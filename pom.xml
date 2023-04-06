@@ -217,7 +217,7 @@
 					</outputFile>
 					<includeTestSourceDirectory>false</includeTestSourceDirectory>
 					<consoleOutput>true</consoleOutput>
-					<violationSeverity>error</violationSeverity>
+					<violationSeverity>warning</violationSeverity>
 					<failOnViolation>true</failOnViolation>
 				</configuration>
 				<executions>
