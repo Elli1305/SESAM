@@ -18,6 +18,12 @@
           <div class="q-gutter-md col items-start q-mt-xs">
             <q-input v-model="password" outlined :type="isPwd ? 'password' : 'text'" hint="Passwort" >
               <template v-slot:counter>
+
+                <q-icon class="q-mr-xs" color="grey" size="14px" name="info" />
+
+                <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
+                           :offset="[0, 8]">Das Passwort muss mind. 8 Zeichen lang  <br> sein, ein Sonderzeichen,
+                            eine Ziffer und  <br> einen Großbuchstaben beinhalten</q-tooltip>
                 <q-icon
                     :name="isPwd ? 'visibility_off' : 'visibility'"
                     class="cursor-pointer"
