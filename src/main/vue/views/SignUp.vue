@@ -78,28 +78,45 @@ export default {
     const $q = useQuasar()
     const router = useRouter()
     const email = ref('')
-
+    const password = ref('')
     const userStore = useUserStore()
     function signUp() {
       userStore.authenticate(email.value)
-      if (userStore.authenticated) {
+      userStore.validatePassword(password.value)
+      if (userStore.authenticated && userStore.validPassword) {
         router.push('/')
         $q.notify({
           type: 'positive',
           message: 'Registrierung erfolgreich'
         })
       } else {
-        $q.notify({
-          type: 'negative',
-          message: 'Registrierung fehlgeschlagen',
-          caption: 'Nutzer (Email) bereits vergeben'
-        })
+        if(!userStore.authenticated){
+            $q.notify({
+                type: 'negative',
+                message: 'Registrierung fehlgeschlagen',
+                caption: 'Nutzer (Email) bereits vergeben'
+            })
+        }
+        if(!userStore.validPassword){
+            $q.notify({
+                type: 'negative',
+                message: 'Registrierung fehlgeschlagen',
+                caption: 'Passwort erfüllt nicht die Kriterien'
+            })
+        }
+        if(!userStore.comparePassword){
+            $q.notify({
+                type: 'negative',
+                message: 'Registrierung fehlgeschlagen',
+                caption: 'Die Passworte stimmen nicht überein'
+            })
+        }
       }
     }
 
     return {
       signUp,
-      password: ref(''),
+      password,
       isPwd: ref(true),
       passwordRepeat: ref(''),
       isPwdRepeat: ref(true),
