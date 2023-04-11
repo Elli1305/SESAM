@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfiguration implements WebMvcConfigurer {
 
     /**
-     * Redirects neccacery routes to frontend.
+     * Redirects necessary routes to frontend.
      * <p>
      * Redirects all routes not set to the frontend index.html.
      * Explicitly excludes '/index.html' to avoid self looping callback.
