@@ -8,12 +8,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  */
 public interface SesamUserService extends UserDetailsService {
     /**
+     * Creates a new {@link SesamUser} based on the provided values.
      *
-     * @param email
-     * @param password
-     * @param firstName
-     * @param lastName
-     * @return
+     * @param userCmd the {@link SesamUserCmd} containing the information needed to create the new user.
+     * @return the newly created user.
      */
     SesamUser createUser(SesamUserCmd userCmd);
 }
