@@ -79,10 +79,11 @@ export default {
     const router = useRouter()
     const email = ref('')
     const password = ref('')
+    const passwordRepeat = ref('')
     const userStore = useUserStore()
     function signUp() {
       userStore.authenticate(email.value)
-      userStore.validatePassword(password.value)
+      userStore.validatePassword(password.value, passwordRepeat)
       if (userStore.authenticated && userStore.validPassword) {
         router.push('/')
         $q.notify({
@@ -118,7 +119,7 @@ export default {
       signUp,
       password,
       isPwd: ref(true),
-      passwordRepeat: ref(''),
+      passwordRepeat,
       isPwdRepeat: ref(true),
       prename: ref(''),
       lastname: ref(''),
