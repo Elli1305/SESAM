@@ -1,8 +1,8 @@
 <template>
   <q-page>
     <div class="col-auto fixed-center ">
-      <div class="row-auto">
-        <div class="text-h4 q-ma-sm">Registrierung</div>
+      <div class="row justify-center full-height full-width text-center">
+        <div class="text-h4">Registrierung</div>
       </div>
       <div class="row-auto q-ma-sm">
 
@@ -10,9 +10,9 @@
         <div class="q-pa-md">
 
           <div class="q-gutter-md col items-start">
-            <q-input outlined v-model="prename" label="Vorname"/>
-            <q-input outlined v-model="lastname" label="Nachname"/>
-            <q-input v-model="email" outlined type="email" label="Email" />
+            <q-input outlined v-model="prename" hint="Vorname"/>
+            <q-input outlined v-model="lastname" hint="Nachname"/>
+            <q-input v-model="email" outlined type="email" hint="Email" />
           </div>
 
           <div class="q-gutter-md col items-start q-mt-xs">
@@ -26,12 +26,12 @@
               </template>
             </q-input>
 
-            <q-input v-model="passwordWdh" outlined :type="isPwdWdh ? 'password' : 'text'" hint="Passwort wiederholen">
+            <q-input v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'" hint="Passwort wiederholen">
               <template v-slot:counter>
                 <q-icon
-                    :name="isPwdWdh ? 'visibility_off' : 'visibility'"
+                    :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
                     class="cursor-pointer"
-                    @click="isPwdWdh = !isPwdWdh"
+                    @click="isPwdRepeat = !isPwdRepeat"
                 />
               </template>
             </q-input>
@@ -41,21 +41,22 @@
 
         </div>
         <div class="row-auto">
-          <div class="col q-mt-sm">
-            <div class="q-pa-md">
+          <div class="col q-mt-md">
+            <div class="q-ml-md">
               <q-option-group
                   :options="options"
                   type="checkbox"
                   v-model="group"
+                  size = "25px"
               />
             </div>
           </div>
         </div>
 
-        <div class="col q-mt-xl">
+        <div class="col q-mt-md">
 
-          <q-btn  size = "15px"  rounded label="Registrieren" @click="registrieren()" color="secondary" class="row-auto q-ma-xs"></q-btn>
-          <q-btn size = "15px" rounded label="Zur Anmeldung" @click="zuLogin()" color="secondary" class="row-auto q-ma-xs"></q-btn>
+          <q-btn  size = "15px"  rounded label="Registrieren" @click="signUp()" color="secondary" class="row-auto q-ma-xs"></q-btn>
+          <q-btn size = "15px" rounded label="Zur Anmeldung" @click="getToLogin()" color="secondary" class="row-auto q-ma-xs"></q-btn>
         </div>
       </div>
     </div>
@@ -72,14 +73,14 @@ import {useRouter} from 'vue-router'
 
 
 export default {
-  name: "Registrierung.vue",
+  name: "SignUp.vue",
   setup () {
     const $q = useQuasar()
     const router = useRouter()
     const email = ref('')
 
     const userStore = useUserStore()
-    function registrieren() {
+    function signUp() {
       userStore.authenticate(email.value)
       if (userStore.authenticated) {
         router.push('/')
@@ -97,19 +98,19 @@ export default {
     }
 
     return {
-      registrieren,
+      signUp,
       password: ref(''),
       isPwd: ref(true),
-      passwordWdh: ref(''),
-      isPwdWdh: ref(true),
+      passwordRepeat: ref(''),
+      isPwdRepeat: ref(true),
       prename: ref(''),
       lastname: ref(''),
       email,
       group: ref([]),
       options: [
         { label: 'Admin', value: 'adminRole' },
-        { label: 'Bearbeiter', value: 'bearbeiterRole'},
-        { label: 'Herausgeber', value: 'herausgeberRole'}
+        { label: 'Bearbeiter', value: 'editorRole'},
+        { label: 'Herausgeber', value: 'publisherRole'}
       ]
     }
   }
