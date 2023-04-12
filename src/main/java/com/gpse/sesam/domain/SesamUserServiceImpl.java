@@ -1,15 +1,13 @@
 package com.gpse.sesam.domain;
 
-import com.gpse.sesam.web.ConflictException;
 import com.gpse.sesam.web.UnprocessableEntityException;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Collectors;
 
@@ -19,6 +17,7 @@ public class SesamUserServiceImpl implements SesamUserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public SesamUserServiceImpl(final SesamUserRepository repository, final PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
@@ -53,7 +52,8 @@ public class SesamUserServiceImpl implements SesamUserService {
     }
 
     @Override
-    public SesamUser createUser(SesamUserCmd userCmd) throws ConflictException, UnprocessableEntityException {
+    public SesamUser createUser(SesamUserCmd userCmd) throws DataIntegrityViolationException,
+            UnprocessableEntityException {
         ensureUserCmdValid(userCmd);
 
         final SesamUser user = new SesamUser(
@@ -67,15 +67,7 @@ public class SesamUserServiceImpl implements SesamUserService {
                         .collect(Collectors.toList())
         );
 
-        try {
-            return repository.save(user);
-        } catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "a user with that email already exists",
-                    e
-            );
-        }
+        return repository.save(user);
     }
 
     @Override

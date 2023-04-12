@@ -9,4 +9,8 @@ import java.io.Serial;
 public class ConflictException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 42L;
+
+    public ConflictException(Throwable throwable) {
+        super(throwable);
+    }
 }
