@@ -3,8 +3,8 @@
       <div style="padding-top: 1em; display: flex; justify-content: center">
           <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em">
               <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Login</h1>
-              <q-input outlined v-model="eMail" label="E-Mail" :dense="dense" />
-              <q-input outlined :type="isPwd ? 'password' : 'text'" v-model="password" label="Passwort" :dense="dense">
+              <q-input outlined v-model="eMail" label="E-Mail"/>
+              <q-input outlined :type="isPwd ? 'password' : 'text'" v-model="password" label="Passwort">
                   <template v-slot:append>
                       <q-icon
                           :name="isPwd ? 'visibility_off' : 'visibility'"

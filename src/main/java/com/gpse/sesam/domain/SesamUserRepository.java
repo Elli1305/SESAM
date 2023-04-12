@@ -2,7 +2,12 @@ package com.gpse.sesam.domain;
 
 import org.springframework.data.repository.CrudRepository;
 
+import javax.crypto.SealedObject;
+import java.util.Optional;
+
 /**
  * A repository for managing {@link SesamUser} objects in H2.
  */
-public interface SesamUserRepository extends CrudRepository<SesamUser, String> {}
+public interface SesamUserRepository extends CrudRepository<SesamUser, String> {
+	Optional<SesamUser> findByEmail(String username);
+}

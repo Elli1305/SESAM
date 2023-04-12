@@ -3,6 +3,7 @@ import {Ref, ref} from 'vue'
 import axios from "axios";
 import api from "../api";
 import {Credentials} from "@/main/vue/entity/credentials";
+import {LoginResponse} from "@/main/vue/entity/loginResponse";
 
 export const useUserStore = defineStore('users', () => {
     const authenticated = ref(false)
@@ -15,7 +16,8 @@ export const useUserStore = defineStore('users', () => {
         comparePassword.value = passwordRepeat===password
     }
 
-    function authenticate(token?: string) { //<1>
+    function authenticate(token?: string) {
+        console.log(token)
         if (token) {
             authenticated.value = true
             localStorage.setItem('token', token);
@@ -27,10 +29,11 @@ export const useUserStore = defineStore('users', () => {
 
     function requestToken(credentials: Credentials): Promise<void> { //<2>
         return new Promise((resolve, reject) => {
-            api.auth.login(credentials).then(res => {
-                authenticate(res.headers.authorization)
+            api.auth.login(credentials).then((res: LoginResponse) => {
+                authenticate(res.data.token)
                 resolve()
             }).catch(() => {
+                console.log("here2")
                 authenticate()
                 reject()
             })
