@@ -4,6 +4,7 @@ import com.gpse.sesam.domain.SesamUser;
 import com.gpse.sesam.domain.SesamUserService;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,10 @@ public class SesamUserController {
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public SesamUser createUser(@RequestBody SesamUserCmd sesamUserCmd) {
-        return service.createUser(sesamUserCmd);
+        try {
+            return service.createUser(sesamUserCmd);
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException(e);
+        }
     }
 }
