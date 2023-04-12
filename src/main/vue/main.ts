@@ -11,6 +11,7 @@ import router from './router'
 
 import 'quasar/src/css/index.sass'
 import '@quasar/extras/material-icons/material-icons.css'
+import axios from "axios";
 
 
 const messages = {
@@ -39,3 +40,5 @@ app.use(i18n)
 // app.use(store)
 
 app.mount('#app')
+
+axios.defaults.headers.post['Content-Type'] = 'application/json'
