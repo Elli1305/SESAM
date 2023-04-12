@@ -1,12 +1,15 @@
 package com.gpse.sesam.domain;
 
 import com.gpse.sesam.web.ConflictException;
+import com.gpse.sesam.web.UnprocessableEntityException;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Collectors;
 
@@ -21,23 +24,57 @@ public class SesamUserServiceImpl implements SesamUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    private void ensureUserCmdValid(SesamUserCmd userCmd) throws UnprocessableEntityException {
+        final String email = userCmd.getEmail();
+
+        if (email == null || !email.matches("[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+")) {
+            throw new UnprocessableEntityException();
+        }
+
+        if (userCmd.getPassword() == null) {
+            throw new UnprocessableEntityException();
+        }
+
+        final String firstName = userCmd.getFirstName();
+
+        if (firstName == null || firstName.length() < 1) {
+            throw new UnprocessableEntityException();
+        }
+
+        final String lastName = userCmd.getLastName();
+
+        if (lastName == null || lastName.length() < 1) {
+            throw new UnprocessableEntityException();
+        }
+
+        if (userCmd.getRequestedRoles() == null) {
+            throw new UnprocessableEntityException();
+        }
+    }
+
     @Override
-    @SuppressWarnings("PMD") // TODO
-    public SesamUser createUser(SesamUserCmd userCmd) throws ConflictException {
+    public SesamUser createUser(SesamUserCmd userCmd) throws ConflictException, UnprocessableEntityException {
+        ensureUserCmdValid(userCmd);
+
         final SesamUser user = new SesamUser(
                 userCmd.getEmail(),
                 passwordEncoder.encode(userCmd.getPassword()),
                 userCmd.getFirstName(),
                 userCmd.getLastName(),
-                userCmd.getRoles().stream()
-                        .map(e -> new SesamUserRole(e))
+                userCmd.getRequestedRoles().stream()
+                        .distinct()
+                        .map(SesamUserRole::new)
                         .collect(Collectors.toList())
         );
 
         try {
             return repository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new ConflictException();
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "a user with that email already exists",
+                    e
+            );
         }
     }
 

@@ -13,7 +13,7 @@ public class SesamUserCmd {
 
     private String lastName;
 
-    private List<SesamUserRole.AttainableRole> roles;
+    private List<SesamUserRole.AttainableRole> requestedRoles;
 
     public String getEmail() {
         return email;
@@ -47,11 +47,11 @@ public class SesamUserCmd {
         this.lastName = lastName;
     }
 
-    public List<SesamUserRole.AttainableRole> getRoles() {
-        return roles;
+    public List<SesamUserRole.AttainableRole> getRequestedRoles() {
+        return requestedRoles;
     }
 
-    public void setRoles(List<SesamUserRole.AttainableRole> roles) {
-        this.roles = roles;
+    public void setRequestedRoles(List<SesamUserRole.AttainableRole> requestedRoles) {
+        this.requestedRoles = requestedRoles;
     }
 }
