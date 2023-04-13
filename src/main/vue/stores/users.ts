@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
+import axios from "axios";
 
 export const useUserStore = defineStore('users', () => {
     const authenticated = ref(null)
@@ -7,8 +8,17 @@ export const useUserStore = defineStore('users', () => {
     const comparePassword = ref(null)
 
 
-        function authenticate(email) {
-        authenticated.value = (email != 'admin@gmail.com')
+        function authenticate(group, prename, lastname, password, passwordRepeat, email) {
+        //the new part
+        const credentials = new URLSearchParams();
+        credentials.append('prename', prename);
+        credentials.append('lastname', lastname);
+        credentials.append('email', email);
+        credentials.append('password', password);
+        credentials.append('passwordRepeat', passwordRepeat);
+        credentials.append('roles', group); // ??????????????????????????????????????????
+        return axios.post('/api/authenticate', credentials);
+        //authenticated.value = (email != 'admin@gmail.com')
     }
 
     function validatePassword(password, passwordRepeat){

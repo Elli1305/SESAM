@@ -84,11 +84,15 @@ export default {
     const $q = useQuasar()
     const router = useRouter()
     const email = ref('')
+    const lastname = ref('')
+    const prename = ref('')
     const password = ref('')
     const passwordRepeat = ref('')
+    const group = ref([]) //???????????????????????????
+
     const userStore = useUserStore()
     function signUp() {
-      userStore.authenticate(email.value)
+      userStore.authenticate(group.value, prename.value, lastname.value, password.value, passwordRepeat, email.value)
       userStore.validatePassword(password.value, passwordRepeat)
       if (userStore.authenticated && userStore.validPassword) {
         router.push('/')
@@ -127,10 +131,10 @@ export default {
       isPwd: ref(true),
       passwordRepeat,
       isPwdRepeat: ref(true),
-      prename: ref(''),
-      lastname: ref(''),
+      prename,
+      lastname,
       email,
-      group: ref([]),
+      group,
       options: [
         { label: 'Admin', value: 'adminRole' },
         { label: 'Bearbeiter', value: 'editorRole'},
