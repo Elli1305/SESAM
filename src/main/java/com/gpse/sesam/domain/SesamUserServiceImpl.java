@@ -36,8 +36,8 @@ public class SesamUserServiceImpl implements SesamUserService {
 
         final String password = userCmd.getPassword();
 
-        if (password == null || password.isBlank()) {
-            throw new UnprocessableEntityException("password may not be empty");
+        if (password == null || !password.matches("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$")) {
+            throw new UnprocessableEntityException("password doesn't match the required criteria");
         }
 
         final String firstName = userCmd.getFirstName();
