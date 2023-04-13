@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class SesamUserServiceImpl implements SesamUserService {
+    private static final String NUMBER_REGEX = "[0-9]";
+
     private final SesamUserRepository repository;
 
     private final PasswordEncoder passwordEncoder;
@@ -40,13 +42,13 @@ public class SesamUserServiceImpl implements SesamUserService {
 
         final String firstName = userCmd.getFirstName();
 
-        if (firstName == null || firstName.isBlank() || firstName.matches("[0-9]")) {
+        if (firstName == null || firstName.isBlank() || firstName.matches(NUMBER_REGEX)) {
             throw new UnprocessableEntityException("firstName does not meet the requirements");
         }
 
         final String lastName = userCmd.getLastName();
 
-        if (lastName == null || lastName.isBlank() || lastName.matches("[0-9]")) {
+        if (lastName == null || lastName.isBlank() || lastName.matches(NUMBER_REGEX)) {
             throw new UnprocessableEntityException("lastName does not meet the requirements");
         }
 

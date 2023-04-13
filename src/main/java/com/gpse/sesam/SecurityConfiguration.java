@@ -13,6 +13,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+    /**
+     * TODO
+     * @param http
+     * @return {@link SecurityFilterChain}
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
 

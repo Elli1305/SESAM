@@ -11,12 +11,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 // TODO: Remove annotation
 @SuppressWarnings("HideUtilityClassConstructor")
 public class SesamApplication {
+    public SesamApplication() {
+    }
 
-	public SesamApplication() {
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(SesamApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SesamApplication.class, args);
+    }
 
 }

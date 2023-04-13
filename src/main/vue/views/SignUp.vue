@@ -69,7 +69,7 @@
   </q-page>
 </template>
 
-<script>
+<script lang="ts">
 
 import { ref } from 'vue'
 
@@ -88,13 +88,13 @@ export default {
     const prename = ref('')
     const password = ref('')
     const passwordRepeat = ref('')
-    const group = ref([]) //???????????????????????????
+    const group = ref([])
 
     const userStore = useUserStore()
     function signUp() {
       console.log(group.value)
-      userStore.authenticate(group.value, prename.value, lastname.value, password.value, passwordRepeat, email.value)
-      userStore.validatePassword(password.value, passwordRepeat)
+      userStore.authenticate(group.value, prename.value, lastname.value, password.value, passwordRepeat.value, email.value)
+      userStore.validatePassword(password.value, passwordRepeat.value)
       if (userStore.authenticated && userStore.validPassword) {
         router.push('/')
         $q.notify({

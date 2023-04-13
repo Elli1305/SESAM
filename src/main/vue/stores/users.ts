@@ -1,11 +1,11 @@
 import {defineStore} from 'pinia'
-import {ref} from 'vue'
+import {Ref, ref} from 'vue'
 import axios from "axios";
 
 export const useUserStore = defineStore('users', () => {
     const authenticated = ref(null)
-    const validPassword = ref(null)
-    const comparePassword = ref(null)
+    const validPassword: Ref<RegExpMatchArray | null> = ref(null)
+    const comparePassword: Ref<boolean> = ref(false)
 
 
     function authenticate(group: string[], prename: string, lastname: string, password: string, passwordRepeat: string, email: string) {
@@ -14,13 +14,13 @@ export const useUserStore = defineStore('users', () => {
             lastName: lastname,
             email: email,
             password: password,
-            roles: group,
+            requestedRoles: group,
         });
         //authenticated.value = (email != 'admin@gmail.com')
     }
 
-    function validatePassword(password, passwordRepeat){
-        var passwordRegEx = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$/;
+    function validatePassword(password: string, passwordRepeat: string){
+        const passwordRegEx = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$/;
         validPassword.value = password.match(passwordRegEx)
         comparePassword.value = passwordRepeat==password
     }

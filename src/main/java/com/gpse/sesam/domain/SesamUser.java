@@ -40,6 +40,15 @@ public class SesamUser implements UserDetails {
     protected SesamUser() {
     }
 
+    /**
+     * Creates a new {@link SesamUser}
+     *
+     * @param email the user's email
+     * @param password the user's password
+     * @param firstName the user's first name
+     * @param lastName the user's last name
+     * @param roles the user's roles
+     */
     public SesamUser(String email, String password, String firstName, String lastName, List<SesamUserRole> roles) {
         this.email = email;
         this.password = password;
@@ -52,9 +61,9 @@ public class SesamUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.createAuthorityList(
                 roles.stream()
-                        .filter(e -> e.isGranted())
+                        .filter(SesamUserRole::isGranted)
                         .map(e -> e.getRole().toString())
-                        .collect(Collectors.toList())
+                        .toList()
                         .toArray(new String[0])
         );
     }
