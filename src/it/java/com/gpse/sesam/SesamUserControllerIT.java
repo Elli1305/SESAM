@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,7 +43,10 @@ public class SesamUserControllerIT {
         final String body = "{\"lastName\": \"User\",\"email\": \"test@example.com\",\"password\": \"password\", \"requestedRoles\": [\"ISSUER\"]}";
 
         this.mvc.perform(post("/api/signup").contentType(MediaType.APPLICATION_JSON).content(body))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(HttpStatus.UNPROCESSABLE_ENTITY.value()))
+                .andExpect(jsonPath("$.error").value(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase()));
     }
 
     @Test
@@ -50,6 +54,9 @@ public class SesamUserControllerIT {
         final String body = "{\"firstName\": \"Example\",\"lastName\": \"User\",\"email\": \"this is not an email\",\"password\": \"password\", \"requestedRoles\": [\"ISSUER\"]}";
 
         this.mvc.perform(post("/api/signup").contentType(MediaType.APPLICATION_JSON).content(body))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(HttpStatus.UNPROCESSABLE_ENTITY.value()))
+                .andExpect(jsonPath("$.error").value(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase()));
     }
 }
