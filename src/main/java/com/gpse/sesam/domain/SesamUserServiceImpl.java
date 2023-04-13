@@ -8,9 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class SesamUserServiceImpl implements SesamUserService {
 	private final SesamUserRepository repository;
@@ -20,19 +17,9 @@ public class SesamUserServiceImpl implements SesamUserService {
 	public SesamUserServiceImpl(final SesamUserRepository repository, final PasswordEncoder passwordEncoder) {
 		this.repository = repository;
 		this.passwordEncoder = passwordEncoder;
-		if (loadUserByUsername("test@test.de") == null) {
-			SesamUserCmd userCmd = new SesamUserCmd();
-			userCmd.setEmail("test@test.de");
-			userCmd.setPassword("test123!");
-			userCmd.setFirstName("FirstName");
-			userCmd.setLastName("LastName");
-			userCmd.setRoles(List.of(SesamUserRole.AttainableRole.ISSUER));
-			createUser(userCmd);
-		}
 	}
 
 	@Override
-	@SuppressWarnings("PMD") // TODO
 	public SesamUser createUser(SesamUserCmd userCmd) throws ConflictException {
 		final SesamUser user = new SesamUser(
 				userCmd.getEmail(),
@@ -40,8 +27,8 @@ public class SesamUserServiceImpl implements SesamUserService {
 				userCmd.getFirstName(),
 				userCmd.getLastName(),
 				userCmd.getRoles().stream()
-						.map(e -> new SesamUserRole(e))
-						.collect(Collectors.toList())
+						.map(SesamUserRole::new)
+						.toList()
 		);
 
 		try {

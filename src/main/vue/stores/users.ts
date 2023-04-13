@@ -21,7 +21,7 @@ export const useUserStore = defineStore('users', () => {
         if (token) {
             authenticated.value = true
             localStorage.setItem('token', token);
-            axios.defaults.headers['Authorization'] = token
+            axios.defaults.headers['Authorization'] = 'Bearer ' + token
         } else {
             authenticated.value = false
         }
