@@ -92,41 +92,52 @@ export default {
 
     const userStore = useUserStore()
     async function signUp() {
-      console.log(group.value)
+      userStore.validateEmail(email.value);
+      userStore.validatePassword(password.value, passwordRepeat.value);
+
+      if(!userStore.validEmail){
+        $q.notify({
+          type: 'negative',
+          message: 'Registrierung fehlgeschlagen',
+          caption: 'E-Mail erfüllt nicht die Kriterien'
+        })
+      }
+
+      if(!userStore.validPassword){
+        $q.notify({
+          type: 'negative',
+          message: 'Registrierung fehlgeschlagen',
+          caption: 'Passwort erfüllt nicht die Kriterien'
+        })
+      }
+
+      if(!userStore.comparePassword){
+        $q.notify({
+          type: 'negative',
+          message: 'Registrierung fehlgeschlagen',
+          caption: 'Die Passworte stimmen nicht überein'
+        })
+      }
+
+      if (!userStore.validPassword || !userStore.validEmail || !userStore.comparePassword) {
+        return;
+      }
+
       await userStore.authenticate(group.value, prename.value, lastname.value, password.value, email.value)
-          .catch(() => {
-      })
-      userStore.validatePassword(password.value, passwordRepeat.value)
+          .catch(() => {});
 
-
-      if (userStore.authenticated && userStore.validPassword) {
+      if (userStore.authenticated) {
         router.push('/')
         $q.notify({
           type: 'positive',
           message: 'Registrierung erfolgreich'
         })
       } else {
-        if(!userStore.authenticated){
             $q.notify({
                 type: 'negative',
                 message: 'Registrierung fehlgeschlagen',
                 caption: 'Nutzer (Email) bereits vergeben'
             })
-        }
-        if(!userStore.validPassword){
-            $q.notify({
-                type: 'negative',
-                message: 'Registrierung fehlgeschlagen',
-                caption: 'Passwort erfüllt nicht die Kriterien'
-            })
-        }
-        if(!userStore.comparePassword){
-            $q.notify({
-                type: 'negative',
-                message: 'Registrierung fehlgeschlagen',
-                caption: 'Die Passworte stimmen nicht überein'
-            })
-        }
       }
     }
 

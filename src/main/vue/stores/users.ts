@@ -6,6 +6,7 @@ import {AttainableRole} from "@/main/vue/entity/createUser";
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
     const validPassword: Ref<RegExpMatchArray | null> = ref(null)
+    const validEmail: Ref<RegExpMatchArray | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
 
 
@@ -37,5 +38,10 @@ export const useUserStore = defineStore('users', () => {
         comparePassword.value = passwordRepeat==password
     }
 
-    return {authenticated, authenticate, validatePassword, validPassword, comparePassword}
+    function validateEmail(email: string) {
+        const emailRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+        validEmail.value = email.match(emailRegex)
+    }
+
+    return {authenticated, authenticate, validatePassword, validPassword, comparePassword, validateEmail, validEmail}
 })
