@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain;
 
+import com.gpse.sesam.web.ConflictException;
 import com.gpse.sesam.web.UnprocessableEntityException;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,38 +24,40 @@ public class SesamUserServiceImpl implements SesamUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    private void ensureUserCmdValid(SesamUserCmd userCmd) throws UnprocessableEntityException {
+    private void validateUserCmd(SesamUserCmd userCmd) throws UnprocessableEntityException {
         final String email = userCmd.getEmail();
 
         if (email == null || !email.matches("[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+")) {
-            throw new UnprocessableEntityException();
+            throw new UnprocessableEntityException("The provided e-mail is not valid");
         }
 
-        if (userCmd.getPassword() == null) {
-            throw new UnprocessableEntityException();
+        final String password = userCmd.getPassword();
+
+        if (password == null || password.isBlank()) {
+            throw new UnprocessableEntityException("password may not be empty");
         }
 
         final String firstName = userCmd.getFirstName();
 
-        if (firstName == null || firstName.length() < 1) {
-            throw new UnprocessableEntityException();
+        if (firstName == null || firstName.isBlank()) {
+            throw new UnprocessableEntityException("firstName may not be empty");
         }
 
         final String lastName = userCmd.getLastName();
 
-        if (lastName == null || lastName.length() < 1) {
-            throw new UnprocessableEntityException();
+        if (lastName == null || lastName.isBlank()) {
+            throw new UnprocessableEntityException("lastName may not be empty");
         }
 
         if (userCmd.getRequestedRoles() == null) {
-            throw new UnprocessableEntityException();
+            throw new UnprocessableEntityException("roles may not be null");
         }
     }
 
     @Override
     public SesamUser createUser(SesamUserCmd userCmd) throws DataIntegrityViolationException,
             UnprocessableEntityException {
-        ensureUserCmdValid(userCmd);
+        validateUserCmd(userCmd);
 
         final SesamUser user = new SesamUser(
                 userCmd.getEmail(),
@@ -67,7 +70,11 @@ public class SesamUserServiceImpl implements SesamUserService {
                         .collect(Collectors.toList())
         );
 
-        return repository.save(user);
+        try {
+            return repository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException(e);
+        }
     }
 
     @Override

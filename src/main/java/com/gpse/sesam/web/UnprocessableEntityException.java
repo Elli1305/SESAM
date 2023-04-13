@@ -9,4 +9,8 @@ import java.io.Serial;
 public class UnprocessableEntityException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 45L;
+
+    public UnprocessableEntityException(final String message) {
+        super(message);
+    }
 }

@@ -22,10 +22,6 @@ public class SesamUserController {
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public SesamUser createUser(@RequestBody SesamUserCmd sesamUserCmd) {
-        try {
-            return service.createUser(sesamUserCmd);
-        } catch (DataIntegrityViolationException e) {
-            throw new ConflictException(e);
-        }
+        return service.createUser(sesamUserCmd);
     }
 }
