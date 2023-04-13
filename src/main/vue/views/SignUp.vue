@@ -92,6 +92,7 @@ export default {
 
     const userStore = useUserStore()
     function signUp() {
+      console.log(group.value)
       userStore.authenticate(group.value, prename.value, lastname.value, password.value, passwordRepeat, email.value)
       userStore.validatePassword(password.value, passwordRepeat)
       if (userStore.authenticated && userStore.validPassword) {
@@ -136,9 +137,9 @@ export default {
       email,
       group,
       options: [
-        { label: 'Admin', value: 'adminRole' },
-        { label: 'Bearbeiter', value: 'editorRole'},
-        { label: 'Herausgeber', value: 'publisherRole'}
+        { label: 'Admin', value: 'ADMINISTRATOR' },
+        { label: 'Bearbeiter', value: 'EDITOR'},
+        { label: 'Herausgeber', value: 'ISSUER'}
       ]
     }
   }

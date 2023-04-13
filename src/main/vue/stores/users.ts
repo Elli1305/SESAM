@@ -8,16 +8,14 @@ export const useUserStore = defineStore('users', () => {
     const comparePassword = ref(null)
 
 
-        function authenticate(group, prename, lastname, password, passwordRepeat, email) {
-        //the new part
-        const credentials = new URLSearchParams();
-        credentials.append('prename', prename);
-        credentials.append('lastname', lastname);
-        credentials.append('email', email);
-        credentials.append('password', password);
-        credentials.append('passwordRepeat', passwordRepeat);
-        credentials.append('roles', group); // ??????????????????????????????????????????
-        return axios.post('/api/authenticate', credentials);
+    function authenticate(group: string[], prename: string, lastname: string, password: string, passwordRepeat: string, email: string) {
+        return axios.post('/api/signup', {
+            firstName: prename,
+            lastName: lastname,
+            email: email,
+            password: password,
+            roles: group,
+        });
         //authenticated.value = (email != 'admin@gmail.com')
     }
 
