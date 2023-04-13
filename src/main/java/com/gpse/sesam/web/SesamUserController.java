@@ -4,7 +4,6 @@ import com.gpse.sesam.domain.SesamUser;
 import com.gpse.sesam.domain.SesamUserService;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

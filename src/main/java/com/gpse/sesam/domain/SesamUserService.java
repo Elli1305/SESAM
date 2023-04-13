@@ -4,7 +4,7 @@ import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
- *
+ * Interface for interacting with {@link SesamUser}
  */
 public interface SesamUserService extends UserDetailsService {
     /**

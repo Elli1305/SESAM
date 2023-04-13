@@ -24,7 +24,8 @@ public class SesamUserServiceImpl implements SesamUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    private void validateUserCmd(SesamUserCmd userCmd) throws UnprocessableEntityException {
+    @Override
+    public SesamUser createUser(SesamUserCmd userCmd) throws ConflictException, UnprocessableEntityException {
         final String email = userCmd.getEmail();
 
         if (email == null || !email.matches("[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+")) {
@@ -39,31 +40,25 @@ public class SesamUserServiceImpl implements SesamUserService {
 
         final String firstName = userCmd.getFirstName();
 
-        if (firstName == null || firstName.isBlank()) {
-            throw new UnprocessableEntityException("firstName may not be empty");
+        if (firstName == null || firstName.isBlank() || firstName.matches("[0-9]")) {
+            throw new UnprocessableEntityException("firstName does not meet the requirements");
         }
 
         final String lastName = userCmd.getLastName();
 
-        if (lastName == null || lastName.isBlank()) {
-            throw new UnprocessableEntityException("lastName may not be empty");
+        if (lastName == null || lastName.isBlank() || lastName.matches("[0-9]")) {
+            throw new UnprocessableEntityException("lastName does not meet the requirements");
         }
 
         if (userCmd.getRequestedRoles() == null) {
             throw new UnprocessableEntityException("roles may not be null");
         }
-    }
-
-    @Override
-    public SesamUser createUser(SesamUserCmd userCmd) throws DataIntegrityViolationException,
-            UnprocessableEntityException {
-        validateUserCmd(userCmd);
 
         final SesamUser user = new SesamUser(
-                userCmd.getEmail(),
-                passwordEncoder.encode(userCmd.getPassword()),
-                userCmd.getFirstName(),
-                userCmd.getLastName(),
+                email,
+                passwordEncoder.encode(password),
+                firstName,
+                lastName,
                 userCmd.getRequestedRoles().stream()
                         .distinct()
                         .map(SesamUserRole::new)
