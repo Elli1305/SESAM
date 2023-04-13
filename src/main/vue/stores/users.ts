@@ -1,22 +1,34 @@
 import {defineStore} from 'pinia'
 import {Ref, ref} from 'vue'
-import axios from "axios";
+import api from '../api'
+import {AttainableRole} from "@/main/vue/entity/createUser";
 
 export const useUserStore = defineStore('users', () => {
-    const authenticated = ref(null)
+    const authenticated: Ref<boolean> = ref(false)
     const validPassword: Ref<RegExpMatchArray | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
 
 
-    function authenticate(group: string[], prename: string, lastname: string, password: string, passwordRepeat: string, email: string) {
-        return axios.post('/api/signup', {
-            firstName: prename,
-            lastName: lastname,
-            email: email,
-            password: password,
-            requestedRoles: group,
+    function authenticate(group: AttainableRole[], prename: string, lastname: string, password: string, email: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            api.auth.signup({
+                firstName: prename,
+                lastName: lastname,
+                password: password,
+                email: email,
+                requestedRoles: group,
+            }).then(_ => {
+                console.log('successfully registered')
+                authenticated.value = true;
+                console.log(authenticated.value);
+                resolve();
+            })
+            .catch(_ => {
+                console.log('failed to register')
+                authenticated.value = false;
+                reject();
+            });
         });
-        //authenticated.value = (email != 'admin@gmail.com')
     }
 
     function validatePassword(password: string, passwordRepeat: string){

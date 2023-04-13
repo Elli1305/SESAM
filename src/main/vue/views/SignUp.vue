@@ -91,10 +91,14 @@ export default {
     const group = ref([])
 
     const userStore = useUserStore()
-    function signUp() {
+    async function signUp() {
       console.log(group.value)
-      userStore.authenticate(group.value, prename.value, lastname.value, password.value, passwordRepeat.value, email.value)
+      await userStore.authenticate(group.value, prename.value, lastname.value, password.value, email.value)
+          .catch(() => {
+      })
       userStore.validatePassword(password.value, passwordRepeat.value)
+
+
       if (userStore.authenticated && userStore.validPassword) {
         router.push('/')
         $q.notify({
