@@ -38,7 +38,6 @@ public class SesamUserControllerIT {
     }
 
     @Test
-    @Disabled
     void signUpWithMissingFirstName() throws Exception {
         final String body = "{\"lastName\": \"User\",\"email\": \"test@example.com\",\"password\": \"password\", \"requestedRoles\": [\"ISSUER\"]}";
 
@@ -47,7 +46,6 @@ public class SesamUserControllerIT {
     }
 
     @Test
-    @Disabled
     void signUpWithInvalidEmail() throws Exception {
         final String body = "{\"firstName\": \"Example\",\"lastName\": \"User\",\"email\": \"this is not an email\",\"password\": \"password\", \"requestedRoles\": [\"ISSUER\"]}";
 

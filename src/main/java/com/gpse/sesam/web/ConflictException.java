@@ -10,7 +10,7 @@ public class ConflictException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 42L;
 
-    public ConflictException(Throwable throwable) {
-        super(throwable);
+    public ConflictException(final String message, Throwable throwable) {
+        super(message, throwable);
     }
 }

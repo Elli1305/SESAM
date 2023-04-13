@@ -68,7 +68,7 @@ public class SesamUserServiceImpl implements SesamUserService {
         try {
             return repository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new ConflictException(e);
+            throw new ConflictException("A user with that e-mail address already exists.", e);
         }
     }
 

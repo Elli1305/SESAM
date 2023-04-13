@@ -23,6 +23,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET).permitAll()
+                .requestMatchers(HttpMethod.POST).permitAll()
                 .requestMatchers("/api/**").permitAll();
 
         http.headers().frameOptions().disable();
