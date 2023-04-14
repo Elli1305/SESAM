@@ -1,24 +1,52 @@
 <script setup>
-import {RouterView} from 'vue-router'
 
+  import {RouterView} from 'vue-router'
+
+  const logged_in = false
+
+  if(logged_in) {
+    document.getElementById("profilePic")
+    document.getElementById("registerBtn")
+    document.getElementById("loginBtn")
+  } else {
+    document.getElementById("profilePic")
+    document.getElementById("registerBtn")
+    document.getElementById("loginBtn")
+  }
 
 
 </script>
+
 <template>
+
   <q-layout view="hHh lpR fFf">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
-      <q-toolbar>
-        <q-toolbar-title>
-          GPSE 2023 Team 3-1
-        </q-toolbar-title>
+      <q-toolbar class="q-gutter-y-md column fit" style="padding: 1em">
+        <div class="row self-start" style="height: fit-content">
+          <q-toolbar-title style="font-size: 2em; font-weight: bolder">
+            SESAM
+          </q-toolbar-title>
+        </div>
+        <div class="row self-end" style="margin-top: 0">
+          <p>Floorplan</p>
+          <q-space style="width: 1em" />
+          <p>Credentials</p>
+          <q-space style="width: 1em" />
+          <p>Information</p>
+          <q-space style="width: 3em" />
+          <!--
+          <q-btn id="profilePic" round>
+            <q-avatar size="42px">
+              <img src="../resources/Profilbild.png">
+            </q-avatar>
+          </q-btn>
+          -->
+          <q-btn id="registerBtn" class="shadow-1" label="Registrierung"/>
+          <q-space style="width: 1em" />
+          <q-btn id="loginBtn" class="shadow-1" label="Login"/>
+        </div>
       </q-toolbar>
-
-      <q-tabs align="left">
-        <q-route-tab to="/page1" label="Page One"/>
-        <q-route-tab to="/page2" label="Page Two"/>
-        <q-route-tab to="/page3" label="Page Three"/>
-      </q-tabs>
     </q-header>
 
     <q-page-container>
@@ -26,17 +54,26 @@ import {RouterView} from 'vue-router'
     </q-page-container>
 
     <q-footer elevated class="bg-grey-8 text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          <div>This is a footer. Hi!</div>
+      <q-toolbar class="bg-grey-7">
+        <q-toolbar-title style="text-align: center; font-size: 1em">
+          <a href="">Impressum</a>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
 
   </q-layout>
 
-
 </template>
 
 <style scoped>
+  a {
+    color: white;
+    font-variant-caps: small-caps;
+  }
+  p {
+    font-size: 1.5em;
+    font-variant-caps: small-caps;
+    vertical-align: center;
+    margin: 0;
+  }
 </style>
