@@ -87,8 +87,21 @@ export default {
             if (!userStore.validPassword || !userStore.validEmail || !userStore.comparePassword) {
                 return;
             }
-            await userStore.authenticate(group.value, prename.value, lastname.value, password.value, email.value)
-                .catch(() => {});
+
+            try {
+              await userStore.signUp(email.value, password.value, prename.value, lastname.value, group.value);
+            } catch (e) {
+              console.error(e);
+
+              $q.notify({
+                type: 'negative',
+                message: 'Nutzer konnte nicht registriert werden.',
+                caption: 'Bitte versuchen Sie es später erneut.'
+              });
+
+              return;
+            }
+
             if (userStore.authenticated) {
                 router.push('/')
                 $q.notify({

@@ -10,24 +10,21 @@ export const useUserStore = defineStore('users', () => {
     const comparePassword: Ref<boolean> = ref(false)
 
 
-    function authenticate(group: AttainableRole[], prename: string, lastname: string, password: string, email: string): Promise<void> {
+    function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            api.auth.signup({
-                firstName: prename,
-                lastName: lastname,
+            api.auth.signUp({
+                firstName: firstName,
+                lastName: lastName,
                 password: password,
                 email: email,
-                requestedRoles: group,
+                requestedRoles: roles,
             }).then(_ => {
-                console.log('successfully registered')
                 authenticated.value = true;
-                console.log(authenticated.value);
                 resolve();
             })
-            .catch(_ => {
-                console.log('failed to register')
+            .catch(e => {
                 authenticated.value = false;
-                reject();
+                reject(e);
             });
         });
     }
@@ -43,5 +40,5 @@ export const useUserStore = defineStore('users', () => {
         validEmail.value = email.match(emailRegex)
     }
 
-    return {authenticated, authenticate, validatePassword, validPassword, comparePassword, validateEmail, validEmail}
+    return {authenticated, signUp, validatePassword, validPassword, comparePassword, validateEmail, validEmail}
 })
