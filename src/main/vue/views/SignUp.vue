@@ -1,166 +1,126 @@
 <template>
-  <q-page>
-    <div class="col-auto fixed-center ">
-      <div class="row justify-center full-height full-width text-center">
-        <div class="text-h4">Registrierung</div>
-      </div>
-      <div class="row-auto q-ma-sm">
-
-
-        <div class="q-pa-md">
-
-          <div class="q-gutter-md col items-start">
-            <q-input outlined v-model="prename" hint="Vorname"/>
-            <q-input outlined v-model="lastname" hint="Nachname"/>
-            <q-input v-model="email" outlined type="email" hint="Email" />
-          </div>
-
-          <div class="q-gutter-md col items-start q-mt-xs">
-            <q-input v-model="password" outlined :type="isPwd ? 'password' : 'text'" hint="Passwort" >
-              <template v-slot:counter>
-
-                <q-icon class="q-mr-xs" color="grey" size="14px" name="info" />
-
-                <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
-                           :offset="[0, 8]">Das Passwort muss mind. 8 Zeichen lang  <br> sein, ein Sonderzeichen,
-                            eine Ziffer und  <br> einen Großbuchstaben beinhalten</q-tooltip>
-                <q-icon
-                    :name="isPwd ? 'visibility_off' : 'visibility'"
-                    class="cursor-pointer"
-                    @click="isPwd = !isPwd"
-                />
-              </template>
+    <q-page class="items-center justify-center" style="display: flex">
+        <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
+            <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Registrierung</h1>
+            <q-input outlined v-model="prename" label="Vorname"/>
+            <q-input outlined v-model="lastname" label="Nachname"/>
+            <q-input v-model="email" outlined type="email" label="Email" />
+            <q-input v-model="password" outlined :type="isPwd ? 'password' : 'text'" label="Passwort" >
+                <template v-slot:append>
+                    <q-icon class="q-mr-xs" color="grey" size="16px" name="info" />
+                    <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
+                               :offset="[0, 8]">Das Passwort muss mind. 8 Zeichen lang  <br> sein, ein Sonderzeichen,
+                        eine Ziffer und  <br> einen Großbuchstaben beinhalten</q-tooltip>
+                    <q-icon
+                            :name="isPwd ? 'visibility_off' : 'visibility'"
+                            class="cursor-pointer"
+                            @click="isPwd = !isPwd"
+                    />
+                </template>
             </q-input>
-
-            <q-input v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'" hint="Passwort wiederholen">
-              <template v-slot:counter>
-                <q-icon
-                    :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
-                    class="cursor-pointer"
-                    @click="isPwdRepeat = !isPwdRepeat"
-                />
-              </template>
+            <q-input v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'" label="Passwort wiederholen">
+                <template v-slot:append>
+                    <q-icon
+                            :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
+                            class="cursor-pointer"
+                            @click="isPwdRepeat = !isPwdRepeat"
+                    />
+                </template>
             </q-input>
-          </div>
-
-
-
+            <q-option-group
+                    :options="options"
+                    type="checkbox"
+                    v-model="group"
+                    size = "25px"
+                    inline
+            />
+            <q-btn @click="signUp()" color="primary" label="Registrieren"/>
+            <p style="font-size: 1em">Bereits registriert:
+                <a href="./login">Zum Login</a>
+            </p>
         </div>
-        <div class="row-auto">
-          <div class="col q-mt-md">
-            <div class="q-ml-md">
-              <q-option-group
-                  :options="options"
-                  type="checkbox"
-                  v-model="group"
-                  size = "25px"
-              />
-            </div>
-          </div>
-        </div>
+    </q-page>
 
-        <div class="col q-mt-md">
-
-          <q-btn  size = "15px"  rounded label="Registrieren" @click="signUp()" color="secondary" class="row-auto q-ma-xs"></q-btn>
-          <q-btn size = "15px" rounded label="Zur Anmeldung" @click="getToLogin()" color="secondary" class="row-auto q-ma-xs"></q-btn>
-        </div>
-      </div>
-    </div>
-  </q-page>
 </template>
 
 <script lang="ts">
-
 import { ref } from 'vue'
-
 import {useUserStore} from "../stores/users"
 import {useQuasar} from 'quasar'
 import {useRouter} from 'vue-router'
-
-
 export default {
-  name: "SignUp.vue",
-  setup () {
-    const $q = useQuasar()
-    const router = useRouter()
-    const email = ref('')
-    const lastname = ref('')
-    const prename = ref('')
-    const password = ref('')
-    const passwordRepeat = ref('')
-    const group = ref([])
-
-    const userStore = useUserStore()
-    async function signUp() {
-      userStore.validateEmail(email.value);
-      userStore.validatePassword(password.value, passwordRepeat.value);
-
-      if(!userStore.validEmail){
-        $q.notify({
-          type: 'negative',
-          message: 'Registrierung fehlgeschlagen',
-          caption: 'E-Mail erfüllt nicht die Kriterien'
-        })
-      }
-
-      if(!userStore.validPassword){
-        $q.notify({
-          type: 'negative',
-          message: 'Registrierung fehlgeschlagen',
-          caption: 'Passwort erfüllt nicht die Kriterien'
-        })
-      }
-
-      if(!userStore.comparePassword){
-        $q.notify({
-          type: 'negative',
-          message: 'Registrierung fehlgeschlagen',
-          caption: 'Die Passworte stimmen nicht überein'
-        })
-      }
-
-      if (!userStore.validPassword || !userStore.validEmail || !userStore.comparePassword) {
-        return;
-      }
-
-      await userStore.authenticate(group.value, prename.value, lastname.value, password.value, email.value)
-          .catch(() => {});
-
-      if (userStore.authenticated) {
-        router.push('/')
-        $q.notify({
-          type: 'positive',
-          message: 'Registrierung erfolgreich'
-        })
-      } else {
-            $q.notify({
-                type: 'negative',
-                message: 'Registrierung fehlgeschlagen',
-                caption: 'Nutzer (Email) bereits vergeben'
-            })
-      }
+    name: "SignUp.vue",
+    setup () {
+        const $q = useQuasar()
+        const router = useRouter()
+        const email = ref('')
+        const lastname = ref('')
+        const prename = ref('')
+        const password = ref('')
+        const passwordRepeat = ref('')
+        const group = ref([])
+        const userStore = useUserStore()
+        async function signUp() {
+            userStore.validateEmail(email.value);
+            userStore.validatePassword(password.value, passwordRepeat.value);
+            if(!userStore.validEmail){
+                $q.notify({
+                    type: 'negative',
+                    message: 'Registrierung fehlgeschlagen',
+                    caption: 'E-Mail erfüllt nicht die Kriterien'
+                })
+            }
+            if(!userStore.validPassword){
+                $q.notify({
+                    type: 'negative',
+                    message: 'Registrierung fehlgeschlagen',
+                    caption: 'Passwort erfüllt nicht die Kriterien'
+                })
+            }
+            if(!userStore.comparePassword){
+                $q.notify({
+                    type: 'negative',
+                    message: 'Registrierung fehlgeschlagen',
+                    caption: 'Die Passworte stimmen nicht überein'
+                })
+            }
+            if (!userStore.validPassword || !userStore.validEmail || !userStore.comparePassword) {
+                return;
+            }
+            await userStore.authenticate(group.value, prename.value, lastname.value, password.value, email.value)
+                .catch(() => {});
+            if (userStore.authenticated) {
+                router.push('/')
+                $q.notify({
+                    type: 'positive',
+                    message: 'Registrierung erfolgreich'
+                })
+            } else {
+                $q.notify({
+                    type: 'negative',
+                    message: 'Registrierung fehlgeschlagen',
+                    caption: 'Nutzer (Email) bereits vergeben'
+                })
+            }
+        }
+        return {
+            signUp,
+            password,
+            isPwd: ref(true),
+            passwordRepeat,
+            isPwdRepeat: ref(true),
+            prename,
+            lastname,
+            email,
+            group,
+            options: [
+                { label: 'Admin', value: 'ADMINISTRATOR' },
+                { label: 'Bearbeiter', value: 'EDITOR'},
+                { label: 'Herausgeber', value: 'ISSUER'}
+            ]
+        }
     }
-
-    return {
-      signUp,
-      password,
-      isPwd: ref(true),
-      passwordRepeat,
-      isPwdRepeat: ref(true),
-      prename,
-      lastname,
-      email,
-      group,
-      options: [
-        { label: 'Admin', value: 'ADMINISTRATOR' },
-        { label: 'Bearbeiter', value: 'EDITOR'},
-        { label: 'Herausgeber', value: 'ISSUER'}
-      ]
-    }
-  }
-
 }
 </script>
-
 <style scoped>
 </style>
