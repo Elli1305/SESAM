@@ -11,6 +11,7 @@ import router from './router'
 
 import 'quasar/src/css/index.sass'
 import '@quasar/extras/material-icons/material-icons.css'
+import '@/main/vue/styles/notify.scss'
 import axios from "axios";
 
 

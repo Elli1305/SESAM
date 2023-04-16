@@ -27,15 +27,14 @@ export const useUserStore = defineStore('users', () => {
         }
     }
 
-    function requestToken(credentials: Credentials): Promise<void> { //<2>
+    function requestToken(credentials: Credentials): Promise<void> {
         return new Promise((resolve, reject) => {
             api.auth.login(credentials).then((res: LoginResponse) => {
                 authenticate(res.data.token)
                 resolve()
-            }).catch(() => {
-                console.log("here2")
+            }).catch((error) => {
                 authenticate()
-                reject()
+                reject(error)
             })
         })
     }

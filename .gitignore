@@ -156,3 +156,4 @@ yarn-error.log
 node/
 src/main/resources/public
 target
+data/
