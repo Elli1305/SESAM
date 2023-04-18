@@ -1,14 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import StartView from '../views/Start.vue'
+import Profilansicht from "@/main/vue/views/Profilansicht.vue";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: StartView
-    },
+    { path: '/', name: 'home', component: StartView },
+    { path: '/profile', name: 'Profile', component: Profilansicht }
   ]
 })
 
