@@ -27,6 +27,7 @@
 import {ref} from "vue";
 import {useUserStore} from "@/main/vue/stores/users";
 import {useQuasar} from 'quasar'
+import router from "@/main/vue/router";
 
 export default {
   name: "Login",
@@ -37,8 +38,8 @@ export default {
     const userStore = useUserStore()
     const $q = useQuasar()
 
-    function login() {
-      userStore.requestToken({eMail: eMail.value, password: password.value})
+    async function login() {
+      await userStore.requestToken({eMail: eMail.value, password: password.value})
           .catch((error) => {
             console.log(error)
             if(error.response.status === 403) {
@@ -70,6 +71,10 @@ export default {
               })
             }
           })
+
+      if (userStore.authenticated === true) {
+        router.push('/');
+      }
     }
 
     return {eMail, password, login, isPwd: ref(true)}
