@@ -42,9 +42,13 @@
             </q-avatar>
           </q-btn>
           -->
-          <q-btn id="registerBtn" class="shadow-1" label="Registrierung"/>
+          <router-link :to="'/signup'">
+            <q-btn id="registerBtn" class="shadow-1" label="Registrierung"/>
+          </router-link>
           <q-space style="width: 1em" />
-          <q-btn id="loginBtn" class="shadow-1" label="Login"/>
+          <router-link :to="'/login/'">
+            <q-btn id="loginBtn" class="shadow-1" label="Login"/>
+          </router-link>
         </div>
       </q-toolbar>
     </q-header>
