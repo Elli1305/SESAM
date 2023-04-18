@@ -10,16 +10,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 	private final AuthenticationConfiguration authConfig;
-	private UserDetailsService userDetailsService;
-	private SecurityConstants securityConstants;
+	private final UserDetailsService userDetailsService;
+	private final SecurityConstants securityConstants;
 
 	@Autowired
 	public SecurityConfiguration(final AuthenticationConfiguration authConfig,
@@ -53,10 +51,5 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
         return authConfig.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

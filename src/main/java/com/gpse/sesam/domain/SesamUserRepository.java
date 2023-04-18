@@ -2,7 +2,6 @@ package com.gpse.sesam.domain;
 
 import org.springframework.data.repository.CrudRepository;
 
-import javax.crypto.SealedObject;
 import java.util.Optional;
 
 /**
