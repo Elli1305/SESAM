@@ -102,6 +102,39 @@ export default {
               return;
             }
 
+          await userStore.requestToken({eMail: email.value, password: password.value})
+              .catch((error) => {
+                console.log(error)
+                if(error.response.status === 403) {
+                  $q.notify({
+                    type: 'negative',
+                    message: 'Login Fehlgeschlagen',
+                    caption: 'Falsches Passwort oder Benutzername',
+                    position: "top",
+                    timeout: 3000,
+                    classes: "loginNotify"
+                  })
+                } else if(error.response.status === 500) {
+                  $q.notify({
+                    type: 'negative',
+                    message: 'Login Fehlgeschlagen',
+                    caption: 'Der Server konnte die Anfrage nicht verarbeiten',
+                    position: "top",
+                    timeout: 3000,
+                    classes: "loginNotify"
+                  })
+                } else {
+                  $q.notify({
+                    type: 'negative',
+                    message: 'Login Fehlgeschlagen',
+                    caption: 'Etwas ist schiefgelaufen',
+                    position: "top",
+                    timeout: 3000,
+                    classes: "loginNotify"
+                  })
+                }
+              })
+
             if (userStore.authenticated) {
                 router.push('/')
                 $q.notify({

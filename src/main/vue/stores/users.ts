@@ -21,14 +21,8 @@ export const useUserStore = defineStore('users', () => {
                 password: password,
                 email: email,
                 requestedRoles: roles,
-            }).then(_ => {
-                authenticated.value = true;
-                resolve();
-            })
-            .catch(e => {
-                authenticated.value = false;
-                reject(e);
-            });
+            }).then(_ => resolve())
+            .catch(reject);
         });
     }
 
