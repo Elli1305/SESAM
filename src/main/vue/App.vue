@@ -1,6 +1,8 @@
 <script setup>
 import {RouterView} from 'vue-router'
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n()
 
 
 </script>
@@ -10,7 +12,7 @@ import {RouterView} from 'vue-router'
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>
-          GPSE 2023 Team 3-1
+          {{t("home.header")}}
         </q-toolbar-title>
       </q-toolbar>
 

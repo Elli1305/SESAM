@@ -18,7 +18,7 @@ public class SesamUserServiceImpl implements SesamUserService {
 
     private final SesamUserRepository repository;
 
-    private final PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public SesamUserServiceImpl(final SesamUserRepository repository, final PasswordEncoder passwordEncoder) {
@@ -74,8 +74,9 @@ public class SesamUserServiceImpl implements SesamUserService {
         }
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findById(username).orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
-    }
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return repository.findByEmail(username)
+				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
+	}
 }
