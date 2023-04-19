@@ -45,7 +45,7 @@ public class SesamUserServiceImpl implements SesamUserService {
 
         final String password = userCmd.getPassword();
 
-        if (isInvalidPassword(password)){
+        if (isInvalidPassword(password)) {
             throw new UnprocessableEntityException("password doesn't match the required criteria");
         }
 
@@ -94,6 +94,27 @@ public class SesamUserServiceImpl implements SesamUserService {
         PasswordResetToken resetToken = new PasswordResetToken(user, token);
 
         passwordResetTokenRepository.save(resetToken);
+        mailService.send(
+                "noreply@gpse-se-ss-2023-team3-1.invalid",
+                user.getUsername(),
+                "Vervollständigen Sie Ihre Passwort-Reset-Anfrage",
+                "Hallo " + user.getFirstName() + " " + user.getLastName() + ",\n"
+                        + "\n"
+                        + "Sie haben kürzlich eine Anfrage zur Zurücksetzung Ihres Passworts gestellt. "
+                        + "Um diesen Vorgang abzuschließen, klicken Sie bitte auf den folgenden Link:\n"
+                        + "\n"
+                        + "http://localhost:8088/update_password?token=" + token
+                        + "\n\n"
+                        + "Bitte beachten Sie, dass der Link nur einmal gültig ist und innerhalb von 24 "
+                        + "Stunden nach Erhalt dieser E-Mail verwendet werden muss.\n"
+                        + "\n"
+                        + "Wenn Sie diese Anfrage nicht gestellt haben oder keine weitere Hilfe benötigen, "
+                        + "ignorieren Sie bitte diese E-Mail.\n"
+                        + "\n"
+                        + "Vielen Dank für Ihre Zusammenarbeit.\n"
+                        + "\n"
+                        + "Mit freundlichen Grüßen,"
+        );
     }
 
     @Override
