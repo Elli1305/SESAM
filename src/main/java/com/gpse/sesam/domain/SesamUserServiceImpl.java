@@ -41,7 +41,7 @@ public class SesamUserServiceImpl implements SesamUserService {
 
         final String password = userCmd.getPassword();
 
-        if (password == null || !password.matches("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$")) {
+        if (isInvalidPassword(password)){
             throw new UnprocessableEntityException("password doesn't match the required criteria");
         }
 
@@ -103,6 +103,10 @@ public class SesamUserServiceImpl implements SesamUserService {
             throw new UnprocessableEntityException("token is expired");
         }
 
+        if (isInvalidPassword(password)) {
+            throw new UnprocessableEntityException("password doesn't match the required criteria");
+        }
+
         SesamUser user = passwordResetToken.getUser();
         changePassword(user, password);
 
@@ -113,5 +117,9 @@ public class SesamUserServiceImpl implements SesamUserService {
     public void changePassword(SesamUser user, String password) {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
+    }
+
+    private boolean isInvalidPassword(String password) {
+        return password == null || !password.matches("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$");
     }
 }
