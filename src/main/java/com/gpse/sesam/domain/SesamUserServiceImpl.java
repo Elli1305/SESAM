@@ -16,13 +16,18 @@ import java.util.stream.Collectors;
 public class SesamUserServiceImpl implements SesamUserService {
     private static final String NUMBER_REGEX = "[0-9]";
 
-    private final SesamUserRepository repository;
+    private final SesamUserRepository userRepository;
 
-	private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SesamUserServiceImpl(final SesamUserRepository repository, final PasswordEncoder passwordEncoder) {
-        this.repository = repository;
+    public SesamUserServiceImpl(final SesamUserRepository userRepository,
+                                final PasswordResetTokenRepository passwordResetTokenRepository,
+                                final PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -68,15 +73,22 @@ public class SesamUserServiceImpl implements SesamUserService {
         );
 
         try {
-            return repository.save(user);
+            return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new ConflictException("A user with that e-mail address already exists.", e);
         }
     }
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return repository.findByEmail(username)
-				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
-	}
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
+    }
+
+    @Override
+    public void createPasswordResetToken(SesamUser user, String token) {
+        PasswordResetToken myToken = new PasswordResetToken(user, token);
+
+        passwordResetTokenRepository.save(myToken);
+    }
 }

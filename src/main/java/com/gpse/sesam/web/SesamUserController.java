@@ -4,6 +4,7 @@ import com.gpse.sesam.SecurityConstants;
 import com.gpse.sesam.domain.SesamUser;
 import com.gpse.sesam.domain.SesamUserService;
 import com.gpse.sesam.web.cmd.Credentials;
+import com.gpse.sesam.web.cmd.PasswordResetCmd;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -72,5 +74,14 @@ public class SesamUserController {
 				.claim("rol", roles)
 				.compact();
 		return new LoginResponse(token, user);
+	}
+
+	@PostMapping("/password_reset")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void passwordReset(@RequestBody final PasswordResetCmd passwordResetCmd) {
+		SesamUser user = (SesamUser) service.loadUserByUsername(passwordResetCmd.getEmail());
+		String token = UUID.randomUUID().toString();
+
+		service.createPasswordResetToken(user, token);
 	}
 }
