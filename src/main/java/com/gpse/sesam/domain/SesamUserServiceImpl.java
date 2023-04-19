@@ -87,8 +87,31 @@ public class SesamUserServiceImpl implements SesamUserService {
 
     @Override
     public void createPasswordResetToken(SesamUser user, String token) {
-        PasswordResetToken myToken = new PasswordResetToken(user, token);
+        PasswordResetToken resetToken = new PasswordResetToken(user, token);
 
-        passwordResetTokenRepository.save(myToken);
+        passwordResetTokenRepository.save(resetToken);
+    }
+
+    @Override
+    public void updatePasswordWithToken(String token, String password) throws UnprocessableEntityException {
+        final PasswordResetToken passwordResetToken = passwordResetTokenRepository
+                .findByToken(token)
+                .orElseThrow(() -> new UnprocessableEntityException("token does not exist."));
+
+        if (passwordResetToken.isExpired()) {
+            passwordResetTokenRepository.delete(passwordResetToken);
+            throw new UnprocessableEntityException("token is expired");
+        }
+
+        SesamUser user = passwordResetToken.getUser();
+        changePassword(user, password);
+
+        passwordResetTokenRepository.delete(passwordResetToken);
+    }
+
+    @Override
+    public void changePassword(SesamUser user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 }

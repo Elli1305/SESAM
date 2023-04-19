@@ -16,4 +16,8 @@ public interface SesamUserService extends UserDetailsService {
     SesamUser createUser(SesamUserCmd userCmd);
 
     void createPasswordResetToken(SesamUser user, String token);
+
+    void updatePasswordWithToken(String token, String password);
+
+    void changePassword(SesamUser user, String password);
 }

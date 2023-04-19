@@ -6,6 +6,7 @@ import com.gpse.sesam.domain.SesamUserService;
 import com.gpse.sesam.web.cmd.Credentials;
 import com.gpse.sesam.web.cmd.PasswordResetCmd;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
+import com.gpse.sesam.web.cmd.UpdatePasswordCmd;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -83,5 +84,14 @@ public class SesamUserController {
 		String token = UUID.randomUUID().toString();
 
 		service.createPasswordResetToken(user, token);
+	}
+
+	@PostMapping("/update_password")
+	@ResponseStatus(HttpStatus.OK)
+	public void updatePasswordWithToken(@RequestBody final UpdatePasswordCmd updatePasswordCmd) {
+		service.updatePasswordWithToken(
+				updatePasswordCmd.getToken(),
+				updatePasswordCmd.getPassword()
+		);
 	}
 }

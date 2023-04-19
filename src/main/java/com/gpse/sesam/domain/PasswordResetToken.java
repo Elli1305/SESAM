@@ -2,12 +2,11 @@ package com.gpse.sesam.domain;
 
 import jakarta.persistence.*;
 
-import java.util.Calendar;
 import java.util.Date;
 
 @Entity
 public class PasswordResetToken {
-    private static final int EXPIRATION = 60 * 24;
+    private static final long EXPIRATION = 60 * 24 * 60000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,10 +28,14 @@ public class PasswordResetToken {
     public PasswordResetToken(SesamUser user, String token) {
         this.user = user;
         this.token = token;
+        this.expiryDate = new Date(System.currentTimeMillis() + EXPIRATION);
+    }
 
-        final Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, EXPIRATION);
+    public SesamUser getUser() {
+        return user;
+    }
 
-        this.expiryDate = calendar.getTime();
+    public boolean isExpired() {
+        return new Date().after(expiryDate);
     }
 }
