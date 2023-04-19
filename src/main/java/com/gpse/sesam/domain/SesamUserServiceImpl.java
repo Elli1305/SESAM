@@ -22,13 +22,17 @@ public class SesamUserServiceImpl implements SesamUserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final MailService mailService;
+
     @Autowired
     public SesamUserServiceImpl(final SesamUserRepository userRepository,
                                 final PasswordResetTokenRepository passwordResetTokenRepository,
-                                final PasswordEncoder passwordEncoder) {
+                                final PasswordEncoder passwordEncoder,
+                                final MailService mailService) {
         this.userRepository = userRepository;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.passwordEncoder = passwordEncoder;
+        this.mailService = mailService;
     }
 
     @Override
