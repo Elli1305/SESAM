@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import StartView from '../views/Start.vue'
 import SignUp from "@/main/vue/views/SignUp.vue";
 import LoginView from '../views/Login.vue'
+import PasswordChange from '../views/PasswortChange.vue'
+import PasswordReset from '../views/PasswordReset.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -19,6 +21,14 @@ const router = createRouter({
     {
       path: '/signup',
       component: SignUp
+    },
+    {
+      path: '/passwordchange',
+      component: PasswordChange
+    },
+    {
+      path: '/passwordreset',
+      component: PasswordReset
     }
   ]
 })
