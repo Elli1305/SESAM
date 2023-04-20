@@ -2,9 +2,13 @@
 import {RouterView} from 'vue-router'
 import {useI18n} from "vue-i18n";
 import {useUserStore} from "@/main/vue/stores/users"
+import {useQuasar} from 'quasar'
+import {useRouter} from "vue-router/dist/vue-router";
 
 const { t } = useI18n()
 const userStore = useUserStore()
+const $q = useQuasar()
+const router = useRouter()
 
   if(userStore.authenticated) {
     document.getElementById("profilePic")
@@ -17,7 +21,7 @@ const userStore = useUserStore()
   }
     async function logout (){
       await userStore.logout
-      if (userStore.authenticated == false) {
+      if (!userStore.authenticated) {
         $q.notify({
           type: 'positive',
           message: 'Sie haben sich erfolgreich abgemeldet',
