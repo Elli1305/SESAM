@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import StartView from '../views/Start.vue'
 import SignUp from "@/main/vue/views/SignUp.vue";
 import LoginView from '../views/Login.vue'
+import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,6 +16,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/admin/currentuserlist',
+      name: 'currentuserlist',
+      component: CurrentUserList
     },
     {
       path: '/signup',
