@@ -45,7 +45,7 @@ const { t } = useI18n()
             <q-btn id="registerBtn" class="shadow-1" label="Registrierung"/>
           </router-link>
           <q-space style="width: 1em" />
-          <router-link :to="'/login/'">
+          <router-link :to="'/login'">
             <q-btn id="loginBtn" class="shadow-1" label="Login"/>
           </router-link>
         </div>
