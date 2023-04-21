@@ -1,7 +1,8 @@
 <script setup>
+import {RouterView} from 'vue-router'
+import {useI18n} from "vue-i18n";
 
-  import {RouterView} from 'vue-router'
-
+const { t } = useI18n()
   const logged_in = false
 
   if(logged_in) {
@@ -16,16 +17,14 @@
 
 
 </script>
-
 <template>
-
   <q-layout view="hHh lpR fFf">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="q-gutter-y-md column fit" style="padding: 1em">
         <div class="row self-start" style="height: fit-content">
           <q-toolbar-title style="font-size: 2em; font-weight: bolder">
-            SESAM
+            {{t("home.header")}}
           </q-toolbar-title>
         </div>
         <div class="row self-end" style="margin-top: 0">

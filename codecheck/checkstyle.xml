@@ -230,6 +230,7 @@
         <!-- See http://checkstyle.sf.net/config_misc.html -->
         <module name="ArrayTypeStyle"/>
         <module name="UpperEll"/>
+        <module name="HideUtilityClassConstructor"/>
         <module name="OuterTypeFilename">
             <property name="severity" value="error"/>
         </module>
