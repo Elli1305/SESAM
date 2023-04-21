@@ -1,11 +1,16 @@
 <script setup>
 import {RouterView} from 'vue-router'
 import {useI18n} from "vue-i18n";
+import {useUserStore} from "@/main/vue/stores/users"
+import {useQuasar} from 'quasar'
+import {useRouter} from "vue-router/dist/vue-router";
 
 const { t } = useI18n()
-  const logged_in = false
+const userStore = useUserStore()
+const $q = useQuasar()
+const router = useRouter()
 
-  if(logged_in) {
+  if(userStore.authenticated) {
     document.getElementById("profilePic")
     document.getElementById("registerBtn")
     document.getElementById("loginBtn")
@@ -14,6 +19,20 @@ const { t } = useI18n()
     document.getElementById("registerBtn")
     document.getElementById("loginBtn")
   }
+    async function logout (){
+      await userStore.logout
+      if (!userStore.authenticated) {
+        $q.notify({
+          type: 'positive',
+          message: 'Sie haben sich erfolgreich abgemeldet',
+          caption: 'Logout erfolgreich',
+          position: "top",
+          timeout: 3000,
+          classes: "loginNotify"
+        })
+        router.push('/')
+      }
+}
 
 
 </script>
@@ -34,18 +53,17 @@ const { t } = useI18n()
           <q-space style="width: 1em" />
           <p>Information</p>
           <q-space style="width: 3em" />
-          <!--
+          <q-btn @click="logout" color="primary" label="Logout"/>
           <q-btn id="profilePic" round>
             <q-avatar size="42px">
               <img src="../resources/Profilbild.png">
             </q-avatar>
           </q-btn>
-          -->
           <router-link :to="'/signup'">
             <q-btn id="registerBtn" class="shadow-1" label="Registrierung"/>
           </router-link>
           <q-space style="width: 1em" />
-          <router-link :to="'/login/'">
+          <router-link :to="'/login'">
             <q-btn id="loginBtn" class="shadow-1" label="Login"/>
           </router-link>
         </div>
