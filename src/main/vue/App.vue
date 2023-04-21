@@ -30,7 +30,7 @@ const router = useRouter()
           timeout: 3000,
           classes: "loginNotify"
         })
-        router.push('/home')
+        router.push('/')
       }
 }
 
