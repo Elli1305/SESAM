@@ -1,15 +1,19 @@
 <template>
- <img src="../../resources/citec-gebaeudeplan.png" alt="">
+  <NavigationTree></NavigationTree>
+  <div><p>Hier kommt der Floorplan rein</p></div>
 </template>
 
 <script>
+import {ref} from "vue";
+import router from "@/main/vue/router";
+import NavigationTree from "@/main/vue/views/NavigationTree.vue";
+
 export default {
-  name: "Start"
+  name: "Start",
+  components: {NavigationTree}
 }
 </script>
 
 <style scoped>
-  img {
-    margin: 5vh 5vw;
-  }
+
 </style>
