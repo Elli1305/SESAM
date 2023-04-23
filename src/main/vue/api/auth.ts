@@ -10,5 +10,13 @@ export default {
     },
     login(credentials: Credentials): Promise<LoginResponse> {
         return axios.post('/api/authenticate', credentials); //<2>
+    },
+    resetPassword(param: { email: string }) {
+        let email;
+        return axios.get('/api/password', email);
+    },
+    changePassword(param: { password: string; acceptPasswordChange(password, passwordRepeat): void }) {
+        let password;
+        return axios.put('/api/passwordchange', password);
     }
 }
