@@ -3,22 +3,15 @@ import {RouterView} from 'vue-router'
 import {useI18n} from "vue-i18n";
 import {useUserStore} from "@/main/vue/stores/users"
 import {useQuasar} from 'quasar'
-import {useRouter} from "vue-router/dist/vue-router";
+import {useRouter} from "vue-router/dist/vue-router"
 
 const { t } = useI18n()
 const userStore = useUserStore()
 const $q = useQuasar()
 const router = useRouter()
 
-  if(userStore.authenticated) {
-    document.getElementById("profilePic")
-    document.getElementById("registerBtn")
-    document.getElementById("loginBtn")
-  } else {
-    document.getElementById("profilePic")
-    document.getElementById("registerBtn")
-    document.getElementById("loginBtn")
-  }
+const loggedIn = userStore.authenticated
+
     async function logout (){
       await userStore.logout
       if (!userStore.authenticated) {
@@ -30,7 +23,7 @@ const router = useRouter()
           timeout: 3000,
           classes: "loginNotify"
         })
-        router.push('/')
+        await router.push('/')
       }
 }
 
@@ -47,25 +40,22 @@ const router = useRouter()
           </q-toolbar-title>
         </div>
         <div class="row self-end" style="margin-top: 0">
-          <p>Floorplan</p>
+          <router-link to="/" style="text-decoration: none"><p>Floorplan</p></router-link>
           <q-space style="width: 1em" />
           <p>Credentials</p>
           <q-space style="width: 1em" />
           <p>Information</p>
           <q-space style="width: 3em" />
-          <q-btn @click="logout" color="primary" label="Logout"/>
-          <q-btn id="profilePic" round>
-            <q-avatar size="42px">
-              <img src="../resources/Profilbild.png">
-            </q-avatar>
-          </q-btn>
-          <router-link :to="'/signup'">
-            <q-btn id="registerBtn" class="shadow-1" label="Registrierung"/>
-          </router-link>
-          <q-space style="width: 1em" />
-          <router-link :to="'/login'">
-            <q-btn id="loginBtn" class="shadow-1" label="Login"/>
-          </router-link>
+            <q-btn-dropdown id="dropdBtn" v-if="loggedIn" label="HM" class="q-btn--round" no-icon-animation color="info" unelevated auto-close >
+              <q-btn to="/profile" label="Profilansicht" text-color="black" style="width: 10em" align="left" unelevated />
+              <br/>
+              <q-btn @click="logout" label="Logout" style="width: 10em" align="left" unelevated />
+            </q-btn-dropdown>
+          <div v-if="!loggedIn" class="row" >
+              <q-btn to="/signup" class="shadow-1" label="Registrierung"/>
+            <q-space style="width: 1em" />
+              <q-btn to="/login" class="shadow-1" label="Login"/>
+           </div>
         </div>
       </q-toolbar>
     </q-header>
