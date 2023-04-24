@@ -96,6 +96,14 @@ export default {
 
     if (userStore.passwordChanged) {
       router.push('./login')
+      userStore.passwordChanged.value = false;
+      $q.notify({
+        type: 'positive',
+        message: 'Passwort zurücksetzen war erfolgreich',
+        position: "top",
+        timeout: 3000,
+        classes: "loginNotify"
+      })
     }
     return {
       passwordChange,
