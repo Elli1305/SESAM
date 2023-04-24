@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain;
 
 import com.gpse.sesam.web.ConflictException;
+import com.gpse.sesam.web.InvalidTokenException;
 import com.gpse.sesam.web.UnprocessableEntityException;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,11 +125,11 @@ public class SesamUserServiceImpl implements SesamUserService {
     public void updatePasswordWithToken(String token, String password) throws UnprocessableEntityException {
         final PasswordResetToken passwordResetToken = passwordResetTokenRepository
                 .findByToken(token)
-                .orElseThrow(() -> new UnprocessableEntityException("token does not exist."));
+                .orElseThrow(() -> new InvalidTokenException("token does not exist."));
 
         if (passwordResetToken.isExpired()) {
             passwordResetTokenRepository.delete(passwordResetToken);
-            throw new UnprocessableEntityException("token is expired");
+            throw new InvalidTokenException("token is expired");
         }
 
         if (isInvalidPassword(password)) {
