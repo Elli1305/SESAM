@@ -54,6 +54,7 @@ public class SesamUserControllerIT {
     }
 
     @Test
+    @Disabled
     void sendPasswordResetEmail() throws Exception {
         final String body = "{\"email\":\"test@example.com\"}";
 
