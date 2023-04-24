@@ -34,13 +34,6 @@ const { t } = useI18n()
           <q-space style="width: 1em" />
           <p>Information</p>
           <q-space style="width: 3em" />
-          <!--
-          <q-btn id="profilePic" round>
-            <q-avatar size="42px">
-              <img src="../resources/Profilbild.png">
-            </q-avatar>
-          </q-btn>
-          -->
           <router-link :to="'/signup'">
             <q-btn id="registerBtn" class="shadow-1" label="Registrierung"/>
           </router-link>

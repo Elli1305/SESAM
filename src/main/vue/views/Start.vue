@@ -1,10 +1,13 @@
 <template>
- <img src="../../resources/citec-gebaeudeplan.png" alt="">
+ <Map></Map>
 </template>
 
 <script>
+import Map from "@/main/vue/views/Map.vue";
+
 export default {
-  name: "Start"
+  name: "Start",
+  components: {Map}
 }
 </script>
 
