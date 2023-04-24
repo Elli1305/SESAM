@@ -52,4 +52,12 @@ public class SesamUserControllerIT {
         this.mvc.perform(post("/api/signup").contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isUnprocessableEntity());
     }
+
+    @Test
+    void sendPasswordResetEmail() throws Exception {
+        final String body = "{\"email\":\"test@example.com\"}";
+
+        this.mvc.perform(post("/api/password_reset").contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isCreated());
+    }
 }
