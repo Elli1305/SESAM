@@ -1,40 +1,43 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import StartView from '../views/Start.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import StartView from "../views/Start.vue";
 import SignUp from "@/main/vue/views/SignUp.vue";
-import LoginView from '../views/Login.vue'
-import PasswordChange from '../views/PasswortChange.vue'
-import PasswordReset from '../views/PasswordReset.vue'
+import LoginView from "../views/Login.vue";
+import PasswordChange from "../views/PasswortChange.vue";
+import PasswordReset from "../views/PasswordReset.vue";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: StartView
+      path: "/",
+      name: "home",
+      component: StartView,
     },
     {
-      path: '/login',
-      name: 'login',
-      component: LoginView
+      path: "/login",
+      name: "login",
+      component: LoginView,
     },
     {
-      path: '/signup',
-      component: SignUp
+      path: "/signup",
+      component: SignUp,
     },
     {
-      path: '/passwordchange',
-      component: PasswordChange
+      path: "/passwordchange",
+      component: PasswordChange,
+      props: (to) => ({
+        token: to.query.token,
+      }),
     },
     {
-      path: '/passwordreset',
-      component: PasswordReset
-    }
-  ]
-})
+      path: "/passwordreset",
+      component: PasswordReset,
+    },
+  ],
+});
 
 /*router.beforeEach((to) => {
   // Something which should be executed before each routing
 })
 */
-export default router
+export default router;

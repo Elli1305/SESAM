@@ -11,9 +11,6 @@ export const useUserStore = defineStore('users', () => {
     const validPassword: Ref<RegExpMatchArray | null> = ref(null)
     const validEmail: Ref<RegExpMatchArray | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
-    const passwordChanged: Ref<boolean> = ref(false)
-
-
 
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -50,8 +47,6 @@ export const useUserStore = defineStore('users', () => {
         validEmail.value = email.match(emailRegex)
     }
 
-
-
     function requestToken(credentials: Credentials): Promise<void> {
         return new Promise((resolve, reject) => {
             api.auth.login(credentials).then((res: LoginResponse) => {
@@ -68,8 +63,6 @@ export const useUserStore = defineStore('users', () => {
         authenticated.value = false;
     }
 
-
-
     function resetPassword (email: string){
         return new Promise<void>((resolve, reject) => {
             api.auth.resetPassword({
@@ -79,19 +72,11 @@ export const useUserStore = defineStore('users', () => {
         });
     }
 
-    function acceptPasswordChange(password?: string, passwordRepeat?: string){
-        if (password && passwordRepeat) {
-            passwordChanged.value == true;
-        } else {
-            passwordChanged.value == false;
-        }
-    }
-
-    function changePassword (password: string, passwordRepeat: string){
+    function changePassword (password: string, token: string){
         return new Promise<void>((resolve, reject) => {
             api.auth.changePassword({
                 password: password,
-                acceptPasswordChange(password, passwordRepeat){},
+                token: token,
             }).then(_ => resolve())
                 .catch(reject);
         });
@@ -109,6 +94,6 @@ export const useUserStore = defineStore('users', () => {
         logout,
         requestToken,
         resetPassword,
-        changePassword
+        changePassword,
     };
 })

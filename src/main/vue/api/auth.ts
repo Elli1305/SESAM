@@ -3,6 +3,8 @@ import {CreateUser} from "@/main/vue/entity/createUser";
 import {SignUpResponse} from "@/main/vue/entity/signUpResponse";
 import {Credentials} from "@/main/vue/entity/credentials";
 import {LoginResponse} from "@/main/vue/entity/loginResponse";
+import {ResetPassword} from "@/main/vue/entity/resetPassword";
+import {ChangePassword} from "@/main/vue/entity/changePassword";
 
 export default {
     signUp(user: CreateUser): Promise<SignUpResponse> {
@@ -11,12 +13,10 @@ export default {
     login(credentials: Credentials): Promise<LoginResponse> {
         return axios.post('/api/authenticate', credentials); //<2>
     },
-    resetPassword(param: { email: string }) {
-        let email;
-        return axios.get('/api/password', email);
+    resetPassword(param: ResetPassword) {
+        return axios.post('/api/password_reset', param);
     },
-    changePassword(param: { password: string; acceptPasswordChange(password, passwordRepeat): void }) {
-        let password;
-        return axios.put('/api/passwordchange', password);
+    changePassword(param: ChangePassword) {
+        return axios.post('/api/update_password', param);
     }
 }
