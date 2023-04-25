@@ -9,8 +9,7 @@ const { t } = useI18n()
 const userStore = useUserStore()
 const $q = useQuasar()
 const router = useRouter()
-
-const loggedIn = userStore.authenticated
+let initials = userStore.firstName.charAt(0) + userStore.lastName.charAt(0)
 
     async function logout (){
       await userStore.logout
@@ -40,18 +39,25 @@ const loggedIn = userStore.authenticated
           </q-toolbar-title>
         </div>
         <div class="row self-end" style="margin-top: 0">
-          <router-link to="/" style="text-decoration: none"><p>Floorplan</p></router-link>
+          <router-link to="/" style="color: white; text-decoration: none"><p>Floorplan</p></router-link>
           <q-space style="width: 1em" />
           <p>Credentials</p>
           <q-space style="width: 1em" />
           <p>Information</p>
           <q-space style="width: 3em" />
-            <q-btn-dropdown id="dropdBtn" v-if="loggedIn" label="HM" class="q-btn--round" no-icon-animation color="info" unelevated auto-close >
-              <q-btn to="/profile" label="Profilansicht" text-color="black" style="width: 10em" align="left" unelevated />
-              <br/>
-              <q-btn @click="logout" label="Logout" style="width: 10em" align="left" unelevated />
-            </q-btn-dropdown>
-          <div v-if="!loggedIn" class="row" >
+            <q-btn v-if="userStore.authenticated" :label="initials" rounded color="info" unelevated auto-close style="width: 36px; height: 36px;" >
+              <q-menu>
+                <q-list>
+                  <q-item to="/profile" clickable v-close-popup>
+                    <q-item-section text-color="black" style="width: 7.5em" unelevated><div><q-icon left name="person"/>Profilansicht</div></q-item-section>
+                  </q-item>
+                  <q-item @click="logout" clickable v-close-popup>
+                    <q-item-section style="width: 7.5em" unelevated><div><q-icon left name="logout"/>Logout</div></q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+            <div v-if="!userStore.authenticated" class="row" >
               <q-btn to="/signup" class="shadow-1" label="Registrierung"/>
             <q-space style="width: 1em" />
               <q-btn to="/login" class="shadow-1" label="Login"/>
@@ -59,7 +65,6 @@ const loggedIn = userStore.authenticated
         </div>
       </q-toolbar>
     </q-header>
-
     <q-page-container>
       <router-view/>
     </q-page-container>
@@ -67,7 +72,7 @@ const loggedIn = userStore.authenticated
     <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
-          <a href="">Impressum</a>
+          <a href="" style="color: white; font-variant-caps: small-caps;">Impressum</a>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -77,10 +82,6 @@ const loggedIn = userStore.authenticated
 </template>
 
 <style scoped>
-  a {
-    color: white;
-    font-variant-caps: small-caps;
-  }
   p {
     font-size: 1.5em;
     font-variant-caps: small-caps;

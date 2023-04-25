@@ -73,7 +73,7 @@ export default {
           })
 
       if (userStore.authenticated === true) {
-        router.push('/');
+        await router.push('/');
       }
     }
 
