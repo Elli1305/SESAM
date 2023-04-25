@@ -1,45 +1,91 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import { Quasar } from 'quasar'
-import quasarUserOptions from './quasar-user-options'
-import {createI18n} from 'vue-i18n'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import { Quasar } from "quasar";
+import quasarUserOptions from "./quasar-user-options";
+import { createI18n } from "vue-i18n";
 
-import App from './App.vue'
-import router from './router'
+import App from "./App.vue";
+import router from "./router";
 
 // import store from "./stores";
 
-import 'quasar/src/css/index.sass'
-import '@quasar/extras/material-icons/material-icons.css'
-import '@/main/vue/styles/notify.scss'
+import "quasar/src/css/index.sass";
+import "@quasar/extras/material-icons/material-icons.css";
+import "@/main/vue/styles/notify.scss";
 import axios from "axios";
 
-
 const messages = {
-    de: {
-        home: {header: "SESAM(Ger)"}
+  de: {
+    common: {
+      internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
+      unkownError: "Ein unbekannter Fehler ist aufgetreten",
     },
-    en: {
-        home: {header: "SESAM(En)"}
-    }
-}
-
+    home: { header: "SESAM(Ger)" },
+    passwordReset: {
+      resetPassword: "Passwort zurücksetzen",
+      email: "E-Mail",
+      emailSendFailed: "E-Mail versenden fehlgeschlagen",
+      emailNonExistent: "Die E-Mail ist nicht existent",
+      emailDoesNotConform: "E-Mail erfüllt nicht die Kriterien",
+      positiveEmail: "E-Mail versenden war erfolgreich",
+    },
+    passwordChange: {
+      changePassword: "Passwort ändern",
+      password: "Passwort",
+      passwordHint:
+        "Das Passwort muss mind. 8 Zeichen lang sein, ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
+      repeatPassword: "Passwort wiederholen",
+      failedToReset: "Password zurücksetzen fehlgeschlagen",
+      passwordDoesNotConform: "Passwort erfüllt nicht die Kriterien",
+      passwordsDontMatch: "Die Passwörter stimmen nicht überein",
+      successfulReset: "Passwort zurücksetzen war erfolgreich",
+    },
+  },
+  en: {
+    common: {
+      internalServerError: "The server could not process the request",
+      unkownError: "An unknown error occured",
+    },
+    home: {
+      header: "SESAM(En)",
+    },
+    passwordReset: {
+      resetPassword: "Reset Password",
+      email: "Email",
+      emailSendFailed: "Failed to send email",
+      emailNonExistent: "Email is non-existent",
+      emailDoesNotConform: "Email does not match the required criteria",
+      positiveEmail: "Email sent",
+    },
+    passwordChange: {
+      changePassword: "Change Password",
+      password: "Password",
+      passwordHint:
+        "The password must include min. 8 characters, a special character, a number, and a capital letter",
+      repeatPassword: "Repeat password",
+      failedToReset: "Failed to reset password",
+      passwordDoesNotConform: "Password does not match the required criteria",
+      passwordsDontMatch: "Passwords do not match",
+      successfulReset: "Password reset was successful",
+    },
+  },
+};
 
 const i18n = createI18n({
-    legacy: false,
-    locale: 'de',
-    allowComposition: true,
-    fallbackLocale: 'en',
-    messages
-})
-const app = createApp(App)
+  legacy: false,
+  locale: "en",
+  allowComposition: true,
+  fallbackLocale: "en",
+  messages,
+});
+const app = createApp(App);
 
-app.use(createPinia())
-app.use(router)
-app.use(Quasar, quasarUserOptions)
-app.use(i18n)
+app.use(createPinia());
+app.use(router);
+app.use(Quasar, quasarUserOptions);
+app.use(i18n);
 // app.use(store)
 
-app.mount('#app')
+app.mount("#app");
 
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+axios.defaults.headers.post["Content-Type"] = "application/json";
