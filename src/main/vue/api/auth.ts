@@ -11,7 +11,15 @@ export default {
         return axios.post('/api/signup', user);
     },
     login(credentials: Credentials): Promise<LoginResponse> {
-        return axios.post('/api/authenticate', credentials); //<2>
+        const param = new URLSearchParams();
+        param.append('eMail', credentials.eMail);
+        param.append('password', credentials.password);
+        return axios.post('/api/authenticate', param,
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
     },
     resetPassword(param: ResetPassword) {
         return axios.post('/api/password_reset', param);

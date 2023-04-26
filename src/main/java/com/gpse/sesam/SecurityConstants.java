@@ -11,6 +11,8 @@ public final class SecurityConstants {
 	private String tokenIssuer;
 	private String tokenAudience;
 
+	private String authLoginUrl;
+
 	private long tokenExpiration;
 
 	public String getJwtSecret() {
@@ -67,5 +69,13 @@ public final class SecurityConstants {
 
 	public void setTokenExpiration(long tokenExpiration) {
 		this.tokenExpiration = tokenExpiration;
+	}
+
+	public String getAuthLoginUrl() {
+		return authLoginUrl;
+	}
+
+	public void setAuthLoginUrl(String authLoginUrl) {
+		this.authLoginUrl = authLoginUrl;
 	}
 }

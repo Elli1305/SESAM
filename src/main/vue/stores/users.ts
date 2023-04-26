@@ -32,7 +32,6 @@ export const useUserStore = defineStore('users', () => {
     }
 
     function authenticate(token?: string) {
-        console.log(token)
         if (token) {
             authenticated.value = true
             localStorage.setItem('token', token);
