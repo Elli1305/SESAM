@@ -68,8 +68,7 @@ export const useUserStore = defineStore('users', () => {
         })
     }
 
-    function logout(token?: string) {
-        console.log(token)
+    function logout() {
         if(localStorage.getItem('token')) {
             localStorage.removeItem('token')
             authenticated.value = false;

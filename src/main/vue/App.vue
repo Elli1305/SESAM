@@ -9,10 +9,9 @@ const { t } = useI18n()
 const userStore = useUserStore()
 const $q = useQuasar()
 const router = useRouter()
-let initials = userStore.firstName.charAt(0) + userStore.lastName.charAt(0)
 
     async function logout (){
-      await userStore.logout
+      await userStore.logout()
       if (!userStore.authenticated) {
         $q.notify({
           type: 'positive',
@@ -45,7 +44,7 @@ let initials = userStore.firstName.charAt(0) + userStore.lastName.charAt(0)
           <q-space style="width: 1em" />
           <p>{{t("home.information")}}</p>
           <q-space style="width: 3em" />
-            <q-btn v-if="userStore.authenticated" :label="initials" rounded color="info" unelevated auto-close style="width: 36px; height: 36px;" >
+            <q-btn v-if="userStore.authenticated" :label="userStore.firstName.charAt(0) + userStore.lastName.charAt(0)" rounded color="info" unelevated auto-close style="width: 36px; height: 36px;" >
               <q-menu>
                 <q-list>
                   <q-item to="/profile" clickable v-close-popup>
