@@ -5,6 +5,7 @@ import {AttainableRole} from "@/main/vue/entity/createUser"
 import axios from "axios";
 import {Credentials} from "@/main/vue/entity/credentials"
 import {LoginResponse} from "@/main/vue/entity/loginResponse"
+import {UserRole} from "@/main/vue/entity/signUpResponse";
 
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
@@ -14,7 +15,7 @@ export const useUserStore = defineStore('users', () => {
     const firstName: Ref<string> = ref('')
     const lastName: Ref<string> = ref('')
     const eMail: Ref<string> = ref('')
-    const roles: Ref<Array<string>|undefined> = ref()
+    const roles: Ref<Array<UserRole>|undefined> = ref()
 
 
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {

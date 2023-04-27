@@ -1,6 +1,6 @@
 import {AttainableRole} from "@/main/vue/entity/createUser";
 
-interface UserRole {
+export interface UserRole {
     role: AttainableRole;
     granted: boolean;
 }

@@ -33,9 +33,9 @@ export default {
     const roles = userStore.roles
     const { t } = useI18n()
 
-    let adminOpacity = roles.includes('ADMINISTRATOR') ? "100%" : "50%"
-    let editorOpacity = roles.includes('EDITOR') ? "100%" : "50%"
-    let issuerOpacity = roles.includes('ISSUER') ? "100%" : "50%"
+    let adminOpacity = roles.some(r => r.role === 'ADMINISTRATOR' && r.granted) ? "100%" : "50%"
+    let editorOpacity = roles.some(r => r.role === 'EDITOR' && r.granted) ? "100%" : "50%"
+    let issuerOpacity = roles.some(r => r.role === 'ISSUER' && r.granted) ? "100%" : "50%"
 
     return {
       firstname: firstName,
