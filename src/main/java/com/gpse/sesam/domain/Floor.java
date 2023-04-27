@@ -15,7 +15,7 @@ public class Floor {
     @Column
     private int floorLevel;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Room> rooms;
 
     protected Floor() {

@@ -15,7 +15,7 @@ public class Location {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Building> buildings;
 
     protected Location() {

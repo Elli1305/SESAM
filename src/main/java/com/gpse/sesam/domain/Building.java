@@ -15,7 +15,7 @@ public class Building {
     @Column
     private String name;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Floor> floors;
 
     protected Building() {
