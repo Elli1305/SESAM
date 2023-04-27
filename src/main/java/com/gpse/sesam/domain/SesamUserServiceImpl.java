@@ -1,29 +1,46 @@
 package com.gpse.sesam.domain;
 
 import com.gpse.sesam.web.ConflictException;
+import com.gpse.sesam.web.InvalidTokenException;
 import com.gpse.sesam.web.UnprocessableEntityException;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
 public class SesamUserServiceImpl implements SesamUserService {
     private static final String NUMBER_REGEX = "[0-9]";
 
-    private final SesamUserRepository repository;
+    private final SesamUserRepository userRepository;
 
-	private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final MailService mailService;
+
+    private final ResourceBundleMessageSource messageSource;
 
     @Autowired
-    public SesamUserServiceImpl(final SesamUserRepository repository, final PasswordEncoder passwordEncoder) {
-        this.repository = repository;
+    public SesamUserServiceImpl(final SesamUserRepository userRepository,
+                                final PasswordResetTokenRepository passwordResetTokenRepository,
+                                final PasswordEncoder passwordEncoder,
+                                final MailService mailService,
+                                final ResourceBundleMessageSource messageSource) {
+        this.userRepository = userRepository;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.passwordEncoder = passwordEncoder;
+        this.mailService = mailService;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -36,7 +53,7 @@ public class SesamUserServiceImpl implements SesamUserService {
 
         final String password = userCmd.getPassword();
 
-        if (password == null || !password.matches("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$")) {
+        if (isInvalidPassword(password)) {
             throw new UnprocessableEntityException("password doesn't match the required criteria");
         }
 
@@ -68,15 +85,70 @@ public class SesamUserServiceImpl implements SesamUserService {
         );
 
         try {
-            return repository.save(user);
+            return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new ConflictException("A user with that e-mail address already exists.", e);
         }
     }
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return repository.findByEmail(username)
-				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
-	}
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
+    }
+
+    @Override
+    public void createPasswordResetToken(SesamUser user, String token) {
+        PasswordResetToken resetToken = new PasswordResetToken(user, token);
+
+        passwordResetTokenRepository.save(resetToken);
+
+        Locale locale = LocaleContextHolder.getLocale();
+
+        mailService.send(
+                "noreply@gpse-se-ss-2023-team3-1.invalid",
+                user.getUsername(),
+                messageSource.getMessage("reset.subject", null,  locale),
+                messageSource.getMessage(
+                        "reset.text",
+                        new String[]{
+                                user.getFirstName(),
+                                user.getLastName(),
+                                token,
+                        },
+                        locale
+                )
+        );
+    }
+
+    @Override
+    public void updatePasswordWithToken(String token, String password) throws UnprocessableEntityException {
+        final PasswordResetToken passwordResetToken = passwordResetTokenRepository
+                .findByToken(token)
+                .orElseThrow(() -> new InvalidTokenException("token does not exist."));
+
+        if (passwordResetToken.isExpired()) {
+            passwordResetTokenRepository.delete(passwordResetToken);
+            throw new InvalidTokenException("token is expired");
+        }
+
+        if (isInvalidPassword(password)) {
+            throw new UnprocessableEntityException("password doesn't match the required criteria");
+        }
+
+        SesamUser user = passwordResetToken.getUser();
+        changePassword(user, password);
+
+        passwordResetTokenRepository.delete(passwordResetToken);
+    }
+
+    @Override
+    public void changePassword(SesamUser user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    private boolean isInvalidPassword(String password) {
+        return password == null || !password.matches("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$");
+    }
 }

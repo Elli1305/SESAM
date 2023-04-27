@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import StartView from '../views/Start.vue'
-import Profilansicht from "@/main/vue/views/Profilansicht.vue";
-import SignUp from "@/main/vue/views/SignUp.vue";
+import SignUp from '@/main/vue/views/SignUp.vue'
 import LoginView from '../views/Login.vue'
-import Logout from '../views/Start.vue'
+import PasswordChange from '../views/PasswortChange.vue'
+import PasswordReset from '../views/PasswordReset.vue'
+import Profilansicht from '@/main/vue/views/Profilansicht.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -12,11 +13,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: StartView
-    },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: Profilansicht
     },
     {
       path: '/login',
@@ -28,9 +24,20 @@ const router = createRouter({
       component: SignUp
     },
     {
-      path: '/',
-      name: 'logout',
-      component: Logout
+      path: '/profile',
+      name: 'profile',
+      component: Profilansicht
+    },
+    {
+      path: '/passwordchange',
+      component: PasswordChange,
+      props: (to) => ({
+        token: to.query.token,
+      }),
+    },
+    {
+      path: '/passwordreset',
+      component: PasswordReset,
     }
   ]
 })

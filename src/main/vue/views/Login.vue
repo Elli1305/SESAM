@@ -13,7 +13,7 @@
         </template>
       </q-input>
       <p style="font-size: 1em">Passwort vergessen:
-        <a href="">Passwort zurücksetzen</a>
+        <a href="./passwordreset">Passwort zurücksetzen</a>
       </p>
       <q-btn @click="login" color="primary" label="Login"/>
       <p style="font-size: 1em">Nicht registriert:

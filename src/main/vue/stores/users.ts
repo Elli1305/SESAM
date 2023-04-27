@@ -17,7 +17,6 @@ export const useUserStore = defineStore('users', () => {
     const eMail: Ref<string> = ref('')
     const roles: Ref<Array<UserRole>|undefined> = ref()
 
-
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             api.auth.signUp({
@@ -38,7 +37,6 @@ export const useUserStore = defineStore('users', () => {
     }
 
     function authenticate(token?: string) {
-        console.log(token)
         if (token) {
             authenticated.value = true
             localStorage.setItem('token', token);
@@ -76,6 +74,25 @@ export const useUserStore = defineStore('users', () => {
         }
     }
 
+    function resetPassword (email: string){
+        return new Promise<void>((resolve, reject) => {
+            api.auth.resetPassword({
+                email: email,
+            }).then(_ => resolve())
+                .catch(reject);
+        });
+    }
+
+    function changePassword (password: string, token: string){
+        return new Promise<void>((resolve, reject) => {
+            api.auth.changePassword({
+                password: password,
+                token: token,
+            }).then(_ => resolve())
+                .catch(reject);
+        });
+    }
+
     return {
         firstName,
         lastName,
@@ -91,5 +108,7 @@ export const useUserStore = defineStore('users', () => {
         validEmail,
         logout,
         requestToken,
+        resetPassword,
+        changePassword,
     };
 })
