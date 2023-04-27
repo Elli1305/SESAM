@@ -1,7 +1,7 @@
 <template>
   <q-page>
 
-  <div class="site-plan-editor-map" style="overflow-x: hidden; overflow-y: hidden;">
+  <div class="site-plan-editor-map">
     <div
         id="site-plan-map"
         :style="{ width: '100%', height: '100%'}"
@@ -14,12 +14,14 @@
 import {map} from "leaflet/src/map";
 import {LatLng, LatLngBounds} from "leaflet/src/geo";
 import {CRS} from "leaflet/dist/leaflet-src.esm";
-import {imageOverlay, rectangle} from "leaflet/src/layer";
+import {imageOverlay, rectangle, tileLayer} from "leaflet/src/layer";
+import {control} from "leaflet/src/control";
 
 const mapConfig = {
   crs: CRS.Simple,
   minZoom: 0,
   attributionControl: false,
+  bounceAtZoomLimits: false
 };
 
 function getBounds(w, h) {
@@ -62,7 +64,6 @@ export default {
       let sitePlanMap = map("site-plan-map", mapConfig);
       const {width, height} = await getImageDimensions("src/main/resources/citec-gebaeudeplan.png");
       const bounds = getBounds(width, height);
-      console.log(bounds)
       sitePlanMap.setMaxBounds(bounds);
       sitePlanMap.fitBounds(bounds);
 
@@ -70,12 +71,10 @@ export default {
 
       overlay.addTo(sitePlanMap)
 
-      sitePlanMap.addEventListener('mousemove', function(ev) {
-        console.log("lat: " + ev.latlng.lat, "lng: " + ev.latlng.lng);
-      });
-
       let center = overlay.getCenter();
+      control.zoom().addTo(sitePlanMap)
       sitePlanMap.panTo(center);
+      sitePlanMap.invalidateSize();
     },
   },
 };
