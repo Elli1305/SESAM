@@ -9,9 +9,9 @@
       <q-input id="email" v-model="email" :label="t('profile.email')" outlined disable/>
     </div>
     <div class="row justify-center" >
-      <q-badge class="row justify-center" rounded color="secondary" text-color="primary" :style="{marginRight: '2em', height: '2em', width: '10em', opacity: this.$data.adminopacity}" ><q-icon name="person" left />{{t('profile.admin')}}</q-badge>
-      <q-badge class="row justify-center" rounded color="secondary" text-color="primary" :style="{marginRight: '2em', height: '2em', width: '10em', opacity: this.$data.editorOpacity}"  ><q-icon name="person" left />{{t('profile.editor')}}</q-badge>
-      <q-badge class="row justify-center" rounded color="secondary" text-color="primary" :style="{height: '2em', width: '10em', opacity: this.$data.issueropacity}" ><q-icon name="person" left />{{t('profile.issuer')}}</q-badge>
+      <q-badge class="row justify-center" rounded color="secondary" text-color="primary" :style="{marginRight: '2em', height: '2em', width: '10em', opacity: adminopacity}" ><q-icon name="person" left />{{t('profile.admin')}}</q-badge>
+      <q-badge class="row justify-center" rounded color="secondary" text-color="primary" :style="{marginRight: '2em', height: '2em', width: '10em', opacity: editorOpacity}"  ><q-icon name="person" left />{{t('profile.editor')}}</q-badge>
+      <q-badge class="row justify-center" rounded color="secondary" text-color="primary" :style="{height: '2em', width: '10em', opacity: issueropacity}" ><q-icon name="person" left />{{t('profile.issuer')}}</q-badge>
     </div>
   </q-page>
 </template>
