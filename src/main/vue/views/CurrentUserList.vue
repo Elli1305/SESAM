@@ -5,8 +5,6 @@
             <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{t("adminCurrentUser.headline")}}</h1>
         </div>
 
-
-
         <div class="items-center justify-center" style="display: flex">
             <div class="center" style="max-width: 80em; min-width: 60em">
                 <q-table
@@ -35,9 +33,6 @@
                 </q-table>
 
 
-
-
-
             </div>
         </div>
 
@@ -49,27 +44,30 @@
 import { ref } from 'vue'
 
 import {useI18n} from "vue-i18n";
+import axios from "axios";
 
 const columns = [
     {
-        name: 'name',
+        name: 'lastName',
         required: true,
         label: 'Name',
         align: 'center',
-        field: row => row.name,
+        field: row => row.lastName,
         sortable: true
     },
-    { name: 'prename', align: 'center', label : 'Vorname' , field: 'prename', sortable: true },
-    { name: 'email', align: 'center',label: 'E-mail', field: 'email', sortable: true },
+    { name: 'firstName', align: 'center', label : 'Vorname' , field: 'firstName', sortable: true },
+    { name: 'username', align: 'center',label: 'E-mail', field: 'username', sortable: true },
     { name: 'roles', align: 'center',label: 'Rolle(n)', field: 'roles' },
-    { name: 'actions', label: 'Bearbeiten', style: "width: 40px", align: 'center' }
+    //{ name: 'actions', label: 'Bearbeiten', style: "width: 40px", align: 'center' }
 ]
 
-const rows = [
+const rows = ref('');
+
+rows.value = [
     {
-        name: 'Frozen Yogurt',
-        prename: 'Frozen',
-        email: 'frozenyogourt@isbest.yeah',
+        lastName: 'Frozen Yogurt',
+        firstName: 'Frozen',
+        username: 'frozenyogourt@isbest.yeah',
         roles: 'Admin'
     },
     {
@@ -128,14 +126,21 @@ const rows = [
 
 export default {
     name: "CurrentUserList",
+    //axios.get(url[,config]),
+
     setup () {
+
+        axios.get('/api/user')
+             .then(res => { rows.value = res.data
+
+        })
 
         const { t } = useI18n();
         return {
             filter: ref(''),
             search: ref(''),
             columns,
-            rows,
+            rows: ref(''),
             t
         }
     }

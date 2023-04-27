@@ -87,7 +87,7 @@ public class SesamUserServiceImpl implements SesamUserService {
     public List<SesamUser> getUsers() {
         final List<SesamUser> articles = new ArrayList<>();
 
-        repository.findAll().forEach(articles::add);  //<2>
+        repository.findAll().forEach(articles::add);
 
         return articles;
     }
