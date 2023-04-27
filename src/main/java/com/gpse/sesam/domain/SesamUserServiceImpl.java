@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,4 +81,14 @@ public class SesamUserServiceImpl implements SesamUserService {
 		return repository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
 	}
+
+
+    @Override
+    public List<SesamUser> getUsers() {
+        final List<SesamUser> articles = new ArrayList<>();
+
+        repository.findAll().forEach(articles::add);  //<2>
+
+        return articles;
+    }
 }

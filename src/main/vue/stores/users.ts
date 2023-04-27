@@ -4,13 +4,15 @@ import api from '../api'
 import {AttainableRole} from "@/main/vue/entity/createUser";
 import axios from "axios";
 import {Credentials} from "@/main/vue/entity/credentials";
-import {LoginResponse} from "@/main/vue/entity/loginResponse";
+import {LoginResponse, User} from "@/main/vue/entity/loginResponse";
+
 
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
     const validPassword: Ref<RegExpMatchArray | null> = ref(null)
     const validEmail: Ref<RegExpMatchArray | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
+    const sesamUsers: Ref<User[]> = ref([])
 
 
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {

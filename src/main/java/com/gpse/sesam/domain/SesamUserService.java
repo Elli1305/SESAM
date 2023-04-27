@@ -3,6 +3,8 @@ package com.gpse.sesam.domain;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 /**
  * Interface for interacting with {@link SesamUser}
  */
@@ -14,4 +16,5 @@ public interface SesamUserService extends UserDetailsService {
      * @return the newly created user.
      */
     SesamUser createUser(SesamUserCmd userCmd);
+    List<SesamUser> getUsers();
 }

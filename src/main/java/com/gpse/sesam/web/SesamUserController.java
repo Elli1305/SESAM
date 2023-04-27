@@ -73,4 +73,9 @@ public class SesamUserController {
 				.compact();
 		return new LoginResponse(token, user);
 	}
+	@GetMapping("/articles")
+	public List<SesamUser> showBlog() {
+		List<SesamUser> sesamUsers = service.getUsers(); //<2>
+		return sesamUsers;
+	}
 }
