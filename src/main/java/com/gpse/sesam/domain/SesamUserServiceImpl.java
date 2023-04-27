@@ -106,7 +106,7 @@ public class SesamUserServiceImpl implements SesamUserService {
         Locale locale = LocaleContextHolder.getLocale();
 
         mailService.send(
-                "noreply@gpse-se-ss-2023-team3-1.invalid",
+                "gp.se.team.3.1@gmail.com",
                 user.getUsername(),
                 messageSource.getMessage("reset.subject", null,  locale),
                 messageSource.getMessage(
