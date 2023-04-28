@@ -59,7 +59,7 @@ const { t } = useI18n()
     <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
-          <a href="">Impressum</a>
+          <router-link to="/impressum">Impressum</router-link>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>

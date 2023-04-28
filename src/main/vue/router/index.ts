@@ -4,7 +4,7 @@ import SignUp from "@/main/vue/views/SignUp.vue";
 import LoginView from "../views/Login.vue";
 import PasswordChange from "../views/PasswortChange.vue";
 import PasswordReset from "../views/PasswordReset.vue";
-
+import Impressum from "../views/Impressum.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -32,6 +32,10 @@ const router = createRouter({
     {
       path: "/passwordreset",
       component: PasswordReset,
+    },
+    {
+      path: "/Impressum",
+      component: Impressum,
     },
   ],
 });
