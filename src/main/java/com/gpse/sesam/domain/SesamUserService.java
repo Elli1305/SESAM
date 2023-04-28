@@ -20,4 +20,10 @@ public interface SesamUserService extends UserDetailsService {
 	void deleteAll();
 
 	void saveAll(Iterable<SesamUser> users);
+
+    void createPasswordResetToken(SesamUser user, String token);
+
+    void updatePasswordWithToken(String token, String password);
+
+    void changePassword(SesamUser user, String password);
 }

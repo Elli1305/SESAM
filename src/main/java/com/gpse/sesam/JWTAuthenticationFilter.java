@@ -1,85 +1,65 @@
 package com.gpse.sesam;
 
-import io.jsonwebtoken.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.gpse.sesam.web.LoginResponse;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
-
-public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
+public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
-	private final UserDetailsService userDetailsService;
 	private final SecurityConstants securityConstants;
 
-	public JWTAuthenticationFilter(AuthenticationManager authenticationManager,
-								   final UserDetailsService userDetailsService,
-								   final SecurityConstants securityConstants) {
+	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, SecurityConstants securityConstants) {
 		super(authenticationManager);
-		this.userDetailsService = userDetailsService;
 		this.securityConstants = securityConstants;
+		setPasswordParameter("password");
+		setUsernameParameter("eMail");
+		setFilterProcessesUrl(securityConstants.getAuthLoginUrl());
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-									FilterChain filterChain) throws IOException, ServletException {
-		UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
-		if (authentication == null) {
-			filterChain.doFilter(request, response);
-			return;
-		}
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+											FilterChain chain, Authentication authentication) throws IOException {
+		UserDetails user = (UserDetails) authentication.getPrincipal();
 
-		authentication.setDetails(
-				new WebAuthenticationDetailsSource().buildDetails(request)
-		);
+		List<String> roles = user.getAuthorities()
+				.stream()
+				.map(GrantedAuthority::getAuthority)
+				.toList();
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		filterChain.doFilter(request, response);
-	}
+		byte[] signingKey = securityConstants.getJwtSecret().getBytes();
 
-	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-		String token = request.getHeader(securityConstants.getTokenHeader());
-		if (token != null && !token.equals("") && token.startsWith(securityConstants.getTokenPrefix())) {
-			try {
-				byte[] signingKey = securityConstants.getJwtSecret().getBytes();
+		String token = Jwts.builder()
+				.signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
+				.setHeaderParam("typ", securityConstants.getTokenType())
+				.setIssuer(securityConstants.getTokenIssuer())
+				.setAudience(securityConstants.getTokenAudience())
+				.setSubject(user.getUsername())
+				.setExpiration(new Date(System.currentTimeMillis() + securityConstants.getTokenExpiration()))
+				.claim("rol", roles)
+				.compact();
 
-				Jws<Claims> parsedToken = Jwts.parserBuilder()
-						.setSigningKey(signingKey).build()
-						.parseClaimsJws(token.replace(securityConstants.getTokenPrefix(), "").strip());
-
-				String username = parsedToken.getBody().getSubject();
-
-				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-				if (username != null && !username.equals("")) {
-					return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				}
-			} catch (ExpiredJwtException exception) {
-				LOG.warn("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());
-			} catch (UnsupportedJwtException exception) {
-				LOG.warn("Request to parse unsupported JWT : {} failed : {}", token, exception.getMessage());
-			} catch (MalformedJwtException exception) {
-				LOG.warn("Request to parse invalid JWT : {} failed : {}", token, exception.getMessage());
-			} catch (SecurityException exception) {
-				LOG.warn("Request to parse JWT with invalid signature : {} failed : {}", token,
-						exception.getMessage());
-			} catch (IllegalArgumentException exception) {
-				LOG.warn("Request to parse empty or null JWT : {} failed : {}", token, exception.getMessage());
-			}
-		}
-
-		return null;
+		response.addHeader(securityConstants.getTokenHeader(), securityConstants.getTokenPrefix() + " " + token);
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		response.getWriter().write(ow.writeValueAsString(new LoginResponse(token, user)));
 	}
 }

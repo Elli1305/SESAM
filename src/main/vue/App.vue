@@ -1,19 +1,29 @@
 <script setup>
 import {RouterView} from 'vue-router'
 import {useI18n} from "vue-i18n";
+import {useUserStore} from "@/main/vue/stores/users"
+import {useQuasar} from 'quasar'
+import {useRouter} from "vue-router/dist/vue-router"
 
 const { t } = useI18n()
-  const logged_in = false
+const userStore = useUserStore()
+const $q = useQuasar()
+const router = useRouter()
 
-  if(logged_in) {
-    document.getElementById("profilePic")
-    document.getElementById("registerBtn")
-    document.getElementById("loginBtn")
-  } else {
-    document.getElementById("profilePic")
-    document.getElementById("registerBtn")
-    document.getElementById("loginBtn")
-  }
+    async function logout (){
+      await userStore.logout()
+      if (!userStore.authenticated) {
+        $q.notify({
+          type: 'positive',
+          message: 'Sie haben sich erfolgreich abgemeldet',
+          caption: 'Logout erfolgreich',
+          position: "top",
+          timeout: 3000,
+          classes: "loginNotify"
+        })
+        await router.push('/')
+      }
+}
 
 
 </script>
@@ -28,19 +38,29 @@ const { t } = useI18n()
           </q-toolbar-title>
         </div>
         <div class="row self-end" style="margin-top: 0">
-          <p>Floorplan</p>
+          <router-link to="/" style="color: white; text-decoration: none"><p>{{t("home.floorplan")}}</p></router-link>
           <q-space style="width: 1em" />
-          <p>Credentials</p>
+          <p>{{t("home.credentials")}}</p>
           <q-space style="width: 1em" />
-          <p>Information</p>
+          <p>{{t("home.information")}}</p>
           <q-space style="width: 3em" />
-          <router-link :to="'/signup'">
-            <q-btn id="registerBtn" class="shadow-1" label="Registrierung"/>
-          </router-link>
-          <q-space style="width: 1em" />
-          <router-link :to="'/login'">
-            <q-btn id="loginBtn" class="shadow-1" label="Login"/>
-          </router-link>
+            <q-btn v-if="userStore.authenticated" :label="userStore.firstName.charAt(0) + userStore.lastName.charAt(0)" rounded color="info" unelevated auto-close style="width: 36px; height: 36px;" >
+              <q-menu>
+                <q-list>
+                  <q-item to="/profile" clickable v-close-popup>
+                    <q-item-section text-color="black" style="width: 7.5em" unelevated><div><q-icon left name="person"/>{{t('profile.title')}}</div></q-item-section>
+                  </q-item>
+                  <q-item @click="logout" clickable v-close-popup>
+                    <q-item-section style="width: 7.5em" unelevated><div><q-icon left name="logout"/>{{t('home.logout')}}</div></q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+            <div v-if="!userStore.authenticated" class="row" >
+              <q-btn to="/signup" class="shadow-1" :label="t('home.signup')"/>
+            <q-space style="width: 1em" />
+              <q-btn to="/login" class="shadow-1" :label="t('home.signin')"/>
+           </div>
         </div>
       </q-toolbar>
     </q-header>
@@ -52,7 +72,9 @@ const { t } = useI18n()
     <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
-          <a href="">Impressum</a>
+
+          <a href="" style="color: white; font-variant-caps: small-caps;">{{t('home.imprint')}}</a>
+          <router-link to="/impressum">Impressum</router-link>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -62,10 +84,6 @@ const { t } = useI18n()
 </template>
 
 <style scoped>
-  a {
-    color: white;
-    font-variant-caps: small-caps;
-  }
   p {
     font-size: 1.5em;
     font-variant-caps: small-caps;
