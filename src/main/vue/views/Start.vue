@@ -1,7 +1,6 @@
 <template>
   <NavigationTree></NavigationTree>
- <Map></Map>
-  <div><p>Hier kommt der Floorplan rein</p></div>
+  <Map></Map>
 </template>
 
 <script>
@@ -13,8 +12,7 @@ import NavigationTree from "@/main/vue/views/NavigationTree.vue";
 
 export default {
   name: "Start",
-  components: {Map}
-  components: {NavigationTree}
+  components: {Map, NavigationTree}
 }
 </script>
 

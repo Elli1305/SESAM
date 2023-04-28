@@ -1,21 +1,21 @@
 <template>
   <q-page>
 
-  <div class="site-plan-editor-map">
-    <div
-        id="site-plan-map"
-        :style="{ width: '100%', height: '100%'}"
-    ></div>
-  </div>
+    <div class="site-plan-editor-map">
+      <div
+          id="site-plan-map"
+
+      ></div>
+    </div>
   </q-page>
 </template>
 <script>
 
-import {map} from "leaflet/src/map";
-import {LatLng, LatLngBounds} from "leaflet/src/geo";
-import {CRS} from "leaflet/dist/leaflet-src.esm";
-import {imageOverlay, rectangle, tileLayer} from "leaflet/src/layer";
-import {control} from "leaflet/src/control";
+import {map, CRS} from "leaflet";
+import "@geoman-io/leaflet-geoman-free";
+import "leaflet/dist/leaflet.css";
+import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
+import L from "leaflet";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -25,17 +25,29 @@ const mapConfig = {
 };
 
 function getBounds(w, h) {
+  let x;
+  let y;
 
-  let c1 = new LatLng(-h, -w);
-  let c2 = new LatLng(h, w);
+  if (w / 2 >= h) {
+    x = 180;
 
-  return new LatLngBounds(c1, c2);
+    y = h * (x / w);
+  } else if (h > w || w / 2 < h) {
+    y = 90;
+
+    x = w * (y / h);
+  }
+
+  let c1 = L.latLng(-y, -x);
+  let c2 = L.latLng(y, x);
+
+  return L.latLngBounds(c1, c2);
 }
 
 function getImageDimensions(imageURL) {
   const img = new Image();
   return new Promise((resolve, reject) => {
-    img.onload = () => resolve({ width: img.width, height: img.height });
+    img.onload = () => resolve({width: img.width, height: img.height});
     img.onerror = reject;
     img.src = imageURL;
   });
@@ -53,32 +65,30 @@ export default {
     this.init();
   },
   methods: {
-    async init() {
-      await this.initMap();
+    init() {
+      this.applyImageToMap();
     },
-    async initMap() {
-      await this.applyImageToMap();
-    },
+    applyImageToMap() {
+      getImageDimensions("src/main/resources/citec-gebaeudeplan.png").then(({width, height}) => {
+        let sitePlanMap = L.map("site-plan-map", mapConfig);
+        const bounds = getBounds(width, height);
+        sitePlanMap.setMaxBounds(bounds);
+        sitePlanMap.fitBounds(bounds);
 
-    async applyImageToMap() {
-      let sitePlanMap = map("site-plan-map", mapConfig);
-      const {width, height} = await getImageDimensions("src/main/resources/citec-gebaeudeplan.png");
-      const bounds = getBounds(width, height);
-      sitePlanMap.setMaxBounds(bounds);
-      sitePlanMap.fitBounds(bounds);
+        let overlay = L.imageOverlay("src/main/resources/citec-gebaeudeplan.png", bounds);
+        overlay.addTo(sitePlanMap)
 
-      let overlay = imageOverlay("src/main/resources/citec-gebaeudeplan.png", bounds);
-
-      overlay.addTo(sitePlanMap)
-
-      let center = overlay.getCenter();
-      control.zoom().addTo(sitePlanMap)
-      sitePlanMap.panTo(center);
-      sitePlanMap.invalidateSize();
+        let center = overlay.getCenter();
+        sitePlanMap.panTo(center);
+        sitePlanMap.invalidateSize();
+      });
     },
   },
 };
 </script>
 <style>
-
+#site-plan-map {
+  width: 100%;
+  height: 85.8vh;
+}
 </style>
