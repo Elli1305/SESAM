@@ -34,10 +34,6 @@
 export default {
   name: "Node",
   props: {
-    // key: {
-    //   type: Number,
-    //   required: true
-    // },
     title: {
       type: String,
       required: true
@@ -45,12 +41,10 @@ export default {
     level: {
       type: Number,
     },
-
     children: {
       type: Array,
       default: []
     },
-
     icon: {
       type: String,
       default: ''

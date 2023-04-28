@@ -31,34 +31,25 @@ export default {
   setup() {
     const locationStore = useLocationStore()
     let locationTreeStructure = ref([])
-    const buildTreeStructure = async () => {
-      const locations = await locationStore.getLocations()
 
-      return locations.map((location) => {
-        return {
-          id: location.id,
-          title: location.name,
-          level: 0,
-
-          children: location.buildings.map((building) => {
-            return {
+    locationStore.getLocations().then((locations) => {
+          locationTreeStructure.value = locations.map((location) => ({
+            id: location.id,
+            title: location.name,
+            level: 0,
+            children: location.buildings.map((building) => ({
               id: building.id,
               title: building.name,
               level: 1,
-              children: building.floors.map(floor => {
-                return {
-                  id: floor.id,
-                  level: 2,
-                  title: "Etage " + floor.floorLevel
-                }
-              })
-            }
-          })
+              children: building.floors.map(floor => ({
+                id: floor.id,
+                level: 2,
+                title: "Etage " + floor.floorLevel
+              }))
+            }))
+          }))
         }
-      })
-    }
-
-    buildTreeStructure().then(res => locationTreeStructure.value = res)
+    )
 
 
     return {locationTreeStructure}
