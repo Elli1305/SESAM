@@ -21,10 +21,10 @@ import java.util.List;
 @Profile("test")
 public class InitializeDatabase implements InitializingBean {
 
-	private LocationService locationService;
+	private final LocationService locationService;
 
-	private SesamUserService userService;
-	private PasswordEncoder passwordEncoder;
+	private final SesamUserService userService;
+	private final PasswordEncoder passwordEncoder;
 
 	public InitializeDatabase(LocationService locationService, SesamUserService userService,
 							  PasswordEncoder passwordEncoder) {
@@ -69,21 +69,28 @@ public class InitializeDatabase implements InitializingBean {
 
 	private List<Location> createLocations() {
 		List<Room> rooms = new ArrayList<>();
+		List<Room> rooms2 = new ArrayList<>();
 		for (int i = 0; i < 30; i++) {
 			rooms.add(new Room("Room " + i));
+			rooms2.add(new Room("Room " + i));
 		}
 
 		List<Floor> floors = new ArrayList<>();
+		List<Floor> floors2 = new ArrayList<>();
 		for (int i = 0; i < 6; i++) {
 			floors.add(new Floor(i % 2, rooms.subList(i * 5, i * 5 + 5)));
+			floors2.add(new Floor(i % 2, rooms2.subList(i * 5, i * 5 + 5)));
 		}
 
 		List<Building> buildings = new ArrayList<>();
+		List<Building> buildings2 = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
 			buildings.add(new Building("Building " + i, floors.subList(i * 2, i * 2 + 2)));
+			buildings2.add(new Building("Building " + i, floors2.subList(i * 2, i * 2 + 2)));
 
 		}
 		Location location1 = new Location("ExampleLocation", buildings);
-		return List.of(location1);
+		Location location2 = new Location("ExampleLocation2", buildings2);
+		return List.of(location1, location2);
 	}
 }
