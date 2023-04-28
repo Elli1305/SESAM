@@ -4,10 +4,15 @@
         <div class="q-mb-xl">
             <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{t("adminCurrentUser.headline")}}</h1>
         </div>
-
+        <div>
+            <h1>My Weather App</h1>
+            <button v-on:click="getUserData">Get User Data</button>
+            <div>{{userDataList}}</div>
+        </div>
         <div class="items-center justify-center" style="display: flex">
             <div class="center" style="max-width: 80em; min-width: 60em">
                 <q-table
+                    :row-key="ids"
                         :rows="rows"
                         :columns="columns"
                         row-key="name"
@@ -128,6 +133,9 @@ export default {
     name: "CurrentUserList",
     //axios.get(url[,config]),
 
+
+
+
     setup () {
 
         axios.get('/api/user')
@@ -143,7 +151,8 @@ export default {
             rows: ref(''),
             t
         }
-    }
+    },
+
 }
 
 </script>
