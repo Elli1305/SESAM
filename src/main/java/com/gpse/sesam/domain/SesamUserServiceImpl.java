@@ -75,6 +75,16 @@ public class SesamUserServiceImpl implements SesamUserService {
     }
 
 	@Override
+	public void deleteAll() {
+		repository.deleteAll();
+	}
+
+	@Override
+	public void saveAll(Iterable<SesamUser> users) {
+		repository.saveAll(users);
+	}
+
+	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return repository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
