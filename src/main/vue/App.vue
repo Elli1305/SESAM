@@ -73,8 +73,8 @@ const router = useRouter()
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
 
-          <a href="" style="color: white; font-variant-caps: small-caps;">{{t('home.imprint')}}</a>
-          <router-link to="/impressum">Impressum</router-link>
+          <a href="/impressum" style="color: white; font-variant-caps: small-caps;">{{t('home.imprint')}}</a>
+
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
