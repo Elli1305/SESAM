@@ -11,8 +11,8 @@ export const useLocationStore = defineStore('locations', () => {
     function getLocations() {
         return new Promise ((resolve, reject) => {
             api.location.getLocations().then((response) => {
-                allLocations.value = response
-                resolve(response)
+                allLocations.value = response.data
+                resolve(response.data)
             }).catch((error) => {
                 reject(error)
             })

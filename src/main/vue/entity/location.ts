@@ -1,4 +1,3 @@
-
 interface Room {
     id: bigint
     name: string
@@ -8,7 +7,7 @@ interface Room {
 interface Floor {
 
     id: bigint
-    name: string
+    floorLevel: number
     rooms: Room[]
 
 }
@@ -21,10 +20,7 @@ interface Building {
 }
 
 export interface Location {
-
-    data: {
-        id: bigint
-        name: string
-        buildings: Building[]
-    }
+    id: bigint
+    name: string
+    buildings: Building[]
 }

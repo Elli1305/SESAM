@@ -1,61 +1,67 @@
 <template>
- <div class="q-pa-md q-gutter-sm">
-    <q-tree
-        :nodes="simple"
-        node-key="label"
-        no-connectors
-        v-model:expanded="expanded"
-    />
-  </div>
+  <q-drawer
+      show-if-above bordered
+      content-class="bg-grey-1">
+    <q-list>
+      <q-item-label
+          header
+          class="text-grey-8">
+        Locations
+      </q-item-label>
+      <Node
+          v-for="node in locationTreeStructure"
+          :title="node.title"
+          v-bind="node"
+      >
+      </Node>
+    </q-list>
+  </q-drawer>
 </template>
 
 <script>
+import {useLocationStore} from "@/main/vue/stores/locations";
+import Node from "@/main/vue/views/Node.vue";
 import {ref} from "vue";
+
 
 export default {
   name: "NavigationTree",
-  setup () {
-    return {
-      expanded: ref([ 'Satisfied customers (with avatar)', 'Good food (with icon)' ]),
+  components: {Node},
 
-      simple: [
-        {
-          label: 'Satisfied customers (with avatar)',
-          avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-          children: [
-            {
-              label: 'Good food (with icon)',
-              icon: 'restaurant_menu',
-              children: [
-                { label: 'Quality ingredients' },
-                { label: 'Good recipe' }
-              ]
-            },
-            {
-              label: 'Good service (disabled node with icon)',
-              icon: 'room_service',
-              disabled: true,
-              children: [
-                { label: 'Prompt attention' },
-                { label: 'Professional waiter' }
-              ]
-            },
-            {
-              label: 'Pleasant surroundings (with icon)',
-              icon: 'photo',
-              children: [
-                {
-                  label: 'Happy atmosphere (with image)',
-                  img: 'https://cdn.quasar.dev/img/logo_calendar_128px.png'
-                },
-                { label: 'Good table presentation' },
-                { label: 'Pleasing decor' }
-              ]
+  setup() {
+    const locationStore = useLocationStore()
+    let locationTreeStructure = ref([])
+    const buildTreeStructure = async () => {
+      const locations = await locationStore.getLocations()
+
+      return locations.map((location) => {
+        return {
+          id: location.id,
+          title: location.name,
+          level: 0,
+
+          children: location.buildings.map((building) => {
+            return {
+              id: building.id,
+              title: building.name,
+              level: 1,
+              children: building.floors.map(floor => {
+                return {
+                  id: floor.id,
+                  level: 2,
+                  title: "Etage " + floor.floorLevel
+                }
+              })
             }
-          ]
+          })
         }
-      ]
+      })
     }
+
+    buildTreeStructure().then(res => locationTreeStructure.value = res)
+
+
+    return {locationTreeStructure}
   }
 }
 </script>
