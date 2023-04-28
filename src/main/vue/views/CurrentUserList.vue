@@ -11,10 +11,9 @@
         <div class="items-center justify-center" style="display: flex">
             <div class="center" style="max-width: 80em; min-width: 60em">
                 <q-table
-                    :row-key="ids"
                         :rows="rows"
                         :columns="columns"
-                        row-key="name"
+                        row-key="username"
                         :separator="'cell'"
                         :filter="filter"
                 >
@@ -32,6 +31,13 @@
                                 <q-icon name="search" />
                             </template>
                         </q-input>
+                    </template>
+                    <template v-slot:body-cell-roles="props">
+                        <q-td :props="props">
+                            <div v-for="role in props.value">
+                                {{ role.role }}
+                            </div>
+                        </q-td>
                     </template>
 
                 </q-table>
@@ -65,7 +71,7 @@ const columns = [
     { name: 'actions', label: 'Bearbeiten', style: "width: 40px", align: 'center' }
 ]
 
-const rows = ref('');
+const rows = ref([]);
 
 rows.value = [
     {
@@ -123,7 +129,6 @@ export default {
         const { t } = useI18n();
         return {
             filter: ref(''),
-            search: ref(''),
             columns,
             rows,
             t
