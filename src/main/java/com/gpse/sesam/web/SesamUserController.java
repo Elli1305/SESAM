@@ -53,4 +53,5 @@ public class SesamUserController {
 				updatePasswordCmd.getPassword()
 		);
 	}
+
 }

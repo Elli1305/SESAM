@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
-
 @Entity
 public class SesamUser implements UserDetails {
 	@Serial

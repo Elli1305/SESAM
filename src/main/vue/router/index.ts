@@ -1,11 +1,13 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import StartView from '../views/Start.vue'
-import SignUp from '@/main/vue/views/SignUp.vue'
-import LoginView from '../views/Login.vue'
-import PasswordChange from '../views/PasswortChange.vue'
-import PasswordReset from '../views/PasswordReset.vue'
+
+import { createRouter, createWebHistory } from "vue-router";
+import StartView from "../views/Start.vue";
+import SignUp from "@/main/vue/views/SignUp.vue";
+import LoginView from "../views/Login.vue";
+import PasswordChange from "../views/PasswortChange.vue";
+import PasswordReset from "../views/PasswordReset.vue";
 import Profilansicht from '@/main/vue/views/Profilansicht.vue'
 
+import Impressum from "../views/Impressum.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -38,9 +40,15 @@ const router = createRouter({
     {
       path: '/passwordreset',
       component: PasswordReset,
-    }
-  ]
-})
+
+    },
+    {
+      path: "/Impressum",
+      component: Impressum,
+    },
+  ],
+});
+
 
 /*router.beforeEach((to) => {
   // Something which should be executed before each routing
