@@ -5,8 +5,7 @@
             <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{t("adminCurrentUser.headline")}}</h1>
         </div>
         <div>
-            <h1>My Weather App</h1>
-            <button v-on:click="getUserData">Get User Data</button>
+            <button v-on:click="getUserData">Aktualisieren</button>
             <div>{{userDataList}}</div>
         </div>
         <div class="items-center justify-center" style="display: flex">
@@ -63,7 +62,7 @@ const columns = [
     { name: 'firstName', align: 'center', label : 'Vorname' , field: 'firstName', sortable: true },
     { name: 'username', align: 'center',label: 'E-mail', field: 'username', sortable: true },
     { name: 'roles', align: 'center',label: 'Rolle(n)', field: 'roles' },
-    //{ name: 'actions', label: 'Bearbeiten', style: "width: 40px", align: 'center' }
+    { name: 'actions', label: 'Bearbeiten', style: "width: 40px", align: 'center' }
 ]
 
 const rows = ref('');
@@ -106,34 +105,12 @@ rows.value = [
         sodium: 87,
         calcium: '14%',
         iron: '1%'
-    },
-    {
-        name: 'Frozen Yogurt',
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        sodium: 87,
-        calcium: '14%',
-        iron: '1%'
-    },
-    {
-        name: 'Frozen Yogurt',
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        sodium: 87,
-        calcium: '14%',
-        iron: '1%'
     }
 ]
 
 export default {
     name: "CurrentUserList",
     //axios.get(url[,config]),
-
-
 
 
     setup () {
@@ -148,10 +125,17 @@ export default {
             filter: ref(''),
             search: ref(''),
             columns,
-            rows: ref(''),
+            rows,
             t
         }
     },
+    methods: {
+        getUserData() {
+             (this.rows = axios.get('/api/user')
+                    .then(res => { rows.value = res.data
+                    }));
+        }
+    }
 
 }
 
