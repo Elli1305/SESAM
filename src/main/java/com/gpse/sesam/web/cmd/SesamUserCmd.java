@@ -1,6 +1,6 @@
 package com.gpse.sesam.web.cmd;
 
-import com.gpse.sesam.domain.SesamUserRole;
+import com.gpse.sesam.domain.user.SesamUserRole;
 
 import java.util.List;
 
