@@ -15,6 +15,9 @@ public class Floor {
     @Column
     private int floorLevel;
 
+    @Column
+    private String floorPlanPath;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Room> rooms;
 
@@ -22,8 +25,9 @@ public class Floor {
 
     }
 
-    public Floor(int floorLevel, List<Room> rooms) {
+    public Floor(int floorLevel, String floorPlanPath, List<Room> rooms) {
         this.floorLevel = floorLevel;
+        this.floorPlanPath = floorPlanPath;
         this.rooms = rooms;
     }
 
@@ -53,5 +57,13 @@ public class Floor {
 
     public void addRoom(Room room) {
         this.rooms.add(room);
+    }
+
+    public String getFloorPlanPath() {
+        return floorPlanPath;
+    }
+
+    public void setFloorPlanPath(String floorPlanPath) {
+        this.floorPlanPath = floorPlanPath;
     }
 }

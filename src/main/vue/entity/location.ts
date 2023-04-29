@@ -4,10 +4,11 @@ interface Room {
 
 }
 
-interface Floor {
+export interface Floor {
 
     id: bigint
     floorLevel: number
+    floorPlanPath: string;
     rooms: Room[]
 
 }

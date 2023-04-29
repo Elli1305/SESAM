@@ -2,20 +2,18 @@
   <q-page>
 
     <div class="site-plan-editor-map">
-      <div
-          id="site-plan-map"
-
-      ></div>
+      <div id="site-plan-map"></div>
     </div>
   </q-page>
 </template>
 <script>
 
-import {map, CRS} from "leaflet";
+import {CRS} from "leaflet";
 import "@geoman-io/leaflet-geoman-free";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import L from "leaflet";
+import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -53,29 +51,23 @@ function getImageDimensions(imageURL) {
   });
 }
 
+let sitePlanMap;
 export default {
-
-
-  data: function () {
-    return {
-      imageURL: "src/main/resources/citec-gebaeudeplan.png",
-    };
-  },
   mounted: function () {
-    this.init();
+    sitePlanMap = L.map("site-plan-map", mapConfig);
+    const floorPlanStore = useFloorPlanStore();
+    floorPlanStore.$subscribe((mutation, state) => {
+      this.applyImageToMap(state.selectedFloorPlan)
+    });
   },
   methods: {
-    init() {
-      this.applyImageToMap();
-    },
-    applyImageToMap() {
-      getImageDimensions("src/main/resources/citec-gebaeudeplan.png").then(({width, height}) => {
-        let sitePlanMap = L.map("site-plan-map", mapConfig);
+    applyImageToMap(floorPlan) {
+      getImageDimensions(floorPlan).then(({width, height}) => {
         const bounds = getBounds(width, height);
         sitePlanMap.setMaxBounds(bounds);
         sitePlanMap.fitBounds(bounds);
 
-        let overlay = L.imageOverlay("src/main/resources/citec-gebaeudeplan.png", bounds);
+        let overlay = L.imageOverlay(floorPlan, bounds);
         overlay.addTo(sitePlanMap)
 
         let center = overlay.getCenter();
