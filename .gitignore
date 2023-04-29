@@ -157,3 +157,4 @@ node/
 src/main/resources/public
 target
 data/
+/data/sesam.mv.db
