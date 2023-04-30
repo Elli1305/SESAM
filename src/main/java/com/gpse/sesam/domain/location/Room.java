@@ -10,7 +10,7 @@ public class Room {
     private Long id;
 
     @Column
-    String name;
+    private String name;
 
     protected Room() {
 

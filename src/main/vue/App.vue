@@ -40,7 +40,7 @@ const router = useRouter()
         <div class="row self-end" style="margin-top: 0">
           <router-link to="/" style="color: white; text-decoration: none"><p>{{t("home.floorplan")}}</p></router-link>
           <q-space style="width: 1em" />
-          <p>{{t("home.credentials")}}</p>
+          <router-link to="/credentialview" style="color: white; text-decoration: none"><p>{{t("home.credentials")}}</p></router-link>
           <q-space style="width: 1em" />
           <p>{{t("home.information")}}</p>
           <q-space style="width: 3em" />

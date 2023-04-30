@@ -1,7 +1,6 @@
 package com.gpse.sesam.domain.user;
 
 
-import com.gpse.sesam.domain.user.PasswordResetToken;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

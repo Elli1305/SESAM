@@ -8,6 +8,7 @@ import LoginView from '../views/Login.vue'
 import NavigationTree from "@/main/vue/views/NavigationTree.vue";
 import Floorplan from "@/main/vue/views/Floorplan.vue";
 import Impressum from "../views/Impressum.vue";
+import Credentialview from "@/main/vue/views/CredentialView.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -49,6 +50,10 @@ const router = createRouter({
     {
       path: "/Impressum",
       component: Impressum,
+    },
+    {
+      path: "/credentialview",
+      component: Credentialview,
     },
   ],
 });

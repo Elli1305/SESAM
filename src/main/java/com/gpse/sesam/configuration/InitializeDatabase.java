@@ -79,7 +79,8 @@ public class InitializeDatabase implements InitializingBean {
 		List<Floor> floors2 = new ArrayList<>();
 		for (int i = 0; i < 6; i++) {
 			floors.add(new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png", rooms.subList(i * 5, i * 5 + 5)));
-			floors2.add(new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png", rooms2.subList(i * 5, i * 5 + 5)));
+			floors2.add(new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png", rooms2.subList(
+					i * 5, i * 5 + 5)));
 		}
 
 		List<Building> buildings = new ArrayList<>();

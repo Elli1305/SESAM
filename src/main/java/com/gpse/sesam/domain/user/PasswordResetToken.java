@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.user;
 
-import com.gpse.sesam.domain.user.SesamUser;
 import jakarta.persistence.*;
 
 import java.util.Date;
