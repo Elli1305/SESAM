@@ -13,11 +13,11 @@
         </template>
       </q-input>
       <p style="font-size: 1em">Passwort vergessen:
-        <a href="./passwordreset">Passwort zurücksetzen</a>
+        <router-link to="./passwordreset">Passwort zurücksetzen</router-link>
       </p>
       <q-btn @click="login" color="primary" label="Login"/>
       <p style="font-size: 1em">Nicht registriert:
-        <a href="./signup">Zur Registrierung</a>
+        <router-link to="./signup">Zur Registrierung</router-link>
       </p>
     </div>
   </q-page>

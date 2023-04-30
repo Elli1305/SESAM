@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import {Location} from "@/main/vue/entity/location";
 
 export default {
-    getLocations(){
+    getLocations(): Promise<AxiosResponse<Location[]>> {
         return axios.get("api/locations")
     }
 }

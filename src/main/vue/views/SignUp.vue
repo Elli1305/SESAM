@@ -36,7 +36,7 @@
             />
             <q-btn @click="signUp()" color="primary" label="Registrieren"/>
             <p style="font-size: 1em">Bereits registriert:
-                <a href="./login">Zum Login</a>
+                <router-link to="./login">Zum Login</router-link>
             </p>
         </div>
     </q-page>
@@ -136,7 +136,7 @@ export default {
               })
 
             if (userStore.authenticated) {
-                router.push('/')
+                await router.push('/')
                 $q.notify({
                     type: 'positive',
                     message: 'Registrierung erfolgreich'

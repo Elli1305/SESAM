@@ -7,8 +7,6 @@ import {createI18n} from 'vue-i18n'
 import App from './App.vue'
 import router from './router'
 
-// import store from "./stores";
-
 import 'quasar/src/css/index.sass'
 import '@quasar/extras/material-icons/material-icons.css'
 import '@/main/vue/styles/notify.scss'
@@ -118,7 +116,6 @@ app.use(createPinia())
 app.use(router)
 app.use(Quasar, quasarUserOptions)
 app.use(i18n)
-// app.use(store)
 
 app.mount('#app')
 

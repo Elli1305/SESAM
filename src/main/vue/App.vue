@@ -44,7 +44,7 @@ const router = useRouter()
           <q-space style="width: 1em" />
           <p>{{t("home.information")}}</p>
           <q-space style="width: 3em" />
-            <q-btn v-if="userStore.authenticated" :label="userStore.firstName.charAt(0) + userStore.lastName.charAt(0)" rounded color="info" unelevated auto-close style="width: 36px; height: 36px;" >
+            <q-btn v-if="userStore.authenticated" :label="userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0)" rounded color="info" unelevated auto-close style="width: 36px; height: 36px;" >
               <q-menu>
                 <q-list>
                   <q-item to="/profile" clickable v-close-popup>
@@ -73,7 +73,7 @@ const router = useRouter()
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
 
-          <a href="/impressum" style="color: white; font-variant-caps: small-caps;">{{t('home.imprint')}}</a>
+          <router-link to="./impressum" style="color: white; font-variant-caps: small-caps;">{{t('home.imprint')}}</router-link>
 
         </q-toolbar-title>
       </q-toolbar>
