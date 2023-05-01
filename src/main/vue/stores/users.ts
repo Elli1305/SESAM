@@ -29,7 +29,7 @@ export const useUserStore = defineStore('users', () => {
     }
 
     function validatePassword(password: string, passwordRepeat: string){
-        const passwordRegEx = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$/;
+        const passwordRegEx = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*+_-])[a-zA-Z0-9!@#$%^&+_*-]{8,120}$/;
         validPassword.value = password.match(passwordRegEx)
         comparePassword.value = passwordRepeat===password
     }

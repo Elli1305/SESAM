@@ -38,7 +38,8 @@ public class SesamUserServiceImpl implements SesamUserService {
 
         final String password = userCmd.getPassword();
 
-        if (password == null || !password.matches("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$")) {
+        if (password == null || !password.matches("^(?=.*[0-9])(?=.*[A-Z])"
+                + "(?=.*[!@#$%^&*_-])[a-zA-Z0-9!@#$%^&*_-]{8,120}$")) {
             throw new UnprocessableEntityException("password doesn't match the required criteria");
         }
 
