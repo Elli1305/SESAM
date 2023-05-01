@@ -18,11 +18,12 @@ import axios from "axios";
 const messages = {
     de: {
         home: {header: "SESAM(Ger)"},
-        adminCurrentUser: {headline: "Aktuelle Nutzer"}
+        adminCurrentUser: {headline: "Aktuelle Nutzer", roles:{ADMINISTRATOR: "Administrator", EDITOR:"Bearbeiter", ISSUER:"Herausgeber", prename:"Vorname", showAdmin:"zeige Admin"}}
+
     },
     en: {
         home: {header: "SESAM(En)"},
-        adminCurrentUser: {headline: "Current Users"}
+        adminCurrentUser: {headline: "Current Users", roles:{ADMINISTRATOR: "Admin", EDITOR:"Editor", ISSUER:"Issuer", prename:"Prename", showAdmin: "Show Admin"}}
     }
 }
 
