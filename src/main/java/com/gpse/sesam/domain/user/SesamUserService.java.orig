@@ -16,7 +16,10 @@ public interface SesamUserService extends UserDetailsService {
      * @return the newly created user.
      */
     SesamUser createUser(SesamUserCmd userCmd);
+<<<<<<< HEAD:src/main/java/com/gpse/sesam/domain/SesamUserService.java
     List<SesamUser> getUsers();
+=======
+
 	void deleteAll();
 
 	void saveAll(Iterable<SesamUser> users);
@@ -26,4 +29,5 @@ public interface SesamUserService extends UserDetailsService {
     void updatePasswordWithToken(String token, String password);
 
     void changePassword(SesamUser user, String password);
+>>>>>>> master:src/main/java/com/gpse/sesam/domain/user/SesamUserService.java
 }

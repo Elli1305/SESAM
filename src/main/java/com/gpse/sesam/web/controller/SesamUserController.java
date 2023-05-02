@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -52,6 +53,11 @@ public class SesamUserController {
 				updatePasswordCmd.getToken(),
 				updatePasswordCmd.getPassword()
 		);
+	}
+
+	@GetMapping("/user")
+	public List<SesamUser> getCurrentUsers() {
+		return service.getUsers();
 	}
 
 }

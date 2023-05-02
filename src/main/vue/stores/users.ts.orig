@@ -3,22 +3,30 @@ import {Ref, ref} from 'vue'
 import api from '../api'
 import {AttainableRole} from "@/main/vue/entity/createUser"
 import axios from "axios";
-import {Credentials} from "@/main/vue/entity/credentials"
+<<<<<<< HEAD
+import {Credentials} from "@/main/vue/entity/credentials";
 import {LoginResponse, User} from "@/main/vue/entity/loginResponse";
 
+=======
+import {Credentials} from "@/main/vue/entity/credentials"
 import {LoginResponse} from "@/main/vue/entity/loginResponse"
 import {UserRole} from "@/main/vue/entity/signUpResponse";
+>>>>>>> master
 
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
     const validPassword: Ref<RegExpMatchArray | null> = ref(null)
     const validEmail: Ref<RegExpMatchArray | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
+<<<<<<< HEAD
     const sesamUsers: Ref<User[]> = ref([])
+
+=======
     const firstName: Ref<string> = ref('')
     const lastName: Ref<string> = ref('')
     const eMail: Ref<string> = ref('')
     const roles: Ref<Array<UserRole>|undefined> = ref()
+>>>>>>> master
 
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {

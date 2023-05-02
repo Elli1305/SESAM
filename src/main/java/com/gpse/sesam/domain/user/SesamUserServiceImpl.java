@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -161,4 +163,13 @@ public class SesamUserServiceImpl implements SesamUserService {
 	public void saveAll(Iterable<SesamUser> users) {
 		userRepository.saveAll(users);
 	}
+
+    @Override
+    public List<SesamUser> getUsers() {
+        final List<SesamUser> articles = new ArrayList<>();
+
+        userRepository.findAll().forEach(articles::add);
+
+        return articles;
+    }
 }

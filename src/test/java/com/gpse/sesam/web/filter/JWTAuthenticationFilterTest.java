@@ -40,6 +40,7 @@ class JWTAuthenticationFilterTest {
 		securityConstants.setTokenExpiration(864_000_000);
 		securityConstants.setTokenAudience("");
 		securityConstants.setTokenType("");
+		securityConstants.setAuthLoginUrl("api/authenticate");
 
 		authenticationFilter = new JWTAuthenticationFilter(mock(AuthenticationManager.class), securityConstants);
 	}
