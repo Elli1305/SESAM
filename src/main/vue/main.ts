@@ -18,12 +18,14 @@ import axios from "axios";
 const messages = {
     de: {
         home: {header: "SESAM(Ger)"},
-        adminCurrentUser: {headline: "Aktuelle Nutzer", roles:{ADMINISTRATOR: "Administrator", EDITOR:"Bearbeiter", ISSUER:"Herausgeber", prename:"Vorname", showAdmin:"zeige Admin"}}
+        adminCurrentUser: {headline: "Aktuelle Nutzer", roles:{ADMINISTRATOR: "Administrator", EDITOR:"Bearbeiter", ISSUER:"Herausgeber"}, prename:"Vorname",
+            showAdmin: "Administratoren", showEditor: "Bearbeiter", showIssuer: "Herausgeber", search: "Suche"}
 
     },
     en: {
         home: {header: "SESAM(En)"},
-        adminCurrentUser: {headline: "Current Users", roles:{ADMINISTRATOR: "Admin", EDITOR:"Editor", ISSUER:"Issuer", prename:"Prename", showAdmin: "Show Admin"}}
+        adminCurrentUser: {headline: "Current Users", roles:{ADMINISTRATOR: "Admin", EDITOR:"Editor", ISSUER:"Issuer"}, prename:"Prename",
+                showAdmin: "Show Admin", showEditor: "Show Editor", showIssuer: "Show Issuer", search: "Search"}
     }
 }
 
@@ -33,6 +35,7 @@ const i18n = createI18n({
     locale: 'de',
     allowComposition: true,
     fallbackLocale: 'en',
+    globalInjection: true,
     messages
 })
 const app = createApp(App)

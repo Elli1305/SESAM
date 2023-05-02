@@ -4,19 +4,15 @@
         <div class="q-mb-xl">
             <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{t("adminCurrentUser.headline")}}</h1>
         </div>
-        <div>
-            <button v-on:click="getUserData">Aktualisieren</button>
-            <div>{{userDataList}}</div>
-        </div>
         <div class="items-center justify-center" style="display: flex">
             <div class="center" style="max-width: 80em; min-width: 60em">
                 <q-table
-                    :rows="rows"
-                    :columns="columns"
-                    row-key="username"
-                    :separator="'cell'"
-                    :filter="filter"
-                    :filter-method="customFilter"
+                        :rows="rows"
+                        :columns="columns"
+                        row-key="username"
+                        :separator="'cell'"
+                        :filter="filter"
+                        :filter-method="customFilter"
                 >
 
                     <template v-slot:body-cell-actions="props">
@@ -26,15 +22,15 @@
                     </template>
                     <template v-slot:top-left>
                         <div class="col-9">
-                            <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR" label="showAdmin" />
-                            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" label="Show Editor" />
-                            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" label="Show Issuer" />
+                            <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR" :label="t( 'adminCurrentUser.showAdmin')"/>
+                            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t( 'adminCurrentUser.showEditor')" />
+                            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t( 'adminCurrentUser.showIssuer')" />
                         </div>
                     </template>
 
 
                     <template v-slot:top-right>
-                        <q-input borderless dense debounce="300" v-model="filter.search" placeholder="Search">
+                        <q-input borderless dense debounce="300" v-model="filter.search" :placeholder="t( 'adminCurrentUser.search')" >
                             <template v-slot:append>
                                 <q-icon name="search" />
                             </template>
@@ -43,17 +39,12 @@
                     <template v-slot:body-cell-roles="props">
                         <q-td :props="props">
                             <div v-for="role in props.value">
-                                <!--                            v-if="(role.role=='ADMINISTRATOR' && filter.filterToggle.admin)
-                                                            || (role.role=='EDITOR' && filter.filterToggle.editor)
-                                                            || (role.role=='ISSUER' && filter.filterToggle.issuer) "-->
-
                                 {{t( `adminCurrentUser.roles.${role.role}` )}}
                             </div>
                         </q-td>
                     </template>
 
                 </q-table>
-                <div>{{filter}}</div>
 
 
             </div>
@@ -94,7 +85,6 @@ export default {
 
 
     setup () {
-
         axios.get('/api/user')
             .then(res => { rows.value = res.data
 
@@ -102,12 +92,6 @@ export default {
 
         const { t } = useI18n();
         return {
-            /* filterToggle: {
-                 admin: true,
-                 editor: true,
-                 issuer: true
-             },
-             search: '',*/
             filter: ref({
                 filterToggle: {
                     admin: true,
@@ -121,25 +105,6 @@ export default {
             t
         }
     },
-    /*computed: {
-
-        filter() {
-            return {
-                search: this.search,
-                admin: this.filterToggle.admin,
-                editor: this.filterToggle.editor,
-                issuer: this.filterToggle.issuer,
-            }
-        }
-    },*/
-
-    /*methods: {
-        getUserData() {
-             (this.rows = axios.get('/api/user')
-                    .then(res => { rows.value = res.data
-                    }));
-        }
-    }*/
     methods: {
         customFilter(rows, terms){
             // rows contain the entire data
@@ -152,7 +117,7 @@ export default {
             const filteredRows = rows.filter(
                 (row) =>{
 
-                    let ans;
+                    let ans
 
                     //Gather toggle conditions
                     let c1 = terms.filterToggle.admin && row.roles.map(r => r.role).includes("ADMINISTRATOR")

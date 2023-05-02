@@ -20,7 +20,7 @@ const router = createRouter({
     {
       path: '/admin/currentuserlist',
       name: 'currentuserlist',
-      component: CurrentUserList, //meta: Metaobjekt(also was für eine Rolle
+      component: CurrentUserList,
       //meta: {requiresAdmin: true}
     },
     {
