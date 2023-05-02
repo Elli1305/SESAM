@@ -14,11 +14,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableMethodSecurity(
 		securedEnabled = true,
 		jsr250Enabled = true)
-// TODO: Remove annotation
 @SuppressWarnings("HideUtilityClassConstructor")
 public class SesamApplication {
     public SesamApplication() {
     }
+
 
     public static void main(String[] args) {
         SpringApplication.run(SesamApplication.class, args);

@@ -1,8 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import StartView from '../views/Start.vue'
 import SignUp from "@/main/vue/views/SignUp.vue";
+import PasswordChange from "../views/PasswortChange.vue";
+import PasswordReset from "../views/PasswordReset.vue";
+import Profilansicht from '@/main/vue/views/Profilansicht.vue'
 import LoginView from '../views/Login.vue'
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
+import NavigationTree from "@/main/vue/views/NavigationTree.vue";
+import Floorplan from "@/main/vue/views/Floorplan.vue";
+import Impressum from "../views/Impressum.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,7 +16,10 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: StartView
+      component: StartView,
+      children: [
+        {path: "", component: Floorplan}
+      ]
     },
     {
       path: '/login',
@@ -26,9 +35,31 @@ const router = createRouter({
     {
       path: '/signup',
       component: SignUp
-    }
-  ]
-})
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profilansicht
+    },
+    {
+      path: '/passwordchange',
+      component: PasswordChange,
+      props: (to) => ({
+        token: to.query.token,
+      }),
+    },
+    {
+      path: '/passwordreset',
+      component: PasswordReset,
+
+    },
+    {
+      path: "/Impressum",
+      component: Impressum,
+    },
+  ],
+});
+
 
 /*router.beforeEach((to) => {
   // Something which should be executed before each routing

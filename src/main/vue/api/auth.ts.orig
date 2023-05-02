@@ -1,0 +1,41 @@
+import axios from "axios";
+import {CreateUser} from "@/main/vue/entity/createUser";
+import {SignUpResponse} from "@/main/vue/entity/signUpResponse";
+import {Credentials} from "@/main/vue/entity/credentials";
+import {LoginResponse} from "@/main/vue/entity/loginResponse";
+<<<<<<< HEAD
+import {CurrentUserListResponse} from "@/main/vue/entity/currentUserListResponse";
+=======
+import {ResetPassword} from "@/main/vue/entity/resetPassword";
+import {ChangePassword} from "@/main/vue/entity/changePassword";
+>>>>>>> master
+
+export default {
+    signUp(user: CreateUser): Promise<SignUpResponse> {
+        return axios.post('/api/signup', user);
+    },
+    login(credentials: Credentials): Promise<LoginResponse> {
+<<<<<<< HEAD
+        return axios.post('/api/authenticate', credentials); //<2>
+    },
+    adminCurrentUser(): Promise<CurrentUserListResponse>{
+        return axios.post('/api/admin/currentUserlist');
+=======
+        const param = new URLSearchParams();
+        param.append('eMail', credentials.eMail);
+        param.append('password', credentials.password);
+        return axios.post('/api/authenticate', param,
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+    },
+    resetPassword(param: ResetPassword) {
+        return axios.post('/api/password_reset', param);
+    },
+    changePassword(param: ChangePassword) {
+        return axios.post('/api/update_password', param);
+>>>>>>> master
+    }
+}

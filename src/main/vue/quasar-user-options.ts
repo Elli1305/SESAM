@@ -4,9 +4,16 @@ import "@quasar/extras/fontawesome-v5/fontawesome-v5.css";
 import { Notify } from "quasar";
 import langDe from 'quasar/lang/de'
 
+// Import QEditor component
+import { QEditor } from "quasar";
+
 // To be used on app.use(Quasar, { ... })
 export default {
     config: {},
+    components: {
+        // Add QEditor to components
+        QEditor,
+    },
     plugins: {
         Notify,
     },
