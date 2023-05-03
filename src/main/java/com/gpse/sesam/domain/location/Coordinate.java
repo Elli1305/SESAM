@@ -17,14 +17,14 @@ public class Coordinate {
 	private Long id;
 
 	@Column
-	private BigDecimal longitude;
+	private BigDecimal lng;
 
 	@Column
-	private BigDecimal latitude;
+	private BigDecimal lat;
 
-	public Coordinate(BigDecimal longitude, BigDecimal latitude) {
-		this.longitude = longitude;
-		this.latitude = latitude;
+	public Coordinate(BigDecimal lng, BigDecimal lat) {
+		this.lng = lng;
+		this.lat = lat;
 	}
 
 	public Coordinate() {
@@ -38,19 +38,19 @@ public class Coordinate {
 		this.id = id;
 	}
 
-	public BigDecimal getLongitude() {
-		return longitude;
+	public BigDecimal getLng() {
+		return lng;
 	}
 
-	public void setLongitude(BigDecimal x) {
-		this.longitude = x;
+	public void setLng(BigDecimal x) {
+		this.lng = x;
 	}
 
-	public BigDecimal getLatitude() {
-		return latitude;
+	public BigDecimal getLat() {
+		return lat;
 	}
 
-	public void setLatitude(BigDecimal y) {
-		this.latitude = y;
+	public void setLat(BigDecimal y) {
+		this.lat = y;
 	}
 }

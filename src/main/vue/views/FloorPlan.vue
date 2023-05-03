@@ -59,8 +59,11 @@ export default {
     const floorPlanStore = useFloorPlanStore();
     floorPlanStore.$subscribe((mutation, state) => {
       this.applyImageToMap(state.selectedFloorPlan)
+      this.drawRooms(state.rooms)
     });
     this.applyImageToMap(floorPlanStore.selectedFloorPlan);
+    this.drawRooms(floorPlanStore.rooms)
+
   },
   methods: {
     applyImageToMap(floorPlan) {
@@ -77,6 +80,11 @@ export default {
         sitePlanMap.invalidateSize();
       });
     },
+    drawRooms(rooms) {
+      for (const room of rooms) {
+        L.polygon(room.coordinates.map(coord => L.latLng(coord.lat, coord.lng))).addTo(sitePlanMap)
+      }
+    }
   },
 };
 </script>
