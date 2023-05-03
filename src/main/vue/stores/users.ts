@@ -14,6 +14,12 @@ export const useUserStore = defineStore('users', () => {
     const user: Ref<User | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
 
+    if (sessionStorage.getItem("users")) {
+        const state = JSON.parse((sessionStorage.getItem("users") || ''));
+        authenticated.value = state.authenticated;
+        user.value = state.user;
+    }
+    
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             api.auth.signUp({

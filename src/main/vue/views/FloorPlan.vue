@@ -60,6 +60,7 @@ export default {
     floorPlanStore.$subscribe((mutation, state) => {
       this.applyImageToMap(state.selectedFloorPlan)
     });
+    this.applyImageToMap(floorPlanStore.selectedFloorPlan);
   },
   methods: {
     applyImageToMap(floorPlan) {
