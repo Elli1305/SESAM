@@ -2,6 +2,7 @@ package com.gpse.sesam.configuration;
 
 import com.gpse.sesam.domain.location.Building;
 import com.gpse.sesam.domain.location.Coordinate;
+import com.gpse.sesam.domain.location.Door;
 import com.gpse.sesam.domain.location.Floor;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
@@ -86,10 +87,18 @@ public class InitializeDatabaseLocal implements InitializingBean {
 			rooms2.add(new Room("Room " + i));
 		}
 
-		List<List<Coordinate>> roomCoordinates = createRoomCoordinates();
+		String jsonContent = readJsonFile();
+		List<List<Coordinate>> roomCoordinates = createRoomCoordinates(jsonContent);
 
 		for (int i = 0; i < roomCoordinates.size(); i++) {
 			rooms.get(i).setCoordinates(roomCoordinates.get(i));
+		}
+
+		List<Coordinate> doorCoordinates = createDoorCoordinates(jsonContent);
+
+		for (int i = 0; i < doorCoordinates.size(); i++) {
+			Door door = new Door(doorCoordinates.get(i));
+			rooms.get(i).setDoors(Collections.singletonList(door));
 		}
 
 		List<Floor> floors = new ArrayList<>();
@@ -112,11 +121,28 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		return List.of(location1, location2);
 	}
 
-	private List<List<Coordinate>> createRoomCoordinates() {
+	private String readJsonFile() {
 		try {
-			String jsonContent = String.join("", Files.readAllLines(Paths.get("src/main/resources/test_coordinates" +
+			return  String.join("", Files.readAllLines(Paths.get("src/main/resources/test_coordinates" +
 					".json"), StandardCharsets.UTF_8));
-			return GeoJsonParser.parseGeoJson(jsonContent);
+		} catch (IOException e) {
+			LOG.warn("Could not read json file", e);
+		}
+		return "";
+	}
+
+	private List<List<Coordinate>> createRoomCoordinates(String jsonContent) {
+		try {
+			return GeoJsonParser.parsePolygonsFromGeoJson(jsonContent);
+		} catch (Exception e) {
+			LOG.warn("Coordination Data could not be initialized", e);
+		}
+		return Collections.emptyList();
+	}
+
+	private List<Coordinate> createDoorCoordinates(String jsonContent) {
+		try {
+			return GeoJsonParser.parsePointsFromGeoJson(jsonContent);
 		} catch (Exception e) {
 			LOG.warn("Coordination Data could not be initialized", e);
 		}

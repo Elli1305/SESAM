@@ -13,7 +13,7 @@ public final class GeoJsonParser {
 	private GeoJsonParser() {
 	}
 
-	public static List<List<Coordinate>> parseGeoJson(String content) throws Exception {
+	public static List<List<Coordinate>> parsePolygonsFromGeoJson(String content) throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode rootNode = objectMapper.readTree(content);
 		JsonNode featuresNode = rootNode.get("features");
@@ -39,5 +39,20 @@ public final class GeoJsonParser {
 		}
 
 		return polygons;
+	}
+
+	public static List<Coordinate> parsePointsFromGeoJson(String geoJson) throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode root = objectMapper.readTree(geoJson);
+		List<Coordinate> points = new ArrayList<>();
+
+		for (JsonNode feature : root.get("features")) {
+			if (feature.get("geometry").get("type").asText().equals("Point")) {
+				double lng = feature.get("geometry").get("coordinates").get(0).asDouble();
+				double lat = feature.get("geometry").get("coordinates").get(1).asDouble();
+				points.add( new Coordinate(BigDecimal.valueOf(lng), BigDecimal.valueOf(lat)));
+			}
+		}
+		return points;
 	}
 }

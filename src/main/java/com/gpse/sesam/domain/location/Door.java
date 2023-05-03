@@ -26,8 +26,8 @@ public class Door {
 
     }
 
-    public Door(Long id) {
-        this.id = id;
+    public Door(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 
     public Long getId() {
