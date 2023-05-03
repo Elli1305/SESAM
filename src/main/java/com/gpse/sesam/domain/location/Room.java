@@ -2,6 +2,8 @@ package com.gpse.sesam.domain.location;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Room {
     @Id
@@ -10,7 +12,13 @@ public class Room {
     private Long id;
 
     @Column
-    String name;
+    private String name;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Door> doors;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Coordinate> coordinates;
 
     protected Room() {
 
@@ -33,5 +41,21 @@ public class Room {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Door> getDoors() {
+        return doors;
+    }
+
+    public void setDoors(List<Door> doors) {
+        this.doors = doors;
+    }
+
+    public List<Coordinate> getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(List<Coordinate> coordinates) {
+        this.coordinates = coordinates;
     }
 }
