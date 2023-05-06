@@ -39,6 +39,9 @@ public class SesamUser implements UserDetails {
 	@Column(nullable = false)
 	private String lastName;
 
+	@Column()
+	private Boolean isEnabled;
+
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<SesamUserRole> roles;
 
@@ -59,6 +62,7 @@ public class SesamUser implements UserDetails {
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.isEnabled = false;
 		this.roles = roles;
 	}
 
@@ -132,7 +136,11 @@ public class SesamUser implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return isEnabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		isEnabled = enabled;
 	}
 
 	public Long getId() {
