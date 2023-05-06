@@ -53,6 +53,7 @@ function getImageDimensions(imageURL) {
 
 let sitePlanMap;
 export default {
+  name: "FloorPlan",
   mounted: function () {
     sitePlanMap = L.map("site-plan-map", mapConfig);
     const floorPlanStore = useFloorPlanStore();
