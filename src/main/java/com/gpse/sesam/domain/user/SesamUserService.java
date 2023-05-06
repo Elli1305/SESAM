@@ -3,6 +3,8 @@ package com.gpse.sesam.domain.user;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 /**
  * Interface for interacting with {@link SesamUser}
  */
@@ -24,4 +26,6 @@ public interface SesamUserService extends UserDetailsService {
     void updatePasswordWithToken(String token, String password);
 
     void changePassword(SesamUser user, String password);
+
+	List<SesamUser> getUsers();
 }
