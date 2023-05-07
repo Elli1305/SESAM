@@ -1,7 +1,7 @@
 import axios from "axios";
 import {CreateUser} from "@/main/vue/entity/createUser";
 import {SignUpResponse} from "@/main/vue/entity/signUpResponse";
-import {Credentials} from "@/main/vue/entity/credentials";
+import {LoginData} from "@/main/vue/entity/loginData";
 import {LoginResponse} from "@/main/vue/entity/loginResponse";
 import {CurrentUserListResponse} from "@/main/vue/entity/currentUserListResponse";
 import {ResetPassword} from "@/main/vue/entity/resetPassword";
@@ -11,7 +11,7 @@ export default {
     signUp(user: CreateUser): Promise<SignUpResponse> {
         return axios.post('/api/signup', user);
     },
-    login(credentials: Credentials): Promise<LoginResponse> {
+    login(credentials: LoginData): Promise<LoginResponse> {
         const param = new URLSearchParams();
         param.append('eMail', credentials.eMail);
         param.append('password', credentials.password);

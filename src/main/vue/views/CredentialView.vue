@@ -15,7 +15,7 @@
         <template v-slot:top-right>
           <q-select
               label="Standort"
-              behavior="dialog"
+              behavior="menu"
               v-model="model"
               multiple
               borderless
@@ -112,7 +112,7 @@ export default {
       rows,
       filter,
       model: ref(null),
-      pov: ref(['', 'Berlin', 'Bielefeld'])
+      pov: ref(['Berlin', 'Bielefeld'])
     }
   }
 }
