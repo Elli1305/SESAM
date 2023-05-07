@@ -29,6 +29,20 @@ const messages = {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
         },
+        credentialview :{
+            credentialview: "Credentialansicht",
+            location: "Standort",
+            search: "Suche",
+            credentialtext: "Das Credential wird von folgenden Person ausgestellt:  ",
+            credentialtext2: "Herausgeber kann in folgenden Räumen gefunden werden: ",
+            credentialtext3: "Als vergleichbare Qualifikation dienen folgende Credentials:",
+            credentialtext4: "Zum Erhalt des Credentials muss folgendes erfolgreich abgeschlossen sein:",
+            category: "Kategorie",
+            availablecredentials: "Verfügbbare Credential",
+            qualification: "Vergleichbare Qualifikation",
+            issuer: "Herausgeber"
+        }
+        ,
         home: {
             header: "SESAM(Ger)",
             signup: "Registrierung",
@@ -80,6 +94,19 @@ const messages = {
         common: {
             internalServerError: "The server could not process the request",
             unkownError: "An unknown error occured",
+        },
+        credentialview :{
+            credentialview: "View Credentials",
+            location: "Location",
+            search: "Search",
+            credentialtext: "The credential can be obtained from",
+            credentialtext2: "Issuer can be found in: ",
+            credentialtext3: "You need the following qualification for this credential: ",
+            credentialtext4: "As a qualification for this credential, you need to have the following:",
+            category: "Category",
+            availablecredentials: "Available Credentials",
+            qualification: "Comparable Qualifications",
+            issuer: "Issuer"
         },
         home: {
             header: "SESAM(En)",

@@ -1,20 +1,20 @@
-<template>
+<template xmlns:margin="http://www.w3.org/1999/xhtml">
   <q-page class="column justify-evenly" style="padding: 0.5em" >
     <div class="q-gutter-y-md column" style="width: 80%; display: flex; margin:0 auto">
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Credentialansicht</h1>
+      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{t("credentialview.credentialview")}}</h1>
     <div class="q-pa-md">
       <q-table
           flat bordered
           :rows="rows"
           :columns="columns"
-          title="Credentialansicht"
+          :title="t('credentialview.credentialview')"
           :separator="'cell'"
           :filter="filter"
           row-key="name"
       >
         <template v-slot:top-right>
           <q-select
-              label="Standort"
+              :label="t('credentialview.location')"
               behavior="menu"
               v-model="model"
               multiple
@@ -28,7 +28,7 @@
               options-cover
               style="min-width: 150px; padding-right: 1em"
           />
-          <q-input dense debounce="300" v-model="filter" placeholder="Suchen">
+          <q-input dense debounce="300" v-model="filter" :placeholder="t('credentialview.search')">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -62,9 +62,11 @@
           </q-tr>
           <q-tr v-show="props.expand" :props="props">
             <q-td colspan="100%">
-              <div class="text-left">Das Credential {{ props.row.name }} kann durch Gerda Peters herausgeben werden. <br>
-                Gerda Peters ist in Raum 0.112 im Citec zu finden. Zum Erlangen wird ein Erste-Hilfe-Kurs benötigt. <br>
-                Als vergleichbare Qualifikation kann Credential 2 angebracht werden.</div>
+              <div class="text-left" style="padding: 1em">{{t('credentialview.credentialtext')}} <b>{{ props.row.issuer }}</b><br>
+                {{t('credentialview.credentialtext2')}} <b>0.007</b> <br>
+                {{t('credentialview.credentialtext3')}} <b>{{ props.row.qualification}}</b> <br>
+                {{t('credentialview.credentialtext4')}} <b>{{props.row.category}} </b>
+              </div>
             </q-td>
           </q-tr>
         </template>
@@ -84,7 +86,7 @@ import axios from "axios";
 
 const filter=ref('')
 const columns = [
-  { name: 'category', required: true, label: 'Kategorie', align: 'center', field: 'category', sortable: true },
+  { name: 'category', required: true, label: "Kategorie", align: 'center', field: 'category', sortable: true },
   { name: 'availableCredential', align: 'center', label : 'Verfügbares Credential' , field: 'availableCredential', sortable: true },
   { name: 'qualification', align: 'center',label: 'Vergleichbare Qualifikation', field: 'qualification', sortable: true },
   { name: 'issuer', align: 'center', label: 'Herausgeber', field: 'issuer', sortable: true }
@@ -107,12 +109,14 @@ const rows = [
 
 export default {
   setup () {
+    const { t } = useI18n();
     return {
       columns,
       rows,
       filter,
       model: ref(null),
-      pov: ref(['Berlin', 'Bielefeld'])
+      pov: ref(['Berlin', 'Bielefeld']),
+      t
     }
   }
 }
