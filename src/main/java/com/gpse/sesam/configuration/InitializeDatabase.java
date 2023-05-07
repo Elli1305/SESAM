@@ -1,10 +1,12 @@
 package com.gpse.sesam.configuration;
 
+import com.gpse.sesam.domain.credential.*;
 import com.gpse.sesam.domain.location.Building;
 import com.gpse.sesam.domain.location.Floor;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.Room;
+import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
@@ -24,10 +26,13 @@ public class InitializeDatabase implements InitializingBean {
 	private final LocationService locationService;
 
 	private final SesamUserService userService;
+
+	private final CredentialService credentialService;
 	private final PasswordEncoder passwordEncoder;
 
 	public InitializeDatabase(LocationService locationService, SesamUserService userService,
-							  PasswordEncoder passwordEncoder) {
+							  CredentialService credentialService, PasswordEncoder passwordEncoder) {
+		this.credentialService = credentialService;
 		this.passwordEncoder = passwordEncoder;
 		this.locationService = locationService;
 		this.userService = userService;
@@ -40,10 +45,11 @@ public class InitializeDatabase implements InitializingBean {
 
 		List<Location> locations = createLocations();
 		List<SesamUser> users = createUsers();
+		List<Credential> credentials = createCredentials();
 
 		locationService.saveAll(locations);
 		userService.saveAll(users);
-
+		credentialService.saveAll(credentials);
 	}
 
 	private List<SesamUser> createUsers() {
@@ -94,4 +100,123 @@ public class InitializeDatabase implements InitializingBean {
 		Location location2 = new Location("ExampleLocation2", buildings2);
 		return List.of(location1, location2);
 	}
+
+	private List<Credential> createCredentials() {
+		// Checklist
+		List<ChecklistEntry> checklist = new ArrayList<>();
+		checklist.add(new ChecklistEntry(1L, "Wurde der Kurs erfolgreich abgeschlossen?"));
+		checklist.add(new ChecklistEntry(2L, "Wurde der notwendige Nachweis erbracht?"));
+
+		//Form
+		List<FormEntry> form = new ArrayList<>();
+		FormEntry id = new FormEntry(1L, "ID", FormEntryType.NUMBER);
+		FormEntry firstName = new FormEntry(2L, "Vorname", FormEntryType.TEXT);
+		FormEntry lastName = new FormEntry(3L, "Nachname", FormEntryType.TEXT);
+		FormEntry birthDate = new FormEntry(5L, "Geburtstagsdatum", FormEntryType.DATE);
+		FormEntry date = new FormEntry(4L, "Ablaufdatum", FormEntryType.DATE);
+		form.add(id);
+		form.add(firstName);
+		form.add(lastName);
+		form.add(birthDate);
+		form.add(date);
+
+		// Issuer
+		SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+		issuerRole10.setGranted(true);
+		SesamUserRole issuerRole11 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+		issuerRole10.setGranted(true);
+		List<Issuer> issuers = new ArrayList<>();
+		Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters", Collections.singletonList(issuerRole10),
+				new Room("0.007"), Collections.singletonList(null));
+
+		Issuer issuer2 = new Issuer("muster@test.com", "Hallo123!", "Erik", "Muster", Collections.singletonList(issuerRole11),
+				new Room("0.112"), Collections.singletonList(null));
+
+		issuers.add(issuer1);
+		issuers.add(issuer2);
+
+		// Safety-Credential
+		List<Credential> credentials = new ArrayList<>();
+		Credential safety = new Credential(1L, "Sicherheitsbelehrung-Uni", "$U-Member", form, checklist, issuers);
+		Credential safety2 = new Credential(1L, "Sicherheitsbelehrung-FH", "$T-Member", form, checklist, issuers);
+		credentials.add(safety);
+		credentials.add(safety2);
+
+		Credential firstAid = new Credential(5L, "Erste-Hilfe-Kurs-DRK", "$U-Training", form, checklist, issuers);
+		credentials.add(firstAid);
+
+		return credentials;
+	}
+
+	private List<Category> createCredentialCategories() {
+		// Checklist
+		List<ChecklistEntry> checklist = new ArrayList<>();
+		checklist.add(new ChecklistEntry(1L, "Wurde der Kurs erfolgreich abgeschlossen?"));
+		checklist.add(new ChecklistEntry(2L, "Wurde der notwendige Nachweis erbracht?"));
+
+		//Form
+		List<FormEntry> form = new ArrayList<>();
+		FormEntry id = new FormEntry(1L, "ID", FormEntryType.NUMBER);
+		FormEntry firstName = new FormEntry(2L, "Vorname", FormEntryType.TEXT);
+		FormEntry lastName = new FormEntry(3L, "Nachname", FormEntryType.TEXT);
+		FormEntry birthDate = new FormEntry(5L, "Geburtstagsdatum", FormEntryType.DATE);
+		FormEntry date = new FormEntry(4L, "Ablaufdatum", FormEntryType.DATE);
+		form.add(id);
+		form.add(firstName);
+		form.add(lastName);
+		form.add(birthDate);
+		form.add(date);
+
+		// Issuer
+		SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+		issuerRole10.setGranted(true);
+		SesamUserRole issuerRole11 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+		issuerRole10.setGranted(true);
+		List<Issuer> issuers = new ArrayList<>();
+		Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters", Collections.singletonList(issuerRole10),
+				new Room("0.007"), Collections.singletonList(null));
+
+		Issuer issuer2 = new Issuer("muster@test.com", "Hallo123!", "Erik", "Muster", Collections.singletonList(issuerRole11),
+				new Room("0.112"), Collections.singletonList(null));
+
+		issuers.add(issuer1);
+		issuers.add(issuer2);
+
+		// Safety-Credential
+		List<Credential> credentials = new ArrayList<>();
+		Credential safety = new Credential(1L, "Sicherheitsbelehrung-Uni", "$U-Member", form, checklist, issuers);
+		Credential safety2 = new Credential(1L, "Sicherheitsbelehrung-FH", "$T-Member", form, checklist, issuers);
+		credentials.add(safety);
+		credentials.add(safety2);
+		List<ExternalCredential> externalCredentials = new ArrayList<>();
+		ExternalCredential safety3 = new ExternalCredential(2L, "Sicherheitsbelehrung-Telekom", "$T-Member");
+
+		externalCredentials.add(safety3);
+
+
+		//First-Aid-Credential
+		List<Issuer> issuers2 = new ArrayList<>();
+		issuers2.add(issuer1);
+
+		List<Credential> credentials2 = new ArrayList<>();
+		Credential firstAid = new Credential(5L, "Erste-Hilfe-Kurs-DRK", "$U-Training", form, checklist, issuers2);
+		credentials2.add(firstAid);
+
+		List<ExternalCredential> externalCredentials2 = new ArrayList<>();
+		ExternalCredential firstAid2 = new ExternalCredential(6L, "Erste-Hilfe-Kurs-Telekom", "$U-Training");
+
+		ExternalCredential firstAid3 = new ExternalCredential(70L, "Erste-Hilfe-Kurs-Johanniter","$U-Member");
+
+		externalCredentials2.add(firstAid2);
+		externalCredentials2.add(firstAid3);
+
+		// Category
+		List<Category> categories = new ArrayList<>();
+		categories.add(new Category(1L, "Sicherheitsbelehrung", credentials,externalCredentials));
+		categories.add(new Category(20L, "Erste-Hilfe-Kurs", credentials2, externalCredentials2));
+
+
+		return categories;
+	}
+
 }

@@ -2,7 +2,7 @@ import {defineStore} from 'pinia'
 import {Ref, ref} from 'vue'
 import api from '../api'
 import {AttainableRole} from "@/main/vue/entity/createUser"
-import axios from "axios";
+import axios from 'axios';
 import {Credentials} from "@/main/vue/entity/credentials"
 import {LoginResponse, User} from "@/main/vue/entity/loginResponse";
 import {UserRole} from "@/main/vue/entity/signUpResponse";
