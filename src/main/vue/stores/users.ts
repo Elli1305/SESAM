@@ -5,8 +5,6 @@ import {AttainableRole} from "@/main/vue/entity/createUser"
 import axios from "axios";
 import {Credentials} from "@/main/vue/entity/credentials"
 import {LoginResponse, User} from "@/main/vue/entity/loginResponse";
-
-import {LoginResponse} from "@/main/vue/entity/loginResponse"
 import {UserRole} from "@/main/vue/entity/signUpResponse";
 
 export const useUserStore = defineStore('users', () => {

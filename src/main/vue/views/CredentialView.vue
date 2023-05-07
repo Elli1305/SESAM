@@ -13,7 +13,22 @@
           row-key="name"
       >
         <template v-slot:top-right>
-          <q-input borderless dense debounce="300" v-model="filter" placeholder="Suchen">
+          <q-select
+              label="Standort"
+              behavior="dialog"
+              v-model="model"
+              multiple
+              borderless
+              dense
+              options-dense
+              emit-value
+              map-options
+              :options="pov"
+              option-value="name"
+              options-cover
+              style="min-width: 150px; padding-right: 1em"
+          />
+          <q-input dense debounce="300" v-model="filter" placeholder="Suchen">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -47,7 +62,9 @@
           </q-tr>
           <q-tr v-show="props.expand" :props="props">
             <q-td colspan="100%">
-              <div class="text-left">Das Credential {{ props.row.name }} kann durch Gerda Peters herausgeben werden. Zum Erlangen wird ein Erste-Hilfe-Kurs benötigt. Als vergleichbare Qualifikation kann Credential 2 angebracht werden.</div>
+              <div class="text-left">Das Credential {{ props.row.name }} kann durch Gerda Peters herausgeben werden. <br>
+                Gerda Peters ist in Raum 0.112 im Citec zu finden. Zum Erlangen wird ein Erste-Hilfe-Kurs benötigt. <br>
+                Als vergleichbare Qualifikation kann Credential 2 angebracht werden.</div>
             </q-td>
           </q-tr>
         </template>
@@ -65,11 +82,11 @@ import { ref } from 'vue'
 import {useI18n} from "vue-i18n";
 import axios from "axios";
 
+const filter=ref('')
 const columns = [
   { name: 'category', required: true, label: 'Kategorie', align: 'center', field: 'category', sortable: true },
   { name: 'availableCredential', align: 'center', label : 'Verfügbares Credential' , field: 'availableCredential', sortable: true },
   { name: 'qualification', align: 'center',label: 'Vergleichbare Qualifikation', field: 'qualification', sortable: true },
-  { name: 'rooms', align: 'center',label: 'Räume', field: 'rooms', sortable: true},
   { name: 'issuer', align: 'center', label: 'Herausgeber', field: 'issuer', sortable: true }
 ]
 
@@ -78,14 +95,12 @@ const rows = [
     category: "Erste-Hilfe-Kurs",
     availableCredential: "1",
     qualification: "2",
-    rooms: "0.007",
     issuer: "Gerda Peters"
   },
   {
     category: "Sicherheitsunterweisung",
     availableCredential: "3",
     qualification: "4",
-    rooms: "0.007, 0.113, 0.112, 0.114",
     issuer: "Gerda Peters"
   }
 ]
@@ -94,7 +109,10 @@ export default {
   setup () {
     return {
       columns,
-      rows
+      rows,
+      filter,
+      model: ref(null),
+      pov: ref(['', 'Berlin', 'Bielefeld'])
     }
   }
 }
