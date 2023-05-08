@@ -30,7 +30,7 @@ const messages = {
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
         },
         home: {
-            header: "SESAM(Ger)",
+            header: "SESAM",
             signup: "Registrierung",
             signin: "Login",
             floorplan: "Floorplan",
@@ -82,7 +82,7 @@ const messages = {
             unkownError: "An unknown error occured",
         },
         home: {
-            header: "SESAM(En)",
+            header: "SESAM",
             signup: "Sign-up",
             signin: "Sign-in",
             floorplan: "Floorplan",
