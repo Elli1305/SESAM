@@ -1,5 +1,6 @@
 package com.gpse.sesam.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.domain.location.Coordinate;
@@ -13,7 +14,7 @@ public final class GeoJsonParser {
 	private GeoJsonParser() {
 	}
 
-	public static List<List<Coordinate>> parsePolygonsFromGeoJson(String content) throws Exception {
+	public static List<List<Coordinate>> parsePolygonsFromGeoJson(String content) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode rootNode = objectMapper.readTree(content);
 		JsonNode featuresNode = rootNode.get("features");
@@ -41,7 +42,7 @@ public final class GeoJsonParser {
 		return polygons;
 	}
 
-	public static List<Coordinate> parsePointsFromGeoJson(String geoJson) throws Exception {
+	public static List<Coordinate> parsePointsFromGeoJson(String geoJson) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode root = objectMapper.readTree(geoJson);
 		List<Coordinate> points = new ArrayList<>();
@@ -55,4 +56,6 @@ public final class GeoJsonParser {
 		}
 		return points;
 	}
+
+
 }

@@ -1,5 +1,6 @@
 package com.gpse.sesam.configuration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.location.Building;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Door;
@@ -134,7 +135,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private List<List<Coordinate>> createRoomCoordinates(String jsonContent) {
 		try {
 			return GeoJsonParser.parsePolygonsFromGeoJson(jsonContent);
-		} catch (Exception e) {
+		} catch (JsonProcessingException e) {
 			LOG.warn("Coordination Data could not be initialized", e);
 		}
 		return Collections.emptyList();
@@ -143,7 +144,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private List<Coordinate> createDoorCoordinates(String jsonContent) {
 		try {
 			return GeoJsonParser.parsePointsFromGeoJson(jsonContent);
-		} catch (Exception e) {
+		} catch (JsonProcessingException e) {
 			LOG.warn("Coordination Data could not be initialized", e);
 		}
 		return Collections.emptyList();

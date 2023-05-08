@@ -27,5 +27,4 @@ public interface SesamUserService extends UserDetailsService {
 
     void changePassword(SesamUser user, String password);
 
-	List<SesamUser> getUsers();
 }
