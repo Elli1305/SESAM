@@ -36,6 +36,10 @@ public class Door {
         this.coordinate = coordinate;
     }
 
+    public Door(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

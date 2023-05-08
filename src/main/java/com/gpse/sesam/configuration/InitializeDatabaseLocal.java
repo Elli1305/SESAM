@@ -99,7 +99,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		List<Coordinate> doorCoordinates = createDoorCoordinates(jsonContent);
 
 		for (int i = 0; i < doorCoordinates.size(); i++) {
-			Door door = new Door(doorCoordinates.get(i));
+			Door door = new Door("door" + i, doorCoordinates.get(i));
 			rooms.get(i).setDoors(Collections.singletonList(door));
 		}
 

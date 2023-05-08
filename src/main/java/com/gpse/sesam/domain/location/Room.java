@@ -45,14 +45,6 @@ public class Room {
 		this.name = name;
     }
 
-    public List<Door> getDoors() {
-        return doors;
-    }
-
-    public void setDoors(List<Door> doors) {
-        this.doors = doors;
-    }
-
     public List<Coordinate> getCoordinates() {
         return coordinates;
     }
