@@ -1,10 +1,11 @@
 <template>
-  <q-page>
-
-    <div class="site-plan-editor-map">
-      <div id="site-plan-map"></div>
-    </div>
-  </q-page>
+    <q-page-container style="padding: 2em">
+        <q-page>
+            <div ref="mapContainer" class="site-plan-editor-map">
+                <div id="site-plan-map"></div>
+            </div>
+        </q-page>
+    </q-page-container>
 </template>
 <script>
 
@@ -62,6 +63,11 @@ export default {
       this.drawRooms(state.rooms)
     });
     this.applyImageToMap(floorPlanStore.selectedFloorPlan);
+
+    const mapContainerObserver = new ResizeObserver(() => {
+          sitePlanMap.invalidateSize();
+    });
+    mapContainerObserver.observe(this.$refs.mapContainer)
     this.drawRooms(floorPlanStore.rooms)
 
   },
