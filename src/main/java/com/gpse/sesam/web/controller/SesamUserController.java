@@ -8,9 +8,11 @@ import com.gpse.sesam.web.cmd.SesamUserCmd;
 import com.gpse.sesam.web.cmd.UpdatePasswordCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -52,6 +54,12 @@ public class SesamUserController {
 				updatePasswordCmd.getToken(),
 				updatePasswordCmd.getPassword()
 		);
+	}
+
+	@Secured("ADMINISTRATOR")
+	@GetMapping("/user")
+	public List<SesamUser> getCurrentUsers() {
+		return service.getUsers();
 	}
 
 }

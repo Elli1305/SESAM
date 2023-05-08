@@ -3,6 +3,7 @@ import {CreateUser} from "@/main/vue/entity/createUser";
 import {SignUpResponse} from "@/main/vue/entity/signUpResponse";
 import {Credentials} from "@/main/vue/entity/credentials";
 import {LoginResponse} from "@/main/vue/entity/loginResponse";
+import {CurrentUserListResponse} from "@/main/vue/entity/currentUserListResponse";
 import {ResetPassword} from "@/main/vue/entity/resetPassword";
 import {ChangePassword} from "@/main/vue/entity/changePassword";
 
@@ -14,13 +15,18 @@ export default {
         const param = new URLSearchParams();
         param.append('eMail', credentials.eMail);
         param.append('password', credentials.password);
-        return axios.post('/api/authenticate', param,
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            });
+        return axios.post('/api/authenticate', param, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
     },
+
+    adminCurrentUser(): Promise<CurrentUserListResponse> {
+        return axios.post('/api/admin/currentUserlist');
+
+    },
+
     resetPassword(param: ResetPassword) {
         return axios.post('/api/password_reset', param);
     },

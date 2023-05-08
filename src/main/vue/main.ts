@@ -1,6 +1,6 @@
 import {createApp, watch} from 'vue'
-import { createPinia } from 'pinia'
-import { Quasar } from 'quasar'
+import {createPinia} from 'pinia'
+import {Quasar} from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 import {createI18n} from 'vue-i18n'
 
@@ -14,6 +14,16 @@ import axios from "axios";
 
 const messages = {
     de: {
+        adminCurrentUser: {
+            headline: "Aktuelle Nutzer",
+            roles: {ADMINISTRATOR: "Administrator", EDITOR: "Bearbeiter", ISSUER: "Herausgeber"},
+            prename: "Vorname",
+            showAdmin: "Administratoren",
+            showEditor: "Bearbeiter",
+            showIssuer: "Herausgeber",
+            search: "Suche"
+        },
+
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
@@ -57,6 +67,15 @@ const messages = {
         }
     },
     en: {
+        adminCurrentUser: {
+            headline: "Current Users",
+            roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
+            prename: "Prename",
+            showAdmin: "Show Admin",
+            showEditor: "Show Editor",
+            showIssuer: "Show Issuer",
+            search: "Search"
+        },
         common: {
             internalServerError: "The server could not process the request",
             unkownError: "An unknown error occured",
@@ -108,6 +127,7 @@ const i18n = createI18n({
     locale: 'de',
     allowComposition: true,
     fallbackLocale: 'en',
+    globalInjection: true,
     messages
 })
 const app = createApp(App)

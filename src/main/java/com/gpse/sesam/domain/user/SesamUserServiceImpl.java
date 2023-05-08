@@ -171,4 +171,13 @@ public class SesamUserServiceImpl implements SesamUserService {
 		userRepository.findAll().forEach(articles::add);
 		return articles;
 	}
+
+    @Override
+    public List<SesamUser> getUsers() {
+        final List<SesamUser> articles = new ArrayList<>();
+
+        userRepository.findAll().forEach(articles::add);
+
+        return articles;
+    }
 }

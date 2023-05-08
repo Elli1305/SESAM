@@ -5,6 +5,9 @@ import PasswordChange from "../views/PasswortChange.vue";
 import PasswordReset from "../views/PasswordReset.vue";
 import Profilansicht from '@/main/vue/views/Profilansicht.vue'
 import LoginView from '../views/Login.vue'
+import NavigationTree from "@/main/vue/views/NavigationTree.vue";
+import Floorplan from "@/main/vue/views/Floorplan.vue";
+import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Impressum from "../views/Impressum.vue";
 
@@ -23,6 +26,12 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/admin/currentuserlist',
+      name: 'currentuserlist',
+      component: CurrentUserList,
+      //meta: {requiresAdmin: true}
     },
     {
       path: '/signup',

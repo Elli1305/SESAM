@@ -5,6 +5,7 @@ import {AttainableRole} from "@/main/vue/entity/createUser"
 import axios, {AxiosResponse} from "axios";
 import {Credentials} from "@/main/vue/entity/credentials"
 import {LoginResponse, User} from "@/main/vue/entity/loginResponse"
+
 import {UserRole} from "@/main/vue/entity/signUpResponse";
 
 export const useUserStore = defineStore('users', () => {
@@ -13,6 +14,7 @@ export const useUserStore = defineStore('users', () => {
     const validEmail: Ref<RegExpMatchArray | null> = ref(null)
     const user: Ref<User | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
+    const sesamUsers: Ref<User[]> = ref([])
 
     if (sessionStorage.getItem("users")) {
         const state = JSON.parse((sessionStorage.getItem("users") || ''));
@@ -34,7 +36,7 @@ export const useUserStore = defineStore('users', () => {
     }
 
     function validatePassword(password: string, passwordRepeat: string){
-        const passwordRegEx = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$/;
+        const passwordRegEx = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*+_-])[a-zA-Z0-9!@#$%^&+_*-]{8,120}$/;
         validPassword.value = password.match(passwordRegEx)
         comparePassword.value = passwordRepeat===password
     }
