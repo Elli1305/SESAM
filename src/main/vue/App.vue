@@ -55,7 +55,46 @@ let isIssuer = userStore.authenticated && userStore.roles.some(r => r.role === '
             <div class="row">
               <router-link to="/" class="headerLink"><p class="headerText">{{t("home.floorplan")}}</p></router-link>
               <router-link to="/" class="headerLink"><p class="headerText">{{t("home.credentials")}}</p></router-link>
-              <router-link to="/" class="headerLink"><p class="headerText">{{t("home.information")}}</p></router-link>
+              <div>
+                <p v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
+                   class="headerText foldMenu">
+                  {{t("home.profileManagement")}}
+                </p>
+                <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right" self="top right">
+                  <div class="column">
+                    <router-link to="/" class="q-ma-sm headerLink text-black">{{t("home.currentUsers")}}</router-link>
+                    <router-link to="/" class="q-ma-sm headerLink text-black">{{t("home.currentRegistrations")}}</router-link>
+                    <router-link to="/" class="q-ma-sm headerLink text-black">{{t("home.issuerManagement")}}</router-link>
+                  </div>
+                </q-menu>
+              </div>
+              <div>
+                <p v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
+                   class="headerText foldMenu">
+                  {{t("home.corporateDesign")}}
+                </p>
+                <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right" self="top right">
+                  <div class="column">
+                    <router-link to="/" class="q-ma-sm headerLink text-black">{{t("home.editCorporateDesign")}}</router-link>
+                    <router-link to="/" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
+                  </div>
+                </q-menu>
+              </div>
+              <router-link
+                  v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
+                  to="/" class="headerLink">
+                <p class="headerText">{{t("home.credentialManagement")}}</p>
+              </router-link>
+              <router-link
+                  v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'EDITOR' && r.granted)"
+                  to="/" class="headerLink">
+                <p class="headerText">{{t("home.editorPages")}}</p>
+              </router-link>
+              <router-link
+                  v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'ISSUER' && r.granted)"
+                  to="/" class="headerLink">
+                <p class="headerText">{{t("home.issuerPages")}}</p>
+              </router-link>
             </div>
             <div style="margin-left: 1em">
               <q-btn v-if="userStore.authenticated" :label="userStore.firstName.charAt(0) + userStore.lastName.charAt(0)" rounded color="info" unelevated auto-close size="3em" style="height: 3em; width: 3em; font-size: 1em; line-height: 1" >
