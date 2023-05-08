@@ -9,15 +9,14 @@ public class ChecklistEntry {
     @Column
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String label;
 
     protected ChecklistEntry () {
 
     }
 
-    public ChecklistEntry(Long id, String label) {
-        this.id = id;
+    public ChecklistEntry(String label) {
         this.label = label;
     }
 

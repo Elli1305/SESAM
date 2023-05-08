@@ -12,7 +12,7 @@ public class Category {
     @Column
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -24,8 +24,7 @@ public class Category {
     protected Category () {
 
     }
-    public Category(Long id, String name, List<Credential> credentials, List<ExternalCredential> externalCredentials) {
-        this.id = id;
+    public Category(String name, List<Credential> credentials, List<ExternalCredential> externalCredentials) {
         this.name = name;
         this.credentials =credentials;
         this.externalCredentials = externalCredentials;

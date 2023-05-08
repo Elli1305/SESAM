@@ -12,7 +12,7 @@ public class Credential {
     @Column
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
@@ -29,8 +29,7 @@ public class Credential {
 
     protected Credential() {}
 
-    public Credential(Long id, String name, String credentialDefinitionId, List<FormEntry> form, List<ChecklistEntry> checklist, List<Issuer> issuer) {
-        this.id = id;
+    public Credential(String name, String credentialDefinitionId, List<FormEntry> form, List<ChecklistEntry> checklist, List<Issuer> issuer) {
         this.name = name;
         this.credentialDefinitionId = credentialDefinitionId;
         this.form = form;

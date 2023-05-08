@@ -9,15 +9,14 @@ public class FormEntry {
     @Column
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String label;
 
     @Column(nullable = false)
     private FormEntryType type;
 
     protected FormEntry (){}
-    public FormEntry (Long id, String label, FormEntryType type) {
-        this.id = id;
+    public FormEntry (String label, FormEntryType type) {
         this.label = label;
         this.type = type;
     }

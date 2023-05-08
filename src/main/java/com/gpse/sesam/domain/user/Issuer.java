@@ -6,10 +6,10 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+@SuppressWarnings("serial")
 @Entity
 public class Issuer extends SesamUser {
-    @Column(nullable = false)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Room room;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -19,7 +19,6 @@ public class Issuer extends SesamUser {
     }
     /**
      * Creates a new {@link SesamUser}
-     *
      * @param email     the user's email
      * @param password  the user's password
      * @param firstName the user's first name

@@ -17,8 +17,7 @@ public class ExternalCredential {
 
     protected ExternalCredential(){}
 
-    public ExternalCredential(Long id, String name, String credentialDefinitionId) {
-        this.id = id;
+    public ExternalCredential(String name, String credentialDefinitionId) {
         this.name = name;
         this.credentialDefinitionId = credentialDefinitionId;
     }
