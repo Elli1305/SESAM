@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class PasswordResetToken {
@@ -44,5 +45,22 @@ public class PasswordResetToken {
 
 	public boolean isExpired() {
 		return new Date().after(expiryDate);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		PasswordResetToken that = (PasswordResetToken) o;
+		return Objects.equals(token, that.token);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(token);
 	}
 }
