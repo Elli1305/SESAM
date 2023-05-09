@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {Ref, ref} from 'vue'
+import {Ref, ref, UnwrapRef} from 'vue'
 import api from '../api'
 import {AttainableRole} from "@/main/vue/entity/createUser"
 import axios from 'axios';
@@ -11,12 +11,16 @@ export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
     const validPassword: Ref<RegExpMatchArray | null> = ref(null)
     const validEmail: Ref<RegExpMatchArray | null> = ref(null)
+    const user: Ref<User | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
     const sesamUsers: Ref<User[]> = ref([])
-    const firstName: Ref<string> = ref('')
-    const lastName: Ref<string> = ref('')
-    const eMail: Ref<string> = ref('')
-    const roles: Ref<Array<UserRole>|undefined> = ref()
+
+
+    if (sessionStorage.getItem("users")) {
+        const state = JSON.parse((sessionStorage.getItem("users") || ''));
+        authenticated.value = state.authenticated;
+        user.value = state.user;
+    }
 
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -55,11 +59,9 @@ export const useUserStore = defineStore('users', () => {
     function requestToken(credentials: LoginData): Promise<void> {
         return new Promise((resolve, reject) => {
             api.auth.login(credentials).then((res: LoginResponse) => {
-                authenticate(res.data.token)
-                firstName.value = res.data.user.firstName
-                lastName.value = res.data.user.lastName
-                eMail.value = res.data.user.username
-                roles.value = res.data.user.roles
+                authenticate(res.token)
+                authenticate(res.token)
+                user.value = res.user
                 resolve()
             }).catch((error) => {
                 authenticate()
@@ -95,10 +97,7 @@ export const useUserStore = defineStore('users', () => {
     }
 
     return {
-        firstName,
-        lastName,
-        eMail,
-        roles,
+        user,
         authenticated,
         signUp,
         authenticate,

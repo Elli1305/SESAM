@@ -6,8 +6,7 @@ import PasswordReset from "../views/PasswordReset.vue";
 import Profilansicht from '@/main/vue/views/Profilansicht.vue'
 import LoginView from '../views/Login.vue'
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
-import NavigationTree from "@/main/vue/views/NavigationTree.vue";
-import Floorplan from "@/main/vue/views/Floorplan.vue";
+import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Impressum from "../views/Impressum.vue";
 import Credentialview from "@/main/vue/views/CredentialView.vue"
 
@@ -19,7 +18,7 @@ const router = createRouter({
       name: 'home',
       component: StartView,
       children: [
-        {path: "", component: Floorplan}
+        {path: "", component: FloorPlan}
       ]
     },
     {
@@ -66,8 +65,8 @@ const router = createRouter({
 });
 
 
-/*router.beforeEach((to) => {
-  // Something which should be executed before each routing
-})
-*/
+// router.beforeEach((to) => {
+//   // Something which should be executed before each routing
+// })
+
 export default router
