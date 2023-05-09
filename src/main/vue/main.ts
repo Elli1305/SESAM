@@ -43,12 +43,21 @@ const messages = {
         }
         ,
         home: {
-            header: "SESAM(Ger)",
+            header: "SESAM",
             signup: "Registrierung",
             signin: "Login",
             floorplan: "Floorplan",
             credentials: "Credentials",
-            information: "Information",
+            profileManagement: "Profilverwaltung",
+            currentUsers: "Aktuelle Nutzer",
+            currentRegistrations: "Aktuelle Registrierungen",
+            issuerManagement: "Herausgeberverwaltung",
+            corporateDesign: "Corporate Design",
+            editCorporateDesign: "Corporate Design anpassen",
+            editImprint: "Imprint bearbeiten",
+            credentialManagement: "Credentialverwaltung",
+            editorPages: "Bearbeiten",
+            issuerPages: "Credential austellen",
             imprint: "Impressum",
             logout: "Logout"
         },
@@ -108,12 +117,21 @@ const messages = {
             issuer: "Issuer"
         },
         home: {
-            header: "SESAM(En)",
+            header: "SESAM",
             signup: "Sign-up",
             signin: "Sign-in",
             floorplan: "Floorplan",
             credentials: "Credentials",
-            information: "Information",
+            profileManagement: "Profile Management",
+            currentUsers: "Current Users",
+            currentRegistrations: "Current Registrations",
+            issuerManagement: "Issuer Management",
+            corporateDesign: "Corporate Design",
+            editCorporateDesign: "Edit Corporate Design",
+            editImprint: "Edit Imprint",
+            credentialManagement: "Credential Management",
+            editorPages: "Edit",
+            issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout"
         },
@@ -151,7 +169,7 @@ const messages = {
 
 const i18n = createI18n({
     legacy: false,
-    locale: 'de',
+    locale: 'en',
     allowComposition: true,
     fallbackLocale: 'en',
     globalInjection: true,
