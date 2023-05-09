@@ -56,8 +56,8 @@ public class InitializeDatabase implements InitializingBean {
 
 		locationService.saveAll(locations);
 		userService.saveAll(users);
-		categoryService.saveAll(categories);
 		credentialService.saveAll(credentials);
+		categoryService.saveAll(categories);
 	}
 
 	private List<SesamUser> createUsers() {
@@ -173,22 +173,22 @@ public class InitializeDatabase implements InitializingBean {
 
 	private List<Category> createCredentialCategories() {
 		// Checklist
-		List<ChecklistEntry> checklist = new ArrayList<>();
-		checklist.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
-		checklist.add(new ChecklistEntry( "Wurde der notwendige Nachweis erbracht?"));
+		List<ChecklistEntry> checklist4 = new ArrayList<>();
+		checklist4.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
+		checklist4.add(new ChecklistEntry( "Wurde der notwendige Nachweis erbracht?"));
 
 		//Form
-		List<FormEntry> form = new ArrayList<>();
-		FormEntry id = new FormEntry( "ID", FormEntryType.NUMBER);
-		FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT);
-		FormEntry lastName = new FormEntry( "Nachname", FormEntryType.TEXT);
-		FormEntry birthDate = new FormEntry( "Geburtstagsdatum", FormEntryType.DATE);
-		FormEntry date = new FormEntry("Ablaufdatum", FormEntryType.DATE);
-		form.add(id);
-		form.add(firstName);
-		form.add(lastName);
-		form.add(birthDate);
-		form.add(date);
+		List<FormEntry> form4 = new ArrayList<>();
+		FormEntry id4 = new FormEntry( "ID", FormEntryType.NUMBER);
+		FormEntry firstName4 = new FormEntry("Vorname", FormEntryType.TEXT);
+		FormEntry lastName4 = new FormEntry( "Nachname", FormEntryType.TEXT);
+		FormEntry birthDate4 = new FormEntry( "Geburtstagsdatum", FormEntryType.DATE);
+		FormEntry date4 = new FormEntry("Ablaufdatum", FormEntryType.DATE);
+		form4.add(id4);
+		form4.add(firstName4);
+		form4.add(lastName4);
+		form4.add(birthDate4);
+		form4.add(date4);
 
 		// Issuer
 		SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
@@ -198,20 +198,18 @@ public class InitializeDatabase implements InitializingBean {
 		Room room = new Room("0.007");
 		Room room2 = new Room("0.112");
 		List<Issuer> issuers = new ArrayList<>();
-		Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters", Collections.singletonList(issuerRole10),
+		Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann", Collections.singletonList(issuerRole10),
 				room, Collections.singletonList(null));
 
-		Issuer issuer2 = new Issuer("muster@test.com", "Hallo123!", "Erik", "Muster", Collections.singletonList(issuerRole11),
+		Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann", "Hombach", Collections.singletonList(issuerRole11),
 				room2, Collections.singletonList(null));
 		issuers.add(issuer1);
 		issuers.add(issuer2);
 
 		// Safety-Credential
 		List<Credential> credentials = new ArrayList<>();
-		Credential safety = new Credential( "Sicherheitsbelehrung-Uni", "$U-Member", form, checklist, issuers);
-		Credential safety2 = new Credential( "Sicherheitsbelehrung-FH", "$T-Member", form, checklist, issuers);
+		Credential safety = new Credential( "Sicherheitsbelehrung-Baumschule", "$U-Member", form4, checklist4, issuers);
 		credentials.add(safety);
-		credentials.add(safety2);
 		List<ExternalCredential> externalCredentials = new ArrayList<>();
 		ExternalCredential safety3 = new ExternalCredential( "Sicherheitsbelehrung-Telekom", "$T-Member");
 
@@ -221,14 +219,31 @@ public class InitializeDatabase implements InitializingBean {
 		//First-Aid-Credential
 		List<Issuer> issuers2 = new ArrayList<>();
 		issuers2.add(issuer1);
+		// Checklist
+		List<ChecklistEntry> checklist6 = new ArrayList<>();
+		checklist6.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
+		checklist6.add(new ChecklistEntry( "Wurde der notwendige Nachweis erbracht?"));
+
+		//Form
+		List<FormEntry> form6 = new ArrayList<>();
+		FormEntry id6 = new FormEntry( "ID", FormEntryType.NUMBER);
+		FormEntry firstName6 = new FormEntry("Vorname", FormEntryType.TEXT);
+		FormEntry lastName6 = new FormEntry( "Nachname", FormEntryType.TEXT);
+		FormEntry birthDate6 = new FormEntry( "Geburtstagsdatum", FormEntryType.DATE);
+		FormEntry date6 = new FormEntry("Ablaufdatum", FormEntryType.DATE);
+		form6.add(id6);
+		form6.add(firstName6);
+		form6.add(lastName6);
+		form6.add(birthDate6);
+		form6.add(date6);
+
 
 		List<Credential> credentials2 = new ArrayList<>();
-		Credential firstAid = new Credential( "Erste-Hilfe-Kurs-DRK", "$U-Training", form, checklist, issuers2);
+		Credential firstAid = new Credential( "Erste-Hilfe-Kurs-DRK", "$U-Training", form6, checklist6, issuers2);
 		credentials2.add(firstAid);
 
 		List<ExternalCredential> externalCredentials2 = new ArrayList<>();
 		ExternalCredential firstAid2 = new ExternalCredential( "Erste-Hilfe-Kurs-Telekom", "$U-Training");
-
 		ExternalCredential firstAid3 = new ExternalCredential( "Erste-Hilfe-Kurs-Johanniter","$U-Member");
 
 		externalCredentials2.add(firstAid2);
@@ -238,8 +253,6 @@ public class InitializeDatabase implements InitializingBean {
 		List<Category> categories = new ArrayList<>();
 		categories.add(new Category( "Sicherheitsbelehrung", credentials,externalCredentials));
 		categories.add(new Category( "Erste-Hilfe-Kurs", credentials2, externalCredentials2));
-
-
 		return categories;
 	}
 
