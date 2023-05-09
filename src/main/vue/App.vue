@@ -43,8 +43,8 @@ const router = useRouter()
                 {{t("home.header")}}
               </q-toolbar-title>
             </div>
-            <div>
-              <country-flag style="border: white solid 1px" :country="this.$i18n.locale.toString() === 'de' ? 'de' : 'gb'" shadow size="small"/>
+            <div class="row justify-center" style="width: 42px; height: 42px">
+              <country-flag style="border: white solid 1px" :country="this.$i18n.locale.toString() === 'de' ? 'de' : 'gb'" shadow size="normal"/>
             </div>
           </div>
           <div id="lower" class="row justify-end items-center no-wrap">

@@ -43,7 +43,7 @@ const messages = {
             editImprint: "Imprint bearbeiten",
             credentialManagement: "Credentialverwaltung",
             editorPages: "Bearbeiten",
-            issuerPages: "Herausgeben",
+            issuerPages: "Credential austellen",
             imprint: "Impressum",
             logout: "Logout"
         },
@@ -104,7 +104,7 @@ const messages = {
             editImprint: "Edit Imprint",
             credentialManagement: "Credential Management",
             editorPages: "Edit",
-            issuerPages: "Issue",
+            issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout"
         },
@@ -142,7 +142,7 @@ const messages = {
 
 const i18n = createI18n({
     legacy: false,
-    locale: 'de',
+    locale: 'en',
     allowComposition: true,
     fallbackLocale: 'en',
     globalInjection: true,

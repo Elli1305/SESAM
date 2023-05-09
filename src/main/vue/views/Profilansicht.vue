@@ -2,9 +2,9 @@
   <q-page class="column justify-evenly" style="padding: 0 5em" >
     <p class="row text-h3 justify-center">{{t('profile.title')}}</p>
     <div class="self-center" style="margin: 2em; width: 25em" >
-      <q-input id="prename" v-model="user.firstname" :label="t('profile.firstname')" outlined readonly/>
+      <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined readonly/>
       <q-space style="height: 1em" />
-      <q-input id="surname" v-model="user.lastname" :label="t('profile.lastname')" outlined readonly/>
+      <q-input id="surname" v-model="user.lastName" :label="t('profile.lastname')" outlined readonly/>
       <q-space style="height: 1em" />
       <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined readonly/>
     </div>
