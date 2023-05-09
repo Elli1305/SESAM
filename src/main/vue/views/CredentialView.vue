@@ -26,7 +26,7 @@
               :options="pov"
               option-value="name"
               options-cover
-              style="min-width: 150px; padding-right: 1em"
+              style="min-width: 13em; padding-right: 1em"
           />
           <q-input dense debounce="300" v-model="filter" :placeholder="t('credentialview.search')">
             <template v-slot:append>
@@ -83,13 +83,15 @@ import { ref } from 'vue'
 
 import {useI18n} from "vue-i18n";
 import axios from "axios";
+import {useCredentialStore} from "@/main/vue/stores/credential";
+import {useUserStore} from "@/main/vue/stores/users";
 
 const filter=ref('')
 const columns = [
   { name: 'category', required: true, label: "Kategorie", align: 'center', field: 'category', sortable: true },
   { name: 'availableCredential', align: 'center', label : 'Verfügbares Credential' , field: 'availableCredential', sortable: true },
-  { name: 'qualification', align: 'center',label: 'Vergleichbare Qualifikation', field: 'qualification', sortable: true },
-  { name: 'issuer', align: 'center', label: 'Herausgeber', field: 'issuer', sortable: true }
+  { name: 'qualification', align: 'center', label: 'Vergleichbare Qualifikation', field: 'qualification', sortable: true },
+  { name: 'issuer', align: 'center', label: 'Herausgeber', field: 'issuer', sortable: true },
 ]
 
 const rows = [
@@ -97,25 +99,27 @@ const rows = [
     category: "Erste-Hilfe-Kurs",
     availableCredential: "1",
     qualification: "2",
-    issuer: "Gerda Peters"
+    issuer: "Gerda Peters",
   },
   {
     category: "Sicherheitsunterweisung",
     availableCredential: "3",
     qualification: "4",
-    issuer: "Gerda Peters"
+    issuer: "Gerda Peters",
   }
 ]
 
 export default {
   setup () {
     const { t } = useI18n();
+    const credentialStore = useCredentialStore()
+    //credentialStore.getCategories().then(res => rows.value = res.data)
     return {
       columns,
       rows,
       filter,
       model: ref(null),
-      pov: ref(['Berlin', 'Bielefeld']),
+      pov: ref(["Berlin", "Bielefeld"]),
       t
     }
   }
