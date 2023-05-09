@@ -50,7 +50,7 @@ const router = useRouter()
           <div id="lower" class="row justify-end items-center no-wrap">
             <div class="row">
               <router-link to="/" class="headerLink"><p class="headerText">{{t("home.floorplan")}}</p></router-link>
-              <router-link to="/" class="headerLink"><p class="headerText">{{t("home.credentials")}}</p></router-link>
+              <router-link to="/credentialview" class="headerLink"><p class="headerText">{{t("home.credentials")}}</p></router-link>
               <div>
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                    class="headerText foldMenu">

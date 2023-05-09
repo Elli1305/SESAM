@@ -87,7 +87,7 @@ public class InitializeDatabase implements InitializingBean {
 		List<Door> doors2 = new ArrayList<>();
 		for(int i = 0, k = 0; i < 60; i++, k += 2) {
 			doors.add(new Door("Door" + i));
-			doors2.add(new Door("D00r" + k));
+			doors2.add(new Door("Door" + k));
 		}
 
 		List<Room> rooms = new ArrayList<>();
@@ -157,11 +157,11 @@ public class InitializeDatabase implements InitializingBean {
 		Room room = new Room("0.007", doors);
 		Room room2 = new Room("0.112", doors2);
 		List<Issuer> issuers = new ArrayList<>();
-		Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters", Collections.singletonList(issuerRole10),
-				room, Collections.singletonList(null));
+		Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters",
+				Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
 
-		Issuer issuer2 = new Issuer("muster@test.com", "Hallo123!", "Erik", "Muster", Collections.singletonList(issuerRole11),
-				  room2, Collections.singletonList(null));
+		Issuer issuer2 = new Issuer("muster@test.com", "Hallo123!", "Erik", "Muster",
+				Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
 
 		issuers.add(issuer1);
 		issuers.add(issuer2);
@@ -231,11 +231,11 @@ public class InitializeDatabase implements InitializingBean {
 		doors2.add(door2);
 		Room room2 = new Room("0.112", doors2);
 		List<Issuer> issuers = new ArrayList<>();
-		Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann", Collections.singletonList(issuerRole10),
-				room, Collections.singletonList(null));
+		Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
+				Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
 
-		Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann", "Hombach", Collections.singletonList(issuerRole11),
-				room2, Collections.singletonList(null));
+		Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann", "Hombach",
+				Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
 		issuers.add(issuer1);
 		issuers.add(issuer2);
 
