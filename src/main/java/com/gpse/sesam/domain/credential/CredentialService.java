@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.credential;
 
-import com.gpse.sesam.domain.location.Location;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +11,7 @@ public interface CredentialService {
 
    Optional<Credential> getCredential(Long id);
 
-   Optional<Credential> getCredential(List<Location> locations);
+    String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds)  throws JsonProcessingException;
 
     void deleteAll();
 

@@ -8,10 +8,10 @@ export default {
     issue(id: string, attributes: IssueCredentialAttribute[]): Promise<AxiosResponse<string>> {
         return axios.post<string>(`/api/credentials/${id}/issue`, attributes);
     },
-    getCredentials(){
-        return axios.get("api/credentialview")
-    },
-    getCategories(){
-        return axios.get("api/credentialview")
-    }
+    // getCredentials(){
+    //     return axios.get("/api/credentials")
+    // },
+    // getCategories(){
+    //     return axios.get("/api/credentials/categories")
+    // }
 };
