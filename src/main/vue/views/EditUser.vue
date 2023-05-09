@@ -1,45 +1,38 @@
 <template>
     <q-page class="column justify-evenly" style="padding: 0 5em">
-        <p class="row text-h3 justify-center">{{ t('adminEdit.title') }}</p>
+        <p class="row text-h3 justify-center">{{t('adminEdit.title') }}</p>
 
         <div class="self-center" style="margin: 2em; width: 25em">
-            <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined/>
+            <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined style = "width: 500px"/>
             <q-space style="height: 1em"/>
-            <q-input id="surname" v-model="user.lastName" :label="t('profile.lastname')" outlined/>
+            <q-input id="surname" v-model="user.lastName" :label="t('profile.lastname')" outlined style = "width: 500px"/>
             <q-space style="height: 1em"/>
-            <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined disable/>
-        </div>
-        <div class="row justify-center">
-            <q-badge class="row justify-center" rounded color="secondary" text-color="primary"
-                     :style="{marginRight: '2em', height: '2em', width: '10em', opacity: adminopacity}">
-                <q-icon name="person" left/>
-                {{ t('profile.admin') }}
-            </q-badge>
-            <q-badge class="row justify-center" rounded color="secondary" text-color="primary"
-                     :style="{marginRight: '2em', height: '2em', width: '10em', opacity: editorOpacity}">
-                <q-icon name="person" left/>
-                {{ t('profile.editor') }}
-            </q-badge>
-            <q-badge class="row justify-center" rounded color="secondary" text-color="primary"
-                     :style="{height: '2em', width: '10em', opacity: issueropacity}">
-                <q-icon name="person" left/>
-                {{ t('profile.issuer') }}
-            </q-badge>
-        </div>
+            <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined disable style = "width: 500px"/>
 
-        <div class="row justify-center">
-            <p class="row text justify-center">{{ t('adminEdit.changeRoles') }}</p>
-            <q-option-group
+            <div>
+                <q-space style="height: 2em"/>
+            </div>
+            <div style="min-width: 250px; max-width: 300px">
+                <q-badge color="secondary" class="q-mb-md">
+                    Rollen: {{ modelMultiple || '[]' }}
+                </q-badge>
+
+                <q-select
+                    filled
+                    v-model="modelMultiple"
+                    multiple
                     :options="options"
-                    type="checkbox"
-                    v-model="group"
-                    size="25px"
-                    inline
-            />
+                    use-chips
+                    stack-label
+                    :label= "t('adminEdit.changeRoles')"
+                    style = "width: 500px"
+                />
+            </div>
+
         </div>
         <div class="row justify-evenly">
-            <q-btn dense round flat color="negative" icon="delete" @click="deleteAlert = true" size="24px"></q-btn>
-            <q-btn dense round flat color="positive" @click="" icon="save" size="24px"></q-btn>
+            <q-btn dense round flat color="negative" icon="delete" @click="deleteAlert = true" size="34px"></q-btn>
+            <q-btn dense round flat color="positive" @click="" icon="save" size="34px"></q-btn>
         </div>
 
     </q-page>
@@ -85,24 +78,30 @@ export default {
         const user = userStore.user
         const {t} = useI18n()
 
-        const group = ref([])
+        let roles= ref([])
 
-        let adminOpacity = user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted) ? "100%" : "50%"
-        let editorOpacity = user.roles.some(r => r.role === 'EDITOR' && r.granted) ? "100%" : "50%"
-        let issuerOpacity = user.roles.some(r => r.role === 'ISSUER' && r.granted) ? "100%" : "50%"
+        let adminRole = user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)
+        let editorRole = user.roles.some(r => r.role === 'EDITOR' && r.granted)
+        let issuerRole = user.roles.some(r => r.role === 'ISSUER' && r.granted)
+
+        if(adminRole) {
+            roles.value.push('Admin');
+        }
+        if(editorRole) {
+            roles.value.push('Editor');
+        }
+        if(issuerRole) {
+            roles.value.push('Herausgeber');
+        }
 
         return {
             user: user,
             deleteAlert: ref(false),
-            adminopacity: adminOpacity,
-            editorOpacity: editorOpacity,
-            issueropacity: issuerOpacity,
             t,
-            group,
+            modelMultiple: roles,
+
             options: [
-                {label: 'Admin', value: 'ADMINISTRATOR'},
-                {label: 'Bearbeiter', value: 'EDITOR'},
-                {label: 'Herausgeber', value: 'ISSUER'}
+                'Admin', 'Bearbeiter', 'Herausgeber'
             ]
         }
     }
