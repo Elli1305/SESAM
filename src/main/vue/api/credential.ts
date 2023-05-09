@@ -1,5 +1,4 @@
 import axios from "axios";
-import {Location} from "@/main/vue/entity/location";
 
 export default {
     getCredential(){
@@ -7,6 +6,6 @@ export default {
     },
 
     getCategories(){
-        return axios.get("/api/credentialview")
+        return axios.get("api/credentialview")
     }
 }

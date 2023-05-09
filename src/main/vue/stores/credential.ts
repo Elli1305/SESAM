@@ -6,6 +6,7 @@ import {Category} from "@/main/vue/entity/credentialDefinition";
 export const useCredentialStore = defineStore('credential', () =>{
     const allCategories: Ref<Category[] | null> = ref(null)
 
+
     function getCategories() {
         return new Promise ((resolve, reject) => {
             api.credential.getCategories().then((response) => {
@@ -19,7 +20,7 @@ export const useCredentialStore = defineStore('credential', () =>{
 
     return {
         allCategories,
-        getCategories
+        getCategories,
     }
 
 })

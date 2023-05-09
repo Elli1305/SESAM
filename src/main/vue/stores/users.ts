@@ -1,11 +1,11 @@
 import {defineStore} from 'pinia'
-import {Ref, ref, UnwrapRef} from 'vue'
+import {Ref, ref} from 'vue'
 import api from '../api'
 import {AttainableRole} from "@/main/vue/entity/createUser"
 import axios from 'axios';
-import {LoginData} from "@/main/vue/entity/loginData"
 import {LoginResponse, User} from "@/main/vue/entity/loginResponse";
 import {UserRole} from "@/main/vue/entity/signUpResponse";
+import {LoginData} from "@/main/vue/entity/loginData"
 
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
@@ -20,6 +20,10 @@ export const useUserStore = defineStore('users', () => {
         const state = JSON.parse((sessionStorage.getItem("users") || ''));
         authenticated.value = state.authenticated;
         user.value = state.user;
+    }
+
+    if (sessionStorage.getItem("token")) {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + sessionStorage.getItem("token")
     }
 
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
@@ -71,8 +75,8 @@ export const useUserStore = defineStore('users', () => {
     }
 
     function logout() {
-        if(localStorage.getItem('token')) {
-            localStorage.removeItem('token')
+        if(sessionStorage.getItem('token')) {
+            sessionStorage.removeItem('token')
             authenticated.value = false;
         }
     }
