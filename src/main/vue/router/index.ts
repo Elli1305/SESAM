@@ -8,6 +8,7 @@ import LoginView from '../views/Login.vue'
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Impressum from "../views/Impressum.vue";
+import EditUser from "@/main/vue/views/EditUser.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -30,6 +31,11 @@ const router = createRouter({
       name: 'currentuserlist',
       component: CurrentUserList,
       //meta: {requiresAdmin: true}
+    },
+    {
+      path: '/admin/currentuserlist/edit',
+      name: 'edit',
+      component: EditUser
     },
     {
       path: '/signup',
