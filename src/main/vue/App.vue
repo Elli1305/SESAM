@@ -10,10 +10,6 @@ const { t } = useI18n()
 const userStore = useUserStore()
 const $q = useQuasar()
 const router = useRouter()
-let isAdmin = userStore.authenticated && userStore.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)
-let isEditor = userStore.authenticated && userStore.roles.some(r => r.role === 'EDITOR' && r.granted)
-let isIssuer = userStore.authenticated && userStore.roles.some(r => r.role === 'ISSUER' && r.granted)
-
 
     async function logout (){
       await userStore.logout()
@@ -56,7 +52,7 @@ let isIssuer = userStore.authenticated && userStore.roles.some(r => r.role === '
               <router-link to="/" class="headerLink"><p class="headerText">{{t("home.floorplan")}}</p></router-link>
               <router-link to="/" class="headerLink"><p class="headerText">{{t("home.credentials")}}</p></router-link>
               <div>
-                <p v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
+                <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                    class="headerText foldMenu">
                   {{t("home.profileManagement")}}
                 </p>
@@ -69,7 +65,7 @@ let isIssuer = userStore.authenticated && userStore.roles.some(r => r.role === '
                 </q-menu>
               </div>
               <div>
-                <p v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
+                <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                    class="headerText foldMenu">
                   {{t("home.corporateDesign")}}
                 </p>
@@ -81,23 +77,23 @@ let isIssuer = userStore.authenticated && userStore.roles.some(r => r.role === '
                 </q-menu>
               </div>
               <router-link
-                  v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
+                  v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                   to="/" class="headerLink">
                 <p class="headerText">{{t("home.credentialManagement")}}</p>
               </router-link>
               <router-link
-                  v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'EDITOR' && r.granted)"
+                  v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
                   to="/" class="headerLink">
                 <p class="headerText">{{t("home.editorPages")}}</p>
               </router-link>
               <router-link
-                  v-if="userStore.authenticated && userStore.roles.some(r => r.role === 'ISSUER' && r.granted)"
+                  v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ISSUER' && r.granted)"
                   to="/" class="headerLink">
                 <p class="headerText">{{t("home.issuerPages")}}</p>
               </router-link>
             </div>
             <div style="margin-left: 1em">
-              <q-btn v-if="userStore.authenticated" :label="userStore.firstName.charAt(0) + userStore.lastName.charAt(0)" rounded color="info" unelevated auto-close size="3em" style="height: 3em; width: 3em; font-size: 1em; line-height: 1" >
+              <q-btn v-if="userStore.authenticated" :label="userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0)" rounded color="info" unelevated auto-close size="3em" style="height: 3em; width: 3em; font-size: 1em; line-height: 1" >
                 <q-menu transition-show="jump-down" transition-hide="jump-up">
                   <q-list>
                     <q-item to="/profile" clickable v-close-popup>
@@ -126,7 +122,7 @@ let isIssuer = userStore.authenticated && userStore.roles.some(r => r.role === '
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
 
-          <a href="/impressum" style="color: white">{{t('home.imprint')}}</a>
+          <router-link to="./impressum" style="color: white">{{t('home.imprint')}}</router-link>
 
         </q-toolbar-title>
       </q-toolbar>

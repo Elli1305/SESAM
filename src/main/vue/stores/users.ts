@@ -2,24 +2,30 @@ import {defineStore} from 'pinia'
 import {Ref, ref} from 'vue'
 import api from '../api'
 import {AttainableRole} from "@/main/vue/entity/createUser"
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import {Credentials} from "@/main/vue/entity/credentials"
-import {LoginResponse, User} from "@/main/vue/entity/loginResponse";
+import {LoginResponse, User} from "@/main/vue/entity/loginResponse"
 
-import {LoginResponse} from "@/main/vue/entity/loginResponse"
 import {UserRole} from "@/main/vue/entity/signUpResponse";
 
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
     const validPassword: Ref<RegExpMatchArray | null> = ref(null)
     const validEmail: Ref<RegExpMatchArray | null> = ref(null)
+    const user: Ref<User | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
     const sesamUsers: Ref<User[]> = ref([])
-    const firstName: Ref<string> = ref('')
-    const lastName: Ref<string> = ref('')
-    const eMail: Ref<string> = ref('')
-    const roles: Ref<Array<UserRole>|undefined> = ref()
 
+    if (sessionStorage.getItem("users")) {
+        const state = JSON.parse((sessionStorage.getItem("users") || ''));
+        authenticated.value = state.authenticated;
+        user.value = state.user;
+    }
+
+    if (sessionStorage.getItem("token")) {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + sessionStorage.getItem("token")
+    }
+    
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             api.auth.signUp({
@@ -42,7 +48,7 @@ export const useUserStore = defineStore('users', () => {
     function authenticate(token?: string) {
         if (token) {
             authenticated.value = true
-            localStorage.setItem('token', token);
+            sessionStorage.setItem('token', token);
             axios.defaults.headers['Authorization'] = 'Bearer ' + token
         } else {
             authenticated.value = false
@@ -56,12 +62,9 @@ export const useUserStore = defineStore('users', () => {
 
     function requestToken(credentials: Credentials): Promise<void> {
         return new Promise((resolve, reject) => {
-            api.auth.login(credentials).then((res: LoginResponse) => {
+            api.auth.login(credentials).then((res) => {
                 authenticate(res.data.token)
-                firstName.value = res.data.user.firstName
-                lastName.value = res.data.user.lastName
-                eMail.value = res.data.user.username
-                roles.value = res.data.user.roles
+                user.value = res.data.user
                 resolve()
             }).catch((error) => {
                 authenticate()
@@ -71,8 +74,8 @@ export const useUserStore = defineStore('users', () => {
     }
 
     function logout() {
-        if(localStorage.getItem('token')) {
-            localStorage.removeItem('token')
+        if(sessionStorage.getItem('token')) {
+            sessionStorage.removeItem('token')
             authenticated.value = false;
         }
     }
@@ -97,10 +100,7 @@ export const useUserStore = defineStore('users', () => {
     }
 
     return {
-        firstName,
-        lastName,
-        eMail,
-        roles,
+        user,
         authenticated,
         signUp,
         authenticate,
