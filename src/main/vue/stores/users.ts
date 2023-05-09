@@ -21,6 +21,10 @@ export const useUserStore = defineStore('users', () => {
         authenticated.value = state.authenticated;
         user.value = state.user;
     }
+
+    if (sessionStorage.getItem("token")) {
+        axios.defaults.headers['Authorization'] = 'Bearer ' + sessionStorage.getItem("token")
+    }
     
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {

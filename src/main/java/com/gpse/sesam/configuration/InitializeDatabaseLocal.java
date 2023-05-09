@@ -81,11 +81,18 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	}
 
 	private List<Location> createLocations() {
+		List<Door> doors = new ArrayList<>();
+		List<Door> doors2 = new ArrayList<>();
+		for(int i = 0, k = 0; i < 60; i++, k += 2) {
+			doors.add(new Door("Door" + i));
+			doors2.add(new Door("D00r" + k));
+		}
+
 		List<Room> rooms = new ArrayList<>();
 		List<Room> rooms2 = new ArrayList<>();
 		for (int i = 0; i < 30; i++) {
-			rooms.add(new Room("Room " + i));
-			rooms2.add(new Room("Room " + i));
+			rooms.add(new Room("Room " + i, doors.subList(i * 2, i * 2 + 2)));
+			rooms2.add(new Room("Room " + i, doors2.subList(i * 2, i * 2 + 2)));
 		}
 
 		String jsonContent = readJsonFile();

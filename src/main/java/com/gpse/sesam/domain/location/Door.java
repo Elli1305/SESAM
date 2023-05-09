@@ -6,43 +6,54 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-
-import java.util.List;
 
 @Entity
 public class Door {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Coordinate coordinate;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Coordinate coordinate;
+	@Column
+	private String name;
 
-    protected Door() {
+	protected Door() {
 
-    }
+	}
 
-    public Door(Coordinate coordinate) {
-        this.coordinate = coordinate;
-    }
+	public Door(String name) {
+		this.name = name;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Door(Coordinate coordinate) {
+		this.coordinate = coordinate;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
-    }
+	public String getName() {
+		return name;
+	}
+
+	public Coordinate getCoordinate() {
+		return coordinate;
+	}
+
+	public void setCoordinate(Coordinate coordinate) {
+		this.coordinate = coordinate;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }
