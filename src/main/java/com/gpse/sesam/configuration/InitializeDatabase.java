@@ -65,7 +65,7 @@ public class InitializeDatabase implements InitializingBean {
 		editorRole.setGranted(true);
 		List<Credential> noCredentials = new ArrayList<>();
 		noCredentials.add(null);
-		Door door = new Door(noCredentials);
+		Door door = new Door("Door100",noCredentials);
 		List<Door> doors = new ArrayList<>();
 		doors.add(door);
 
@@ -85,9 +85,11 @@ public class InitializeDatabase implements InitializingBean {
 	private List<Location> createLocations() {
 		List<Door> doors = new ArrayList<>();
 		List<Door> doors2 = new ArrayList<>();
+		List<Credential> credentials = new ArrayList<>();
+		credentials.add(null);
 		for(int i = 0, k = 0; i < 60; i++, k += 2) {
-			doors.add(new Door("Door" + i));
-			doors2.add(new Door("Door" + k));
+			doors.add(new Door("Door" + i, credentials));
+			doors2.add(new Door("Door" + k, null));
 		}
 
 		List<Room> rooms = new ArrayList<>();
@@ -144,13 +146,13 @@ public class InitializeDatabase implements InitializingBean {
 
 		List<Credential> noCredentials = new ArrayList<>();
 		noCredentials.add(null);
-		Door door = new Door(noCredentials);
+		Door door = new Door("Door999",noCredentials);
 		List<Door> doors = new ArrayList<>();
 		doors.add(door);
 
 		List<Credential> noCredentials2 = new ArrayList<>();
 		noCredentials2.add(null);
-		Door door2 = new Door(noCredentials);
+		Door door2 = new Door("Door666",noCredentials);
 		List<Door> doors2 = new ArrayList<>();
 		doors2.add(door2);
 
@@ -215,7 +217,7 @@ public class InitializeDatabase implements InitializingBean {
 		// Issuer
 		List<Credential> noCredentials = new ArrayList<>();
 		noCredentials.add(null);
-		Door door = new Door(noCredentials);
+		Door door = new Door("Tor",noCredentials);
 		List<Door> doors = new ArrayList<>();
 		doors.add(door);
 		SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
@@ -226,7 +228,7 @@ public class InitializeDatabase implements InitializingBean {
 
 		List<Credential> noCredentials2 = new ArrayList<>();
 		noCredentials2.add(null);
-		Door door2 = new Door(noCredentials);
+		Door door2 = new Door("Tor",noCredentials);
 		List<Door> doors2 = new ArrayList<>();
 		doors2.add(door2);
 		Room room2 = new Room("0.112", doors2);
