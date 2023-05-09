@@ -64,8 +64,72 @@ const messages = {
             email: "E-Mail",
             admin: "Admin",
             editor: "Bearbeiter",
-            issuer: "Herausgeber"
-        }
+            issuer: "Herausgeber",
+        },
+        issueCredential: {
+            title: "{0} Credential Ausstellung",
+            description: [
+                "Herzlich Willkommen zum Ausstellungsprozess des \"{0}\" Credentials! Hier können Sie ein offizielles Dokument erstellen, das die erfolgreiche Absolvierung eines bestimmten Kurses oder die Erlangung bestimmter Fähigkeiten oder Qualifikationen bestätigt.",
+                "Um das Credential auszustellen, füllen Sie bitte die neben stehenden Felder mit den geforderten Attributen aus. Stellen Sie sicher, dass alle Daten korrekt und aktuell sind. Sobald Sie alle erforderlichen Attribute ausgefüllt haben, klicken Sie auf die Schaltfläche \"@:{'issueCredential.next'}\"."
+            ],
+            checkConditions: "Bitte verwenden Sie die folgende Checkliste, um sicherzustellen, dass alle notwendigen Schritte ausgeführt wurden, bevor Sie das Credential ausstellen.",
+            validation: {
+                inputRequired: "Dieses Feld ist erforderlich.",
+            },
+            steps: {
+                form: "Formular",
+                list: "Checklist",
+                qrcode: "QR-Code",
+            },
+            next: "Nächster Schritt",
+            previous: "Zurück",
+            checklistHint:
+                "Um das Credential ausstellen zu können muss jede Bedingung der Checkliste erfüllt sein.",
+            confirm: {
+                title: "Sind Sie sicher, dass Sie das Credential ausstellen möchten?",
+                message:
+                    'Bitte stellen Sie sicher, dass alle Bedingungen erfüllt sind und Sie alle erforderlichen Schritte ausgeführt haben, bevor Sie das Credential ausstellen. Sobald Sie das Credential ausgestellt haben, kann es nicht mehr rückgängig gemacht werden.',
+                ok: "Credential ausstellen",
+                cancel: "Abbrechen",
+            },
+            addCredential: {
+                title: " Ihr neues Credential ({0}) wurde erfolgreich ausgestellt!",
+                howTo: "So fügen Sie ein Credential zur BC Wallet hinzu:",
+                steps: {
+                    step1:
+                        "Laden Sie die {0} aus dem App Store oder Google Play Store herunter.",
+                    step2:
+                        "Öffnen Sie die App und befolgen Sie die Anweisungen zur Einrichtung eines neuen Kontos.",
+                    step3:
+                        'Wenn Sie Ihr Konto erfolgreich eingerichtet haben, wählen Sie den Tab "Credentials" aus.',
+                    step4:
+                        "Tippen Sie auf das kleine Plus-Zeichen in der oberen rechten Ecke des Bildschirms.",
+                    step5:
+                        'Wählen Sie im daraufhin erscheinenden Menü die Option "Scan a QR code".',
+                    step6:
+                        "Richten Sie die Kamera Ihres Smartphones auf den QR-Code, den Sie scannen möchten (der QR-Code sollte sich rechts neben dieser Anleitung befinden).",
+                    step7:
+                        "Überprüfen Sie die Informationen, die auf dem Bildschirm angezeigt werden, um sicherzustellen, dass sie korrekt sind.",
+                    step8:
+                        'Wenn alle Informationen korrekt sind, tippen Sie auf "Accept", um das Credential Ihrer Wallet hinzuzufügen.',
+                },
+            },
+            errors: {
+                get: {
+                    failed: "Das Credential konnte nicht geladen werden.",
+                    unauthorized:
+                        "Ihnen fehlen die benötigten Berechtigungen um das Credential anzuzeigen.",
+                },
+                issue: {
+                    failed: "Das Credential konnte nicht ausgestellt werden.",
+                    unauthorized:
+                        "Ihnen fehlen die benötigten Berechtigungen um das Credential auszustellen.",
+                    failedDependency:
+                        "Es konnte keine Verbindung zum Credential Issuing Self-Service aufgebaut werden. Bitte stellen Sie sicher, dass sie mit dem Netzwerk der Universität verbunden sind.",
+                },
+                unknown: "Bitte versuchen Sie es später erneut.",
+            },
+        },
     },
     en: {
         adminCurrentUser: {
@@ -133,10 +197,12 @@ const i18n = createI18n({
 })
 const app = createApp(App)
 
-app.use(createPinia())
-app.use(router)
-app.use(Quasar, quasarUserOptions)
-app.use(i18n)
+const pinia = createPinia();
+
+app.use(pinia);
+app.use(router);
+app.use(Quasar, quasarUserOptions);
+app.use(i18n);
 // app.use(store)
 
 app.mount('#app')
