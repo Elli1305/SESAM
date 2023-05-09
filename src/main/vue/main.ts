@@ -150,7 +150,6 @@ const i18n = createI18n({
 })
 const app = createApp(App)
 const pinia = createPinia();
-
 app.use(pinia)
 app.use(router)
 app.use(Quasar, quasarUserOptions)

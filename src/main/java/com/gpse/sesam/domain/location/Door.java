@@ -6,7 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
+
+import java.util.List;
 
 @Entity
 public class Door {
@@ -16,21 +18,21 @@ public class Door {
 	@Column
 	private Long id;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private Coordinate coordinate;
 	@Column
 	private String name;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Coordinate> coordinates;
 
 	protected Door() {
 
 	}
 
-	public Door(String name) {
-		this.name = name;
+	public Door(List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
 	}
 
-	public Door(Coordinate coordinate) {
-		this.coordinate = coordinate;
+	public Door(String name) {
+		this.name = name;
 	}
 
 	public Long getId() {
@@ -41,16 +43,16 @@ public class Door {
 		this.id = id;
 	}
 
+	public List<Coordinate> getCoordinates() {
+		return coordinates;
+	}
+
+	public void setCoordinates(List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
+	}
+
 	public String getName() {
 		return name;
-	}
-
-	public Coordinate getCoordinate() {
-		return coordinate;
-	}
-
-	public void setCoordinate(Coordinate coordinate) {
-		this.coordinate = coordinate;
 	}
 
 	public void setName(String name) {

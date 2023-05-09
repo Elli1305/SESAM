@@ -56,41 +56,28 @@ class GeoJsonParserTest {
 	}
 
 	@Test
-	void testParsePointsFromGeoJsonWithOnePoint() throws Exception {
-		String geoJson = "{ \"type\": \"FeatureCollection\", \"features\": [ { \"type\": \"Feature\", \"geometry\": {" +
-				" " +
-				"\"type\": \"Point\", \"coordinates\": [ 30.0, 10.0 ] }, \"properties\": {} } ] }";
+	void testParseLinesFromGeoJsonWithMultiplePoints() throws Exception {
+		String geoJson = "{\"type\":\"FeatureCollection\",\"features\":[{\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[10.0,20.0],[30.0,40.0],[50.0,60.0]]}}]}";
 
-		List<Coordinate> points = GeoJsonParser.parsePointsFromGeoJson(geoJson);
 
-		assertThat(1, is(points.size()));
-		assertThat(points.get(0).getLng(), is(BigDecimal.valueOf(30.0)));
-		assertThat(points.get(0).getLat(), is(BigDecimal.valueOf(10.0)));
-	}
+		List<List<Coordinate>> lines = GeoJsonParser.parseLinesFromGeoJson(geoJson);
 
-	@Test
-	void testParsePointsFromGeoJsonWithMultiplePoints() throws Exception {
-		String geoJson = "{ \"type\": \"FeatureCollection\", \"features\": [ { \"type\": \"Feature\", \"geometry\": {" +
-				" " +
-				"\"type\": \"Point\", \"coordinates\": [ 30.0, 10.0 ] }, \"properties\": {} }, { \"type\": " +
-				"\"Feature\", \"geometry\": { \"type\": \"Point\", \"coordinates\": [ 40.0, 20.0 ] }, \"properties\":" +
-				" " +
-				"{} } ] }";
+		assertThat(lines.size(), is(1));
 
-		List<Coordinate> points = GeoJsonParser.parsePointsFromGeoJson(geoJson);
-
-		assertThat(points.size(), is(2));
-		assertThat(points.get(0).getLng(), is(BigDecimal.valueOf(30.0)));
-		assertThat(points.get(0).getLat(), is(BigDecimal.valueOf(10.0)));
-		assertThat(points.get(1).getLng(), is(BigDecimal.valueOf(40.0)));
-		assertThat(points.get(1).getLat(), is(BigDecimal.valueOf(20.0)));
+		List<Coordinate> line = lines.get(0);
+		assertThat(line.get(0).getLng(), is(BigDecimal.valueOf(10.0)));
+		assertThat(line.get(0).getLat(), is(BigDecimal.valueOf(20.0)));
+		assertThat(line.get(1).getLng(), is(BigDecimal.valueOf(30.0)));
+		assertThat(line.get(1).getLat(), is(BigDecimal.valueOf(40.0)));
+		assertThat(line.get(2).getLng(), is(BigDecimal.valueOf(50.0)));
+		assertThat(line.get(2).getLat(), is(BigDecimal.valueOf(60.0)));
 	}
 
 	@Test
 	void testParsePointsFromGeoJsonWithNoPoints() throws Exception {
 		String geoJson = "{ \"type\": \"FeatureCollection\", \"features\": [] }";
 
-		List<Coordinate> points = GeoJsonParser.parsePointsFromGeoJson(geoJson);
+		List<List<Coordinate>> points = GeoJsonParser.parseLinesFromGeoJson(geoJson);
 
 		assertThat(points.size(), is(0));
 	}
@@ -99,6 +86,6 @@ class GeoJsonParserTest {
 	void testParsePointsFromGeoJsonWithInvalidJson() {
 		String geoJson = "invalidJson";
 
-		assertThrows(JsonParseException.class, () -> GeoJsonParser.parsePointsFromGeoJson(geoJson));
+		assertThrows(JsonParseException.class, () -> GeoJsonParser.parseLinesFromGeoJson(geoJson));
 	}
 }

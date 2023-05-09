@@ -31,7 +31,8 @@ public final class GeoJsonParser {
 				for (JsonNode coordinateNode : coordinatesNode) {
 					double longitude = coordinateNode.get(0).asDouble();
 					double latitude = coordinateNode.get(1).asDouble();
-					Coordinate coordinate = new Coordinate(BigDecimal.valueOf(longitude), BigDecimal.valueOf(latitude));
+					Coordinate coordinate = new Coordinate(BigDecimal.valueOf(longitude),
+							BigDecimal.valueOf(latitude));
 					polygonCoordinates.add(coordinate);
 				}
 
@@ -42,19 +43,29 @@ public final class GeoJsonParser {
 		return polygons;
 	}
 
-	public static List<Coordinate> parsePointsFromGeoJson(String geoJson) throws JsonProcessingException {
+	public static List<List<Coordinate>> parseLinesFromGeoJson(String geoJson) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode root = objectMapper.readTree(geoJson);
-		List<Coordinate> points = new ArrayList<>();
+		List<List<Coordinate>> lines = new ArrayList<>();
 
-		for (JsonNode feature : root.get("features")) {
-			if (feature.get("geometry").get("type").asText().equals("Point")) {
-				double lng = feature.get("geometry").get("coordinates").get(0).asDouble();
-				double lat = feature.get("geometry").get("coordinates").get(1).asDouble();
-				points.add( new Coordinate(BigDecimal.valueOf(lng), BigDecimal.valueOf(lat)));
+		for (JsonNode featureNode : root.get("features")) {
+			JsonNode geometryNode = featureNode.get("geometry");
+			String geometryType = geometryNode.get("type").asText();
+			if (geometryType.equals("LineString")) {
+				JsonNode coordinatesNode = geometryNode.get("coordinates");
+				List<Coordinate> lineCoordinates = new ArrayList<>();
+
+				for (JsonNode coordinateNode : coordinatesNode) {
+					double longitude = coordinateNode.get(0).asDouble();
+					double latitude = coordinateNode.get(1).asDouble();
+					Coordinate coordinate = new Coordinate(BigDecimal.valueOf(longitude),
+							BigDecimal.valueOf(latitude));
+					lineCoordinates.add(coordinate);
+				}
+				lines.add(lineCoordinates);
 			}
 		}
-		return points;
+		return lines;
 	}
 
 
