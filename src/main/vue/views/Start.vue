@@ -1,18 +1,17 @@
 <template>
   <NavigationTree></NavigationTree>
-  <Map></Map>
+  <FloorPlan></FloorPlan>
+  <FloorPlanRoomList></FloorPlanRoomList>
 </template>
 
 <script>
-import Map from "@/main/vue/views/Map.vue";
-
-import {ref} from "vue";
-import router from "@/main/vue/router";
 import NavigationTree from "@/main/vue/views/NavigationTree.vue";
+import FloorPlan from "@/main/vue/views/FloorPlan.vue";
+import FloorPlanRoomList from "@/main/vue/views/FloorPlanRoomList.vue";
 
 export default {
   name: "Start",
-  components: {Map, NavigationTree}
+  components: {FloorPlan, NavigationTree, FloorPlanRoomList}
 }
 </script>
 

@@ -35,21 +35,40 @@ export default {
     const floorPlanStore = useFloorPlanStore()
     let locationTreeStructure = ref([])
 
-    locationStore.getLocations().then((locations) => {
-          const initialFloor = locations[0].buildings[0].floors[0];
-          floorPlanStore.selectedFloorPlan = initialFloor.floorPlanPath;
-          floorPlanStore.selectedFloorId = initialFloor.id;
+    function getParentIDs(locations, selectFloorId) {
+      for (const location of locations) {
+        for (const building of location.buildings) {
+          if (building.floors.some(floor => floor.id === selectFloorId)) {
+            return {locationId: location.id, buildingId: building.id}
+          }
+        }
+      }
+      return null;
+    }
 
-          locationTreeStructure.value = locations.map((location, index) => ({
+
+    locationStore.getLocations().then((locations) => {
+          let locationId, buildingId;
+          if (!floorPlanStore.selectedFloorPlan) {
+            const initialFloor = locations[0].buildings[0].floors[0];
+            locationId = locations[0].id
+            buildingId = locations[0].buildings[0].id
+            floorPlanStore.selectedFloorPlan = initialFloor.floorPlanPath;
+            floorPlanStore.selectedFloorId = initialFloor.id;
+          } else {
+            ({locationId, buildingId} = getParentIDs(locations, floorPlanStore.selectedFloorId));
+          }
+
+          locationTreeStructure.value = locations.map((location) => ({
             id: location.id,
             title: location.name,
             level: 0,
-            expanded: index === 0,
-            children: location.buildings.map((building, index) => ({
+            expanded: location.id === locationId,
+            children: location.buildings.map((building) => ({
               id: building.id,
               title: building.name,
               level: 1,
-              expanded: index === 0,
+              expanded: building.id === buildingId,
               children: building.floors.map(floor => ({
                 id: floor.id,
                 level: 2,

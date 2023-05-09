@@ -6,10 +6,11 @@ import PasswordReset from "../views/PasswordReset.vue";
 import Profilansicht from "@/main/vue/views/Profilansicht.vue";
 import LoginView from "../views/Login.vue";
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
-import Floorplan from "@/main/vue/views/Floorplan.vue";
+import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Impressum from "../views/Impressum.vue";
 import IssueCredential from "../views/IssueCredential.vue";
 import { useUserStore } from "../stores/users";
+import Credentialview from "@/main/vue/views/CredentialView.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,7 +19,7 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: StartView,
-      children: [{ path: "", component: Floorplan }],
+      children: [{ path: "", component: FloorPlan }],
     },
     {
       path: "/login",
@@ -54,6 +55,10 @@ const router = createRouter({
     {
       path: "/Impressum",
       component: Impressum,
+    },
+    {
+      path: "/credentialview",
+      component: Credentialview,
     },
     {
       path: "/issue_credential/:id",

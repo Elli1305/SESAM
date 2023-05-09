@@ -1,4 +1,4 @@
-import {createApp} from 'vue'
+import {createApp, watch} from 'vue'
 import {createPinia} from 'pinia'
 import {Quasar} from 'quasar'
 import quasarUserOptions from './quasar-user-options'
@@ -7,7 +7,6 @@ import {createI18n} from 'vue-i18n'
 import App from './App.vue'
 import router from './router'
 
-// import store from "./stores";
 import 'quasar/src/css/index.sass'
 import '@quasar/extras/material-icons/material-icons.css'
 import '@/main/vue/styles/notify.scss'
@@ -29,13 +28,36 @@ const messages = {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
         },
+        credentialview :{
+            credentialview: "Credentialansicht",
+            location: "Standort",
+            search: "Suche",
+            credentialtext: "Das Credential wird von folgenden Person ausgestellt:  ",
+            credentialtext2: "Herausgeber kann in folgenden Räumen gefunden werden: ",
+            credentialtext3: "Als vergleichbare Qualifikation dienen folgende Credentials:",
+            credentialtext4: "Zum Erhalt des Credentials muss folgendes erfolgreich abgeschlossen sein:",
+            category: "Kategorie",
+            availablecredentials: "Verfügbbare Credential",
+            qualification: "Vergleichbare Qualifikation",
+            issuer: "Herausgeber"
+        }
+        ,
         home: {
-            header: "SESAM(Ger)",
+            header: "SESAM",
             signup: "Registrierung",
             signin: "Login",
             floorplan: "Floorplan",
             credentials: "Credentials",
-            information: "Information",
+            profileManagement: "Profilverwaltung",
+            currentUsers: "Aktuelle Nutzer",
+            currentRegistrations: "Aktuelle Registrierungen",
+            issuerManagement: "Herausgeberverwaltung",
+            corporateDesign: "Corporate Design",
+            editCorporateDesign: "Corporate Design anpassen",
+            editImprint: "Imprint bearbeiten",
+            credentialManagement: "Credentialverwaltung",
+            editorPages: "Bearbeiten",
+            issuerPages: "Credential austellen",
             imprint: "Impressum",
             logout: "Logout"
         },
@@ -145,13 +167,35 @@ const messages = {
             internalServerError: "The server could not process the request",
             unkownError: "An unknown error occured",
         },
+        credentialview :{
+            credentialview: "View Credentials",
+            location: "Location",
+            search: "Search",
+            credentialtext: "The credential can be obtained from",
+            credentialtext2: "Issuer can be found in: ",
+            credentialtext3: "You need the following qualification for this credential: ",
+            credentialtext4: "As a qualification for this credential, you need to have the following:",
+            category: "Category",
+            availablecredentials: "Available Credentials",
+            qualification: "Comparable Qualifications",
+            issuer: "Issuer"
+        },
         home: {
-            header: "SESAM(En)",
+            header: "SESAM",
             signup: "Sign-up",
             signin: "Sign-in",
             floorplan: "Floorplan",
             credentials: "Credentials",
-            information: "Information",
+            profileManagement: "Profile Management",
+            currentUsers: "Current Users",
+            currentRegistrations: "Current Registrations",
+            issuerManagement: "Issuer Management",
+            corporateDesign: "Corporate Design",
+            editCorporateDesign: "Edit Corporate Design",
+            editImprint: "Edit Imprint",
+            credentialManagement: "Credential Management",
+            editorPages: "Edit",
+            issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout"
         },
@@ -189,7 +233,7 @@ const messages = {
 
 const i18n = createI18n({
     legacy: false,
-    locale: 'de',
+    locale: 'en',
     allowComposition: true,
     fallbackLocale: 'en',
     globalInjection: true,
@@ -203,8 +247,16 @@ app.use(pinia);
 app.use(router);
 app.use(Quasar, quasarUserOptions);
 app.use(i18n);
-// app.use(store)
 
 app.mount('#app')
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
+
+watch(
+    pinia.state,
+    (state) => {
+        sessionStorage.setItem("users", JSON.stringify(state.users));
+        sessionStorage.setItem("floorPlan", JSON.stringify(state.floorPlan));
+    },
+    { deep: true }
+);

@@ -1,0 +1,17 @@
+package com.gpse.sesam.web.exception;
+
+import com.gpse.sesam.domain.credential.Credential;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.io.Serial;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class CredentialNotFoundException extends RuntimeException {
+    @Serial
+    private static final long serialVersionUID = 42L;
+
+    public CredentialNotFoundException(final String message) {
+        super(message);
+    }
+}
