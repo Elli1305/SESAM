@@ -1,10 +1,8 @@
 package com.gpse.sesam.domain.location;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Room {
@@ -16,12 +14,16 @@ public class Room {
 	@Column
 	private String name;
 
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Door> doors;
+
 	protected Room() {
 
 	}
 
-	public Room(String name) {
+	public Room(String name, List<Door> doors) {
 		this.name = name;
+		this.doors = doors;
 	}
 
 	public void setId(Long id) {
@@ -38,5 +40,17 @@ public class Room {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Door> getDoors() {
+		return doors;
+	}
+
+	public void setDoors(List<Door> doors) {
+		this.doors = doors;
+	}
+
+	public void addDoor(Door door) {
+		this.doors.add(door);
 	}
 }
