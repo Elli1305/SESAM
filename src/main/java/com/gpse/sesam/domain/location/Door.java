@@ -1,6 +1,9 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.domain.credential.Credential;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Door {
@@ -14,10 +17,15 @@ public class Door {
     private String name;
 
 
-    //Field/List for Credentials?
+    @OneToMany
+    private List<Credential> credentials;
 
     protected Door() {
 
+    }
+
+    public Door(List<Credential> credentials) {
+        this.credentials = credentials;
     }
 
     public Door(String name) {
@@ -40,4 +48,11 @@ public class Door {
         this.name = name;
     }
 
+    public List<Credential> getCredentials() {
+        return credentials;
+    }
+
+    public void setCredentials(List<Credential> credentials) {
+        this.credentials = credentials;
+    }
 }

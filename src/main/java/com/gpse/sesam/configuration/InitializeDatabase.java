@@ -1,11 +1,7 @@
 package com.gpse.sesam.configuration;
 
 import com.gpse.sesam.domain.credential.*;
-import com.gpse.sesam.domain.location.Building;
-import com.gpse.sesam.domain.location.Floor;
-import com.gpse.sesam.domain.location.Location;
-import com.gpse.sesam.domain.location.LocationService;
-import com.gpse.sesam.domain.location.Room;
+import com.gpse.sesam.domain.location.*;
 import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
@@ -67,25 +63,38 @@ public class InitializeDatabase implements InitializingBean {
 		issuerRole.setGranted(true);
 		SesamUserRole editorRole = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
 		editorRole.setGranted(true);
+		List<Credential> noCredentials = new ArrayList<>();
+		noCredentials.add(null);
+		Door door = new Door(noCredentials);
+		List<Door> doors = new ArrayList<>();
+		doors.add(door);
 
 		String defaultPassword = passwordEncoder.encode("Hallo123!");
 		SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
 				Collections.singletonList(adminRole));
 		SesamUser issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
-				Collections.singletonList(issuerRole), new Room("0.007"), null);
+				Collections.singletonList(issuerRole), new Room("0.007", doors), null);
 		SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
 				Collections.singletonList(editorRole));
 		SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User", Collections.emptyList());
+
 
 		return List.of(admin, issuer, editor, user);
 	}
 
 	private List<Location> createLocations() {
+		List<Door> doors = new ArrayList<>();
+		List<Door> doors2 = new ArrayList<>();
+		for(int i = 0, k = 0; i < 60; i++, k += 2) {
+			doors.add(new Door("Door" + i));
+			doors2.add(new Door("D00r" + k));
+		}
+
 		List<Room> rooms = new ArrayList<>();
 		List<Room> rooms2 = new ArrayList<>();
 		for (int i = 0; i < 30; i++) {
-			rooms.add(new Room("Room " + i));
-			rooms2.add(new Room("Room " + i));
+			rooms.add(new Room("Room " + i, doors.subList(i * 2, i * 2 + 2)));
+			rooms2.add(new Room("Room " + i, doors2.subList(i * 2, i * 2 + 2)));
 		}
 
 		List<Floor> floors = new ArrayList<>();
@@ -132,8 +141,21 @@ public class InitializeDatabase implements InitializingBean {
 		issuerRole10.setGranted(true);
 		SesamUserRole issuerRole11 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
 		issuerRole10.setGranted(true);
-		Room room = new Room("0.007");
-		Room room2 = new Room("0.112");
+
+		List<Credential> noCredentials = new ArrayList<>();
+		noCredentials.add(null);
+		Door door = new Door(noCredentials);
+		List<Door> doors = new ArrayList<>();
+		doors.add(door);
+
+		List<Credential> noCredentials2 = new ArrayList<>();
+		noCredentials2.add(null);
+		Door door2 = new Door(noCredentials);
+		List<Door> doors2 = new ArrayList<>();
+		doors2.add(door2);
+
+		Room room = new Room("0.007", doors);
+		Room room2 = new Room("0.112", doors2);
 		List<Issuer> issuers = new ArrayList<>();
 		Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters", Collections.singletonList(issuerRole10),
 				room, Collections.singletonList(null));
@@ -191,12 +213,23 @@ public class InitializeDatabase implements InitializingBean {
 		form4.add(date4);
 
 		// Issuer
+		List<Credential> noCredentials = new ArrayList<>();
+		noCredentials.add(null);
+		Door door = new Door(noCredentials);
+		List<Door> doors = new ArrayList<>();
+		doors.add(door);
 		SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
 		issuerRole10.setGranted(true);
 		SesamUserRole issuerRole11 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
 		issuerRole10.setGranted(true);
-		Room room = new Room("0.007");
-		Room room2 = new Room("0.112");
+		Room room = new Room("0.007", doors);
+
+		List<Credential> noCredentials2 = new ArrayList<>();
+		noCredentials2.add(null);
+		Door door2 = new Door(noCredentials);
+		List<Door> doors2 = new ArrayList<>();
+		doors2.add(door2);
+		Room room2 = new Room("0.112", doors2);
 		List<Issuer> issuers = new ArrayList<>();
 		Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann", Collections.singletonList(issuerRole10),
 				room, Collections.singletonList(null));

@@ -42,6 +42,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void saveAll(Iterable<Category> category) {
-        categoryRepository.deleteAll();
+        categoryRepository.saveAll(category);
     }
 }
