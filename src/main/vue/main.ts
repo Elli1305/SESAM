@@ -38,6 +38,15 @@ const messages = {
             imprint: "Impressum",
             logout: "Logout"
         },
+        login: {
+            wrongEmailPassword:"Falsches Passwort oder Benutzername",
+            loginFailed: "Login Fehlgeschlagen",
+            forgotPassword: "Passwort vergessen:",
+            resetPassword: "Passwort zurücksetzen",
+            notRegistered: "Nicht registriert:",
+            toRegister: "Zur Registrierung",
+            password: "Passwort"
+        },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
             email: "E-Mail",
@@ -89,6 +98,15 @@ const messages = {
             information: "Information",
             imprint: "Imprint",
             logout: "Logout"
+        },
+        login: {
+            wrongEmailPassword:"Wrong Password oder Username",
+            loginFailed: "Login Failed",
+            forgotPassword: "Forgot Password:",
+            resetPassword: "Reset Password",
+            notRegistered: "Not registered",
+            toRegister: "Go to Register",
+            password: "Password"
         },
         passwordReset: {
             resetPassword: "Reset Password",
