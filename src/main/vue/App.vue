@@ -28,7 +28,7 @@ const router = useRouter()
 
 </script>
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh lpR fff">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="q-gutter-y-md column fit" style="padding: 1em">
