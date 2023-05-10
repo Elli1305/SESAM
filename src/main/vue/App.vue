@@ -72,7 +72,7 @@ const router = useRouter()
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right" self="top right">
                   <div class="column">
                     <router-link to="/" class="q-ma-sm headerLink text-black">{{t("home.editCorporateDesign")}}</router-link>
-                    <router-link to="/" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
+                    <router-link to="/ImprintEditor" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
                   </div>
                 </q-menu>
               </div>
@@ -122,7 +122,7 @@ const router = useRouter()
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
 
-          <router-link to="./impressum" style="color: white">{{t('home.imprint')}}</router-link>
+          <router-link to="./imprint" style="color: white">{{t('home.imprint')}}</router-link>
 
         </q-toolbar-title>
       </q-toolbar>

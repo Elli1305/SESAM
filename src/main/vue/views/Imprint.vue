@@ -3,9 +3,8 @@
     <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
       <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Impressum</h1>
 
-      <div class="impressum-content" v-html="impressumContent"></div>
+      <div class="imprint-content" v-html="imprintContent"></div>
 
-      <router-link to="/" class="back-to-home">Homepage</router-link>
     </div>
   </q-page>
 </template>
@@ -15,14 +14,14 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 export default {
-  name: "Impressum",
+  name: "Imprint",
   setup() {
-    const impressumContent = ref('');
+    const imprintContent = ref('');
 
-    const fetchImpressumContent = async () => {
+    const fetchImprintContent = async () => {
       try {
-        const response = await axios.get('/api/impressum');
-        impressumContent.value = response.data;
+        const response = await axios.get('/api/imprint');
+        imprintContent.value = response.data;
         setDecodedImageSrc();
       } catch (error) {
         console.error('Error fetching impressum content:', error);
@@ -30,7 +29,7 @@ export default {
     };
 
     const setDecodedImageSrc = () => {
-      const imgElem = document.querySelector('.impressum-content img');
+      const imgElem = document.querySelector('.imprint-content img');
       if (imgElem) {
         const encodedSrc = imgElem.getAttribute('data-src');
         if (encodedSrc !== null) {
@@ -41,10 +40,10 @@ export default {
     };
 
 
-    onMounted(fetchImpressumContent);
+    onMounted(fetchImprintContent);
 
     return {
-      impressumContent,
+      imprintContent,
     };
   },
 
@@ -59,10 +58,5 @@ h1 {
   margin-bottom: -0.5em;
 }
 
-.back-to-home {
-  display: inline-block;
-  margin-top: 1em;
-  text-decoration: underline;
-  cursor: pointer;
-}
+
 </style>
