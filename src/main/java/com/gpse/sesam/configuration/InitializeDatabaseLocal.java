@@ -1,7 +1,13 @@
 package com.gpse.sesam.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gpse.sesam.domain.location.*;
+import com.gpse.sesam.domain.location.Building;
+import com.gpse.sesam.domain.location.Coordinate;
+import com.gpse.sesam.domain.location.Door;
+import com.gpse.sesam.domain.location.Floor;
+import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.domain.location.LocationService;
+import com.gpse.sesam.domain.location.Room;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
@@ -25,12 +31,12 @@ import java.util.List;
 @Profile("test")
 public class InitializeDatabaseLocal implements InitializingBean {
 
+	private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
 	private final LocationService locationService;
 
 	private final SesamUserService userService;
 	private final PasswordEncoder passwordEncoder;
 
-	private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
 
 
 	public InitializeDatabaseLocal(LocationService locationService, SesamUserService userService,
@@ -77,7 +83,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private List<Location> createLocations() {
 		List<Door> doors = new ArrayList<>();
 		List<Door> doors2 = new ArrayList<>();
-		for(int i = 0, k = 0; i < 60; i++, k += 2) {
+		for (int i = 0, k = 0; i < 60; i++, k += 2) {
 			doors.add(new Door("Door" + i));
 			doors2.add(new Door("D00r" + k));
 		}
@@ -96,7 +102,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 			rooms.get(i).setCoordinates(roomCoordinates.get(i));
 		}
 
-		List<Coordinate> doorCoordinates = createDoorCoordinates(jsonContent);
+		List<List<Coordinate>> doorCoordinates = createDoorCoordinates(jsonContent);
 
 		for (int i = 0; i < doorCoordinates.size(); i++) {
 			Door door = new Door("door" + i, doorCoordinates.get(i));
@@ -125,8 +131,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private String readJsonFile() {
 		try {
-			return  String.join("", Files.readAllLines(Paths.get("src/main/resources/test_coordinates" +
-					".json"), StandardCharsets.UTF_8));
+			return String.join("", Files.readAllLines(Paths.get("src/main/resources/test_coordinates"
+					+ ".json"), StandardCharsets.UTF_8));
 		} catch (IOException e) {
 			LOG.warn("Could not read json file", e);
 		}
@@ -142,9 +148,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		return Collections.emptyList();
 	}
 
-	private List<Coordinate> createDoorCoordinates(String jsonContent) {
+	private List<List<Coordinate>> createDoorCoordinates(String jsonContent) {
 		try {
-			return GeoJsonParser.parsePointsFromGeoJson(jsonContent);
+			return GeoJsonParser.parseLinesFromGeoJson(jsonContent);
 		} catch (JsonProcessingException e) {
 			LOG.warn("Coordination Data could not be initialized", e);
 		}

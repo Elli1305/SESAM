@@ -1,8 +1,14 @@
 package com.gpse.sesam.domain.location;
 
-import jakarta.persistence.*;
-import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
+import java.util.List;
 
 @Entity
 public class Room {
@@ -12,13 +18,13 @@ public class Room {
 	private Long id;
 
 	@Column
-    private String name;
+	private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Door> doors;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Door> doors;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Coordinate> coordinates;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Coordinate> coordinates;
 
 	protected Room() {
 
@@ -43,14 +49,6 @@ public class Room {
 
 	public void setName(String name) {
 		this.name = name;
-    }
-
-    public List<Coordinate> getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(List<Coordinate> coordinates) {
-        this.coordinates = coordinates;
 	}
 
 	public List<Door> getDoors() {
@@ -61,7 +59,11 @@ public class Room {
 		this.doors = doors;
 	}
 
-	public void addDoor(Door door) {
-		this.doors.add(door);
+	public List<Coordinate> getCoordinates() {
+		return coordinates;
+	}
+
+	public void setCoordinates(List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
 	}
 }

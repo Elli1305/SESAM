@@ -29,12 +29,21 @@ const messages = {
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
         },
         home: {
-            header: "SESAM(Ger)",
+            header: "SESAM",
             signup: "Registrierung",
             signin: "Login",
             floorplan: "Floorplan",
             credentials: "Credentials",
-            information: "Information",
+            profileManagement: "Profilverwaltung",
+            currentUsers: "Aktuelle Nutzer",
+            currentRegistrations: "Aktuelle Registrierungen",
+            issuerManagement: "Herausgeberverwaltung",
+            corporateDesign: "Corporate Design",
+            editCorporateDesign: "Corporate Design anpassen",
+            editImprint: "Imprint bearbeiten",
+            credentialManagement: "Credentialverwaltung",
+            editorPages: "Bearbeiten",
+            issuerPages: "Credential austellen",
             imprint: "Impressum",
             logout: "Logout"
         },
@@ -90,12 +99,21 @@ const messages = {
             unkownError: "An unknown error occured",
         },
         home: {
-            header: "SESAM(En)",
+            header: "SESAM",
             signup: "Sign-up",
             signin: "Sign-in",
             floorplan: "Floorplan",
             credentials: "Credentials",
-            information: "Information",
+            profileManagement: "Profile Management",
+            currentUsers: "Current Users",
+            currentRegistrations: "Current Registrations",
+            issuerManagement: "Issuer Management",
+            corporateDesign: "Corporate Design",
+            editCorporateDesign: "Edit Corporate Design",
+            editImprint: "Edit Imprint",
+            credentialManagement: "Credential Management",
+            editorPages: "Edit",
+            issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout"
         },
@@ -150,7 +168,6 @@ const i18n = createI18n({
 })
 const app = createApp(App)
 const pinia = createPinia();
-
 app.use(pinia)
 app.use(router)
 app.use(Quasar, quasarUserOptions)

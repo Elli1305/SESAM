@@ -1,6 +1,7 @@
 <template>
   <q-drawer
       show-if-above bordered
+      v-model="show"
       content-class="bg-grey-1">
     <q-list>
       <q-item-label
@@ -17,7 +18,29 @@
       >
       </Node>
     </q-list>
+    <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
+      <q-btn
+          dense
+          round
+          unelevated
+          color="primary"
+          icon="chevron_left"
+          @click="show = false"
+      />
+    </div>
   </q-drawer>
+  <q-fab
+      v-if="show === false"
+      style="z-index: 10; margin-top: 15px; margin-left: -22px"
+      @click="show = true"
+      class="absolute"
+      label="   "
+      label-position="left"
+      color="primary"
+      icon="menu"
+      direction="right"
+  ></q-fab>
+
 </template>
 
 <script>
@@ -34,6 +57,7 @@ export default {
     const locationStore = useLocationStore()
     const floorPlanStore = useFloorPlanStore()
     let locationTreeStructure = ref([])
+    let show = ref(true)
 
     function getParentIDs(locations, selectFloorId) {
       for (const location of locations) {
@@ -83,7 +107,7 @@ export default {
     )
 
 
-    return {locationTreeStructure}
+    return {locationTreeStructure, show}
   }
 }
 </script>

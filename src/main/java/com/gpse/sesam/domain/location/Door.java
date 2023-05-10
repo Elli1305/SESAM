@@ -7,46 +7,47 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Door {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
 
+	@Column
+	private String name;
 
-    @Column
-    private String name;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Coordinate> coordinates;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Coordinate coordinate;
+	protected Door() {
 
+	}
 
-    protected Door() {
+	public Door(List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
+	}
 
-    }
+	public Door(String name) {
+		this.name = name;
+	}
 
-
-    public Door(String name, Coordinate coordinate) {
+    public Door(String name, List<Coordinate> coordinates) {
         this.name = name;
-        this.coordinate = coordinate;
+        this.coordinates = coordinates;
     }
 
-    public Door(String name) {
-        this.name = name;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
     public String getName() {
         return name;
@@ -56,11 +57,11 @@ public class Door {
         this.name = name;
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
+	public List<Coordinate> getCoordinates() {
+		return coordinates;
+	}
 
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
-    }
+	public void setCoordinates(List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
+	}
 }

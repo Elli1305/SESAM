@@ -1,6 +1,8 @@
 <template>
     <q-page-container style="padding: 2em">
         <q-page>
+          <q-btn v-if="false" dense round unelevated class="bg-black"
+                 style="z-index: 1000; top: 15px; left: -17px"></q-btn>
             <div ref="mapContainer" class="site-plan-editor-map">
                 <div id="site-plan-map"></div>
             </div>
@@ -20,7 +22,8 @@ const mapConfig = {
   crs: CRS.Simple,
   minZoom: 0,
   attributionControl: false,
-  bounceAtZoomLimits: false
+  bounceAtZoomLimits: false,
+  zoomControl: false
 };
 
 function getBounds(w, h) {
@@ -59,21 +62,27 @@ export default {
     sitePlanMap = L.map("site-plan-map", mapConfig);
     const floorPlanStore = useFloorPlanStore();
     floorPlanStore.$subscribe((mutation, state) => {
+      sitePlanMap.eachLayer(layer => sitePlanMap.removeLayer(layer));
       this.applyImageToMap(state.selectedFloorPlan)
       this.drawRooms(state.rooms)
     });
+    sitePlanMap.eachLayer(layer => sitePlanMap.removeLayer(layer));
     this.applyImageToMap(floorPlanStore.selectedFloorPlan);
-
-    const mapContainerObserver = new ResizeObserver(() => {
-          sitePlanMap.invalidateSize();
-    });
-    mapContainerObserver.observe(this.$refs.mapContainer)
     this.drawRooms(floorPlanStore.rooms)
 
+    L.control.zoom({
+      position: 'topright'
+    }).addTo(sitePlanMap)
+
+    const mapContainerObserver = new ResizeObserver(() => {
+      sitePlanMap.invalidateSize();
+    });
+    mapContainerObserver.observe(this.$refs.mapContainer)
   },
   methods: {
     applyImageToMap(floorPlan) {
       getImageDimensions(floorPlan).then(({width, height}) => {
+
         const bounds = getBounds(width, height);
         sitePlanMap.setMaxBounds(bounds);
         sitePlanMap.fitBounds(bounds);
@@ -83,20 +92,28 @@ export default {
 
         let center = overlay.getCenter();
         sitePlanMap.panTo(center);
-        sitePlanMap.invalidateSize();
       });
     },
     drawRooms(rooms) {
       for (const room of rooms) {
-        L.polygon(room.coordinates.map(coord => L.latLng(coord.lat, coord.lng))).addTo(sitePlanMap)
+        L.polygon(room.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {color: 'black', width: 5, fillOpacity: 0.1}).addTo(sitePlanMap)
+        for (const door of room.doors) {
+          L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {color: '#b0b0b0', weight: 3}).addTo(sitePlanMap)
+        }
       }
     }
   },
 };
 </script>
 <style>
-#site-plan-map {
+.site-plan-editor-map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
   width: 100%;
-  height: 85.8vh;
+}
+#site-plan-map {
+  height: 100%;
+  position: relative;
 }
 </style>

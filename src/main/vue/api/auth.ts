@@ -24,7 +24,6 @@ export default {
 
     adminCurrentUser(): Promise<CurrentUserListResponse> {
         return axios.post('/api/admin/currentUserlist');
-
     },
 
     resetPassword(param: ResetPassword) {
