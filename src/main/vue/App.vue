@@ -93,7 +93,8 @@ const router = useRouter()
               </router-link>
             </div>
             <div style="margin-left: 1em">
-              <q-btn v-if="userStore.authenticated" :label="userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0)" rounded color="info" unelevated auto-close size="3em" style="height: 3em; width: 3em; font-size: 1em; line-height: 1" >
+              <q-btn v-if="userStore.authenticated" rounded color="info" unelevated auto-close size="3em" style="height: 3em; width: 3em; font-size: 1em; line-height: 1">
+                <p style="margin-top: 0.1em; margin-bottom: 0; font-size: 1.5em; font-weight: 400; line-height: 1">{{userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0)}}</p>
                 <q-menu transition-show="jump-down" transition-hide="jump-up">
                   <q-list>
                     <q-item to="/profile" clickable v-close-popup>
