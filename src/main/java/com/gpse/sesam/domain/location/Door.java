@@ -11,7 +11,8 @@ import jakarta.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-public class Room {
+public class Door {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
@@ -19,44 +20,27 @@ public class Room {
 
 	@Column
 	private String name;
-
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Door> doors;
-
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Coordinate> coordinates;
 
-	protected Room() {
+	protected Door() {
 
 	}
 
-	public Room(String name, List<Door> doors) {
+	public Door(List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
+	}
+
+	public Door(String name) {
 		this.name = name;
-		this.doors = doors;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public List<Door> getDoors() {
-		return doors;
-	}
-
-	public void setDoors(List<Door> doors) {
-		this.doors = doors;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public List<Coordinate> getCoordinates() {
@@ -65,5 +49,13 @@ public class Room {
 
 	public void setCoordinates(List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

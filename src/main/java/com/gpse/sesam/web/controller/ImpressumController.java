@@ -1,6 +1,5 @@
 package com.gpse.sesam.web.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,25 +10,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-@SuppressWarnings("HideUtilityClassConstructor")
 public class ImpressumController {
-    @GetMapping("/api/impressum")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> getImpressum(HttpServletRequest request) {
+	@GetMapping("/api/impressum")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<String> getImpressum() {
 
 
-        String impressumContent =
-                "<p><strong>INVALID GmbH</strong></p>"
-                        + "<p>Baumstr.23</p>"
-                        + "<p>32124 Niemandsland</p>"
-                        + "<p>Deutschland</p>"
-                        + "<p>&nbsp;</p>"
-                        + "<p><strong>Kontakt</strong></p>"
-                        + "<p>Email: <a href=\"mailto:mail@invalid.de\">mail@invalid.de</a></p>"
-                        + "<p>Telefon: 123456789</p>"
-                        + "<img src=\"src/main/resources/Deutsche_Telekom_2022.png\" alt=\"\" "
-                        + "style=\"height:73px; width:61px;\" /></p>";
+		String impressumContent =
+				"<p><strong>INVALID GmbH</strong></p>"
+						+ "<p>Baumstr.23</p>"
+						+ "<p>32124 Niemandsland</p>"
+						+ "<p>Deutschland</p>"
+						+ "<p>&nbsp;</p>"
+						+ "<p><strong>Kontakt</strong></p>"
+						+ "<p>Email: <a href=\"mailto:mail@invalid.de\">mail@invalid.de</a></p>"
+						+ "<p>Telefon: 123456789</p>"
+						+ "<img src=\"src/main/resources/Deutsche_Telekom_2022.png\" alt=\"\" "
+						+ "style=\"height:73px; width:61px;\" /></p>";
 
-        return new ResponseEntity<String>(impressumContent, HttpStatus.OK);
-    }
+		return new ResponseEntity<>(impressumContent, HttpStatus.OK);
+	}
 }
