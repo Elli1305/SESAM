@@ -23,8 +23,9 @@
               options-dense
               emit-value
               map-options
-              :options="pov"
-              option-value="name"
+              :options="locationStore.allLocations"
+              option-value="id"
+              option-label="name"
               options-cover
               style="min-width: 13em; padding-right: 1em"
           />
@@ -85,41 +86,136 @@ import {useI18n} from "vue-i18n";
 import axios from "axios";
 import {useCredentialStore} from "@/main/vue/stores/credential";
 import {useUserStore} from "@/main/vue/stores/users";
+import {useLocationStore} from "@/main/vue/stores/locations";
 
 const filter=ref('')
 const columns = [
   { name: 'category', required: true, label: "Kategorie", align: 'center', field: 'category', sortable: true },
   { name: 'availableCredential', align: 'center', label : 'Verfügbares Credential' , field: 'availableCredential', sortable: true },
-  { name: 'qualification', align: 'center', label: 'Vergleichbare Qualifikation', field: 'qualification', sortable: true },
+  { name: 'qualification', align: 'center', label: 'Vergleichbare Credentials', field: 'qualification', sortable: true },
   { name: 'issuer', align: 'center', label: 'Herausgeber', field: 'issuer', sortable: true },
 ]
 
+//const rows = ref([''])
 const rows = [
   {
     category: "Erste-Hilfe-Kurs",
-    availableCredential: "1",
-    qualification: "2",
+    availableCredential: "Erste-Hilfe-Kurs DRK",
+    qualification: "Erste-Hilfe-Kurs Johanniter",
     issuer: "Gerda Peters",
   },
   {
     category: "Sicherheitsunterweisung",
-    availableCredential: "3",
-    qualification: "4",
+    availableCredential: "Sicherheitsunterweisung Labor",
+    qualification: "Sicherheitsunterweisung S1",
     issuer: "Gerda Peters",
   }
 ]
 
 export default {
   setup () {
+    let locationNames = ref([])
     const { t } = useI18n();
     const credentialStore = useCredentialStore()
+    const locationStore = useLocationStore()
     //credentialStore.getCategories().then(res => rows.value = res.data)
+
+
+    const name = []
+    /*function getAllLocationName(locations) {
+      for (const location of locations) {
+        locationNames.value = ref([location.name])
+      }
+      return locationNames
+    }*/
+
+    locationStore.getLocations().then((locations) => {
+    })
+    /*
+function getCategoryInfoTable (categories, credential) {
+  for (const category of categories) {
+    if (category.credential.includes (credential)) {
+      rows.id = category.id
+    rows.name = category.name
+    const credentialList = ref([])
+    const issuerName = ref([])
+      for (const credential of category) {
+        credentialList.push(credential.name)
+        issuerName.push(issuer.firstName + issuer.lastName)
+      }
+    rows.availableCredential = credentialList.value
+    rows.issuer = issuerName.value
+    const externalCredentials = ref([])
+    if (category.externalCredentials) {
+    for (const external of category) {
+      externalCredentials.push(external.name)
+    }
+    }
+    }
+  }
+}
+
+credentialStore.getCategories().then(res => {
+  getCategoryInfoTable(res)
+  }
+)
+
+function findCredential (location) {
+  for (building of location) {
+    for (floor of building) {
+      for (room of floor) {
+        for (door of room) {
+          credentials.push(door.credential)
+        }
+      }
+    }
+  }
+  return credentials
+}
+
+locationStore.locationByName().then(res => {
+  findCredential(res)
+})
+
+ */
+
+    credentialStore.getCategories().then(res => {
+      rows.value = res.data
+        }
+    )
+    function getCategoryInfoTable (categories) {
+      rows.name = categories.name
+      rows.availableCredential = categories.credential.name
+      rows.qualification = categories.externalCredentials.name
+      rows.issuer = categories.credential.issuer.firstName
+      /*
+      for (const category of categories) {
+          rows.name = category.name
+          const credentialList = []
+          const issuerName = []
+          for (const credential of category) {
+            credentialList.push(credential.name)
+            issuerName.push(issuer.firstName + issuer.lastName)
+          }
+          rows.availableCredential = credentialList.value
+          rows.issuer = issuerName.value
+          const externalCredentials = ref([])
+          if (category.externalCredentials) {
+            for (const external of category) {
+              externalCredentials.push(external.name)
+            }
+          }
+        }*/
+    }
+
     return {
       columns,
       rows,
       filter,
       model: ref(null),
       pov: ref(["Berlin", "Bielefeld"]),
+      locationNames,
+      locationStore,
       t
     }
   }

@@ -32,8 +32,9 @@ public class Door {
 
     }
 
-	public Door(String name, List<Credential> credentials) {
+	public Door(String name,List<Coordinate> coordinates, List<Credential> credentials) {
 		this.name =name;
+		this.coordinates = coordinates;
         this.credentials = credentials;
 	}
 
@@ -59,5 +60,13 @@ public class Door {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Credential> getCredentials() {
+		return credentials;
+	}
+
+	public void setCredentials(List<Credential> credentials) {
+		this.credentials = credentials;
 	}
 }

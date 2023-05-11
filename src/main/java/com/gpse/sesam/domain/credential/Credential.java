@@ -18,6 +18,9 @@ public class Credential {
     @Column(nullable = false)
     private String credentialDefinitionId;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Category category;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<FormEntry> form;
 
@@ -29,9 +32,10 @@ public class Credential {
 
     protected Credential() {}
 
-    public Credential(String name, String credentialDefinitionId, List<FormEntry> form, List<ChecklistEntry> checklist, List<Issuer> issuer) {
+    public Credential(String name, String credentialDefinitionId, Category category, List<FormEntry> form, List<ChecklistEntry> checklist, List<Issuer> issuer) {
         this.name = name;
         this.credentialDefinitionId = credentialDefinitionId;
+        this.category = category;
         this.form = form;
         this.checklist = checklist;
         this.issuer = issuer;

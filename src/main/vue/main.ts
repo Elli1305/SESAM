@@ -169,7 +169,7 @@ const messages = {
 
 const i18n = createI18n({
     legacy: false,
-    locale: 'en',
+    locale: 'de',
     allowComposition: true,
     fallbackLocale: 'en',
     globalInjection: true,

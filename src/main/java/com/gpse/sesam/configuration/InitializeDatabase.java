@@ -41,9 +41,9 @@ public class InitializeDatabase implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() {
 		locationService.deleteAll();
-		userService.deleteAll();
-		credentialService.deleteAll();
 		categoryService.deleteAll();
+		credentialService.deleteAll();
+		userService.deleteAll();
 
 		List<Location> locations = createLocations();
 		List<SesamUser> users = createUsers();
@@ -65,7 +65,7 @@ public class InitializeDatabase implements InitializingBean {
 		editorRole.setGranted(true);
 		List<Credential> noCredentials = new ArrayList<>();
 		noCredentials.add(null);
-		Door door = new Door("Door100",noCredentials);
+		Door door = new Door("Door100", null ,noCredentials);
 		List<Door> doors = new ArrayList<>();
 		doors.add(door);
 
@@ -88,8 +88,8 @@ public class InitializeDatabase implements InitializingBean {
 		List<Credential> credentials = new ArrayList<>();
 		credentials.add(null);
 		for(int i = 0, k = 0; i < 60; i++, k += 2) {
-			doors.add(new Door("Door" + i, credentials));
-			doors2.add(new Door("Door" + k, null));
+			doors.add(new Door("Door" + i, null, credentials));
+			doors2.add(new Door("Door" + k, null, null));
 		}
 
 		List<Room> rooms = new ArrayList<>();
@@ -114,8 +114,8 @@ public class InitializeDatabase implements InitializingBean {
 			buildings2.add(new Building("Building " + i, floors2.subList(i * 2, i * 2 + 2)));
 
 		}
-		Location location1 = new Location("ExampleLocation", buildings);
-		Location location2 = new Location("ExampleLocation2", buildings2);
+		Location location1 = new Location("Berlin", buildings);
+		Location location2 = new Location("Bielefeld", buildings2);
 		return List.of(location1, location2);
 	}
 
@@ -146,13 +146,13 @@ public class InitializeDatabase implements InitializingBean {
 
 		List<Credential> noCredentials = new ArrayList<>();
 		noCredentials.add(null);
-		Door door = new Door("Door999",noCredentials);
+		Door door = new Door("Door999", null, noCredentials);
 		List<Door> doors = new ArrayList<>();
 		doors.add(door);
 
 		List<Credential> noCredentials2 = new ArrayList<>();
 		noCredentials2.add(null);
-		Door door2 = new Door("Door666",noCredentials);
+		Door door2 = new Door("Door666", null, noCredentials);
 		List<Door> doors2 = new ArrayList<>();
 		doors2.add(door2);
 
@@ -170,7 +170,7 @@ public class InitializeDatabase implements InitializingBean {
 
 		// Safety-Credential
 		List<Credential> credentials = new ArrayList<>();
-		Credential safety = new Credential( "Sicherheitsbelehrung-Uni", "$U-Member", form, checklist, issuers);
+		Credential safety = new Credential( "Sicherheitsbelehrung-Uni", "$U-Member", null, form, checklist, issuers);
 
 
 		List<ChecklistEntry> checklist3 = new ArrayList<>();
@@ -188,7 +188,7 @@ public class InitializeDatabase implements InitializingBean {
 		form.add(lastName3);
 		form.add(birthDate3);
 		form.add(date3);
-		Credential safety2 = new Credential( "Sicherheitsbelehrung-FH", "$T-Member", form3, checklist3, issuers);
+		Credential safety2 = new Credential( "Sicherheitsbelehrung-FH", "$T-Member", null, form3, checklist3, issuers);
 		credentials.add(safety);
 		credentials.add(safety2);
 
@@ -217,7 +217,7 @@ public class InitializeDatabase implements InitializingBean {
 		// Issuer
 		List<Credential> noCredentials = new ArrayList<>();
 		noCredentials.add(null);
-		Door door = new Door("Tor",noCredentials);
+		Door door = new Door("Tor", null, noCredentials);
 		List<Door> doors = new ArrayList<>();
 		doors.add(door);
 		SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
@@ -226,12 +226,16 @@ public class InitializeDatabase implements InitializingBean {
 		issuerRole10.setGranted(true);
 		Room room = new Room("0.007", doors);
 
+
 		List<Credential> noCredentials2 = new ArrayList<>();
 		noCredentials2.add(null);
-		Door door2 = new Door("Tor",noCredentials);
+		Door door2 = new Door("Tor", null, noCredentials);
 		List<Door> doors2 = new ArrayList<>();
 		doors2.add(door2);
 		Room room2 = new Room("0.112", doors2);
+
+
+
 		List<Issuer> issuers = new ArrayList<>();
 		Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
 				Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
@@ -243,7 +247,7 @@ public class InitializeDatabase implements InitializingBean {
 
 		// Safety-Credential
 		List<Credential> credentials = new ArrayList<>();
-		Credential safety = new Credential( "Sicherheitsbelehrung-Baumschule", "$U-Member", form4, checklist4, issuers);
+		Credential safety = new Credential( "Sicherheitsbelehrung-Baumschule", "$U-Member", null, form4, checklist4, issuers);
 		credentials.add(safety);
 		List<ExternalCredential> externalCredentials = new ArrayList<>();
 		ExternalCredential safety3 = new ExternalCredential( "Sicherheitsbelehrung-Telekom", "$T-Member");
@@ -274,7 +278,7 @@ public class InitializeDatabase implements InitializingBean {
 
 
 		List<Credential> credentials2 = new ArrayList<>();
-		Credential firstAid = new Credential( "Erste-Hilfe-Kurs-DRK", "$U-Training", form6, checklist6, issuers2);
+		Credential firstAid = new Credential( "Erste-Hilfe-Kurs-DRK", "$U-Training", null, form6, checklist6, issuers2);
 		credentials2.add(firstAid);
 
 		List<ExternalCredential> externalCredentials2 = new ArrayList<>();
@@ -284,11 +288,39 @@ public class InitializeDatabase implements InitializingBean {
 		externalCredentials2.add(firstAid2);
 		externalCredentials2.add(firstAid3);
 
+		//Rooms with Credentials
+		Door door3 = new Door("Tor120", null, credentials2);
+		List<Door> doors3 = new ArrayList<>();
+		doors3.add(door3);
+		Room room3 = new Room("120", doors3);
+		List<Room> roomList = new ArrayList<>();
+		roomList.add(room3);
+		Floor floor3 = new Floor(1, "src/main/resources/citec-gebaeudeplan.png", roomList);
+		List<Floor> floorList = new ArrayList<>();
+		floorList.add(floor3);
+		Building building3 = new Building("Citec",floorList );
+		List<Building> buildingList = new ArrayList<>();
+		buildingList.add(building3);
+		Location location = new Location("Hamburg", buildingList);
+
+		Door door4 = new Door("Tor1506", null, credentials);
+		List<Door> doors4 = new ArrayList<>();
+		doors3.add(door4);
+		Room room4 = new Room("0.150", doors4);
+		List<Room> roomList2 = new ArrayList<>();
+		roomList2.add(room4);
+		Floor floor4 = new Floor(1, "src/main/resources/citec-gebaeudeplan.png", roomList2);
+		List<Floor> floorList2 = new ArrayList<>();
+		floorList2.add(floor4);
+		Building building4 = new Building("Citec2",floorList2);
+		List<Building> buildingList2 = new ArrayList<>();
+		buildingList2.add(building4);
+		Location location2 = new Location("Köln", buildingList2);
+
 		// Category
 		List<Category> categories = new ArrayList<>();
 		categories.add(new Category( "Sicherheitsbelehrung", credentials,externalCredentials));
 		categories.add(new Category( "Erste-Hilfe-Kurs", credentials2, externalCredentials2));
 		return categories;
 	}
-
 }
