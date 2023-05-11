@@ -33,9 +33,11 @@ const router = createRouter({
       //meta: {requiresAdmin: true}
     },
     {
-      path: '/admin/currentuserlist/edit',
+      path: '/admin/currentuserlist/edit/:email',
       name: 'edit',
-      component: EditUser
+      component: EditUser,
+      props: true,
+      //meta: {requiresAdmin: true}
     },
     {
       path: '/signup',

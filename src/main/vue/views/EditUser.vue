@@ -1,5 +1,5 @@
 <template>
-    <q-page class="column justify-evenly" style="padding: 0 5em">
+    <q-page class="column justify-evenly" style="padding: 0 5em" v-if="user!=null">
         <p class="row text-h3 justify-center">{{t('adminEdit.title') }}</p>
 
         <div class="self-center" style="margin: 2em; width: 25em">
@@ -67,32 +67,38 @@ import {useUserStore} from "@/main/vue/stores/users";
 
 export default {
     name: "EditUser",
-    setup() {
-    },
 
-    props() {
-        this.$refs.admin.$props.color = "info"
-    },
-    data() {
+    props:['email'],
+
+    setup(props) {
         const userStore = useUserStore()
-        const user = userStore.user
-        const {t} = useI18n()
 
         let roles= ref([])
+        const {t} = useI18n()
 
-        let adminRole = user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)
-        let editorRole = user.roles.some(r => r.role === 'EDITOR' && r.granted)
-        let issuerRole = user.roles.some(r => r.role === 'ISSUER' && r.granted)
+        let user = ref(null)
 
-        if(adminRole) {
-            roles.value.push('Admin');
-        }
-        if(editorRole) {
-            roles.value.push('Editor');
-        }
-        if(issuerRole) {
-            roles.value.push('Herausgeber');
-        }
+
+        userStore.getEditUser(props.email).then( ()=> {
+            user.value = userStore.editUser
+
+
+            let adminRole = user.value.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)
+            let editorRole = user.value.roles.some(r => r.role === 'EDITOR' && r.granted)
+            let issuerRole = user.value.roles.some(r => r.role === 'ISSUER' && r.granted)
+
+            if(adminRole) {
+                roles.value.push('Admin');
+            }
+            if(editorRole) {
+                roles.value.push('Editor');
+            }
+            if(issuerRole) {
+                roles.value.push('Herausgeber');
+
+            }
+        })
+
 
         return {
             user: user,

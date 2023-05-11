@@ -1,10 +1,10 @@
 package com.gpse.sesam.domain.user;
 
 import com.gpse.sesam.domain.mail.MailService;
+import com.gpse.sesam.web.cmd.SesamUserCmd;
 import com.gpse.sesam.web.exception.ConflictException;
 import com.gpse.sesam.web.exception.InvalidTokenException;
 import com.gpse.sesam.web.exception.UnprocessableEntityException;
-import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -94,7 +94,7 @@ public class SesamUserServiceImpl implements SesamUserService {
         }
     }
 
-    @Override
+    @Override //
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
@@ -111,7 +111,7 @@ public class SesamUserServiceImpl implements SesamUserService {
         mailService.send(
                 "gp.se.team.3.1@gmail.com",
                 user.getUsername(),
-                messageSource.getMessage("reset.subject", null,  locale),
+                messageSource.getMessage("reset.subject", null, locale),
                 messageSource.getMessage(
                         "reset.text",
                         new String[]{
@@ -154,15 +154,16 @@ public class SesamUserServiceImpl implements SesamUserService {
     private boolean isInvalidPassword(String password) {
         return password == null || !password.matches("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,120}$");
     }
-	@Override
-	public void deleteAll() {
-		userRepository.deleteAll();
-	}
 
-	@Override
-	public void saveAll(Iterable<SesamUser> users) {
-		userRepository.saveAll(users);
-	}
+    @Override
+    public void deleteAll() {
+        userRepository.deleteAll();
+    }
+
+    @Override
+    public void saveAll(Iterable<SesamUser> users) {
+        userRepository.saveAll(users);
+    }
 
     @Override
     public List<SesamUser> getUsers() {
@@ -171,5 +172,11 @@ public class SesamUserServiceImpl implements SesamUserService {
         userRepository.findAll().forEach(articles::add);
 
         return articles;
+    }
+
+    @Override
+    public SesamUser getUserByMail(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
     }
 }
