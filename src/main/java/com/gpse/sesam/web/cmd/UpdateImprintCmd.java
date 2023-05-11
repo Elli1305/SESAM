@@ -1,6 +1,7 @@
 package com.gpse.sesam.web.cmd;
 
 public class UpdateImprintCmd {
+    String content;
 
     public String getContent() {
         return content;
@@ -9,8 +10,4 @@ public class UpdateImprintCmd {
     public void setContent(String content) {
         this.content = content;
     }
-
-    String content;
-
-
 }
