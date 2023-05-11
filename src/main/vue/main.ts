@@ -61,6 +61,15 @@ const messages = {
             imprint: "Impressum",
             logout: "Logout"
         },
+        login: {
+            wrongEmailPassword:"Falsches Passwort oder Benutzername",
+            loginFailed: "Login Fehlgeschlagen",
+            forgotPassword: "Passwort vergessen:",
+            resetPassword: "Passwort zurücksetzen",
+            notRegistered: "Nicht registriert:",
+            toRegister: "Zur Registrierung",
+            password: "Passwort"
+        },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
             email: "E-Mail",
@@ -199,6 +208,15 @@ const messages = {
             imprint: "Imprint",
             logout: "Logout"
         },
+        login: {
+            wrongEmailPassword:"Wrong Password oder Username",
+            loginFailed: "Login Failed",
+            forgotPassword: "Forgot Password:",
+            resetPassword: "Reset Password",
+            notRegistered: "Not registered",
+            toRegister: "Go to Register",
+            password: "Password"
+        },
         passwordReset: {
             resetPassword: "Reset Password",
             email: "Email",
@@ -233,7 +251,7 @@ const messages = {
 
 const i18n = createI18n({
     legacy: false,
-    locale: 'en',
+    locale: 'de',
     allowComposition: true,
     fallbackLocale: 'en',
     globalInjection: true,

@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>gpse</groupId>
-	<artifactId>basis</artifactId>
+	<artifactId>team-3-1</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Basis</name>
 	<description>Basis project gpse 23</description>

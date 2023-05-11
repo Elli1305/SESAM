@@ -7,11 +7,12 @@ import Profilansicht from "@/main/vue/views/Profilansicht.vue";
 import LoginView from "../views/Login.vue";
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
-import Impressum from "../views/Impressum.vue";
 import IssueCredential from "../views/IssueCredential.vue";
 import { useUserStore } from "../stores/users";
 import Credentialview from "@/main/vue/views/CredentialView.vue"
 
+import Imprint from "../views/Imprint.vue";
+import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -53,8 +54,13 @@ const router = createRouter({
       component: PasswordReset,
     },
     {
-      path: "/Impressum",
-      component: Impressum,
+      path: "/imprint",
+      component: Imprint,
+    },
+    {
+      path: "/imprinteditor",
+      component: ImprintEditor,
+      meta: {requiresAdmin: true},
     },
     {
       path: "/credentialview",

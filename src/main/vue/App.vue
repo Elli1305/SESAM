@@ -29,7 +29,7 @@ const router = useRouter()
 
 </script>
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh lpR fff">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="row" style="margin: 0; padding: 24px">
@@ -72,7 +72,7 @@ const router = useRouter()
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right" self="top right">
                   <div class="column">
                     <router-link to="/" class="q-ma-sm headerLink text-black">{{t("home.editCorporateDesign")}}</router-link>
-                    <router-link to="/" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
+                    <router-link to="/ImprintEditor" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
                   </div>
                 </q-menu>
               </div>
@@ -93,7 +93,8 @@ const router = useRouter()
               </router-link>
             </div>
             <div style="margin-left: 1em">
-              <q-btn v-if="userStore.authenticated" :label="userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0)" rounded color="info" unelevated auto-close size="3em" style="height: 3em; width: 3em; font-size: 1em; line-height: 1" >
+              <q-btn v-if="userStore.authenticated" rounded color="info" unelevated auto-close size="3em" style="height: 3em; width: 3em; font-size: 1em; line-height: 1">
+                <p style="margin-top: 0.1em; margin-bottom: 0; font-size: 1.5em; font-weight: 400; line-height: 1">{{userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0)}}</p>
                 <q-menu transition-show="jump-down" transition-hide="jump-up">
                   <q-list>
                     <q-item to="/profile" clickable v-close-popup>
@@ -122,7 +123,7 @@ const router = useRouter()
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
 
-          <router-link to="./impressum" style="color: white">{{t('home.imprint')}}</router-link>
+          <router-link to="./imprint" style="color: white">{{t('home.imprint')}}</router-link>
 
         </q-toolbar-title>
       </q-toolbar>
