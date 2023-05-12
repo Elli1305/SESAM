@@ -2,7 +2,6 @@
   <q-page class="column justify-evenly" style="padding: 0 5em" >
     <p class="row text-h3 justify-center">{{t('corporateDesign.title')}}</p>
     <div class="row self-center no-wrap">
-      <!-- <q-expansion-item icon="colorize" :label="t('corporateDesign.colors')"> -->
       <div class="column q-mx-xs">
         <q-input rounded outlined v-model="primary" class="my-input q-my-xs" bg-color="primary" style="width: fit-content">
           <template v-slot:append>
@@ -90,15 +89,15 @@
           </template>
         </q-input>
       </div>
-      <!-- </q-expansion-item> -->
     </div>
     <div class="row justify-center" >
-      <q-file class="q-mx-xs" rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" hint="Only SVG files">
+      <q-btn @click="resetSettings" round icon="restart_alt" color="negative" style="width: 4em; height: 4em; margin-right: 4em"/>
+      <q-file class="q-mx-xs" hide-bottom-space hide-hint rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" hint="Only SVG files">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
       </q-file>
-      <q-file class="q-mx-xs" rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" hint="Only ICO files">
+      <q-file class="q-mx-xs" hide-hint rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" hint="Only ICO files">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
@@ -132,10 +131,15 @@ export default {
     const logo = new Image()
     const favicon = new Image()
 
+    function resetSettings() {
+
+    }
+
     return {
       t,
       logo,
-      favicon
+      favicon,
+      resetSettings
     }
   }
 }
