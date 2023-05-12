@@ -90,35 +90,53 @@
         </q-input>
       </div>
     </div>
-    <div class="row justify-center" >
-      <q-btn @click="confirm = true" round icon="restart_alt" color="negative" style="width: 4em; height: 4em; margin-right: 4em"/>
-      <q-file class="q-mx-xs" hide-bottom-space hide-hint rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" hint="Only SVG files">
+    <div class="row justify-evenly no-wrap" >
+      <q-btn @click="confirmReset = true" round icon="restart_alt" color="negative" text-color="positive" style="width: 4em; height: 4em"/>
+      <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" hint="Only SVG files">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
       </q-file>
-      <q-file class="q-mx-xs" hide-hint rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" hint="Only ICO files">
+      <q-file rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" hint="Only ICO files">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
       </q-file>
+      <q-btn @click="confirmSave = true" round icon="save" color="positive" text-color="negative" style="width: 4em; height: 4em"/>
     </div>
 
-    <q-dialog v-model="confirm" persistent>
+    <q-dialog v-model="confirmReset" persistent>
       <q-card>
         <q-card-section>
-          <div class="text-h6">{{ t('corporateDesign.confirm.title') }}</div>
+          <div class="text-h6">{{ t('corporateDesign.confirm.reset.title') }}</div>
         </q-card-section>
         <q-card-section class="row items-center">
-          <span class="q-ml-sm">{{t('corporateDesign.confirm.message')}}</span>
+          <span class="q-ml-sm">{{t('corporateDesign.confirm.reset.message')}}</span>
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn flat :label="t('corporateDesign.confirm.cancel')" color="primary" v-close-popup />
-          <q-btn flat :label="t('corporateDesign.confirm.ok')" color="primary" v-close-popup />
+          <q-btn flat :label="t('corporateDesign.confirm.reset.cancel')" color="primary" v-close-popup />
+          <q-btn @click="reset" flat :label="t('corporateDesign.confirm.reset.ok')" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="confirmSave" persistent>
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">{{ t('corporateDesign.confirm.save.title') }}</div>
+        </q-card-section>
+        <q-card-section class="row items-center">
+          <span class="q-ml-sm">{{t('corporateDesign.confirm.save.message')}}</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat :label="t('corporateDesign.confirm.save.cancel')" color="primary" v-close-popup />
+          <q-btn @click="save" flat :label="t('corporateDesign.confirm.save.ok')" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
   </q-page>
 
 </template>
@@ -126,7 +144,7 @@
 <script>
 import { ref } from 'vue'
 import { useI18n } from "vue-i18n"
-import {colors} from "quasar"
+import {colors, useQuasar} from "quasar"
 
 export default {
   name: "CorporateDesign",
@@ -141,18 +159,39 @@ export default {
       negative: ref(colors.getPaletteColor('negative')),
       info: ref(colors.getPaletteColor('info')),
       warning: ref(colors.getPaletteColor('warning')),
-      confirm: ref(false)
+      confirmReset: ref(false),
+      confirmSave: ref(false)
     }
   },
   data() {
     const { t } = useI18n()
     const logo = new Image()
     const favicon = new Image()
+    const $q = useQuasar()
+
+    function reset() {
+      $q.notify({
+        message: t('corporateDesign.resetSuccess'),
+        color: "positive",
+        textColor: "negative",
+        timeout: "1500"
+      })
+    }
+    function save() {
+      $q.notify({
+        message: t('corporateDesign.saveSuccess'),
+        color: "positive",
+        textColor: "negative",
+        timeout: "1500"
+      })
+    }
 
     return {
       t,
       logo,
-      favicon
+      favicon,
+      reset,
+      save
     }
   }
 }

@@ -89,12 +89,21 @@ const messages = {
             logo: "Logo",
             favicon: "Favicon",
             confirm: {
-                title: "Sind Sie sicher, dass sie zurücksetzen wollen?",
-                message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
-                ok: "Zurücksetzen",
-                cancel: "Abbruch"
+                reset: {
+                    title: "Sind Sie sicher, dass sie zurücksetzen wollen?",
+                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
+                    ok: "Zurücksetzen",
+                    cancel: "Abbruch"
+                },
+                save: {
+                    title: "Sind Sie sicher, dass sie speichern wollen?",
+                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
+                    ok: "Speichern",
+                    cancel: "Abbruch"
+                }
             },
-            resetSuccess: "Reset successful"
+            resetSuccess: "Zurücksetzen erfolgreich",
+            saveSuccess: "Speichern erfolgreich"
         }
     },
     en: {
@@ -173,12 +182,21 @@ const messages = {
             logo: "Logo",
             favicon: "Favicon",
             confirm: {
-                title: "Are you sure you want to reset?",
-                message: "You will not be able to retrieve your current settings.",
-                ok: "Confirm",
-                cancel: "Cancel"
+                reset: {
+                    title: "Are you sure you want to reset?",
+                    message: "You will not be able to retrieve your current settings.",
+                    ok: "Reset",
+                    cancel: "Cancel"
+                },
+                save: {
+                    title: "Are you sure you want to save?",
+                    message: "You will not be able to retrieve your current settings.",
+                    ok: "Save",
+                    cancel: "Cancel"
+                }
             },
-            resetSuccess: "Reset successful"
+            resetSuccess: "Reset successful",
+            saveSuccess: "Saving successful"
         }
     }
 }
