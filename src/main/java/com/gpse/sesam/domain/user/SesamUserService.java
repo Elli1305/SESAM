@@ -34,4 +34,5 @@ public interface SesamUserService extends UserDetailsService {
     void updatePasswordWithToken(String token, String password);
 
     void changePassword(SesamUser user, String password);
+
 }

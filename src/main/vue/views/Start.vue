@@ -1,7 +1,9 @@
 <template>
   <NavigationTree></NavigationTree>
-  <FloorPlan></FloorPlan>
-  <FloorPlanRoomList></FloorPlanRoomList>
+    <div class="q-gutter-x-md" style="display: flex">
+        <FloorPlan class="fit"></FloorPlan>
+        <FloorPlanRoomList></FloorPlanRoomList>
+    </div>
 </template>
 
 <script>

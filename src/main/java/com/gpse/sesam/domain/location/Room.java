@@ -1,6 +1,12 @@
 package com.gpse.sesam.domain.location;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.util.List;
 
@@ -16,6 +22,9 @@ public class Room {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Door> doors;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Coordinate> coordinates;
 
 	protected Room() {
 
@@ -50,7 +59,11 @@ public class Room {
 		this.doors = doors;
 	}
 
-	public void addDoor(Door door) {
-		this.doors.add(door);
+	public List<Coordinate> getCoordinates() {
+		return coordinates;
+	}
+
+	public void setCoordinates(List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
 	}
 }

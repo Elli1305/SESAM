@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="children.length === 0">
-      <q-item clickable v-ripple :inset-level="level" @click="changeFloorPlan(floorPlan, id)"
+      <q-item clickable v-ripple :inset-level="level" @click="changeFloorPlan(floorPlan, id, rooms)"
               :active="floorPlanStore.selectedFloorId === id">
         <q-item-section>{{ title }}</q-item-section>
       </q-item>
@@ -22,6 +22,7 @@
               v-bind="child"
               :id="child.id"
               :expanded="child.expanded"
+              :rooms="child.rooms"
           >
           </Node>
         </q-expansion-item>
@@ -67,13 +68,17 @@ export default {
     floorPlan: {
       type: String,
       default: ''
+    },
+    rooms: {
+      type: Array
     }
   },
   setup(props) {
     const floorPlanStore = useFloorPlanStore()
-    const changeFloorPlan = function (floorPlan, id) {
+    const changeFloorPlan = function (floorPlan, id, rooms) {
       floorPlanStore.selectedFloorId = id
       floorPlanStore.selectedFloorPlan = floorPlan
+      floorPlanStore.rooms = rooms
     }
 
     const expandedRef = ref(props.expanded)

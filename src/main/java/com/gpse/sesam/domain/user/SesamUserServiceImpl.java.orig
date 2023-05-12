@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -160,33 +158,21 @@ public class SesamUserServiceImpl implements SesamUserService {
 	public void deleteAll() {
 		userRepository.deleteAll();
 	}
-    public void deleteUser(SesamUser sesamUser) {
-        userRepository.delete(sesamUser);
-    }
 
 	@Override
 	public void saveAll(Iterable<SesamUser> users) {
 		userRepository.saveAll(users);
 	}
+<<<<<<< Updated upstream
+=======
+
 	@Override
 	public List<SesamUser> getUsers() {
 		final List<SesamUser> articles = new ArrayList<>();
+
 		userRepository.findAll().forEach(articles::add);
+
 		return articles;
 	}
-    @Override
-    public SesamUser getUserByMail(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
-    }
-    public void makeUserEdit(SesamUser user, String prename, String lastname, String username, List<SesamUserRole.AttainableRole> roles) {
-        user.setFirstName(prename);
-        user.setLastName(lastname);
-        user.setRoles(roles.stream()
-                .distinct()
-                .map(role -> new SesamUserRole(role,true))
-                .collect(Collectors.toList())
-        );
-        userRepository.save(user);
-    }
+>>>>>>> Stashed changes
 }

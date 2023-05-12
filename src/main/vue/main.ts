@@ -41,14 +41,32 @@ const messages = {
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
         },
         home: {
-            header: "SESAM(Ger)",
+            header: "SESAM",
             signup: "Registrierung",
             signin: "Login",
             floorplan: "Floorplan",
             credentials: "Credentials",
-            information: "Information",
+            profileManagement: "Profilverwaltung",
+            currentUsers: "Aktuelle Nutzer",
+            currentRegistrations: "Aktuelle Registrierungen",
+            issuerManagement: "Herausgeberverwaltung",
+            corporateDesign: "Corporate Design",
+            editCorporateDesign: "Corporate Design anpassen",
+            editImprint: "Imprint bearbeiten",
+            credentialManagement: "Credentialverwaltung",
+            editorPages: "Bearbeiten",
+            issuerPages: "Credential austellen",
             imprint: "Impressum",
             logout: "Logout"
+        },
+        login: {
+            wrongEmailPassword:"Falsches Passwort oder Benutzername",
+            loginFailed: "Login Fehlgeschlagen",
+            forgotPassword: "Passwort vergessen:",
+            resetPassword: "Passwort zurücksetzen",
+            notRegistered: "Nicht registriert:",
+            toRegister: "Zur Registrierung",
+            password: "Passwort"
         },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
@@ -101,14 +119,32 @@ const messages = {
             unkownError: "An unknown error occured",
         },
         home: {
-            header: "SESAM(En)",
+            header: "SESAM",
             signup: "Sign-up",
             signin: "Sign-in",
             floorplan: "Floorplan",
             credentials: "Credentials",
-            information: "Information",
+            profileManagement: "Profile Management",
+            currentUsers: "Current Users",
+            currentRegistrations: "Current Registrations",
+            issuerManagement: "Issuer Management",
+            corporateDesign: "Corporate Design",
+            editCorporateDesign: "Edit Corporate Design",
+            editImprint: "Edit Imprint",
+            credentialManagement: "Credential Management",
+            editorPages: "Edit",
+            issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout"
+        },
+        login: {
+            wrongEmailPassword:"Wrong Password oder Username",
+            loginFailed: "Login Failed",
+            forgotPassword: "Forgot Password:",
+            resetPassword: "Reset Password",
+            notRegistered: "Not registered",
+            toRegister: "Go to Register",
+            password: "Password"
         },
         passwordReset: {
             resetPassword: "Reset Password",
@@ -152,7 +188,6 @@ const i18n = createI18n({
 })
 const app = createApp(App)
 const pinia = createPinia();
-
 app.use(pinia)
 app.use(router)
 app.use(Quasar, quasarUserOptions)
