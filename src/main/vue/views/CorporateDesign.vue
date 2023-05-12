@@ -126,7 +126,7 @@
 <script>
 import { ref } from 'vue'
 import { useI18n } from "vue-i18n"
-import {colors, useQuasar} from "quasar"
+import {colors} from "quasar"
 
 export default {
   name: "CorporateDesign",
@@ -148,22 +148,11 @@ export default {
     const { t } = useI18n()
     const logo = new Image()
     const favicon = new Image()
-    const $q = useQuasar()
-
-    function resetSettings() {
-      $q.dialog({
-        title: t('corporateDesign.confirm.title'),
-        message: t('corporateDesign.confirm.message'),
-        ok: t('corporateDesign.confirm.ok'),
-        cancel: t('corporateDesign.confirm.cancel')
-      })
-    }
 
     return {
       t,
       logo,
-      favicon,
-      resetSettings
+      favicon
     }
   }
 }
