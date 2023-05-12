@@ -82,6 +82,10 @@ const messages = {
             admin: "Admin",
             editor: "Bearbeiter",
             issuer: "Herausgeber"
+        },
+        corporateDesign: {
+            title: "Corporate Design",
+            colors: "Farben"
         }
     },
     en: {
@@ -153,6 +157,10 @@ const messages = {
             admin: "Admin",
             editor: "Editor",
             issuer: "Issuer"
+        },
+        corporateDesign: {
+            title: "Corporate Design",
+            colors: "Colors"
         }
     }
 }
