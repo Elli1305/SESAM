@@ -179,12 +179,16 @@ public class SesamUserServiceImpl implements SesamUserService {
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
     }
-    public void makeUserEdit(SesamUser user, String prename, String lastname, String username, List<SesamUserRole.AttainableRole> roles) {
+    public void makeUserEdit(SesamUser user,
+							 String prename,
+							 String lastname,
+							 String username,
+							 List<SesamUserRole.AttainableRole> roles) {
         user.setFirstName(prename);
         user.setLastName(lastname);
         user.setRoles(roles.stream()
                 .distinct()
-                .map(role -> new SesamUserRole(role,true))
+                .map(role -> new SesamUserRole(role, true))
                 .collect(Collectors.toList())
         );
         userRepository.save(user);

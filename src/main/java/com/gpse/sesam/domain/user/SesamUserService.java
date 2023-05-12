@@ -21,7 +21,9 @@ public interface SesamUserService extends UserDetailsService {
 
     SesamUser getUserByMail(String username);
 
-    void makeUserEdit(SesamUser user, String prename, String lastname, String mail, List<SesamUserRole.AttainableRole> roles);
+    void makeUserEdit(SesamUser user, String prename,
+                      String lastname, String mail,
+                      List<SesamUserRole.AttainableRole> roles);
 
     void deleteAll();
 

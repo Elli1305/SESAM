@@ -53,8 +53,7 @@ public class SesamUserRole {
 
     public Long getId() {
         return id;
-    }//HI
-
+    }
     public void setId(Long id) {
         this.id = id;
     }
