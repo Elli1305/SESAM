@@ -8,6 +8,7 @@ import LoginView from '../views/Login.vue'
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Impressum from "../views/Impressum.vue";
+import RequestRolles from "@/main/vue/views/RolesRequest.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -29,6 +30,12 @@ const router = createRouter({
       path: '/admin/currentuserlist',
       name: 'currentuserlist',
       component: CurrentUserList,
+      //meta: {requiresAdmin: true}
+    },
+    {
+      path: '/admin/rolesRequest',
+      name: 'rolesRequest',
+      component: RequestRolles,
       //meta: {requiresAdmin: true}
     },
     {

@@ -23,6 +23,9 @@ const messages = {
             showIssuer: "Herausgeber",
             search: "Suche"
         },
+        adminRolesRequest:{
+          headline: "Angefragt Rollen"
+        },
 
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
