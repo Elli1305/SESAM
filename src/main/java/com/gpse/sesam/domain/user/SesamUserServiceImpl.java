@@ -168,9 +168,7 @@ public class SesamUserServiceImpl implements SesamUserService {
     @Override
     public List<SesamUser> getUsers() {
         final List<SesamUser> articles = new ArrayList<>();
-
         userRepository.findAll().forEach(articles::add);
-
         return articles;
     }
 
@@ -178,5 +176,16 @@ public class SesamUserServiceImpl implements SesamUserService {
     public SesamUser getUserByMail(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
+    }
+    public void makeUserEdit(SesamUser user, String prename, String lastname, String username, List<SesamUserRole.AttainableRole> roles) {
+        user.setFirstName(prename);
+        user.setLastName(lastname);
+        System.out.println("hier ServiceImpl");
+        user.setRoles(roles.stream()
+                .distinct()
+                .map(role -> new SesamUserRole(role,true))
+                .collect(Collectors.toList())
+        );
+        userRepository.save(user);
     }
 }

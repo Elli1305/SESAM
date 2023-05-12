@@ -5,7 +5,7 @@
         <div class="self-center" style="margin: 2em; width: 25em">
             <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined style = "width: 500px"/>
             <q-space style="height: 1em"/>
-            <q-input id="surname" v-model="user.lastName" :label="t('profile.lastname')" outlined style = "width: 500px"/>
+            <q-input id="lastname" v-model="user.lastName" :label="t('profile.lastname')" outlined style = "width: 500px"/>
             <q-space style="height: 1em"/>
             <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined disable style = "width: 500px"/>
 
@@ -32,7 +32,7 @@
         </div>
         <div class="row justify-evenly">
             <q-btn dense round flat color="negative" icon="delete" @click="deleteAlert = true" size="34px"></q-btn>
-            <q-btn dense round flat color="positive" @click="" icon="save" size="34px"></q-btn>
+            <q-btn dense round flat color="positive" @click="saveEditedUser()" icon="save" size="34px"></q-btn>
         </div>
 
     </q-page>
@@ -64,11 +64,16 @@ import {ref} from 'vue'
 
 import {useI18n} from "vue-i18n";
 import {useUserStore} from "@/main/vue/stores/users";
+import router from "@/main/vue/router";
+
+
+let test = ref('')
 
 export default {
     name: "EditUser",
 
     props:['email'],
+
 
     setup(props) {
         const userStore = useUserStore()
@@ -95,15 +100,43 @@ export default {
             }
             if(issuerRole) {
                 roles.value.push('Herausgeber');
-
             }
+
         })
+
+        function saveEditedUser() {
+
+            let prename;
+            let lastname;
+            let mail;
+            prename = user.value.firstName
+            lastname = user.value.lastName
+            mail = user.value.username
+
+            userStore.saveEdits(prename, lastname, mail, roles.value.map(r => {
+                if(r==='Admin') {
+                    return 'ADMINISTRATOR'
+                }
+                if(r==='Editor') {
+                    return 'EDITOR'
+                }
+                if(r==='Herausgeber') {
+                    return 'ISSUER'
+                }
+            })).then( ()=> {
+                router.push('/admin/currentuserlist'); } )
+        }
+
+
 
 
         return {
             user: user,
             deleteAlert: ref(false),
             t,
+
+
+            saveEditedUser,
             modelMultiple: roles,
 
             options: [

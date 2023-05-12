@@ -34,6 +34,9 @@ export default {
         return axios.post('/api/update_password', param);
     },
     getEditUser(param: string): Promise<AxiosResponse<User>> {
-        return axios.get('/api/user/edit/'+param);
+        return axios.get('/api/user/edit/' + param);
+    },
+    editUser(param: User): Promise<AxiosResponse<SignUpResponse>> {
+        return axios.post('/api/edit_user', param);
     }
 }

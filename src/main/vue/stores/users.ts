@@ -112,6 +112,18 @@ export const useUserStore = defineStore('users', () => {
         })
     }
 
+    function saveEdits(prename: string, lastname: string, mail: string, roles: []){
+        return new Promise<void>((resolve, reject) => {
+            api.auth.editUser({
+                firstName: prename,
+                lastName: lastname,
+                username: mail,
+                roles: roles,
+            }).then(_ => resolve())
+                .catch(reject);
+        });
+    }
+
 
     return {
         user,
@@ -129,5 +141,6 @@ export const useUserStore = defineStore('users', () => {
         changePassword,
         getEditUser,
         editUser,
+        saveEdits,
     };
 })

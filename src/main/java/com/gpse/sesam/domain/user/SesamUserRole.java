@@ -30,6 +30,11 @@ public class SesamUserRole {
         this.granted = false;
     }
 
+    public SesamUserRole(AttainableRole role, boolean granted) {
+        this.role = role;
+        this.granted = granted;
+    }
+
     public AttainableRole getRole() {
         return role;
     }
@@ -48,7 +53,7 @@ public class SesamUserRole {
 
     public Long getId() {
         return id;
-    }
+    }//HI
 
     public void setId(Long id) {
         this.id = id;
