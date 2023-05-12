@@ -124,7 +124,7 @@ const messages = {
                 cancel: "Abbrechen",
             },
             addCredential: {
-                title: " Ihr neues Credential ({0}) wurde erfolgreich ausgestellt!",
+                title: "Ihr neues Credential ({0}) wurde erfolgreich ausgestellt!",
                 howTo: "So fügen Sie ein Credential zur BC Wallet hinzu:",
                 steps: {
                     step1:
@@ -244,7 +244,71 @@ const messages = {
             admin: "Admin",
             editor: "Editor",
             issuer: "Issuer"
-        }
+        },
+        issueCredential: {
+            title: "{0} Credential Issuance",
+            description: [
+                "Welcome to the issuance process of the \"{0}\" Credential! Here you can create an official document that confirms the successful completion of a specific course or the attainment of certain skills or qualifications.",
+                "To issue the credential, please fill out the fields on the right with the required attributes. Make sure that all data is correct and up-to-date. Once you have filled out all the necessary attributes, click the \"@:{'issueCredential.next'}\" button."
+            ],
+            checkConditions: "Please use the following checklist to ensure that all necessary steps have been taken before issuing the credential.",
+            validation: {
+                inputRequired: "This field is required.",
+            },
+            steps: {
+                form: "Form",
+                list: "Checklist",
+                qrcode: "QR Code",
+            },
+            next: "Next Step",
+            previous: "Previous",
+            checklistHint:
+                "To issue the credential, all conditions on the checklist must be met.",
+            confirm: {
+                title: "Are you sure you want to issue the credential?",
+                message:
+                    'Please ensure that all conditions have been met and all necessary steps have been taken before issuing the credential. Once issued, it cannot be undone.',
+                ok: "Issue Credential",
+                cancel: "Cancel",
+            },
+            addCredential: {
+                title: "Your new credential ({0}) has been successfully issued!",
+                howTo: "How to add a credential to the BC Wallet:",
+                steps: {
+                    step1:
+                        "Download the {0} from the App Store or Google Play Store.",
+                    step2:
+                        "Open the app and follow the instructions to set up a new account.",
+                    step3:
+                        'Once you have successfully set up your account, select the "Credentials" tab.',
+                    step4:
+                        "Tap the small plus sign in the upper right corner of the screen.",
+                    step5:
+                        'In the menu that appears, select the option "Scan a QR code".',
+                    step6:
+                        "Point the camera of your smartphone at the QR code you want to scan (the QR code should be located to the right of these instructions).",
+                    step7:
+                        "Review the information displayed on the screen to ensure that it is correct.",
+                    step8:
+                        'If all information is correct, tap "Accept" to add the credential to your wallet.',
+                },
+            },
+            errors: {
+                get: {
+                    failed: "The credential could not be loaded.",
+                    unauthorized:
+                        "You do not have the necessary permissions to view the credential.",
+                },
+                issue: {
+                    failed: "The credential could not be issued.",
+                    unauthorized:
+                        "You do not have the necessary permissions to issue the credential.",
+                    failedDependency:
+                        "Could not connect to the Credential Issuing Self-Service. Please ensure that you are connected to the university network.",
+                },
+                unknown: "Please try again later.",
+            },
+        },
     }
 }
 

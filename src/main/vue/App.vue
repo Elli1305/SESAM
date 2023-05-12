@@ -34,7 +34,7 @@ const router = useRouter()
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="row" style="margin: 0; padding: 24px">
         <div class="column">
-          <q-img src="src/main/resources/brand_design/T_logo_white.svg" @click="router.push('/')" class="foldMenu" style="height: 95px; width: 80px; margin-right: 24px"/>
+          <q-img src="/src/main/resources/brand_design/T_logo_white.svg" @click="router.push('/')" class="foldMenu" style="height: 95px; width: 80px; margin-right: 24px"/>
         </div>
         <div class="column full-width justify-between" style="height: 95px">
           <div id="upper" class="row justify-between" style="height: 42px">

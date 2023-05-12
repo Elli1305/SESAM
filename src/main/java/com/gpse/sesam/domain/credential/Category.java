@@ -21,12 +21,12 @@ public class Category {
     @OneToMany(cascade = CascadeType.ALL)
     private List<ExternalCredential> externalCredentials;
 
-    protected Category () {
-
+    protected Category() {
     }
+
     public Category(String name, List<Credential> credentials, List<ExternalCredential> externalCredentials) {
         this.name = name;
-        this.credentials =credentials;
+        this.credentials = credentials;
         this.externalCredentials = externalCredentials;
     }
 

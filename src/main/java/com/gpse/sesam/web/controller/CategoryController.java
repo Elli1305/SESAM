@@ -15,7 +15,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @Autowired
-    public CategoryController (final CategoryService categoryService) {
+    public CategoryController(final CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
@@ -25,7 +25,7 @@ public class CategoryController {
     }
 
     @GetMapping("/credentialview/{id:\\d+}")
-    public Category getCategoryInfo(@PathVariable("id") final Long id){
+    public Category getCategoryInfo(@PathVariable("id") final Long id) {
         if (categoryService.getCategory(id).isPresent()) {
             return categoryService.getCategory(id).get();
         } else {

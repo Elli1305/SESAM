@@ -8,6 +8,7 @@ import LoginView from "../views/Login.vue";
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import IssueCredential from "../views/IssueCredential.vue";
+import IssueCredentials from "../views/IssueCredentials.vue";
 import { useUserStore } from "../stores/users";
 import Credentialview from "@/main/vue/views/CredentialView.vue"
 
@@ -67,11 +68,17 @@ const router = createRouter({
       component: Credentialview,
     },
     {
-      path: "/issue_credential/:id",
-      component: IssueCredential,
+      path: "/credentials",
+      component: IssueCredentials,
       props: true,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/credentials/:id/issue",
+      component: IssueCredential,
+      props: true,
+      meta: { requiresAuth: true },
+    }
   ],
 });
 

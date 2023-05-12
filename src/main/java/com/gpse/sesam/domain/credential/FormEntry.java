@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.credential;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,10 +16,17 @@ public class FormEntry {
     @Column(nullable = false)
     private FormEntryType type;
 
-    protected FormEntry (){}
-    public FormEntry (String label, FormEntryType type) {
+    @JsonIgnore
+    @Column(nullable = false)
+    private String attributeName;
+
+    protected FormEntry() {
+    }
+
+    public FormEntry(String label, FormEntryType type, String attributeName) {
         this.label = label;
         this.type = type;
+        this.attributeName = attributeName;
     }
 
     public Long getId() {
@@ -43,5 +51,9 @@ public class FormEntry {
 
     public void setType(FormEntryType type) {
         this.type = type;
+    }
+
+    public String getAttributeName() {
+        return attributeName;
     }
 }

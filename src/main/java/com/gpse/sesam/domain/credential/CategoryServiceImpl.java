@@ -1,7 +1,6 @@
 package com.gpse.sesam.domain.credential;
 
 import com.gpse.sesam.domain.location.Location;
-import com.gpse.sesam.domain.user.Issuer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<Category> getCategory(List<Location> locations) {
-        return null;
+        return Optional.empty();
     }
 
 

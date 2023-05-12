@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.credential;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gpse.sesam.domain.user.Issuer;
 import jakarta.persistence.*;
 
@@ -18,20 +19,31 @@ public class Credential {
     @Column(nullable = false)
     private String credentialDefinitionId;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @Column(nullable = false)
+    private String agent;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Category category;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<FormEntry> form;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ChecklistEntry> checklist;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Issuer> issuer;
 
-    protected Credential() {}
+    protected Credential() {
+    }
 
-    public Credential(String name, String credentialDefinitionId, List<FormEntry> form, List<ChecklistEntry> checklist, List<Issuer> issuer) {
+    public Credential(String name, String credentialDefinitionId, String agent, Category category, List<FormEntry> form,
+                      List<ChecklistEntry> checklist, List<Issuer> issuer) {
         this.name = name;
         this.credentialDefinitionId = credentialDefinitionId;
+        this.agent = agent;
+        this.category = category;
         this.form = form;
         this.checklist = checklist;
         this.issuer = issuer;
@@ -83,5 +95,13 @@ public class Credential {
 
     public void setIssuer(List<Issuer> issuer) {
         this.issuer = issuer;
+    }
+
+    public String getAgent() {
+        return agent;
+    }
+
+    public void setAgent(String agent) {
+        this.agent = agent;
     }
 }

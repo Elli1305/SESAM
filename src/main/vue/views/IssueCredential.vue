@@ -13,7 +13,7 @@
           </div>
           <div class="col-12 col-md">
             <q-form ref="form" @submit.prevent>
-              <q-input class="q-mt-sm" outlined v-for="attribute in credential?.attributes" v-model="attribute.value"
+              <q-input class="q-mt-sm" outlined v-for="attribute in credential?.form" v-model="attribute.value"
                 :label="attribute.label" :type="attribute.type" :rules="[required]" />
             </q-form>
           </div>
@@ -23,7 +23,7 @@
       <q-step :name="2" :title="t('issueCredential.steps.list')" icon="checklist" :done="step > 2">
         <div class="row q-col-gutter-lg">
           <div class="col-12 col-md">
-            <q-input class="q-mt-sm" outlined v-for="attribute in credential?.attributes" v-model="attribute.value"
+            <q-input class="q-mt-sm" outlined v-for="attribute in credential?.form" v-model="attribute.value"
               :label="attribute.label" :type="attribute.type" readonly />
           </div>
           <div class="col-12 col-md">
@@ -81,11 +81,11 @@
 <script setup lang="ts">
 import { QForm, QNotifyCreateOptions, QOptionGroupProps, QStepper, ValidationRule, useQuasar } from 'quasar';
 import { computed, ComputedRef, Ref, ref } from 'vue';
-import { IssueCredential } from '@/main/vue/entity/credential';
 import { useI18n } from 'vue-i18n';
 import { AxiosError, AxiosResponse } from "axios";
 import QRCode from 'qrcode.vue';
 import api from '@/main/vue/api';
+import {IssueCredential} from "@/main/vue/entity/credentialDefinition";
 
 const props = defineProps<{ id: string }>();
 
@@ -97,7 +97,7 @@ const credential: Ref<IssueCredential | null> = ref(null);
 const form: Ref<QForm | null> = ref(null);
 
 const selectedConditions: Ref<NonNullable<QOptionGroupProps['options']>> = ref([]);
-const conditions: ComputedRef<QOptionGroupProps['options']> = computed(() => credential.value?.conditions.map(v => ({ ...v, value: v.id })) ?? []);
+const conditions: ComputedRef<QOptionGroupProps['options']> = computed(() => credential.value?.checklist.map(v => ({ ...v, value: v.id })) ?? []);
 const checklistIncomplete: ComputedRef<boolean> = computed(() => step.value === 2 && selectedConditions.value.length !== conditions.value?.length)
 
 const oobUrl: Ref<string | undefined> = ref(undefined);
@@ -109,7 +109,7 @@ const opts: QNotifyCreateOptions = {
 };
 
 api.credential.get(props.id)
-  .then((v) => credential.value = { ...v.data, attributes: v.data.attributes.map(a => ({ ...a, value: '' })) })
+  .then((v) => credential.value = { ...v.data, form: v.data.form.map(a => ({ ...a, value: '' })) })
   .catch((e: AxiosError) => {
     switch (e.response?.status) {
       case 403:
@@ -152,7 +152,7 @@ const next = async (refs: any) => {
     }).onOk(async () => {
       $q.loading.show({ delay: 400 });
 
-      api.credential.issue(props.id, credential.value!.attributes.map(a => ({ id: a.id, value: a.value })))
+      api.credential.issue(props.id, credential.value!.form.map(a => ({ id: a.id, value: a.value })))
         .then((r: AxiosResponse<string>) => {
           oobUrl.value = r.data;
           stepper.next();
