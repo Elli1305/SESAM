@@ -85,7 +85,8 @@ const messages = {
         },
         corporateDesign: {
             title: "Corporate Design",
-            colors: "Farben"
+            colors: "Farben",
+            logo: "Logo"
         }
     },
     en: {
@@ -160,7 +161,8 @@ const messages = {
         },
         corporateDesign: {
             title: "Corporate Design",
-            colors: "Colors"
+            colors: "Colors",
+            logo: "Logo"
         }
     }
 }

@@ -93,15 +93,19 @@
       <!-- </q-expansion-item> -->
     </div>
     <div class="row justify-center" >
-
+      <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg">
+        <template v-slot:prepend>
+          <q-icon name="attach_file" />
+        </template>
+      </q-file>
     </div>
   </q-page>
 </template>
 
 <script>
 import { ref } from 'vue'
-import {useI18n} from "vue-i18n"
-import {colors} from "quasar"
+import { useI18n } from "vue-i18n"
+import { colors } from "quasar"
 
 export default {
   name: "CorporateDesign",
@@ -115,14 +119,16 @@ export default {
       positive: ref(colors.getPaletteColor('positive')),
       negative: ref(colors.getPaletteColor('negative')),
       info: ref(colors.getPaletteColor('info')),
-      warning: ref(colors.getPaletteColor('warning')),
+      warning: ref(colors.getPaletteColor('warning'))
     }
   },
   data() {
     const { t } = useI18n()
+    const logo = new Image()
 
     return {
-      t
+      t,
+      logo
     }
   }
 }
