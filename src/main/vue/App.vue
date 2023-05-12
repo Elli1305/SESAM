@@ -10,6 +10,7 @@ const { t } = useI18n()
 const userStore = useUserStore()
 const $q = useQuasar()
 const router = useRouter()
+const i18nLocale = useI18n()
 
     async function logout (){
       await userStore.logout()
@@ -43,8 +44,30 @@ const router = useRouter()
                 {{t("home.header")}}
               </q-toolbar-title>
             </div>
-            <div class="row justify-center" style="width: 42px; height: 42px">
-              <country-flag style="border: white solid 1px" :country="this.$i18n.locale.toString() === 'de' ? 'de' : 'gb'" shadow size="normal"/>
+            <div class="column" style="width: 42px; height: 42px">
+              <q-btn class="row no-padding" round unelevated style="width: 3em">
+                <country-flag class="self-center no-margin shadow-16" style="height: 3em; width: 3em; border-radius: 100%" :country="i18nLocale.locale.value.toString() === 'de' ? 'de' : 'gb'" size="normal"/>
+                <q-menu fit transition-show="jump-down" transition-hide="jump-up">
+                  <q-list>
+                    <q-item @click="i18nLocale.locale.value = 'de'" clickable v-close-popup>
+                      <q-item-section text-color="black" style="width: 7.5em" unelevated>
+                        <div class="row justify-start items-center no-wrap">
+                          <country-flag rounded country='de' size="small" style="margin: 0 -0.5em 0.1em -1.5em; border: 1px solid black"/>
+                          <p class="no-margin" style="line-height: 1">Deutsch</p>
+                        </div>
+                      </q-item-section>
+                    </q-item>
+                    <q-item @click="i18nLocale.locale.value = 'en'" clickable v-close-popup>
+                      <q-item-section style="width: 7.5em" unelevated>
+                        <div class="row justify-start items-center no-wrap">
+                          <country-flag rounded country='gb' size="small" style="margin: 0 -0.5em 0.1em -1.5em; border: 1px solid black"/>
+                          <p class="no-margin" style="line-height: 1">English</p>
+                        </div>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
             </div>
           </div>
           <div id="lower" class="row justify-end items-center no-wrap">
