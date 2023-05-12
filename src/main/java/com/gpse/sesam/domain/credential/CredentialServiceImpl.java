@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CredentialServiceImpl implements CredentialService {
@@ -41,27 +39,60 @@ public class CredentialServiceImpl implements CredentialService {
         return credentialRepository.findById(id);
     }
 
-    private List<IssueCredentialAttribute> createAttributes(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds) {
+    private IssueCredentialRequest createIssueCredentialRequest(final Long id,
+                                                            final List<IssueCredentialAttributeCmd> attributeCmds) {
+        final Optional<Credential> optionalCredential = credentialRepository.findById(id);
+
+        if (!optionalCredential.isPresent()) {
+            return null;
+        }
+
+        final Credential credential = optionalCredential.get();
+        final List<FormEntry> form = credential.getForm();
+
+        if (form.size() != attributeCmds.size()) {
+            return null;
+        }
+
         final ArrayList<IssueCredentialAttribute> attributes1 = new ArrayList<>();
 
-        attributes1.add(new IssueCredentialAttribute("id", "1"));
-        attributes1.add(new IssueCredentialAttribute("first_name", "Alice"));
-        attributes1.add(new IssueCredentialAttribute("last_name", "Ananas"));
-        attributes1.add(new IssueCredentialAttribute("birth_date", "20000101"));
-        attributes1.add(new IssueCredentialAttribute("expiration_date", "20250101"));
+        Map<Long, IssueCredentialAttributeCmd> attributeCmdMap = new HashMap<>();
+        for (IssueCredentialAttributeCmd attributeCmd : attributeCmds) {
+            attributeCmdMap.put(attributeCmd.id(), attributeCmd);
+        }
 
-        return attributes1;
+        for (final FormEntry entry : form) {
+            final IssueCredentialAttributeCmd correspondingAttributeCmd = attributeCmdMap.get(entry.getId());
+
+            if (correspondingAttributeCmd == null) {
+                return null;
+            }
+
+            switch (entry.getType()) {
+                case DATE:
+                    attributes1.add(new IssueCredentialAttribute(entry.getAttributeName(), correspondingAttributeCmd.value().replace("-", "")));
+                    break;
+                default:
+                    attributes1.add(new IssueCredentialAttribute(entry.getAttributeName(), correspondingAttributeCmd.value()));
+                    break;
+            }
+
+        }
+
+        return new IssueCredentialRequest(
+                credential.getAgent(),
+                new IssueCredential(
+                        credential.getCredentialDefinitionId(),
+                        attributes1
+                )
+        );
     }
 
     @Override
-    public String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds) throws JsonProcessingException {
-        final IssueCredentialRequest issueCredentialRequest = new IssueCredentialRequest(
-                "tlabs",
-                new IssueCredential(
-                        "$T-MEMBER",
-                        createAttributes(id, attributeCmds)
-                )
-        );
+    public String issueCredential(final Long id,
+                                  final List<IssueCredentialAttributeCmd> attributeCmds)
+            throws JsonProcessingException {
+        final IssueCredentialRequest issueCredentialRequest = createIssueCredentialRequest(id, attributeCmds);
 
         return client.post()
                 .uri("credential/issue")
