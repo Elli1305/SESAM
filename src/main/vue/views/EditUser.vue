@@ -51,7 +51,7 @@
 
             <q-card-actions align="right" class="bg-white text-teal">
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
-                <q-btn flat :label="t('adminEdit.delete')" @click=""/>
+                <q-btn flat :label="t('adminEdit.delete')" @click="deleteUser()"/>
             </q-card-actions>
         </q-card>
     </q-dialog>
@@ -65,6 +65,7 @@ import {ref} from 'vue'
 import {useI18n} from "vue-i18n";
 import {useUserStore} from "@/main/vue/stores/users";
 import router from "@/main/vue/router";
+import {useQuasar} from "quasar";
 
 
 let test = ref('')
@@ -77,6 +78,8 @@ export default {
 
     setup(props) {
         const userStore = useUserStore()
+        const $q = useQuasar()
+        const currentUser = userStore.user
 
         let roles= ref([])
         const {t} = useI18n()
@@ -96,7 +99,7 @@ export default {
                 roles.value.push('Admin');
             }
             if(editorRole) {
-                roles.value.push('Editor');
+                roles.value.push('Bearbeiter');
             }
             if(issuerRole) {
                 roles.value.push('Herausgeber');
@@ -117,7 +120,7 @@ export default {
                 if(r==='Admin') {
                     return 'ADMINISTRATOR'
                 }
-                if(r==='Editor') {
+                if(r==='Bearbeiter') {
                     return 'EDITOR'
                 }
                 if(r==='Herausgeber') {
@@ -127,13 +130,30 @@ export default {
                 router.push('/admin/currentuserlist'); } )
         }
 
+        function deleteUser() {
+            let mail = user.value.username
 
+            if(mail === currentUser.username) {
+                $q.notify({
+                    type: 'negative',
+                    message: t('adminEdit.deleteOwnAccount'),
+                    caption: t('adminEdit.otherAdmin'),
+                })
+
+            } else {
+                userStore.deleteUser(mail);
+                router.push('/admin/currentuserlist');
+            }
+        }
+
+//Sprache überall anpassen
 
 
         return {
             user: user,
             deleteAlert: ref(false),
             t,
+            deleteUser,
 
 
             saveEditedUser,

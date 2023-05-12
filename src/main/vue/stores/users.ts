@@ -123,6 +123,12 @@ export const useUserStore = defineStore('users', () => {
                 .catch(reject);
         });
     }
+    function deleteUser(mail:string) {
+        new Promise<void>((resolve, reject) => {
+            api.auth.deleteUser(mail).then(_ => resolve())
+                .catch(reject);
+        });
+    }
 
 
     return {
@@ -142,5 +148,6 @@ export const useUserStore = defineStore('users', () => {
         getEditUser,
         editUser,
         saveEdits,
+        deleteUser,
     };
 })

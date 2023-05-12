@@ -72,10 +72,15 @@ public class SesamUserController {
     @PostMapping("/edit_user")
     @ResponseStatus(HttpStatus.OK)
     public void makeUserEdit(@RequestBody EditUserCmd editUserCmd) {
-        System.out.println("hier Controller");
-        System.out.println(editUserCmd.getUsername());
         SesamUser user = service.getUserByMail(editUserCmd.getUsername());
-        System.out.println("hier Controller 2");
         service.makeUserEdit(user, editUserCmd.getFirstName(), editUserCmd.getLastName(),editUserCmd.getUsername(), editUserCmd.getRoles());
     }
+    @Secured("ADMINISTRATOR")
+    @DeleteMapping("/delete_user/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable("id") final String id) {
+        SesamUser user = service.getUserByMail(id);
+        service.deleteUser(user);
+    }
+
 }

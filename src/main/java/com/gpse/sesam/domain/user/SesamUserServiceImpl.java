@@ -160,6 +160,10 @@ public class SesamUserServiceImpl implements SesamUserService {
         userRepository.deleteAll();
     }
 
+    public void deleteUser(SesamUser sesamUser) {
+        userRepository.delete(sesamUser);
+    }
+
     @Override
     public void saveAll(Iterable<SesamUser> users) {
         userRepository.saveAll(users);
@@ -180,7 +184,6 @@ public class SesamUserServiceImpl implements SesamUserService {
     public void makeUserEdit(SesamUser user, String prename, String lastname, String username, List<SesamUserRole.AttainableRole> roles) {
         user.setFirstName(prename);
         user.setLastName(lastname);
-        System.out.println("hier ServiceImpl");
         user.setRoles(roles.stream()
                 .distinct()
                 .map(role -> new SesamUserRole(role,true))

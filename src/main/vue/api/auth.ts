@@ -38,5 +38,8 @@ export default {
     },
     editUser(param: User): Promise<AxiosResponse<SignUpResponse>> {
         return axios.post('/api/edit_user', param);
+    },
+    deleteUser(param: String): Promise<AxiosResponse<SignUpResponse>> {
+        return axios.delete('/api/delete_user/'+param);
     }
 }

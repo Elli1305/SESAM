@@ -29,7 +29,11 @@ const messages = {
             delete: "Löschen",
             back: "Zurück",
             attention: "ACHTUNG",
-            question: "Nutzer wirklich löschen?"
+            question: "Nutzer wirklich löschen?",
+            deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
+            otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
+
+
         },
 
         common: {

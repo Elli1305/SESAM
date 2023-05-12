@@ -25,6 +25,8 @@ public interface SesamUserService extends UserDetailsService {
 
     void deleteAll();
 
+    void deleteUser(SesamUser sesamUser);
+
     void saveAll(Iterable<SesamUser> users);
 
     void createPasswordResetToken(SesamUser user, String token);
