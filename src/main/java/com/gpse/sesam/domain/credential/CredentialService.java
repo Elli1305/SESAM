@@ -9,9 +9,10 @@ import java.util.Optional;
 public interface CredentialService {
     List<Credential> getCredentials();
 
-   Optional<Credential> getCredential(Long id);
+    Optional<Credential> getCredential(Long id);
 
-    String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds)  throws JsonProcessingException;
+    String issueCredential(Long id, List<IssueCredentialAttributeCmd> attributeCmds)
+            throws JsonProcessingException;
 
     void deleteAll();
 

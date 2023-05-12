@@ -27,7 +27,8 @@ public class Credential {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Issuer> issuer;
 
-    protected Credential() {}
+    protected Credential() {
+    }
 
     public Credential(String name, String credentialDefinitionId, List<FormEntry> form, List<ChecklistEntry> checklist, List<Issuer> issuer) {
         this.name = name;
