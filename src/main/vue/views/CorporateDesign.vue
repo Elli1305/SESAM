@@ -93,7 +93,12 @@
       <!-- </q-expansion-item> -->
     </div>
     <div class="row justify-center" >
-      <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg">
+      <q-file class="q-mx-xs" rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" hint="Only SVG files">
+        <template v-slot:prepend>
+          <q-icon name="attach_file" />
+        </template>
+      </q-file>
+      <q-file class="q-mx-xs" rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" hint="Only ICO files">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
@@ -125,10 +130,12 @@ export default {
   data() {
     const { t } = useI18n()
     const logo = new Image()
+    const favicon = new Image()
 
     return {
       t,
-      logo
+      logo,
+      favicon
     }
   }
 }
