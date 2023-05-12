@@ -73,7 +73,11 @@ public class SesamUserController {
     @ResponseStatus(HttpStatus.OK)
     public void makeUserEdit(@RequestBody EditUserCmd editUserCmd) {
         SesamUser user = service.getUserByMail(editUserCmd.getUsername());
-        service.makeUserEdit(user, editUserCmd.getFirstName(), editUserCmd.getLastName(),editUserCmd.getUsername(), editUserCmd.getRoles());
+        service.makeUserEdit(user,
+                editUserCmd.getFirstName(),
+                editUserCmd.getLastName(),
+                editUserCmd.getUsername(),
+                editUserCmd.getRoles());
     }
     @Secured("ADMINISTRATOR")
     @DeleteMapping("/delete_user/{id}")

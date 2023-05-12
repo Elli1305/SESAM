@@ -25,7 +25,9 @@ public class EditUserCmd {
         return username;
     }
 
-    public List<SesamUserRole.AttainableRole> getRoles() { return roles;}
+    public List<SesamUserRole.AttainableRole> getRoles() {
+        return roles;
+    }
 
 
     public void setFirstName(String firstName) {
@@ -35,7 +37,9 @@ public class EditUserCmd {
         this.lastName = lastName;
     }
 
-    public void setUsername(String username) { this.username = username; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public void setRoles(List<SesamUserRole.AttainableRole> roles) {
         this.roles = roles;
