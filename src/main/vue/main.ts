@@ -87,7 +87,14 @@ const messages = {
             title: "Corporate Design",
             colors: "Farben",
             logo: "Logo",
-            favicon: "Favicon"
+            favicon: "Favicon",
+            confirm: {
+                title: "Sind Sie sicher, dass sie zurücksetzen wollen?",
+                message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
+                ok: "Zurücksetzen",
+                cancel: "Abbruch"
+            },
+            resetSuccess: "Reset successful"
         }
     },
     en: {
@@ -164,7 +171,14 @@ const messages = {
             title: "Corporate Design",
             colors: "Colors",
             logo: "Logo",
-            favicon: "Favicon"
+            favicon: "Favicon",
+            confirm: {
+                title: "Are you sure you want to reset?",
+                message: "You will not be able to retrieve your current settings.",
+                ok: "Confirm",
+                cancel: "Cancel"
+            },
+            resetSuccess: "Reset successful"
         }
     }
 }

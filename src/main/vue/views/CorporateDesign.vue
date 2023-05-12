@@ -91,7 +91,7 @@
       </div>
     </div>
     <div class="row justify-center" >
-      <q-btn @click="resetSettings" round icon="restart_alt" color="negative" style="width: 4em; height: 4em; margin-right: 4em"/>
+      <q-btn @click="confirm = true" round icon="restart_alt" color="negative" style="width: 4em; height: 4em; margin-right: 4em"/>
       <q-file class="q-mx-xs" hide-bottom-space hide-hint rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" hint="Only SVG files">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
@@ -103,13 +103,30 @@
         </template>
       </q-file>
     </div>
+
+    <q-dialog v-model="confirm" persistent>
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">{{ t('corporateDesign.confirm.title') }}</div>
+        </q-card-section>
+        <q-card-section class="row items-center">
+          <span class="q-ml-sm">{{t('corporateDesign.confirm.message')}}</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat :label="t('corporateDesign.confirm.cancel')" color="primary" v-close-popup />
+          <q-btn flat :label="t('corporateDesign.confirm.ok')" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
+
 </template>
 
 <script>
 import { ref } from 'vue'
 import { useI18n } from "vue-i18n"
-import { colors } from "quasar"
+import {colors, useQuasar} from "quasar"
 
 export default {
   name: "CorporateDesign",
@@ -123,16 +140,23 @@ export default {
       positive: ref(colors.getPaletteColor('positive')),
       negative: ref(colors.getPaletteColor('negative')),
       info: ref(colors.getPaletteColor('info')),
-      warning: ref(colors.getPaletteColor('warning'))
+      warning: ref(colors.getPaletteColor('warning')),
+      confirm: ref(false)
     }
   },
   data() {
     const { t } = useI18n()
     const logo = new Image()
     const favicon = new Image()
+    const $q = useQuasar()
 
     function resetSettings() {
-
+      $q.dialog({
+        title: t('corporateDesign.confirm.title'),
+        message: t('corporateDesign.confirm.message'),
+        ok: t('corporateDesign.confirm.ok'),
+        cancel: t('corporateDesign.confirm.cancel')
+      })
     }
 
     return {
