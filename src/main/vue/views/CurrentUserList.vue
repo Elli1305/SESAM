@@ -120,9 +120,13 @@ export default {
                     let ans
 
                     //Gather toggle conditions
-                    let c1 = terms.filterToggle.admin && row.roles.map(r => r.role).includes("ADMINISTRATOR")
-                    let c2 = terms.filterToggle.editor && row.roles.map(r => r.role).includes("EDITOR")
-                    let c3 = terms.filterToggle.issuer && row.roles.map(r => r.role).includes("ISSUER")
+                    let c1 = terms.filterToggle.admin && row.roles.filter(r => r.granted).map(r => r.role).includes("ADMINISTRATOR")
+                    let c2 = terms.filterToggle.editor && row.roles.filter(r => r.granted).map(r => r.role).includes("EDITOR")
+                    let c3 = terms.filterToggle.issuer && row.roles.filter(r => r.granted).map(r => r.role).includes("ISSUER")
+                    let c4 = false
+                    if(row.roles.filter(r => r.granted).length === 0){
+                        c4=true;
+                    }
 
                     //Gather search condition
 
@@ -147,9 +151,14 @@ export default {
                     //assume row doesn't match
                     ans = false
                     //check if any of the conditions match
-                    if ( (c1 && s1) || (c2 && s1) || (c3 && s1) ) {
+                    if ( (c1 && s1) || (c2 && s1) || (c3 && s1)) {
                         ans = true
+                    }else{
+                        if((!(terms.filterToggle.admin  || terms.filterToggle.editor  || terms.filterToggle.issuer )) && c4){
+                            ans = true
+                        }
                     }
+
                     return ans
                 })
             return filteredRows
