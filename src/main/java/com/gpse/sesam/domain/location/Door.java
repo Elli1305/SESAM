@@ -2,13 +2,6 @@ package com.gpse.sesam.domain.location;
 
 import com.gpse.sesam.domain.credential.Credential;
 import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
 import java.util.List;
 
@@ -20,44 +13,54 @@ public class Door {
     @Column
     private Long id;
 
-	@Column
-	private String name;
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Coordinate> coordinates;
+    @Column
+    private String name;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Coordinate> coordinates;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Credential> credentials;
 
     protected Door() {
 
     }
 
-	public Door(String name, List<Credential> credentials) {
-		this.name =name;
+    public Door(String name, List<Coordinate> coordinates, List<Credential> credentials) {
+        this.name = name;
+        this.coordinates = coordinates;
         this.credentials = credentials;
-	}
+    }
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public List<Coordinate> getCoordinates() {
-		return coordinates;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setCoordinates(List<Coordinate> coordinates) {
-		this.coordinates = coordinates;
-	}
+    public List<Coordinate> getCoordinates() {
+        return coordinates;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setCoordinates(List<Coordinate> coordinates) {
+        this.coordinates = coordinates;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Credential> getCredentials() {
+        return credentials;
+    }
+
+    public void setCredentials(List<Credential> credentials) {
+        this.credentials = credentials;
+    }
 }
