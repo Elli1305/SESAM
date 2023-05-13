@@ -16,10 +16,20 @@ public interface SesamUserService extends UserDetailsService {
      * @return the newly created user.
      */
     SesamUser createUser(SesamUserCmd userCmd);
-    List<SesamUser> getUsers();
-	void deleteAll();
 
-	void saveAll(Iterable<SesamUser> users);
+    List<SesamUser> getUsers();
+
+    SesamUser getUserByMail(String username);
+
+    void makeUserEdit(SesamUser user, String prename,
+                      String lastname, String mail,
+                      List<SesamUserRole.AttainableRole> roles);
+
+    void deleteAll();
+
+    void deleteUser(SesamUser sesamUser);
+
+    void saveAll(Iterable<SesamUser> users);
 
     void createPasswordResetToken(SesamUser user, String token);
 

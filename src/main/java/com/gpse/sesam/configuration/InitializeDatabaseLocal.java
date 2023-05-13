@@ -105,7 +105,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		List<List<Coordinate>> doorCoordinates = createDoorCoordinates(jsonContent);
 
 		for (int i = 0; i < doorCoordinates.size(); i++) {
-			rooms.get(i).setDoors(List.of(new Door(doorCoordinates.get(i))));
+			Door door = new Door("door" + i, doorCoordinates.get(i));
+			rooms.get(i).setDoors(Collections.singletonList(door));
 		}
 
 		List<Floor> floors = new ArrayList<>();

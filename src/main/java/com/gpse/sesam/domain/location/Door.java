@@ -20,6 +20,7 @@ public class Door {
 
 	@Column
 	private String name;
+
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Coordinate> coordinates;
 
@@ -35,6 +36,11 @@ public class Door {
 		this.name = name;
 	}
 
+    public Door(String name, List<Coordinate> coordinates) {
+        this.name = name;
+        this.coordinates = coordinates;
+    }
+
 	public Long getId() {
 		return id;
 	}
@@ -43,19 +49,19 @@ public class Door {
 		this.id = id;
 	}
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
 
 	public void setCoordinates(List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 }

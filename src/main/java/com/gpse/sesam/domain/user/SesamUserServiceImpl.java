@@ -160,6 +160,9 @@ public class SesamUserServiceImpl implements SesamUserService {
 	public void deleteAll() {
 		userRepository.deleteAll();
 	}
+    public void deleteUser(SesamUser sesamUser) {
+        userRepository.delete(sesamUser);
+    }
 
 	@Override
 	public void saveAll(Iterable<SesamUser> users) {
@@ -171,4 +174,23 @@ public class SesamUserServiceImpl implements SesamUserService {
 		userRepository.findAll().forEach(articles::add);
 		return articles;
 	}
+    @Override
+    public SesamUser getUserByMail(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
+    }
+    public void makeUserEdit(SesamUser user,
+							 String prename,
+							 String lastname,
+							 String username,
+							 List<SesamUserRole.AttainableRole> roles) {
+        user.setFirstName(prename);
+        user.setLastName(lastname);
+        user.setRoles(roles.stream()
+                .distinct()
+                .map(role -> new SesamUserRole(role, true))
+                .collect(Collectors.toList())
+        );
+        userRepository.save(user);
+    }
 }

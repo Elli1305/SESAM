@@ -6,6 +6,7 @@ export const useFloorPlanStore = defineStore('floorPlan', () => {
     const selectedFloorPlan: Ref<String> = ref('')
     const selectedFloorId: Ref<Number> = ref(0)
     const rooms: Ref<Room[]> = ref([])
+    const selectedRooms = ref([])
 
     if (sessionStorage.getItem("floorPlan")) {
         const state = JSON.parse((sessionStorage.getItem("floorPlan") || ''));
@@ -14,5 +15,5 @@ export const useFloorPlanStore = defineStore('floorPlan', () => {
         rooms.value = state.rooms;
     }
 
-    return {selectedFloorPlan, selectedFloorId, rooms}
+    return {selectedFloorPlan, selectedFloorId, rooms, selectedRooms}
 })

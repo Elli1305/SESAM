@@ -1,10 +1,13 @@
 <template>
-  <q-page>
-    <q-btn v-if="false" dense round unelevated class="bg-black" style="z-index: 1000; top: 15px; left: -17px"></q-btn>
-    <div ref="mapContainer" class="site-plan-editor-map">
-      <div id="site-plan-map"></div>
-    </div>
-  </q-page>
+    <q-page-container style="padding: 2em">
+        <q-page>
+          <q-btn v-if="false" dense round unelevated class="bg-black"
+                 style="z-index: 1000; top: 15px; left: -17px"></q-btn>
+            <div ref="mapContainer" class="site-plan-editor-map">
+                <div id="site-plan-map"></div>
+            </div>
+        </q-page>
+    </q-page-container>
 </template>
 <script>
 
