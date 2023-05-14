@@ -148,7 +148,7 @@ public class InitializeDatabase implements InitializingBean {
 
         List<Credential> noCredentials2 = new ArrayList<>();
         noCredentials2.add(null);
-        Door door2 = new Door("Door666", null, noCredentials);
+        Door door2 = new Door("Door666", null, noCredentials2);
         List<Door> doors2 = new ArrayList<>();
         doors2.add(door2);
 
@@ -164,7 +164,7 @@ public class InitializeDatabase implements InitializingBean {
 
         // Safety-Credential
         List<Credential> credentials = new ArrayList<>();
-        Credential safety = new Credential("Sicherheitsbelehrung-Uni", "$U-Member", "university", null, form, checklist, issuers);
+        Credential safety = new Credential("Sicherheitsbelehrung-Uni", "$U-MEMBER", "university", null, form, checklist, issuers);
 
         List<ChecklistEntry> checklist3 = new ArrayList<>();
         checklist3.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
@@ -176,12 +176,12 @@ public class InitializeDatabase implements InitializingBean {
         FormEntry lastName3 = new FormEntry("Nachname", FormEntryType.TEXT, "last_name");
         FormEntry birthDate3 = new FormEntry("Geburtstagsdatum", FormEntryType.DATE, "birth_date");
         FormEntry date3 = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
-        form.add(id3);
-        form.add(firstName3);
-        form.add(lastName3);
-        form.add(birthDate3);
-        form.add(date3);
-        Credential safety2 = new Credential("Sicherheitsbelehrung-FH", "$T-MEMBER", "tlabs", null, null, form3, checklist3, issuers);
+        form3.add(id3);
+        form3.add(firstName3);
+        form3.add(lastName3);
+        form3.add(birthDate3);
+        form3.add(date3);
+        Credential safety2 = new Credential("Sicherheitsbelehrung-FH", "$T-MEMBER", "tlabs", null, form3, checklist3, issuers);
         credentials.add(safety);
         credentials.add(safety2);
 
@@ -221,7 +221,7 @@ public class InitializeDatabase implements InitializingBean {
 
         List<Credential> noCredentials2 = new ArrayList<>();
         noCredentials2.add(null);
-        Door door2 = new Door("Tor", null, noCredentials);
+        Door door2 = new Door("Tor", null, noCredentials2);
         List<Door> doors2 = new ArrayList<>();
         doors2.add(door2);
         Room room2 = new Room("0.112", doors2);
@@ -234,7 +234,7 @@ public class InitializeDatabase implements InitializingBean {
 
         // Safety-Credential
         List<Credential> credentials = new ArrayList<>();
-        Credential safety = new Credential("Sicherheitsbelehrung-Baumschule", "$T-MEMBER", "tlabs", null, null, form4, checklist4, issuers);
+        Credential safety = new Credential("Sicherheitsbelehrung-Baumschule", "$T-MEMBER", "tlabs", null, form4, checklist4, issuers);
         credentials.add(safety);
         List<ExternalCredential> externalCredentials = new ArrayList<>();
         ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-MEMBER");
@@ -265,12 +265,12 @@ public class InitializeDatabase implements InitializingBean {
 
 
         List<Credential> credentials2 = new ArrayList<>();
-        Credential firstAid = new Credential("Erste-Hilfe-Kurs-DRK", "$U-Training", "university", null, form6, checklist6, issuers2);
+        Credential firstAid = new Credential("Erste-Hilfe-Kurs-DRK", "$U-TRAINING", "university", null, form6, checklist6, issuers2);
         credentials2.add(firstAid);
 
         List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-        ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-Training");
-        ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-Member");
+        ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-TRAINING");
+        ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-MEMBER");
 
         externalCredentials2.add(firstAid2);
         externalCredentials2.add(firstAid3);
