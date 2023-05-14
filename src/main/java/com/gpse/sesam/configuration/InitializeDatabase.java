@@ -44,7 +44,6 @@ public class InitializeDatabase implements InitializingBean {
         credentialService.deleteAll();
         userService.deleteAll();
 
-
         List<Location> locations = createLocations();
         List<SesamUser> users = createUsers();
         List<Credential> credentials = createCredentials();
@@ -182,7 +181,7 @@ public class InitializeDatabase implements InitializingBean {
         form.add(lastName3);
         form.add(birthDate3);
         form.add(date3);
-        Credential safety2 = new Credential("Sicherheitsbelehrung-FH", "$T-MEMBER", "tlabs", null, form3, checklist3, issuers);
+        Credential safety2 = new Credential("Sicherheitsbelehrung-FH", "$T-MEMBER", "tlabs", null, null, form3, checklist3, issuers);
         credentials.add(safety);
         credentials.add(safety2);
 
@@ -235,7 +234,7 @@ public class InitializeDatabase implements InitializingBean {
 
         // Safety-Credential
         List<Credential> credentials = new ArrayList<>();
-        Credential safety = new Credential("Sicherheitsbelehrung-Baumschule", "$T-MEMBER", "tlabs", null, form4, checklist4, issuers);
+        Credential safety = new Credential("Sicherheitsbelehrung-Baumschule", "$T-MEMBER", "tlabs", null, null, form4, checklist4, issuers);
         credentials.add(safety);
         List<ExternalCredential> externalCredentials = new ArrayList<>();
         ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-MEMBER");
@@ -337,5 +336,4 @@ public class InitializeDatabase implements InitializingBean {
         categories.add(new Category("Erste-Hilfe-Kurs", credentials2, externalCredentials2));
         return categories;
     }
-
 }

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import {CreateUser} from "@/main/vue/entity/createUser";
 import {SignUpResponse} from "@/main/vue/entity/signUpResponse";
 import {LoginData} from "@/main/vue/entity/loginData";
@@ -11,7 +11,7 @@ export default {
     signUp(user: CreateUser): Promise<SignUpResponse> {
         return axios.post('/api/signup', user);
     },
-    login(credentials: LoginData): Promise<LoginResponse> {
+    login(credentials: LoginData): Promise<AxiosResponse<LoginResponse>> {
         const param = new URLSearchParams();
         param.append('eMail', credentials.eMail);
         param.append('password', credentials.password);
