@@ -42,7 +42,8 @@ public class CredentialServiceImpl implements CredentialService {
         return credentialRepository.findById(id);
     }
 
-    private String sendCredentialIssueRequest(@Valid IssueCredentialRequest issueCredentialRequest) throws JsonProcessingException {
+    private String sendCredentialIssueRequest(@Valid IssueCredentialRequest issueCredentialRequest)
+            throws JsonProcessingException {
         return client.post()
                 .uri("credential/issue")
                 .contentType(MediaType.TEXT_PLAIN)
@@ -73,9 +74,9 @@ public class CredentialServiceImpl implements CredentialService {
 
                     return new IssueCredentialAttribute(
                             entry.getAttributeName(),
-                            entry.getType() == FormEntryType.DATE ?
-                                    correspondingAttributeCmd.value().replace("-", "") :
-                                    correspondingAttributeCmd.value(),
+                            entry.getType() == FormEntryType.DATE
+                                    ? correspondingAttributeCmd.value().replace("-", "")
+                                    : correspondingAttributeCmd.value(),
                             entry.getType()
                     );
                 })

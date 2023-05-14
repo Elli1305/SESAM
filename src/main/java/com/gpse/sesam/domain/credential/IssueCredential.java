@@ -5,5 +5,8 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
-public record IssueCredential(@NotEmpty String credentialDefinitionId, @Valid List<IssueCredentialAttribute> attributes) {
+public record IssueCredential(
+        @NotEmpty String credentialDefinitionId,
+        @Valid List<IssueCredentialAttribute> attributes
+) {
 }

@@ -29,7 +29,9 @@ public class InitializeDatabase implements InitializingBean {
 
     private final PasswordEncoder passwordEncoder;
 
-    public InitializeDatabase(LocationService locationService, SesamUserService userService, CredentialService credentialService, CategoryService categoryService, PasswordEncoder passwordEncoder) {
+    public InitializeDatabase(LocationService locationService, SesamUserService userService,
+                              CredentialService credentialService, CategoryService categoryService,
+                              PasswordEncoder passwordEncoder) {
         this.credentialService = credentialService;
         this.categoryService = categoryService;
         this.passwordEncoder = passwordEncoder;
@@ -69,10 +71,14 @@ public class InitializeDatabase implements InitializingBean {
         doors.add(door);
 
         String defaultPassword = passwordEncoder.encode("Hallo123!");
-        SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User", Collections.singletonList(adminRole));
-        SesamUser issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User", Collections.singletonList(issuerRole), new Room("0.007", doors), null);
-        SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User", Collections.singletonList(editorRole));
-        SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User", Collections.emptyList());
+        SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
+                Collections.singletonList(adminRole));
+        SesamUser issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
+                Collections.singletonList(issuerRole), new Room("0.007", doors), null);
+        SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
+                Collections.singletonList(editorRole));
+        SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User",
+                Collections.emptyList());
 
 
         return List.of(admin, issuer, editor, user);
@@ -98,8 +104,10 @@ public class InitializeDatabase implements InitializingBean {
         List<Floor> floors = new ArrayList<>();
         List<Floor> floors2 = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            floors.add(new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png", rooms.subList(i * 5, i * 5 + 5)));
-            floors2.add(new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png", rooms2.subList(i * 5, i * 5 + 5)));
+            floors.add(new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png",
+                    rooms.subList(i * 5, i * 5 + 5)));
+            floors2.add(new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png",
+                    rooms2.subList(i * 5, i * 5 + 5)));
         }
 
         List<Building> buildings = new ArrayList<>();
@@ -155,16 +163,19 @@ public class InitializeDatabase implements InitializingBean {
         Room room = new Room("0.007", doors);
         Room room2 = new Room("0.112", doors2);
         List<Issuer> issuers = new ArrayList<>();
-        Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters", Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
+        Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters",
+                Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
 
-        Issuer issuer2 = new Issuer("muster@test.com", "Hallo123!", "Erik", "Muster", Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
+        Issuer issuer2 = new Issuer("muster@test.com", "Hallo123!", "Erik", "Muster",
+                Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
 
         issuers.add(issuer1);
         issuers.add(issuer2);
 
         // Safety-Credential
         List<Credential> credentials = new ArrayList<>();
-        Credential safety = new Credential("Sicherheitsbelehrung-Uni", "$U-MEMBER", "university", null, form, checklist, issuers);
+        Credential safety = new Credential("Sicherheitsbelehrung-Uni", "$U-MEMBER",
+                "university", null, form, checklist, issuers);
 
         List<ChecklistEntry> checklist3 = new ArrayList<>();
         checklist3.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
@@ -181,7 +192,8 @@ public class InitializeDatabase implements InitializingBean {
         form3.add(lastName3);
         form3.add(birthDate3);
         form3.add(date3);
-        Credential safety2 = new Credential("Sicherheitsbelehrung-FH", "$T-MEMBER", "tlabs", null, form3, checklist3, issuers);
+        Credential safety2 = new Credential("Sicherheitsbelehrung-FH", "$T-MEMBER",
+                "tlabs", null, form3, checklist3, issuers);
         credentials.add(safety);
         credentials.add(safety2);
 
@@ -226,18 +238,22 @@ public class InitializeDatabase implements InitializingBean {
         doors2.add(door2);
         Room room2 = new Room("0.112", doors2);
         List<Issuer> issuers = new ArrayList<>();
-        Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann", Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
+        Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
+                Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
 
-        Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann", "Hombach", Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
+        Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann",
+                "Hombach", Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
         issuers.add(issuer1);
         issuers.add(issuer2);
 
         // Safety-Credential
         List<Credential> credentials = new ArrayList<>();
-        Credential safety = new Credential("Sicherheitsbelehrung-Baumschule", "$T-MEMBER", "tlabs", null, form4, checklist4, issuers);
+        Credential safety = new Credential("Sicherheitsbelehrung-Baumschule", "$T-MEMBER",
+                "tlabs", null, form4, checklist4, issuers);
         credentials.add(safety);
         List<ExternalCredential> externalCredentials = new ArrayList<>();
-        ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-MEMBER");
+        ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom",
+                "$T-MEMBER");
 
         externalCredentials.add(safety3);
 
@@ -265,12 +281,15 @@ public class InitializeDatabase implements InitializingBean {
 
 
         List<Credential> credentials2 = new ArrayList<>();
-        Credential firstAid = new Credential("Erste-Hilfe-Kurs-DRK", "$U-TRAINING", "university", null, form6, checklist6, issuers2);
+        Credential firstAid = new Credential("Erste-Hilfe-Kurs-DRK", "$U-TRAINING",
+                "university", null, form6, checklist6, issuers2);
         credentials2.add(firstAid);
 
         List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-        ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-TRAINING");
-        ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-MEMBER");
+        ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom",
+                "$U-TRAINING");
+        ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter",
+                "$U-MEMBER");
 
         externalCredentials2.add(firstAid2);
         externalCredentials2.add(firstAid3);
