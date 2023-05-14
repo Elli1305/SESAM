@@ -4,10 +4,14 @@ import com.gpse.sesam.domain.credential.Credential;
 import com.gpse.sesam.domain.location.Room;
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.util.List;
 
 @Entity
 public class Issuer extends SesamUser {
+    @Serial
+    private static final long serialVersionUID = 215982L;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Room room;
 

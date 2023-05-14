@@ -1,4 +1,7 @@
 package com.gpse.sesam.domain.credential;
 
-public record IssueCredentialRequest(String agent, IssueCredential credential) {
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+
+public record IssueCredentialRequest(@NotEmpty String agent, @Valid IssueCredential credential) {
 }

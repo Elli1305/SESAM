@@ -3,6 +3,7 @@ package com.gpse.sesam.domain.credential;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class CredentialServiceImpl implements CredentialService {
@@ -39,61 +42,7 @@ public class CredentialServiceImpl implements CredentialService {
         return credentialRepository.findById(id);
     }
 
-    private IssueCredentialRequest createIssueCredentialRequest(final Long id,
-                                                            final List<IssueCredentialAttributeCmd> attributeCmds) {
-        final Optional<Credential> optionalCredential = credentialRepository.findById(id);
-
-        if (!optionalCredential.isPresent()) {
-            return null;
-        }
-
-        final Credential credential = optionalCredential.get();
-        final List<FormEntry> form = credential.getForm();
-
-        if (form.size() != attributeCmds.size()) {
-            return null;
-        }
-
-        final ArrayList<IssueCredentialAttribute> attributes1 = new ArrayList<>();
-
-        Map<Long, IssueCredentialAttributeCmd> attributeCmdMap = new HashMap<>();
-        for (IssueCredentialAttributeCmd attributeCmd : attributeCmds) {
-            attributeCmdMap.put(attributeCmd.id(), attributeCmd);
-        }
-
-        for (final FormEntry entry : form) {
-            final IssueCredentialAttributeCmd correspondingAttributeCmd = attributeCmdMap.get(entry.getId());
-
-            if (correspondingAttributeCmd == null) {
-                return null;
-            }
-
-            switch (entry.getType()) {
-                case DATE:
-                    attributes1.add(new IssueCredentialAttribute(entry.getAttributeName(), correspondingAttributeCmd.value().replace("-", "")));
-                    break;
-                default:
-                    attributes1.add(new IssueCredentialAttribute(entry.getAttributeName(), correspondingAttributeCmd.value()));
-                    break;
-            }
-
-        }
-
-        return new IssueCredentialRequest(
-                credential.getAgent(),
-                new IssueCredential(
-                        credential.getCredentialDefinitionId(),
-                        attributes1
-                )
-        );
-    }
-
-    @Override
-    public String issueCredential(final Long id,
-                                  final List<IssueCredentialAttributeCmd> attributeCmds)
-            throws JsonProcessingException {
-        final IssueCredentialRequest issueCredentialRequest = createIssueCredentialRequest(id, attributeCmds);
-
+    private String sendCredentialIssueRequest(@Valid IssueCredentialRequest issueCredentialRequest) throws JsonProcessingException {
         return client.post()
                 .uri("credential/issue")
                 .contentType(MediaType.TEXT_PLAIN)
@@ -103,6 +52,49 @@ public class CredentialServiceImpl implements CredentialService {
                 .bodyToMono(String.class)
                 .timeout(Duration.ofMillis(5000))
                 .block();
+    }
+
+    @Override
+    public String issueCredential(final Long id,
+                                  final List<IssueCredentialAttributeCmd> attributeCmds)
+            throws JsonProcessingException {
+        Credential credential = credentialRepository.findById(id).orElseThrow();
+
+        Map<Long, IssueCredentialAttributeCmd> attributeCmdMap =
+                attributeCmds.stream().collect(Collectors.toMap(IssueCredentialAttributeCmd::id, Function.identity()));
+
+        List<IssueCredentialAttribute> attributes = credential.getForm().stream()
+                .map(entry -> {
+                    IssueCredentialAttributeCmd correspondingAttributeCmd = attributeCmdMap.get(entry.getId());
+
+                    if (correspondingAttributeCmd == null) {
+                        return null;
+                    }
+
+                    return new IssueCredentialAttribute(
+                            entry.getAttributeName(),
+                            entry.getType() == FormEntryType.DATE ?
+                                    correspondingAttributeCmd.value().replace("-", "") :
+                                    correspondingAttributeCmd.value(),
+                            entry.getType()
+                    );
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if (credential.getForm().size() != attributes.size()) {
+            return null;
+        }
+
+        return sendCredentialIssueRequest(
+                new IssueCredentialRequest(
+                        credential.getAgent(),
+                        new IssueCredential(
+                                credential.getCredentialDefinitionId(),
+                                attributes
+                        )
+                )
+        );
     }
 
     @Override
