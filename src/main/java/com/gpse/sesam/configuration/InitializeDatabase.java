@@ -21,6 +21,7 @@ public class InitializeDatabase implements InitializingBean {
 
 	private final LocationService locationService;
 
+
 	private final SesamUserService userService;
 
 	private final CredentialService credentialService;
@@ -28,6 +29,8 @@ public class InitializeDatabase implements InitializingBean {
 	private final CategoryService categoryService;
 
 	private final PasswordEncoder passwordEncoder;
+
+	List<Location> locationsList = new ArrayList<>();
 
 	public InitializeDatabase(LocationService locationService, SesamUserService userService,
 							  CredentialService credentialService, CategoryService categoryService, PasswordEncoder passwordEncoder) {
@@ -54,6 +57,7 @@ public class InitializeDatabase implements InitializingBean {
 		userService.saveAll(users);
 		credentialService.saveAll(credentials);
 		categoryService.saveAll(categories);
+		locationService.saveAll(locationsList);
 	}
 
 	private List<SesamUser> createUsers() {
@@ -157,6 +161,7 @@ public class InitializeDatabase implements InitializingBean {
 		doors2.add(door2);
 
 		Room room = new Room("0.007", doors);
+		door.setRoom(room);
 		Room room2 = new Room("0.112", doors2);
 		List<Issuer> issuers = new ArrayList<>();
 		Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters",
@@ -315,7 +320,9 @@ public class InitializeDatabase implements InitializingBean {
 		Building building4 = new Building("Citec2",floorList2);
 		List<Building> buildingList2 = new ArrayList<>();
 		buildingList2.add(building4);
-		Location location2 = new Location("Köln", buildingList2);
+		Location location2 = new Location("Bremen", buildingList2);
+		locationsList.add(location);
+		locationsList.add(location2);
 
 		// Category
 		List<Category> categories = new ArrayList<>();

@@ -18,6 +18,9 @@ public class Building {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Floor> floors;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Location location;
+
     protected Building() {
 
     }

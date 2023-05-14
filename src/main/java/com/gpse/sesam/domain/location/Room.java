@@ -14,8 +14,11 @@ public class Room {
 	@Column
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id")
 	private List<Door> doors;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Floor floor;
 
 	protected Room() {
 

@@ -18,6 +18,7 @@ public class Location {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Building> buildings;
 
+
     protected Location() {
 
     }

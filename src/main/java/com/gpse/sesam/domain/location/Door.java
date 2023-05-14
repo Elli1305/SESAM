@@ -25,8 +25,12 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Coordinate> coordinates;
 
-    @OneToMany
+    @ManyToMany
     private List<Credential> credentials;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "room_id")
+	private Room room;
 
     protected Door() {
 
@@ -68,5 +72,13 @@ public class Door {
 
 	public void setCredentials(List<Credential> credentials) {
 		this.credentials = credentials;
+	}
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
 	}
 }

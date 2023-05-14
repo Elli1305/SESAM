@@ -17,7 +17,6 @@
               :label="t('credentialview.location')"
               behavior="menu"
               v-model="model"
-              multiple
               borderless
               dense
               options-dense
@@ -97,28 +96,21 @@ const columns = [
 ]
 
 //const rows = ref([''])
-const rows = [
-  {
-    category: "Erste-Hilfe-Kurs",
-    availableCredential: "Erste-Hilfe-Kurs DRK",
-    qualification: "Erste-Hilfe-Kurs Johanniter",
-    issuer: "Gerda Peters",
-  },
-  {
-    category: "Sicherheitsunterweisung",
-    availableCredential: "Sicherheitsunterweisung Labor",
-    qualification: "Sicherheitsunterweisung S1",
-    issuer: "Gerda Peters",
-  }
-]
+const rows = ref([])
+    rows.value = []
 
 export default {
   setup () {
+
     let locationNames = ref([])
     const { t } = useI18n();
     const credentialStore = useCredentialStore()
     const locationStore = useLocationStore()
-    //credentialStore.getCategories().then(res => rows.value = res.data)
+    //credentialStore.getCategoryInfos().then(res => {})
+    //rows.value = credentialStore.allInformation.data
+    //rows.category.value = useLocationStore.allInformation.category
+    //rows.availableCredential.value = useLocationStore.allInformation.credential.name
+    //rows.qualification.name.value = use
 
 
     const name = []
@@ -128,9 +120,11 @@ export default {
       }
       return locationNames
     }*/
-
+    const model = ref()
     locationStore.getLocations().then((locations) => {
+      model.value = locations[0]
     })
+
     /*
 function getCategoryInfoTable (categories, credential) {
   for (const category of categories) {
@@ -178,12 +172,12 @@ locationStore.locationByName().then(res => {
 })
 
  */
-
-    credentialStore.getCategories().then(res => {
+    /*
+    credentialStore.getCategories(options.value).then(res => {
       rows.value = res.data
         }
     )
-    function getCategoryInfoTable (categories) {
+   function getCategoryInfoTable (categories) {
       rows.name = categories.name
       rows.availableCredential = categories.credential.name
       rows.qualification = categories.externalCredentials.name
@@ -206,16 +200,16 @@ locationStore.locationByName().then(res => {
             }
           }
         }*/
-    }
+
 
     return {
       columns,
       rows,
       filter,
-      model: ref(null),
-      pov: ref(["Berlin", "Bielefeld"]),
       locationNames,
       locationStore,
+      model,
+      //getCategoryInfoTable,
       t
     }
   }

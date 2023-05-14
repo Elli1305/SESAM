@@ -1,9 +1,11 @@
 package com.gpse.sesam.domain.credential;
 
 import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.web.exception.LocationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.CredentialNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,5 +45,16 @@ public class CredentialServiceImpl implements CredentialService {
     @Override
     public void saveAll(Iterable<Credential> credentials) {
         credentialRepository.saveAll(credentials);
+    }
+
+    @Override
+    public Optional<Credential> credentialFindByLocation(Location location) {
+        return Optional.empty();
+    }
+
+
+    @Override
+    public List<Credential> credentialFindByLocation(Long id) {
+        return credentialRepository.findByLocation(id);
     }
 }

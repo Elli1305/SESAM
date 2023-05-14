@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.credential;
 
+import com.gpse.sesam.domain.location.Door;
 import com.gpse.sesam.domain.user.Issuer;
 import jakarta.persistence.*;
 
@@ -29,6 +30,9 @@ public class Credential {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Issuer> issuer;
+
+    @ManyToMany
+    private List<Door> doors;
 
     protected Credential() {}
 
@@ -87,5 +91,14 @@ public class Credential {
 
     public void setIssuer(List<Issuer> issuer) {
         this.issuer = issuer;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
