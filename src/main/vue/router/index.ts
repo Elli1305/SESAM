@@ -10,6 +10,7 @@ import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Imprint from "../views/Imprint.vue";
 import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
 import EditUser from "@/main/vue/views/EditUser.vue";
+import CredentialMapping from "@/main/vue/views/CredentialMappingList.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -68,6 +69,11 @@ const router = createRouter({
     {
       path: "/imprinteditor",
       component: ImprintEditor,
+      meta: {requiresAdmin: true},
+    },
+    {
+      path: "/credentialmapping",
+      component: CredentialMapping,
       meta: {requiresAdmin: true},
     },
   ],

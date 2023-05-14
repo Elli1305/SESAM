@@ -103,6 +103,11 @@ const i18nLocale = useI18n()
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                   to="/" class="headerLink">
                 <p class="headerText">{{t("home.credentialManagement")}}</p>
+                <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right" self="top right">
+                  <div class="column">
+                    <router-link to="/credentialmapping" class="q-ma-sm headerLink text-black">Credentialmapping</router-link>
+                  </div>
+                </q-menu>
               </router-link>
               <router-link
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
