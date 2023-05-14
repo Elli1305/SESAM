@@ -11,6 +11,7 @@ import Imprint from "../views/Imprint.vue";
 import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
 import EditUser from "@/main/vue/views/EditUser.vue";
 import CredentialAdministration from "@/main/vue/views/CredentialAdministration.vue";
+import CredentialEditing from "@/main/vue/views/CredentialEditing.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -81,6 +82,25 @@ const router = createRouter({
         ]
       }
     },
+    {
+      path: "/credential_administration/:id(\\d+)",
+      component: CredentialEditing,
+      props: true,
+      meta: {
+        requiresRoles: [
+          'ADMINISTRATOR',
+        ]
+      }
+    },
+    {
+      path: "/add_credential",
+      component: CredentialEditing,
+      meta: {
+        requiresRoles: [
+          'ADMINISTRATOR',
+        ]
+      }
+    }
   ],
 });
 
