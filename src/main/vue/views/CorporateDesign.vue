@@ -89,6 +89,21 @@
           </template>
         </q-input>
       </div>
+      <q-icon @mouseover="menu = true" @mouseleave="menu = false" name="info_outlined" color="info">
+        <q-menu v-model="menu">
+          <q-card class="q-pa-sm bg-grey-10" style="width: fit-content; height: fit-content">
+            <p class="no-wrap q-my-xs" :style="{color: primary}">Primary: banner, buttons</p>
+            <p class="no-wrap q-my-xs" :style="{color: secondary}">Secondary: badges (roles)</p>
+            <p class="no-wrap q-my-xs" :style="{color: accent}">Accent: ...</p>
+            <p class="no-wrap q-my-xs" :style="{color: dark}">Dark: ...</p>
+            <p class="no-wrap q-my-xs" :style="{color: lightBlue}">Light-Blue: ...</p>
+            <p class="no-wrap q-my-xs" :style="{color: positive}">Positive: positive notifications</p>
+            <p class="no-wrap q-my-xs" :style="{color: negative}">Negative: negative notifications</p>
+            <p class="no-wrap q-my-xs" :style="{color: info}">Info: profile button, informational content</p>
+            <p class="no-wrap q-my-xs" :style="{color: warning}">Warning: warnings</p>
+          </q-card>
+        </q-menu>
+      </q-icon>
     </div>
     <div class="row justify-evenly no-wrap" >
       <q-btn @click="confirmReset = true" round icon="restart_alt" color="negative" text-color="positive" style="width: 4em; height: 4em"/>
@@ -168,6 +183,7 @@ export default {
     const logo = new Image()
     const favicon = new Image()
     const $q = useQuasar()
+    let menu = false
 
     function reset() {
       $q.notify({
@@ -191,7 +207,9 @@ export default {
       logo,
       favicon,
       reset,
-      save
+      save,
+      menu,
+      colors
     }
   }
 }
