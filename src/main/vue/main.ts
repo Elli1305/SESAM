@@ -99,7 +99,9 @@ const messages = {
             title: "Corporate Design",
             colors: "Farben",
             logo: "Logo",
+            logoHint: "Nur SVG Dateien",
             favicon: "Favicon",
+            faviconHint: "Nur ICO Dateien",
             confirm: {
                 reset: {
                     title: "Sind Sie sicher, dass sie zurücksetzen wollen?",
@@ -200,7 +202,9 @@ const messages = {
             title: "Corporate Design",
             colors: "Colors",
             logo: "Logo",
+            logoHint: "Only SVG files",
             favicon: "Favicon",
+            faviconHint: "Only ICO files",
             confirm: {
                 reset: {
                     title: "Are you sure you want to reset?",

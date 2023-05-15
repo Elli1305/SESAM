@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t('corporateDesign.title')}}</p>
     <div class="row self-center no-wrap">
       <div class="column q-mx-xs">
-        <q-input rounded outlined v-model="primary" class="my-input q-my-xs" bg-color="primary" style="width: fit-content">
+        <q-input label="Primary" rounded outlined v-model="primary" class="my-input q-my-xs" bg-color="primary" style="width: fit-content">
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -12,7 +12,7 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input rounded outlined v-model="secondary" class="my-input q-my-xs" bg-color="secondary" style="width: fit-content">
+        <q-input label="Secondary" rounded outlined v-model="secondary" class="my-input q-my-xs" bg-color="secondary" style="width: fit-content">
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -21,7 +21,7 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input rounded outlined v-model="accent" class="my-input q-my-xs" bg-color="accent" style="width: fit-content">
+        <q-input label="Accent" rounded outlined v-model="accent" class="my-input q-my-xs" bg-color="accent" style="width: fit-content">
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -32,7 +32,7 @@
         </q-input>
       </div>
       <div class="column q-mx-xs">
-        <q-input rounded outlined v-model="dark" class="my-input q-my-xs" bg-color="dark" style="width: fit-content">
+        <q-input label="Dark" rounded outlined v-model="dark" class="my-input q-my-xs" bg-color="dark" style="width: fit-content">
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -41,7 +41,7 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input rounded outlined v-model="lightBlue" class="my-input q-my-xs" bg-color="light-blue" style="width: fit-content">
+        <q-input label="Light-Blue" rounded outlined v-model="lightBlue" class="my-input q-my-xs" bg-color="light-blue" style="width: fit-content">
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -50,7 +50,7 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input rounded outlined v-model="positive" class="my-input q-my-xs" bg-color="positive" style="width: fit-content">
+        <q-input label="Positive" rounded outlined v-model="positive" class="my-input q-my-xs" bg-color="positive" style="width: fit-content">
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -61,7 +61,7 @@
         </q-input>
       </div>
       <div class="column q-mx-xs">
-        <q-input rounded outlined v-model="negative" class="my-input q-my-xs" bg-color="negative" style="width: fit-content">
+        <q-input label="Negative" rounded outlined v-model="negative" class="my-input q-my-xs" bg-color="negative" style="width: fit-content">
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -70,7 +70,7 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input rounded outlined v-model="info" class="my-input q-my-xs" bg-color="info" style="width: fit-content">
+        <q-input label="Info" rounded outlined v-model="info" class="my-input q-my-xs" bg-color="info" style="width: fit-content">
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -79,7 +79,7 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input rounded outlined v-model="warning" class="my-input q-my-xs" bg-color="warning" style="width: fit-content">
+        <q-input label="Warning" rounded outlined v-model="warning" class="my-input q-my-xs" bg-color="warning" style="width: fit-content">
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -92,12 +92,12 @@
     </div>
     <div class="row justify-evenly no-wrap" >
       <q-btn @click="confirmReset = true" round icon="restart_alt" color="negative" text-color="positive" style="width: 4em; height: 4em"/>
-      <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" hint="Only SVG files">
+      <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" :hint="t('corporateDesign.logoHint')">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
       </q-file>
-      <q-file rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" hint="Only ICO files">
+      <q-file rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" :hint="t('corporateDesign.faviconHint')">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
