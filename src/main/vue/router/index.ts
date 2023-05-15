@@ -11,6 +11,8 @@ import Imprint from "../views/Imprint.vue";
 import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
 import EditUser from "@/main/vue/views/EditUser.vue";
 import CredentialMapping from "@/main/vue/views/CredentialMappingList.vue";
+import CredentialMappingEdit from "@/main/vue/views/EditCredentialMapping.vue"
+import EditCredentialMapping from "@/main/vue/views/EditCredentialMapping.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -74,6 +76,11 @@ const router = createRouter({
     {
       path: "/credentialmapping",
       component: CredentialMapping,
+      meta: {requiresAdmin: true},
+    },
+    {
+      path: "/credentialmapping/edit",
+      component: EditCredentialMapping,
       meta: {requiresAdmin: true},
     },
   ],

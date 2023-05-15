@@ -20,7 +20,10 @@
           @request="onRequest"
       >
         <template v-slot:top-right>
-          <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+          <div style="padding-right: 1em">
+          <q-btn color="primary" label="New categoty" icon="add" rounded/>
+          </div>
+          <q-input v-model="filter" placeholder="Search" dense>
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -42,7 +45,7 @@
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td auto-width>
-              <q-btn size="sm" color="accent" round dense icon="create" />
+              <q-btn to="/credentialmapping/edit" size="sm" color="primary" round dense icon="create" />
             </q-td>
             <q-td
                 v-for="col in props.cols"
@@ -64,6 +67,7 @@ import {ref} from 'vue'
 
 import {useI18n} from "vue-i18n";
 import {useRouter} from 'vue-router'
+
 const columns = [
   {
     name: 'category',
