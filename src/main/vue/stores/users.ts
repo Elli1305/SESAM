@@ -2,11 +2,9 @@ import {defineStore} from 'pinia'
 import {Ref, ref} from 'vue'
 import api from '../api'
 import {AttainableRole} from "@/main/vue/entity/createUser"
-import axios, {AxiosResponse} from "axios";
+import axios from "axios";
 import {Credentials} from "@/main/vue/entity/credentials"
-import {LoginResponse, User} from "@/main/vue/entity/loginResponse"
-
-import {UserRole} from "@/main/vue/entity/signUpResponse";
+import {User} from "@/main/vue/entity/loginResponse"
 
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
@@ -14,7 +12,8 @@ export const useUserStore = defineStore('users', () => {
     const validEmail: Ref<RegExpMatchArray | null> = ref(null)
     const user: Ref<User | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
-    const sesamUsers: Ref<User[]> = ref([])
+    const editUser: Ref<User | null> = ref(null)
+
 
     if (sessionStorage.getItem("users")) {
         const state = JSON.parse((sessionStorage.getItem("users") || ''));
@@ -25,7 +24,7 @@ export const useUserStore = defineStore('users', () => {
     if (sessionStorage.getItem("token")) {
         axios.defaults.headers['Authorization'] = 'Bearer ' + sessionStorage.getItem("token")
     }
-    
+
     function signUp(email: string, password: string, firstName: string, lastName: string, roles: AttainableRole[]): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             api.auth.signUp({
@@ -35,14 +34,14 @@ export const useUserStore = defineStore('users', () => {
                 email: email,
                 requestedRoles: roles,
             }).then(_ => resolve())
-            .catch(reject);
+                .catch(reject);
         });
     }
 
-    function validatePassword(password: string, passwordRepeat: string){
+    function validatePassword(password: string, passwordRepeat: string) {
         const passwordRegEx = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*+_-])[a-zA-Z0-9!@#$%^&+_*-]{8,120}$/;
         validPassword.value = password.match(passwordRegEx)
-        comparePassword.value = passwordRepeat===password
+        comparePassword.value = passwordRepeat === password
     }
 
     function authenticate(token?: string) {
@@ -74,13 +73,13 @@ export const useUserStore = defineStore('users', () => {
     }
 
     function logout() {
-        if(sessionStorage.getItem('token')) {
+        if (sessionStorage.getItem('token')) {
             sessionStorage.removeItem('token')
             authenticated.value = false;
         }
     }
 
-    function resetPassword (email: string){
+    function resetPassword(email: string) {
         return new Promise<void>((resolve, reject) => {
             api.auth.resetPassword({
                 email: email,
@@ -89,7 +88,7 @@ export const useUserStore = defineStore('users', () => {
         });
     }
 
-    function changePassword (password: string, token: string){
+    function changePassword(password: string, token: string) {
         return new Promise<void>((resolve, reject) => {
             api.auth.changePassword({
                 password: password,
@@ -98,6 +97,39 @@ export const useUserStore = defineStore('users', () => {
                 .catch(reject);
         });
     }
+
+    function getEditUser(mail: string) {
+        return new Promise<void>((resolve, reject) => {
+            api.auth.getEditUser(mail).then((res) => {
+
+                editUser.value = res.data
+                console.log(editUser.value)
+                resolve()
+            }).catch((error) => {
+
+                reject(error)
+            })
+        })
+    }
+
+    function saveEdits(prename: string, lastname: string, mail: string, roles: []){
+        return new Promise<void>((resolve, reject) => {
+            api.auth.editUser({
+                firstName: prename,
+                lastName: lastname,
+                username: mail,
+                roles: roles,
+            }).then(_ => resolve())
+                .catch(reject);
+        });
+    }
+    function deleteUser(mail:string) {
+        new Promise<void>((resolve, reject) => {
+            api.auth.deleteUser(mail).then(_ => resolve())
+                .catch(reject);
+        });
+    }
+
 
     return {
         user,
@@ -113,5 +145,9 @@ export const useUserStore = defineStore('users', () => {
         requestToken,
         resetPassword,
         changePassword,
+        getEditUser,
+        editUser,
+        saveEdits,
+        deleteUser,
     };
 })

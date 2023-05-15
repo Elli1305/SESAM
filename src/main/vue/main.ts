@@ -23,6 +23,18 @@ const messages = {
             showIssuer: "Herausgeber",
             search: "Suche"
         },
+        adminEdit: {
+            title: "Nutzer bearbeiten",
+            changeRoles:"Rollen vergeben/entfernen: ",
+            delete: "Löschen",
+            back: "Zurück",
+            attention: "ACHTUNG",
+            question: "Nutzer wirklich löschen?",
+            deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
+            otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
+
+
+        },
 
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
@@ -115,6 +127,14 @@ const messages = {
             showEditor: "Show Editor",
             showIssuer: "Show Issuer",
             search: "Search"
+        },
+        adminEdit: {
+            title: "Edit user",
+            changeRoles:"Give/take Roles: ",
+            delete: "Delete",
+            back: "Back",
+            attention: "Attention",
+            question: "Do you really want to delete this user?"
         },
         common: {
             internalServerError: "The server could not process the request",

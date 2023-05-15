@@ -3,6 +3,7 @@ package com.gpse.sesam.web.controller;
 import com.gpse.sesam.configuration.SecurityConstants;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserService;
+import com.gpse.sesam.web.cmd.EditUserCmd;
 import com.gpse.sesam.web.cmd.PasswordResetCmd;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import com.gpse.sesam.web.cmd.UpdatePasswordCmd;
@@ -20,46 +21,70 @@ import java.util.UUID;
 @CrossOrigin
 @RequestMapping("/api")
 public class SesamUserController {
-	private final SesamUserService service;
-	private final AuthenticationManager authenticationManager;
-	private final SecurityConstants securityConstants;
+    private final SesamUserService service;
+    private final AuthenticationManager authenticationManager;
+    private final SecurityConstants securityConstants;
 
-	@Autowired
-	public SesamUserController(final SesamUserService service, AuthenticationManager authenticationManager,
-							   final SecurityConstants securityConstants) {
-		this.service = service;
-		this.authenticationManager = authenticationManager;
-		this.securityConstants = securityConstants;
-	}
+    @Autowired
+    public SesamUserController(final SesamUserService service, AuthenticationManager authenticationManager,
+                               final SecurityConstants securityConstants) {
+        this.service = service;
+        this.authenticationManager = authenticationManager;
+        this.securityConstants = securityConstants;
+    }
 
-	@PostMapping("/signup")
-	@ResponseStatus(HttpStatus.CREATED)
-	public SesamUser createUser(@RequestBody SesamUserCmd sesamUserCmd) {
-		return service.createUser(sesamUserCmd);
-	}
+    @PostMapping("/signup")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SesamUser createUser(@RequestBody SesamUserCmd sesamUserCmd) {
+        return service.createUser(sesamUserCmd);
+    }
 
-	@PostMapping("/password_reset")
-	@ResponseStatus(HttpStatus.CREATED)
-	public void passwordReset(@RequestBody final PasswordResetCmd passwordResetCmd) {
-		SesamUser user = (SesamUser) service.loadUserByUsername(passwordResetCmd.getEmail());
-		String token = UUID.randomUUID().toString();
+    @PostMapping("/password_reset")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void passwordReset(@RequestBody final PasswordResetCmd passwordResetCmd) {
+        SesamUser user = (SesamUser) service.loadUserByUsername(passwordResetCmd.getEmail());
+        String token = UUID.randomUUID().toString();
 
-		service.createPasswordResetToken(user, token);
-	}
+        service.createPasswordResetToken(user, token);
+    }
 
-	@PostMapping("/update_password")
-	@ResponseStatus(HttpStatus.OK)
-	public void updatePasswordWithToken(@RequestBody final UpdatePasswordCmd updatePasswordCmd) {
-		service.updatePasswordWithToken(
-				updatePasswordCmd.getToken(),
-				updatePasswordCmd.getPassword()
-		);
-	}
+    @PostMapping("/update_password")
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePasswordWithToken(@RequestBody final UpdatePasswordCmd updatePasswordCmd) {
+        service.updatePasswordWithToken(
+                updatePasswordCmd.getToken(),
+                updatePasswordCmd.getPassword()
+        );
+    }
 
-	@Secured("ADMINISTRATOR")
-	@GetMapping("/user")
-	public List<SesamUser> getCurrentUsers() {
-		return service.getUsers();
-	}
+    @Secured("ADMINISTRATOR")
+    @GetMapping("/user")
+    public List<SesamUser> getCurrentUsers() {
+        return service.getUsers();
+    }
+
+    @Secured("ADMINISTRATOR")
+    @GetMapping("/user/edit/{id}")
+    public SesamUser getUserToEdit(@PathVariable("id") final String id) {
+        return service.getUserByMail(id);
+    }
+    @Secured("ADMINISTRATOR")
+    @PostMapping("/edit_user")
+    @ResponseStatus(HttpStatus.OK)
+    public void makeUserEdit(@RequestBody EditUserCmd editUserCmd) {
+        SesamUser user = service.getUserByMail(editUserCmd.getUsername());
+        service.makeUserEdit(user,
+                editUserCmd.getFirstName(),
+                editUserCmd.getLastName(),
+                editUserCmd.getUsername(),
+                editUserCmd.getRoles());
+    }
+    @Secured("ADMINISTRATOR")
+    @DeleteMapping("/delete_user/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable("id") final String id) {
+        SesamUser user = service.getUserByMail(id);
+        service.deleteUser(user);
+    }
 
 }
