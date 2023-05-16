@@ -7,7 +7,7 @@ import Profilansicht from '@/main/vue/views/Profilansicht.vue'
 import LoginView from '../views/Login.vue'
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
-import Impressum from "../views/Impressum.vue";
+import Impressum from "../views/Imprint.vue";
 import RequestRolles from "@/main/vue/views/RolesRequest.vue";
 
 const router = createRouter({

@@ -27,8 +27,7 @@
 
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
-                            <q-btn dense round flat color="primary" @click="rejectRoleRequest()" icon="delete_outline"></q-btn>
-                            <q-btn outline round flat color="primary" @click="acceptRoleRequest()" icon="done"></q-btn>
+                            <q-btn outline round flat color="primary" @click="updateRoles(Object.values(props))" icon="done"></q-btn>
                         </q-td>
                     </template>
                     <template v-slot:top-left>
@@ -39,18 +38,20 @@
                         </div>
                     </template>
 
+                    <template v-slot:top-right>
+                        <q-input borderless dense debounce="300" v-model="filter.search" :placeholder="t( 'adminCurrentUser.search')" >
+                            <template v-slot:append>
+                                <q-icon name="search" />
+                            </template>
+                        </q-input>
+                    </template>
+
                     <template v-slot:body-cell-roles="props">
                         <q-td :props="props">
                             <div class="q-gutter-xs" v-for="role in props.value">
-                                <q-chip v-model:selected="role.selected" color="secondary" text-color="primary" :style="{padding: '0.4em 1em 0.4em 0.5em', fontSize: '1em', opacity: issueropacity}" icon="account_circle">
+                                <q-chip v-model:selected="role.selected" color="secondary" text-color="primary" :style="{padding: '0.4em 1em 0.4em 0.5em', fontSize: '1em', opacity: issueropacity}" icon="highlight_off">
                                     {{t(`adminCurrentUser.roles.${role.role}`)}}
                                 </q-chip>
-                            </div>
-                            <div class="q-mt-sm">
-                                Your pick:
-                                <div v-for="role in props.value">
-                                    <p>{{role.role}}: {{role.selected}}</p>
-                                </div>
                             </div>
                         </q-td>
                     </template>
@@ -66,22 +67,9 @@ import {computed, reactive, ref} from 'vue'
 
 import {useI18n} from "vue-i18n";
 import axios from "axios";
+import {useUserStore} from "@/main/vue/stores/users";
 
-const columns = [
-    {
-        name: 'lastName',
-        required: true,
-        label: 'Name',
-        align: 'center',
-        field: row => row.lastName,
-        format: val => `${val}`,
-        sortable: true
-    },
-    { name: 'firstName', align: 'center', label : "Vorname" , field: 'firstName', sortable: true },
-    { name: 'username', align: 'center',label: 'E-mail', field: 'username', sortable: true },
-    { name: 'roles', align: 'center',label: 'Rolle(n)', field: 'roles' },
-    { name: 'actions', label: 'Annehmen/rejecten', style: "width: 40px", align: 'center', field: row => row.roles }
-]
+
 
 const rows = ref([]);
 
@@ -95,6 +83,7 @@ export default {
 
 
     setup () {
+        const userStore = useUserStore()
         axios.get('/api/user')
             .then(res => { rows.value = res.data.map(v => ({...v, roles: v.roles.filter(r => !r.granted).map(r => ({...r, selected: false}))}))
 
@@ -102,11 +91,49 @@ export default {
 
         const { t } = useI18n();
 
+        const columns = [
+            {
+                name: t('adminRolesRequest.name'),
+                required: true,
+                label: 'Name',
+                align: 'center',
+                field: row => row.lastName,
+                format: val => `${val}`,
+                sortable: true
+            },
+            { name: 'firstName', align: 'center', label : t('adminRolesRequest.prename') , field: 'firstName', sortable: true },
+            { name: 'username', align: 'center',label: t('adminRolesRequest.email') , field: 'username', sortable: true },
+            { name: 'roles', align: 'center',label: t('adminRolesRequest.role'), field: 'roles' },
+            { name: 'actions', label: t('adminRolesRequest.save'), style: "width: 40px", align: 'center', field: row => row.roles }
+        ]
+
         const roles = reactive({
             admin: false,
             editor: false,
             issuer: false
         })
+
+        function updateRoles(test) {
+            let prename = test[1].firstName;
+            let lastname = test[1].lastName;
+            let email= test[1].username;
+            let role = test[1].roles;
+
+            let rolesD = [];
+
+            for(let i =0; i<role.length; i++){
+                if(role[i].selected === true){
+                    rolesD.push(role[i].role);
+                }
+            }
+
+
+
+            userStore.saveEdits(prename, lastname, email, rolesD).then( axios.get('/api/user')
+                .then(res => { rows.value = res.data.map(v => ({...v, roles: v.roles.filter(r => !r.granted).map(r => ({...r, selected: false}))}))
+
+                }) )
+        }
 
         return {
             filter: ref({
@@ -127,14 +154,11 @@ export default {
             rows,
             t,
             onRowClick: (row) => alert(`${row.name} clicked`),
+            updateRoles,
         }
     },
     methods: {
         customFilter(rows, terms){
-            // rows contain the entire data
-            // terms contains whatever you have as filter
-
-            console.log(terms,rows)
 
             const lowerSearch = terms.search ? terms.search.toLowerCase() : ""
 
