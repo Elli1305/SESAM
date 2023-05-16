@@ -60,20 +60,6 @@ import { ref } from 'vue'
 import {useI18n} from "vue-i18n";
 import axios from "axios";
 
-const columns = [
-    {
-        name: 'lastName',
-        required: true,
-        label: 'Name',
-        align: 'center',
-        field: row => row.lastName,
-        sortable: true
-    },
-    { name: 'firstName', align: 'center', label : "Vorname" , field: 'firstName', sortable: true },
-    { name: 'username', align: 'center',label: 'E-mail', field: 'username', sortable: true },
-    { name: 'roles', align: 'center',label: 'Rolle(n)', field: 'roles' },
-    { name: 'actions', label: 'Bearbeiten', style: "width: 40px", align: 'center' }
-]
 
 const rows = ref([]);
 
@@ -91,6 +77,23 @@ export default {
             })
 
         const { t } = useI18n();
+
+        const columns = [
+            {
+                name: 'lastName',
+                required: true,
+                label:t('adminCurrentUser.lastname'),
+                align: 'center',
+                field: row => row.lastName,
+                format: val => `${val}`,
+                sortable: true
+            },
+            { name: 'firstName', align: 'center', label : t('adminCurrentUser.prename') , field: 'firstName', sortable: true },
+            { name: 'username', align: 'center',label: t('adminCurrentUser.email') , field: 'username', sortable: true },
+            { name: 'roles', align: 'center',label: t('adminCurrentUser.role'), field: 'roles' },
+            { name: 'actions', label: t('adminCurrentUser.edit'), style: "width: 40px", align: 'center' }
+        ]
+
         return {
             filter: ref({
                 filterToggle: {
