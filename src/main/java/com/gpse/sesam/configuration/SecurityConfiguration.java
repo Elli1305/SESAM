@@ -2,6 +2,9 @@ package com.gpse.sesam.configuration;
 
 import com.gpse.sesam.web.filter.JWTAuthenticationFilter;
 import com.gpse.sesam.web.filter.JWTAuthorizationFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +28,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+	private static final Logger LOG = LoggerFactory.getLogger(SecurityConfiguration.class);
 	private final AuthenticationConfiguration authConfig;
 	private final UserDetailsService userDetailsService;
 	private final SecurityConstants securityConstants;
@@ -40,22 +44,27 @@ public class SecurityConfiguration {
 
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain filterChain(final HttpSecurity http) {
 
-		http.csrf().disable().cors()
-				.and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
-				.authorizeHttpRequests()
-				.requestMatchers(HttpMethod.GET).permitAll()
-				.requestMatchers("/api/**").permitAll()
-				.and()
-				.addFilter(new JWTAuthorizationFilter(authenticationManager(), userDetailsService, securityConstants))
-				.addFilter(new JWTAuthenticationFilter(authenticationManager(), securityConstants));
+		try {
+			http.csrf().disable().cors()
+					.and()
+					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+					.and()
+					.authorizeHttpRequests()
+					.requestMatchers(HttpMethod.GET).permitAll()
+					.requestMatchers("/api/**").permitAll()
+					.and()
+					.addFilter(new JWTAuthorizationFilter(authenticationManager(), userDetailsService,
+							securityConstants))
+					.addFilter(new JWTAuthenticationFilter(authenticationManager(), securityConstants));
 
-		http.headers().frameOptions().disable();
+			http.headers().frameOptions().disable();
 
-		return http.build();
+			return http.build();
+		} catch (Exception e) { //NOPMD
+			throw new BeanCreationException("could not create security filter chain bean", e);
+		}
 	}
 
 
@@ -68,8 +77,12 @@ public class SecurityConfiguration {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager() throws Exception {
-		return authConfig.getAuthenticationManager();
+	public AuthenticationManager authenticationManager() {
+		try {
+			return authConfig.getAuthenticationManager();
+		} catch (Exception e) { //NOPMD
+			throw new BeanCreationException("could not create authentication manger bean", e);
+		}
 	}
 
 	@Bean

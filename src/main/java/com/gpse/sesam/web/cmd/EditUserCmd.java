@@ -6,43 +6,44 @@ import java.util.List;
 
 public class EditUserCmd {
 
-    private String firstName;
+	private String firstName;
 
-    private String lastName;
-    private String username;
+	private String lastName;
+	private String username;
 
-    private List<SesamUserRole.AttainableRole> roles;
+	private List<SesamUserRole.AttainableRole> roles;
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public List<SesamUserRole.AttainableRole> getRoles() {
-        return roles;
-    }
+	public List<SesamUserRole.AttainableRole> getRoles() {
+		return roles;
+	}
 
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public void setFirstName(final String firstName) {
+		this.firstName = firstName;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setLastName(final String lastName) {
+		this.lastName = lastName;
+	}
 
-    public void setRoles(List<SesamUserRole.AttainableRole> roles) {
-        this.roles = roles;
-    }
+	public void setUsername(final String username) {
+		this.username = username;
+	}
+
+	public void setRoles(final List<SesamUserRole.AttainableRole> roles) {
+		this.roles = roles;
+	}
 
 }

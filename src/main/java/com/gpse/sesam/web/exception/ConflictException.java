@@ -7,10 +7,10 @@ import java.io.Serial;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 public class ConflictException extends RuntimeException {
-    @Serial
-    private static final long serialVersionUID = 42L;
+	@Serial
+	private static final long serialVersionUID = 42L;
 
-    public ConflictException(final String message, Throwable throwable) {
-        super(message, throwable);
-    }
+	public ConflictException(final String message, final Throwable throwable) {
+		super(message, throwable);
+	}
 }

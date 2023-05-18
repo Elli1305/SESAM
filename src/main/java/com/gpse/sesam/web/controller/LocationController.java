@@ -4,7 +4,11 @@ import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.exception.LocationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -13,25 +17,25 @@ import java.util.List;
 @RequestMapping("/api")
 public class LocationController {
 
-    private final LocationService locationService;
+	private final LocationService locationService;
 
-    @Autowired
-    public LocationController(LocationService locationService) {
-        this.locationService = locationService;
-    }
+	@Autowired
+	public LocationController(final LocationService locationService) {
+		this.locationService = locationService;
+	}
 
-    @GetMapping("/locations")
-    public List<Location> getNavigationTreeInfo() {
+	@GetMapping("/locations")
+	public List<Location> getNavigationTreeInfo() {
 
-        return locationService.getLocations();
-    }
+		return locationService.getLocations();
+	}
 
-    @GetMapping("/locations/{id:\\d+}")
-    public Location getLocationInfo(@PathVariable("id") final Long id) {
-        if (locationService.getLocation(id).isPresent()) {
-            return locationService.getLocation(id).get();
-        } else {
-            throw new LocationNotFoundException("Location not Found with ID: " + id);
-        }
-    }
+	@GetMapping("/locations/{id:\\d+}")
+	public Location getLocationInfo(@PathVariable("id") final Long id) {
+		if (locationService.getLocation(id).isPresent()) {
+			return locationService.getLocation(id).get();
+		} else {
+			throw new LocationNotFoundException("Location not Found with ID: " + id);
+		}
+	}
 }

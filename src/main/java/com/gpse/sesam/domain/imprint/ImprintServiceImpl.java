@@ -16,13 +16,16 @@ public class ImprintServiceImpl implements ImprintService {
 	@Autowired
 	private ImprintRepository imprintRepository;
 
-	public void createImprintEntry(String content) {
-		Imprint newEntry = new Imprint(content, LocalDateTime.now());
+	@Override
+	public void createImprintEntry(final String content) {
+		final Imprint newEntry = new Imprint(content, LocalDateTime.now());
 		imprintRepository.save(newEntry);
 	}
 
+	@Override
 	public String getLatestImprintEntry() {
-		List<Imprint> imprintEntries = StreamSupport.stream(imprintRepository.findAll().spliterator(), false)
+		final List<Imprint> imprintEntries = StreamSupport
+				.stream(imprintRepository.findAll().spliterator(), false)
 				.collect(Collectors.toList());
 
 		return imprintEntries.stream()
