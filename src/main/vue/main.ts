@@ -35,6 +35,13 @@ const messages = {
 
 
         },
+        groupRooms: {
+            title: "Gruppierungen von Räumen",
+            question: "Gruppierung wirklich löschen?",
+            choseBuilding: "Gebäude wählen",
+            choseLocation: "Location wählen",
+
+        },
 
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
@@ -106,6 +113,14 @@ const messages = {
             showIssuer: "Show Issuer",
             search: "Search"
         },
+
+        groupRooms: {
+            title: "Groupings of rooms",
+            question: "Do you really want to delete this group?",
+            choseBuilding: "Choose a building",
+            choseLocation: "Choose a location",
+        },
+
         adminEdit: {
             title: "Edit user",
             changeRoles:"Give/take Roles: ",
