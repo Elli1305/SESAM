@@ -7,7 +7,7 @@
       <q-item-label
           header
           class="text-grey-8">
-        Locations
+        {{ t('floorplan.locations') }}
       </q-item-label>
       <Node
           v-for="node in locationTreeStructure"
@@ -48,6 +48,7 @@ import {useLocationStore} from "@/main/vue/stores/locations";
 import Node from "@/main/vue/views/Node.vue";
 import {ref} from "vue";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
+import {useI18n} from "vue-i18n";
 
 
 export default {
@@ -58,6 +59,7 @@ export default {
     const floorPlanStore = useFloorPlanStore()
     let locationTreeStructure = ref([])
     let show = ref(true)
+    const {t} = useI18n()
 
     function getParentIDs(locations, selectFloorId) {
       for (const location of locations) {
@@ -107,7 +109,7 @@ export default {
     )
 
 
-    return {locationTreeStructure, show}
+    return {locationTreeStructure, show, t}
   }
 }
 </script>
