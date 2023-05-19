@@ -94,28 +94,58 @@ export default {
         floorPlanMap.panTo(center);
       });
     },
-    drawRooms(rooms) {
-      for (const room of rooms) {
-        const polygon = L.polygon(room.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
-          color: 'black',
-          width: 5,
-          fillOpacity: 0.1
-        })
+      drawRooms(rooms) {
+          let polygons = [];
 
-        polygon.on('click', (layer) => layer.setColor);
-        const popup = L.popup();
+          for (const room of rooms) {
+              const polygon = L.polygon(room.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
+                  color: 'black',
+                  width: 5,
+                  fillOpacity: 0.1
+              });
 
-        polygon.bindPopup(popup)
+              polygons.push(polygon);
+              let doorsname = "";
+              for(const door in room.doors){
+                  doorsname += (door.name) + ", ";
+              }
+              if (doorsname !== "") {
+                  doorsname = doorsname.slice(0, -2);
+              }
 
-        polygon.addTo(floorPlanMap)
-        for (const door of room.doors) {
-          L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
-            color: '#b0b0b0',
-            weight: 3
-          }).addTo(floorPlanMap)
-        }
+              const popup = L.popup();
+              let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname ;
+              //popup.setContent(string);
+              polygon.bindTooltip(string).openTooltip();
+              polygon.bindPopup(popup);
+              polygon.addTo(floorPlanMap);
+
+              for (const door of room.doors) {
+                  L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
+                      color: '#b0b0b0',
+                      weight: 3
+                  }).addTo(floorPlanMap);
+              }
+
+              polygon.on('click', function() {
+                  for (const p of polygons) {
+                      p.setStyle({
+                          color: 'black',
+                          fillColor: 'black',
+                          weight: 5,
+                          fillOpacity: 0.1
+                      });
+                  }
+
+                  polygon.setStyle({
+                      color: 'red',
+                      fillColor: 'red',
+                      weight: 2,
+                      fillOpacity: 0.1
+                  });
+              });
+          }
       }
-    }
   },
 };
 </script>
