@@ -1,8 +1,8 @@
 package com.gpse.sesam.domain.location;
 
-import com.gpse.sesam.domain.location.building.Building;
-import com.gpse.sesam.domain.location.building.BuildingRepository;
-import com.gpse.sesam.domain.location.building.BuildingServiceImpl;
+import com.gpse.sesam.domain.location.floor.Floor;
+import com.gpse.sesam.domain.location.floor.FloorRepository;
+import com.gpse.sesam.domain.location.floor.FloorServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,16 +18,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 
-class BuildingServiceImplTest {
+class FloorServiceImplTest {
 
 	@Mock
-	private BuildingRepository buildingRepository;
+	private FloorRepository floorRepository;
 
 	@InjectMocks
-	private BuildingServiceImpl buildingService;
+	private FloorServiceImpl floorService;
 
 	@Captor
-	private ArgumentCaptor<Building> buildingCaptor;
+	private ArgumentCaptor<Floor> floorArgumentCaptor;
 
 
 	@Captor
@@ -47,21 +47,22 @@ class BuildingServiceImplTest {
 
 	@Test
 	void deleteShouldCallRepositoryWithCorrectArguments() {
-		buildingService.deleteById(1L);
+		floorService.deleteById(1L);
 
-		verify(buildingRepository).deleteById(idCaptor.capture());
+		verify(floorRepository).deleteById(idCaptor.capture());
 		assertThat(idCaptor.getValue(), is(1L));
 	}
 
 	@Test
 	void saveShouldCallRepositoryWithCorrectArguments() {
-		Building building = new Building("Test", Collections.emptyList());
+		Floor floor = new Floor(1, "Test", Collections.emptyList());
 
-		buildingService.save(building);
+		floorService.save(floor);
 
-		verify(buildingRepository).save(buildingCaptor.capture());
-		assertThat(building.getName(), is("Test"));
-		assertThat(building.getFloors(), is(Collections.emptyList()));
+		verify(floorRepository).save(floorArgumentCaptor.capture());
+		assertThat(floor.getFloorLevel(), is(1));
+		assertThat(floor.getFloorPlanPath(), is("Test"));
+		assertThat(floor.getRooms(), is(Collections.emptyList()));
 	}
 
 }

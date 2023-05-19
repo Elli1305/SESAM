@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.location;
+package com.gpse.sesam.domain.location.building;
 
 public interface BuildingService {
 

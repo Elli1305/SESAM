@@ -1,7 +1,7 @@
 package com.gpse.sesam.web.controller;
 
-import com.gpse.sesam.domain.location.building.Building;
-import com.gpse.sesam.domain.location.building.BuildingService;
+import com.gpse.sesam.domain.location.floor.Floor;
+import com.gpse.sesam.domain.location.floor.FloorService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,13 +16,13 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class BuildingControllerTest {
+class FloorControllerTest {
 
 	@Mock
-	private BuildingService buildingService;
+	private FloorService floorService;
 
 	@InjectMocks
-	private BuildingController buildingController;
+	private FloorController floorController;
 
 	private AutoCloseable autoCloseable;
 
@@ -38,20 +38,21 @@ class BuildingControllerTest {
 
 	@Test
 	void saveShouldCallServiceWithCorrectArguments() {
-		Building newBuilding = new Building("Test", Collections.emptyList());
+		Floor newFloor = new Floor(1, "test", Collections.emptyList());
 
-		when(buildingService.save(newBuilding)).thenReturn(newBuilding);
+		when(floorService.save(newFloor)).thenReturn(newFloor);
 
-		Building buildingSaved = buildingController.save(newBuilding);
+		Floor floorSaved = floorController.save(newFloor);
 
-		assertThat(buildingSaved.getName(), is(newBuilding.getName()));
-		assertThat(buildingSaved.getFloors(), is(newBuilding.getFloors()));
+		assertThat(floorSaved.getFloorLevel(), is(newFloor.getFloorLevel()));
+		assertThat(floorSaved.getFloorPlanPath(), is(newFloor.getFloorPlanPath()));
+		assertThat(floorSaved.getRooms(), is(newFloor.getRooms()));
 	}
 
 	@Test
 	void deleteShouldCallServiceWithCorrectArguments() {
-		buildingController.deleteById(1L);
+		floorController.deleteById(1L);
 
-		verify(buildingService).deleteById(1L);
+		verify(floorService).deleteById(1L);
 	}
 }

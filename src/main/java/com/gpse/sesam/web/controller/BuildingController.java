@@ -1,9 +1,9 @@
 package com.gpse.sesam.web.controller;
 
-import com.gpse.sesam.domain.location.Building;
-import com.gpse.sesam.domain.location.BuildingService;
+import com.gpse.sesam.domain.location.building.Building;
+import com.gpse.sesam.domain.location.building.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +23,7 @@ public class BuildingController {
 		return buildingService.save(building);
 	}
 
-	@GetMapping("/buildings/{id:\\d+}")
+	@DeleteMapping("/buildings/{id:\\d+}")
 	public void deleteById(@PathVariable("id") final Long id) {
 		buildingService.deleteById(id);
 	}
