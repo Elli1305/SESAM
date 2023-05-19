@@ -1,6 +1,6 @@
 package com.gpse.sesam.domain.location.floor;
 
-import com.gpse.sesam.domain.location.Room;
+import com.gpse.sesam.domain.location.room.Room;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
