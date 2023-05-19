@@ -7,9 +7,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api")
+@RestController
+@RequestMapping("/api/room")
 @Secured("EDITOR")
 public class RoomController {
 
@@ -20,12 +22,12 @@ public class RoomController {
 		this.roomService = roomService;
 	}
 
-	@PostMapping("/room/save")
+	@PostMapping("/save")
 	public Room save(Room building) {
 		return roomService.save(building);
 	}
 
-	@DeleteMapping("/room/{id:\\d+}")
+	@DeleteMapping("/{id:\\d+}")
 	public void deleteById(@PathVariable("id") final Long id) {
 		roomService.deleteById(id);
 	}

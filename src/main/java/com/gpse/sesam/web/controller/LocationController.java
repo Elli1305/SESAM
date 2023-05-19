@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+@RequestMapping("/api/locations")
 public class LocationController {
 
 	private final LocationService locationService;
@@ -27,13 +27,13 @@ public class LocationController {
 		this.locationService = locationService;
 	}
 
-	@GetMapping("/locations")
+	@GetMapping("/")
 	public List<Location> getNavigationTreeInfo() {
 
 		return locationService.getLocations();
 	}
 
-	@GetMapping("/locations/{id:\\d+}")
+	@GetMapping("/{id:\\d+}")
 	public Location getLocationInfo(@PathVariable("id") final Long id) {
 		if (locationService.getLocation(id).isPresent()) {
 			return locationService.getLocation(id).get();
@@ -42,13 +42,13 @@ public class LocationController {
 		}
 	}
 
-	@PostMapping("/locations/save")
+	@PostMapping("/save")
 	@Secured("EDITOR")
 	public Location save(Location location) {
 		return locationService.save(location);
 	}
 
-	@DeleteMapping("/locations/{id:\\d+}")
+	@DeleteMapping("/{id:\\d+}")
 	@Secured("EDITOR")
 	public void deleteById(@PathVariable("id") final Long id) {
 		locationService.deleteById(id);

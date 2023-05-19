@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api")
+@RestController("/api/door")
 @Secured("EDITOR")
 public class DoorController {
 
@@ -20,12 +20,12 @@ public class DoorController {
 		this.doorService = doorService;
 	}
 
-	@PostMapping("/door/save")
+	@PostMapping("/save")
 	public Door save(Door door) {
 		return doorService.save(door);
 	}
 
-	@DeleteMapping("/door/{id:\\d+}")
+	@DeleteMapping("/{id:\\d+}")
 	public void deleteById(@PathVariable("id") final Long id) {
 		doorService.deleteById(id);
 	}
