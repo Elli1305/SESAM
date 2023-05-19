@@ -57,7 +57,8 @@ const messages = {
             editorPages: "Bearbeiten",
             issuerPages: "Credential austellen",
             imprint: "Impressum",
-            logout: "Logout"
+            logout: "Logout",
+            roomSearch: "Raumsuche"
         },
         login: {
             wrongEmailPassword:"Falsches Passwort oder Benutzername",
@@ -135,7 +136,8 @@ const messages = {
             editorPages: "Edit",
             issuerPages: "Issue Credential",
             imprint: "Imprint",
-            logout: "Logout"
+            logout: "Logout",
+            roomSearch: "Search"
         },
         login: {
             wrongEmailPassword:"Wrong Password oder Username",
