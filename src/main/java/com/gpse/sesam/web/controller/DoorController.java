@@ -19,8 +19,8 @@ public class DoorController {
 	}
 
 	@PostMapping("/door/save")
-	public Door save(Door building) {
-		return doorService.save(building);
+	public Door save(Door door) {
+		return doorService.save(door);
 	}
 
 	@DeleteMapping("/door/{id:\\d+}")

@@ -40,4 +40,14 @@ public class LocationServiceImpl implements LocationService {
 	public void saveAll(final Iterable<Location> locations) {
 		locationRepository.saveAll(locations);
 	}
+
+	@Override
+	public Location save(Location location) {
+		return locationRepository.save(location);
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		locationRepository.deleteById(id);
+	}
 }

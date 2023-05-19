@@ -5,8 +5,10 @@ import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.exception.LocationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,5 +39,15 @@ public class LocationController {
 		} else {
 			throw new LocationNotFoundException("Location not Found with ID: " + id);
 		}
+	}
+
+	@PostMapping("/locations/save")
+	public Location save(Location location) {
+		return locationService.save(location);
+	}
+
+	@DeleteMapping("/locations/{id:\\d+}")
+	public void deleteById(@PathVariable("id") final Long id) {
+		locationService.deleteById(id);
 	}
 }

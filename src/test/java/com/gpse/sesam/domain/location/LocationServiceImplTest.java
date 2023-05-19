@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.location;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,6 +81,28 @@ class LocationServiceImplTest {
 
 		assertThat(locationsCaptor.getValue(), is(locations));
 	}
+
+	@Test
+	void saveShouldCallRepositoryWithCorrectArguments() {
+		Location location = new Location("Test", Collections.emptyList());
+
+		when(locationRepository.save(location)).thenReturn(location);
+
+		Location savedLocation = locationService.save(location);
+
+		assertThat(savedLocation.getName(), is(location.getName()));
+		assertThat(savedLocation.getBuildings(), is(location.getBuildings()));
+
+	}
+
+	@Test
+	void deleteShouldCallRepositoryWithCorrectArguments() {
+		locationService.deleteById(1L);
+
+		verify(locationRepository).deleteById(idCaptor.capture());
+		assertThat(idCaptor.getValue(), Matchers.is(1L));
+	}
+
 
 	@Test
 	void getLocationShouldCallRepositoryWithCorrectArguments() {
