@@ -4,6 +4,7 @@ import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.exception.LocationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,11 +43,13 @@ public class LocationController {
 	}
 
 	@PostMapping("/locations/save")
+	@Secured("EDITOR")
 	public Location save(Location location) {
 		return locationService.save(location);
 	}
 
 	@DeleteMapping("/locations/{id:\\d+}")
+	@Secured("EDITOR")
 	public void deleteById(@PathVariable("id") final Long id) {
 		locationService.deleteById(id);
 	}
