@@ -47,8 +47,9 @@
 <script>
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import {useUserStore} from "@/main/vue/stores/users";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import { useI18n } from 'vue-i18n';
+import {storeToRefs} from "pinia";
 
 export default {
   name: "FloorPlanRoomList",
@@ -56,12 +57,16 @@ export default {
   setup() {
     const { t } = useI18n();
     const floorPlanStore = useFloorPlanStore()
+    const { rooms } = storeToRefs(floorPlanStore)
     const selectedRooms = floorPlanStore.selectedRooms
     const userStore = useUserStore()
     const filteredRooms = ref([])
     const search = ref()
+    filteredRooms.value = rooms.value
 
-    filteredRooms.value = floorPlanStore.rooms
+    watch(rooms, () => {
+      filteredRooms.value = rooms.value
+    })
 
     function addAllRooms() {
         floorPlanStore.rooms.forEach((element) => {
@@ -95,7 +100,7 @@ export default {
     async function roomFilter() {
       if (!search.value || search.value.trim() === '') {
         filteredRooms.value = floorPlanStore.rooms
-      } else {
+      } else if(search.value) {
         const request = search.value.toLowerCase().trim()
         filteredRooms.value = floorPlanStore.rooms.filter(room => {
           return room.name.toLowerCase().includes(request)
