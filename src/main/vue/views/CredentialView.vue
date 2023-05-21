@@ -34,43 +34,15 @@
             </template>
           </q-input>
         </template>
-        <template v-slot:header="props">
-          <q-tr :props="props">
-            <q-th auto-width />
-            <q-th
-                v-for="col in props.cols"
-                :key="col.name"
-                :props="props"
-            >
-              {{ col.label }}
-            </q-th>
-          </q-tr>
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props">
+            <q-icon class="q-mr-xs" color="grey" size="16px" name="info" />
+            <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
+                       :offset="[0, 8]">
+              {{props.row.issuer}} ist in Raum: 000.7
+            </q-tooltip>
+          </q-td>
         </template>
-
-        <template v-slot:body="props">
-          <q-tr :props="props">
-            <q-td auto-width>
-              <q-btn size="sm" color="info" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'info' : 'info'" />
-            </q-td>
-            <q-td
-                v-for="col in props.cols"
-                :key="col.name"
-                :props="props"
-            >
-              {{ col.value }}
-            </q-td>
-          </q-tr>
-          <q-tr v-show="props.expand" :props="props">
-            <q-td colspan="100%">
-              <div class="text-left" style="padding: 1em">{{t('credentialview.credentialtext')}} <b>{{ props.row.issuer }}</b><br>
-                {{t('credentialview.credentialtext2')}} <b>0.007</b> <br>
-                {{t('credentialview.credentialtext3')}} <b>{{ props.row.qualification}}</b> <br>
-                {{t('credentialview.credentialtext4')}} <b>{{props.row.category}} </b>
-              </div>
-            </q-td>
-          </q-tr>
-        </template>
-
       </q-table>
     </div>
     </div>
@@ -93,11 +65,11 @@ const columns = [
   { name: 'availableCredential', align: 'center', label : 'Verfügbares Credential' , field: 'availableCredential', sortable: true },
   { name: 'qualification', align: 'center', label: 'Vergleichbare Credentials', field: 'qualification', sortable: true },
   { name: 'issuer', align: 'center', label: 'Herausgeber', field: 'issuer', sortable: true },
+  { name: 'actions', align: 'center'}
 ]
 
 //const rows = ref([''])
-const rows = ref([])
-    rows.value = []
+const rows = ref([{category: "Erste-Hilfe", availableCredential: "Telekom", qualification: "DRK", issuer: "2"}])
 
 export default {
   setup () {
