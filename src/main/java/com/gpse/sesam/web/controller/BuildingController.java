@@ -7,6 +7,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,12 +19,12 @@ public class BuildingController {
 	private final BuildingService buildingService;
 
 	@Autowired
-	public BuildingController(BuildingService buildingService) {
+	public BuildingController(final BuildingService buildingService) {
 		this.buildingService = buildingService;
 	}
 
 	@PostMapping(path = "/save")
-	public Building save(Building building) {
+	public Building save(@RequestBody final Building building) {
 		return buildingService.save(building);
 	}
 
