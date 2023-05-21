@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -27,7 +29,7 @@ public class LocationController {
 		this.locationService = locationService;
 	}
 
-	@GetMapping("/")
+	@GetMapping
 	public List<Location> getNavigationTreeInfo() {
 
 		return locationService.getLocations();
@@ -35,8 +37,9 @@ public class LocationController {
 
 	@GetMapping("/{id:\\d+}")
 	public Location getLocationInfo(@PathVariable("id") final Long id) {
-		if (locationService.getLocation(id).isPresent()) {
-			return locationService.getLocation(id).get();
+		final Optional<Location> location = locationService.getLocation(id);
+		if (location.isPresent()) {
+			return location.get();
 		} else {
 			throw new LocationNotFoundException("Location not Found with ID: " + id);
 		}
@@ -44,7 +47,7 @@ public class LocationController {
 
 	@PostMapping("/save")
 	@Secured("EDITOR")
-	public Location save(Location location) {
+	public Location save(@RequestBody final Location location) {
 		return locationService.save(location);
 	}
 

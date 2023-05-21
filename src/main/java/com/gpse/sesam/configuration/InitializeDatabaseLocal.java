@@ -2,12 +2,12 @@ package com.gpse.sesam.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.location.Coordinate;
-import com.gpse.sesam.domain.location.Door;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
-import com.gpse.sesam.domain.location.Room;
 import com.gpse.sesam.domain.location.building.Building;
+import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.floor.Floor;
+import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;

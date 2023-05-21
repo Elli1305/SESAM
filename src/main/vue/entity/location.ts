@@ -4,7 +4,7 @@ interface Coordinates {
 }
 
 interface Door {
-    id:number
+    id: number
     name: string
     coordinates: Coordinates[]
 }
@@ -28,7 +28,7 @@ export interface Floor {
 
 }
 
-interface Building {
+export interface Building {
     id: bigint
     name: string
     floors: Floor[]
