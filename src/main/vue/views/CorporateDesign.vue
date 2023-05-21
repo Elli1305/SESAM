@@ -160,6 +160,7 @@
 import { ref } from 'vue'
 import { useI18n } from "vue-i18n"
 import {colors, useQuasar} from "quasar"
+import corpdesign from "@/main/vue/api/corpdesign";
 
 export default {
   name: "CorporateDesign",
@@ -180,8 +181,8 @@ export default {
   },
   data() {
     const { t } = useI18n()
-    const logo = new Image()
-    const favicon = new Image()
+    const logo = ref(null)
+    const favicon = ref(null)
     const $q = useQuasar()
     let menu = false
 
@@ -194,6 +195,8 @@ export default {
       })
     }
     function save() {
+      corpdesign.saveLogo(logo.value)
+      corpdesign.saveFavicon(favicon.value)
       $q.notify({
         message: t('corporateDesign.saveSuccess'),
         color: "positive",
