@@ -38,8 +38,11 @@ const messages = {
         groupRooms: {
             title: "Gruppierungen von Räumen",
             question: "Gruppierung wirklich löschen?",
-            choseBuilding: "Gebäude wählen",
-            choseLocation: "Location wählen",
+            chooseBuilding: "Gebäude wählen",
+            chooseLocation: "Location wählen",
+            chooseRooms: "Räume auswählen",
+            editGroup:"Gruppierung bearbeiten",
+
 
         },
 
@@ -117,8 +120,10 @@ const messages = {
         groupRooms: {
             title: "Groupings of rooms",
             question: "Do you really want to delete this group?",
-            choseBuilding: "Choose a building",
-            choseLocation: "Choose a location",
+            chooseBuilding: "Choose a building",
+            chooseLocation: "Choose a location",
+            chooseRooms: "Choose the rooms",
+            editGroup:"Edit group",
         },
 
         adminEdit: {

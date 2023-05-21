@@ -22,7 +22,7 @@
 
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
-                            <q-btn dense round flat color="grey" @click=""
+                            <q-btn dense round flat color="grey" @click="editGroup(Object.values(props)), getOldName(), editAlert = true"
                                    test="props.value" icon="edit"></q-btn>
                             <q-btn dense round flat color="grey" icon="delete" @click="deleteAlert = true"></q-btn>
 
@@ -45,7 +45,7 @@
                                 v-model="modelForLocation"
                                 use-input
                                 input-debounce="0"
-                                :label="t( 'groupRooms.choseLocation')"
+                                :label="t( 'groupRooms.chooseLocation')"
                                 :options="optionsLocations"
                                 @filter="filterFn"
                                 style="width: 250px"
@@ -67,7 +67,7 @@
                                 v-model="model"
                                 use-input
                                 input-debounce="0"
-                                :label="t( 'groupRooms.choseBuilding')"
+                                :label="t( 'groupRooms.chooseBuilding')"
                                 :options="options"
                                 @filter="filterFn"
                                 style="width: 250px"
@@ -87,8 +87,6 @@
 
                         <q-btn dense round icon="add" label="Neue Gruppe" flat color="primary" stretch
                                @click="newGroup = true"></q-btn>
-
-
                     </template>
                 </q-table>
 
@@ -113,6 +111,57 @@
             <q-card-actions align="right" class="bg-white text-teal">
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
                 <q-btn flat :label="t('adminEdit.delete')" @click=""/>
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
+
+    <q-dialog
+        v-model="editAlert"
+    >
+        <q-card style="width: 500px">
+            <q-card-section>
+                <div class="text-h6"> {{t('groupRooms.editGroup')}}</div>
+            </q-card-section>
+
+            <q-card-section class="a-pt-none">
+                {{t('groupRooms.chooseRooms')}}
+            </q-card-section>
+
+            <div class="q-pa-md" style="max-width: 500px">
+                <div class="q-gutter-md">
+                    <q-select
+                        filled
+                        v-model="modelRoomsNew"
+                        multiple
+                        :options="optionsRooms"
+
+                    />
+                </div>
+            </div>
+
+            <q-card-actions align="right" class="text-primary">
+                <q-btn flat label="Gruppennamen ändern" @click="editNameAlert = true" />
+                <q-btn flat label="Speichern" @click="" />
+                <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
+            </q-card-actions>
+        </q-card>
+
+
+    </q-dialog>
+    <q-dialog v-model="editNameAlert">
+        <q-card>
+
+
+            <q-card-section>
+                <div class="text-h6">Name der Gruppe</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+                <q-input dense v-model="editName" autofocus @keyup.enter="prompt = false"/>
+            </q-card-section>
+
+            <q-card-actions align="right" class="text-primary">
+                <q-btn flat label="Speichern" @click=""/>
+                <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
             </q-card-actions>
         </q-card>
     </q-dialog>
@@ -220,15 +269,25 @@ export default {
         const {t} = useI18n();
         const options = ref(stringOptions)
         const optionsLocations = ref(['Location1', 'Location2'])
+        let editGroupName = ref(null);
+        let editGroupRooms = ref(null);
 
         return {
             deleteAlert: ref(false),
+            editAlert: ref(false),
+            editNameAlert:ref(false),
 
             newGroup: ref(false),
             newGroupName: ref(''),
+            editName:ref(''),
             secondDialog: ref(false),
             modelRooms: ref(null),
+            modelRoomsNew: ref(editGroupRooms),
             optionsRooms,
+            getOldName() {
+              this.editName = editGroupName;
+              this.modelRoomsNew= editGroupRooms;
+            },
 
             filter: ref({
                 search: ''
@@ -242,6 +301,12 @@ export default {
             stringOptions,
             options,
             optionsLocations,
+            editGroup(value) {
+              editGroupName = value[1].groupname;
+              editGroupRooms = value[1].rooms;
+              console.log(editGroupRooms);
+              console.log(editGroupName);
+            },
 
             filterFn(val, update) {
                 if (val === '') {
