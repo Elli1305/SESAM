@@ -34,9 +34,10 @@
             </template>
           </q-input>
         </template>
-        <template v-slot:body-cell-actions="props">
+        <template v-slot:body-cell-issuer="props">
           <q-td :props="props">
-            <q-icon class="q-mr-xs" color="grey" size="16px" name="info" />
+            {{props.row.issuer}}
+            <q-icon class="q-mr-xs" color="grey" size="20px" name="info" />
             <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
                        :offset="[0, 8]">
               {{props.row.issuer}} ist in Raum: 000.7
@@ -65,7 +66,6 @@ const columns = [
   { name: 'availableCredential', align: 'center', label : 'Verfügbares Credential' , field: 'availableCredential', sortable: true },
   { name: 'qualification', align: 'center', label: 'Vergleichbare Credentials', field: 'qualification', sortable: true },
   { name: 'issuer', align: 'center', label: 'Herausgeber', field: 'issuer', sortable: true },
-  { name: 'actions', align: 'center'}
 ]
 
 //const rows = ref([''])
@@ -78,100 +78,10 @@ export default {
     const { t } = useI18n();
     const credentialStore = useCredentialStore()
     const locationStore = useLocationStore()
-    //credentialStore.getCategoryInfos().then(res => {})
-    //rows.value = credentialStore.allInformation.data
-    //rows.category.value = useLocationStore.allInformation.category
-    //rows.availableCredential.value = useLocationStore.allInformation.credential.name
-    //rows.qualification.name.value = use
-
-
-    const name = []
-    /*function getAllLocationName(locations) {
-      for (const location of locations) {
-        locationNames.value = ref([location.name])
-      }
-      return locationNames
-    }*/
     const model = ref()
     locationStore.getLocations().then((locations) => {
       model.value = locations[0]
     })
-
-    /*
-function getCategoryInfoTable (categories, credential) {
-  for (const category of categories) {
-    if (category.credential.includes (credential)) {
-      rows.id = category.id
-    rows.name = category.name
-    const credentialList = ref([])
-    const issuerName = ref([])
-      for (const credential of category) {
-        credentialList.push(credential.name)
-        issuerName.push(issuer.firstName + issuer.lastName)
-      }
-    rows.availableCredential = credentialList.value
-    rows.issuer = issuerName.value
-    const externalCredentials = ref([])
-    if (category.externalCredentials) {
-    for (const external of category) {
-      externalCredentials.push(external.name)
-    }
-    }
-    }
-  }
-}
-
-credentialStore.getCategories().then(res => {
-  getCategoryInfoTable(res)
-  }
-)
-
-function findCredential (location) {
-  for (building of location) {
-    for (floor of building) {
-      for (room of floor) {
-        for (door of room) {
-          credentials.push(door.credential)
-        }
-      }
-    }
-  }
-  return credentials
-}
-
-locationStore.locationByName().then(res => {
-  findCredential(res)
-})
-
- */
-    /*
-    credentialStore.getCategories(options.value).then(res => {
-      rows.value = res.data
-        }
-    )
-   function getCategoryInfoTable (categories) {
-      rows.name = categories.name
-      rows.availableCredential = categories.credential.name
-      rows.qualification = categories.externalCredentials.name
-      rows.issuer = categories.credential.issuer.firstName
-      /*
-      for (const category of categories) {
-          rows.name = category.name
-          const credentialList = []
-          const issuerName = []
-          for (const credential of category) {
-            credentialList.push(credential.name)
-            issuerName.push(issuer.firstName + issuer.lastName)
-          }
-          rows.availableCredential = credentialList.value
-          rows.issuer = issuerName.value
-          const externalCredentials = ref([])
-          if (category.externalCredentials) {
-            for (const external of category) {
-              externalCredentials.push(external.name)
-            }
-          }
-        }*/
 
 
     return {
@@ -181,7 +91,6 @@ locationStore.locationByName().then(res => {
       locationNames,
       locationStore,
       model,
-      //getCategoryInfoTable,
       t
     }
   }
