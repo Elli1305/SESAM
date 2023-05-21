@@ -89,7 +89,6 @@ export default {
     }
 
     function toggleRoomCheckbox(element) {
-      console.log(selectedRooms.includes(element))
       if(selectedRooms.includes(element)) {
         deleteRoom(element)
       } else if(!selectedRooms.includes(element)) {
