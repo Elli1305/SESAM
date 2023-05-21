@@ -2,9 +2,9 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <q-card-section class="q-pa-md">
-        <div class="text-h6">Standort bearbeiten</div>
+        <div class="text-h6">Ebene bearbeiten</div>
         <div class="q-mt-md">
-          <q-input outlined v-model="locationName" label="Name"/>
+          <q-input outlined v-model.number="floorLevel" type="number" label="Etagen Nummer"/>
         </div>
       </q-card-section>
       <q-card-actions align="right">
@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import {useLocationStore} from "@/main/vue/stores/locations";
+import {useFloorStore} from "@/main/vue/stores/floor";
 import {ref} from "vue";
 
 export default {
   props: {
-    location: {
+    floor: {
       required: true
     }
   },
@@ -44,10 +44,11 @@ export default {
 
     onOKClick() {
 
-      this.locationStore.save({
-        name: this.locationName,
-        id: this.$props.location.id,
-        buildings: this.$props.location.buildings,
+      this.floorStore.save({
+        floorLevel: this.floorLevel,
+        id: this.$props.floor.id,
+        floorPlanPath: this.$props.floor.floorPlanPath,
+        rooms: this.$props.floor.rooms
       }).then((location) => {
         this.$emit('ok', location)
         this.hide()
@@ -59,9 +60,9 @@ export default {
     }
   },
   setup(props) {
-    const locationStore = useLocationStore()
-    let locationName = ref(props.location.name);
-    return {locationName, locationStore}
+    const floorStore = useFloorStore()
+    const floorLevel = ref(props.floor.floorLevel)
+    return {floorLevel, floorStore}
   }
 }
 </script>

@@ -4,7 +4,7 @@
       <q-card-section class="q-pa-md">
         <div class="text-h6">Gebäude bearbeiten</div>
         <div class="q-mt-md">
-          <q-input outlined v-model="locationName" label="Name"/>
+          <q-input outlined v-model="buildingName" label="Name"/>
         </div>
       </q-card-section>
       <q-card-actions align="right">
@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import {useLocationStore} from "@/main/vue/stores/locations";
 import {useBuildingStore} from "@/main/vue/stores/buildings";
+import {ref} from "vue";
 
 export default {
   props: {
@@ -45,7 +45,7 @@ export default {
     onOKClick() {
 
       this.buildingStore.save({
-        name: this.locationName,
+        name: this.buildingName,
         id: this.$props.building.id,
         floors: this.$props.building.floors,
       }).then((location) => {
@@ -60,7 +60,8 @@ export default {
   },
   setup(props) {
     const buildingStore = useBuildingStore()
-    return {locationName: props.building.name, buildingStore}
+    const buildingName = ref(props.building.name)
+    return {buildingName, buildingStore}
   }
 }
 </script>

@@ -58,6 +58,13 @@ function getImageDimensions(imageURL) {
 let floorPlanMap;
 export default {
   name: "FloorPlan",
+  props: {
+    editView: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   mounted: function () {
     floorPlanMap = L.map("floor-plan-map", mapConfig);
     const floorPlanStore = useFloorPlanStore();
@@ -77,9 +84,36 @@ export default {
     const mapContainerObserver = new ResizeObserver(() => {
       floorPlanMap.invalidateSize();
     });
+
+
     mapContainerObserver.observe(this.$refs.mapContainer)
   },
   methods: {
+    addEditControls(editView) {
+      if (editView) {
+        floorPlanMap.pm.addControls({
+          position: 'topleft',
+          drawCircle: false,
+          drawCircleMarker: false,
+          drawText: false,
+          cutPolygon: false,
+          rotateMode: false,
+          drawMarker: false,
+        });
+
+        floorPlanMap.on('pm:drawstart', ({workingLayer}) => {
+          workingLayer.on('pm:vertexadded', (e) => {
+            if (e.shape === 'Line' && workingLayer.getLatLngs().length >= 2) {
+              floorPlanMap.pm.Draw.Line._finishShape();
+            }
+          });
+        });
+
+        floorPlanMap.pm.enableDraw('Line', {
+          hideMiddleMarkers: true
+        });
+      }
+    },
     applyImageToMap(floorPlan) {
       getImageDimensions(floorPlan).then(({width, height}) => {
 
@@ -92,6 +126,7 @@ export default {
 
         let center = overlay.getCenter();
         floorPlanMap.panTo(center);
+        this.addEditControls(this.editView)
       });
     },
     drawRooms(rooms) {
@@ -100,21 +135,17 @@ export default {
           color: 'black',
           width: 5,
           fillOpacity: 0.1
-        })
-
-        polygon.on('click', (layer) => layer.setColor);
-        const popup = L.popup();
-
-        polygon.bindPopup(popup)
-
-        polygon.addTo(floorPlanMap)
+        }).addTo(floorPlanMap)
+        polygon.id = room.id
         for (const door of room.doors) {
-          L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
+          const line = L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
             color: '#b0b0b0',
             weight: 3
           }).addTo(floorPlanMap)
+          polygon.id = room.id
         }
       }
+
     }
   },
 };

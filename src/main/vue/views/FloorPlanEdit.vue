@@ -40,9 +40,12 @@
             </q-item-section>
           </template>
           <q-item clickable v-ripple v-for="(floor,i) in building.floors" :inset-level="2"
-                  @click="changeFloorPlan(floor)"
-                  :active="i===0">
+                  @click="changeFloorPlan(floor)" :active="i===0">
             <q-item-section>{{ floor.floorLevel === 0 ? "Erdgeschoss" : "Etage " + floor.floorLevel }}</q-item-section>
+            <q-item-section side>
+              <q-icon name="edit" @click.stop="editFloor(floor)" v-ripple
+                      style="border-radius: 50%; display: flex; width: 33px; height: 33px"/>
+            </q-item-section>
           </q-item>
         </q-expansion-item>
       </q-expansion-item>
@@ -85,6 +88,7 @@ import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import {useQuasar} from "quasar";
 import EditLocation from "@/main/vue/views/EditLocation.vue";
 import EditBuilding from "@/main/vue/views/EditBuilding.vue";
+import EditFloor from "@/main/vue/views/EditFloor.vue";
 
 
 export default {
@@ -135,13 +139,28 @@ export default {
       })
     }
 
+    const editFloor = function (floor: Floor) {
+      $q.dialog({
+        component: EditFloor,
+        componentProps: {
+          floor: floor
+        }
+      }).onOk(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Etage wurde erfolgreich gespeichert',
+          position: 'bottom',
+          timeout: 3000,
+        });
+      })
+    }
 
     locationStore.getLocations().then((res: Location[]) => {
       changeFloorPlan(res[0].buildings[0].floors[0])
     })
 
 
-    return {show, t, locationStore, changeFloorPlan, editLocation, editBuilding}
+    return {show, t, locationStore, changeFloorPlan, editLocation, editBuilding, editFloor}
   }
 }
 </script>
