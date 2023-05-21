@@ -21,7 +21,7 @@
       >
         <template v-slot:top-right>
           <div style="padding-right: 1em">
-          <q-btn color="primary" label="New categoty" icon="add" rounded/>
+          <q-btn dense flat color="grey" label="New categoty"  :disable="loading" icon="add" rounded @click="addRow"/>
           </div>
           <q-input v-model="filter" placeholder="Search" dense>
             <template v-slot:append>
@@ -29,32 +29,12 @@
             </template>
           </q-input>
         </template>
-        <template v-slot:header="props">
-          <q-tr :props="props">
-            <q-th auto-width />
-            <q-th
-                v-for="col in props.cols"
-                :key="col.name"
-                :props="props"
-            >
-              {{ col.label }}
-            </q-th>
-          </q-tr>
-        </template>
-
-        <template v-slot:body="props">
-          <q-tr :props="props">
-            <q-td auto-width>
-              <q-btn to="/credentialmapping/edit" size="sm" color="primary" round dense icon="create" />
-            </q-td>
-            <q-td
-                v-for="col in props.cols"
-                :key="col.name"
-                :props="props"
-            >
-              {{ col.value }}
-            </q-td>
-          </q-tr>
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props">
+            <q-btn dense round flat color="grey" to="/credentialmapping/edit"
+                   test="props.value" icon="edit"></q-btn>
+            <q-btn dense round flat color="grey" icon="delete" :disable="loading" @click="removeRow" />
+          </q-td>
         </template>
       </q-table>
     </div>
@@ -85,6 +65,7 @@ const columns = [
     field: 'externalCredential',
     sortable: true
   },
+  {name: 'actions', align: 'center', label: 'Bearbeiten'}
 ]
 
 const rows = ref([
@@ -99,7 +80,34 @@ export default {
     return {
       rows,
       columns,
-      filter: ref('')
+      filter: ref(''),
+      // emulate fetching data from server
+      addRow () {
+        loading.value = true
+        setTimeout(() => {
+          const
+              index = Math.floor(Math.random() * (rows.value.length + 1)),
+              row = originalRows[ Math.floor(Math.random() * originalRows.length) ]
+
+          if (rows.value.length === 0) {
+            rowCount.value = 0
+          }
+
+          row.id = ++rowCount.value
+          const newRow = { ...row } // extend({}, row, { name: `${row.name} (${row.__count})` })
+          rows.value = [ ...rows.value.slice(0, index), newRow, ...rows.value.slice(index) ]
+          loading.value = false
+        }, 500)
+      },
+
+      removeRow () {
+        loading.value = true
+        setTimeout(() => {
+          const index = Math.floor(Math.random() * rows.value.length)
+          rows.value = [ ...rows.value.slice(0, index), ...rows.value.slice(index + 1) ]
+          loading.value = false
+        }, 500)
+      }
     }
   }
 }
