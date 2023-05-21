@@ -1,5 +1,7 @@
 package com.gpse.sesam.domain.location;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gpse.sesam.domain.credential.Credential;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
@@ -26,10 +28,12 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Coordinate> coordinates;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy="doors")
+	@JsonManagedReference
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy="doors", fetch = FetchType.EAGER)
     private List<Credential> credentials = new ArrayList<>();
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Room room;
 
     protected Door() {

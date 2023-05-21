@@ -181,7 +181,7 @@ public class InitializeDatabase implements InitializingBean {
 		SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
 		issuerRole10.setGranted(true);
 		SesamUserRole issuerRole11 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-		issuerRole10.setGranted(true);
+		issuerRole11.setGranted(true);
 
 		Door door = new Door("Door999", null);
 		List<Door> doors = new ArrayList<>();

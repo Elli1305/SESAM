@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.credential;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gpse.sesam.domain.location.Door;
 import com.gpse.sesam.domain.user.Issuer;
 import jakarta.persistence.*;
@@ -20,7 +21,8 @@ public class Credential {
     @Column(nullable = false)
     private String credentialDefinitionId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Category category;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -32,7 +34,8 @@ public class Credential {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Issuer> issuer;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonBackReference
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Door> doors = new ArrayList<>();
 
     protected Credential() {}
