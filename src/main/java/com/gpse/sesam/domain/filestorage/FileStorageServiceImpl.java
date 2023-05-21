@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,7 +44,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     public String storeLogo(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
-            Path targetLocation = this.fileStorageLocation.resolve("logo.svg");
+            Path targetLocation = this.fileStorageLocation.resolve("Logo.svg");
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         } catch (IOException e) {
@@ -55,11 +56,24 @@ public class FileStorageServiceImpl implements FileStorageService {
     public String storeFavicon(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
-            Path targetLocation = this.fileStorageLocation.resolve("favicon.ico");
+            Path targetLocation = this.fileStorageLocation.resolve("Favicon.ico");
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         } catch (IOException e) {
             throw new FileStorageException("Could not store file " + fileName, e);
+        }
+    }
+
+    @Override
+    public void reset() {
+        try (InputStream logoFile = Files.newInputStream(this.fileStorageLocation.resolve("T_logo_white.svg"));
+             InputStream faviconFile = Files.newInputStream(this.fileStorageLocation.resolve("T_favicon.ico"))) {
+            Path logoLocation = this.fileStorageLocation.resolve("Logo.svg");
+            Path faviconLocation = this.fileStorageLocation.resolve("Favicon.ico");
+            Files.copy(logoFile, logoLocation, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(faviconFile, faviconLocation, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new FileStorageException("Could not reset resources", e);
         }
     }
 

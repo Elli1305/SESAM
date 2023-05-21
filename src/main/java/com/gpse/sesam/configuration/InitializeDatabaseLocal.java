@@ -14,13 +14,11 @@ import com.gpse.sesam.domain.user.SesamUserService;
 import com.gpse.sesam.util.GeoJsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -38,17 +36,12 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private final SesamUserService userService;
 	private final PasswordEncoder passwordEncoder;
 
-	private File floorplanDir = new File("data" + File.separator + "floorplan");
 
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
 								   final PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
 		this.locationService = locationService;
 		this.userService = userService;
-
-		if (!floorplanDir.exists() && !floorplanDir.mkdir()) {
-			throw new BeanCreationException("Folder: " + floorplanDir + " could not be created.");
-		}
 	}
 
 	@Override

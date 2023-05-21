@@ -20,6 +20,10 @@ export default {
                 "Content-Type": "multipart/form-data"
             }
         })
+    },
+
+    reset(): Promise<void> {
+        return axios.post('/api/corpdesign/reset')
     }
 
 }

@@ -102,12 +102,6 @@ export default {
           fillOpacity: 0.1
         })
 
-        polygon.on('click', (layer) => layer.setColor);
-        const popup = L.popup();
-
-        polygon.bindPopup(popup)
-
-        polygon.addTo(floorPlanMap)
         for (const door of room.doors) {
           L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
             color: '#b0b0b0',

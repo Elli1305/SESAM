@@ -10,4 +10,6 @@ public interface FileStorageService {
 
     String storeFavicon(MultipartFile file);
 
+    void reset();
+
 }

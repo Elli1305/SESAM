@@ -187,6 +187,7 @@ export default {
     let menu = false
 
     function reset() {
+      corpdesign.reset()
       $q.notify({
         message: t('corporateDesign.resetSuccess'),
         color: "positive",

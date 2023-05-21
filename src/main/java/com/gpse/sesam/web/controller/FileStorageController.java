@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("api/corpdesign")
 public class FileStorageController {
 
-    FileStorageService fileStorageService;
+    private final FileStorageService fileStorageService;
 
     @Autowired
     public FileStorageController(final FileStorageService fileStorageService) {
@@ -30,6 +30,14 @@ public class FileStorageController {
     public void saveFavicon(@RequestPart("file") MultipartFile file) {
 
         fileStorageService.storeFavicon(file);
+
+    }
+
+    @PostMapping(path = "/reset")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void reset() {
+
+        fileStorageService.reset();
 
     }
 
