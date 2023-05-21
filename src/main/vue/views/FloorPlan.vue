@@ -17,6 +17,9 @@ import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import L from "leaflet";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
+import {useFloorStore} from "@/main/vue/stores/floor";
+import {useLocationStore} from "@/main/vue/stores/locations";
+import {useQuasar} from "quasar";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -68,11 +71,16 @@ export default {
   mounted: function () {
     floorPlanMap = L.map("floor-plan-map", mapConfig);
     const floorPlanStore = useFloorPlanStore();
+    const floorStore = useFloorStore();
+    const locationStore = useLocationStore();
+    const $q = useQuasar();
+
     floorPlanStore.$subscribe((mutation, state) => {
       floorPlanMap.eachLayer(layer => floorPlanMap.removeLayer(layer));
       this.applyImageToMap(state.selectedFloorPlan)
       this.drawRooms(state.rooms)
     });
+
     floorPlanMap.eachLayer(layer => floorPlanMap.removeLayer(layer));
     this.applyImageToMap(floorPlanStore.selectedFloorPlan);
     this.drawRooms(floorPlanStore.rooms)
@@ -85,6 +93,23 @@ export default {
       floorPlanMap.invalidateSize();
     });
 
+    floorPlanMap.on('pm:create', (e) => {
+      if (e.shape === 'Rectangle' || e.shape === 'Polygon') {
+        const room = {
+          name: 'New Room',
+          coordinates: e.layer._latlngs[0].map((latLng) => ({
+                lat: latLng.lat,
+                lng: latLng.lng
+              }
+          )),
+          doors: []
+        }
+        const floor = locationStore.getFloorById(floorPlanStore.selectedFloorId)
+        floor.rooms.push(room)
+
+        floorStore.save(floor)
+      }
+    })
 
     mapContainerObserver.observe(this.$refs.mapContainer)
   },
@@ -107,12 +132,13 @@ export default {
               floorPlanMap.pm.Draw.Line._finishShape();
             }
           });
-        });
 
-        floorPlanMap.pm.enableDraw('Line', {
-          hideMiddleMarkers: true
         });
+        floorPlanMap.pm.Draw.Line.setOptions({
+          hideMiddleMarkers: true
+        })
       }
+
     },
     applyImageToMap(floorPlan) {
       getImageDimensions(floorPlan).then(({width, height}) => {
@@ -131,18 +157,18 @@ export default {
     },
     drawRooms(rooms) {
       for (const room of rooms) {
-        const polygon = L.polygon(room.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
+        const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
           color: 'black',
           width: 5,
           fillOpacity: 0.1
         }).addTo(floorPlanMap)
         polygon.id = room.id
         for (const door of room.doors) {
-          const line = L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
+          const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
             color: '#b0b0b0',
             weight: 3
           }).addTo(floorPlanMap)
-          polygon.id = room.id
+          line.id = door.id
         }
       }
 

@@ -40,7 +40,7 @@
             </q-item-section>
           </template>
           <q-item clickable v-ripple v-for="(floor,i) in building.floors" :inset-level="2"
-                  @click="changeFloorPlan(floor)" :active="i===0">
+                  @click="changeFloorPlan(floor)" :active="floorPlanStore.selectedFloorId === floor.id">
             <q-item-section>{{ floor.floorLevel === 0 ? "Erdgeschoss" : "Etage " + floor.floorLevel }}</q-item-section>
             <q-item-section side>
               <q-icon name="edit" @click.stop="editFloor(floor)" v-ripple
@@ -72,8 +72,10 @@
       icon="menu"
       direction="right"
   ></q-fab>
-  <floor-plan :edit-view="true">
-  </floor-plan>
+  <div class="q-gutter-x-md" style="display: flex">
+    <FloorPlan :edit-view="true" class="fit"></FloorPlan>
+    <FloorPlanRoomList></FloorPlanRoomList>
+  </div>
 
 </template>
 
@@ -89,11 +91,12 @@ import {useQuasar} from "quasar";
 import EditLocation from "@/main/vue/views/EditLocation.vue";
 import EditBuilding from "@/main/vue/views/EditBuilding.vue";
 import EditFloor from "@/main/vue/views/EditFloor.vue";
+import FloorPlanRoomList from "@/main/vue/views/FloorPlanRoomList.vue";
 
 
 export default {
   name: 'FloorPlanEdit',
-  components: {FloorPlan},
+  components: {FloorPlanRoomList, FloorPlan},
   methods: {},
   setup() {
     const locationStore = useLocationStore()
@@ -160,7 +163,7 @@ export default {
     })
 
 
-    return {show, t, locationStore, changeFloorPlan, editLocation, editBuilding, editFloor}
+    return {show, t, locationStore, changeFloorPlan, editLocation, editBuilding, editFloor, floorPlanStore}
   }
 }
 </script>

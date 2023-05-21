@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,7 @@ public class Door {
 	private String name;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<Coordinate> coordinates;
+	private List<Coordinate> coordinates = new ArrayList<>();
 
 	protected Door() {
 
