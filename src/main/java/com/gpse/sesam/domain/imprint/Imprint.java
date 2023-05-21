@@ -25,7 +25,7 @@ public class Imprint {
 
 	}
 
-	public Imprint(String content, LocalDateTime timestamp) {
+	public Imprint(final String content, final LocalDateTime timestamp) {
 		this.content = content;
 		this.timestamp = timestamp;
 	}
@@ -43,15 +43,15 @@ public class Imprint {
 		return timestamp;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
-	public void setContent(String content) {
+	public void setContent(final String content) {
 		this.content = content;
 	}
 
-	public void setTimestamp(LocalDateTime timestamp) {
+	public void setTimestamp(final LocalDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 

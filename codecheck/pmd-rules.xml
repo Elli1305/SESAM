@@ -79,7 +79,7 @@
     <rule ref="category/java/codestyle.xml/ClassNamingConventions">
         <priority>5</priority>
         <properties>
-            <property name="utilityClassPattern" value="[A-Z][a-zA-Z]+(s|Utils?|Helper|Singleton)"/>
+            <property name="utilityClassPattern" value="[A-Z][a-zA-Z]+(s|Utils?|Helper|Singleton|Parser)"/>
         </properties>
     </rule>
     <!--Allow more static imports - especially for tests-->

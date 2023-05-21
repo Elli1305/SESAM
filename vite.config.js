@@ -10,9 +10,9 @@ export default defineConfig({
             template: transformAssetUrls
         }
     ),
-    quasar({
-        sassVariables:'src/main/vue/quasar-variables.sass'
-    })]
+        quasar({
+            sassVariables: 'src/main/vue/quasar-variables.sass'
+        })]
     , resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -25,6 +25,9 @@ export default defineConfig({
                 see https://vitejs.dev/config/#server-proxy
             */
             '/api': {
+                target: 'http://localhost:8088', ws: true, changeOrigin: true
+            },
+            '^/.*.(?:png|jpg|jpeg|gif|bmp|svg|ico|tiff)$': {
                 target: 'http://localhost:8088', ws: true, changeOrigin: true
             }
         }

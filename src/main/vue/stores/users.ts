@@ -112,7 +112,7 @@ export const useUserStore = defineStore('users', () => {
         })
     }
 
-    function saveEdits(prename: string, lastname: string, mail: string, roles: []){
+    function saveEdits(prename: string, lastname: string, mail: string, roles: []) {
         return new Promise<void>((resolve, reject) => {
             api.auth.editUser({
                 firstName: prename,
@@ -123,7 +123,8 @@ export const useUserStore = defineStore('users', () => {
                 .catch(reject);
         });
     }
-    function deleteUser(mail:string) {
+
+    function deleteUser(mail: string) {
         new Promise<void>((resolve, reject) => {
             api.auth.deleteUser(mail).then(_ => resolve())
                 .catch(reject);
