@@ -4,6 +4,7 @@ import com.gpse.sesam.domain.location.Door;
 import com.gpse.sesam.domain.user.Issuer;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,15 +32,14 @@ public class Credential {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Issuer> issuer;
 
-    @ManyToMany
-    private List<Door> doors;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Door> doors = new ArrayList<>();
 
     protected Credential() {}
 
-    public Credential(String name, String credentialDefinitionId, Category category, List<FormEntry> form, List<ChecklistEntry> checklist, List<Issuer> issuer) {
+    public Credential(String name, String credentialDefinitionId, List<FormEntry> form, List<ChecklistEntry> checklist, List<Issuer> issuer) {
         this.name = name;
         this.credentialDefinitionId = credentialDefinitionId;
-        this.category = category;
         this.form = form;
         this.checklist = checklist;
         this.issuer = issuer;
@@ -100,5 +100,13 @@ public class Credential {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public void setDoors(List<Door> doors) {
+        this.doors = doors;
+    }
+
+    public List<Door> getDoors() {
+        return doors;
     }
 }

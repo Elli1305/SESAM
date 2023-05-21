@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,21 +26,19 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Coordinate> coordinates;
 
-    @ManyToMany
-    private List<Credential> credentials;
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy="doors")
+    private List<Credential> credentials = new ArrayList<>();
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "room_id")
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Room room;
 
     protected Door() {
 
     }
 
-	public Door(String name,List<Coordinate> coordinates, List<Credential> credentials) {
+	public Door(String name,List<Coordinate> coordinates) {
 		this.name =name;
 		this.coordinates = coordinates;
-        this.credentials = credentials;
 	}
 
 	public Long getId() {
@@ -80,5 +79,18 @@ public class Door {
 
 	public void setRoom(Room room) {
 		this.room = room;
+	}
+
+	public void addCredential(Credential credential) {
+		credentials.add(credential);
+		List<Door> doors = new ArrayList<>();
+		doors.add(this);
+		credential.setDoors(doors);
+	}
+
+	public void removeCredential(Credential credential) {
+		credentials.remove(credential);
+		List<Door> doors = new ArrayList<>();
+		credential.setDoors(doors);
 	}
 }

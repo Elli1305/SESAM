@@ -2,6 +2,7 @@ package com.gpse.sesam.domain.credential;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,8 +16,8 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Credential> credentials;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id")
+    private List<Credential> credentials = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<ExternalCredential> externalCredentials;
@@ -24,9 +25,8 @@ public class Category {
     protected Category () {
 
     }
-    public Category(String name, List<Credential> credentials, List<ExternalCredential> externalCredentials) {
+    public Category(String name, List<ExternalCredential> externalCredentials) {
         this.name = name;
-        this.credentials =credentials;
         this.externalCredentials = externalCredentials;
     }
 
@@ -60,5 +60,15 @@ public class Category {
 
     public void setExternalCredentialList(List<ExternalCredential> externalCredentials) {
         this.externalCredentials = externalCredentials;
+    }
+
+    public void addCredential(Credential credential) {
+        credentials.add(credential);
+        credential.setCategory(this);
+    }
+
+    public void removeCredential(Credential credential) {
+        credentials.remove(credential);
+        credential.setCategory(null);
     }
 }

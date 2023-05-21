@@ -2,6 +2,7 @@ package com.gpse.sesam.domain.location;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,8 +19,8 @@ public class Floor {
     @Column
     private String floorPlanPath;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Room> rooms;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id")
+    private List<Room> rooms = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Building building;
@@ -28,10 +29,9 @@ public class Floor {
 
     }
 
-    public Floor(int floorLevel, String floorPlanPath, List<Room> rooms) {
+    public Floor(int floorLevel, String floorPlanPath) {
         this.floorLevel = floorLevel;
         this.floorPlanPath = floorPlanPath;
-        this.rooms = rooms;
     }
 
     public int getFloorLevel() {
@@ -59,7 +59,8 @@ public class Floor {
     }
 
     public void addRoom(Room room) {
-        this.rooms.add(room);
+        rooms.add(room);
+        room.setFloor(this);
     }
 
     public String getFloorPlanPath() {
@@ -68,5 +69,18 @@ public class Floor {
 
     public void setFloorPlanPath(String floorPlanPath) {
         this.floorPlanPath = floorPlanPath;
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    public void removeRoom(Room room) {
+        rooms.remove(room);
+        room.setFloor(null);
     }
 }
