@@ -25,7 +25,7 @@ const messages = {
         },
         adminEdit: {
             title: "Nutzer bearbeiten",
-            changeRoles:"Rollen vergeben/entfernen: ",
+            changeRoles: "Rollen vergeben/entfernen: ",
             delete: "Löschen",
             back: "Zurück",
             attention: "ACHTUNG",
@@ -35,7 +35,9 @@ const messages = {
 
 
         },
-
+        floorplan: {
+            locations: 'Standorte'
+        },
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
@@ -61,7 +63,7 @@ const messages = {
             roomSearch: "Raumsuche"
         },
         login: {
-            wrongEmailPassword:"Falsches Passwort oder Benutzername",
+            wrongEmailPassword: "Falsches Passwort oder Benutzername",
             loginFailed: "Login Fehlgeschlagen",
             forgotPassword: "Passwort vergessen:",
             resetPassword: "Passwort zurücksetzen",
@@ -109,7 +111,7 @@ const messages = {
         },
         adminEdit: {
             title: "Edit user",
-            changeRoles:"Give/take Roles: ",
+            changeRoles: "Give/take Roles: ",
             delete: "Delete",
             back: "Back",
             attention: "Attention",
@@ -118,6 +120,9 @@ const messages = {
         common: {
             internalServerError: "The server could not process the request",
             unkownError: "An unknown error occured",
+        },
+        floorplan: {
+            locations: 'Locations'
         },
         home: {
             header: "SESAM",
@@ -140,7 +145,7 @@ const messages = {
             roomSearch: "Search"
         },
         login: {
-            wrongEmailPassword:"Wrong Password oder Username",
+            wrongEmailPassword: "Wrong Password oder Username",
             loginFailed: "Login Failed",
             forgotPassword: "Forgot Password:",
             resetPassword: "Reset Password",
@@ -188,6 +193,7 @@ const i18n = createI18n({
     globalInjection: true,
     messages
 })
+
 const app = createApp(App)
 const pinia = createPinia();
 app.use(pinia)
@@ -205,5 +211,6 @@ watch(
         sessionStorage.setItem("users", JSON.stringify(state.users));
         sessionStorage.setItem("floorPlan", JSON.stringify(state.floorPlan));
     },
-    { deep: true }
+    {deep: true}
 );
+

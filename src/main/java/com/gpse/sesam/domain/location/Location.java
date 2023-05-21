@@ -1,57 +1,63 @@
 package com.gpse.sesam.domain.location;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.util.List;
 
 @Entity
 public class Location {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String name;
+	@Column(unique = true, nullable = false)
+	private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Building> buildings;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Building> buildings;
 
-    protected Location() {
+	protected Location() {
 
-    }
+	}
 
-    public Location(String name, List<Building> buildings) {
-        this.name = name;
-        this.buildings = buildings;
-    }
+	public Location(final String name, final List<Building> buildings) {
+		this.name = name;
+		this.buildings = buildings;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
-    public List<Building> getBuildings() {
-        return buildings;
-    }
+	public List<Building> getBuildings() {
+		return buildings;
+	}
 
-    public void setBuildings(List<Building> buildings) {
-        this.buildings = buildings;
-    }
+	public void setBuildings(final List<Building> buildings) {
+		this.buildings = buildings;
+	}
 
-    public void addBuilding(Building building) {
-        this.buildings.add(building);
-    }
+	public void addBuilding(final Building building) {
+		this.buildings.add(building);
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(final Long id) {
+		this.id = id;
+	}
 }

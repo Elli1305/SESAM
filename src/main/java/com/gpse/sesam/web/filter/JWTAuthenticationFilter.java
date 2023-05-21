@@ -10,8 +10,6 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -25,10 +23,10 @@ import java.util.List;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 	private final SecurityConstants securityConstants;
 
-	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, SecurityConstants securityConstants) {
+	public JWTAuthenticationFilter(final AuthenticationManager authenticationManager,
+								   final SecurityConstants securityConstants) {
 		super(authenticationManager);
 		this.securityConstants = securityConstants;
 		setPasswordParameter("password");
@@ -37,18 +35,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	}
 
 	@Override
-	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-											FilterChain chain, Authentication authentication) throws IOException {
-		UserDetails user = (UserDetails) authentication.getPrincipal();
+	protected void successfulAuthentication(final HttpServletRequest request, final HttpServletResponse response,
+											final FilterChain chain, final Authentication authentication)
+			throws IOException {
+		final UserDetails user = (UserDetails) authentication.getPrincipal();
 
-		List<String> roles = user.getAuthorities()
+		final List<String> roles = user.getAuthorities()
 				.stream()
 				.map(GrantedAuthority::getAuthority)
 				.toList();
 
-		byte[] signingKey = securityConstants.getJwtSecret().getBytes();
+		final byte[] signingKey = securityConstants.getJwtSecret().getBytes();
 
-		String token = Jwts.builder()
+		final String token = Jwts.builder()
 				.signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
 				.setHeaderParam("typ", securityConstants.getTokenType())
 				.setIssuer(securityConstants.getTokenIssuer())
@@ -60,7 +59,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		response.addHeader(securityConstants.getTokenHeader(), securityConstants.getTokenPrefix() + " " + token);
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		final ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		response.getWriter().write(ow.writeValueAsString(new LoginResponse(token, user)));
 	}
 }
