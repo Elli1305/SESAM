@@ -1,6 +1,8 @@
 package com.gpse.sesam.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.gpse.sesam.domain.colors.Colors;
+import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.location.Building;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Door;
@@ -35,26 +37,59 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private final SesamUserService userService;
 	private final PasswordEncoder passwordEncoder;
+	private final ColorsService colorsService;
 
 
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
-								   final PasswordEncoder passwordEncoder) {
+								   final PasswordEncoder passwordEncoder, ColorsService colorsService) {
 		this.passwordEncoder = passwordEncoder;
 		this.locationService = locationService;
 		this.userService = userService;
+		this.colorsService = colorsService;
 	}
 
 	@Override
 	public void afterPropertiesSet() {
 		locationService.deleteAll();
 		userService.deleteAll();
+		colorsService.deleteAll();
 
 		final List<Location> locations = createLocations();
 		final List<SesamUser> users = createUsers();
+		List<Colors> colors = createColors();
 
 		locationService.saveAll(locations);
 		userService.saveAll(users);
+		colorsService.saveAll(colors);
 
+	}
+
+	private List<Colors> createColors() {
+		Colors defaultColors = new Colors();
+		defaultColors.setDefaultColors(true);
+		setColors(defaultColors);
+
+		Colors currentColors = new Colors();
+		currentColors.setDefaultColors(false);
+		setColors(currentColors);
+
+		List<Colors> colors = new ArrayList<>();
+		colors.add(defaultColors);
+		colors.add(currentColors);
+
+		return colors;
+	}
+
+	private void setColors(Colors defaultColors) {
+		defaultColors.setPrimaryColor("#e20074");
+		defaultColors.setSecondary("#f6b2d5");
+		defaultColors.setAccent("#fbd9ea");
+		defaultColors.setDark("#D2006C");
+		defaultColors.setLightBlue("#ee6caf");
+		defaultColors.setPositive("#dcdcdc");
+		defaultColors.setNegative("#505050");
+		defaultColors.setInfo("#0074E2");
+		defaultColors.setWarning("#fec705");
 	}
 
 	private List<SesamUser> createUsers() {

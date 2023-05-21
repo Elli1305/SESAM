@@ -166,15 +166,6 @@ export default {
   name: "CorporateDesign",
   setup() {
     return {
-      primary: ref(colors.getPaletteColor('primary')),
-      secondary: ref(colors.getPaletteColor('secondary')),
-      accent: ref(colors.getPaletteColor('accent')),
-      dark: ref(colors.getPaletteColor('dark')),
-      lightBlue: ref(colors.getPaletteColor('light-blue')),
-      positive: ref(colors.getPaletteColor('positive')),
-      negative: ref(colors.getPaletteColor('negative')),
-      info: ref(colors.getPaletteColor('info')),
-      warning: ref(colors.getPaletteColor('warning')),
       confirmReset: ref(false),
       confirmSave: ref(false)
     }
@@ -185,24 +176,64 @@ export default {
     const favicon = ref(null)
     const $q = useQuasar()
     let menu = false
+    let primary = ref(colors.getPaletteColor('primary'))
+    let secondary = ref(colors.getPaletteColor('secondary'))
+    let accent = ref(colors.getPaletteColor('accent'))
+    let dark = ref(colors.getPaletteColor('dark'))
+    let lightBlue = ref(colors.getPaletteColor('light-blue'))
+    let positive = ref(colors.getPaletteColor('positive'))
+    let negative = ref(colors.getPaletteColor('negative'))
+    let info = ref(colors.getPaletteColor('info'))
+    let warning = ref(colors.getPaletteColor('warning'))
 
     function reset() {
-      corpdesign.reset()
-      $q.notify({
-        message: t('corporateDesign.resetSuccess'),
-        color: "positive",
-        textColor: "negative",
-        timeout: "1500"
+      corpdesign.reset().then( () => {
+        corpdesign.setColors()
+        $q.notify({
+          message: t('corporateDesign.resetSuccess'),
+          color: "positive",
+          textColor: "negative",
+          timeout: "1500"
+        })
+      }).catch( () => {
+        $q.notify({
+          message: t('corporateDesign.resetFailure'),
+          color: "negative",
+          textColor: "positive",
+          timeout: "1500"
+        })
       })
     }
     function save() {
-      corpdesign.saveLogo(logo.value)
-      corpdesign.saveFavicon(favicon.value)
-      $q.notify({
-        message: t('corporateDesign.saveSuccess'),
-        color: "positive",
-        textColor: "negative",
-        timeout: "1500"
+      if (logo.value != null)
+        corpdesign.saveLogo(logo.value)
+      if (favicon.value != null)
+        corpdesign.saveFavicon(favicon.value)
+      corpdesign.saveColors({
+        primaryColor: primary.value,
+        secondary: secondary.value,
+        accent: accent.value,
+        dark: dark.value,
+        lightBlue: lightBlue.value,
+        positive: positive.value,
+        negative: negative.value,
+        info: info.value,
+        warning: warning.value,
+      }).then( () => {
+        corpdesign.setColors()
+        $q.notify({
+          message: t('corporateDesign.saveSuccess'),
+          color: "positive",
+          textColor: "negative",
+          timeout: "1500"
+        })
+      }).catch( () => {
+        $q.notify({
+          message: t('corporateDesign.saveFailure'),
+          color: "negative",
+          textColor: "positive",
+          timeout: "1500"
+        })
       })
     }
 
@@ -213,7 +244,16 @@ export default {
       reset,
       save,
       menu,
-      colors
+      colors,
+      primary,
+      secondary,
+      accent,
+      dark,
+      lightBlue,
+      positive,
+      negative,
+      info,
+      warning
     }
   }
 }

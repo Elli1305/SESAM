@@ -5,12 +5,15 @@ import {useUserStore} from "@/main/vue/stores/users"
 import {useQuasar} from 'quasar'
 import {useRouter} from "vue-router/dist/vue-router"
 import CountryFlag from 'vue-country-flag-next'
+import corpdesign from "@/main/vue/api/corpdesign";
 
 const {t} = useI18n()
 const userStore = useUserStore()
 const $q = useQuasar()
 const router = useRouter()
 const i18nLocale = useI18n()
+
+corpdesign.setColors()
 
 async function logout() {
   await userStore.logout()
