@@ -117,7 +117,7 @@ async function logout() {
               </router-link>
               <router-link
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
-                  to="/" class="headerLink">
+                  to="/editFloorPlan" class="headerLink">
                 <p class="headerText">{{ t("home.editorPages") }}</p>
               </router-link>
               <router-link
