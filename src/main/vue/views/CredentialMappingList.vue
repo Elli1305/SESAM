@@ -40,6 +40,24 @@
     </div>
     </div>
   </q-page>
+  <q-dialog
+      v-model="deleteAlert"
+  >
+    <q-card style="width: 400px">
+      <q-card-section>
+        <div class="text-h6">Warning</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        "Möchten Sie die Kategorie löschen?"
+      </q-card-section>
+
+      <q-card-actions align="right" class="bg-white text-teal">
+        <q-btn flat :label="Nein" v-close-popup/>
+        <q-btn flat :label="Ja" @click="deleteCategory()"/>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
@@ -77,9 +95,11 @@ const rows = ref([
 export default {
   name: "CredentialMappingList",
   setup() {
-    return {
+    function deleteCategory() {
+    }return {
       rows,
       columns,
+      deleteAlert: ref(false),
       filter: ref(''),
       // emulate fetching data from server
       addRow () {
