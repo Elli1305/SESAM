@@ -20,34 +20,35 @@ import java.util.Locale;
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
-    /**
-     * Redirects necessary routes to frontend.
-     * <p>
-     * Redirects all routes not set to the frontend index.html.
-     * Explicitly excludes '/index.html' to avoid self looping callback.
-     * Explicitly excludes '/static/**' files to load .css and .js files properly.
-     */
-    @Bean
-    public WebMvcConfigurer forwardToIndex() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addViewControllers(final ViewControllerRegistry registry) {
-                registry.addViewController("{_:^(?!static|index\\.html).*$}/**")
-                        .setViewName("forward:/");
-            }
-        };
-    }
+	/**
+	 * Redirects necessary routes to frontend.
+	 * <p>
+	 * Redirects all routes not set to the frontend index.html.
+	 * Explicitly excludes '/index.html' to avoid self looping callback.
+	 * Explicitly excludes '/static/**' files to load .css and .js files properly.
+	 */
+	@Bean
+	public WebMvcConfigurer forwardToIndex() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addViewControllers(final ViewControllerRegistry registry) {
+				registry.addViewController("{_:^(?!static|index\\.html|.*\\.(?:png|jpg|jpeg|gif|bmp|svg|ico|tiff)$)"
+								+ ".*$}/**")
+						.setViewName("forward:/");
+			}
+		};
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public LocaleResolver localeResolver() {
-        AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
-        resolver.setDefaultLocale(Locale.GERMAN);
+	@Bean
+	public LocaleResolver localeResolver() {
+		final AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
+		resolver.setDefaultLocale(Locale.GERMAN);
 
-        return resolver;
-    }
+		return resolver;
+	}
 }

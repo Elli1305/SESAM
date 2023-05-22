@@ -28,40 +28,40 @@ public class Door {
 
 	}
 
-	public Door(List<Coordinate> coordinates) {
+	public Door(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
 	}
 
-	public Door(String name) {
+	public Door(final String name) {
 		this.name = name;
 	}
 
-    public Door(String name, List<Coordinate> coordinates) {
-        this.name = name;
-        this.coordinates = coordinates;
-    }
+	public Door(final String name, final List<Coordinate> coordinates) {
+		this.name = name;
+		this.coordinates = coordinates;
+	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
 
-	public void setCoordinates(List<Coordinate> coordinates) {
+	public void setCoordinates(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
 	}
 }

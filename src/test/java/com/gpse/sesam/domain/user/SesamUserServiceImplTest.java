@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.user;
 
+import com.gpse.sesam.domain.mail.MailInformation;
 import com.gpse.sesam.domain.mail.MailService;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import com.gpse.sesam.web.exception.ConflictException;
@@ -271,7 +272,8 @@ class SesamUserServiceImplTest {
 		sesamUserService.createPasswordResetToken(sesamUser, token);
 
 		verify(passwordResetTokenRepository).save(new PasswordResetToken(sesamUser, token));
-		verify(mailService).send("gp.se.team.3.1@gmail.com", sesamUser.getUsername(), "subject", "text");
+		verify(mailService).send(new MailInformation("gp.se.team.3.1@gmail.com", sesamUser.getUsername(), "subject",
+				"text"));
 
 	}
 
@@ -293,7 +295,8 @@ class SesamUserServiceImplTest {
 		String username = "username";
 		when(sesamUserRepository.findByEmail(username)).thenReturn(Optional.empty());
 
-		assertThrows(UsernameNotFoundException.class, () -> sesamUserService.loadUserByUsername(username), "username " +
+		assertThrows(UsernameNotFoundException.class, () -> sesamUserService.loadUserByUsername(username), "username" +
+				" " +
 				"not found.");
 	}
 }
