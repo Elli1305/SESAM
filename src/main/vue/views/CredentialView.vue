@@ -83,6 +83,8 @@ export default {
       model.value = locations[0]
     })
 
+    credentialStore.getCredentialsByLocation().then((credentials) => {})
+
 
     return {
       columns,
