@@ -35,7 +35,7 @@ const i18nLocale = useI18n()
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="row" style="margin: 0; padding: 24px">
         <div class="column">
-          <q-img src="src/main/resources/brand_design/T_logo_white.svg" @click="router.push('/')" class="foldMenu" style="height: 95px; width: 80px; margin-right: 24px"/>
+          <q-img src="/src/main/resources/brand_design/T_logo_white.svg" @click="router.push('/')" class="foldMenu" style="height: 95px; width: 80px; margin-right: 24px"/>
         </div>
         <div class="column full-width justify-between" style="height: 95px">
           <div id="upper" class="row justify-between" style="height: 42px">
@@ -101,7 +101,7 @@ const i18nLocale = useI18n()
               </div>
               <router-link
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
-                  to="/" class="headerLink">
+                  to="/credential_administration" class="headerLink">
                 <p class="headerText">{{t("home.credentialManagement")}}</p>
               </router-link>
               <router-link
@@ -146,7 +146,7 @@ const i18nLocale = useI18n()
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
 
-          <router-link to="./imprint" style="color: white">{{t('home.imprint')}}</router-link>
+          <router-link to="/imprint" style="color: white">{{t('home.imprint')}}</router-link>
 
         </q-toolbar-title>
       </q-toolbar>
