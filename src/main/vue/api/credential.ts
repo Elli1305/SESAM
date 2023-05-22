@@ -1,5 +1,6 @@
 import axios from "axios";
 import {AxiosResponse} from "axios/index";
+import {User} from "@/main/vue/entity/loginResponse";
 
 export default {
     getCredential(){
@@ -14,7 +15,7 @@ export default {
         return axios.get("api/credentialview/{locationname}")
     },
 
-    getCredentialsByLocation(): Promise<AxiosResponse<Credential[]>>{
-        return axios.get("api/credentialview/{id}")
+    getCredentialsByLocation(param: string): Promise<AxiosResponse<Credential[]>>{
+        return axios.get("api/credentialview/" + param)
     }
 }

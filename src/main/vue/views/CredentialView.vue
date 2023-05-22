@@ -2,6 +2,7 @@
   <q-page class="column justify-evenly" style="padding: 0.5em" >
     <div class="q-gutter-y-md column" style="width: 80%; display: flex; margin:0 auto">
       <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{t("credentialview.credentialview")}}</h1>
+      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{model}}</h1>
     <div class="q-pa-md">
       <q-table
           flat bordered
@@ -35,12 +36,13 @@
           </q-input>
         </template>
         <template v-slot:body-cell-issuer="props">
-          <q-td :props="props">
-            {{props.row.issuer}}
+          <q-td :props="props" v-for="item in credentialStore.credentials.issuer">
+            {{credentialStore.credentials.issuer.firstName[item]}} + {{credentialStore.credentials.issuer.lastName[item]}}
             <q-icon class="q-mr-xs" color="grey" size="20px" name="info" />
             <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
                        :offset="[0, 8]">
-              {{props.row.issuer}} ist in Raum: 000.7
+              {{credentialStore.credentials.issuer.firstName[item]}} + {{credentialStore.credentials.issuer.lastName[item]}}
+              ist in Raum: {{credentialStore.credentials.issuer.room[item]}}
             </q-tooltip>
           </q-td>
         </template>
@@ -68,12 +70,12 @@ const columns = [
   { name: 'issuer', align: 'center', label: 'Herausgeber', field: 'issuer', sortable: true },
 ]
 
-//const rows = ref([''])
-const rows = ref([{category: "Erste-Hilfe", availableCredential: "Telekom", qualification: "DRK", issuer: "2"}])
+const rows = ref([''])
 
 export default {
   setup () {
 
+    const items = ref([])
     let locationNames = ref([])
     const { t } = useI18n();
     const credentialStore = useCredentialStore()
@@ -83,7 +85,12 @@ export default {
       model.value = locations[0]
     })
 
-    credentialStore.getCredentialsByLocation().then((credentials) => {})
+    credentialStore.getCredentialsByLocation(model.value).then((credentials) => {
+      props.rows.category.value = credentials.category.name
+      props.rows.availableCredential.value = credentials.name
+      props.rows.qualification.value = credentials.category.externalCredentials
+      props.rows.issuer.value = credentials.issuer.firstName+ " " + credentials.issuer.lastName
+    })
 
 
     return {
@@ -92,8 +99,10 @@ export default {
       filter,
       locationNames,
       locationStore,
+      credentialStore,
       model,
-      t
+      t,
+      items
     }
   }
 }

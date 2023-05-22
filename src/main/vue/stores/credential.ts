@@ -33,7 +33,7 @@ export const useCredentialStore = defineStore('credential', () =>{
 
     function getCredentialsByLocation(id: string) {
         return new Promise((resolve, reject) => {
-            api.credential.getCredentialsByLocation().then((response) => {
+            api.credential.getCredentialsByLocation(id).then((response) => {
                 credentials.value = response.data
                 resolve(response.data)
             }).catch((error) => {
@@ -43,8 +43,7 @@ export const useCredentialStore = defineStore('credential', () =>{
     }
 
     return {
-        getCategoryInfos,
-        allInformation,
+        getCredentialsByLocation,
         allCategories,
         getCategories,
         credentials,
