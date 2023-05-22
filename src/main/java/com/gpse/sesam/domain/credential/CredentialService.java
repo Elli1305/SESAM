@@ -17,4 +17,9 @@ public interface CredentialService {
     void deleteAll();
 
     void saveAll(Iterable<Credential> credentials);
+
+    Optional<Credential> credentialFindByLocation(Location location);
+
+    List<Credential> credentialFindByLocation(Long id);
+
 }

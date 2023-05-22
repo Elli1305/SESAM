@@ -1,8 +1,11 @@
 package com.gpse.sesam.domain.location;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gpse.sesam.domain.credential.Credential;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,17 +22,22 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Coordinate> coordinates;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Credential> credentials;
+	@JsonManagedReference
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy="doors", fetch = FetchType.EAGER)
+    private List<Credential> credentials = new ArrayList<>();
+
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Room room;
 
     protected Door() {
 
     }
 
-    public Door(String name, List<Coordinate> coordinates, List<Credential> credentials) {
+    public Door(String name, List<Coordinate> coordinates) {
         this.name = name;
         this.coordinates = coordinates;
-        this.credentials = credentials;
+
     }
 
     public Door(String name, List<Coordinate> coordinates) {
@@ -63,6 +71,27 @@ public class Door {
 
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
+	}
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+
+	public void addCredential(Credential credential) {
+		credentials.add(credential);
+		List<Door> doors = new ArrayList<>();
+		doors.add(this);
+		credential.setDoors(doors);
+	}
+
+	public void removeCredential(Credential credential) {
+		credentials.remove(credential);
+		List<Door> doors = new ArrayList<>();
+		credential.setDoors(doors);
 	}
 
 	public void setCoordinates(List<Coordinate> coordinates) {

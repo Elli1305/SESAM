@@ -5,6 +5,8 @@ import {Category} from "@/main/vue/entity/credentialDefinition";
 
 export const useCredentialStore = defineStore('credential', () =>{
     const allCategories: Ref<Category[] | null> = ref(null)
+    const allInformation: Ref<Credential[]|null> = ref(null)
+    const credentials: Ref<Credential[]|null> = ref(null)
 
 
     function getCategories() {
@@ -18,9 +20,33 @@ export const useCredentialStore = defineStore('credential', () =>{
         })
     }
 
+    function getCategoryInfos(locationName: string) {
+        return new Promise ((resolve, reject) => {
+            api.credential.getCredentialInfos().then((response) => {
+                allInformation.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+    function getCredentialsByLocation(id: string) {
+        return new Promise((resolve, reject) => {
+            api.credential.getCredentialsByLocation(id).then((response) => {
+                credentials.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
     return {
+        getCredentialsByLocation,
         allCategories,
         getCategories,
+        credentials,
     }
 
 })

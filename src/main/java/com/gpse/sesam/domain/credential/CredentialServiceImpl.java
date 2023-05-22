@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 import jakarta.validation.Valid;
+import com.gpse.sesam.web.exception.LocationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ import java.time.Duration;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CredentialServiceImpl implements CredentialService {
@@ -106,5 +110,16 @@ public class CredentialServiceImpl implements CredentialService {
     @Override
     public void saveAll(Iterable<Credential> credentials) {
         credentialRepository.saveAll(credentials);
+    }
+
+    @Override
+    public Optional<Credential> credentialFindByLocation(Location location) {
+        return Optional.empty();
+    }
+
+
+    @Override
+    public List<Credential> credentialFindByLocation(Long id) {
+        return credentialRepository.findByLocation(id);
     }
 }

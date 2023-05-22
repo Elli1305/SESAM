@@ -1,7 +1,10 @@
 package com.gpse.sesam.domain.location;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,16 +17,20 @@ public class Room {
 	@Column
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Door> doors;
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	private List<Door> doors = new ArrayList<>();
+
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Floor floor;
 
 	protected Room() {
 
 	}
 
-	public Room(String name, List<Door> doors) {
+	public Room(String name) {
 		this.name = name;
-		this.doors = doors;
 	}
 
 	public void setId(Long id) {
@@ -51,6 +58,20 @@ public class Room {
 	}
 
 	public void addDoor(Door door) {
-		this.doors.add(door);
+		doors.add(door);
+		door.setRoom(this);
+	}
+
+	public Floor getFloor() {
+		return floor;
+	}
+
+	public void setFloor(Floor floor) {
+		this.floor = floor;
+	}
+
+	public void removeDoor(Door door) {
+		doors.remove(door);
+		door.setRoom(null);
 	}
 }

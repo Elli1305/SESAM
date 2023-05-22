@@ -13,4 +13,13 @@ export default {
     all(): Promise<AxiosResponse<Credential[]>>{
         return axios.get("/api/credentials")
     },
-};
+    getCategories(){
+        return axios.get("api/credentialview")
+    },
+    getCredentialInfos(): Promise<AxiosResponse<Credential[]>>{
+        return axios.get("api/credentialview/{locationname}")
+    },
+    getCredentialsByLocation(param: string): Promise<AxiosResponse<Credential[]>>{
+        return axios.get("api/credentialview/" + param)
+    }
+}
