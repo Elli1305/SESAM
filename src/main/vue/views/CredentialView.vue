@@ -28,6 +28,7 @@
               option-label="name"
               options-cover
               style="min-width: 13em; padding-right: 1em"
+              @click="updateCredentials"
           />
           <q-input dense debounce="300" v-model="filter" :placeholder="t('credentialview.search')">
             <template v-slot:append>
@@ -36,13 +37,13 @@
           </q-input>
         </template>
         <template v-slot:body-cell-issuer="props">
-          <q-td :props="props" v-for="item in credentialStore.credentials.issuer">
+          <q-td :props="props" v-for="item in items">
             {{credentialStore.credentials.issuer.firstName[item]}} + {{credentialStore.credentials.issuer.lastName[item]}}
             <q-icon class="q-mr-xs" color="grey" size="20px" name="info" />
             <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
                        :offset="[0, 8]">
               {{credentialStore.credentials.issuer.firstName[item]}} + {{credentialStore.credentials.issuer.lastName[item]}}
-              ist in Raum: {{credentialStore.credentials.issuer.room[item]}}
+              ist in Raum: {{credentialStore.credentials.issuer.room[item]}} <br>
             </q-tooltip>
           </q-td>
         </template>
@@ -82,15 +83,17 @@ export default {
     const locationStore = useLocationStore()
     const model = ref()
     locationStore.getLocations().then((locations) => {
-      model.value = locations[0]
+      model.value = locations[0].id
     })
 
+    async function updateCredentials(){
     credentialStore.getCredentialsByLocation(model.value).then((credentials) => {
-      props.rows.category.value = credentials.category.name
-      props.rows.availableCredential.value = credentials.name
-      props.rows.qualification.value = credentials.category.externalCredentials
-      props.rows.issuer.value = credentials.issuer.firstName+ " " + credentials.issuer.lastName
+      rows.value.category = credentials.category.name
+      rows.value.availableCredential = credentials.name
+      rows.value.qualification = credentials.category.externalCredentials
+      items.value = credentials.issuer.firstName
     })
+    }
 
 
     return {
@@ -102,7 +105,8 @@ export default {
       credentialStore,
       model,
       t,
-      items
+      items,
+      updateCredentials
     }
   }
 }
