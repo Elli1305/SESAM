@@ -87,13 +87,7 @@ export default {
     })
 
     async function updateCredentials(){
-    credentialStore.getCredentialsByLocation(model.value).then((credentials) => {
-      rows.value.category = credentials.category.name
-      rows.value.availableCredential = credentials.name
-      rows.value.qualification = credentials.category.externalCredentials
-      items.value = credentials.issuer.firstName
-    })
-    }
+    credentialStore.getCredentialsByLocation(model.value).then((credentials) => {})}
 
 
     return {

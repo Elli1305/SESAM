@@ -73,4 +73,16 @@ public class Category {
         credentials.remove(credential);
         credential.setCategory(null);
     }
+
+    public void setExternalCredentials(List<ExternalCredential> externalCredentials) {
+        this.externalCredentials = externalCredentials;
+    }
+
+    public List<ExternalCredential> getExternalCredentials() {
+        return externalCredentials;
+    }
+
+    public void setCredentials(List<Credential> credentials) {
+        this.credentials = credentials;
+    }
 }
