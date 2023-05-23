@@ -22,7 +22,7 @@
 
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
-                            <q-btn dense round flat color="grey" @click="editGroup(Object.values(props)), getOldName(), editAlert = true"
+                            <q-btn dense round flat color="grey" @click="editGroup(Object.values(props)); getOldName(); editAlert = true"
                                    test="props.value" icon="edit"></q-btn>
                             <q-btn dense round flat color="grey" icon="delete" @click="deleteAlert = true"></q-btn>
 
@@ -108,9 +108,9 @@
                 {{ t('groupRooms.question') }}
             </q-card-section>
 
-            <q-card-actions align="right" class="bg-white text-teal">
-                <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
+            <q-card-actions align="right" class="text-primary">
                 <q-btn flat :label="t('adminEdit.delete')" @click=""/>
+                <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
             </q-card-actions>
         </q-card>
     </q-dialog>
@@ -120,14 +120,17 @@
     >
         <q-card style="width: 500px">
             <q-card-section>
-                <div class="text-h6"> {{t('groupRooms.editGroup')}}</div>
+                <div class="text-h6">Name der Gruppe</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+                <q-input dense v-model="editName" autofocus @keyup.enter="prompt = false"/>
             </q-card-section>
 
             <q-card-section class="a-pt-none">
-                {{t('groupRooms.chooseRooms')}}
+                <div class="text-h6">{{t('groupRooms.chooseRooms')}}</div>
             </q-card-section>
 
-            <div class="q-pa-md" style="max-width: 500px">
+            <div class="q-pl-md q-pr-md q-pb-md" style="max-width: 500px">
                 <div class="q-gutter-md">
                     <q-select
                         filled
@@ -140,37 +143,19 @@
             </div>
 
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat label="Gruppennamen ändern" @click="editNameAlert = true" />
-                <q-btn flat label="Speichern" @click="" />
+                <q-btn flat label="Speichern" @click="checkName(editName)" />
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
             </q-card-actions>
         </q-card>
 
 
-    </q-dialog>
-    <q-dialog v-model="editNameAlert">
-        <q-card>
-
-
-            <q-card-section>
-                <div class="text-h6">Name der Gruppe</div>
-            </q-card-section>
-            <q-card-section class="q-pt-none">
-                <q-input dense v-model="editName" autofocus @keyup.enter="prompt = false"/>
-            </q-card-section>
-
-            <q-card-actions align="right" class="text-primary">
-                <q-btn flat label="Speichern" @click=""/>
-                <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
-            </q-card-actions>
-        </q-card>
     </q-dialog>
 
   <!--    the dialog for adding a new group-->
     <div class="q-pa-md q-gutter-sm">
 
         <q-dialog v-model="newGroup">
-            <q-card>
+            <q-card style="width: 500px">
 
 
                 <q-card-section>
@@ -179,16 +164,6 @@
                 <q-card-section class="q-pt-none">
                     <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
                 </q-card-section>
-
-                <q-card-actions align="right" class="text-primary">
-                    <q-btn flat label="Weiter" @click="secondDialog = true"/>
-                    <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
-                </q-card-actions>
-            </q-card>
-        </q-dialog>
-
-        <q-dialog v-model="secondDialog" persistent transition-show="scale" transition-hide="scale">
-            <q-card style="width: 500px">
                 <q-card-section>
                     <div class="text-h6">Räume auswählen</div>
                 </q-card-section>
@@ -198,10 +173,10 @@
                     <div class="q-pa-md" style="max-width: 500px">
                         <div class="q-gutter-md">
                             <q-select
-                                    filled
-                                    v-model="modelRooms"
-                                    multiple
-                                    :options="optionsRooms"
+                                filled
+                                v-model="modelRooms"
+                                multiple
+                                :options="optionsRooms"
 
                             />
                         </div>
@@ -209,9 +184,9 @@
 
                 </q-card-section>
 
-                <q-card-actions align="right" class="bg-white text-teal">
-                    <q-btn flat label="Speichern" v-close-popup/>
-                    <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
+                <q-card-actions align="right" class="text-primary">
+                    <q-btn flat label="Speichern" @click="checkName(newGroupName); toDefault()"/>
+                    <q-btn flat :label="t('adminEdit.back')" @click="toDefault()" v-close-popup/>
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -223,6 +198,7 @@
 import {ref} from 'vue'
 
 import {useI18n} from "vue-i18n";
+import {useQuasar} from "quasar";
 
 const columns = [
     {
@@ -233,7 +209,7 @@ const columns = [
         field: row => row.groupname,
         sortable: true,
         headerStyle: 'max-width: 50px',
-        headerClasses: 'bg-primary text-white',
+        //headerClasses: 'bg-primary text-white',
     },
     {name: 'rooms', align: 'center', label: "Räume", field: row => row.rooms.join(", "),  sortable: true},
     {name: 'actions', label: 'Bearbeiten', style: 'max-width 10px', headerStyle: 'max-width: 20px', align: 'center'}
@@ -249,7 +225,7 @@ rows.value = [
     },
     {
         groupname: 'Labore',
-        rooms: ['Raum1', 'Raum 7'],
+        rooms: ['Room 2', 'Room 5', 'Room 7', 'Room 13'],
     },
 ]
 
@@ -267,23 +243,41 @@ export default {
     setup() {
 
         const {t} = useI18n();
+        const $q = useQuasar();
         const options = ref(stringOptions)
         const optionsLocations = ref(['Location1', 'Location2'])
         let editGroupName = ref(null);
         let editGroupRooms = ref(null);
 
+        async function checkName(newName) {
+            console.log(newName);
+            if(newName.trim() === ""){
+                $q.notify({
+                    type:'negative',
+                    message: 'Name darf nicht leer sein',
+                    caption: 'Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.'
+                })
+            }
+        }
+
+        function toDefault(){
+            this.newGroupName=ref('');
+            this.modelRooms=ref(null);
+
+        }
+
         return {
             deleteAlert: ref(false),
             editAlert: ref(false),
-            editNameAlert:ref(false),
 
             newGroup: ref(false),
             newGroupName: ref(''),
             editName:ref(''),
-            secondDialog: ref(false),
             modelRooms: ref(null),
             modelRoomsNew: ref(editGroupRooms.value),
             optionsRooms,
+            checkName,
+            toDefault,
             getOldName() {
               this.editName = editGroupName;
               this.modelRoomsNew= editGroupRooms;
