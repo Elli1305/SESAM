@@ -33,6 +33,8 @@ public class ColorsServiceImpl implements ColorsService {
         Colors colors = new Colors();
         colors.setId(currentColorsId);
         colors.setDefaultColors(false);
+        colors.setBgC(defaultColors.getBgC());
+        colors.setTextC(defaultColors.getTextC());
         colors.setPrimaryColor(defaultColors.getPrimaryColor());
         colors.setSecondary(defaultColors.getSecondary());
         colors.setAccent(defaultColors.getAccent());

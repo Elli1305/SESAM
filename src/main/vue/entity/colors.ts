@@ -4,6 +4,9 @@ export interface Colors {
 
     defaultColors: boolean,
 
+    bgC: string,
+    textC: string,
+
     primaryColor: string,
     secondary: string,
     accent: string,

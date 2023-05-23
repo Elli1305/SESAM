@@ -14,6 +14,11 @@ public class Colors {
     private boolean defaultColors;
 
     @Column(nullable = false)
+    private String bgC;
+    @Column(nullable = false)
+    private String textC;
+
+    @Column(nullable = false)
     private String primaryColor;
     @Column(nullable = false)
     private String secondary;
@@ -80,6 +85,14 @@ public class Colors {
         return warning;
     }
 
+    public String getBgC() {
+        return bgC;
+    }
+
+    public String getTextC() {
+        return textC;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -122,5 +135,13 @@ public class Colors {
 
     public void setWarning(String warning) {
         this.warning = warning;
+    }
+
+    public void setBgC(String bgC) {
+        this.bgC = bgC;
+    }
+
+    public void setTextC(String textC) {
+        this.textC = textC;
     }
 }

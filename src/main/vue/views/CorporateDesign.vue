@@ -3,7 +3,10 @@
     <p class="row text-h3 justify-center">{{t('corporateDesign.title')}}</p>
     <div class="row self-center no-wrap">
       <div class="column q-mx-xs">
-        <q-input label="Primary" rounded outlined v-model="primary" class="my-input q-my-xs" bg-color="primary" style="width: fit-content">
+        <q-input label="Primary" label-color="grey-10" rounded outlined v-model="primary" class="my-input q-my-xs" style="width: 14em">
+          <template v-slot:prepend>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: primary, borderRadius: '100%'}"/>
+          </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -12,7 +15,10 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input label="Secondary" rounded outlined v-model="secondary" class="my-input q-my-xs" bg-color="secondary" style="width: fit-content">
+        <q-input label="Secondary" label-color="grey-10" rounded outlined v-model="secondary" class="my-input q-my-xs" style="width: 14em">
+          <template v-slot:prepend>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: secondary, borderRadius: '100%'}"/>
+          </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -21,7 +27,10 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input label="Accent" rounded outlined v-model="accent" class="my-input q-my-xs" bg-color="accent" style="width: fit-content">
+        <q-input label="Accent" label-color="grey-10" rounded outlined v-model="accent" class="my-input q-my-xs" style="width: 14em">
+          <template v-slot:prepend>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: accent, borderRadius: '100%'}"/>
+          </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -32,7 +41,10 @@
         </q-input>
       </div>
       <div class="column q-mx-xs">
-        <q-input label="Dark" rounded outlined v-model="dark" class="my-input q-my-xs" bg-color="dark" style="width: fit-content">
+        <q-input label="Dark" label-color="grey-10" rounded outlined v-model="dark" class="my-input q-my-xs" style="width: 14em">
+          <template v-slot:prepend>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: dark, borderRadius: '100%'}"/>
+          </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -41,7 +53,10 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input label="Light-Blue" rounded outlined v-model="lightBlue" class="my-input q-my-xs" bg-color="light-blue" style="width: fit-content">
+        <q-input label="Light-Blue" label-color="grey-10" rounded outlined v-model="lightBlue" class="my-input q-my-xs" style="width: 14em">
+          <template v-slot:prepend>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: lightBlue, borderRadius: '100%'}"/>
+          </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -50,7 +65,10 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input label="Positive" rounded outlined v-model="positive" class="my-input q-my-xs" bg-color="positive" style="width: fit-content">
+        <q-input label="Positive" label-color="grey-10" rounded outlined v-model="positive" class="my-input q-my-xs" style="width: 14em">
+          <template v-slot:prepend>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: positive, borderRadius: '100%'}"/>
+          </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -61,7 +79,10 @@
         </q-input>
       </div>
       <div class="column q-mx-xs">
-        <q-input label="Negative" rounded outlined v-model="negative" class="my-input q-my-xs" bg-color="negative" style="width: fit-content">
+        <q-input label="Negative" label-color="grey-10" rounded outlined v-model="negative" class="my-input q-my-xs" style="width: 14em">
+          <template v-slot:prepend>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: negative, borderRadius: '100%'}"/>
+          </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -70,7 +91,10 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input label="Info" rounded outlined v-model="info" class="my-input q-my-xs" bg-color="info" style="width: fit-content">
+        <q-input label="Info" label-color="grey-10" rounded outlined v-model="info" class="my-input q-my-xs" style="width: 14em">
+          <template v-slot:prepend>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: info, borderRadius: '100%'}"/>
+          </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -79,7 +103,10 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input label="Warning" rounded outlined v-model="warning" class="my-input q-my-xs" bg-color="warning" style="width: fit-content">
+        <q-input label="Warning" label-color="grey-10" rounded outlined v-model="warning" class="my-input q-my-xs" style="width: 14em">
+          <template v-slot:prepend>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: warning, borderRadius: '100%'}"/>
+          </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -105,14 +132,40 @@
         </q-menu>
       </q-icon>
     </div>
+    <div class="row justify-center no-wrap" >
+      <q-input label="Background" rounded outlined v-model="bgColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
+        <template v-slot:prepend>
+          <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: bgColor, borderRadius: '100%'}"/>
+        </template>
+        <template v-slot:append>
+          <q-icon name="colorize" class="cursor-pointer">
+            <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+              <q-color v-model="bgColor" />
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
+      <q-input label="Text-Color" rounded outlined v-model="fontColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
+        <template v-slot:prepend>
+          <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: fontColor, borderRadius: '100%'}"/>
+        </template>
+        <template v-slot:append>
+          <q-icon name="colorize" class="cursor-pointer">
+            <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+              <q-color v-model="fontColor" />
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
+    </div>
     <div class="row justify-evenly no-wrap" >
       <q-btn @click="confirmReset = true" round icon="restart_alt" color="negative" text-color="positive" style="width: 4em; height: 4em"/>
-      <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" :hint="t('corporateDesign.logoHint')">
+      <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" :hint="t('corporateDesign.logoHint')" bg-color="white" style="width: 14em">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
       </q-file>
-      <q-file rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" :hint="t('corporateDesign.faviconHint')">
+      <q-file rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" :hint="t('corporateDesign.faviconHint')" bg-color="white" style="width: 14em">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
@@ -159,7 +212,7 @@
 <script>
 import { ref } from 'vue'
 import { useI18n } from "vue-i18n"
-import {colors, useQuasar} from "quasar"
+import {useQuasar} from "quasar"
 import corpdesign from "@/main/vue/api/corpdesign";
 
 export default {
@@ -175,26 +228,45 @@ export default {
     const logo = ref(null)
     const favicon = ref(null)
     const $q = useQuasar()
+    const r = document.querySelector(':root')
     let menu = false
-    let primary = ref(colors.getPaletteColor('primary'))
-    let secondary = ref(colors.getPaletteColor('secondary'))
-    let accent = ref(colors.getPaletteColor('accent'))
-    let dark = ref(colors.getPaletteColor('dark'))
-    let lightBlue = ref(colors.getPaletteColor('light-blue'))
-    let positive = ref(colors.getPaletteColor('positive'))
-    let negative = ref(colors.getPaletteColor('negative'))
-    let info = ref(colors.getPaletteColor('info'))
-    let warning = ref(colors.getPaletteColor('warning'))
+    let primary = ref('')
+    let secondary = ref('')
+    let accent = ref('')
+    let dark = ref('')
+    let lightBlue = ref('')
+    let positive = ref('')
+    let negative = ref('')
+    let info = ref('')
+    let warning = ref('')
+    let bgColor = ref('')
+    let fontColor = ref('')
+    corpdesign.getColors().then( colors => {
+      bgColor.value = colors.data.bgC
+      fontColor.value = colors.data.textC
+      primary.value = colors.data.primaryColor
+      secondary.value = colors.data.secondary
+      accent.value = colors.data.accent
+      dark.value = colors.data.dark
+      lightBlue.value = colors.data.lightBlue
+      positive.value = colors.data.positive
+      negative.value = colors.data.negative
+      info.value = colors.data.info
+      warning.value = colors.data.warning
+    })
 
     function reset() {
-      corpdesign.reset().then( () => {
+      corpdesign.reset().then( colors => {
         corpdesign.setColors()
+        r.style.setProperty('--bg-color', colors.data.bgC)
+        r.style.setProperty('--text-color', colors.data.textC)
         $q.notify({
           message: t('corporateDesign.resetSuccess'),
           color: "positive",
           textColor: "negative",
           timeout: "1500"
         })
+        location.reload()
       }).catch( () => {
         $q.notify({
           message: t('corporateDesign.resetFailure'),
@@ -210,6 +282,8 @@ export default {
       if (favicon.value != null)
         corpdesign.saveFavicon(favicon.value)
       corpdesign.saveColors({
+        bgC: bgColor.value,
+        textC: fontColor.value,
         primaryColor: primary.value,
         secondary: secondary.value,
         accent: accent.value,
@@ -219,8 +293,11 @@ export default {
         negative: negative.value,
         info: info.value,
         warning: warning.value,
-      }).then( () => {
+      }).then( colors => {
         corpdesign.setColors()
+        r.style.setProperty('--bg-color', colors.data.bgC)
+        r.style.setProperty('--text-color', colors.data.textC)
+        location.reload()
         $q.notify({
           message: t('corporateDesign.saveSuccess'),
           color: "positive",
@@ -244,7 +321,6 @@ export default {
       reset,
       save,
       menu,
-      colors,
       primary,
       secondary,
       accent,
@@ -253,7 +329,10 @@ export default {
       positive,
       negative,
       info,
-      warning
+      warning,
+      bgColor,
+      fontColor,
+      r
     }
   }
 }

@@ -81,6 +81,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	}
 
 	private void setColors(Colors defaultColors) {
+		defaultColors.setBgC("#ffffff");
+		defaultColors.setTextC("#000000");
 		defaultColors.setPrimaryColor("#e20074");
 		defaultColors.setSecondary("#f6b2d5");
 		defaultColors.setAccent("#fbd9ea");

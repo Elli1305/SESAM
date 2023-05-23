@@ -39,9 +39,9 @@ public class CorporateDesignController {
 
     @PostMapping(path = "/save/colors")
     @ResponseStatus(HttpStatus.CREATED)
-    public void changeColors(@RequestBody Colors colors) {
+    public Colors changeColors(@RequestBody Colors colors) {
 
-        colorsService.changeColors(colors);
+        return colorsService.changeColors(colors);
 
     }
 
@@ -55,11 +55,12 @@ public class CorporateDesignController {
 
     @PostMapping(path = "/reset")
     @ResponseStatus(HttpStatus.CREATED)
-    public void reset() {
+    public Colors reset() {
 
         fileStorageService.reset();
         colorsService.resetColors();
 
+        return getColors();
     }
 
 }

@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from "axios"
-import {Colors} from "@/main/vue/entity/colors";
-import {setCssVar} from "quasar";
+import {Colors} from "@/main/vue/entity/colors"
+import {setCssVar} from "quasar"
 
 export default {
 
@@ -24,7 +24,7 @@ export default {
         })
     },
 
-    saveColors(colors: Colors): Promise<AxiosResponse<void>> {
+    saveColors(colors: Colors): Promise<AxiosResponse<Colors>> {
         return axios.post('/api/corpdesign/save/colors', colors)
     },
 
@@ -32,7 +32,7 @@ export default {
         return axios.get('/api/corpdesign/get/colors')
     },
 
-    reset(): Promise<AxiosResponse<void>> {
+    reset(): Promise<AxiosResponse<Colors>> {
         return axios.post('/api/corpdesign/reset')
     },
 
@@ -42,7 +42,7 @@ export default {
             setCssVar('secondary', colors.data.secondary)
             setCssVar('accent', colors.data.accent)
             setCssVar('dark', colors.data.dark)
-            setCssVar('lightBlue', colors.data.lightBlue)
+            setCssVar('light-blue', colors.data.lightBlue)
             setCssVar('positive', colors.data.positive)
             setCssVar('negative', colors.data.negative)
             setCssVar('info', colors.data.info)
