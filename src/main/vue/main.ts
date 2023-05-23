@@ -119,7 +119,7 @@ const messages = {
             title: "Corporate Design",
             colors: "Farben",
             logo: "Logo",
-            logoHint: "Nur SVG, PNG, JPG Dateien",
+            logoHint: "Nur SVG Dateien",
             favicon: "Favicon",
             faviconHint: "Nur ICO Dateien",
             confirm: {
@@ -241,7 +241,7 @@ const messages = {
             title: "Corporate Design",
             colors: "Colors",
             logo: "Logo",
-            logoHint: "Only SVG, PNG, JPG files",
+            logoHint: "Only SVG files",
             favicon: "Favicon",
             faviconHint: "Only ICO files",
             confirm: {
