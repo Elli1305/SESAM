@@ -136,8 +136,8 @@ const messages = {
                     cancel: "Abbruch"
                 }
             },
-            resetSuccess: "Zurücksetzen erfolgreich",
-            saveSuccess: "Speichern erfolgreich"
+            resetFailure: "Zurücksetzen fehlgeschlagen",
+            saveFailure: "Speichern fehlgeschlagen"
         }
     },
     en: {
@@ -258,8 +258,8 @@ const messages = {
                     cancel: "Cancel"
                 }
             },
-            resetSuccess: "Reset successful",
-            saveSuccess: "Saving successful"
+            resetFailure: "Reset failed",
+            saveFailure: "Saving failed"
         }
     }
 }
