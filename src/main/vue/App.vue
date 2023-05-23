@@ -96,8 +96,8 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/" class="q-ma-sm headerLink text-black">{{ t("home.currentUsers") }}</router-link>
-                    <router-link to="/" class="q-ma-sm headerLink text-black">{{ t("home.currentRegistrations") }}
+                    <router-link to="/admin/currentUserlist" class="q-ma-sm headerLink text-black">{{ t("home.currentUsers") }}</router-link>
+                    <router-link to="/admin/rolesRequest" class="q-ma-sm headerLink text-black">{{ t("home.currentRegistrations") }}
                     </router-link>
                     <router-link to="/" class="q-ma-sm headerLink text-black">{{ t("home.issuerManagement") }}
                     </router-link>

@@ -12,6 +12,7 @@ import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
 import EditUser from "@/main/vue/views/EditUser.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 import {useUserStore} from "@/main/vue/stores/users";
+import RequestRolles from "@/main/vue/views/RolesRequest.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -39,6 +40,12 @@ const router = createRouter({
             component: CurrentUserList,
       //meta: {requiresAdmin: true}
     },
+      {
+        path: '/admin/rolesRequest',
+        name: 'rolesRequest',
+        component: RequestRolles,
+        //meta: {requiresAdmin: true}
+      },
     {
       path: '/admin/currentuserlist/edit/:email',
       name: 'edit',

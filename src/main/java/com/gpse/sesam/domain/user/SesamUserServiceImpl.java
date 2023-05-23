@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 public class SesamUserServiceImpl implements SesamUserService {
@@ -194,8 +195,8 @@ public class SesamUserServiceImpl implements SesamUserService {
 		user.setRoles(roles.stream()
 				.distinct()
 				.map(role -> new SesamUserRole(role, true))
-				.toList()
-		);
+				.collect(Collectors.toList()));
+
 		userRepository.save(user);
 	}
 }

@@ -18,6 +18,22 @@ const messages = {
             headline: "Aktuelle Nutzer",
             roles: {ADMINISTRATOR: "Administrator", EDITOR: "Bearbeiter", ISSUER: "Herausgeber"},
             prename: "Vorname",
+            lastname: "Nachname",
+            email: "Email",
+            role: "Rollen",
+            bearbeiten: "edit",
+            showAdmin: "Administratoren",
+            showEditor: "Bearbeiter",
+            showIssuer: "Herausgeber",
+            search: "Suche"
+        },
+        adminRolesRequest:{
+          headline: "Angefragte Rollen",
+            prename: "Vorname",
+            lastname: "Nachname",
+            email: "Email",
+            role: "Rollen",
+            save:"speichern",
             showAdmin: "Administratoren",
             showEditor: "Bearbeiter",
             showIssuer: "Herausgeber",
@@ -38,6 +54,7 @@ const messages = {
         floorplan: {
             locations: 'Standorte'
         },
+
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
@@ -59,7 +76,8 @@ const messages = {
             editorPages: "Bearbeiten",
             issuerPages: "Credential austellen",
             imprint: "Impressum",
-            logout: "Logout"
+            logout: "Logout",
+            roomSearch: "Raumsuche"
         },
         login: {
             wrongEmailPassword: "Falsches Passwort oder Benutzername",
@@ -127,6 +145,21 @@ const messages = {
             headline: "Current Users",
             roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
             prename: "Prename",
+            lastname: "Name",
+            email: "Email",
+            role: "Roles",
+            showAdmin: "Show Admin",
+            showEditor: "Show Editor",
+            showIssuer: "Show Issuer",
+            search: "Search"
+        },
+        adminRolesRequest:{
+            headline: "Requested Roles",
+            roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
+            prename: "Prename",
+            lastname: "Name",
+            email: "Email",
+            role: "Roles",
             showAdmin: "Show Admin",
             showEditor: "Show Editor",
             showIssuer: "Show Issuer",
@@ -164,7 +197,8 @@ const messages = {
             editorPages: "Edit",
             issuerPages: "Issue Credential",
             imprint: "Imprint",
-            logout: "Logout"
+            logout: "Logout",
+            roomSearch: "Search"
         },
         login: {
             wrongEmailPassword: "Wrong Password oder Username",
