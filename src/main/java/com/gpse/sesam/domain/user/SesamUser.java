@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
+
 @Entity
 public class SesamUser implements UserDetails {
 	@Serial
@@ -54,7 +55,8 @@ public class SesamUser implements UserDetails {
 	 * @param lastName  the user's last name
 	 * @param roles     the user's roles
 	 */
-	public SesamUser(String email, String password, String firstName, String lastName, List<SesamUserRole> roles) {
+	public SesamUser(final String email, final String password, final String firstName, final String lastName,
+					 final List<SesamUserRole> roles) {
 		this.email = email;
 		this.password = password;
 		this.firstName = firstName;
@@ -78,7 +80,7 @@ public class SesamUser implements UserDetails {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 
@@ -87,7 +89,7 @@ public class SesamUser implements UserDetails {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -95,7 +97,7 @@ public class SesamUser implements UserDetails {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -103,7 +105,7 @@ public class SesamUser implements UserDetails {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -111,7 +113,7 @@ public class SesamUser implements UserDetails {
 		return roles;
 	}
 
-	public void setRoles(List<SesamUserRole> roles) {
+	public void setRoles(final List<SesamUserRole> roles) {
 		this.roles = roles;
 	}
 
@@ -134,6 +136,7 @@ public class SesamUser implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
 
 	public Long getId() {
 		return id;

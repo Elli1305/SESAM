@@ -2,22 +2,32 @@
     <div class="q-pa-md">
 
         <div class="q-mb-xl">
-            <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{t("adminCurrentUser.headline")}}</h1>
+            <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{t("adminRolesRequest.headline")}}</h1>
         </div>
         <div class="items-center justify-center" style="display: flex">
             <div class="center" style="max-width: 80em; min-width: 60em">
                 <q-table
-                        :rows="rows"
-                        :columns="columns"
-                        row-key="username"
-                        :separator="'cell'"
-                        :filter="filter"
-                        :filter-method="customFilter"
+                    :rows="rows"
+                    :columns="columns"
+                    row-key="username"
+                    :separator="'cell'"
+                    :filter="filter"
+                    :filter-method="customFilter"
                 >
+
+                    <template>
+                        <q-tr :props="props" @click="onRowClick(props.row)">
+                            <q-td key="lastName" :props="props">
+                                <q-badge color="green">
+                                    {{ props.row.lastname }}
+                                </q-badge>
+                            </q-td>
+                        </q-tr>
+                    </template>
 
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
-                            <q-btn dense round flat color="grey" @click="" icon="edit"></q-btn>
+                            <q-btn outline round flat color="primary" @click="updateRoles(Object.values(props))" icon="done"></q-btn>
                         </q-td>
                     </template>
                     <template v-slot:top-left>
@@ -28,7 +38,6 @@
                         </div>
                     </template>
 
-
                     <template v-slot:top-right>
                         <q-input borderless dense debounce="300" v-model="filter.search" :placeholder="t( 'adminCurrentUser.search')" >
                             <template v-slot:append>
@@ -36,43 +45,47 @@
                             </template>
                         </q-input>
                     </template>
+
                     <template v-slot:body-cell-roles="props">
                         <q-td :props="props">
-                            <div v-for="role in props.value">
-                                {{t( `adminCurrentUser.roles.${role.role}` )}}
+                            <div class="q-gutter-xs" v-for="role in props.value">
+                                <q-chip v-model:selected="role.selected" color="secondary" text-color="primary" :style="{padding: '0.4em 1em 0.4em 0.5em', fontSize: '1em', opacity: issueropacity}" icon="highlight_off">
+                                    {{t(`adminCurrentUser.roles.${role.role}`)}}
+                                </q-chip>
                             </div>
                         </q-td>
                     </template>
-
                 </q-table>
-
-
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
 
-import { ref } from 'vue'
+import {computed, reactive, ref} from 'vue'
 
 import {useI18n} from "vue-i18n";
 import axios from "axios";
+import {useUserStore} from "@/main/vue/stores/users";
+
 
 
 const rows = ref([]);
 
 rows.value = []
 
+
+
 export default {
-    name: "CurrentUserList",
+    name: "RolesRequest",
     //axios.get(url[,config]),
 
 
     setup () {
+        const userStore = useUserStore()
         axios.get('/api/user')
-            .then(res => { rows.value = res.data
+            .then(res => { rows.value = res.data.map(v => ({...v, roles: v.roles.filter(r => !r.granted).map(r => ({...r, selected: false}))}))
 
             })
 
@@ -80,19 +93,47 @@ export default {
 
         const columns = [
             {
-                name: 'lastName',
+                name: t('adminRolesRequest.name'),
                 required: true,
-                label:t('adminCurrentUser.lastname'),
+                label: 'Name',
                 align: 'center',
                 field: row => row.lastName,
                 format: val => `${val}`,
                 sortable: true
             },
-            { name: 'firstName', align: 'center', label : t('adminCurrentUser.prename') , field: 'firstName', sortable: true },
-            { name: 'username', align: 'center',label: t('adminCurrentUser.email') , field: 'username', sortable: true },
-            { name: 'roles', align: 'center',label: t('adminCurrentUser.role'), field: 'roles' },
-            { name: 'actions', label: t('adminCurrentUser.edit'), style: "width: 40px", align: 'center' }
+            { name: 'firstName', align: 'center', label : t('adminRolesRequest.prename') , field: 'firstName', sortable: true },
+            { name: 'username', align: 'center',label: t('adminRolesRequest.email') , field: 'username', sortable: true },
+            { name: 'roles', align: 'center',label: t('adminRolesRequest.role'), field: 'roles' },
+            { name: 'actions', label: t('adminRolesRequest.save'), style: "width: 40px", align: 'center', field: row => row.roles }
         ]
+
+        const roles = reactive({
+            admin: false,
+            editor: false,
+            issuer: false
+        })
+
+        function updateRoles(test) {
+            let prename = test[1].firstName;
+            let lastname = test[1].lastName;
+            let email= test[1].username;
+            let role = test[1].roles;
+
+            let rolesD = [];
+
+            for(let i =0; i<role.length; i++){
+                if(role[i].selected === true){
+                    rolesD.push(role[i].role);
+                }
+            }
+
+
+
+            userStore.saveEdits(prename, lastname, email, rolesD).then( axios.get('/api/user')
+                .then(res => { rows.value = res.data.map(v => ({...v, roles: v.roles.filter(r => !r.granted).map(r => ({...r, selected: false}))}))
+
+                }) )
+        }
 
         return {
             filter: ref({
@@ -101,19 +142,23 @@ export default {
                     editor: true,
                     issuer: true
                 },
-                search: ''
+                search: '',
+                roles,
+                selection: computed(() =>{
+                    return Object.keys(roles)
+                        .filter(type => roles[ type ] === true)
+                        .join(', ')
+                })
             }),
             columns,
             rows,
-            t
+            t,
+            onRowClick: (row) => alert(`${row.name} clicked`),
+            updateRoles,
         }
     },
     methods: {
         customFilter(rows, terms){
-            // rows contain the entire data
-            // terms contains whatever you have as filter
-
-            console.log(terms,rows)
 
             const lowerSearch = terms.search ? terms.search.toLowerCase() : ""
 
@@ -123,13 +168,9 @@ export default {
                     let ans
 
                     //Gather toggle conditions
-                    let c1 = terms.filterToggle.admin && row.roles.filter(r => r.granted).map(r => r.role).includes("ADMINISTRATOR")
-                    let c2 = terms.filterToggle.editor && row.roles.filter(r => r.granted).map(r => r.role).includes("EDITOR")
-                    let c3 = terms.filterToggle.issuer && row.roles.filter(r => r.granted).map(r => r.role).includes("ISSUER")
-                    let c4 = false
-                    if(row.roles.filter(r => r.granted).length === 0){
-                        c4=true;
-                    }
+                    let c1 = terms.filterToggle.admin && row.roles.filter(r => !r.granted).map(r => r.role).includes("ADMINISTRATOR")
+                    let c2 = terms.filterToggle.editor && row.roles.filter(r => !r.granted).map(r => r.role).includes("EDITOR")
+                    let c3 = terms.filterToggle.issuer && row.roles.filter(r => !r.granted).map(r => r.role).includes("ISSUER")
 
                     //Gather search condition
 
@@ -156,10 +197,6 @@ export default {
                     //check if any of the conditions match
                     if ( (c1 && s1) || (c2 && s1) || (c3 && s1)) {
                         ans = true
-                    }else{
-                        if((!(terms.filterToggle.admin  || terms.filterToggle.editor  || terms.filterToggle.issuer )) && c4){
-                            ans = true
-                        }
                     }
 
                     return ans

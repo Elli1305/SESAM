@@ -2,8 +2,6 @@ package com.gpse.sesam.web.controller;
 
 import com.gpse.sesam.domain.imprint.ImprintServiceImpl;
 import com.gpse.sesam.web.cmd.UpdateImprintCmd;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -20,12 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Secured("ADMINISTRATOR")
 public class ImprintController {
 
-	@Autowired
-	private ImprintServiceImpl imprintService;
+	private final ImprintServiceImpl imprintService;
+
+	public ImprintController(final ImprintServiceImpl imprintService) {
+		this.imprintService = imprintService;
+	}
 
 	@GetMapping("/api/imprint")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<String> getImprintContent(HttpServletRequest request) {
+	public ResponseEntity<String> getImprintContent() {
 		String imprintContent = imprintService.getLatestImprintEntry();
 
 		if (imprintContent == null) {
@@ -36,9 +37,9 @@ public class ImprintController {
 	}
 
 	@Secured("ADMINISTRATOR")
-	@PostMapping(value = "/api/imprint")
+	@PostMapping("/api/imprint")
 	@ResponseStatus(HttpStatus.OK)
-	public void saveImprintContent(@RequestBody UpdateImprintCmd imprintContent) {
+	public void saveImprintContent(@RequestBody final UpdateImprintCmd imprintContent) {
 		if (imprintContent != null) {
 			imprintService.createImprintEntry(imprintContent.getContent());
 		}

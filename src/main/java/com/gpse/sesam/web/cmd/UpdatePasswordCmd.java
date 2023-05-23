@@ -1,23 +1,23 @@
 package com.gpse.sesam.web.cmd;
 
 public class UpdatePasswordCmd {
-    private String token;
+	private String token;
 
-    private String password;
+	private String password;
 
-    public String getToken() {
-        return token;
-    }
+	public String getToken() {
+		return token;
+	}
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+	public void setToken(final String token) {
+		this.token = token;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPassword(final String password) {
+		this.password = password;
+	}
 }
