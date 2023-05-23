@@ -10,6 +10,9 @@ import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Imprint from "../views/Imprint.vue";
 import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
 import EditUser from "@/main/vue/views/EditUser.vue";
+import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
+import {useUserStore} from "@/main/vue/stores/users";
+import RequestRolles from "@/main/vue/views/RolesRequest.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -37,6 +40,12 @@ const router = createRouter({
             component: CurrentUserList,
       //meta: {requiresAdmin: true}
     },
+      {
+        path: '/admin/rolesRequest',
+        name: 'rolesRequest',
+        component: RequestRolles,
+        //meta: {requiresAdmin: true}
+      },
     {
       path: '/admin/currentuserlist/edit/:email',
       name: 'edit',
@@ -64,22 +73,34 @@ const router = createRouter({
             path: '/passwordreset',
             component: PasswordReset,
 
-        },
-        {
-            path: "/imprint",
-            component: Imprint,
-        },
-        {
-            path: "/imprinteditor",
-            component: ImprintEditor,
-            meta: {requiresAdmin: true},
-        },
-    ],
+    },
+    {
+      path: "/imprint",
+      component: Imprint,
+    },
+    {
+      path: "/imprinteditor",
+      component: ImprintEditor,
+      meta: {requiresAdmin: true},
+    },
+    {
+      path: "/corporatedesign",
+      component: CorporateDesign,
+      meta: {requiresAdmin: true},
+    },
+  ],
 });
 
 
-// router.beforeEach((to) => {
-//   // Something which should be executed before each routing
-// })
+router.beforeEach((to) => {
+    if (to.fullPath.endsWith("/corporatedesign")) {
+        if (!useUserStore().authenticated)
+            router.push("/")
+    }
+    if (to.fullPath.endsWith("/profile")) {
+        if (!useUserStore().authenticated)
+            router.push("/")
+    }
+})
 
 export default router

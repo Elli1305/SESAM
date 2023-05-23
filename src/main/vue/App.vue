@@ -5,12 +5,21 @@ import {useUserStore} from "@/main/vue/stores/users"
 import {useQuasar} from 'quasar'
 import {useRouter} from "vue-router/dist/vue-router"
 import CountryFlag from 'vue-country-flag-next'
+import corpdesign from "@/main/vue/api/corpdesign";
 
 const {t} = useI18n()
 const userStore = useUserStore()
 const $q = useQuasar()
 const router = useRouter()
 const i18nLocale = useI18n()
+const r = document.querySelector(':root')
+
+corpdesign.setColors()
+corpdesign.getColors().then( c => {
+  r.style.setProperty('--bg-color', c.data.bgC)
+  r.style.setProperty('--text-color', c.data.textC)
+})
+
 
 async function logout() {
   await userStore.logout()
@@ -35,7 +44,7 @@ async function logout() {
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="row" style="margin: 0; padding: 24px">
         <div class="column">
-          <q-img src="/T_logo_white.svg" @click="router.push('/')" class="foldMenu"
+          <q-img src="/Logo.svg" @click="router.push('/')" class="foldMenu"
                  style="height: 95px; width: 80px; margin-right: 24px"/>
         </div>
         <div class="column full-width justify-between" style="height: 95px">
@@ -50,7 +59,7 @@ async function logout() {
                 <country-flag class="self-center no-margin shadow-16"
                               style="height: 3em; width: 3em; border-radius: 100%"
                               :country="i18nLocale.locale.value.toString() === 'de' ? 'de' : 'gb'" size="normal"/>
-                <q-menu fit transition-show="jump-down" transition-hide="jump-up">
+                <q-menu fit transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
                   <q-list>
                     <q-item @click="i18nLocale.locale.value = 'de'" clickable v-close-popup>
                       <q-item-section text-color="black" style="width: 7.5em" unelevated>
@@ -85,10 +94,10 @@ async function logout() {
                   {{ t("home.profileManagement") }}
                 </p>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
-                        self="top right">
+                        self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/" class="q-ma-sm headerLink text-black">{{ t("home.currentUsers") }}</router-link>
-                    <router-link to="/" class="q-ma-sm headerLink text-black">{{ t("home.currentRegistrations") }}
+                    <router-link to="/admin/currentUserlist" class="q-ma-sm headerLink text-black">{{ t("home.currentUsers") }}</router-link>
+                    <router-link to="/admin/rolesRequest" class="q-ma-sm headerLink text-black">{{ t("home.currentRegistrations") }}
                     </router-link>
                     <router-link to="/" class="q-ma-sm headerLink text-black">{{ t("home.issuerManagement") }}
                     </router-link>
@@ -101,12 +110,10 @@ async function logout() {
                   {{ t("home.corporateDesign") }}
                 </p>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
-                        self="top right">
+                        self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/" class="q-ma-sm headerLink text-black">{{ t("home.editCorporateDesign") }}
-                    </router-link>
-                    <router-link to="/ImprintEditor" class="q-ma-sm headerLink text-black">{{ t("home.editImprint") }}
-                    </router-link>
+                    <router-link to="/corporatedesign" class="q-ma-sm headerLink text-black">{{t("home.editCorporateDesign")}}</router-link>
+                    <router-link to="/ImprintEditor" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
                   </div>
                 </q-menu>
               </div>
@@ -131,7 +138,7 @@ async function logout() {
                      style="height: 3em; width: 3em; font-size: 1em; line-height: 1">
                 <p style="margin-top: 0.1em; margin-bottom: 0; font-size: 1.5em; font-weight: 400; line-height: 1">
                   {{ userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0) }}</p>
-                <q-menu transition-show="jump-down" transition-hide="jump-up">
+                <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
                   <q-list>
                     <q-item to="/profile" clickable v-close-popup>
                       <q-item-section text-color="black" style="width: 7.5em" unelevated>
@@ -161,7 +168,7 @@ async function logout() {
       </q-toolbar>
     </q-header>
 
-    <q-page-container>
+    <q-page-container class="page">
       <router-view/>
     </q-page-container>
 
@@ -180,6 +187,11 @@ async function logout() {
 </template>
 
 <style scoped>
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
 @font-face {
   font-family: "TeleNeoVariable-Upright";
   src: local("TeleNeoVariable-Upright"),
@@ -203,4 +215,10 @@ async function logout() {
 .foldMenu {
   cursor: pointer;
 }
+
+.page {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
 </style>
