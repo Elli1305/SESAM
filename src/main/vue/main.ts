@@ -39,6 +39,21 @@ const messages = {
             showIssuer: "Herausgeber",
             search: "Suche"
         },
+        adminEdit: {
+            title: "Nutzer bearbeiten",
+            changeRoles: "Rollen vergeben/entfernen: ",
+            delete: "Löschen",
+            back: "Zurück",
+            attention: "ACHTUNG",
+            question: "Nutzer wirklich löschen?",
+            deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
+            otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
+
+
+        },
+        floorplan: {
+            locations: 'Standorte'
+        },
 
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
@@ -62,6 +77,15 @@ const messages = {
             issuerPages: "Credential austellen",
             imprint: "Impressum",
             logout: "Logout"
+        },
+        login: {
+            wrongEmailPassword: "Falsches Passwort oder Benutzername",
+            loginFailed: "Login Fehlgeschlagen",
+            forgotPassword: "Passwort vergessen:",
+            resetPassword: "Passwort zurücksetzen",
+            notRegistered: "Nicht registriert:",
+            toRegister: "Zur Registrierung",
+            password: "Passwort"
         },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
@@ -116,9 +140,20 @@ const messages = {
             showIssuer: "Show Issuer",
             search: "Search"
         },
+        adminEdit: {
+            title: "Edit user",
+            changeRoles: "Give/take Roles: ",
+            delete: "Delete",
+            back: "Back",
+            attention: "Attention",
+            question: "Do you really want to delete this user?"
+        },
         common: {
             internalServerError: "The server could not process the request",
             unkownError: "An unknown error occured",
+        },
+        floorplan: {
+            locations: 'Locations'
         },
         home: {
             header: "SESAM",
@@ -138,6 +173,15 @@ const messages = {
             issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout"
+        },
+        login: {
+            wrongEmailPassword: "Wrong Password oder Username",
+            loginFailed: "Login Failed",
+            forgotPassword: "Forgot Password:",
+            resetPassword: "Reset Password",
+            notRegistered: "Not registered",
+            toRegister: "Go to Register",
+            password: "Password"
         },
         passwordReset: {
             resetPassword: "Reset Password",
@@ -179,6 +223,7 @@ const i18n = createI18n({
     globalInjection: true,
     messages
 })
+
 const app = createApp(App)
 const pinia = createPinia();
 app.use(pinia)
@@ -196,5 +241,6 @@ watch(
         sessionStorage.setItem("users", JSON.stringify(state.users));
         sessionStorage.setItem("floorPlan", JSON.stringify(state.floorPlan));
     },
-    { deep: true }
+    {deep: true}
 );
+

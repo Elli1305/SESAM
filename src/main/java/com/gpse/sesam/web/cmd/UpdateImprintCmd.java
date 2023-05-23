@@ -1,13 +1,13 @@
 package com.gpse.sesam.web.cmd;
 
 public class UpdateImprintCmd {
-    String content;
+	private String content;
 
-    public String getContent() {
-        return content;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public void setContent(final String content) {
+		this.content = content;
+	}
 }

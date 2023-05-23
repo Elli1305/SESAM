@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Entity
 public class PasswordResetToken {
-	private static final long EXPIRATION = 60 * 24 * 60000L;
+	private static final long EXPIRATION = 60 * 24 * 60_000L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,7 +33,7 @@ public class PasswordResetToken {
 	protected PasswordResetToken() {
 	}
 
-	public PasswordResetToken(SesamUser user, String token) {
+	public PasswordResetToken(final SesamUser user, final String token) {
 		this.user = user;
 		this.token = token;
 		this.expiryDate = new Date(System.currentTimeMillis() + EXPIRATION);
@@ -48,14 +48,14 @@ public class PasswordResetToken {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) {
 			return true;
 		}
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		PasswordResetToken that = (PasswordResetToken) o;
+		final PasswordResetToken that = (PasswordResetToken) o;
 		return Objects.equals(token, that.token);
 	}
 
