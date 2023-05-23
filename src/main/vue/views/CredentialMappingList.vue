@@ -21,7 +21,7 @@
       >
         <template v-slot:top-right>
           <div style="padding-right: 1em">
-          <q-btn dense flat color="grey" label="New categoty"  :disable="loading" icon="add" rounded @click="addRow"/>
+          <q-btn dense flat color="grey" label="New category"  :disable="loading" icon="add" rounded @click="prompt=true"/>
           </div>
           <q-input v-model="filter" placeholder="Search" dense>
             <template v-slot:append>
@@ -31,30 +31,153 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn dense round flat color="grey" to="/credentialmapping/edit"
-                   test="props.value" icon="edit"></q-btn>
-            <q-btn dense round flat color="grey" icon="delete" :disable="loading" @click="removeRow" />
+            <q-btn dense round flat color="grey" @click="changeCategory = true" icon="edit"></q-btn>
+            <q-btn dense round flat color="grey" icon="delete" :disable="loading" @click="alert = true" />
           </q-td>
         </template>
       </q-table>
     </div>
     </div>
   </q-page>
-  <q-dialog
-      v-model="deleteAlert"
-  >
-    <q-card style="width: 400px">
+  <q-dialog v-model="alert">
+    <q-card>
       <q-card-section>
-        <div class="text-h6">Warning</div>
+        <div class="text-h6">Löschen der Kategorie</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        "Möchten Sie die Kategorie löschen?"
+        Möchten Sie wirklich die Kategorie löschen?
       </q-card-section>
 
-      <q-card-actions align="right" class="bg-white text-teal">
-        <q-btn flat :label="Nein" v-close-popup/>
-        <q-btn flat :label="Ja" @click="deleteCategory()"/>
+      <q-card-actions>
+        <q-btn flat label="Ja" color="primary" v-close-popup />
+        <q-btn flat label="Nein" color="primary" v-close-popup />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <q-dialog v-model="prompt" persistent>
+    <q-card style="max-width: 80%; padding-bottom: 2em">
+      <q-card-section>
+        <div class="text-h6">Neue Kategorie erstellen</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <q-input dense label="Name der Kategorie" v-model="address" autofocus @keyup.enter="prompt = false" placeholder="Kategorie">
+          <template v-slot:append>
+            <q-icon name="edit" />
+          </template>
+        </q-input>
+      </q-card-section>
+      <q-card-section class="q-pt-none" style="padding-bottom: 10em ">
+      <div style="float: right; width: 20em; padding-top: 2em ; padding-left: 2em">
+        <q-select
+            filled
+            v-model="model"
+            multiple
+            label="Interne Credentials"
+            emit-value
+            :options="options"
+        ></q-select>
+      </div>
+      <div style="float: left; width: 20em; padding-top: 2em">
+        <q-select
+            filled
+            v-model="model2"
+            multiple
+            label="Externe Credentials"
+            emit-value
+            :options="options2"
+        ></q-select>
+        <q-btn dense flat color="grey" label="Delete External Credential" :disable="loading" icon="delete" rounded @click="alertExternal = true" no-caps/>
+        <q-btn dense flat color="grey" label="Add External Credential" :disable="loading" icon="add" rounded @click="addExternal=true" no-caps/>
+      </div>
+      </q-card-section>
+      <q-card-actions align="right" class="text-primary">
+        <q-btn flat icon="cancel" v-close-popup />
+        <q-btn flat icon="save" v-close-popup />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <q-dialog v-model="alertExternal">
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Löschen von ein Externen Credential</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        Möchten Sie wirklich ein externes Credential löschen?
+        <q-select
+            filled
+            v-model="model2"
+            multiple
+            label="Externe Credentials"
+            emit-value
+            :options="options2"
+        ></q-select>
+      </q-card-section>
+
+      <q-card-actions align="evenly">
+        <q-btn flat icon="cancel" color="primary" v-close-popup />
+        <q-btn flat icon="check" color="primary" v-close-popup />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <q-dialog v-model="addExternal">
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Hinzufügen eines externen Credentials</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <q-card-section class="q-pt-none">
+          <q-input dense label="Name des externen Credentials" v-model="address" autofocus @keyup.enter="prompt = false" />
+        </q-card-section>
+      </q-card-section>
+      <q-card-actions align="evenly">
+        <q-btn flat icon="cancel" color="primary" v-close-popup />
+        <q-btn flat icon="save" color="primary" v-close-popup />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <q-dialog v-model="changeCategory" persistent>
+    <q-card style="max-width: 80%; padding-bottom: 2em">
+      <q-card-section>
+        <div class="text-h6">Kategorie ändern</div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <q-input dense label="Name der Kategorie" v-model="address" autofocus @keyup.enter="prompt = false" placeholder="Kategorie">
+        <template v-slot:append>
+          <q-icon name="edit" />
+        </template>
+        </q-input>
+      </q-card-section>
+      <q-card-section class="q-pt-none" style="padding-bottom: 10em ">
+        <div style="float: right; width: 20em; padding-top: 2em ; padding-left: 2em">
+          <q-select
+              filled
+              v-model="model"
+              multiple
+              label="Interne Credentials"
+              emit-value
+              :options="options"
+          ></q-select>
+        </div>
+        <div style="float: left; width: 20em; padding-top: 2em">
+          <q-select
+              filled
+              v-model="model2"
+              multiple
+              label="Externe Credentials"
+              emit-value
+              :options="options2"
+          ></q-select>
+          <q-btn dense flat color="grey" label="Delete External Credential" :disable="loading" icon="delete" rounded @click="alertExternal = true" no-caps/>
+          <q-btn dense flat color="grey" label="Add External Credential" :disable="loading" icon="add" rounded @click="addExternal=true" no-caps/>
+        </div>
+      </q-card-section>
+      <q-card-actions align="right" class="text-primary">
+        <q-btn flat icon="cancel" v-close-popup />
+        <q-btn flat icon="save" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -99,8 +222,16 @@ export default {
     }return {
       rows,
       columns,
-      deleteAlert: ref(false),
+      alert: ref(false),
+      prompt: ref(false),
       filter: ref(''),
+      alertExternal: ref(false),
+      addExternal:ref(false),
+      changeCategory:ref(false),
+      options: [
+        'DRLG', 'Johanniter'
+      ],
+      options2:['Telekom', 'DRK'],
       // emulate fetching data from server
       addRow () {
         loading.value = true
