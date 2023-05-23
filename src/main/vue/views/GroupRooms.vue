@@ -235,7 +235,7 @@ const columns = [
         headerStyle: 'max-width: 50px',
         headerClasses: 'bg-primary text-white',
     },
-    {name: 'rooms', align: 'center', label: "Räume", field: 'rooms', sortable: true},
+    {name: 'rooms', align: 'center', label: "Räume", field: row => row.rooms.join(", "),  sortable: true},
     {name: 'actions', label: 'Bearbeiten', style: 'max-width 10px', headerStyle: 'max-width: 20px', align: 'center'}
 ]
 
@@ -245,11 +245,11 @@ rows.value = [
 
     {
         groupname: 'Frozen Yogurt',
-        rooms: 'Raum 1, Raum 2, Raum 5',
+        rooms: ['Room 1', 'Room 7'],
     },
     {
         groupname: 'Labore',
-        rooms: 'Raum 7, Raum 8, Raum 9',
+        rooms: ['Raum1', 'Raum 7'],
     },
 ]
 
@@ -282,7 +282,7 @@ export default {
             editName:ref(''),
             secondDialog: ref(false),
             modelRooms: ref(null),
-            modelRoomsNew: ref(editGroupRooms),
+            modelRoomsNew: ref(editGroupRooms.value),
             optionsRooms,
             getOldName() {
               this.editName = editGroupName;
