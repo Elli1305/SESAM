@@ -38,12 +38,10 @@
         </template>
         <template v-slot:body-cell-issuer="props">
           <q-td :props="props" v-for="item in items">
-            {{credentialStore.credentials.issuer.firstName[item]}} + {{credentialStore.credentials.issuer.lastName[item]}}
+            items[item]
             <q-icon class="q-mr-xs" color="grey" size="20px" name="info" />
             <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
-                       :offset="[0, 8]">
-              {{credentialStore.credentials.issuer.firstName[item]}} + {{credentialStore.credentials.issuer.lastName[item]}}
-              ist in Raum: {{credentialStore.credentials.issuer.room[item]}} <br>
+                       :offset="[0, 8]"> items[item]: Raum room[item]<br>
             </q-tooltip>
           </q-td>
         </template>
@@ -86,8 +84,15 @@ export default {
       model.value = locations[0].id
     })
 
+    const credentials = ref([''])
+    const credentialName = ref('')
+    const issuer = ref([''])
+    const categories = ref([''])
+
     async function updateCredentials(){
-    credentialStore.getCredentialsByLocation(model.value).then((credentials) => {})}
+    credentialStore.getCredentialsByLocation(model.value).then((credentials) => {
+      credentials.value = credentials.data;
+    })}
 
 
     return {
