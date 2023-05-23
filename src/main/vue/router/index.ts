@@ -11,6 +11,7 @@ import Imprint from "../views/Imprint.vue";
 import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
 import EditUser from "@/main/vue/views/EditUser.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
+import {useUserStore} from "@/main/vue/stores/users";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -84,8 +85,11 @@ const router = createRouter({
 });
 
 
-// router.beforeEach((to) => {
-//   // Something which should be executed before each routing
-// })
+router.beforeEach((to) => {
+    if (to.fullPath.endsWith("/corporatedesign")) {
+        if (!useUserStore().authenticated)
+            router.push("/")
+    }
+})
 
 export default router
