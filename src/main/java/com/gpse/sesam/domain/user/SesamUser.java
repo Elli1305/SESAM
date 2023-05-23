@@ -137,6 +137,7 @@ public class SesamUser implements UserDetails {
 		return true;
 	}
 
+
 	public Long getId() {
 		return id;
 	}
