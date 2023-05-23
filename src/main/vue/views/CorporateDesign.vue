@@ -260,12 +260,6 @@ export default {
         corpdesign.setColors()
         r.style.setProperty('--bg-color', colors.data.bgC)
         r.style.setProperty('--text-color', colors.data.textC)
-        $q.notify({
-          message: t('corporateDesign.resetSuccess'),
-          color: "positive",
-          textColor: "negative",
-          timeout: "1500"
-        })
         location.reload()
       }).catch( () => {
         $q.notify({
@@ -298,12 +292,6 @@ export default {
         r.style.setProperty('--bg-color', colors.data.bgC)
         r.style.setProperty('--text-color', colors.data.textC)
         location.reload()
-        $q.notify({
-          message: t('corporateDesign.saveSuccess'),
-          color: "positive",
-          textColor: "negative",
-          timeout: "1500"
-        })
       }).catch( () => {
         $q.notify({
           message: t('corporateDesign.saveFailure'),
