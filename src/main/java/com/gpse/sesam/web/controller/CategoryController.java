@@ -4,6 +4,7 @@ import com.gpse.sesam.domain.credential.Category;
 import com.gpse.sesam.domain.credential.CategoryService;
 import com.gpse.sesam.domain.credential.Credential;
 import com.gpse.sesam.domain.credential.CredentialService;
+import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class CategoryController {
     }*/
 
     @GetMapping("/credentialview/{id}")
-    public List<Credential> getCredentialInfos(@PathVariable("id") final Long id) {
+    public List<CredentialCmd> getCredentialInfos(@PathVariable("id") final Long id) {
         return credentialService.credentialFindByLocation(id);
     }
 }

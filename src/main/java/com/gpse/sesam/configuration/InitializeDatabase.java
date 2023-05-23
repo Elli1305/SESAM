@@ -6,6 +6,7 @@ import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
+import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +27,8 @@ public class InitializeDatabase implements InitializingBean {
 
 	private final CredentialService credentialService;
 
+	private final CredentialCmdService credentialCmdService;
+
 	private final CategoryService categoryService;
 
 	private final PasswordEncoder passwordEncoder;
@@ -33,12 +36,13 @@ public class InitializeDatabase implements InitializingBean {
 	List<Location> locationsList = new ArrayList<>();
 
 	public InitializeDatabase(LocationService locationService, SesamUserService userService,
-							  CredentialService credentialService, CategoryService categoryService, PasswordEncoder passwordEncoder) {
+							  CredentialService credentialService, CredentialCmdService credentialCmdService, CategoryService categoryService, PasswordEncoder passwordEncoder) {
 		this.credentialService = credentialService;
 		this.categoryService = categoryService;
 		this.passwordEncoder = passwordEncoder;
 		this.locationService = locationService;
 		this.userService = userService;
+		this.credentialCmdService = credentialCmdService;
 	}
 
 	@Override
@@ -47,6 +51,7 @@ public class InitializeDatabase implements InitializingBean {
 		categoryService.deleteAll();
 		credentialService.deleteAll();
 		userService.deleteAll();
+		credentialCmdService.deleteAll();
 
 		List<Location> locations = createLocations();
 		List<SesamUser> users = createUsers();
@@ -310,7 +315,7 @@ public class InitializeDatabase implements InitializingBean {
 
 
 		List<Credential> credentials2 = new ArrayList<>();
-		Credential firstAid = new Credential( "Erste-Hilfe-Kurs-DRK", "$U-Training", form6, checklist6, issuers);
+		Credential firstAid = new Credential( "Erste-Hilfe-Kurs-DRK", "$U-Training", form6, checklist6, issuers2);
 		credentials2.add(firstAid);
 
 		List<ExternalCredential> externalCredentials2 = new ArrayList<>();
@@ -364,13 +369,21 @@ public class InitializeDatabase implements InitializingBean {
 		locationsList.add(location2);
 
 		// Category
+
 		List<Category> categories = new ArrayList<>();
 		Category category = new Category( "Sicherheitsbelehrung", externalCredentials);
 		category.addCredential(safety);
 		Category category2 = new Category( "Erste-Hilfe-Kurs", externalCredentials2);
 		category2.addCredential(firstAid);
+		CredentialCmd credentialCmd = CredentialServiceImpl.createCredentialCmd(category,safety);
+		CredentialCmd credentialCmd2 = CredentialServiceImpl.createCredentialCmd(category2, firstAid);
+		List<CredentialCmd> credentialCmds =new ArrayList<>();
+		credentialCmds.add(credentialCmd);
+		credentialCmds.add(credentialCmd2);
+		credentialCmdService.saveAll(credentialCmds);
 		categories.add(category);
 		categories.add(category2);
+
 		return categories;
 	}
 }

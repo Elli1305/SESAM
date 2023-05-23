@@ -42,6 +42,7 @@ export const useCredentialStore = defineStore('credential', () =>{
         })
     }
 
+
     return {
         getCredentialsByLocation,
         allCategories,

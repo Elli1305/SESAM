@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.credential;
 
 import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.exception.LocationNotFoundException;
 
 import javax.security.auth.login.CredentialNotFoundException;
@@ -20,6 +21,6 @@ public interface CredentialService {
 
     Optional<Credential> credentialFindByLocation(Location location);
 
-    List<Credential> credentialFindByLocation(Long id);
+    List<CredentialCmd> credentialFindByLocation(Long id);
 
 }
