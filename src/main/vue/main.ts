@@ -119,7 +119,7 @@ const messages = {
             title: "Corporate Design",
             colors: "Farben",
             logo: "Logo",
-            logoHint: "Nur SVG Dateien",
+            logoHint: "Nur SVG, PNG, JPG Dateien",
             favicon: "Favicon",
             faviconHint: "Nur ICO Dateien",
             confirm: {
@@ -136,8 +136,8 @@ const messages = {
                     cancel: "Abbruch"
                 }
             },
-            resetSuccess: "Zurücksetzen erfolgreich",
-            saveSuccess: "Speichern erfolgreich"
+            resetFailure: "Zurücksetzen fehlgeschlagen",
+            saveFailure: "Speichern fehlgeschlagen"
         }
     },
     en: {
@@ -241,7 +241,7 @@ const messages = {
             title: "Corporate Design",
             colors: "Colors",
             logo: "Logo",
-            logoHint: "Only SVG files",
+            logoHint: "Only SVG, PNG, JPG files",
             favicon: "Favicon",
             faviconHint: "Only ICO files",
             confirm: {
@@ -258,8 +258,8 @@ const messages = {
                     cancel: "Cancel"
                 }
             },
-            resetSuccess: "Reset successful",
-            saveSuccess: "Saving successful"
+            resetFailure: "Reset failed",
+            saveFailure: "Saving failed"
         }
     }
 }

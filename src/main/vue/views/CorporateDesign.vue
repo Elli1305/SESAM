@@ -160,7 +160,7 @@
     </div>
     <div class="row justify-evenly no-wrap" >
       <q-btn @click="confirmReset = true" round icon="restart_alt" color="negative" text-color="positive" style="width: 4em; height: 4em"/>
-      <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" :hint="t('corporateDesign.logoHint')" bg-color="white" style="width: 14em">
+      <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg, .png, .jpg" :hint="t('corporateDesign.logoHint')" bg-color="white" style="width: 14em">
         <template v-slot:prepend>
           <q-icon name="attach_file" />
         </template>
