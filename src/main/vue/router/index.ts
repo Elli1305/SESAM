@@ -90,6 +90,10 @@ router.beforeEach((to) => {
         if (!useUserStore().authenticated)
             router.push("/")
     }
+    if (to.fullPath.endsWith("/profile")) {
+        if (!useUserStore().authenticated)
+            router.push("/")
+    }
 })
 
 export default router
