@@ -185,7 +185,7 @@
                 </q-card-section>
 
                 <q-card-actions align="right" class="text-primary">
-                    <q-btn flat label="Speichern" @click="checkName(newGroupName); toDefault()"/>
+                    <q-btn flat label="Speichern" @click="checkName(newGroupName);"/>
                     <q-btn flat :label="t('adminEdit.back')" @click="toDefault()" v-close-popup/>
                 </q-card-actions>
             </q-card>
