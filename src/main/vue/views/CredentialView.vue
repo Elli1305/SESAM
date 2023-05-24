@@ -28,7 +28,6 @@
               option-label="name"
               options-cover
               style="min-width: 13em; padding-right: 1em"
-              @click="updateCredentials"
           />
           <q-input dense debounce="300" v-model="filter" :placeholder="t('credentialview.search')">
             <template v-slot:append>
@@ -37,11 +36,10 @@
           </q-input>
         </template>
         <template v-slot:body-cell-issuer="props">
-          <q-td :props="props" v-for="item in items">
-            items[item]
+          <q-td :props="props">
             <q-icon class="q-mr-xs" color="grey" size="20px" name="info" />
             <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
-                       :offset="[0, 8]"> items[item]: Raum room[item]<br>
+                       :offset="[0, 8]"> Room<br>
             </q-tooltip>
           </q-td>
         </template>
@@ -67,6 +65,7 @@ const columns = [
   { name: 'availableCredential', align: 'center', label : 'Verfügbares Credential' , field: 'availableCredential', sortable: true },
   { name: 'qualification', align: 'center', label: 'Vergleichbare Credentials', field: 'qualification', sortable: true },
   { name: 'issuer', align: 'center', label: 'Herausgeber', field: 'issuer', sortable: true },
+  {name: 'issuerRoom', align: 'center', label: 'Raum', field: 'room', sortable: true}
 ]
 
 const rows = ref([''])
@@ -84,14 +83,9 @@ export default {
       model.value = locations[0].id
     })
 
-    const credentials = ref([''])
-    const credentialName = ref('')
-    const issuer = ref([''])
-    const categories = ref([''])
-
     async function updateCredentials(){
     credentialStore.getCredentialsByLocation(model.value).then((credentials) => {
-      credentials.value = credentials.data;
+      credentials.value = rows.value;
     })}
 
 

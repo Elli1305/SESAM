@@ -1,12 +1,12 @@
 import {defineStore} from "pinia";
 import {Ref, ref} from "vue";
 import api from "@/main/vue/api";
-import {Category} from "@/main/vue/entity/credentialDefinition";
+import {Category, CredentialCmd} from "@/main/vue/entity/credentialDefinition";
 
 export const useCredentialStore = defineStore('credential', () =>{
     const allCategories: Ref<Category[] | null> = ref(null)
     const allInformation: Ref<Credential[]|null> = ref(null)
-    const credentials: Ref<Credential[]|null> = ref(null)
+    const credentials: Ref<CredentialCmd[]|null> = ref(null)
 
 
     function getCategories() {
