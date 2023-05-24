@@ -3,10 +3,8 @@ import {Ref, ref} from 'vue'
 import api from '../api'
 import {AttainableRole} from "@/main/vue/entity/createUser"
 import axios from 'axios';
-import {LoginResponse, User} from "@/main/vue/entity/loginResponse";
-import {UserRole} from "@/main/vue/entity/signUpResponse";
+import {User} from "@/main/vue/entity/loginResponse";
 import {LoginData} from "@/main/vue/entity/loginData"
-import {Credentials} from "@/main/vue/entity/credentials"
 
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
@@ -50,7 +48,7 @@ export const useUserStore = defineStore('users', () => {
     function authenticate(token?: string) {
         if (token) {
             authenticated.value = true
-            localStorage.setItem('token', token);
+            sessionStorage.setItem('token', token);
             axios.defaults.headers['Authorization'] = 'Bearer ' + token
         } else {
             authenticated.value = false

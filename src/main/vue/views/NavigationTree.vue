@@ -100,7 +100,8 @@ export default {
                 id: floor.id,
                 level: 2,
                 floorPlan: floor.floorPlanPath,
-                title: "Etage " + floor.floorLevel
+                title: "Etage " + floor.floorLevel,
+                rooms: floor.rooms
               }))
             }))
           }))
