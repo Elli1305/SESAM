@@ -39,7 +39,7 @@
                     </template>
 
 
-                    <template v-slot:top-left>
+                    <template v-slot:top-left >
                         <q-select
                                 filled
                                 v-model="modelForLocation"
@@ -47,8 +47,11 @@
                                 input-debounce="0"
                                 :label="t( 'groupRooms.chooseLocation')"
                                 :options="optionsLocations"
-                                @filter="filterFn"
-                                style="width: 250px"
+                                option-label="name"
+
+                                @filter="filterLocations"
+                                @update:model-value="changed"
+                                style="width: 280px"
                                 behavior="menu"
                         >
                             <template v-slot:no-option>
@@ -68,9 +71,11 @@
                                 use-input
                                 input-debounce="0"
                                 :label="t( 'groupRooms.chooseBuilding')"
-                                :options="options"
-                                @filter="filterFn"
-                                style="width: 250px"
+                                :options="buildingListNames"
+                                option-label="name"
+                                @filter="filterBuilding"
+                                @update:model-value="getBuilding"
+                                style="width: 280px"
                                 behavior="menu"
                         >
                             <template v-slot:no-option>
@@ -176,7 +181,8 @@
                                 filled
                                 v-model="modelRooms"
                                 multiple
-                                :options="optionsRooms"
+                                :options="listOfAllRoomsViaBuilding"
+                                option-label="name"
 
                             />
                         </div>
@@ -200,6 +206,7 @@ import {ref} from 'vue'
 import {useI18n} from "vue-i18n";
 import {useQuasar} from "quasar";
 import {useLocationStore} from "@/main/vue/stores/locations";
+import {prop} from "vue-class-component";
 
 const columns = [
     {
@@ -223,10 +230,14 @@ rows.value = [
     {
         groupname: 'Frozen Yogurt',
         rooms: ['Room 1', 'Room 7'],
+        location: 'ExampleLocation',
+        building: 'Building 0',
     },
     {
         groupname: 'Labore',
         rooms: ['Room 2', 'Room 5', 'Room 7', 'Room 13'],
+        location: 'ExampleLocation',
+        building: 'Building 1',
     },
 ]
 
@@ -247,11 +258,15 @@ export default {
         const $q = useQuasar();
         const locationStore = useLocationStore()
         const options = ref(stringOptions)
-        let optionsLocations = ref(['Location1', 'Location2'])
+        let optionsLocations = ref([])
         let editGroupName = ref(null);
         let editGroupRooms = ref(null);
         let locationList = [];
         let locationListNames = [];
+        let buildingList = ref([]);
+        let buildingListNames = ref([]);
+        let buildingListForFilter=ref([]);
+        let listOfAllRoomsViaBuilding = ref([]);
 
         async function loadLocations() {
             await locationStore.getLocations().then((locations) => {
@@ -262,30 +277,45 @@ export default {
                 for(const loc of locationList) {
                     locationListNames.push(loc.name);
                 }
-                //optionsLocations = locationListNames;
+                optionsLocations.value = locationList;
                 console.log("hallo");
                 console.log(optionsLocations);
                 console.log(locationListNames);
             }).then(() => {
-                    console.log(optionsLocations);
+                console.log(optionsLocations.value);
                 console.log("halalal");
-                console.log(optionsLocations);
-                optionsLocations = ref(['weiß ich nicht', 'hohoh'])
-                console.log(optionsLocations);
+                console.log(optionsLocations.value);
             }
             )
 
             console.log(locationListNames);
 
             console.log("hier");
-            console.log(locationList);
-            console.log("hier Ende");
+            //console.log(locationList);
+            //console.log("hier Ende");
 
         }
 
         loadLocations();
-        (console.log(locationListNames) )
-        console.log("sss");
+
+
+        function adjustBuildingList(nameLoc) {
+            buildingList.value=[];
+            for(const loc of locationList){
+                if(loc.name===nameLoc) {
+                    buildingList.value.push(loc.buildings);
+                    console.log("sucess")
+                }
+                console.log(loc.name);
+            }
+            for(const building of buildingList.value) {
+                buildingListNames.value = building;
+                buildingListForFilter.value=building;
+            }
+            console.log("Buildings");
+            console.log(buildingList.value);
+            console.log(buildingListNames.value);
+        }
 
 
         async function checkName(newName) {
@@ -304,6 +334,16 @@ export default {
             this.modelRooms=ref(null);
 
         }
+        function updateRoomList(building){
+            listOfAllRoomsViaBuilding.value=[];
+            for(const floor of building.floors) {
+                for(const rooms of floor.rooms) {
+                    listOfAllRoomsViaBuilding.value.push(rooms)
+                }
+            }
+            console.log("Räume:")
+            console.log(listOfAllRoomsViaBuilding.value);
+        }
 
         return {
             deleteAlert: ref(false),
@@ -317,10 +357,27 @@ export default {
             optionsRooms,
             checkName,
             loadLocations,
+            locationList,
+            buildingListNames,
             toDefault,
+            adjustBuildingList,
             getOldName() {
               this.editName = editGroupName;
               this.modelRoomsNew= editGroupRooms;
+            },
+            changed(val){
+                if(val !==null) {
+                    adjustBuildingList(val.name);
+                    console.log("Change", val.name)
+                }
+                else {
+                    buildingListNames.value=[];
+                }
+            },
+
+            getBuilding(building) {
+                console.log(building);
+                updateRoomList(building);
             },
 
             filter: ref({
@@ -335,6 +392,7 @@ export default {
             stringOptions,
             options,
             optionsLocations,
+            listOfAllRoomsViaBuilding,
             editGroup(value) {
               editGroupName = value[1].groupname;
               editGroupRooms = value[1].rooms;
@@ -342,23 +400,36 @@ export default {
               console.log(editGroupName);
             },
 
-            filterFn(val, update) {
+            filterBuilding(val, update) {
                 if (val === '') {
                     update(() => {
-                        options.value = stringOptions
+                        buildingListNames.value = buildingListForFilter.value
                     })
                     return
                 }
 
                 update(() => {
                     const needle = val.toLowerCase()
-                    options.value = stringOptions.filter(v => v.toLowerCase().indexOf(needle) > -1)
+                    buildingListNames.value = buildingListForFilter.value.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
                 })
-            }
+            },
+            filterLocations(val, update) {
+                if (val === '') {
+                    update(() => {
+                        optionsLocations.value=locationList
+                    })
+                    return
+                }
+                update(() => {
+                    const needle = val.toLowerCase()
+                    optionsLocations.value = locationList.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+                })
+            },
         }
     },
 
     methods: {
+        prop,
         customFilter(rows, terms) {
             // rows contain the entire data
             // terms contains whatever you have as filter
