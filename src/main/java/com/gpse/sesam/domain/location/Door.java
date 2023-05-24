@@ -23,7 +23,7 @@ public class Door {
     private List<Coordinate> coordinates;
 
 	@JsonManagedReference
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy="doors", fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "doors", fetch = FetchType.EAGER)
     private List<Credential> credentials = new ArrayList<>();
 
 	@JsonBackReference
@@ -31,12 +31,6 @@ public class Door {
 	private Room room;
 
     protected Door() {
-
-    }
-
-    public Door(String name, List<Coordinate> coordinates) {
-        this.name = name;
-        this.coordinates = coordinates;
 
     }
 

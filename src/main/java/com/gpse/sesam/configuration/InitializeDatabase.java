@@ -29,7 +29,9 @@ public class InitializeDatabase implements InitializingBean {
 
     private final PasswordEncoder passwordEncoder;
 
-    List<Location> locationsList = new ArrayList<>();public InitializeDatabase(LocationService locationService, SesamUserService userService,
+    private final List<Location> locationsList = new ArrayList<>();
+
+    public InitializeDatabase(LocationService locationService, SesamUserService userService,
                               CredentialService credentialService, CategoryService categoryService,
                               PasswordEncoder passwordEncoder) {
         this.credentialService = credentialService;
@@ -55,8 +57,8 @@ public class InitializeDatabase implements InitializingBean {
         userService.saveAll(users);
         credentialService.saveAll(credentials);
         categoryService.saveAll(categories);
-    locationService.saveAll(locationsList);
-	}
+        locationService.saveAll(locationsList);
+    }
 
     private List<SesamUser> createUsers() {
         SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
@@ -67,15 +69,16 @@ public class InitializeDatabase implements InitializingBean {
         editorRole.setGranted(true);
 
         Door door = new Door("Door100", null);
-        List<Door> doors = new ArrayList<>();Room room = new Room("0.007");
-		Floor floor = new Floor(40, null);
-		floor.addRoom(room);
-		Building building = new Building("UHG");
-		building.addFloor(floor);
-		Location location = new Location("Heidelberg");
-		location.addBuilding(building);
+        List<Door> doors = new ArrayList<>();
+        Room room = new Room("0.007");
+        Floor floor = new Floor(40, null);
+        floor.addRoom(room);
+        Building building = new Building("UHG");
+        building.addFloor(floor);
+        Location location = new Location("Heidelberg");
+        location.addBuilding(building);
 
-		room.addDoor(door);
+        room.addDoor(door);
         doors.add(door);
 
         String defaultPassword = passwordEncoder.encode("Hallo123!");
@@ -99,63 +102,61 @@ public class InitializeDatabase implements InitializingBean {
         for (int i = 0, k = 0; i < 60; i++, k += 2) {
             Door door = new Door("Door" + i, null);
             doors.add(door);
-			Door door2 = new Door("Door" + k, null);
-			doors2.add(door2);
+            Door door2 = new Door("Door" + k, null);
+            doors2.add(door2);
         }
 
         List<Room> rooms = new ArrayList<>();
         List<Room> rooms2 = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             Room room = new Room("Room " + i);
-			room.addDoor(doors.get(i*2));
-			room.addDoor(doors.get(i*2+1));
+            room.addDoor(doors.get(i * 2));
+            room.addDoor(doors.get(i * 2 + 1));
             rooms.add(room);
-			Room room2 = new Room("Room " + i);
-			room2.addDoor(doors2.get(i*2));
-			room2.addDoor(doors2.get(i*2+1));
-			rooms2.add(room2);
+            Room room2 = new Room("Room " + i);
+            room2.addDoor(doors2.get(i * 2));
+            room2.addDoor(doors2.get(i * 2 + 1));
+            rooms2.add(room2);
         }
 
         List<Floor> floors = new ArrayList<>();
         List<Floor> floors2 = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             Floor floor = new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png");
-			floor.addRoom(rooms.get(i*5));
-			floor.addRoom(rooms.get(i*5+1));
-			floor.addRoom(
-                    rooms.get(i*5+2));
-			floor.addRoom(rooms.get(i*5+3));
-			floor.addRoom(rooms.get(i*5+4));
+            floor.addRoom(rooms.get(i * 5));
+            floor.addRoom(rooms.get(i * 5 + 1));
+            floor.addRoom(rooms.get(i * 5 + 2));
+            floor.addRoom(rooms.get(i * 5 + 3));
+            floor.addRoom(rooms.get(i * 5 + 4));
             floors.add(floor);
-			Floor floor2 = new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png");
-			floor2.addRoom(
-                    rooms2.get(i*5));
-			floor2.addRoom(rooms2.get( i * 5 + 1));
-			floor2.addRoom(rooms2.get(i*5+2));
-			floor2.addRoom(rooms2.get(i*5+3));
-			floor2.addRoom(rooms2.get(i*5+4));
-			floors2.add(floor2);
+            Floor floor2 = new Floor(i % 2, "src/main/resources/citec-gebaeudeplan.png");
+            floor2.addRoom(rooms2.get(i * 5));
+            floor2.addRoom(rooms2.get(i * 5 + 1));
+            floor2.addRoom(rooms2.get(i * 5 + 2));
+            floor2.addRoom(rooms2.get(i * 5 + 3));
+            floor2.addRoom(rooms2.get(i * 5 + 4));
+            floors2.add(floor2);
         }
 
         List<Building> buildings = new ArrayList<>();
         List<Building> buildings2 = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             Building building = new Building("Building " + i);
-			building.addFloor(floors.get(i*2));
-			building.addFloor(floors.get(i*2+1));
+            building.addFloor(floors.get(i * 2));
+            building.addFloor(floors.get(i * 2 + 1));
             buildings.add(building);
-			Building building2 = new Building("Building " + i);
-			building2.addFloor(floors2.get(i*2));
-			building2.addFloor(floors2.get(i*2+1));
-			buildings2.add(building2);
-		}
-		Location location1 = new Location("Berlin");
-		Location location2 = new Location("Bielefeld");
+            Building building2 = new Building("Building " + i);
+            building2.addFloor(floors2.get(i * 2));
+            building2.addFloor(floors2.get(i * 2 + 1));
+            buildings2.add(building2);
+        }
+        Location location1 = new Location("Berlin");
+        Location location2 = new Location("Bielefeld");
 
-        for (int i=0; i < buildings.size(); i++) {
-        location1.addBuilding(buildings.get(i));
-        location2.addBuilding(buildings2.get(i));
-		}
+        for (int i = 0; i < buildings.size(); i++) {
+            location1.addBuilding(buildings.get(i));
+            location2.addBuilding(buildings2.get(i));
+        }
 
         return List.of(location1, location2);
     }
@@ -190,21 +191,21 @@ public class InitializeDatabase implements InitializingBean {
         List<Door> doors = new ArrayList<>();
         doors.add(door);
 
-		Door door2 = new Door("Door666", null);
-		List<Door> doors2 = new ArrayList<>();
-		doors2.add(door2);
+        Door door2 = new Door("Door666", null);
+        List<Door> doors2 = new ArrayList<>();
+        doors2.add(door2);
 
         Room room = new Room("0.007");
-		room.addDoor(door);
+        room.addDoor(door);
         Room room2 = new Room("0.112");
-		room2.addDoor(door2);
-		Floor floor = new Floor(40, null);
-		floor.addRoom(room);
-		floor.addRoom(room2);
-		Building building = new Building("UHG");
-		building.addFloor(floor);
-		Location location = new Location("Köln");
-		location.addBuilding(building);
+        room2.addDoor(door2);
+        Floor floor = new Floor(40, null);
+        floor.addRoom(room);
+        floor.addRoom(room2);
+        Building building = new Building("UHG");
+        building.addFloor(floor);
+        Location location = new Location("Köln");
+        location.addBuilding(building);
         List<Issuer> issuers = new ArrayList<>();
         Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters",
                 Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
@@ -262,19 +263,18 @@ public class InitializeDatabase implements InitializingBean {
         form4.add(birthDate4);
         form4.add(date4);
 
-		// Issuer
-		SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-		issuerRole10.setGranted(true);
-		SesamUserRole issuerRole11 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-		issuerRole10.setGranted(true);
-		Room room = new Room("0.007");
-		Room room2 = new Room("0.112");
+        // Issuer
+        SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+        issuerRole10.setGranted(true);
+        SesamUserRole issuerRole11 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+        issuerRole10.setGranted(true);
+        Room room = new Room("0.007");
+        Room room2 = new Room("0.112");
 
 
-
-		List<Issuer> issuers = new ArrayList<>();
-		Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
-				Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
+        List<Issuer> issuers = new ArrayList<>();
+        Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
+                Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
 
         Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann",
                 "Hombach", Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
@@ -283,12 +283,17 @@ public class InitializeDatabase implements InitializingBean {
 
         // Safety-Credential
         List<Credential> credentials = new ArrayList<>();
-        Credential safety = new Credential("Sicherheitsbelehrung-Baumschule", "$T-MEMBER",
-                "tlabs", form4, checklist4, issuers);
+        Credential safety = new Credential(
+                "Sicherheitsbelehrung-Baumschule",
+                "$T-MEMBER",
+                "tlabs",
+                form4,
+                checklist4,
+                issuers
+        );
         credentials.add(safety);
         List<ExternalCredential> externalCredentials = new ArrayList<>();
-        ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom",
-                "$T-MEMBER");
+        ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-MEMBER");
 
         externalCredentials.add(safety3);
 
@@ -316,15 +321,19 @@ public class InitializeDatabase implements InitializingBean {
 
 
         List<Credential> credentials2 = new ArrayList<>();
-        Credential firstAid = new Credential("Erste-Hilfe-Kurs-DRK", "$U-TRAINING",
-                "university", form6, checklist6, issuers);
+        Credential firstAid = new Credential(
+                "Erste-Hilfe-Kurs-DRK",
+                "$U-TRAINING",
+                "university",
+                form6,
+                checklist6,
+                issuers
+        );
         credentials2.add(firstAid);
 
         List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-        ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom",
-                "$U-TRAINING");
-        ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter",
-                "$U-MEMBER");
+        ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-TRAINING");
+        ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-MEMBER");
 
         externalCredentials2.add(firstAid2);
         externalCredentials2.add(firstAid3);
@@ -332,54 +341,54 @@ public class InitializeDatabase implements InitializingBean {
         //Rooms with Credentials
 
         Door door3 = new Door("Tor120", null);
-		door3.addCredential(safety);
+        door3.addCredential(safety);
 
         List<Door> doors3 = new ArrayList<>();
 
         doors3.add(door3);
 
         Room room3 = new Room("120");
-		room3.addDoor(door3);
+        room3.addDoor(door3);
 
         List<Room> roomList = new ArrayList<>();
 
         roomList.add(room3);
 
         Floor floor3 = new Floor(1, "src/main/resources/citec-gebaeudeplan.png");
-		floor3.addRoom(room3);
-		floor3.addRoom(room);
-		floor3.addRoom(room2);
+        floor3.addRoom(room3);
+        floor3.addRoom(room);
+        floor3.addRoom(room2);
 
         List<Floor> floorList = new ArrayList<>();
 
         floorList.add(floor3);
 
         Building building3 = new Building("Citec");
-		building3.addFloor(floor3);
+        building3.addFloor(floor3);
 
         List<Building> buildingList = new ArrayList<>();
 
         buildingList.add(building3);
 
         Location location = new Location("Hamburg");
-		location.addBuilding(building3);
+        location.addBuilding(building3);
 
         Door door4 = new Door("Tor1506", null);
-		door4.addCredential(firstAid);
+        door4.addCredential(firstAid);
 
         List<Door> doors4 = new ArrayList<>();
 
         doors4.add(door4);
 
         Room room4 = new Room("0.150");
-		room4.addDoor(door4);
+        room4.addDoor(door4);
 
         List<Room> roomList2 = new ArrayList<>();
 
         roomList2.add(room4);
 
         Floor floor4 = new Floor(1, "src/main/resources/citec-gebaeudeplan.png");
-		floor4.addRoom(room4);
+        floor4.addRoom(room4);
 
         List<Floor> floorList2 = new ArrayList<>();
 
@@ -387,24 +396,25 @@ public class InitializeDatabase implements InitializingBean {
 
         Building building4 = new Building("Citec2");
 
-        List<Building> buildingList2 = new ArrayList<>();building4.addFloor(floor4);
+        List<Building> buildingList2 = new ArrayList<>();
+        building4.addFloor(floor4);
 
         buildingList2.add(building4);
 
         Location location2 = new Location("Bremen");
-		location2.addBuilding(building4);
-		locationsList.add(location);
-		locationsList.add(location2);
+        location2.addBuilding(building4);
+        locationsList.add(location);
+        locationsList.add(location2);
 
 
         // Category
         List<Category> categories = new ArrayList<>();
-        Category category =new Category("Sicherheitsbelehrung",  externalCredentials);
+        Category category = new Category("Sicherheitsbelehrung", externalCredentials);
         category.addCredential(safety);
-		Category category2 =new Category("Erste-Hilfe-Kurs", externalCredentials2);
-		category2.addCredential(firstAid);
-		categories.add(category);
-		categories.add(category2);
+        Category category2 = new Category("Erste-Hilfe-Kurs", externalCredentials2);
+        category2.addCredential(firstAid);
+        categories.add(category);
+        categories.add(category2);
         return categories;
     }
 }

@@ -15,6 +15,18 @@ public class SesamUserCmd {
 
     private List<SesamUserRole.AttainableRole> requestedRoles;
 
+    public SesamUserCmd() {
+    }
+
+    public SesamUserCmd(String email, String password, String firstName, String lastName,
+                        List<SesamUserRole.AttainableRole> requestedRoles) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.requestedRoles = requestedRoles;
+    }
+
     public String getEmail() {
         return email;
     }
