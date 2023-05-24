@@ -5,5 +5,5 @@ import credential from "@/main/vue/api/credential";
 export default {
     auth,
     location,
-    credential
-}
+    credential,
+};

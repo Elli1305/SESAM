@@ -10,56 +10,56 @@ import java.util.List;
 @Entity
 public class Building {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
 
-    @Column
-    private String name;
+	@Column
+	private String name;
 
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
-    private List<Floor> floors = new ArrayList<>();
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	private List<Floor> floors = new ArrayList<>();
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Location location;
 
-    protected Building() {
+	protected Building() {
 
-    }
+	}
 
-    public Building(String name) {
+    public Building(final String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
-    public List<Floor> getFloors() {
-        return floors;
-    }
+	public List<Floor> getFloors() {
+		return floors;
+	}
 
-    public void setFloors(List<Floor> floors) {
-        this.floors = floors;
-    }
+	public void setFloors(final List<Floor> floors) {
+		this.floors = floors;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
-    public void addFloor(Floor floor) {
-        floors.add(floor);
+	public void addFloor(final Floor floor) {
+		floors.add(floor);
         floor.setBuilding(this);
     }
 

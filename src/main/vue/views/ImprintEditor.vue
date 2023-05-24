@@ -1,0 +1,176 @@
+<template>
+  <q-page class="items-center justify-center" style="display: flex">
+    <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
+      <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
+        <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Impressum</h1>
+        <div v-if="!showEditor" class="imprint-content" v-html="imprintContent || initialImprintContent"></div>
+      </div>
+      <q-editor v-model="editorContent" v-if="showEditor" />
+
+      <div class="editor-result" v-html="editorContent" v-if="showEditor"></div>
+      <div class="action-buttons" v-if="showEditor" style="display: flex; justify-content: space-between; width: 100%; margin-top: 1em; margin-bottom: 2em;">
+        <q-btn icon="delete" color="primary" @click="showDeleteDialog" size="md" />
+        <q-btn icon="save" color="primary" @click="showConfirmDialog" size="md" />
+
+      </div>
+      <div class="action-buttons" style="display: flex; justify-content: center; width: 100%; margin-top: 1em; margin-bottom: 2em;">
+        <q-btn icon="edit" color="primary" @click="toggleEditor" v-if="!showEditor" size="md" />
+      </div>
+    </div>
+    <q-dialog v-model="confirmDialog">
+      <q-card>
+        <q-card-section class="q-pa-md">
+          <div class="text-h6">Bestätigen</div>
+          <div class="q-mt-md">Möchten Sie das bestehende Impressum wirklich überschreiben?</div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Abbrechen" color="primary" @click="confirmDialog = false" />
+          <q-btn label="Ok" color="primary" @click="postText" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="deleteDialog">
+      <q-card>
+        <q-card-section class="q-pa-md">
+          <div class="text-h6">Löschen bestätigen</div>
+          <div class="q-mt-md">Sind Sie sicher, dass Sie das Impressum löschen wollen?</div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Abbrechen" color="primary" @click="deleteDialog = false" />
+          <q-btn label="Löschen" color="primary" @click="deletePostedContent" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </q-page>
+</template>
+<script lang="ts">
+import { ref, onMounted } from 'vue';
+import { QDialog, useQuasar } from 'quasar';
+import { getImprintContent, postImprintContent,deleteImprintContent,getLatestImprint } from '../api/imprint';
+
+export default {
+  name: "ImprintEditor",
+  components: {
+    QDialog,
+  },
+  setup() {
+    const $q = useQuasar();
+    const editorContent = ref('');
+    const imprintContent = ref('');
+    const showEditor = ref(false);
+    const confirmDialog = ref(false);
+    const deleteDialog = ref(false);
+    const initialImprintContent = ref('');
+
+    onMounted(async () => {
+      try {
+        const response = await getImprintContent();
+        imprintContent.value = response.data;
+        initialImprintContent.value = response.data;
+        editorContent.value = imprintContent.value;
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    const showConfirmDialog = () => {
+      confirmDialog.value = true;
+    };
+
+    const postText = () => {
+      console.log("postText called");
+      postImprintContent(editorContent.value)
+          .then(() => {
+            imprintContent.value = editorContent.value;
+            showEditor.value = false;
+            confirmDialog.value = false;
+
+            $q.notify({
+              type: 'positive',
+              message: 'Inhalt erfolgreich gespeichert',
+              position: 'bottom',
+              timeout: 3000,
+            });
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {
+            confirmDialog.value = false;
+          });
+    };
+
+    const toggleEditor = () => {
+      showEditor.value = !showEditor.value;
+      if (showEditor.value) {
+        loadLatestContent();
+      }
+    };
+
+    const deletePostedContent = () => {
+      deleteImprintContent()
+          .then(() => {
+            imprintContent.value = '';
+            editorContent.value = '';
+            initialImprintContent.value = '';
+            showEditor.value = false;
+            deleteDialog.value = false;
+
+            $q.notify({
+              type: 'negative',
+              message: 'Inhalt erfolgreich gelöscht',
+              position: 'bottom',
+              timeout: 3000,
+            });
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    };
+
+    const showDeleteDialog = () => {
+      deleteDialog.value = true;
+    };
+
+    const loadLatestContent = async () => {
+      try {
+        const response = await getLatestImprint();
+        console.log(response.data); // Add this line
+        editorContent.value = response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    return {
+      editorContent,
+      imprintContent: imprintContent,
+      showEditor,
+      toggleEditor,
+      loadLatestContent,
+      confirmDialog,
+      deleteDialog,
+      showConfirmDialog,
+      postText,
+      showDeleteDialog,
+      deletePostedContent,
+      initialImprintContent: initialImprintContent
+    };
+  }
+}
+</script>
+<style scoped>
+h1 {
+  font-size: 3em;
+  text-align: center;
+  margin-bottom: -0.5em;
+}
+
+.editor-result {
+  margin-top: 2em;
+}
+
+
+
+</style>

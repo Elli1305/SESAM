@@ -1,0 +1,58 @@
+package com.gpse.sesam.domain.imprint;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+import java.time.LocalDateTime;
+
+@Entity
+public class Imprint {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	@Column(nullable = false)
+	private String content;
+
+	@Column(nullable = false)
+	private LocalDateTime timestamp;
+
+	protected Imprint() {
+
+	}
+
+	public Imprint(final String content, final LocalDateTime timestamp) {
+		this.content = content;
+		this.timestamp = timestamp;
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
+
+	public void setId(final Long id) {
+		this.id = id;
+	}
+
+	public void setContent(final String content) {
+		this.content = content;
+	}
+
+	public void setTimestamp(final LocalDateTime timestamp) {
+		this.timestamp = timestamp;
+	}
+
+}

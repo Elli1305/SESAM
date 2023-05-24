@@ -29,11 +29,11 @@ public class Room {
 
 	}
 
-	public Room(String name) {
+	public Room(final String name) {
 		this.name = name;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -45,7 +45,7 @@ public class Room {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -53,7 +53,7 @@ public class Room {
 		return doors;
 	}
 
-	public void setDoors(List<Door> doors) {
+	public void setDoors(final List<Door> doors) {
 		this.doors = doors;
 	}
 

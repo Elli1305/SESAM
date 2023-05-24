@@ -12,7 +12,7 @@ public class ChecklistEntry {
     @Column(nullable = false)
     private String label;
 
-    protected ChecklistEntry () {
+    protected ChecklistEntry() {
 
     }
 

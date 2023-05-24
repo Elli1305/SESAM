@@ -4,13 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gpse.sesam.domain.credential.Credential;
 import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +18,12 @@ public class Door {
 
 	@Column
 	private String name;
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Coordinate> coordinates;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Coordinate> coordinates;
 
 	@JsonManagedReference
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy="doors", fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "doors", fetch = FetchType.EAGER)
     private List<Credential> credentials = new ArrayList<>();
 
 	@JsonBackReference
@@ -40,41 +34,37 @@ public class Door {
 
     }
 
-	public Door(String name,List<Coordinate> coordinates) {
-		this.name =name;
-		this.coordinates = coordinates;
-	}
+    public Door(final String name, final List<Coordinate> coordinates) {
+        this.name = name;
+        this.coordinates = coordinates;
+    }
 
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public List<Coordinate> getCoordinates() {
-		return coordinates;
-	}
-
-	public void setCoordinates(List<Coordinate> coordinates) {
-		this.coordinates = coordinates;
-	}
+    public void setId(final Long id) {
+        this.id = id;
+    }
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
-	public List<Credential> getCredentials() {
-		return credentials;
-	}
+    public List<Credential> getCredentials() {
+        return credentials;
+    }
 
-	public void setCredentials(List<Credential> credentials) {
-		this.credentials = credentials;
+    public void setCredentials(List<Credential> credentials) {
+        this.credentials = credentials;
+    }
+
+	public List<Coordinate> getCoordinates() {
+		return coordinates;
 	}
 
 	public Room getRoom() {
@@ -96,5 +86,9 @@ public class Door {
 		credentials.remove(credential);
 		List<Door> doors = new ArrayList<>();
 		credential.setDoors(doors);
+	}
+
+	public void setCoordinates(final List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
 	}
 }

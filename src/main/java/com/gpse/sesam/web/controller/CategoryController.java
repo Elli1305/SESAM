@@ -9,7 +9,6 @@ import com.gpse.sesam.web.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.CredentialNotFoundException;
 import java.util.List;
 
 @RestController
@@ -20,7 +19,7 @@ public class CategoryController {
     private final CredentialService credentialService;
 
     @Autowired
-    public CategoryController (final CategoryService categoryService, CredentialService credentialService) {
+    public CategoryController(final CategoryService categoryService, CredentialService credentialService) {
         this.categoryService = categoryService;
         this.credentialService = credentialService;
     }
@@ -31,7 +30,7 @@ public class CategoryController {
     }
 
     /*@GetMapping("/credentialview/{id:\\d+}")
-    public Category getCategoryInfo(@PathVariable("id") final Long id){
+    public Category getCategoryInfo(@PathVariable("id") final Long id) {
         if (categoryService.getCategory(id).isPresent()) {
             return categoryService.getCategory(id).get();
         } else {

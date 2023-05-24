@@ -1,62 +1,71 @@
 package com.gpse.sesam.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.io.Serial;
 
 @Entity
 public class SesamUserRole {
-    @Serial
-    private static final long serialVersionUID = 43L;
+	@Serial
+	private static final long serialVersionUID = 43L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    @JsonIgnore
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	@JsonIgnore
+	private Long id;
 
-    @Column(nullable = false)
-    private AttainableRole role;
+	@Column(nullable = false)
+	private AttainableRole role;
 
-    @Column(nullable = false)
-    private boolean granted;
+	@Column(nullable = false)
+	private boolean granted;
 
-    protected SesamUserRole() {
-    }
+	protected SesamUserRole() {
+	}
 
-    public SesamUserRole(AttainableRole role) {
-        this.role = role;
-        this.granted = false;
-    }
+	public SesamUserRole(final AttainableRole role) {
+		this.role = role;
+		this.granted = false;
+	}
 
-    public AttainableRole getRole() {
-        return role;
-    }
+	public SesamUserRole(final AttainableRole role, final boolean granted) {
+		this.role = role;
+		this.granted = granted;
+	}
 
-    public void setRole(AttainableRole role) {
-        this.role = role;
-    }
+	public AttainableRole getRole() {
+		return role;
+	}
 
-    public boolean isGranted() {
-        return granted;
-    }
+	public void setRole(final AttainableRole role) {
+		this.role = role;
+	}
 
-    public void setGranted(boolean granted) {
-        this.granted = granted;
-    }
+	public boolean isGranted() {
+		return granted;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setGranted(final boolean granted) {
+		this.granted = granted;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public enum AttainableRole {
-        ADMINISTRATOR,
-        EDITOR,
-        ISSUER
-    }
+	public void setId(final Long id) {
+		this.id = id;
+	}
+
+	public enum AttainableRole {
+		ADMINISTRATOR,
+		EDITOR,
+		ISSUER
+	}
 }

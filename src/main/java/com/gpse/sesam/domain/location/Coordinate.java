@@ -22,7 +22,7 @@ public class Coordinate {
 	@Column
 	private BigDecimal lat;
 
-	public Coordinate(BigDecimal lng, BigDecimal lat) {
+	public Coordinate(final BigDecimal lng, final BigDecimal lat) {
 		this.lng = lng;
 		this.lat = lat;
 	}
@@ -34,7 +34,7 @@ public class Coordinate {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -42,7 +42,7 @@ public class Coordinate {
 		return lng;
 	}
 
-	public void setLng(BigDecimal x) {
+	public void setLng(final BigDecimal x) {
 		this.lng = x;
 	}
 
@@ -50,7 +50,7 @@ public class Coordinate {
 		return lat;
 	}
 
-	public void setLat(BigDecimal y) {
+	public void setLat(final BigDecimal y) {
 		this.lat = y;
 	}
 }

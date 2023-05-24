@@ -1,12 +1,13 @@
 <template>
   <q-drawer
       show-if-above bordered
+      v-model="show"
       content-class="bg-grey-1">
     <q-list>
       <q-item-label
           header
           class="text-grey-8">
-        Locations
+        {{ t('floorplan.locations') }}
       </q-item-label>
       <Node
           v-for="node in locationTreeStructure"
@@ -17,7 +18,29 @@
       >
       </Node>
     </q-list>
+    <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
+      <q-btn
+          dense
+          round
+          unelevated
+          color="primary"
+          icon="chevron_left"
+          @click="show = false"
+      />
+    </div>
   </q-drawer>
+  <q-fab
+      v-if="show === false"
+      style="z-index: 10; margin-top: 15px; margin-left: -22px"
+      @click="show = true"
+      class="absolute"
+      label="   "
+      label-position="left"
+      color="primary"
+      icon="menu"
+      direction="right"
+  ></q-fab>
+
 </template>
 
 <script>
@@ -25,6 +48,7 @@ import {useLocationStore} from "@/main/vue/stores/locations";
 import Node from "@/main/vue/views/Node.vue";
 import {ref} from "vue";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
+import {useI18n} from "vue-i18n";
 
 
 export default {
@@ -34,6 +58,8 @@ export default {
     const locationStore = useLocationStore()
     const floorPlanStore = useFloorPlanStore()
     let locationTreeStructure = ref([])
+    let show = ref(true)
+    const {t} = useI18n()
 
     function getParentIDs(locations, selectFloorId) {
       for (const location of locations) {
@@ -55,6 +81,7 @@ export default {
             buildingId = locations[0].buildings[0].id
             floorPlanStore.selectedFloorPlan = initialFloor.floorPlanPath;
             floorPlanStore.selectedFloorId = initialFloor.id;
+            floorPlanStore.rooms = initialFloor.rooms;
           } else {
             ({locationId, buildingId} = getParentIDs(locations, floorPlanStore.selectedFloorId));
           }
@@ -73,7 +100,8 @@ export default {
                 id: floor.id,
                 level: 2,
                 floorPlan: floor.floorPlanPath,
-                title: "Etage " + floor.floorLevel
+                title: "Etage " + floor.floorLevel,
+                rooms: floor.rooms
               }))
             }))
           }))
@@ -81,7 +109,7 @@ export default {
     )
 
 
-    return {locationTreeStructure}
+    return {locationTreeStructure, show, t}
   }
 }
 </script>

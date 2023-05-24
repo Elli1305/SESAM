@@ -14,7 +14,7 @@ public class LocationServiceImpl implements LocationService {
 	private final LocationRepository locationRepository;
 
 	@Autowired
-	public LocationServiceImpl(LocationRepository locationRepository) {
+	public LocationServiceImpl(final LocationRepository locationRepository) {
 		this.locationRepository = locationRepository;
 	}
 
@@ -33,7 +33,7 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public Optional<Location> getLocationByName (String name) throws LocationNotFoundException {
+	public Optional<Location> getLocationByName(String name) throws LocationNotFoundException {
 		return Optional.ofNullable(locationRepository.findByName(name)
 				.orElseThrow(() -> new LocationNotFoundException(name + "Not found")));
 	}
@@ -44,7 +44,7 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public void saveAll(Iterable<Location> locations) {
+	public void saveAll(final Iterable<Location> locations) {
 		locationRepository.saveAll(locations);
 	}
 }

@@ -10,12 +10,13 @@ public class ExternalCredential {
     private Long id;
 
     @Column(nullable = false)
-    String name;
+    private String name;
 
     @Column(nullable = false)
-    String credentialDefinitionId;
+    private String credentialDefinitionId;
 
-    protected ExternalCredential(){}
+    protected ExternalCredential() {
+    }
 
     public ExternalCredential(String name, String credentialDefinitionId) {
         this.name = name;
