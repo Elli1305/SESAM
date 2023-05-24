@@ -7,10 +7,10 @@ import java.io.Serial;
 
 @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
 public class UnprocessableEntityException extends RuntimeException {
-    @Serial
-    private static final long serialVersionUID = 45L;
+	@Serial
+	private static final long serialVersionUID = 45L;
 
-    public UnprocessableEntityException(final String message) {
-        super(message);
-    }
+	public UnprocessableEntityException(final String message) {
+		super(message);
+	}
 }

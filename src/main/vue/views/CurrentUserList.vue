@@ -60,20 +60,6 @@ import { ref } from 'vue'
 import {useI18n} from "vue-i18n";
 import axios from "axios";
 
-const columns = [
-    {
-        name: 'lastName',
-        required: true,
-        label: 'Name',
-        align: 'center',
-        field: row => row.lastName,
-        sortable: true
-    },
-    { name: 'firstName', align: 'center', label : "Vorname" , field: 'firstName', sortable: true },
-    { name: 'username', align: 'center',label: 'E-mail', field: 'username', sortable: true },
-    { name: 'roles', align: 'center',label: 'Rolle(n)', field: 'roles' },
-    { name: 'actions', label: 'Bearbeiten', style: "width: 40px", align: 'center' }
-]
 
 const rows = ref([]);
 
@@ -91,6 +77,23 @@ export default {
             })
 
         const { t } = useI18n();
+
+        const columns = [
+            {
+                name: 'lastName',
+                required: true,
+                label:t('adminCurrentUser.lastname'),
+                align: 'center',
+                field: row => row.lastName,
+                format: val => `${val}`,
+                sortable: true
+            },
+            { name: 'firstName', align: 'center', label : t('adminCurrentUser.prename') , field: 'firstName', sortable: true },
+            { name: 'username', align: 'center',label: t('adminCurrentUser.email') , field: 'username', sortable: true },
+            { name: 'roles', align: 'center',label: t('adminCurrentUser.role'), field: 'roles' },
+            { name: 'actions', label: t('adminCurrentUser.edit'), style: "width: 40px", align: 'center' }
+        ]
+
         return {
             filter: ref({
                 filterToggle: {
@@ -120,9 +123,13 @@ export default {
                     let ans
 
                     //Gather toggle conditions
-                    let c1 = terms.filterToggle.admin && row.roles.map(r => r.role).includes("ADMINISTRATOR")
-                    let c2 = terms.filterToggle.editor && row.roles.map(r => r.role).includes("EDITOR")
-                    let c3 = terms.filterToggle.issuer && row.roles.map(r => r.role).includes("ISSUER")
+                    let c1 = terms.filterToggle.admin && row.roles.filter(r => r.granted).map(r => r.role).includes("ADMINISTRATOR")
+                    let c2 = terms.filterToggle.editor && row.roles.filter(r => r.granted).map(r => r.role).includes("EDITOR")
+                    let c3 = terms.filterToggle.issuer && row.roles.filter(r => r.granted).map(r => r.role).includes("ISSUER")
+                    let c4 = false
+                    if(row.roles.filter(r => r.granted).length === 0){
+                        c4=true;
+                    }
 
                     //Gather search condition
 
@@ -147,9 +154,14 @@ export default {
                     //assume row doesn't match
                     ans = false
                     //check if any of the conditions match
-                    if ( (c1 && s1) || (c2 && s1) || (c3 && s1) ) {
+                    if ( (c1 && s1) || (c2 && s1) || (c3 && s1)) {
                         ans = true
+                    }else{
+                        if((!(terms.filterToggle.admin  || terms.filterToggle.editor  || terms.filterToggle.issuer )) && c4){
+                            ans = true
+                        }
                     }
+
                     return ans
                 })
             return filteredRows

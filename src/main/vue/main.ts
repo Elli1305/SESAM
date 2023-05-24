@@ -18,10 +18,41 @@ const messages = {
             headline: "Aktuelle Nutzer",
             roles: {ADMINISTRATOR: "Administrator", EDITOR: "Bearbeiter", ISSUER: "Herausgeber"},
             prename: "Vorname",
+            lastname: "Nachname",
+            email: "Email",
+            role: "Rollen",
+            bearbeiten: "edit",
             showAdmin: "Administratoren",
             showEditor: "Bearbeiter",
             showIssuer: "Herausgeber",
             search: "Suche"
+        },
+        adminRolesRequest:{
+          headline: "Angefragte Rollen",
+            prename: "Vorname",
+            lastname: "Nachname",
+            email: "Email",
+            role: "Rollen",
+            save:"speichern",
+            showAdmin: "Administratoren",
+            showEditor: "Bearbeiter",
+            showIssuer: "Herausgeber",
+            search: "Suche"
+        },
+        adminEdit: {
+            title: "Nutzer bearbeiten",
+            changeRoles: "Rollen vergeben/entfernen: ",
+            delete: "Löschen",
+            back: "Zurück",
+            attention: "ACHTUNG",
+            question: "Nutzer wirklich löschen?",
+            deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
+            otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
+
+
+        },
+        floorplan: {
+            locations: 'Standorte'
         },
 
         common: {
@@ -59,10 +90,11 @@ const messages = {
             editorPages: "Bearbeiten",
             issuerPages: "Credential austellen",
             imprint: "Impressum",
-            logout: "Logout"
+            logout: "Logout",
+            roomSearch: "Raumsuche"
         },
         login: {
-            wrongEmailPassword:"Falsches Passwort oder Benutzername",
+            wrongEmailPassword: "Falsches Passwort oder Benutzername",
             loginFailed: "Login Fehlgeschlagen",
             forgotPassword: "Passwort vergessen:",
             resetPassword: "Passwort zurücksetzen",
@@ -161,16 +193,63 @@ const messages = {
                 unknown: "Bitte versuchen Sie es später erneut.",
             },
         },
+        corporateDesign: {
+            title: "Corporate Design",
+            colors: "Farben",
+            logo: "Logo",
+            logoHint: "Nur SVG Dateien",
+            favicon: "Favicon",
+            faviconHint: "Nur ICO Dateien",
+            confirm: {
+                reset: {
+                    title: "Sind Sie sicher, dass sie zurücksetzen wollen?",
+                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
+                    ok: "Zurücksetzen",
+                    cancel: "Abbruch"
+                },
+                save: {
+                    title: "Sind Sie sicher, dass sie speichern wollen?",
+                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
+                    ok: "Speichern",
+                    cancel: "Abbruch"
+                }
+            },
+            resetFailure: "Zurücksetzen fehlgeschlagen",
+            saveFailure: "Speichern fehlgeschlagen"
+        }
     },
     en: {
         adminCurrentUser: {
             headline: "Current Users",
             roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
             prename: "Prename",
+            lastname: "Name",
+            email: "Email",
+            role: "Roles",
             showAdmin: "Show Admin",
             showEditor: "Show Editor",
             showIssuer: "Show Issuer",
             search: "Search"
+        },
+        adminRolesRequest:{
+            headline: "Requested Roles",
+            roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
+            prename: "Prename",
+            lastname: "Name",
+            email: "Email",
+            role: "Roles",
+            showAdmin: "Show Admin",
+            showEditor: "Show Editor",
+            showIssuer: "Show Issuer",
+            search: "Search"
+        },
+        adminEdit: {
+            title: "Edit user",
+            changeRoles: "Give/take Roles: ",
+            delete: "Delete",
+            back: "Back",
+            attention: "Attention",
+            question: "Do you really want to delete this user?"
         },
         common: {
             internalServerError: "The server could not process the request",
@@ -189,6 +268,9 @@ const messages = {
             qualification: "Comparable Qualifications",
             issuer: "Issuer"
         },
+        floorplan: {
+            locations: 'Locations'
+        },
         home: {
             header: "SESAM",
             signup: "Sign-up",
@@ -206,10 +288,11 @@ const messages = {
             editorPages: "Edit",
             issuerPages: "Issue Credential",
             imprint: "Imprint",
-            logout: "Logout"
+            logout: "Logout",
+            roomSearch: "Search"
         },
         login: {
-            wrongEmailPassword:"Wrong Password oder Username",
+            wrongEmailPassword: "Wrong Password oder Username",
             loginFailed: "Login Failed",
             forgotPassword: "Forgot Password:",
             resetPassword: "Reset Password",
@@ -309,6 +392,30 @@ const messages = {
                 unknown: "Please try again later.",
             },
         },
+        corporateDesign: {
+            title: "Corporate Design",
+            colors: "Colors",
+            logo: "Logo",
+            logoHint: "Only SVG files",
+            favicon: "Favicon",
+            faviconHint: "Only ICO files",
+            confirm: {
+                reset: {
+                    title: "Are you sure you want to reset?",
+                    message: "You will not be able to retrieve your current settings.",
+                    ok: "Reset",
+                    cancel: "Cancel"
+                },
+                save: {
+                    title: "Are you sure you want to save?",
+                    message: "You will not be able to retrieve your current settings.",
+                    ok: "Save",
+                    cancel: "Cancel"
+                }
+            },
+            resetFailure: "Reset failed",
+            saveFailure: "Saving failed"
+        }
     }
 }
 
@@ -321,6 +428,7 @@ const i18n = createI18n({
     globalInjection: true,
     messages
 })
+
 const app = createApp(App)
 
 const pinia = createPinia();
@@ -340,5 +448,6 @@ watch(
         sessionStorage.setItem("users", JSON.stringify(state.users));
         sessionStorage.setItem("floorPlan", JSON.stringify(state.floorPlan));
     },
-    { deep: true }
+    {deep: true}
 );
+

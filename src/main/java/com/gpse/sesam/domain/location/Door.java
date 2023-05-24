@@ -34,7 +34,7 @@ public class Door {
 
     }
 
-    public Door(String name, List<Coordinate> coordinates) {
+    public Door(final String name, final List<Coordinate> coordinates) {
         this.name = name;
         this.coordinates = coordinates;
     }
@@ -43,17 +43,17 @@ public class Door {
 		return id;
 	}
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
     public List<Credential> getCredentials() {
         return credentials;
@@ -88,7 +88,7 @@ public class Door {
 		credential.setDoors(doors);
 	}
 
-	public void setCoordinates(List<Coordinate> coordinates) {
+	public void setCoordinates(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
 	}
 }

@@ -2,7 +2,13 @@ package com.gpse.sesam.domain.location;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,70 +16,70 @@ import java.util.List;
 @Entity
 public class Floor {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
 
-    @Column
-    private int floorLevel;
+	@Column
+	private int floorLevel;
 
-    @Column
-    private String floorPlanPath;
+	@Column
+	private String floorPlanPath;
 
-    @JsonManagedReference
+	@JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
-    private List<Room> rooms = new ArrayList<>();
+	private List<Room> rooms = new ArrayList<>();
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Building building;
 
-    protected Floor() {
+	protected Floor() {
 
-    }
+	}
 
-    public Floor(int floorLevel, String floorPlanPath) {
+    public Floor(final int floorLevel, final String floorPlanPath) {
         this.floorLevel = floorLevel;
         this.floorPlanPath = floorPlanPath;
     }
 
-    public int getFloorLevel() {
-        return floorLevel;
-    }
+	public int getFloorLevel() {
+		return floorLevel;
+	}
 
-    public void setFloorLevel(int floorLevel) {
-        this.floorLevel = floorLevel;
-    }
+	public void setFloorLevel(final int floorLevel) {
+		this.floorLevel = floorLevel;
+	}
 
-    public List<Room> getRooms() {
-        return rooms;
-    }
+	public List<Room> getRooms() {
+		return rooms;
+	}
 
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
-    }
+	public void setRooms(final List<Room> rooms) {
+		this.rooms = rooms;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
-    public void addRoom(Room room) {
-        rooms.add(room);
+	public void addRoom(final Room room) {
+		rooms.add(room);
         room.setFloor(this);
     }
 
-    public String getFloorPlanPath() {
-        return floorPlanPath;
-    }
+	public String getFloorPlanPath() {
+		return floorPlanPath;
+	}
 
-    public void setFloorPlanPath(String floorPlanPath) {
-        this.floorPlanPath = floorPlanPath;
-    }
+	public void setFloorPlanPath(final String floorPlanPath) {
+		this.floorPlanPath = floorPlanPath;
+	}
 
     public Building getBuilding() {
         return building;

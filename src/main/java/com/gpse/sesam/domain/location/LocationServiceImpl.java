@@ -14,7 +14,7 @@ public class LocationServiceImpl implements LocationService {
 	private final LocationRepository locationRepository;
 
 	@Autowired
-	public LocationServiceImpl(LocationRepository locationRepository) {
+	public LocationServiceImpl(final LocationRepository locationRepository) {
 		this.locationRepository = locationRepository;
 	}
 
@@ -44,7 +44,7 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public void saveAll(Iterable<Location> locations) {
+	public void saveAll(final Iterable<Location> locations) {
 		locationRepository.saveAll(locations);
 	}
 }
