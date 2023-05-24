@@ -35,7 +35,8 @@ public class InitializeDatabase implements InitializingBean {
     private final List<Location> locationsList = new ArrayList<>();
 
     public InitializeDatabase(LocationService locationService, SesamUserService userService,
-                              CredentialService credentialService, CredentialCmdService credentialCmdService, CategoryService categoryService, PasswordEncoder passwordEncoder) {
+                              CredentialService credentialService, CredentialCmdService credentialCmdService,
+                              CategoryService categoryService, PasswordEncoder passwordEncoder) {
 		this.credentialService = credentialService;
 		this.categoryService = categoryService;
 		this.passwordEncoder = passwordEncoder;
@@ -413,13 +414,13 @@ public class InitializeDatabase implements InitializingBean {
 		// Category
 
 		List<Category> categories = new ArrayList<>();
-		Category category = new Category( "Sicherheitsbelehrung", externalCredentials);
+		Category category = new Category("Sicherheitsbelehrung", externalCredentials);
 		category.addCredential(safety);
-		Category category2 = new Category( "Erste-Hilfe-Kurs", externalCredentials2);
+		Category category2 = new Category("Erste-Hilfe-Kurs", externalCredentials2);
 		category2.addCredential(firstAid);
-		CredentialCmd credentialCmd = CredentialServiceImpl.createCredentialCmd(category,safety);
+		CredentialCmd credentialCmd = CredentialServiceImpl.createCredentialCmd(category, safety);
 		CredentialCmd credentialCmd2 = CredentialServiceImpl.createCredentialCmd(category2, firstAid);
-		List<CredentialCmd> credentialCmds =new ArrayList<>();
+		List<CredentialCmd> credentialCmds = new ArrayList<>();
 		credentialCmds.add(credentialCmd);
 		credentialCmds.add(credentialCmd2);
 		credentialCmdService.saveAll(credentialCmds);

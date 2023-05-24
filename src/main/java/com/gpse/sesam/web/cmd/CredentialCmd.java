@@ -27,8 +27,9 @@ public class CredentialCmd {
     @ElementCollection
     private List<String> room;
 
-    protected CredentialCmd() {}
-    public CredentialCmd(String categoryName, String credentialName, List<String> externalCredential, List<String> issuerName, List<String> room){
+    protected CredentialCmd() { }
+    public CredentialCmd(String categoryName, String credentialName, List<String> externalCredential,
+                         List<String> issuerName, List<String> room) {
         this.categoryName = categoryName;
         this.credentialName = credentialName;
         this.externalCredential = externalCredential;

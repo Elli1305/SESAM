@@ -3,7 +3,6 @@ package com.gpse.sesam.domain.credential;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.domain.location.Location;
-import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 import jakarta.validation.Valid;
@@ -130,17 +129,18 @@ public class CredentialServiceImpl implements CredentialService {
         List<String> issuerName = new ArrayList<>();
         List<String> issuerRoom = new ArrayList<>();
 
-        for (int i = 0; i< category.getExternalCredentials().size(); i++) {
-            externalCred.add( category.getExternalCredentials().get(i).getName());
+        for (int i = 0; i < category.getExternalCredentials().size(); i++) {
+            externalCred.add(category.getExternalCredentials().get(i).getName());
         }
 
-        for (int i = 0; i<credential.getIssuer().size(); i++) {
+        for (int i = 0; i < credential.getIssuer().size(); i++) {
             issuerRoom.add(credential.getIssuer().get(i).getRoom().getName());
-            issuerName.add(credential.getIssuer().get(i).getFirstName() + " " +
-                    credential.getIssuer().get(i).getLastName());
+            issuerName.add(credential.getIssuer().get(i).getFirstName() + " "
+                    + credential.getIssuer().get(i).getLastName());
         }
 
-        CredentialCmd cmd = new CredentialCmd(category.getName(), credential.getName(), externalCred, issuerName, issuerRoom);
+        CredentialCmd cmd = new CredentialCmd(category.getName(), credential.getName(), externalCred, issuerName,
+                issuerRoom);
         return cmd;
     }
 }

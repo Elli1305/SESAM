@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CredentialCmdServiceImpl implements CredentialCmdService{
+public class CredentialCmdServiceImpl implements CredentialCmdService {
 
     private final CredentialCmdRepository credentialCmdRepository;
 

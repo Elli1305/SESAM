@@ -2,10 +2,8 @@ package com.gpse.sesam.web.controller;
 
 import com.gpse.sesam.domain.credential.Category;
 import com.gpse.sesam.domain.credential.CategoryService;
-import com.gpse.sesam.domain.credential.Credential;
 import com.gpse.sesam.domain.credential.CredentialService;
 import com.gpse.sesam.web.cmd.CredentialCmd;
-import com.gpse.sesam.web.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
