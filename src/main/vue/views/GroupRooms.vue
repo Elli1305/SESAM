@@ -67,7 +67,7 @@
 
                         <q-select
                                 filled
-                                v-model="model"
+                                v-model="modelForBuilding"
                                 use-input
                                 input-debounce="0"
                                 :label="t( 'groupRooms.chooseBuilding')"
@@ -241,13 +241,6 @@ rows.value = [
     },
 ]
 
-const stringOptions = [
-    'Gebäude 1', 'Gebäude 2'
-]
-const optionsRooms = []
-for (let i = 0; i <= 100; i++) {
-    optionsRooms.push('Room ' + i)
-}
 
 
 export default {
@@ -257,7 +250,6 @@ export default {
         const {t} = useI18n();
         const $q = useQuasar();
         const locationStore = useLocationStore()
-        const options = ref(stringOptions)
         let optionsLocations = ref([])
         let editGroupName = ref(null);
         let editGroupRooms = ref(null);
@@ -268,31 +260,24 @@ export default {
         let buildingListForFilter=ref([]);
         let listOfAllRoomsViaBuilding = ref([]);
 
+        let modelForBuilding = ref(null);
+        let modelForLocation = ref(null);
         async function loadLocations() {
             await locationStore.getLocations().then((locations) => {
                 for (const loc of locations) {
                     locationList.push(loc);
                 }
-                console.log(typeof locationList[0].name);
                 for(const loc of locationList) {
                     locationListNames.push(loc.name);
                 }
                 optionsLocations.value = locationList;
-                console.log("hallo");
-                console.log(optionsLocations);
-                console.log(locationListNames);
-            }).then(() => {
-                console.log(optionsLocations.value);
-                console.log("halalal");
-                console.log(optionsLocations.value);
+            })
+            console.log("Locations");
+            console.log(optionsLocations.value);
+            if(optionsLocations.value !== null) {
+                modelForLocation.value = optionsLocations.value[0].name;
+                adjustBuildingList(modelForLocation.value);
             }
-            )
-
-            console.log(locationListNames);
-
-            console.log("hier");
-            //console.log(locationList);
-            //console.log("hier Ende");
 
         }
 
@@ -304,17 +289,18 @@ export default {
             for(const loc of locationList){
                 if(loc.name===nameLoc) {
                     buildingList.value.push(loc.buildings);
-                    console.log("sucess")
                 }
-                console.log(loc.name);
             }
             for(const building of buildingList.value) {
                 buildingListNames.value = building;
                 buildingListForFilter.value=building;
             }
             console.log("Buildings");
-            console.log(buildingList.value);
             console.log(buildingListNames.value);
+            if(buildingListNames.value !==null) {
+                modelForBuilding.value = buildingListNames.value[0];
+                console.log(modelForBuilding.value.id);
+            }
         }
 
 
@@ -354,7 +340,6 @@ export default {
             editName:ref(''),
             modelRooms: ref(null),
             modelRoomsNew: ref(editGroupRooms.value),
-            optionsRooms,
             checkName,
             loadLocations,
             locationList,
@@ -387,10 +372,8 @@ export default {
             rows,
             t,
             //for selecting the building:
-            model: ref(null),
-            modelForLocation: ref(null),
-            stringOptions,
-            options,
+            modelForBuilding,
+            modelForLocation,
             optionsLocations,
             listOfAllRoomsViaBuilding,
             editGroup(value) {
