@@ -1,13 +1,7 @@
 package com.gpse.sesam.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gpse.sesam.domain.location.Building;
-import com.gpse.sesam.domain.location.Coordinate;
-import com.gpse.sesam.domain.location.Door;
-import com.gpse.sesam.domain.location.Floor;
-import com.gpse.sesam.domain.location.Location;
-import com.gpse.sesam.domain.location.LocationService;
-import com.gpse.sesam.domain.location.Room;
+import com.gpse.sesam.domain.location.*;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
@@ -34,6 +28,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
 	private final LocationService locationService;
+	private final RoomGroupService roomGroupService;
 
 	private final SesamUserService userService;
 	private final PasswordEncoder passwordEncoder;
@@ -41,10 +36,11 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private File floorplanDir = new File("data" + File.separator + "floorplan");
 
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
-								   final PasswordEncoder passwordEncoder) {
+								   final PasswordEncoder passwordEncoder, final RoomGroupService roomGroupService) {
 		this.passwordEncoder = passwordEncoder;
 		this.locationService = locationService;
 		this.userService = userService;
+		this.roomGroupService = roomGroupService;
 
 		if (!floorplanDir.exists() && !floorplanDir.mkdir()) {
 			throw new BeanCreationException("Folder: " + floorplanDir + " could not be created.");
@@ -55,12 +51,15 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	public void afterPropertiesSet() {
 		locationService.deleteAll();
 		userService.deleteAll();
+		roomGroupService.deleteAll();
 
 		final List<Location> locations = createLocations();
 		final List<SesamUser> users = createUsers();
+		final List<RoomGroups> roomGroups = roomGroups(locations);
 
 		locationService.saveAll(locations);
 		userService.saveAll(users);
+		roomGroupService.saveAll(roomGroups);
 
 	}
 
@@ -85,6 +84,18 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 		LOG.info("Testdata successfully inserted");
 		return List.of(admin, issuer, editor, user);
+	}
+
+	private List<RoomGroups> roomGroups(List<Location> locations) {
+		final List<RoomGroups> roomGroups = new ArrayList<>();
+		final Building build = locations.get(0).getBuildings().get(0);
+		final Building build2 = locations.get(0).getBuildings().get(1);
+		final List<Room> rooms = build.getFloors().get(0).getRooms();
+
+		final List<Room> rooms2 = build2.getFloors().get(0).getRooms();
+		roomGroups.add(new RoomGroups("Frozen Jaghurt", rooms, build));
+		roomGroups.add(new RoomGroups("Group 2", rooms2, build2));
+		return roomGroups;
 	}
 
 	private List<Location> createLocations() {
@@ -134,6 +145,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		}
 		final Location location1 = new Location("ExampleLocation", buildings);
 		final Location location2 = new Location("ExampleLocation2", buildings2);
+
 		return List.of(location1, location2);
 	}
 

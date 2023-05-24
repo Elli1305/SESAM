@@ -16,13 +16,17 @@ public class RoomGroups {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Room> rooms;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Building building;
+
     protected RoomGroups() {
 
     }
 
-    public RoomGroups(String name, List<Room> rooms) {
+    public RoomGroups(String name, List<Room> rooms, Building building) {
         this.name = name;
         this.rooms = rooms;
+        this.building = building;
     }
 
     public String getName() {
@@ -39,5 +43,12 @@ public class RoomGroups {
 
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
+    }
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 }
