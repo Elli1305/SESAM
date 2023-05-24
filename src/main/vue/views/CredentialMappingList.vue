@@ -49,9 +49,9 @@
         Möchten Sie wirklich die Kategorie löschen?
       </q-card-section>
 
-      <q-card-actions>
-        <q-btn flat label="Ja" color="primary" v-close-popup />
-        <q-btn flat label="Nein" color="primary" v-close-popup />
+      <q-card-actions align="evenly">
+        <q-btn flat icon="cancel" color="primary" v-close-popup />
+        <q-btn flat icon="check" color="primary" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -131,6 +131,7 @@
       <q-card-section class="q-pt-none">
         <q-card-section class="q-pt-none">
           <q-input dense label="Name des externen Credentials" v-model="address" autofocus @keyup.enter="prompt = false" />
+          <q-input dense label="CredentialDefintionId" v-model="address" autofocus @keyup.enter="prompt = false" style="padding-top: 2em" />
         </q-card-section>
       </q-card-section>
       <q-card-actions align="evenly">
