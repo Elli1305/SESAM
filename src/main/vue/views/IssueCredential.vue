@@ -83,7 +83,6 @@ import { QForm, QNotifyCreateOptions, QOptionGroupProps, QStepper, ValidationRul
 import { computed, ComputedRef, Ref, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { AxiosError, AxiosResponse } from "axios";
-import QRCode from 'qrcode.vue';
 import api from '@/main/vue/api';
 import {IssueCredential} from "@/main/vue/entity/credentialDefinition";
 
