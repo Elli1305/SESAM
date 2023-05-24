@@ -199,6 +199,7 @@ import {ref} from 'vue'
 
 import {useI18n} from "vue-i18n";
 import {useQuasar} from "quasar";
+import {useLocationStore} from "@/main/vue/stores/locations";
 
 const columns = [
     {
@@ -244,10 +245,48 @@ export default {
 
         const {t} = useI18n();
         const $q = useQuasar();
+        const locationStore = useLocationStore()
         const options = ref(stringOptions)
-        const optionsLocations = ref(['Location1', 'Location2'])
+        let optionsLocations = ref(['Location1', 'Location2'])
         let editGroupName = ref(null);
         let editGroupRooms = ref(null);
+        let locationList = [];
+        let locationListNames = [];
+
+        async function loadLocations() {
+            await locationStore.getLocations().then((locations) => {
+                for (const loc of locations) {
+                    locationList.push(loc);
+                }
+                console.log(typeof locationList[0].name);
+                for(const loc of locationList) {
+                    locationListNames.push(loc.name);
+                }
+                //optionsLocations = locationListNames;
+                console.log("hallo");
+                console.log(optionsLocations);
+                console.log(locationListNames);
+            }).then(() => {
+                    console.log(optionsLocations);
+                console.log("halalal");
+                console.log(optionsLocations);
+                optionsLocations = ref(['weiß ich nicht', 'hohoh'])
+                console.log(optionsLocations);
+            }
+            )
+
+            console.log(locationListNames);
+
+            console.log("hier");
+            console.log(locationList);
+            console.log("hier Ende");
+
+        }
+
+        loadLocations();
+        (console.log(locationListNames) )
+        console.log("sss");
+
 
         async function checkName(newName) {
             console.log(newName);
@@ -277,6 +316,7 @@ export default {
             modelRoomsNew: ref(editGroupRooms.value),
             optionsRooms,
             checkName,
+            loadLocations,
             toDefault,
             getOldName() {
               this.editName = editGroupName;
