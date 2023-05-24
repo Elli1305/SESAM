@@ -9,7 +9,6 @@ import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import IssueCredential from "../views/IssueCredential.vue";
 import IssueCredentials from "../views/IssueCredentials.vue";
-import { useUserStore } from "../stores/users";
 import Credentialview from "@/main/vue/views/CredentialView.vue"
 
 import Imprint from "../views/Imprint.vue";
@@ -97,7 +96,7 @@ const router = createRouter({
       component: IssueCredential,
       props: true,
       meta: { requiresAuth: true },
-    }
+    },
     {
       path: "/corporatedesign",
       component: CorporateDesign,

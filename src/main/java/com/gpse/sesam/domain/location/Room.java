@@ -74,8 +74,4 @@ public class Room {
 		doors.remove(door);
 		door.setRoom(null);
 	}
-
-	public void setCoordinates(final List<Coordinate> coordinates) {
-		this.coordinates = coordinates;
-	}
 }
