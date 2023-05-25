@@ -9,14 +9,16 @@ import java.util.List;
 public class RoomGroups {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private String name;
 
+    @Column
     @OneToMany(cascade = CascadeType.ALL)
     private List<Room> rooms;
 
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @ManyToOne(cascade = CascadeType.ALL)
     private Building building;
 
     protected RoomGroups() {
@@ -44,6 +46,7 @@ public class RoomGroups {
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
+
     public Building getBuilding() {
         return building;
     }
