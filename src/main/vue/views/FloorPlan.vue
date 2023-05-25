@@ -19,6 +19,8 @@ import L from "leaflet";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
+import { storeToRefs } from "pinia";
+import {watch} from "vue";
 import {useQuasar} from "quasar";
 
 const mapConfig = {
@@ -71,19 +73,41 @@ export default {
   mounted: function () {
     floorPlanMap = L.map("floor-plan-map", mapConfig);
     const floorPlanStore = useFloorPlanStore();
-    const floorStore = useFloorStore();
-    const locationStore = useLocationStore();
+    const { rooms } = storeToRefs(floorPlanStore)
+    watch(rooms, () => {
     const $q = useQuasar();
 
-    floorPlanStore.$subscribe((mutation, state) => {
       floorPlanMap.eachLayer(layer => floorPlanMap.removeLayer(layer));
-      this.applyImageToMap(state.selectedFloorPlan)
-      this.drawRooms(state.rooms)
-    });
+      this.applyImageToMap(floorPlanStore.selectedFloorPlan)
+      this.drawRooms(floorPlanStore.rooms)
+    })
 
     floorPlanMap.eachLayer(layer => floorPlanMap.removeLayer(layer));
     this.applyImageToMap(floorPlanStore.selectedFloorPlan);
     this.drawRooms(floorPlanStore.rooms)
+    const { selectedRooms } = storeToRefs(floorPlanStore)
+    watch(selectedRooms, () => {
+      floorPlanMap.eachLayer(layer => {
+        if(layer.type === "Room") {
+          layer.setStyle({
+            color: 'black',
+            fillColor: 'black',
+            weight: 2,
+            fillOpacity: 0.1
+          });
+          selectedRooms.value.forEach(room => {
+            if(room.id === layer.id) {
+              layer.setStyle({
+                color: 'red',
+                fillColor: 'red',
+                weight: 2,
+                fillOpacity: 0.2
+              });
+            }
+          })
+        }
+      })
+    }, {deep: true})
 
     L.control.zoom({
       position: 'topright'
@@ -163,6 +187,7 @@ export default {
           fillOpacity: 0.1
         }).addTo(floorPlanMap)
         polygon.id = room.id
+        polygon.type = "Room"
         for (const door of room.doors) {
           const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
             color: '#b0b0b0',

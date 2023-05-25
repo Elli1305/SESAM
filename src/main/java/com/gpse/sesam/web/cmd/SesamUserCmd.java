@@ -15,7 +15,10 @@ public class SesamUserCmd {
 
 	private List<SesamUserRole.AttainableRole> requestedRoles;
 
-	public SesamUserCmd(final String email, final String password, final String firstName, final String lastName,
+	public SesamUserCmd() {
+    }
+
+    public SesamUserCmd(final String email, final String password, final String firstName, final String lastName,
 						final List<SesamUserRole.AttainableRole> requestedRoles) {
 		this.email = email;
 		this.password = password;
@@ -24,12 +27,9 @@ public class SesamUserCmd {
 		this.requestedRoles = requestedRoles;
 	}
 
-	public SesamUserCmd() {
-	}
-
 	public String getEmail() {
-		return email;
-	}
+        return email;
+    }
 
 	public String getPassword() {
 		return password;

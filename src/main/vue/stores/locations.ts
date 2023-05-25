@@ -7,6 +7,7 @@ import api from "@/main/vue/api";
 export const useLocationStore = defineStore('locations', () => {
 
     const allLocations: Ref<Location[]> = ref([])
+    let locationByName: Ref<Location | null> = ref(null)
     const getLocationTreeStructure = computed(() => {
             return (locationId: bigint, buildingId: bigint) => {
                 return allLocations.value.map((location) => ({
@@ -43,6 +44,17 @@ export const useLocationStore = defineStore('locations', () => {
         })
     }
 
+    function getLocationsByName() {
+        return new Promise((resolve, reject) => {
+            api.location.getLocationByName().then((response) => {
+                locationByName.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
     function save(location: Location): Promise<Location> {
         return new Promise((resolve, reject) => {
             api.location.save(location).then((response) => {
@@ -56,8 +68,9 @@ export const useLocationStore = defineStore('locations', () => {
 
     return {
         allLocations,
+        getLocations,
+        locationByName,
         getLocationTreeStructure,
         save,
-        getLocations
     }
 })

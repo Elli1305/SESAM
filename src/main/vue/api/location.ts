@@ -8,5 +8,9 @@ export default {
 
     save(location: Location): Promise<AxiosResponse<Location>> {
         return axios.post("api/locations/save", location)
+    },
+    
+    getLocationByName(): Promise<AxiosResponse<Location>> {
+        return axios.get("api/locations/{name}")
     }
 }

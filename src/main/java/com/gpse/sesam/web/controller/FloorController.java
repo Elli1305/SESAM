@@ -1,6 +1,6 @@
 package com.gpse.sesam.web.controller;
 
-import com.gpse.sesam.domain.file.FileStorageService;
+import com.gpse.sesam.domain.filestorage.FileStorageService;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.floor.FloorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,13 @@ public class FloorController {
 	private final FileStorageService fileStorageService;
 
 	@Autowired
-	public FloorController(FloorService floorService, FileStorageService fileStorageService) {
+	public FloorController(final FloorService floorService, final FileStorageService fileStorageService) {
 		this.floorService = floorService;
 		this.fileStorageService = fileStorageService;
 	}
 
 	@PostMapping("/save")
-	public Floor save(Floor floor) {
+	public Floor save(final Floor floor) {
 		return floorService.save(floor);
 	}
 
@@ -42,9 +42,8 @@ public class FloorController {
 
 	@PostMapping("/uploadFile")
 	@ResponseStatus(HttpStatus.OK)
-	public String uploadFile(@RequestParam("file") MultipartFile file) {
-		String fileName = fileStorageService.storeFile(file);
-		return fileName;
+	public String uploadFile(@RequestParam("file") final MultipartFile file) {
+		return fileStorageService.storeFile(file);
 	}
 
 }
