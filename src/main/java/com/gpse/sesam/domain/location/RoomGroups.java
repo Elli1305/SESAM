@@ -9,7 +9,10 @@ import java.util.List;
 public class RoomGroups {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private Long id;
+
     @Column
     private String name;
 
@@ -18,7 +21,7 @@ public class RoomGroups {
     private List<Room> rooms;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Building building;
 
     protected RoomGroups() {
@@ -29,6 +32,14 @@ public class RoomGroups {
         this.name = name;
         this.rooms = rooms;
         this.building = building;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
