@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoryService {
-    List<Category> getCategory();
+	List<Category> getCategory();
 
-    Optional<Category> getCategory(Long id);
+	Optional<Category> getCategory(Long id);
 
-    Optional<Category> getCategory(List<Location> locations);
+	Optional<Category> getCategory(List<Location> locations);
 
-    void deleteAll();
 
-    void saveAll(Iterable<Category> category);
+	void saveAll(Iterable<Category> category);
 }

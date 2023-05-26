@@ -9,31 +9,29 @@ import java.util.List;
  * Interface for interacting with {@link SesamUser}
  */
 public interface SesamUserService extends UserDetailsService {
-    /**
-     * Creates a new {@link SesamUser} based on the provided values.
-     *
-     * @param userCmd the {@link SesamUserCmd} containing the information needed to create the new user.
-     * @return the newly created user.
-     */
-    SesamUser createUser(SesamUserCmd userCmd);
+	/**
+	 * Creates a new {@link SesamUser} based on the provided values.
+	 *
+	 * @param userCmd the {@link SesamUserCmd} containing the information needed to create the new user.
+	 * @return the newly created user.
+	 */
+	SesamUser createUser(SesamUserCmd userCmd);
 
-    List<SesamUser> getUsers();
+	List<SesamUser> getUsers();
 
-    SesamUser getUserByMail(String username);
+	SesamUser getUserByMail(String username);
 
-    void makeUserEdit(SesamUser user, String prename,
-                      String lastname, String mail,
-                      List<SesamUserRole.AttainableRole> roles);
+	void makeUserEdit(SesamUser user, String prename,
+					  String lastname, String mail,
+					  List<SesamUserRole.AttainableRole> roles);
 
-    void deleteAll();
+	void deleteUser(SesamUser sesamUser);
 
-    void deleteUser(SesamUser sesamUser);
+	void saveAll(Iterable<SesamUser> users);
 
-    void saveAll(Iterable<SesamUser> users);
+	void createPasswordResetToken(SesamUser user, String token);
 
-    void createPasswordResetToken(SesamUser user, String token);
+	void updatePasswordWithToken(String token, String password);
 
-    void updatePasswordWithToken(String token, String password);
-
-    void changePassword(SesamUser user, String password);
+	void changePassword(SesamUser user, String password);
 }

@@ -11,38 +11,32 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryRepository categoryRepository;
+	private final CategoryRepository categoryRepository;
 
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+	@Autowired
+	public CategoryServiceImpl(final CategoryRepository categoryRepository) {
+		this.categoryRepository = categoryRepository;
+	}
 
-    @Override
-    public List<Category> getCategory() {
-        final List<Category> categories = new ArrayList<>();
-        categoryRepository.findAll().forEach(categories::add);
-        return categories;
-    }
+	@Override
+	public List<Category> getCategory() {
+		final List<Category> categories = new ArrayList<>();
+		categoryRepository.findAll().forEach(categories::add);
+		return categories;
+	}
 
-    @Override
-    public Optional<Category> getCategory(Long id) {
-        return categoryRepository.findById(id);
-    }
+	@Override
+	public Optional<Category> getCategory(final Long id) {
+		return categoryRepository.findById(id);
+	}
 
-    @Override
-    public Optional<Category> getCategory(List<Location> locations) {
-        return Optional.empty();
-    }
+	@Override
+	public Optional<Category> getCategory(final List<Location> locations) {
+		return Optional.empty();
+	}
 
-
-    @Override
-    public void deleteAll() {
-        categoryRepository.deleteAll();
-    }
-
-    @Override
-    public void saveAll(Iterable<Category> category) {
-        categoryRepository.saveAll(category);
-    }
+	@Override
+	public void saveAll(final Iterable<Category> category) {
+		categoryRepository.saveAll(category);
+	}
 }
