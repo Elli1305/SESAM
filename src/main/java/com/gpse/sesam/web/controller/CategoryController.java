@@ -5,6 +5,7 @@ import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.web.cmd.CategoryCmd;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
+@Secured("ADMINISTRATOR")
 public class CategoryController {
     private final CategoryService categoryService;
     private final CredentialService credentialService;
@@ -23,6 +25,8 @@ public class CategoryController {
         this.credentialService = credentialService;
     }
 
+
+    @Secured("ADMINISTRATOR")
     @GetMapping("/credentialmapping")
     public List<CategoryCmd> getCategoriesInfo() {
         List<Category> categories = categoryService.getCategory();
