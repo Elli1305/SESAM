@@ -13,6 +13,9 @@ export interface Room {
     id: bigint
     name: string
 
+    coordinates: Coordinates[]
+
+    doors: Door[]
 }
 
 export interface Floor {

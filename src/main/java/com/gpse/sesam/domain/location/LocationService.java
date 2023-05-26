@@ -8,9 +8,7 @@ public interface LocationService {
 
 	Optional<Location> getLocation(Long id);
 
-    Optional<Location> getLocationByName(String name);
-
-	void deleteAll();
+	Optional<Location> getLocationByName(String name);
 
 	void saveAll(Iterable<Location> locations);
 

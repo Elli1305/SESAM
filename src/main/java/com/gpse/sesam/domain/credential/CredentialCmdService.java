@@ -4,7 +4,5 @@ import com.gpse.sesam.web.cmd.CredentialCmd;
 
 public interface CredentialCmdService {
 
-    void deleteAll();
-
-    void saveAll(Iterable<CredentialCmd> credentials);
+	void saveAll(Iterable<CredentialCmd> credentials);
 }
