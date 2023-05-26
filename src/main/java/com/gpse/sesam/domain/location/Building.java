@@ -19,7 +19,7 @@ public class Building {
 	private String name;
 
 	@JsonManagedReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<Floor> floors = new ArrayList<>();
 
     @JsonBackReference

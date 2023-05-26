@@ -18,7 +18,7 @@ public class Room {
 	private String name;
 
 	@JsonManagedReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<Door> doors = new ArrayList<>();
 
 	@JsonBackReference

@@ -2,22 +2,17 @@
   <q-page class="items-center justify-center" style="display: flex">
     <div class="q-gutter-y-md column" style="max-width: 80%; min-width: 20em; display: flex">
       <div>
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Credentialmapping</h1>
+      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Credentialmapping  {{credentialStore.categories}}</h1>
       </div>
       <div style="width: 100em">
       <q-table
           flat bordered
-          ref="tableRef"
           title="Credentialmapping"
           :rows="rows"
           :columns="columns"
-          row-key="id"
+          row-key="name"
           :separator="'cell'"
-          v-model:pagination="pagination"
-          :loading="loading"
           :filter="filter"
-          binary-state-sort
-          @request="onRequest"
       >
         <template v-slot:top-right>
           <div style="padding-right: 1em">
@@ -186,41 +181,33 @@
 
 <script>
 import {ref} from 'vue'
-
+import {useCredentialStore} from "@/main/vue/stores/credential";
 import {useI18n} from "vue-i18n";
 import {useRouter} from 'vue-router'
 
 const columns = [
-  {
-    name: 'category',
-    required: true,
-    label: 'Kategorie',
-    align: 'center',
-    field: 'category',
-    sortable: true
-  },
-  {name: 'credential', align: 'center', label: "Credential (intern)", field: 'credential', sortable: true},
-  {
-    name: 'externalCredential',
-    align: 'center',
-    label: 'Credential (extern)',
-    field: 'externalCredential',
-    sortable: true
-  },
-  {name: 'actions', align: 'center', label: 'Bearbeiten'}
+  { name: 'category', required: true, label: 'Kategorie', align: 'center', field: row => row.nameCategory, sortable: true },
+  { name: 'credential', align: 'center', label: "Credential (intern)", field: row => row.internalCredentials,  format: (val, row) => val.join(', '), sortable: true},
+  { name: 'externalCredential', align: 'center', label: 'Credential (extern)', field: row => row.externalCredentialsCmd, format: (val, row) => val.join(', '), sortable: true},
+  { name: 'actions', align: 'center', label: 'Bearbeiten'}
 ]
 
-const rows = ref([
-  {
-    category: 'Erste-Hilfe-Kurs', credential: 'Erste-Hilfe-Kurs DRK', externalCredential: 'Erste-Hilfe-Kurs DRLG'
-  }
-]);
+const rows = ref([]);
+
+rows.value = []
 
 export default {
   name: "CredentialMappingList",
   setup() {
-    function deleteCategory() {
-    }return {
+    const credentialStore = useCredentialStore()
+
+    credentialStore.getCategory().then((categories) => {
+        rows.value = categories
+    })
+
+
+    return {
+      credentialStore,
       rows,
       columns,
       alert: ref(false),
@@ -233,33 +220,6 @@ export default {
         'DRLG', 'Johanniter'
       ],
       options2:['Telekom', 'DRK'],
-      // emulate fetching data from server
-      addRow () {
-        loading.value = true
-        setTimeout(() => {
-          const
-              index = Math.floor(Math.random() * (rows.value.length + 1)),
-              row = originalRows[ Math.floor(Math.random() * originalRows.length) ]
-
-          if (rows.value.length === 0) {
-            rowCount.value = 0
-          }
-
-          row.id = ++rowCount.value
-          const newRow = { ...row } // extend({}, row, { name: `${row.name} (${row.__count})` })
-          rows.value = [ ...rows.value.slice(0, index), newRow, ...rows.value.slice(index) ]
-          loading.value = false
-        }, 500)
-      },
-
-      removeRow () {
-        loading.value = true
-        setTimeout(() => {
-          const index = Math.floor(Math.random() * rows.value.length)
-          rows.value = [ ...rows.value.slice(0, index), ...rows.value.slice(index + 1) ]
-          loading.value = false
-        }, 500)
-      }
     }
   }
 }

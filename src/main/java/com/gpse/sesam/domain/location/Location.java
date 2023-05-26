@@ -18,7 +18,7 @@ public class Location {
 	private String name;
 
 	@JsonManagedReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<Building> buildings = new ArrayList<>();
 
 	protected Location() {
@@ -44,6 +44,7 @@ public class Location {
 	public void setBuildings(final List<Building> buildings) {
 		this.buildings = buildings;
 	}
+
 
 	public void addBuilding(final Building building) {
 		buildings.add(building);

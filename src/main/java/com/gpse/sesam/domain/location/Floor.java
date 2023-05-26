@@ -22,7 +22,7 @@ public class Floor {
 	private String floorPlanPath;
 
 	@JsonManagedReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<Room> rooms = new ArrayList<>();
 
     @JsonBackReference
@@ -87,4 +87,5 @@ public class Floor {
         rooms.remove(room);
         room.setFloor(null);
     }
+
 }

@@ -95,7 +95,6 @@ export default {
       credentialStore.getCredentialsByLocation(model.value).then((credentials) => {
 
       rows.value = credentials
-      console.log(rows.value)
     })}
 
 

@@ -1,12 +1,13 @@
 package com.gpse.sesam.web.controller;
 
-import com.gpse.sesam.domain.credential.Category;
-import com.gpse.sesam.domain.credential.CategoryService;
-import com.gpse.sesam.domain.credential.CredentialService;
+import com.gpse.sesam.domain.credential.*;
+import com.gpse.sesam.domain.user.Issuer;
+import com.gpse.sesam.web.cmd.CategoryCmd;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,9 +23,24 @@ public class CategoryController {
         this.credentialService = credentialService;
     }
 
-    @GetMapping("/credentialview")
-    public List<Category> getCategoriesInfo() {
-        return categoryService.getCategory();
+    @GetMapping("/credentialmapping")
+    public List<CategoryCmd> getCategoriesInfo() {
+        List<Category> categories = categoryService.getCategory();
+        List<CategoryCmd> cmd = new ArrayList<>();
+        for (Category category : categories) {
+            String name = category.getName();
+            List<String> credentials = new ArrayList<>();
+            List<String> externalcredentials = new ArrayList<>();
+            List<Credential> credentialList = category.getCredentials();
+            for (Credential cred : credentialList) {
+                credentials.add(cred.getName());
+            }
+            for (ExternalCredential externalCredential: category.getExternalCredentials()) {
+                externalcredentials.add(externalCredential.getName());
+            }
+            cmd.add(new CategoryCmd(name, credentials, externalcredentials));
+        }
+        return cmd;
     }
 
     /*@GetMapping("/credentialview/{id:\\d+}")
@@ -38,6 +54,23 @@ public class CategoryController {
 
     @GetMapping("/credentialview/{id}")
     public List<CredentialCmd> getCredentialInfos(@PathVariable("id") final Long id) {
-        return credentialService.credentialFindByLocation(id);
+        List<Credential> credentials = credentialService.credentialFindByLocation(id);
+        List<CredentialCmd> credentialCmds = new ArrayList<>();
+        for (Credential credential: credentials) {
+            String catName = credential.getCategory().getName();
+            String credentialName = credential.getName();
+            List<String> external = new ArrayList<>();
+            List<String> issuerName = new ArrayList<>();
+            List<String> room = new ArrayList<>();
+            for (ExternalCredential externalCredential: credential.getCategory().getExternalCredentials()) {
+                external.add(externalCredential.getName());
+            }
+            for (Issuer issuer : credential.getIssuer()) {
+                room.add(issuer.getRoom().getName());
+                issuerName.add(issuer.getFirstName()+ " " + issuer.getLastName());
+            }
+            credentialCmds.add(new CredentialCmd(catName,credentialName,external,issuerName,room));
+        }
+        return credentialCmds;
     }
 }

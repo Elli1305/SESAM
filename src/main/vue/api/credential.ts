@@ -3,6 +3,7 @@ import axios, {
 } from "axios";
 import {Credential, IssueCredentialAttribute} from "@/main/vue/entity/credentialDefinition";
 import {CredentialCmd} from "@/main/vue/entity/credentialDefinition";
+import {CategoryCmd} from "@/main/vue/entity/credentialDefinition";
 
 export default {
     get(id: string): Promise<AxiosResponse<Credential>> {
@@ -14,8 +15,8 @@ export default {
     all(): Promise<AxiosResponse<Credential[]>>{
         return axios.get("/api/credentials")
     },
-    getCategories(){
-        return axios.get("api/credentialview")
+    getCategories(): Promise<AxiosResponse<CategoryCmd[]>>{
+        return axios.get("api/credentialmapping")
     },
     getCredentialInfos(): Promise<AxiosResponse<Credential[]>>{
         return axios.get("api/credentialview/{locationname}")

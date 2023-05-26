@@ -128,4 +128,11 @@ public class Credential {
     public List<Door> getDoors() {
         return doors;
     }
+
+    @PreRemove
+    public void removeDoor(){
+        for (Door door : this.doors) {
+            door.getCredentials().remove(this);
+        }
+    }
 }

@@ -120,7 +120,7 @@ public class CredentialServiceImpl implements CredentialService {
 
 
     @Override
-    public List<CredentialCmd> credentialFindByLocation(Long id) {
+    public List<Credential> credentialFindByLocation(Long id) {
         return credentialRepository.findByLocation(id);
     }
 

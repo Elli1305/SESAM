@@ -83,12 +83,12 @@ public class Door {
 	}
 
 	public void removeCredential(Credential credential) {
-		credentials.remove(credential);
-		List<Door> doors = new ArrayList<>();
-		credential.setDoors(doors);
+		this.credentials.remove(credential);
+		credential.getDoors().remove(this);
 	}
 
 	public void setCoordinates(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
 	}
+
 }
