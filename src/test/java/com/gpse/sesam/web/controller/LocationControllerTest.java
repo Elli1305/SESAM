@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -50,7 +49,7 @@ class LocationControllerTest {
 	void getLocationShouldReturnContentOfOptional() {
 		long id = 1;
 
-		Optional<Location> locationOptional = Optional.of(new Location("Test", Collections.emptyList()));
+		Optional<Location> locationOptional = Optional.of(new Location("Test"));
 		when(locationService.getLocation(id)).thenReturn(locationOptional);
 
 		Location location = locationController.getLocationInfo(id);

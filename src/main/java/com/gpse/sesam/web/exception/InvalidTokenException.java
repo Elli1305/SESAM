@@ -7,10 +7,10 @@ import java.io.Serial;
 
 @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
 public class InvalidTokenException extends RuntimeException {
-    @Serial
-    private static final long serialVersionUID = 45L;
+	@Serial
+	private static final long serialVersionUID = 45L;
 
-    public InvalidTokenException(final String message) {
-        super(message);
-    }
+	public InvalidTokenException(final String message) {
+		super(message);
+	}
 }

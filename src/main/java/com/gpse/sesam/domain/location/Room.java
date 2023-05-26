@@ -1,13 +1,18 @@
 package com.gpse.sesam.domain.location;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +25,13 @@ public class Room {
 	@Column
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Door> doors;
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	private List<Door> doors = new ArrayList<>();
+
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Floor floor;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Coordinate> coordinates;
@@ -30,12 +40,11 @@ public class Room {
 
 	}
 
-	public Room(String name, List<Door> doors) {
+	public Room(final String name) {
 		this.name = name;
-		this.doors = doors;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -47,7 +56,7 @@ public class Room {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -55,15 +64,33 @@ public class Room {
 		return doors;
 	}
 
-	public void setDoors(List<Door> doors) {
+	public void setDoors(final List<Door> doors) {
 		this.doors = doors;
+	}
+
+	public void addDoor(final Door door) {
+		doors.add(door);
+		door.setRoom(this);
+	}
+
+	public Floor getFloor() {
+		return floor;
+	}
+
+	public void setFloor(final Floor floor) {
+		this.floor = floor;
+	}
+
+	public void removeDoor(final Door door) {
+		doors.remove(door);
+		door.setRoom(null);
 	}
 
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
 
-	public void setCoordinates(List<Coordinate> coordinates) {
+	public void setCoordinates(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
 	}
 }
