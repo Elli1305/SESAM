@@ -1,21 +1,22 @@
 <template>
   <div class="q-pa-md">
+    <div class="q-mb-xl">
+      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">
+        Credentials</h1>
+    </div>
     <q-table
         :columns="columns"
         :filter="filter"
         :rows="store.credentials"
         row-key="name"
-        title="Credentials"
     >
       <template v-slot:top-right>
-        <q-input v-model="filter" borderless debounce="300" dense placeholder="Search">
+        <q-btn to="/add_credential" color="grey-6" borderless flat icon="add" label="New Credential" />
+        <q-input class="q-ml-md" v-model="filter" borderless debounce="300" dense placeholder="Search">
           <template v-slot:append>
             <q-icon name="search"/>
           </template>
         </q-input>
-        <router-link class="q-ml-md" to="/add_credential">
-          <q-icon color="primary" name="add" size="24px"/>
-        </router-link>
       </template>
       <template v-slot:body-cell-name="props">
         <q-td :props="props">
