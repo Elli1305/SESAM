@@ -7,7 +7,7 @@
     <q-table
         :columns="columns"
         :filter="filter"
-        :rows="store.credentials"
+        :rows="rows"
         row-key="name"
     >
       <template v-slot:top-right>
@@ -20,7 +20,7 @@
       </template>
       <template v-slot:body-cell-name="props">
         <q-td :props="props">
-          <router-link :to="`/credential_administration/${props.row.id}`">{{ props.value }}</router-link>
+          <router-link :to="issuer ? `/credentials/${props.row.id}/issue` : `/credential_administration/${props.row.id}`">{{ props.value }}</router-link>
         </q-td>
       </template>
     </q-table>
@@ -30,8 +30,11 @@
 <script lang="ts" setup>
 import {QTableColumn} from "quasar";
 import {useCredentialsStore} from "@/main/vue/stores/credential";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {Credential} from "@/main/vue/entity/credentialDefinition";
+import {useUserStore} from "@/main/vue/stores/users";
+
+const { issuer } = defineProps<{ issuer: boolean }>();
 
 const columns: QTableColumn<Credential>[] = [
   {
@@ -64,6 +67,10 @@ const filter = ref('');
 const store = useCredentialsStore();
 
 store.fetch();
+
+const userStore = useUserStore();
+
+const rows = computed(() => issuer ? store.credentials.filter(e => e.issuer.some(i => i.id === userStore.user?.id)) : store.credentials);
 </script>
 
 <style scoped></style>

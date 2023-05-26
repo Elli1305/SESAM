@@ -8,7 +8,6 @@ import LoginView from "../views/Login.vue";
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import IssueCredential from "../views/IssueCredential.vue";
-import IssueCredentials from "../views/IssueCredentials.vue";
 import Credentialview from "@/main/vue/views/CredentialView.vue"
 
 import Imprint from "../views/Imprint.vue";
@@ -88,10 +87,10 @@ const router = createRouter({
       component: Credentialview,
     },
     {
-      path: "/credentials",
-      component: IssueCredentials,
-      props: true,
-      meta: { requiresAuth: true },
+        path: "/credentials",
+        component: CredentialAdministration,
+        props: {issuer: true},
+        meta: {requiresAuth: true},
     },
     {
       path: "/credentials/:id/issue",
@@ -107,12 +106,8 @@ const router = createRouter({
     {
       path: "/credential_administration",
       component: CredentialAdministration,
-      meta: {
-        requiresRoles: [
-          'ADMINISTRATOR',
-          'ISSUER'
-        ]
-      }
+      props: {issuer: false},
+      meta: {requiresAuth: true},
     },
     {
       path: "/credential_administration/:id(\\d+)",
