@@ -32,7 +32,7 @@
                 <div v-if="userStore.authenticated">
                   <q-separator spaced></q-separator>
                   <div class="row justify-end" style="padding: 0.5em">
-                    <q-btn size="sm" label="Bearbeiten" color="blue" @click="func(room)" ></q-btn>
+                    <q-btn size="sm" label="Bearbeiten" color="primary" @click="inception = true" ></q-btn>
                       <q-dialog v-model="inception">
                           <q-card>
                               <q-card-section>
@@ -168,12 +168,11 @@ export default {
     const inception = ref();
     const addDoorDialog = ref();
     const deleteDoorDialog = ref();
-      const fourthDialog = ref();
-      const text = ref();
-      const newDoorName = ref();
-      const newDoorCoord = ref();
-      const currentDoorname = ref();
-      const currentDoorCoord = ref();
+    const fourthDialog = ref();
+    const newDoorName = ref();
+    const newDoorCoord = ref();
+    const currentDoorname = ref();
+    const currentDoorCoord = ref();
     filteredRooms.value = rooms.value
 
     watch(rooms, () => {
@@ -185,11 +184,18 @@ export default {
             selectedRooms.push(element)
         })
     }
-
-    // to do function func(room)
-    //to do function  deleteDoor(room, door)
-
-    //to do function addDoor(room, name, coordinates)
+      function  deleteDoor(room, door){
+          const doors = room.doors;
+          const index = doors.indexOf(door);
+          doors.splice(index, 1);
+          room.doors = doors;
+      }
+      function addDoor(room, name, coordinates){
+          const doors = room.doors;
+          let door = Door(name, coordinates);
+          doors.push(door);
+          room.doors = doors;
+      }
 
     //to do define save(room)
 
@@ -225,7 +231,7 @@ export default {
         })
       }
     }
-    return{floorPlanStore, selectedRooms, toggleRoomCheckbox, userStore, search, filteredRooms, roomFilter, t, inception, addDoorDialog, deleteDoorDialog, func, text, deleteDoor, addDoor, newDoorName, newDoorCoord, currentDoorname, currentDoorCoord, fourthDialog}
+    return{floorPlanStore, selectedRooms, toggleRoomCheckbox, userStore, search, filteredRooms, roomFilter, t, inception, addDoorDialog, deleteDoorDialog, deleteDoor, addDoor, newDoorName, newDoorCoord, currentDoorname, currentDoorCoord, fourthDialog}
   }
 
 }
