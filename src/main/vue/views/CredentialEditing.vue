@@ -2,30 +2,36 @@
   <div class="q-pa-md">
     <div class="row q-col-gutter-md">
       <div class="col-12 col-md q-col-gutter-sm">
-        <q-input label="Name" outlined type="text"/>
-      </div>
-      <div class="col-12 col-md q-col-gutter-sm">
-        <q-input label="Agent" outlined type="text"/>
-        <q-input label="Credential Definition ID" outlined type="text"/>
-      </div>
-    </div>
-    <div class="row q-col-gutter-md q-mt-md">
-      <div class="col-12 col-md">
-        <div v-for="(attribute, index) in attributes" class="row q-col-gutter-sm q-mb-sm">
-          <q-input v-model="attribute.name" class="col-9" label="Name" outlined type="text"
-                   @click.prevent="focus(index)"/>
-          <q-select v-model="attribute.type" :options="types" class="col-3" emit-value label="Type" map-options
+        <q-input v-model="credential.name" label="Name" outlined type="text"/>
+        <q-input v-model="credential.agent" label="Agent" outlined type="text"/>
+        <q-input v-model="credential.credentialDefinitionId" class="q-mb-md" label="Credential Definition ID" outlined
+                 type="text"/>
+
+        <div v-for="(attribute, index) in credential.attributes" class="row q-col-gutter-sm">
+          <q-input v-model="attribute.name" class="col-8" label="Name" outlined type="text" />
+          <q-select v-model="attribute.type" :options="types" class="col-2" emit-value label="Type" map-options
                     outlined/>
+          <q-btn-group flat class="col-2">
+            <q-btn v-if="index !== 0" color="primary" icon="remove" flat @click="() => credential.attributes.splice(index, 1)" />
+            <q-btn v-if="index === 0" color="primary" icon="add" flat @click="addAttribute(index)" />
+          </q-btn-group>
         </div>
       </div>
-      <div class="col-12 col-md">
-        <q-input label="Name" outlined type="text"/>
+      <div class="col-12 col-md q-col-gutter-sm">
+        <div v-for="(condition, index) in credential.conditions" class="row q-col-gutter-sm">
+          <q-input v-model="condition.value" label="Name" outlined type="text" class="col-10" />
+
+          <q-btn-group flat class="col-2">
+            <q-btn v-if="index !== 0" color="primary" icon="remove" flat @click="() => credential.conditions.splice(index, 1)" />
+            <q-btn v-if="index === 0" color="primary" icon="add" flat @click="() => credential.conditions.push({value: ''})" />
+          </q-btn-group>
+        </div>
       </div>
     </div>
-    <p>{{ attributes }}</p>
+    <p class="q-mt-lg">{{ credential }}</p>
   </div>
-  <q-page-sticky position="bottom-right" :offset="[18, 18]">
-    <q-btn fab icon="save" color="accent" @click="save" unelevated />
+  <q-page-sticky :offset="[18, 18]" position="bottom-right">
+    <q-btn color="accent" fab icon="save" unelevated @click="save"/>
   </q-page-sticky>
 </template>
 
@@ -55,17 +61,33 @@ interface CreateAttribute {
   name: string
 }
 
-const attributes: Ref<CreateAttribute[]> = ref([{type: types[0].value, name: ''}]);
+interface CreateCredential {
+  name: string;
+  agent: string;
+  credentialDefinitionId: string;
 
-const focus = (index: number) => {
-  if (index !== attributes.value.length - 1) {
+  attributes: CreateAttribute[];
+  conditions: { value: string; }[];
+}
+
+const credential: Ref<CreateCredential> = ref({
+  name: '',
+  agent: '',
+  credentialDefinitionId: '',
+  attributes: [{type: types[0].value, name: ''}],
+  conditions: [{value: ''}],
+});
+
+const addAttribute = (index: number) => {
+  if (index !== credential.value.attributes.length - 1) {
     return;
   }
 
-  attributes.value.push({type: 'text', name: ''});
+  credential.value.attributes.push({type: 'text', name: ''});
 }
 
-const save = () => {}
+const save = () => {
+}
 </script>
 
 <style scoped></style>
