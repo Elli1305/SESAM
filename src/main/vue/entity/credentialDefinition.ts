@@ -62,3 +62,22 @@ export interface CredentialCmd {
     issuerName: string[];
     issuerRoom: string[];
 }
+
+interface CreateAttribute {
+    type: string;
+    name: string;
+    attributeName: string;
+}
+
+interface CreateCondition {
+    label: string;
+}
+
+export interface CreateCredential {
+    name: string;
+    agent: string;
+    credentialDefinitionId: string;
+
+    attributes: CreateAttribute[];
+    conditions: CreateCondition[];
+}

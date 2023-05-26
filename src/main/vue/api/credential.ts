@@ -1,7 +1,7 @@
 import axios, {
     AxiosResponse,
 } from "axios";
-import {Credential, IssueCredentialAttribute} from "@/main/vue/entity/credentialDefinition";
+import {CreateCredential, Credential, IssueCredentialAttribute} from "@/main/vue/entity/credentialDefinition";
 import {CredentialCmd} from "@/main/vue/entity/credentialDefinition";
 
 export default {
@@ -13,6 +13,9 @@ export default {
     },
     all(): Promise<AxiosResponse<Credential[]>>{
         return axios.get("/api/credentials")
+    },
+    create(credential: CreateCredential): Promise<AxiosResponse<CreateCredential>> {
+        return axios.post(`/api/credentials`, credential);
     },
     getCategories(){
         return axios.get("api/credentialview")

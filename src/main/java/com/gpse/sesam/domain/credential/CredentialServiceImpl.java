@@ -3,6 +3,7 @@ package com.gpse.sesam.domain.credential;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.web.cmd.CreateCredentialCmd;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 import jakarta.validation.Valid;
@@ -12,109 +13,128 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class CredentialServiceImpl implements CredentialService {
 
-	private final WebClient client;
+    private final WebClient client;
 
-	private final ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
-	private final CredentialRepository credentialRepository;
+    private final CredentialRepository credentialRepository;
 
-	@Autowired
-	public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
-								 final CredentialRepository credentialRepository) {
-		this.client = client;
-		this.mapper = mapper;
-		this.credentialRepository = credentialRepository;
-	}
+    @Autowired
+    public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
+                                 final CredentialRepository credentialRepository) {
+        this.client = client;
+        this.mapper = mapper;
+        this.credentialRepository = credentialRepository;
+    }
 
-	@Override
-	public List<Credential> getCredentials() {
-		final List<Credential> credentials = new ArrayList<>();
-		credentialRepository.findAll().forEach(credentials::add);
-		return credentials;
-	}
+    public static CredentialCmd createCredentialCmd(final Category category, final Credential credential) {
+        final List<String> externalCred = new ArrayList<>();
+        final List<String> issuerName = new ArrayList<>();
+        final List<String> issuerRoom = new ArrayList<>();
 
-	@Override
-	public Optional<Credential> getCredential(final Long id) {
-		return credentialRepository.findById(id);
-	}
+        for (int i = 0; i < category.getExternalCredentials().size(); i++) {
+            externalCred.add(category.getExternalCredentials().get(i).getName());
+        }
 
-	private String sendCredentialIssueRequest(@Valid final IssueCredentialRequest issueCredentialRequest)
-			throws JsonProcessingException {
-		return client.post().uri("credential/issue").contentType(MediaType.TEXT_PLAIN)
-				.accept(MediaType.APPLICATION_JSON).bodyValue(mapper.writeValueAsString(issueCredentialRequest))
-				.retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(5000)).block();
-	}
+        for (int i = 0; i < credential.getIssuer().size(); i++) {
+            issuerRoom.add(credential.getIssuer().get(i).getRoom().getName());
+            issuerName.add(credential.getIssuer().get(i).getFirstName() + " " + credential.getIssuer().get(i)
+                    .getLastName());
+        }
 
-	@Override
-	public String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds)
-			throws JsonProcessingException {
-		final Credential credential = credentialRepository.findById(id).orElseThrow();
+        return new CredentialCmd(category.getName(), credential.getName(), externalCred, issuerName, issuerRoom);
+    }
 
-		final Map<Long, IssueCredentialAttributeCmd> attributeCmdMap = attributeCmds.stream()
-				.collect(Collectors.toMap(IssueCredentialAttributeCmd::id, Function.identity()));
+    @Override
+    public List<Credential> getCredentials() {
+        final List<Credential> credentials = new ArrayList<>();
+        credentialRepository.findAll().forEach(credentials::add);
+        return credentials;
+    }
 
-		final List<IssueCredentialAttribute> attributes = credential.getForm().stream().map(entry -> {
-			final IssueCredentialAttributeCmd correspondingAttributeCmd = attributeCmdMap.get(entry.getId());
+    @Override
+    public Optional<Credential> getCredential(final Long id) {
+        return credentialRepository.findById(id);
+    }
 
-			if (correspondingAttributeCmd == null) {
-				return null;
-			}
+    private String sendCredentialIssueRequest(@Valid final IssueCredentialRequest issueCredentialRequest)
+            throws JsonProcessingException {
+        return client.post().uri("credential/issue").contentType(MediaType.TEXT_PLAIN)
+                .accept(MediaType.APPLICATION_JSON).bodyValue(mapper.writeValueAsString(issueCredentialRequest))
+                .retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(5000)).block();
+    }
 
-			return new IssueCredentialAttribute(entry.getAttributeName(), entry.getType() == FormEntryType.DATE
-					? correspondingAttributeCmd.value().replace("-", "")
-					: correspondingAttributeCmd.value(), entry.getType());
-		}).filter(Objects::nonNull).collect(Collectors.toList());
+    @Override
+    public String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds)
+            throws JsonProcessingException {
+        final Credential credential = credentialRepository.findById(id).orElseThrow();
 
-		if (credential.getForm().size() != attributes.size()) {
-			return null;
-		}
+        final Map<Long, IssueCredentialAttributeCmd> attributeCmdMap = attributeCmds.stream()
+                .collect(Collectors.toMap(IssueCredentialAttributeCmd::id, Function.identity()));
 
-		return sendCredentialIssueRequest(new IssueCredentialRequest(credential.getAgent(),
-				new IssueCredential(credential.getCredentialDefinitionId(), attributes)));
-	}
+        final List<IssueCredentialAttribute> attributes = credential.getForm().stream().map(entry -> {
+            final IssueCredentialAttributeCmd correspondingAttributeCmd = attributeCmdMap.get(entry.getId());
 
-	@Override
-	public void saveAll(final Iterable<Credential> credentials) {
-		credentialRepository.saveAll(credentials);
-	}
+            if (correspondingAttributeCmd == null) {
+                return null;
+            }
 
-	@Override
-	public Optional<Credential> credentialFindByLocation(final Location location) {
-		return Optional.empty();
-	}
+            return new IssueCredentialAttribute(entry.getAttributeName(), entry.getType() == FormEntryType.DATE
+                    ? correspondingAttributeCmd.value().replace("-", "")
+                    : correspondingAttributeCmd.value(), entry.getType());
+        }).filter(Objects::nonNull).collect(Collectors.toList());
 
+        if (credential.getForm().size() != attributes.size()) {
+            return null;
+        }
 
-	@Override
-	public List<CredentialCmd> credentialFindByLocation(final Long id) {
-		return credentialRepository.findByLocation(id);
-	}
+        return sendCredentialIssueRequest(new IssueCredentialRequest(credential.getAgent(),
+                new IssueCredential(credential.getCredentialDefinitionId(), attributes)));
+    }
 
-	public static CredentialCmd createCredentialCmd(final Category category, final Credential credential) {
-		final List<String> externalCred = new ArrayList<>();
-		final List<String> issuerName = new ArrayList<>();
-		final List<String> issuerRoom = new ArrayList<>();
+    @Override
+    public void saveAll(final Iterable<Credential> credentials) {
+        credentialRepository.saveAll(credentials);
+    }
 
-		for (int i = 0; i < category.getExternalCredentials().size(); i++) {
-			externalCred.add(category.getExternalCredentials().get(i).getName());
-		}
+    @Override
+    public Optional<Credential> credentialFindByLocation(final Location location) {
+        return Optional.empty();
+    }
 
-		for (int i = 0; i < credential.getIssuer().size(); i++) {
-			issuerRoom.add(credential.getIssuer().get(i).getRoom().getName());
-			issuerName.add(credential.getIssuer().get(i).getFirstName() + " " + credential.getIssuer().get(i)
-					.getLastName());
-		}
+    @Override
+    public List<CredentialCmd> credentialFindByLocation(final Long id) {
+        return credentialRepository.findByLocation(id);
+    }
 
-		return new CredentialCmd(category.getName(), credential.getName(), externalCred, issuerName, issuerRoom);
-	}
+    @Override
+    public void create(CreateCredentialCmd createCredentialCmd) {
+        final Credential credential = new Credential(
+                createCredentialCmd.getName(),
+                createCredentialCmd.getCredentialDefinitionId(),
+                createCredentialCmd.getAgent(),
+                createCredentialCmd.getAttributes().stream()
+                        .map(createAttributeCmd ->
+                                new FormEntry(
+                                        createAttributeCmd.getName(),
+                                        createAttributeCmd.getType(),
+                                        createAttributeCmd.getAttributeName()
+                                )
+                        )
+                        .toList(),
+                createCredentialCmd.getConditions().stream()
+                        .map(createConditionCmd -> new ChecklistEntry(createConditionCmd.getLabel()))
+                        .toList(),
+                Collections.emptyList()
+        );
+
+        credentialRepository.save(credential);
+    }
 }

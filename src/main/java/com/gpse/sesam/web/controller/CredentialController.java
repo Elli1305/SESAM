@@ -54,12 +54,14 @@ public class CredentialController {
 
     @PostMapping(value = "/credentials")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateCredentialCmd create(@Valid @RequestBody CreateCredentialCmd credential) {
-        return credential;
+    @Secured("ADMINISTRATOR")
+    public void create(@Valid @RequestBody CreateCredentialCmd credential) {
+        service.create(credential);
     }
 
     @PutMapping(value = "/credentials/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ADMINISTRATOR")
     public CreateCredentialCmd update(@PathVariable Long id, @Valid @RequestBody CreateCredentialCmd credential) {
         return credential;
     }
