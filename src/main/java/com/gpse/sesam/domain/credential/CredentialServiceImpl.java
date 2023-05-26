@@ -137,4 +137,9 @@ public class CredentialServiceImpl implements CredentialService {
 
         credentialRepository.save(credential);
     }
+
+    @Override
+    public void delete(Long id) {
+        credentialRepository.deleteById(id);
+    }
 }

@@ -65,4 +65,11 @@ public class CredentialController {
     public CreateCredentialCmd update(@PathVariable Long id, @Valid @RequestBody CreateCredentialCmd credential) {
         return credential;
     }
+
+    @DeleteMapping(value = "/credentials/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ADMINISTRATOR")
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
 }

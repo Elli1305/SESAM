@@ -42,7 +42,10 @@
     <p class="q-mt-lg">{{ credential }}</p>
   </q-form>
   <q-page-sticky :offset="[18, 18]" position="bottom-right">
-    <q-btn color="accent" fab icon="save" unelevated @click="save"/>
+    <q-btn color="primary" fab icon="save" unelevated @click="save"/>
+  </q-page-sticky>
+  <q-page-sticky v-if="props.id !== undefined" :offset="[18, 18]" position="bottom-left">
+    <q-btn color="primary" fab icon="delete" unelevated @click="deleteCredential"/>
   </q-page-sticky>
 </template>
 
@@ -98,6 +101,20 @@ const save = async () => {
   }
 
   api.credential.create(credential.value)
+      .then(() => {
+        router.push("/credential_administration");
+      })
+      .catch(reason => {
+        console.log(reason);
+      });
+}
+
+const deleteCredential = async () => {
+  if (!props.id) {
+    return;
+  }
+
+  api.credential.delete(props.id)
       .then(() => {
         router.push("/credential_administration");
       })

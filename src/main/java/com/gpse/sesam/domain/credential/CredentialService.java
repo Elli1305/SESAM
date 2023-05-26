@@ -25,4 +25,6 @@ public interface CredentialService {
 	List<CredentialCmd> credentialFindByLocation(Long id);
 
 	void create(CreateCredentialCmd createCredentialCmd);
+
+	void delete(Long id);
 }

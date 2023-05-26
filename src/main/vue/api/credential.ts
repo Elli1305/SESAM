@@ -17,6 +17,9 @@ export default {
     create(credential: CreateCredential): Promise<AxiosResponse<CreateCredential>> {
         return axios.post(`/api/credentials`, credential);
     },
+    delete(id: number): Promise<AxiosResponse<void>> {
+        return axios.delete(`/api/credentials/${id}`);
+    },
     getCategories(){
         return axios.get("api/credentialview")
     },
