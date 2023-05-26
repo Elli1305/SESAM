@@ -3,6 +3,7 @@ type CredentialFormEntryType = "text" | "number" | "date";
 export interface Credential {
     id: bigint;
     name: string;
+    agent: string;
     credentialDefinitionId: string;
     form: FormEntry[];
     checklist: ChecklistEntry[];

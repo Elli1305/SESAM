@@ -29,10 +29,11 @@
 
 <script lang="ts" setup>
 import {QTableColumn} from "quasar";
-import {CredentialDefinition, useCredentialStore} from "@/main/vue/stores/credential";
+import {useCredentialsStore} from "@/main/vue/stores/credential";
 import {ref} from "vue";
+import {Credential} from "@/main/vue/entity/credentialDefinition";
 
-const columns: QTableColumn<CredentialDefinition>[] = [
+const columns: QTableColumn<Credential>[] = [
   {
     name: 'name',
     required: true,
@@ -60,7 +61,7 @@ const columns: QTableColumn<CredentialDefinition>[] = [
 ]
 
 const filter = ref('');
-const store = useCredentialStore();
+const store = useCredentialsStore();
 
 store.fetch();
 </script>

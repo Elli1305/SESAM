@@ -2,7 +2,6 @@ package com.gpse.sesam.domain.credential;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gpse.sesam.domain.location.Door;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gpse.sesam.domain.user.Issuer;
 import jakarta.persistence.*;
 
@@ -22,7 +21,6 @@ public class Credential {
     @Column(nullable = false)
     private String credentialDefinitionId;
 
-    @JsonIgnore
     @Column(nullable = false)
     private String agent;
 

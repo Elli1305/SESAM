@@ -1,44 +1,24 @@
 import {defineStore} from "pinia";
+import {Ref, ref} from "vue";
+import api from "@/main/vue/api";
+import {Credential, CredentialCmd} from "@/main/vue/entity/credentialDefinition";
 
-export interface CredentialDefinition {
-    id: number;
-    name: string;
-    agent: string;
-    credentialDefinitionId: string;
-}
-
-export const useCredentialListStore = defineStore('credential', {
+export const useCredentialsStore = defineStore('credentials', {
     state: () => {
         return {
-            credentials: new Array<CredentialDefinition>(),
+            credentials: new Array<Credential>(),
         };
     }, actions: {
         async fetch(): Promise<void> {
-            this.credentials = [
-                {id: 0, name: 'Telekom Member', agent: 'tlabs', credentialDefinitionId: '$T-MEMBER'},
-                {id: 1, name: 'University Member', agent: 'university', credentialDefinitionId: '$U-MEMBER'},
-                {id: 2, name: 'Telekom Member', agent: 'tlabs', credentialDefinitionId: '$T-TRAINING'},
-                {id: 3, name: 'University Training', agent: 'university', credentialDefinitionId: '$U-TRAINING'},
-            ];
+            this.credentials = await api.credential.all().then(response => response.data);
         },
-        async update(id: number, changes: Partial<Omit<CredentialDefinition, 'id'>>): Promise<void> {
-            const index = this.credentials.findIndex(credential => credential.id == id);
-
-            if (index === -1) {
-                return;
-            }
-
-            this.credentials[index] = {...this.credentials[index], ...changes};
+        async update(credential: Credential): Promise<void> {
         }
     }
 },);
 
-import {Ref, ref} from "vue";
-import api from "@/main/vue/api";
-import {Category, CredentialCmd} from "@/main/vue/entity/credentialDefinition";
-
-export const useCredentialStore = defineStore('credential', () =>{
-    const credentials: Ref<CredentialCmd[]|null> = ref(null)
+export const useCredentialStore = defineStore('credential', () => {
+    const credentials: Ref<CredentialCmd[] | null> = ref(null)
 
 
     function getCredentialsByLocation(id: string) {
