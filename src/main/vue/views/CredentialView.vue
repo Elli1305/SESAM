@@ -56,7 +56,9 @@
 
 
 <script>
-import { ref } from 'vue'
+//import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 import {useI18n} from "vue-i18n";
 import axios from "axios";
@@ -86,9 +88,37 @@ export default {
     const credentialStore = useCredentialStore()
     const locationStore = useLocationStore()
     const model = ref()
-    locationStore.getLocations().then((locations) => {
-      model.value = locations[0].id
-    })
+      const locationslist = locationStore.getLocations()
+      const route = useRoute()
+      const queryParam = ref('')
+
+      onMounted(() => {
+          queryParam.value = route.query.q
+          console.log('Übergebener Wert:', queryParam.value)
+      })
+      function getLocationid(id){
+        for(const location in locationslist){
+            for(const building of location.buildings){
+                for(const floor of building.floors){
+                    if(floor.rooms.some(room => room.id === id)){
+                        return location.id
+                    }
+                }
+            }
+        }
+        return null
+      }
+      let selectedLocation = getLocationid(queryParam.value);
+      if(selectedLocation != null){
+          locationStore.getLocations().then(() => {
+              model.value = selectedLocation;
+          });
+      }else{
+          locationStore.getLocations().then((locations) => {
+              model.value = locations[0].id
+          })
+      }
+
 
     let baum = ref()
     async function updateCredentials(){
@@ -109,6 +139,7 @@ export default {
       model,
       t,
       updateCredentials,
+        queryParam,
       baum
     }
   }

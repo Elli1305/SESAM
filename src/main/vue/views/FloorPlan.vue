@@ -20,6 +20,7 @@ import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import { storeToRefs } from "pinia";
 import {watch} from "vue";
 import credential from "@/main/vue/api/credential";
+import credentialView from "@/main/vue/views/CredentialView.vue";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -138,7 +139,10 @@ export default {
               console.log(room.doors);
               const popup = L.popup();
               let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
-              let url = "<a href='./credentialview'> Mehr Informationen zu Credentials</a>";
+              let qq = room.location;
+
+              let url = "<a href='/credentialview?q= room.id'> Mehr Informationen zu Credentials</a>";
+
               popup.setContent(url);
               polygon.bindTooltip(string).openTooltip();
               polygon.bindPopup(popup);
