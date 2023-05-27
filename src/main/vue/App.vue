@@ -113,7 +113,7 @@ async function logout() {
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
                     <router-link to="/corporatedesign" class="q-ma-sm headerLink text-black">{{t("home.editCorporateDesign")}}</router-link>
-                    <router-link to="/ImprintEditor" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
+                    <router-link to="/imprinteditor" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
                   </div>
                 </q-menu>
               </div>
