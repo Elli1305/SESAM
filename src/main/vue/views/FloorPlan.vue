@@ -19,6 +19,7 @@ import L from "leaflet";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import { storeToRefs } from "pinia";
 import {watch} from "vue";
+import credential from "@/main/vue/api/credential";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -120,29 +121,55 @@ export default {
         floorPlanMap.panTo(center);
       });
     },
-    drawRooms(rooms) {
-      for (const room of rooms) {
-        const polygon = L.polygon(room.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
-          color: 'black',
-          width: 5,
-          fillOpacity: 0.1
-        })
-        polygon.id = room.id
-        polygon.type = "Room"
-        polygon.on('click', (layer) => layer.setColor);
-        const popup = L.popup();
+      drawRooms(rooms) {
+          let polygons = [];
 
-        polygon.bindPopup(popup)
+          for (const room of rooms) {
+              const polygon = L.polygon(room.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
+                  color: 'black',
+                  width: 5,
+                  fillOpacity: 0.1
+              });
 
-        polygon.addTo(floorPlanMap)
-        for (const door of room.doors) {
-          L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
-            color: '#b0b0b0',
-            weight: 3
-          }).addTo(floorPlanMap)
-        }
+              polygons.push(polygon);
+              let doorsname = room.doors.map(door => door.name).join(", ");
+              let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential.name).join(", ");
+              let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstname +" " + issuer.lastname).join(", ");
+              console.log(room.doors);
+              const popup = L.popup();
+              let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
+              let url = "<a href='./credentialview'> Mehr Informationen zu Credentials</a>";
+              popup.setContent(url);
+              polygon.bindTooltip(string).openTooltip();
+              polygon.bindPopup(popup);
+              polygon.addTo(floorPlanMap);
+
+              for (const door of room.doors) {
+                  L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
+                      color: '#b0b0b0',
+                      weight: 3
+                  }).addTo(floorPlanMap);
+              }
+
+              polygon.on('click', function() {
+                  for (const p of polygons) {
+                      p.setStyle({
+                          color: 'black',
+                          fillColor: 'black',
+                          weight: 5,
+                          fillOpacity: 0.1
+                      });
+                  }
+
+                  polygon.setStyle({
+                      color: 'red',
+                      fillColor: 'red',
+                      weight: 2,
+                      fillOpacity: 0.1
+                  });
+              });
+          }
       }
-    }
   },
 };
 </script>

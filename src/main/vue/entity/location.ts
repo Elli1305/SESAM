@@ -7,6 +7,7 @@ interface Door {
     id: number
     name: string
     coordinates: Coordinates[]
+    credentials: Credential[]
 }
 
 export interface Room {
