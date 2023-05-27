@@ -9,11 +9,10 @@ import java.io.Serial;
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class FileStorageException extends RuntimeException {
 
-    @Serial
-    private static final long serialVersionUID = 47L;
+	@Serial
+	private static final long serialVersionUID = 47L;
 
-    public FileStorageException(String message, IOException e) {
-        super(message, e);
-    }
-
+	public FileStorageException(String s, IOException ex) {
+		super(s, ex);
+	}
 }

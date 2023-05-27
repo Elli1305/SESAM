@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Floor {
@@ -31,11 +32,11 @@ public class Floor {
 	@Column
 	private String floorPlanPath;
 
-	@JsonManagedReference
+	@JsonManagedReference("rooms_floor")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
 	private List<Room> rooms = new ArrayList<>();
 
-	@JsonBackReference
+	@JsonBackReference("building_floor")
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Building building;
 
@@ -96,5 +97,24 @@ public class Floor {
 	public void removeRoom(final Room room) {
 		rooms.remove(room);
 		room.setFloor(null);
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		final Floor floor = (Floor) o;
+
+		return Objects.equals(id, floor.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id != null ? id.hashCode() : 0;
 	}
 }

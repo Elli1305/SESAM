@@ -37,7 +37,7 @@ public class Door {
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "doors", fetch = FetchType.EAGER)
 	private List<Credential> credentials = new ArrayList<>();
 
-	@JsonBackReference
+	@JsonBackReference("doors_rooms")
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Room room;
 

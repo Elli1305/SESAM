@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.domain.file.FileStorageService;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.floor.FloorRepository;
 import com.gpse.sesam.domain.location.floor.FloorServiceImpl;
@@ -11,17 +12,22 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class FloorServiceImplTest {
 
 	@Mock
 	private FloorRepository floorRepository;
+
+	@Mock
+	private FileStorageService fileStorageService;
 
 	@InjectMocks
 	private FloorServiceImpl floorService;
@@ -55,13 +61,15 @@ class FloorServiceImplTest {
 
 	@Test
 	void saveShouldCallRepositoryWithCorrectArguments() {
-		Floor floor = new Floor(1, "Test", Collections.emptyList());
+		final Floor floor = new Floor(1, "", Collections.emptyList());
+		final MockMultipartFile multipartFile = new MockMultipartFile("test_file", new byte[]{});
 
-		floorService.save(floor);
+		when(fileStorageService.storeFile(multipartFile)).thenReturn(multipartFile.getName());
+		floorService.save(floor, multipartFile);
 
 		verify(floorRepository).save(floorArgumentCaptor.capture());
 		assertThat(floor.getFloorLevel(), is(1));
-		assertThat(floor.getFloorPlanPath(), is("Test"));
+		assertThat(floor.getFloorPlanPath(), is("test_file"));
 		assertThat(floor.getRooms(), is(Collections.emptyList()));
 	}
 

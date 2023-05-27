@@ -1,5 +1,7 @@
 package com.gpse.sesam.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.floor.FloorService;
 import org.junit.jupiter.api.AfterEach;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Collections;
 
@@ -37,12 +40,14 @@ class FloorControllerTest {
 	}
 
 	@Test
-	void saveShouldCallServiceWithCorrectArguments() {
-		Floor newFloor = new Floor(1, "test", Collections.emptyList());
+	void saveShouldCallServiceWithCorrectArguments() throws JsonProcessingException {
+		final Floor newFloor = new Floor(1, "test", Collections.emptyList());
+		final MockMultipartFile mockMultipartFile = new MockMultipartFile("test_file", new byte[]{});
 
-		when(floorService.save(newFloor)).thenReturn(newFloor);
+		when(floorService.save(newFloor, mockMultipartFile)).thenReturn(newFloor);
 
-		Floor floorSaved = floorController.save(newFloor);
+		final Floor floorSaved = floorController.save(new ObjectMapper().writer()
+				.writeValueAsString(newFloor), mockMultipartFile);
 
 		assertThat(floorSaved.getFloorLevel(), is(newFloor.getFloorLevel()));
 		assertThat(floorSaved.getFloorPlanPath(), is(newFloor.getFloorPlanPath()));

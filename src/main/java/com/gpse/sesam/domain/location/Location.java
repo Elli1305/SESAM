@@ -1,8 +1,15 @@
 package com.gpse.sesam.domain.location;
 
-import com.gpse.sesam.domain.location.building.Building;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import com.gpse.sesam.domain.location.building.Building;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +25,7 @@ public class Location {
 	@Column(unique = true, nullable = false)
 	private String name;
 
-	@JsonManagedReference
+	@JsonManagedReference("location_building")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
 	private List<Building> buildings = new ArrayList<>();
 
@@ -26,9 +33,9 @@ public class Location {
 
 	}
 
-    public Location(final String name) {
-        this.name = name;
-    }
+	public Location(final String name) {
+		this.name = name;
+	}
 
 	public String getName() {
 		return name;
@@ -48,8 +55,8 @@ public class Location {
 
 	public void addBuilding(final Building building) {
 		buildings.add(building);
-        building.setLocation(this);
-    }
+		building.setLocation(this);
+	}
 
 	public Long getId() {
 		return id;
@@ -59,8 +66,8 @@ public class Location {
 		this.id = id;
 	}
 
-    public void removeBuilding(Building building) {
-        buildings.remove(building);
-        building.setLocation(null);
-    }
+	public void removeBuilding(final Building building) {
+		buildings.remove(building);
+		building.setLocation(null);
+	}
 }

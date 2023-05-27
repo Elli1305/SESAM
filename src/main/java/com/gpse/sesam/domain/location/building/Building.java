@@ -28,11 +28,11 @@ public class Building {
 	@Column
 	private String name;
 
-	@JsonManagedReference
+	@JsonManagedReference("building_floor")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
 	private List<Floor> floors = new ArrayList<>();
 
-	@JsonBackReference
+	@JsonBackReference("location_building")
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Location location;
 

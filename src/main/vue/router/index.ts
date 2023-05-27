@@ -11,9 +11,8 @@ import Imprint from "../views/Imprint.vue";
 import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
 
 import FloorPlanEdit from "@/main/vue/views/FloorPlanEdit.vue";
-import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 import {useUserStore} from "@/main/vue/stores/users";
-
+import EditUser from "@/main/vue/views/EditUser.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -41,6 +40,8 @@ const router = createRouter({
             name: 'edit',
             component: EditUser,
             props: true,
+        },
+        {
             path: '/admin/currentuserlist',
             name: 'currentuserlist',
             component: CurrentUserList,
@@ -50,8 +51,6 @@ const router = createRouter({
             path: '/editFloorPlan',
             component: FloorPlanEdit
         },
-
-
         {
             path: '/signup',
             component: SignUp
@@ -87,14 +86,16 @@ const router = createRouter({
     ],
 });
 
-router.beforeEach((to) => {
 
-    if (to.fullPath.endsWith("/imprinteditor")) {
-        if (!useUserStore().authenticated)
-            router.push("/")
-    }
-})
 router.beforeEach((to, from, next) => {
+    const {authenticated} = useUserStore();
+
+    if (to.meta.requiresAuth && !authenticated) {
+        return {
+            path: "/login",
+            query: {redirect: to.fullPath},
+        };
+    }
 
     if (to.path === "/ImprintEditor") {
         return next("/imprinteditor");

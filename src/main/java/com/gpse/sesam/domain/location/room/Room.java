@@ -28,11 +28,11 @@ public class Room {
 	@Column
 	private String name;
 
-	@JsonManagedReference
+	@JsonManagedReference("doors_rooms")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
 	private List<Door> doors = new ArrayList<>();
 
-	@JsonBackReference
+	@JsonBackReference("rooms_floor")
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Floor floor;
 
