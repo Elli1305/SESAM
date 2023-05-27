@@ -59,6 +59,17 @@ const messages = {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
         },
+        credentialview :{
+            credentialview: "Credentialansicht",
+            location: "Standort",
+            search: "Suche",
+            category: "Kategorie",
+            availablecredentials: "Verfügbbare Credential",
+            qualification: "Vergleichbare Qualifikation",
+            issuer: "Herausgeber",
+            room: "Raum: "
+        }
+        ,
         home: {
             header: "SESAM",
             signup: "Registrierung",
@@ -113,7 +124,71 @@ const messages = {
             email: "E-Mail",
             admin: "Admin",
             editor: "Bearbeiter",
-            issuer: "Herausgeber"
+            issuer: "Herausgeber",
+        },
+        issueCredential: {
+            title: "{0} Credential Ausstellung",
+            description: [
+                "Herzlich Willkommen zum Ausstellungsprozess des \"{0}\" Credentials! Hier können Sie ein offizielles Dokument erstellen, das die erfolgreiche Absolvierung eines bestimmten Kurses oder die Erlangung bestimmter Fähigkeiten oder Qualifikationen bestätigt.",
+                "Um das Credential auszustellen, füllen Sie bitte die neben stehenden Felder mit den geforderten Attributen aus. Stellen Sie sicher, dass alle Daten korrekt und aktuell sind. Sobald Sie alle erforderlichen Attribute ausgefüllt haben, klicken Sie auf die Schaltfläche \"@:{'issueCredential.next'}\"."
+            ],
+            checkConditions: "Bitte verwenden Sie die folgende Checkliste, um sicherzustellen, dass alle notwendigen Schritte ausgeführt wurden, bevor Sie das Credential ausstellen.",
+            validation: {
+                inputRequired: "Dieses Feld ist erforderlich.",
+            },
+            steps: {
+                form: "Formular",
+                list: "Checklist",
+                qrcode: "QR-Code",
+            },
+            next: "Nächster Schritt",
+            previous: "Zurück",
+            checklistHint:
+                "Um das Credential ausstellen zu können muss jede Bedingung der Checkliste erfüllt sein.",
+            confirm: {
+                title: "Sind Sie sicher, dass Sie das Credential ausstellen möchten?",
+                message:
+                    'Bitte stellen Sie sicher, dass alle Bedingungen erfüllt sind und Sie alle erforderlichen Schritte ausgeführt haben, bevor Sie das Credential ausstellen. Sobald Sie das Credential ausgestellt haben, kann es nicht mehr rückgängig gemacht werden.',
+                ok: "Credential ausstellen",
+                cancel: "Abbrechen",
+            },
+            addCredential: {
+                title: "Ihr neues Credential ({0}) wurde erfolgreich ausgestellt!",
+                howTo: "So fügen Sie ein Credential zur BC Wallet hinzu:",
+                steps: {
+                    step1:
+                        "Laden Sie die {0} aus dem App Store oder Google Play Store herunter.",
+                    step2:
+                        "Öffnen Sie die App und befolgen Sie die Anweisungen zur Einrichtung eines neuen Kontos.",
+                    step3:
+                        'Wenn Sie Ihr Konto erfolgreich eingerichtet haben, wählen Sie den Tab "Credentials" aus.',
+                    step4:
+                        "Tippen Sie auf das kleine Plus-Zeichen in der oberen rechten Ecke des Bildschirms.",
+                    step5:
+                        'Wählen Sie im daraufhin erscheinenden Menü die Option "Scan a QR code".',
+                    step6:
+                        "Richten Sie die Kamera Ihres Smartphones auf den QR-Code, den Sie scannen möchten (der QR-Code sollte sich rechts neben dieser Anleitung befinden).",
+                    step7:
+                        "Überprüfen Sie die Informationen, die auf dem Bildschirm angezeigt werden, um sicherzustellen, dass sie korrekt sind.",
+                    step8:
+                        'Wenn alle Informationen korrekt sind, tippen Sie auf "Accept", um das Credential Ihrer Wallet hinzuzufügen.',
+                },
+            },
+            errors: {
+                get: {
+                    failed: "Das Credential konnte nicht geladen werden.",
+                    unauthorized:
+                        "Ihnen fehlen die benötigten Berechtigungen um das Credential anzuzeigen.",
+                },
+                issue: {
+                    failed: "Das Credential konnte nicht ausgestellt werden.",
+                    unauthorized:
+                        "Ihnen fehlen die benötigten Berechtigungen um das Credential auszustellen.",
+                    failedDependency:
+                        "Es konnte keine Verbindung zum Credential Issuing Self-Service aufgebaut werden. Bitte stellen Sie sicher, dass sie mit dem Netzwerk der Universität verbunden sind.",
+                },
+                unknown: "Bitte versuchen Sie es später erneut.",
+            },
         },
         corporateDesign: {
             title: "Corporate Design",
@@ -177,6 +252,16 @@ const messages = {
             internalServerError: "The server could not process the request",
             unkownError: "An unknown error occured",
         },
+        credentialview :{
+            credentialview: "View Credentials",
+            location: "Location",
+            search: "Search",
+            category: "Category",
+            availablecredentials: "Available Credentials",
+            qualification: "Comparable Qualifications",
+            issuer: "Issuer",
+            room: "Room: "
+        },
         floorplan: {
             locations: 'Locations'
         },
@@ -237,6 +322,70 @@ const messages = {
             editor: "Editor",
             issuer: "Issuer"
         },
+        issueCredential: {
+            title: "{0} Credential Issuance",
+            description: [
+                "Welcome to the issuance process of the \"{0}\" Credential! Here you can create an official document that confirms the successful completion of a specific course or the attainment of certain skills or qualifications.",
+                "To issue the credential, please fill out the fields on the right with the required attributes. Make sure that all data is correct and up-to-date. Once you have filled out all the necessary attributes, click the \"@:{'issueCredential.next'}\" button."
+            ],
+            checkConditions: "Please use the following checklist to ensure that all necessary steps have been taken before issuing the credential.",
+            validation: {
+                inputRequired: "This field is required.",
+            },
+            steps: {
+                form: "Form",
+                list: "Checklist",
+                qrcode: "QR Code",
+            },
+            next: "Next Step",
+            previous: "Previous",
+            checklistHint:
+                "To issue the credential, all conditions on the checklist must be met.",
+            confirm: {
+                title: "Are you sure you want to issue the credential?",
+                message:
+                    'Please ensure that all conditions have been met and all necessary steps have been taken before issuing the credential. Once issued, it cannot be undone.',
+                ok: "Issue Credential",
+                cancel: "Cancel",
+            },
+            addCredential: {
+                title: "Your new credential ({0}) has been successfully issued!",
+                howTo: "How to add a credential to the BC Wallet:",
+                steps: {
+                    step1:
+                        "Download the {0} from the App Store or Google Play Store.",
+                    step2:
+                        "Open the app and follow the instructions to set up a new account.",
+                    step3:
+                        'Once you have successfully set up your account, select the "Credentials" tab.',
+                    step4:
+                        "Tap the small plus sign in the upper right corner of the screen.",
+                    step5:
+                        'In the menu that appears, select the option "Scan a QR code".',
+                    step6:
+                        "Point the camera of your smartphone at the QR code you want to scan (the QR code should be located to the right of these instructions).",
+                    step7:
+                        "Review the information displayed on the screen to ensure that it is correct.",
+                    step8:
+                        'If all information is correct, tap "Accept" to add the credential to your wallet.',
+                },
+            },
+            errors: {
+                get: {
+                    failed: "The credential could not be loaded.",
+                    unauthorized:
+                        "You do not have the necessary permissions to view the credential.",
+                },
+                issue: {
+                    failed: "The credential could not be issued.",
+                    unauthorized:
+                        "You do not have the necessary permissions to issue the credential.",
+                    failedDependency:
+                        "Could not connect to the Credential Issuing Self-Service. Please ensure that you are connected to the university network.",
+                },
+                unknown: "Please try again later.",
+            },
+        },
         corporateDesign: {
             title: "Corporate Design",
             colors: "Colors",
@@ -275,11 +424,13 @@ const i18n = createI18n({
 })
 
 const app = createApp(App)
+
 const pinia = createPinia();
-app.use(pinia)
-app.use(router)
-app.use(Quasar, quasarUserOptions)
-app.use(i18n)
+
+app.use(pinia);
+app.use(router);
+app.use(Quasar, quasarUserOptions);
+app.use(i18n);
 
 app.mount('#app')
 

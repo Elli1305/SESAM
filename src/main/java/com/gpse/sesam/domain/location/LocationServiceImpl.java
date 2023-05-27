@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.web.exception.LocationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,9 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public void deleteAll() {
-		locationRepository.deleteAll();
+	public Optional<Location> getLocationByName(final String name) throws LocationNotFoundException {
+		return Optional.ofNullable(locationRepository.findByName(name)
+				.orElseThrow(() -> new LocationNotFoundException(name + "Not found")));
 	}
 
 	@Override

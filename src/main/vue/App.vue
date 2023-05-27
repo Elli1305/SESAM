@@ -87,7 +87,7 @@ async function logout() {
           <div id="lower" class="row justify-end items-center no-wrap">
             <div class="row">
               <router-link to="/" class="headerLink"><p class="headerText">{{ t("home.floorplan") }}</p></router-link>
-              <router-link to="/" class="headerLink"><p class="headerText">{{ t("home.credentials") }}</p></router-link>
+              <router-link to="/credentialview" class="headerLink"><p class="headerText">{{ t("home.credentials") }}</p></router-link>
               <div>
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                    class="headerText foldMenu">
@@ -204,13 +204,12 @@ async function logout() {
   line-height: 1;
   font-weight: 500;
   font-size: 1.5em;
-  vertical-align: center;
-}
-
-.headerLink {
-  color: white;
-  text-decoration: none;
-}
+  font-variant-caps: small-caps;
+    vertical-align: center;
+  }
+  .headerLink {
+    color: white;
+    text-decoration: none;}
 
 .foldMenu {
   cursor: pointer;
@@ -220,5 +219,4 @@ async function logout() {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
-
 </style>

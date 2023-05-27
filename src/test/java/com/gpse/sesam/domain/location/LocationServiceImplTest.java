@@ -50,27 +50,16 @@ class LocationServiceImplTest {
 		when(locationRepository.findAll()).thenReturn(Collections.singletonList(new Location()));
 
 		// act
-		List<Location> locations = locationService.getLocations();
+		final List<Location> locations = locationService.getLocations();
 
 		// assert
 		assertThat(locations.size(), is(1));
 	}
 
-
-	@Test
-	void deleteAllShouldCallRepository() {
-		//arrange
-		// act
-		locationService.deleteAll();
-
-		// assert
-		verify(locationRepository).deleteAll();
-	}
-
 	@Test
 	void saveAllShouldCallRepositoryWithCorrectArguments() {
 		// arrange
-		List<Location> locations = Collections.singletonList(new Location());
+		final List<Location> locations = Collections.singletonList(new Location());
 
 		// act
 		locationService.saveAll(locations);
@@ -84,7 +73,7 @@ class LocationServiceImplTest {
 	@Test
 	void getLocationShouldCallRepositoryWithCorrectArguments() {
 		// arrange
-		long id = 1;
+		final long id = 1;
 
 		// act
 		locationService.getLocation(id);

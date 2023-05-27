@@ -1,13 +1,10 @@
 package com.gpse.sesam.domain.location;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,18 +21,22 @@ public class Floor {
 	@Column
 	private String floorPlanPath;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Room> rooms;
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	private List<Room> rooms = new ArrayList<>();
+
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Building building;
 
 	protected Floor() {
 
 	}
 
-	public Floor(final int floorLevel, final String floorPlanPath, final List<Room> rooms) {
-		this.floorLevel = floorLevel;
-		this.floorPlanPath = floorPlanPath;
-		this.rooms = rooms;
-	}
+    public Floor(final int floorLevel, final String floorPlanPath) {
+        this.floorLevel = floorLevel;
+        this.floorPlanPath = floorPlanPath;
+    }
 
 	public int getFloorLevel() {
 		return floorLevel;
@@ -62,8 +63,9 @@ public class Floor {
 	}
 
 	public void addRoom(final Room room) {
-		this.rooms.add(room);
-	}
+		rooms.add(room);
+        room.setFloor(this);
+    }
 
 	public String getFloorPlanPath() {
 		return floorPlanPath;
@@ -72,4 +74,17 @@ public class Floor {
 	public void setFloorPlanPath(final String floorPlanPath) {
 		this.floorPlanPath = floorPlanPath;
 	}
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    public void removeRoom(Room room) {
+        rooms.remove(room);
+        room.setFloor(null);
+    }
 }

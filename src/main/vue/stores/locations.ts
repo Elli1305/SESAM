@@ -7,6 +7,7 @@ import api from "@/main/vue/api";
 export const useLocationStore = defineStore('locations', () => {
 
     const allLocations: Ref<Location[] | null> = ref(null)
+    let locationByName: Ref<Location | null> = ref(null)
 
     function getLocations() {
         return new Promise ((resolve, reject) => {
@@ -19,8 +20,20 @@ export const useLocationStore = defineStore('locations', () => {
         })
     }
 
+    function getLocationsByName(){
+        return new Promise ((resolve, reject) => {
+            api.location.getLocationByName().then((response) => {
+                locationByName.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
     return{
         allLocations,
-        getLocations
+        getLocations,
+        locationByName
     }
 })
