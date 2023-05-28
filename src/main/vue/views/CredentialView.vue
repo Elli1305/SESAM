@@ -88,42 +88,35 @@ export default {
     const credentialStore = useCredentialStore()
     const locationStore = useLocationStore()
     const model = ref()
-      const locationslist = locationStore.getLocations()
-      const route = useRoute()
-      const queryParam = ref('')
-
-      onMounted(() => {
-          queryParam.value = route.query.q
-          console.log('Übergebener Wert:', queryParam.value)
-      })
-      function getLocationid(id){
-        for(const location in locationslist){
-            for(const building of location.buildings){
-                for(const floor of building.floors){
-                    if(floor.rooms.some(room => room.id === id)){
-                        return location.id
+    const route = useRoute()
+    const queryParam = ref('')
+    function setLocation(id) {
+        locationStore.getLocations().then((locations) => {
+            model.value = locations[0].id;
+            for (const location of locations) {
+                for (const building of location.buildings ?? []) {
+                    for (const floor of building.floors ?? []) {
+                        for (const room of floor.rooms ?? []) {
+                            if (Number(room.id) === Number(id)) {
+                                model.value = location;
+                            }
+                        }
                     }
                 }
             }
-        }
-        return null
-      }
-      let selectedLocation = getLocationid(queryParam.value);
-      if(selectedLocation != null){
-          locationStore.getLocations().then(() => {
-              model.value = selectedLocation;
-          });
-      }else{
-          locationStore.getLocations().then((locations) => {
-              model.value = locations[0].id
-          })
-      }
+        });
+    }
+    onMounted(() => {
+        queryParam.value = route.query.q
+        setLocation(queryParam.value)
+    })
+
+
 
 
     let baum = ref()
     async function updateCredentials(){
       credentialStore.getCredentialsByLocation(model.value).then((credentials) => {
-
       rows.value = credentials
       console.log(rows.value)
     })}
