@@ -1,8 +1,5 @@
 package com.gpse.sesam.domain.location.building;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.floor.Floor;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,7 +8,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
@@ -28,13 +25,9 @@ public class Building {
 	@Column
 	private String name;
 
-	@JsonManagedReference("building_floor")
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "BUILDING_ID")
 	private List<Floor> floors = new ArrayList<>();
-
-	@JsonBackReference("location_building")
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Location location;
 
 	protected Building() {
 
@@ -70,19 +63,5 @@ public class Building {
 
 	public void addFloor(final Floor floor) {
 		floors.add(floor);
-		floor.setBuilding(this);
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(final Location location) {
-		this.location = location;
-	}
-
-	public void removeFloor(final Floor floor) {
-		floors.remove(floor);
-		floor.setBuilding(null);
 	}
 }

@@ -2,7 +2,6 @@ package com.gpse.sesam.domain.credential;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.user.Issuer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,7 +14,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,7 +33,7 @@ public class Credential {
 	@Column(nullable = false)
 	private String agent;
 
-	@JsonBackReference
+	@JsonBackReference("credential_category")
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Category category;
 
@@ -48,14 +46,11 @@ public class Credential {
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Issuer> issuer;
 
-	@JsonBackReference
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Door> doors = new ArrayList<>();
-
 	protected Credential() {
 	}
 
-	public Credential(final String name, final String credentialDefinitionId, final String agent, final List<FormEntry> form,
+	public Credential(final String name, final String credentialDefinitionId, final String agent,
+					  final List<FormEntry> form,
 					  final List<ChecklistEntry> checklist, final List<Issuer> issuer) {
 		this.name = name;
 		this.credentialDefinitionId = credentialDefinitionId;
@@ -128,13 +123,5 @@ public class Credential {
 
 	public void setCategory(final Category category) {
 		this.category = category;
-	}
-
-	public void setDoors(final List<Door> doors) {
-		this.doors = doors;
-	}
-
-	public List<Door> getDoors() {
-		return doors;
 	}
 }

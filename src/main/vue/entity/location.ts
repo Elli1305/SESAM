@@ -3,7 +3,7 @@ interface Coordinates {
     lng: number
 }
 
-interface Door {
+export interface Door {
     id: number
     name: string
     coordinates: Coordinates[]

@@ -24,6 +24,7 @@ import SelectRoom from "@/main/vue/views/SelectRoom.vue";
 import {useRoomStore} from "@/main/vue/stores/room";
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
+import {useDoorStore} from "@/main/vue/stores/door";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -75,9 +76,10 @@ export default {
   setup() {
     const floorPlanStore = useFloorPlanStore();
     const floorStore = useFloorStore();
+    const doorStore = useDoorStore();
     const locationStore = useLocationStore();
     const roomStore = useRoomStore();
-    return {floorStore, floorPlanStore, locationStore, roomStore}
+    return {floorStore, floorPlanStore, locationStore, roomStore, doorStore}
   },
   mounted: function () {
     floorPlanMap = L.map("floor-plan-map", mapConfig);
@@ -90,6 +92,16 @@ export default {
       this.applyImageToMap(this.floorPlanStore.selectedFloorPlan)
       this.drawRooms(this.floorPlanStore.rooms)
     })
+
+    floorPlanMap.pm.Draw.Polygon.setPathOptions({
+      color: 'black',
+      width: 5,
+      fillOpacity: 0.1
+    });
+    floorPlanMap.pm.Draw.Line.setPathOptions({
+      color: '#b0b0b0',
+      weight: 3
+    });
 
     floorPlanMap.eachLayer(layer => floorPlanMap.removeLayer(layer));
     this.applyImageToMap(this.floorPlanStore.selectedFloorPlan);
@@ -127,7 +139,21 @@ export default {
     });
 
     floorPlanMap.on('pm:create', (e) => {
+      if (e.layer instanceof L.Polygon || e.layer instanceof L.Rectangle) {
+        e.layer.setStyle({
+          color: 'black',
+          width: 5,
+          fillOpacity: 0.1
+        });
+      } else if (e.layer instanceof L.Polyline) {
+        e.layer.setStyle({
+          color: '#b0b0b0',
+          weight: 3
+        });
+      }
+
       if (e.shape === 'Rectangle' || e.shape === 'Polygon') {
+        const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
         const room = {
           name: 'New Room',
           coordinates: e.layer._latlngs[0].map((latLng) => ({
@@ -137,16 +163,9 @@ export default {
           )),
           doors: []
         }
-        const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
         floor.rooms.push(room)
 
-        this.floorStore.save(floor).then((floor) => {
-          e.layer.id = floor.rooms.find(room => room.coordinates === e.layer._latlngs[0].map((latLng) => ({
-                lat: latLng.lat,
-                lng: latLng.lng
-              }
-          ))).id
-        })
+        this.floorStore.save(floor)
       } else if (e.shape === 'Line' || e.shape === 'Polyline') {
         $q.dialog({
           component: SelectRoom,
@@ -162,7 +181,13 @@ export default {
                 }
             )),
           })
-          this.roomStore.save(room)
+          console.log(room.doors)
+          this.roomStore.save(room).then((savedRoom) => {
+            const doorTest = savedRoom.doors.find(door => {
+              return door.coordinates.some()
+            })
+            console.log(doorTest)
+          })
         })
       }
     })
@@ -194,7 +219,7 @@ export default {
         floorPlanMap.pm.Draw.Line.setOptions({
           hideMiddleMarkers: true
         })
-
+        console.log(floorPlanMap.pm)
       }
 
     },
@@ -229,6 +254,36 @@ export default {
           }).addTo(floorPlanMap)
           line.id = door.id
           line.roomId = room.id
+
+          line.on('pm:update', (e) => {
+            const door = this.locationStore.getDoorById(e.layer.id)
+            door.coordinates = e.layer._latlngs.map((latLng) => ({
+                  lat: latLng.lat,
+                  lng: latLng.lng
+                }
+            ))
+            this.doorStore.save(door)
+          })
+
+          line.on('pm:dragend', (e) => {
+            const door = this.locationStore.getDoorById(e.layer.id)
+            door.coordinates = e.layer._latlngs[0].map((latLng) => ({
+                  lat: latLng.lat,
+                  lng: latLng.lng
+                }
+            ))
+            this.doorStore.save(door)
+          });
+
+          line.on('pm:remove', (e) => {
+            const room = this.locationStore.getRoomById(e.layer.roomId)
+            const index = room.doors.findIndex(door => e.layer.id === door.id)
+            room.doors.splice(index, 1)
+            this.roomStore.save(room)
+          });
+
+          line.pm._createMiddleMarker = () => {
+          };
         }
         polygon.on('pm:update', (e) => {
           const room = this.locationStore.getRoomById(e.layer.id)
@@ -240,7 +295,6 @@ export default {
           this.roomStore.save(room)
         })
         polygon.on('pm:dragend', (e) => {
-          console.log(e)
           const room = this.locationStore.getRoomById(e.layer.id)
           room.coordinates = e.layer._latlngs[0].map((latLng) => ({
                 lat: latLng.lat,
@@ -252,7 +306,7 @@ export default {
 
         polygon.on('pm:remove', (e) => {
           const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
-          const index = floor.rooms.indexOf(room => e.layer.id === room.id)
+          const index = floor.rooms.findIndex(room => e.layer.id === room.id)
           floor.rooms.splice(index, 1)
           this.floorStore.save(floor)
           floorPlanMap.eachLayer(layer => {

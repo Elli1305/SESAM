@@ -1,10 +1,7 @@
 package com.gpse.sesam.domain.location.door;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gpse.sesam.domain.credential.Credential;
 import com.gpse.sesam.domain.location.Coordinate;
-import com.gpse.sesam.domain.location.room.Room;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
@@ -33,13 +29,8 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
-	@JsonManagedReference
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "doors", fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<Credential> credentials = new ArrayList<>();
-
-	@JsonBackReference("doors_rooms")
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Room room;
 
 	protected Door() {
 
@@ -78,28 +69,11 @@ public class Door {
 		return coordinates;
 	}
 
-	public Room getRoom() {
-		return room;
-	}
-
-	public void setRoom(final Room room) {
-		this.room = room;
+	public void setCoordinates(final List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
 	}
 
 	public void addCredential(final Credential credential) {
 		credentials.add(credential);
-		final List<Door> doors = new ArrayList<>();
-		doors.add(this);
-		credential.setDoors(doors);
-	}
-
-	public void removeCredential(final Credential credential) {
-		credentials.remove(credential);
-		final List<Door> doors = new ArrayList<>();
-		credential.setDoors(doors);
-	}
-
-	public void setCoordinates(final List<Coordinate> coordinates) {
-		this.coordinates = coordinates;
 	}
 }

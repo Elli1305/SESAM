@@ -1,16 +1,20 @@
 package com.gpse.sesam.domain.credential;
 
-import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface CredentialRepository extends CrudRepository<Credential, Long> {
-    @Query(value = "SELECT cmd from CredentialCmd cmd join Credential c"
-            + " join c.category cat join cat.externalCredentials ex join c.issuer i join c.doors d "
-            + "join d.room r join r.floor f join f.building b join b.location l "
-            + "WHERE l.id = ?1 and cmd.credentialName = c.name and cmd.categoryName = cat.name")
-    List<CredentialCmd> findByLocation(Long id);
+	@Query(value = "SELECT cr.* FROM CREDENTIAL AS cr " +
+			"INNER JOIN DOOR_CREDENTIALS AS cd ON cd.CREDENTIALS_ID = cr.ID " +
+			"INNER JOIN DOOR AS dr ON dr.ID = cd.DOOR_ID " +
+			"INNER JOIN ROOM AS rm ON rm.ID = dr.ROOM_ID " +
+			"INNER JOIN FLOOR AS fl ON fl.ID = rm.FLOOR_ID " +
+			"INNER JOIN BUILDING AS bd ON bd.ID = fl.BUILDING_ID " +
+			"INNER JOIN LOCATION AS lc ON lc.ID = bd.LOCATION_ID " +
+			"WHERE lc.id = :id", nativeQuery = true)
+	List<Credential> findByLocation(@Param("id") Long id);
 }
 
