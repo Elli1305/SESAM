@@ -49,7 +49,7 @@
                     <template v-slot:body-cell-roles="props">
                         <q-td :props="props">
                             <div class="q-gutter-xs" v-for="role in props.value">
-                                <q-chip v-model:selected="role.selected" color="secondary" text-color="primary" :style="{padding: '0.4em 1em 0.4em 0.5em', fontSize: '1em', opacity: issueropacity}" icon="highlight_off">
+                                <q-chip v-model:selected="role.selected" color="secondary" text-color="primary" :style="{padding: '0.4em 1em 0.4em 0.5em', fontSize: '1em'}" icon="highlight_off">
                                     {{t(`adminCurrentUser.roles.${role.role}`)}}
                                 </q-chip>
                             </div>
@@ -93,7 +93,7 @@ export default {
 
         const columns = [
             {
-                name: t('adminRolesRequest.name'),
+                name: t('adminRolesRequest.lastname'),
                 required: true,
                 label: 'Name',
                 align: 'center',
@@ -129,7 +129,7 @@ export default {
 
 
 
-            userStore.saveEdits(prename, lastname, email, rolesD).then( axios.get('/api/user')
+            userStore.saveEdits(prename, lastname, email, rolesD).then( () => axios.get('/api/user')
                 .then(res => { rows.value = res.data.map(v => ({...v, roles: v.roles.filter(r => !r.granted).map(r => ({...r, selected: false}))}))
 
                 }) )
