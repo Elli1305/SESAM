@@ -1,10 +1,7 @@
 package com.gpse.sesam.domain.location.room;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.door.Door;
-import com.gpse.sesam.domain.location.floor.Floor;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
@@ -28,13 +25,9 @@ public class Room {
 	@Column
 	private String name;
 
-	@JsonManagedReference("doors_rooms")
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "ROOM_ID")
 	private List<Door> doors = new ArrayList<>();
-
-	@JsonBackReference("rooms_floor")
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Floor floor;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Coordinate> coordinates;
@@ -71,29 +64,15 @@ public class Room {
 		this.doors = doors;
 	}
 
-	public void addDoor(final Door door) {
-		doors.add(door);
-		door.setRoom(this);
-	}
-
-	public Floor getFloor() {
-		return floor;
-	}
-
-	public void setFloor(final Floor floor) {
-		this.floor = floor;
-	}
-
-	public void removeDoor(final Door door) {
-		doors.remove(door);
-		door.setRoom(null);
-	}
-
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
 
 	public void setCoordinates(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
+	}
+
+	public void addDoor(final Door door) {
+		doors.add(door);
 	}
 }

@@ -23,6 +23,9 @@ export default {
   props: {
     floor: {
       required: true
+    },
+    building: {
+      required: true
     }
   },
 
