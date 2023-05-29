@@ -14,6 +14,7 @@ import FloorPlanEdit from "@/main/vue/views/FloorPlanEdit.vue";
 import {useUserStore} from "@/main/vue/stores/users";
 import EditUser from "@/main/vue/views/EditUser.vue";
 import CredentialView from "@/main/vue/views/CredentialView.vue";
+import RolesRequest from "@/main/vue/views/RolesRequest.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -85,6 +86,10 @@ const router = createRouter({
         {
             path: '/credentialview',
             component: CredentialView
+        },
+        {
+            path: '/admin/rolesRequest',
+            component: RolesRequest
         }
 
     ],
