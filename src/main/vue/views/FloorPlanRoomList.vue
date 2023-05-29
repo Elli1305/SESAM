@@ -31,15 +31,15 @@
                 </div>
                 <div v-if="userStore.authenticated">
                   <q-separator spaced></q-separator>
-                  <div class="row justify-end" style="padding: 0.5em">
-                    <q-btn size="sm" label="Bearbeiten" color="primary" @click="inception = true" ></q-btn>
+                  <div class="row justify-end" style="padding: 0.7em">
+                    <q-btn size="sm" label="Bearbeiten" color="primary" @click="setOldValueR(room)" ></q-btn>
                       <q-dialog v-model="inception">
                           <q-card>
                               <q-card-section>
                                   <div class="text-h6">Raum Bearbeiten</div>
                               </q-card-section>
                               <q-card-section>
-                                  <q-input filled v-model="room.name" label="Raumname" stack-label :dense="dense" />
+                                  <q-input filled v-model="currentRoomName" label="Raumname" stack-label/>
                               </q-card-section>
 
                               <q-card-section>
@@ -47,7 +47,7 @@
                                       <q-item-label header>
                                           <div class="row items-center">
                                               <div class="q-mr-sm">Türe</div>
-                                              <q-btn round size="sm" icon="add" @click="addDoorDialog = true" class="ml-auto" /> <!-- Modified class -->
+
                                           </div>
                                       </q-item-label>
                                       <template v-for="door in room.doors">
@@ -66,76 +66,56 @@
                                               <q-item-section top side>
                                                   <div class="text-grey-8 q-gutter-xs">
                                                       <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click = "deleteDoorDialog= true" />
-                                                      <q-btn class="gt-xs" size="12px" flat dense round icon="done" @click = "save(room)" />
-                                                      <q-btn size="12px" flat dense round icon="edit" @click="fourthDialog = true"/>
+                                                      <q-btn size="12px" flat dense round icon="edit" @click="setOldValues(door)"/>
                                                   </div>
                                               </q-item-section>
                                           </q-item>
+                                          <div class="row justify-end" style="padding: 0.7em">
+
+                                              <q-dialog v-model="deleteDoorDialog" persistent transition-show="scale" transition-hide="scale">
+                                                  <q-card class="bg-teal text-white" style="width: 300px">
+                                                      <q-card-section>
+                                                          <div class="text-h6">Persistent</div>
+                                                      </q-card-section>
+
+                                                      <q-card-section class="q-pt-none">
+                                                          Bist du sicher dass du die Tür löschen möchtest?
+                                                      </q-card-section>
+
+                                                      <q-card-actions align="right" class="bg-white text-teal">
+                                                          <q-btn flat label="Ja" @click="deleteDoor(room, door)" v-close-popup />
+                                                          <q-btn flat label="Nein" v-close-popup />
+                                                      </q-card-actions>
+                                                  </q-card>
+                                              </q-dialog>
+                                              <q-dialog v-model="editDoorDialog" persistent transition-show="scale" transition-hide="scale">
+                                                  <q-card>
+                                                      <q-card-section>
+                                                          <div class="text-h6">Tür Bearbeiten</div>
+                                                      </q-card-section>
+                                                      <q-card-section>
+                                                          <q-input filled v-model="editedDoorName" label="Türname" stack-label />
+                                                      </q-card-section>
+
+
+                                                      <q-card-actions align="right" class="bg-white text-teal">
+                                                          <q-btn flat label="speichern" @click="editDoor(room, door)"  v-close-popup/>
+                                                          <q-btn flat label="abbrechen" v-close-popup />
+                                                      </q-card-actions>
+                                                  </q-card>
+                                              </q-dialog>
+
+                                          </div>
                                       </template>
                                   </q-list>
                               </q-card-section>
+
                               <q-card-actions align="right" class="text-primary">
-                                  <q-btn flat label="speichern" @click="addDoor(room, newRoomName, newRoomCoord)"/>
-                                  <q-btn flat label="abbrechen" v-close-popup />
+                                  <q-btn flat label="speichern" @click="save(room)" v-close-popup/>
+                                  <q-btn flat label="abbrechen" @click="reset()" v-close-popup />
                               </q-card-actions>
                           </q-card>
                       </q-dialog>
-                      <div class="row justify-end" style="padding: 0.5em">
-                      <q-dialog v-model="addDoorDialog" persistent transition-show="scale" transition-hide="scale">
-                          <q-card>
-                              <q-card-section>
-                                  <div class="text-h6">Tür Hinzufuegen</div>
-                              </q-card-section>
-                              <q-card-section>
-
-                                  <q-input filled v-model="newDoorName" label="Türname" stack-label :dense="dense" />
-                                  <q-separator spaced />
-                                  <q-input filled v-model="newDoorCoord" label="Tür Coordinaten" stack-label :dense="dense" />
-                              </q-card-section>
-
-
-                              <q-card-actions align="right" class="bg-white text-teal">
-                                  <q-btn flat label="speichern" color = "primary" />
-                                  <q-btn flat label="abbrechen"  color = "primary" v-close-popup />
-                              </q-card-actions>
-                          </q-card>
-                      </q-dialog>
-                      <q-dialog v-model="deleteDoorDialog" persistent transition-show="scale" transition-hide="scale">
-                          <q-card class="bg-teal text-white" style="width: 300px">
-                              <q-card-section>
-                                  <div class="text-h6">Persistent</div>
-                              </q-card-section>
-
-                              <q-card-section class="q-pt-none">
-                                  Bist du sicher dass du die Tür löschen möchtest?
-                              </q-card-section>
-
-                              <q-card-actions align="right" class="bg-white text-teal">
-                                  <q-btn flat label="Ja" @click="deleteDoor(room, door)" v-close-popup />
-                                  <q-btn flat label="Nein" v-close-popup />
-                              </q-card-actions>
-                          </q-card>
-                      </q-dialog>
-                          <q-dialog v-model="fourthDialog" persistent transition-show="scale" transition-hide="scale">
-                              <q-card>
-                                  <q-card-section>
-                                      <div class="text-h6">Tür Bearbeiten</div>
-                                  </q-card-section>
-                                  <q-card-section>
-                                      <q-input filled v-model="currentDoorName" label="Türname" stack-label :dense="dense" />
-                                      <q-separator spaced />
-                                      <q-input filled v-model="CurrentDoorCoord" label="Tür Coordinaten" stack-label :dense="dense" />
-                                  </q-card-section>
-
-
-                                  <q-card-actions align="right" class="bg-white text-teal">
-                                      <q-btn flat label="speichern" />
-                                      <q-btn flat label="abbrechen" v-close-popup />
-                                  </q-card-actions>
-                              </q-card>
-                          </q-dialog>
-
-                      </div>
                   </div>
                 </div>
               </div>
@@ -153,51 +133,69 @@ import {useUserStore} from "@/main/vue/stores/users";
 import {ref, watch} from "vue";
 import { useI18n } from 'vue-i18n';
 import {storeToRefs} from "pinia";
+import {useRoomStore} from "@/main/vue/stores/room";
 
 export default {
   name: "FloorPlanRoomList",
 
   setup() {
-    const { t } = useI18n();
-    const floorPlanStore = useFloorPlanStore()
-    const { rooms } = storeToRefs(floorPlanStore)
-    const selectedRooms = floorPlanStore.selectedRooms
-    const userStore = useUserStore()
-    const filteredRooms = ref([])
-    const search = ref()
-    const inception = ref();
-    const addDoorDialog = ref();
-    const deleteDoorDialog = ref();
-    const fourthDialog = ref();
-    const newDoorName = ref();
-    const newDoorCoord = ref();
-    const currentDoorname = ref();
-    const currentDoorCoord = ref();
-    filteredRooms.value = rooms.value
+      const {t} = useI18n();
+      const floorPlanStore = useFloorPlanStore()
+      const {rooms} = storeToRefs(floorPlanStore)
+      const selectedRooms = floorPlanStore.selectedRooms
+      const userStore = useUserStore()
+      const roomStore = useRoomStore();
+      const filteredRooms = ref([])
+      const search = ref()
+      const inception = ref();
+      const deleteDoorDialog = ref();
+      const editDoorDialog = ref();
+      const editedDoorName = ref();
+      const currentRoomName = ref();
 
-    watch(rooms, () => {
       filteredRooms.value = rooms.value
-    })
 
-    function addAllRooms() {
-        floorPlanStore.rooms.forEach((element) => {
-            selectedRooms.push(element)
-        })
-    }
-      function  deleteDoor(room, door){
+      watch(rooms, () => {
+          filteredRooms.value = rooms.value
+      })
+
+      function addAllRooms() {
+          floorPlanStore.rooms.forEach((element) => {
+              selectedRooms.push(element)
+          })
+      }
+
+      function deleteDoor(room, door) {
           const doors = room.doors;
           const index = doors.indexOf(door);
           doors.splice(index, 1);
           room.doors = doors;
+          deleteDoorDialog.value= false;
       }
-      function addDoor(room, name, coordinates){
+      function setOldValues(door){
+          editDoorDialog.value= true;
+          editedDoorName.value= door.name;
+      }
+      function setOldValueR(room){
+          inception.value = true;
+          currentRoomName.value= room.name;
+      }
+      function editDoor(room, door) {
+          editDoorDialog.value= false;
           const doors = room.doors;
-          let door = Door(name, coordinates);
-          doors.push(door);
-          room.doors = doors;
+          door.name= editedDoorName.value;
+          const index = doors.indexOf(door);
+          doors[index].name=  editedDoorName.value;
       }
 
-    //to do define save(room)
+      function save(room){
+        room.name = currentRoomName.value;
+        roomStore.save(room);
+      }
+
+      function reset(){
+          window.location.reload();
+      }
 
     function deleteAllRooms() {
       floorPlanStore.selectedRooms.length = 0
@@ -231,8 +229,8 @@ export default {
         })
       }
     }
-    return{floorPlanStore, selectedRooms, toggleRoomCheckbox, userStore, search, filteredRooms, roomFilter, t, inception, addDoorDialog, deleteDoorDialog, deleteDoor, addDoor, newDoorName, newDoorCoord, currentDoorname, currentDoorCoord, fourthDialog}
-  }
+    return{floorPlanStore, selectedRooms, toggleRoomCheckbox, userStore, search, filteredRooms, roomFilter, t, inception, deleteDoorDialog, editedDoorName, editDoorDialog, setOldValues, roomStore, deleteDoor, editDoor, save, currentRoomName, setOldValueR, reset}
+  },
 
 }
 </script>
