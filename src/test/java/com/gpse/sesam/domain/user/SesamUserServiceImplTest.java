@@ -81,7 +81,7 @@ class SesamUserServiceImplTest {
 
 	@Test
 	void createUserShouldCallRepositoryWithCorrectUser() {
-		SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", "John", "Doe",
+		final SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", "John", "Doe",
 				Collections.singletonList(SesamUserRole.AttainableRole.ADMINISTRATOR));
 
 		when(passwordEncoder.encode(userCmd.getPassword())).thenReturn("hashedPassword");
@@ -90,7 +90,7 @@ class SesamUserServiceImplTest {
 
 		verify(sesamUserRepository).save(userCaptor.capture());
 
-		SesamUser user = userCaptor.getValue();
+		final SesamUser user = userCaptor.getValue();
 
 		assertThat(user, notNullValue());
 		assertThat(user.getUsername(), is(userCmd.getEmail()));
@@ -105,8 +105,8 @@ class SesamUserServiceImplTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"", " ", "12", "1"})
 	@NullSource
-	void createUserShouldRaiseExceptionIfFirstNameIsNotCorrect(String firstName) {
-		SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", firstName, "Doe",
+	void createUserShouldRaiseExceptionIfFirstNameIsNotCorrect(final String firstName) {
+		final SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", firstName, "Doe",
 				Collections.singletonList(SesamUserRole.AttainableRole.ADMINISTRATOR));
 
 		assertThrows(UnprocessableEntityException.class, () -> sesamUserService.createUser(userCmd), "firstName does" +
@@ -117,8 +117,8 @@ class SesamUserServiceImplTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"", " ", "12", "1"})
 	@NullSource
-	void createUserShouldRaiseExceptionIfLastNameIsNotCorrect(String lastName) {
-		SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", "John", lastName,
+	void createUserShouldRaiseExceptionIfLastNameIsNotCorrect(final String lastName) {
+		final SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", "John", lastName,
 				Collections.singletonList(SesamUserRole.AttainableRole.ADMINISTRATOR));
 
 		assertThrows(UnprocessableEntityException.class, () -> sesamUserService.createUser(userCmd), "lastName does " +
@@ -129,8 +129,8 @@ class SesamUserServiceImplTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"", " ", "12345678", "hallo123!", "Hallo1234", "Hao123!", "Hallooo!"})
 	@NullSource
-	void createUserShouldRaiseExceptionIfPasswordIsNotCorrect(String password) {
-		SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", password, "John", "Doe",
+	void createUserShouldRaiseExceptionIfPasswordIsNotCorrect(final String password) {
+		final SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", password, "John", "Doe",
 				Collections.singletonList(SesamUserRole.AttainableRole.ADMINISTRATOR));
 
 		assertThrows(UnprocessableEntityException.class, () -> sesamUserService.createUser(userCmd), "password does " +
@@ -140,7 +140,7 @@ class SesamUserServiceImplTest {
 
 	@Test
 	void createUserShouldRaiseExceptionIfEMailIsNotCorrect() {
-		SesamUserCmd userCmd = new SesamUserCmd("johndoeexample.com", "Hallo123!", "John", "Doe",
+		final SesamUserCmd userCmd = new SesamUserCmd("johndoeexample.com", "Hallo123!", "John", "Doe",
 				Collections.singletonList(SesamUserRole.AttainableRole.ADMINISTRATOR));
 
 		assertThrows(UnprocessableEntityException.class, () -> sesamUserService.createUser(userCmd), "The provided " +
@@ -150,7 +150,7 @@ class SesamUserServiceImplTest {
 
 	@Test
 	void createUserShouldRaiseExceptionIfRolesAreNull() {
-		SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", "John", "Doe",
+		final SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", "John", "Doe",
 				null);
 
 		assertThrows(UnprocessableEntityException.class, () -> sesamUserService.createUser(userCmd), "roles may not " +
@@ -160,7 +160,7 @@ class SesamUserServiceImplTest {
 
 	@Test
 	void createUserShouldRaiseConflictExceptionIfSaveRaisesAnException() {
-		SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", "John", "Doe",
+		final SesamUserCmd userCmd = new SesamUserCmd("johndoe@example.com", "Hallo123!", "John", "Doe",
 				Collections.singletonList(SesamUserRole.AttainableRole.ADMINISTRATOR));
 
 
@@ -173,8 +173,8 @@ class SesamUserServiceImplTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"", " ", "12345678", "hallo123!", "Hallo1234", "Hao123!", "Hallooo!"})
 	@NullSource
-	void updatePasswordWithTokenShouldRaiseExceptionIfPasswordDoesNotMatchCriteria(String password) {
-		String token = "token";
+	void updatePasswordWithTokenShouldRaiseExceptionIfPasswordDoesNotMatchCriteria(final String password) {
+		final String token = "token";
 		when(passwordResetTokenRepository.findByToken(token)).thenReturn(Optional.of(new PasswordResetToken(new SesamUser(), token)));
 
 		assertThrows(UnprocessableEntityException.class, () -> sesamUserService.updatePasswordWithToken(token,
@@ -185,9 +185,9 @@ class SesamUserServiceImplTest {
 
 	@Test
 	void updatePasswordWithTokenShouldDeleteTokenAndUpdatePassword() {
-		String tokenString = "token";
-		String password = "Password123!";
-		PasswordResetToken token = new PasswordResetToken(new SesamUser(), tokenString);
+		final String tokenString = "token";
+		final String password = "Password123!";
+		final PasswordResetToken token = new PasswordResetToken(new SesamUser(), tokenString);
 		when(passwordResetTokenRepository.findByToken(tokenString)).thenReturn(Optional.of(token));
 		when(passwordEncoder.encode(password)).thenReturn("encodedPassword");
 
@@ -201,7 +201,7 @@ class SesamUserServiceImplTest {
 
 	@Test
 	void updatePasswordWithTokenShouldRaiseExceptionWhenTokenIsInvalid() {
-		String token = "token";
+		final String token = "token";
 		when(passwordResetTokenRepository.findByToken(token)).thenReturn(Optional.empty());
 
 		assertThrows(InvalidTokenException.class, () -> sesamUserService.updatePasswordWithToken(token,
@@ -212,8 +212,8 @@ class SesamUserServiceImplTest {
 
 	@Test
 	void updatePasswordWithTokenShouldRaiseExceptionWhenTokenIsExpired() {
-		String token = "token";
-		PasswordResetToken resetToken = new PasswordResetToken(new SesamUser(), token);
+		final String token = "token";
+		final PasswordResetToken resetToken = new PasswordResetToken(new SesamUser(), token);
 		ReflectionTestUtils.setField(resetToken, "expiryDate", new Date());
 
 		when(passwordResetTokenRepository.findByToken(token)).thenReturn(Optional.of(resetToken));
@@ -226,16 +226,8 @@ class SesamUserServiceImplTest {
 	}
 
 	@Test
-	void deleteAllShouldCallRepository() {
-		sesamUserService.deleteAll();
-
-		// assert
-		verify(sesamUserRepository).deleteAll();
-	}
-
-	@Test
 	void saveAllShouldCallRepositoryWithCorrectArguments() {
-		List<SesamUser> users = Collections.singletonList(new SesamUser());
+		final List<SesamUser> users = Collections.singletonList(new SesamUser());
 
 		sesamUserService.saveAll(users);
 
@@ -248,7 +240,7 @@ class SesamUserServiceImplTest {
 	void getUsersShouldReturnListOfLocations() {
 		when(sesamUserRepository.findAll()).thenReturn(Collections.singletonList(new SesamUser()));
 
-		List<SesamUser> users = sesamUserService.getUsers();
+		final List<SesamUser> users = sesamUserService.getUsers();
 
 		assertThat(users.size(), is(1));
 	}
@@ -256,12 +248,12 @@ class SesamUserServiceImplTest {
 
 	@Test
 	void creatPasswordResetTokenShouldCallMailService() {
-		SesamUser sesamUser = new SesamUser();
+		final SesamUser sesamUser = new SesamUser();
 		sesamUser.setFirstName("firstName");
 		sesamUser.setLastName("lastName");
 		sesamUser.setEmail("email");
 
-		String token = "token";
+		final String token = "token";
 
 		LocaleContextHolder.setLocale(Locale.GERMAN);
 
@@ -279,20 +271,20 @@ class SesamUserServiceImplTest {
 
 	@Test
 	void loadUserByUsernameShouldCallRepository() {
-		String username = "email";
-		SesamUser user = new SesamUser();
+		final String username = "email";
+		final SesamUser user = new SesamUser();
 		user.setEmail("test");
 
 		when(sesamUserRepository.findByEmail(username)).thenReturn(Optional.of(user));
 
-		UserDetails userDetails = sesamUserService.loadUserByUsername(username);
+		final UserDetails userDetails = sesamUserService.loadUserByUsername(username);
 
 		assertThat(userDetails.getUsername(), is(user.getUsername()));
 	}
 
 	@Test
 	void loadUserByUsernameShouldRaiseExceptionWhenUserDoesNotExist() {
-		String username = "username";
+		final String username = "username";
 		when(sesamUserRepository.findByEmail(username)).thenReturn(Optional.empty());
 
 		assertThrows(UsernameNotFoundException.class, () -> sesamUserService.loadUserByUsername(username), "username" +

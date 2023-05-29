@@ -17,8 +17,13 @@ import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import L from "leaflet";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
-import { storeToRefs } from "pinia";
+import {storeToRefs} from "pinia";
 import {watch} from "vue";
+import {useQuasar} from "quasar";
+import SelectRoom from "@/main/vue/views/SelectRoom.vue";
+import {useRoomStore} from "@/main/vue/stores/room";
+import {useFloorStore} from "@/main/vue/stores/floor";
+import {useLocationStore} from "@/main/vue/stores/locations";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -60,22 +65,39 @@ function getImageDimensions(imageURL) {
 let floorPlanMap;
 export default {
   name: "FloorPlan",
+  props: {
+    editView: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
+  setup() {
+    const floorPlanStore = useFloorPlanStore();
+    const floorStore = useFloorStore();
+    const locationStore = useLocationStore();
+    const roomStore = useRoomStore();
+    return {floorStore, floorPlanStore, locationStore, roomStore}
+  },
   mounted: function () {
     floorPlanMap = L.map("floor-plan-map", mapConfig);
-    const floorPlanStore = useFloorPlanStore();
-    const { rooms } = storeToRefs(floorPlanStore)
+
+    const $q = useQuasar();
+
+    const {rooms} = storeToRefs(this.floorPlanStore)
     watch(rooms, () => {
       floorPlanMap.eachLayer(layer => floorPlanMap.removeLayer(layer));
-      this.applyImageToMap(floorPlanStore.selectedFloorPlan)
-      this.drawRooms(floorPlanStore.rooms)
+      this.applyImageToMap(this.floorPlanStore.selectedFloorPlan)
+      this.drawRooms(this.floorPlanStore.rooms)
     })
+
     floorPlanMap.eachLayer(layer => floorPlanMap.removeLayer(layer));
-    this.applyImageToMap(floorPlanStore.selectedFloorPlan);
-    this.drawRooms(floorPlanStore.rooms)
-    const { selectedRooms } = storeToRefs(floorPlanStore)
+    this.applyImageToMap(this.floorPlanStore.selectedFloorPlan);
+    this.drawRooms(this.floorPlanStore.rooms)
+    const {selectedRooms} = storeToRefs(this.floorPlanStore)
     watch(selectedRooms, () => {
       floorPlanMap.eachLayer(layer => {
-        if(layer.type === "Room") {
+        if (layer.type === "Room") {
           layer.setStyle({
             color: 'black',
             fillColor: 'black',
@@ -83,7 +105,7 @@ export default {
             fillOpacity: 0.1
           });
           selectedRooms.value.forEach(room => {
-            if(room.id === layer.id) {
+            if (room.id === layer.id) {
               layer.setStyle({
                 color: 'red',
                 fillColor: 'red',
@@ -103,9 +125,79 @@ export default {
     const mapContainerObserver = new ResizeObserver(() => {
       floorPlanMap.invalidateSize();
     });
+
+    floorPlanMap.on('pm:create', (e) => {
+      if (e.shape === 'Rectangle' || e.shape === 'Polygon') {
+        const room = {
+          name: 'New Room',
+          coordinates: e.layer._latlngs[0].map((latLng) => ({
+                lat: latLng.lat,
+                lng: latLng.lng
+              }
+          )),
+          doors: []
+        }
+        const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
+        floor.rooms.push(room)
+
+        this.floorStore.save(floor).then((floor) => {
+          e.layer.id = floor.rooms.find(room => room.coordinates === e.layer._latlngs[0].map((latLng) => ({
+                lat: latLng.lat,
+                lng: latLng.lng
+              }
+          ))).id
+        })
+      } else if (e.shape === 'Line' || e.shape === 'Polyline') {
+        $q.dialog({
+          component: SelectRoom,
+          componentProps: {
+            rooms: this.floorPlanStore.rooms
+          }
+        }).onOk((room) => {
+          room.doors.push({
+            name: 'door',
+            coordinates: e.layer._latlngs.map((latLng) => ({
+                  lat: latLng.lat,
+                  lng: latLng.lng
+                }
+            )),
+          })
+          this.roomStore.save(room)
+        })
+      }
+    })
+
+
     mapContainerObserver.observe(this.$refs.mapContainer)
   },
   methods: {
+    addEditControls(editView) {
+      if (editView) {
+        floorPlanMap.pm.addControls({
+          position: 'topleft',
+          drawCircle: false,
+          drawCircleMarker: false,
+          drawText: false,
+          cutPolygon: false,
+          rotateMode: false,
+          drawMarker: false,
+        });
+
+        floorPlanMap.on('pm:drawstart', ({workingLayer}) => {
+          workingLayer.on('pm:vertexadded', (e) => {
+            if (e.shape === 'Line' && workingLayer.getLatLngs().length >= 2) {
+              floorPlanMap.pm.Draw.Line._finishShape();
+            }
+          });
+
+        });
+        floorPlanMap.pm.Draw.Line.setOptions({
+          hideMiddleMarkers: true
+        })
+
+      }
+
+    },
     applyImageToMap(floorPlan) {
       getImageDimensions(floorPlan).then(({width, height}) => {
 
@@ -118,30 +210,59 @@ export default {
 
         let center = overlay.getCenter();
         floorPlanMap.panTo(center);
+        this.addEditControls(this.editView)
       });
     },
     drawRooms(rooms) {
       for (const room of rooms) {
-        const polygon = L.polygon(room.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
+        const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
           color: 'black',
           width: 5,
           fillOpacity: 0.1
-        })
+        }).addTo(floorPlanMap)
         polygon.id = room.id
         polygon.type = "Room"
-        polygon.on('click', (layer) => layer.setColor);
-        const popup = L.popup();
-
-        polygon.bindPopup(popup)
-
-        polygon.addTo(floorPlanMap)
         for (const door of room.doors) {
-          L.polyline(door.coordinates.map(coord => L.latLng(coord.lat, coord.lng)), {
+          const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
             color: '#b0b0b0',
             weight: 3
           }).addTo(floorPlanMap)
+          line.id = door.id
+          line.roomId = room.id
         }
+        polygon.on('pm:update', (e) => {
+          const room = this.locationStore.getRoomById(e.layer.id)
+          room.coordinates = e.layer._latlngs[0].map((latLng) => ({
+                lat: latLng.lat,
+                lng: latLng.lng
+              }
+          ))
+          this.roomStore.save(room)
+        })
+        polygon.on('pm:dragend', (e) => {
+          console.log(e)
+          const room = this.locationStore.getRoomById(e.layer.id)
+          room.coordinates = e.layer._latlngs[0].map((latLng) => ({
+                lat: latLng.lat,
+                lng: latLng.lng
+              }
+          ))
+          this.roomStore.save(room)
+        });
+
+        polygon.on('pm:remove', (e) => {
+          const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
+          const index = floor.rooms.indexOf(room => e.layer.id === room.id)
+          floor.rooms.splice(index, 1)
+          this.floorStore.save(floor)
+          floorPlanMap.eachLayer(layer => {
+            if (layer.roomId === e.layer.id) {
+              floorPlanMap.removeLayer(layer)
+            }
+          })
+        });
       }
+
     }
   },
 };

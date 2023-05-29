@@ -9,13 +9,14 @@ import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Imprint from "../views/Imprint.vue";
 import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
-import EditUser from "@/main/vue/views/EditUser.vue";
-import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
+
+import FloorPlanEdit from "@/main/vue/views/FloorPlanEdit.vue";
 import {useUserStore} from "@/main/vue/stores/users";
-import RequestRolles from "@/main/vue/views/RolesRequest.vue";
+import EditUser from "@/main/vue/views/EditUser.vue";
 
 const router = createRouter({
     history: createWebHistory(),
+
     routes: [
         {
             path: '/',
@@ -35,23 +36,20 @@ const router = createRouter({
             component: LoginView
         },
         {
+            path: '/admin/currentuserlist/edit/:email',
+            name: 'edit',
+            component: EditUser,
+            props: true,
+        },
+        {
             path: '/admin/currentuserlist',
             name: 'currentuserlist',
             component: CurrentUserList,
-      //meta: {requiresAdmin: true}
-    },
-      {
-        path: '/admin/rolesRequest',
-        name: 'rolesRequest',
-        component: RequestRolles,
-        //meta: {requiresAdmin: true}
-      },
-    {
-      path: '/admin/currentuserlist/edit/:email',
-      name: 'edit',
-      component: EditUser,
-      props: true,
             //meta: {requiresAdmin: true}
+        },
+        {
+            path: '/editFloorPlan',
+            component: FloorPlanEdit
         },
         {
             path: '/signup',
@@ -73,34 +71,37 @@ const router = createRouter({
             path: '/passwordreset',
             component: PasswordReset,
 
-    },
-    {
-      path: "/imprint",
-      component: Imprint,
-    },
-    {
-      path: "/imprinteditor",
-      component: ImprintEditor,
-      meta: {requiresAdmin: true},
-    },
-    {
-      path: "/corporatedesign",
-      component: CorporateDesign,
-      meta: {requiresAdmin: true},
-    },
-  ],
+        },
+        {
+            path: "/imprint",
+            component: Imprint,
+        },
+        {
+            path: "/imprinteditor",
+            component: ImprintEditor,
+            meta: {requiresAdmin: true},
+        },
+
+
+    ],
 });
 
 
-router.beforeEach((to) => {
-    if (to.fullPath.endsWith("/corporatedesign")) {
-        if (!useUserStore().authenticated)
-            router.push("/")
+router.beforeEach((to, from, next) => {
+    const {authenticated} = useUserStore();
+
+    if (to.meta.requiresAuth && !authenticated) {
+        return {
+            path: "/login",
+            query: {redirect: to.fullPath},
+        };
     }
-    if (to.fullPath.endsWith("/profile")) {
-        if (!useUserStore().authenticated)
-            router.push("/")
+
+    if (to.path === "/ImprintEditor") {
+        return next("/imprinteditor");
     }
-})
+    next();
+});
+
 
 export default router
