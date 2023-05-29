@@ -2,7 +2,6 @@ package com.gpse.sesam.domain.credential;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.location.Location;
-import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 
 import java.util.List;
@@ -21,6 +20,6 @@ public interface CredentialService {
 
 	Optional<Credential> credentialFindByLocation(Location location);
 
-	List<CredentialCmd> credentialFindByLocation(Long id);
+	List<Credential> credentialFindByLocation(Long id);
 
 }

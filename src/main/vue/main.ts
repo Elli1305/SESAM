@@ -48,8 +48,6 @@ const messages = {
             question: "Nutzer wirklich löschen?",
             deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
             otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
-
-
         },
         floorplan: {
             locations: 'Standorte'
@@ -84,7 +82,7 @@ const messages = {
             editCorporateDesign: "Corporate Design anpassen",
             editImprint: "Imprint bearbeiten",
             credentialManagement: "Credentialverwaltung",
-            editorPages: "Bearbeiten",
+            editorPages: "Floorplan Bearbeiten",
             issuerPages: "Credential austellen",
             imprint: "Impressum",
             logout: "Logout",
@@ -279,7 +277,7 @@ const messages = {
             editCorporateDesign: "Edit Corporate Design",
             editImprint: "Edit Imprint",
             credentialManagement: "Credential Management",
-            editorPages: "Edit",
+            editorPages: "Edit Floorplan",
             issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout",
@@ -440,7 +438,7 @@ watch(
     pinia.state,
     (state) => {
         sessionStorage.setItem("users", JSON.stringify(state.users));
-        sessionStorage.setItem("floorPlan", JSON.stringify(state.floorPlan));
+        sessionStorage.setItem("floorPlan", state.floorplan ? JSON.stringify(state.floorPlan) : '');
     },
     {deep: true}
 );

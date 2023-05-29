@@ -11,4 +11,8 @@ public interface LocationService {
 	Optional<Location> getLocationByName(String name);
 
 	void saveAll(Iterable<Location> locations);
+
+	Location save(Location location);
+
+	void deleteById(Long id);
 }

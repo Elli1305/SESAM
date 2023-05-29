@@ -2,19 +2,21 @@
   <q-page class="items-center justify-center" style="display: flex">
     <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
       <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
-        <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Impressum</h1>
+        <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Impressum bearbeiten</h1>
         <div v-if="!showEditor" class="imprint-content" v-html="imprintContent || initialImprintContent"></div>
       </div>
-      <q-editor v-model="editorContent" v-if="showEditor" />
-
+      <q-editor v-model="editorContent" v-if="showEditor"/>
       <div class="editor-result" v-html="editorContent" v-if="showEditor"></div>
-      <div class="action-buttons" v-if="showEditor" style="display: flex; justify-content: space-between; width: 100%; margin-top: 1em; margin-bottom: 2em;">
-        <q-btn icon="delete" color="primary" @click="showDeleteDialog" size="md" />
-        <q-btn icon="save" color="primary" @click="showConfirmDialog" size="md" />
 
+
+      <div class="action-buttons" v-if="showEditor"
+           style="display: flex; justify-content: space-between; width: 100%; margin-top: 1em; margin-bottom: 2em;">
+        <q-btn icon="delete" color="primary" @click="showDeleteDialog" size="md"/>
+        <q-btn icon="save" color="primary" @click="showConfirmDialog" size="md"/>
       </div>
-      <div class="action-buttons" style="display: flex; justify-content: center; width: 100%; margin-top: 1em; margin-bottom: 2em;">
-        <q-btn icon="edit" color="primary" @click="toggleEditor" v-if="!showEditor" size="md" />
+      <div class="action-buttons"
+           style="display: flex; justify-content: center; width: 100%; margin-top: 1em; margin-bottom: 2em;">
+        <q-btn icon="edit" color="primary" @click="toggleEditor" v-if="!showEditor" size="md"/>
       </div>
     </div>
     <q-dialog v-model="confirmDialog">
@@ -24,8 +26,8 @@
           <div class="q-mt-md">Möchten Sie das bestehende Impressum wirklich überschreiben?</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn label="Abbrechen" color="primary" @click="confirmDialog = false" />
-          <q-btn label="Ok" color="primary" @click="postText" />
+          <q-btn label="Abbrechen" color="primary" @click="confirmDialog = false"/>
+          <q-btn label="Ok" color="primary" @click="postText"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -37,17 +39,17 @@
           <div class="q-mt-md">Sind Sie sicher, dass Sie das Impressum löschen wollen?</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn label="Abbrechen" color="primary" @click="deleteDialog = false" />
-          <q-btn label="Löschen" color="primary" @click="deletePostedContent" />
+          <q-btn label="Abbrechen" color="primary" @click="deleteDialog = false"/>
+          <q-btn label="Löschen" color="primary" @click="deletePostedContent"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
   </q-page>
 </template>
 <script lang="ts">
-import { ref, onMounted } from 'vue';
-import { QDialog, useQuasar } from 'quasar';
-import { getImprintContent, postImprintContent,deleteImprintContent,getLatestImprint } from '../api/imprint';
+import {ref, onMounted,nextTick} from 'vue';
+import {QDialog, useQuasar} from 'quasar';
+import {getImprintContent, postImprintContent, deleteImprintContent, getLatestImprint} from '../api/imprint';
 
 export default {
   name: "ImprintEditor",
@@ -63,6 +65,7 @@ export default {
     const deleteDialog = ref(false);
     const initialImprintContent = ref('');
 
+
     onMounted(async () => {
       try {
         const response = await getImprintContent();
@@ -73,6 +76,7 @@ export default {
         console.log(error);
       }
     });
+
 
     const showConfirmDialog = () => {
       confirmDialog.value = true;
@@ -100,6 +104,7 @@ export default {
             confirmDialog.value = false;
           });
     };
+
 
     const toggleEditor = () => {
       showEditor.value = !showEditor.value;
@@ -136,7 +141,7 @@ export default {
     const loadLatestContent = async () => {
       try {
         const response = await getLatestImprint();
-        console.log(response.data); // Add this line
+        console.log(response.data);
         editorContent.value = response.data;
       } catch (error) {
         console.error(error);
@@ -155,6 +160,8 @@ export default {
       postText,
       showDeleteDialog,
       deletePostedContent,
+
+
       initialImprintContent: initialImprintContent
     };
   }
@@ -170,7 +177,6 @@ h1 {
 .editor-result {
   margin-top: 2em;
 }
-
 
 
 </style>
