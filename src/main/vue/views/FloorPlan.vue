@@ -277,7 +277,7 @@ export default {
                   fillColor: 'red',
                   weight: 2,
                   fillOpacity: 0.1
-              });
+              })});
 
           polygon.id = room.id
         polygon.type = "Room"
