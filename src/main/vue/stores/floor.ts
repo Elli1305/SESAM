@@ -8,15 +8,27 @@ export const useFloorStore = defineStore('floor', () => {
 
     const locationStore = useLocationStore()
 
-    function save(floor: Floor): Promise<Floor> {
-        return new Promise((resolve, reject) => {
-            api.floor.save(floor).then((response) => {
-                locationStore.getLocations();
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
+    function save(floor: Floor, file: File): Promise<Floor> {
+        if (file) {
+            return new Promise<Floor>((resolve, reject) => {
+                api.floor.saveWithFile(floor, file).then((response) => {
+                    locationStore.getLocations();
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
             })
-        })
+        } else {
+
+            return new Promise((resolve, reject) => {
+                api.floor.save(floor).then((response) => {
+                    locationStore.getLocations();
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
+            })
+        }
     }
 
     return {

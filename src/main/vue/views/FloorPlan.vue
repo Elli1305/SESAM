@@ -103,6 +103,18 @@ export default {
       weight: 3
     });
 
+    floorPlanMap.on('pm:drawstart', ({workingLayer}) => {
+      workingLayer.on('pm:vertexadded', (e) => {
+        if (e.shape === 'Line' && workingLayer.getLatLngs().length >= 2) {
+          floorPlanMap.pm.Draw.Line._finishShape();
+        }
+      });
+
+    });
+    floorPlanMap.pm.Draw.Line.setOptions({
+      hideMiddleMarkers: true
+    })
+
     floorPlanMap.eachLayer(layer => floorPlanMap.removeLayer(layer));
     this.applyImageToMap(this.floorPlanStore.selectedFloorPlan);
     this.drawRooms(this.floorPlanStore.rooms)
@@ -209,18 +221,6 @@ export default {
           rotateMode: false,
           drawMarker: false,
         });
-
-        floorPlanMap.on('pm:drawstart', ({workingLayer}) => {
-          workingLayer.on('pm:vertexadded', (e) => {
-            if (e.shape === 'Line' && workingLayer.getLatLngs().length >= 2) {
-              floorPlanMap.pm.Draw.Line._finishShape();
-            }
-          });
-
-        });
-        floorPlanMap.pm.Draw.Line.setOptions({
-          hideMiddleMarkers: true
-        })
       }
 
     },
