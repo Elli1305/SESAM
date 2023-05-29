@@ -73,18 +73,15 @@
                                           <div class="row justify-end" style="padding: 0.7em">
 
                                               <q-dialog v-model="deleteDoorDialog" persistent transition-show="scale" transition-hide="scale">
-                                                  <q-card class="bg-teal text-white" style="width: 300px">
-                                                      <q-card-section>
-                                                          <div class="text-h6">Persistent</div>
-                                                      </q-card-section>
+                                                  <q-card class="bg-white text-black" style="width: 300px">
 
-                                                      <q-card-section class="q-pt-none">
+                                                      <q-card-section class="q-pt-lg">
                                                           Bist du sicher dass du die Tür löschen möchtest?
                                                       </q-card-section>
 
                                                       <q-card-actions align="right" class="bg-white text-teal">
-                                                          <q-btn flat label="Ja" @click="deleteDoor(room, door)" v-close-popup />
-                                                          <q-btn flat label="Nein" v-close-popup />
+                                                          <q-btn flat label="Ja" @click="deleteDoor(room, door)" color="primary" v-close-popup />
+                                                          <q-btn flat label="Nein" color="primary" v-close-popup />
                                                       </q-card-actions>
                                                   </q-card>
                                               </q-dialog>
