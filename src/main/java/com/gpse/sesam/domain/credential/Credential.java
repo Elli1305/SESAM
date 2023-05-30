@@ -55,8 +55,8 @@ public class Credential {
 	protected Credential() {
 	}
 
-	public Credential(final String name, final String credentialDefinitionId, final String agent, final List<FormEntry> form,
-					  final List<ChecklistEntry> checklist, final List<Issuer> issuer) {
+	public Credential(final String name, final String credentialDefinitionId, final String agent,
+					  final List<FormEntry> form, final List<ChecklistEntry> checklist, final List<Issuer> issuer) {
 		this.name = name;
 		this.credentialDefinitionId = credentialDefinitionId;
 		this.agent = agent;
