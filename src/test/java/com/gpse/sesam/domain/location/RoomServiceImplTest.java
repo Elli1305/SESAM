@@ -55,7 +55,7 @@ class RoomServiceImplTest {
 
 	@Test
 	void saveShouldCallRepositoryWithCorrectArguments() {
-		Room room = new Room("Test", Collections.emptyList());
+		final Room room = new Room("Test");
 
 		roomService.save(room);
 

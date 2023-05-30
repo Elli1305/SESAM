@@ -1,6 +1,6 @@
 package com.gpse.sesam.domain.location;
 
-import com.gpse.sesam.domain.file.FileStorageService;
+import com.gpse.sesam.domain.filestorage.FileStorageService;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.floor.FloorRepository;
 import com.gpse.sesam.domain.location.floor.FloorServiceImpl;
@@ -61,7 +61,7 @@ class FloorServiceImplTest {
 
 	@Test
 	void saveShouldCallRepositoryWithCorrectArguments() {
-		final Floor floor = new Floor(1, "", Collections.emptyList());
+		final Floor floor = new Floor(1, "");
 		final MockMultipartFile multipartFile = new MockMultipartFile("test_file", new byte[]{});
 
 		when(fileStorageService.storeFile(multipartFile)).thenReturn(multipartFile.getName());
