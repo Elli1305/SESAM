@@ -85,26 +85,7 @@ export default {
           } else {
             ({locationId, buildingId} = getParentIDs(locations, floorPlanStore.selectedFloorId));
           }
-
-          locationTreeStructure.value = locations.map((location) => ({
-            id: location.id,
-            title: location.name,
-            level: 0,
-            expanded: location.id === locationId,
-            children: location.buildings.map((building) => ({
-              id: building.id,
-              title: building.name,
-              level: 1,
-              expanded: building.id === buildingId,
-              children: building.floors.map(floor => ({
-                id: floor.id,
-                level: 2,
-                floorPlan: floor.floorPlanPath,
-                title: "Etage " + floor.floorLevel,
-                rooms: floor.rooms
-              }))
-            }))
-          }))
+          locationTreeStructure.value = locationStore.getLocationTreeStructure(locationId, buildingId);
         }
     )
 

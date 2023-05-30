@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-@Secured("ADMINISTRATOR")
+
 public class ImprintController {
 
 	private final ImprintServiceImpl imprintService;

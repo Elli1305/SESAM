@@ -1,5 +1,9 @@
 package com.gpse.sesam.web.controller;
 
+import com.gpse.sesam.domain.credential.Category;
+import com.gpse.sesam.domain.credential.CategoryService;
+import com.gpse.sesam.domain.credential.Credential;
+import com.gpse.sesam.domain.credential.CredentialService;
 import com.gpse.sesam.domain.credential.*;
 import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.web.cmd.CategoryCmd;
@@ -7,7 +11,11 @@ import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +25,12 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/api")
 public class CategoryController {
-    private final CategoryService categoryService;
-    private final CredentialService credentialService;
+	private final CategoryService categoryService;
+	private final CredentialService credentialService;
     private final ExternalCredentialService externalCredentialService;
 
-    @Autowired
-    public CategoryController(final CategoryService categoryService, CredentialService credentialService,
+	@Autowired
+	public CategoryController(final CategoryService categoryService, final CredentialService credentialService,
                               ExternalCredentialService externalCredentialService) {
         this.categoryService = categoryService;
         this.credentialService = credentialService;
@@ -32,8 +40,8 @@ public class CategoryController {
 
     @Secured("ADMINISTRATOR")
     @GetMapping("/credentialmapping")
-    public List<CategoryCmd> getCategoriesInfo() {
-        List<Category> categories = categoryService.getCategory();
+	public List<CategoryCmd> getCategoriesInfo() {
+		List<Category> categories = categoryService.getCategory();
         List<CategoryCmd> cmd = new ArrayList<>();
         for (Category category : categories) {
             String name = category.getName();
@@ -56,28 +64,8 @@ public class CategoryController {
         return externalCredentialService.getExternalCredentials();
     }
 
-    @GetMapping("/credentialview/{id}")
-    public List<CredentialCmd> getCredentialInfos(@PathVariable("id") final Long id) {
-        List<Credential> credentials = credentialService.credentialFindByLocation(id);
-        List<CredentialCmd> credentialCmds = new ArrayList<>();
-        for (Credential credential: credentials) {
-            String catName = credential.getCategory().getName();
-            String credentialName = credential.getName();
-            List<String> external = new ArrayList<>();
-            List<String> issuerName = new ArrayList<>();
-            List<String> room = new ArrayList<>();
-            for (ExternalCredential externalCredential: credential.getCategory().getExternalCredentials()) {
-                external.add(externalCredential.getName());
-            }
-            for (Issuer issuer : credential.getIssuer()) {
-                room.add(issuer.getRoom().getName());
-                issuerName.add(issuer.getFirstName()+ " " + issuer.getLastName());
-            }
-            credentialCmds.add(new CredentialCmd(catName,credentialName,external,issuerName,room));
-        }
-        return credentialCmds;
-    }
 
+    /*
     @DeleteMapping("/credentialmapping/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCategory(@PathVariable("id") final String id) {
@@ -102,10 +90,11 @@ public class CategoryController {
         externalCredentialService.updateExternalCredential(externalCredential, cmd.getName(), cmd.getDefintionID());
     }*/
 
+    /*
     @DeleteMapping("/externalcredential/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void deleteExternalCredential(@PathVariable("id") final String id) {
         final ExternalCredential externalCredential = externalCredentialService.findExternalById(Long.valueOf(id));
         externalCredentialService.deleteExternalCredential(externalCredential);
-    }
+    }*/
 }

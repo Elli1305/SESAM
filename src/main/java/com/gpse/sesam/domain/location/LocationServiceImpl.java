@@ -33,18 +33,23 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public Optional<Location> getLocationByName(String name) throws LocationNotFoundException {
+	public Optional<Location> getLocationByName(final String name) throws LocationNotFoundException {
 		return Optional.ofNullable(locationRepository.findByName(name)
 				.orElseThrow(() -> new LocationNotFoundException(name + "Not found")));
 	}
 
 	@Override
-	public void deleteAll() {
-		locationRepository.deleteAll();
+	public void saveAll(final Iterable<Location> locations) {
+		locationRepository.saveAll(locations);
 	}
 
 	@Override
-	public void saveAll(final Iterable<Location> locations) {
-		locationRepository.saveAll(locations);
+	public Location save(Location location) {
+		return locationRepository.save(location);
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		locationRepository.deleteById(id);
 	}
 }
