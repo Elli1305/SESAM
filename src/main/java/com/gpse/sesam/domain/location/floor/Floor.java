@@ -1,14 +1,19 @@
-package com.gpse.sesam.domain.location;
+package com.gpse.sesam.domain.location.floor;
 
+import com.gpse.sesam.domain.location.room.Room;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Floor {
@@ -24,17 +29,17 @@ public class Floor {
 	@Column
 	private String floorPlanPath;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Room> rooms;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "FLOOR_ID")
+	private List<Room> rooms = new ArrayList<>();
 
 	protected Floor() {
 
 	}
 
-	public Floor(final int floorLevel, final String floorPlanPath, final List<Room> rooms) {
+	public Floor(final int floorLevel, final String floorPlanPath) {
 		this.floorLevel = floorLevel;
 		this.floorPlanPath = floorPlanPath;
-		this.rooms = rooms;
 	}
 
 	public int getFloorLevel() {
@@ -61,15 +66,34 @@ public class Floor {
 		this.id = id;
 	}
 
-	public void addRoom(final Room room) {
-		this.rooms.add(room);
-	}
-
 	public String getFloorPlanPath() {
 		return floorPlanPath;
 	}
 
 	public void setFloorPlanPath(final String floorPlanPath) {
 		this.floorPlanPath = floorPlanPath;
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		final Floor floor = (Floor) o;
+
+		return Objects.equals(id, floor.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id != null ? id.hashCode() : 0;
+	}
+
+	public void addRoom(final Room room) {
+		rooms.add(room);
 	}
 }

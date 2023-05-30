@@ -37,44 +37,13 @@ public class SesamUserServiceImpl implements SesamUserService {
 	@Autowired
 	public SesamUserServiceImpl(final SesamUserRepository userRepository,
 								final PasswordResetTokenRepository passwordResetTokenRepository,
-								final PasswordEncoder passwordEncoder,
-								final MailService mailService,
+								final PasswordEncoder passwordEncoder, final MailService mailService,
 								final MessageSource messageSource) {
 		this.userRepository = userRepository;
 		this.passwordResetTokenRepository = passwordResetTokenRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.mailService = mailService;
 		this.messageSource = messageSource;
-	}
-
-	@Override
-	public SesamUser createUser(final SesamUserCmd userCmd) {
-		validateUser(userCmd);
-
-		final SesamUser user = new SesamUser(
-				userCmd.getEmail(),
-				passwordEncoder.encode(userCmd.getPassword()),
-				userCmd.getFirstName(),
-				userCmd.getLastName(),
-				userCmd.getRequestedRoles().stream()
-						.distinct()
-						.map(SesamUserRole::new)
-						.toList()
-		);
-
-		try {
-			return userRepository.save(user);
-		} catch (final DataIntegrityViolationException e) {
-			throw new ConflictException("A user with that e-mail address already exists.", e);
-		}
-	}
-
-	private void validateUser(final SesamUserCmd userCmd) {
-		validatePassword(userCmd.getPassword());
-		validateEmail(userCmd.getEmail());
-		validateName(userCmd.getFirstName(), "firstName");
-		validateName(userCmd.getLastName(), "lastName");
-		validateRoles(userCmd.getRequestedRoles());
 	}
 
 	private static void validateRoles(final List<SesamUserRole.AttainableRole> roles) {
@@ -96,6 +65,34 @@ public class SesamUserServiceImpl implements SesamUserService {
 	}
 
 	@Override
+	public SesamUser createUser(final SesamUserCmd userCmd) {
+		validateUser(userCmd);
+
+		final SesamUser user = new SesamUser(
+				userCmd.getEmail(),
+				passwordEncoder.encode(userCmd.getPassword()),
+				userCmd.getFirstName(),
+				userCmd.getLastName(),
+				userCmd.getRequestedRoles().stream().distinct().map(SesamUserRole::new)
+						.toList()
+		);
+
+		try {
+			return userRepository.save(user);
+		} catch (final DataIntegrityViolationException e) {
+			throw new ConflictException("A user with that e-mail address already exists.", e);
+		}
+	}
+
+	private void validateUser(final SesamUserCmd userCmd) {
+		validatePassword(userCmd.getPassword());
+		validateEmail(userCmd.getEmail());
+		validateName(userCmd.getFirstName(), "firstName");
+		validateName(userCmd.getLastName(), "lastName");
+		validateRoles(userCmd.getRequestedRoles());
+	}
+
+	@Override
 	public UserDetails loadUserByUsername(final String username) {
 		return userRepository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
@@ -109,19 +106,10 @@ public class SesamUserServiceImpl implements SesamUserService {
 
 		final Locale locale = LocaleContextHolder.getLocale();
 
-		mailService.send(
-				new MailInformation("gp.se.team.3.1@gmail.com",
-						user.getUsername(),
-						messageSource.getMessage("reset" + ".subject", null, locale),
-						messageSource.getMessage(
-								"reset.text",
-								new String[]{
-										user.getFirstName(),
-										user.getLastName(),
-										token,
-								},
-								locale
-						)));
+		mailService.send(new MailInformation("gp.se.team.3.1@gmail.com", user.getUsername(),
+				messageSource.getMessage("reset" + ".subject", null, locale),
+				messageSource.getMessage("reset.text",
+						new String[]{user.getFirstName(), user.getLastName(), token}, locale)));
 	}
 
 	@Override
@@ -157,11 +145,6 @@ public class SesamUserServiceImpl implements SesamUserService {
 	}
 
 	@Override
-	public void deleteAll() {
-		userRepository.deleteAll();
-	}
-
-	@Override
 	public void deleteUser(final SesamUser sesamUser) {
 		userRepository.delete(sesamUser);
 	}
@@ -180,21 +163,16 @@ public class SesamUserServiceImpl implements SesamUserService {
 
 	@Override
 	public SesamUser getUserByMail(final String username) {
-		return userRepository.findByEmail(username)
-				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
+		return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username
+				+ " not found."));
 	}
 
 	@Override
-	public void makeUserEdit(final SesamUser user,
-							 final String prename,
-							 final String lastname,
-							 final String username,
+	public void makeUserEdit(final SesamUser user, final String prename, final String lastname, final String username,
 							 final List<SesamUserRole.AttainableRole> roles) {
 		user.setFirstName(prename);
 		user.setLastName(lastname);
-		user.setRoles(roles.stream()
-				.distinct()
-				.map(role -> new SesamUserRole(role, true))
+		user.setRoles(roles.stream().distinct().map(role -> new SesamUserRole(role, true))
 				.collect(Collectors.toList()));
 
 		userRepository.save(user);

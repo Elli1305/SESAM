@@ -9,9 +9,14 @@ import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Imprint from "../views/Imprint.vue";
 import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
+import {AttainableRole} from "@/main/vue/entity/createUser";
+
+import FloorPlanEdit from "@/main/vue/views/FloorPlanEdit.vue";
+import {useUserStore} from "@/main/vue/stores/users";
 import EditUser from "@/main/vue/views/EditUser.vue";
 import GroupRooms from "@/main/vue/views/GroupRooms.vue";
-import RequestRolles from "@/main/vue/views/RolesRequest.vue";
+import CredentialView from "@/main/vue/views/CredentialView.vue";
+import RolesRequest from "@/main/vue/views/RolesRequest.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -34,28 +39,28 @@ const router = createRouter({
             component: LoginView
         },
         {
+            path: '/admin/currentuserlist/edit/:email',
+            name: 'edit',
+            component: EditUser,
+            props: true,
+        },
+        {
             path: '/admin/currentuserlist',
             name: 'currentuserlist',
             component: CurrentUserList,
-      //meta: {requiresAdmin: true}
-    },
-      {
-        path: '/admin/rolesRequest',
-        name: 'rolesRequest',
-        component: RequestRolles,
-        //meta: {requiresAdmin: true}
-      },
-      {
-        path: '/grouprooms',
-        name: 'GroupRooms',
-        component: GroupRooms,
-      },
-    {
-      path: '/admin/currentuserlist/edit/:email',
-      name: 'edit',
-      component: EditUser,
-      props: true,
             //meta: {requiresAdmin: true}
+        },
+        {
+            path: '/grouprooms',
+            name: 'GroupRooms',
+            component: GroupRooms,
+        },
+        {
+            path: '/editFloorPlan',
+            component: FloorPlanEdit,
+            meta: {
+                authorize: AttainableRole.EDITOR
+            }
         },
         {
             path: '/signup',
@@ -87,12 +92,31 @@ const router = createRouter({
             component: ImprintEditor,
             meta: {requiresAdmin: true},
         },
+        {
+            path: '/credentialview',
+            component: CredentialView
+        },
+        {
+            path: '/admin/rolesRequest',
+            component: RolesRequest
+        },
+        {path: "/:pathMatch(.*)*", component: StartView}
+
     ],
 });
 
 
-// router.beforeEach((to) => {
-//   // Something which should be executed before each routing
-// })
+router.beforeEach((to, from, next) => {
+    const {authenticated, user} = useUserStore();
+    const {authorize} = to.meta;
+    if ((to.meta.requiresAuth || authorize) && !authenticated) {
+        return next({path: '/login', query: {returnUrl: to.path}});
+    } else if (authorize && !user?.roles.some(role => role.role === authorize && role.granted)) {
+        return next({path: '/'});
+    }
+
+    next();
+});
+
 
 export default router

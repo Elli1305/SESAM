@@ -1,13 +1,17 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.domain.location.building.Building;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,16 +25,16 @@ public class Location {
 	@Column(unique = true, nullable = false)
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Building> buildings;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "LOCATION_ID")
+	private List<Building> buildings = new ArrayList<>();
 
 	protected Location() {
 
 	}
 
-	public Location(final String name, final List<Building> buildings) {
+	public Location(final String name) {
 		this.name = name;
-		this.buildings = buildings;
 	}
 
 	public String getName() {
@@ -49,15 +53,15 @@ public class Location {
 		this.buildings = buildings;
 	}
 
-	public void addBuilding(final Building building) {
-		this.buildings.add(building);
-	}
-
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(final Long id) {
 		this.id = id;
+	}
+
+	public void addBuilding(final Building building) {
+		buildings.add(building);
 	}
 }

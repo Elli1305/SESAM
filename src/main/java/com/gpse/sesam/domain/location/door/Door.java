@@ -1,13 +1,18 @@
-package com.gpse.sesam.domain.location;
+package com.gpse.sesam.domain.location.door;
 
+import com.gpse.sesam.domain.credential.Credential;
+import com.gpse.sesam.domain.location.Coordinate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,19 +26,14 @@ public class Door {
 	@Column
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Coordinate> coordinates;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Coordinate> coordinates = new ArrayList<>();
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Credential> credentials = new ArrayList<>();
 
 	protected Door() {
 
-	}
-
-	public Door(final List<Coordinate> coordinates) {
-		this.coordinates = coordinates;
-	}
-
-	public Door(final String name) {
-		this.name = name;
 	}
 
 	public Door(final String name, final List<Coordinate> coordinates) {
@@ -57,11 +57,23 @@ public class Door {
 		this.name = name;
 	}
 
+	public List<Credential> getCredentials() {
+		return credentials;
+	}
+
+	public void setCredentials(final List<Credential> credentials) {
+		this.credentials = credentials;
+	}
+
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
 
 	public void setCoordinates(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
+	}
+
+	public void addCredential(final Credential credential) {
+		credentials.add(credential);
 	}
 }

@@ -29,6 +29,8 @@ import {useUserStore} from "@/main/vue/stores/users";
 import {useQuasar} from 'quasar'
 import router from "@/main/vue/router";
 import {useI18n} from "vue-i18n";
+import { useRoute } from "vue-router";
+
 
 export default {
   name: "Login",
@@ -39,6 +41,7 @@ export default {
     const userStore = useUserStore()
     const $q = useQuasar()
     const { t } = useI18n()
+    const r = useRoute();
 
     async function login() {
       await userStore.requestToken({eMail: eMail.value, password: password.value})
@@ -74,8 +77,11 @@ export default {
             }
           })
 
+
       if (userStore.authenticated === true) {
-        await router.push('/');
+        const redirect = r.query['redirect'];
+
+        await router.push(typeof redirect !== 'string' ? '/' : redirect);
       }
     }
 
