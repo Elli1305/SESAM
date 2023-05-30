@@ -5,24 +5,28 @@ import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.web.cmd.CategoryCmd;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
-@Secured("ADMINISTRATOR")
 public class CategoryController {
     private final CategoryService categoryService;
     private final CredentialService credentialService;
+    private final ExternalCredentialService externalCredentialService;
 
     @Autowired
-    public CategoryController(final CategoryService categoryService, CredentialService credentialService) {
+    public CategoryController(final CategoryService categoryService, CredentialService credentialService,
+                              ExternalCredentialService externalCredentialService) {
         this.categoryService = categoryService;
         this.credentialService = credentialService;
+        this.externalCredentialService = externalCredentialService;
     }
 
 
@@ -47,14 +51,10 @@ public class CategoryController {
         return cmd;
     }
 
-    /*@GetMapping("/credentialview/{id:\\d+}")
-    public Category getCategoryInfo(@PathVariable("id") final Long id) {
-        if (categoryService.getCategory(id).isPresent()) {
-            return categoryService.getCategory(id).get();
-        } else {
-            throw new CategoryNotFoundException("Category not found with ID:" + id);
-        }
-    }*/
+    @GetMapping("/externalcredentials")
+    public List<ExternalCredential> getExternalInfos() {
+        return externalCredentialService.getExternalCredentials();
+    }
 
     @GetMapping("/credentialview/{id}")
     public List<CredentialCmd> getCredentialInfos(@PathVariable("id") final Long id) {
@@ -76,5 +76,36 @@ public class CategoryController {
             credentialCmds.add(new CredentialCmd(catName,credentialName,external,issuerName,room));
         }
         return credentialCmds;
+    }
+
+    @DeleteMapping("/credentialmapping/{id}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCategory(@PathVariable("id") final String id) {
+        final Category category = categoryService.categoryGetById(Long.valueOf(id));
+        categoryService.deleteCategory(category);
+    }
+
+     /*
+    @PostMapping("/credentialmapping/{id}/edit")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateCategory(@PathVariable("id") @RequestBody final String id, CredentialCmd cmd) {
+        final Category category = categoryService.categoryGetById(Long.valueOf(id));
+        categoryService.updateCategory(category, cmd.getCategoryName(), cmd.getCredentialName(), cmd.getExternalCredential());
+    }*/
+
+
+    /*
+    @PostMapping("/externalcredential/{id}/edit")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateExternal(@PathVariable("id") @ResponseStatus final String id, ExternalCmd dm) {
+        final ExternalCredential externalCredential = externalCredentialService.findExternalById(Long.valueOf(id));
+        externalCredentialService.updateExternalCredential(externalCredential, cmd.getName(), cmd.getDefintionID());
+    }*/
+
+    @DeleteMapping("/externalcredential/{id}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteExternalCredential(@PathVariable("id") final String id) {
+        final ExternalCredential externalCredential = externalCredentialService.findExternalById(Long.valueOf(id));
+        externalCredentialService.deleteExternalCredential(externalCredential);
     }
 }

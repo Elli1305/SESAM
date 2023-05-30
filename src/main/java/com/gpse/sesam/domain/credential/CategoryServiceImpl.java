@@ -30,6 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id);
     }
 
+
     @Override
     public Optional<Category> getCategory(List<Location> locations) {
         return Optional.empty();
@@ -44,5 +45,23 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void saveAll(Iterable<Category> category) {
         categoryRepository.saveAll(category);
+    }
+
+    @Override
+    public void updateCategory(Category category, String name, List<ExternalCredential> externalCredential, List<Credential> credential) {
+        category.setName(name);
+        category.setCredentials(credential);
+        category.setExternalCredentials(externalCredential);
+        categoryRepository.save(category);
+    }
+
+    @Override
+    public void deleteCategory(Category category) {
+        categoryRepository.delete(category);
+    }
+
+    @Override
+    public Category categoryGetById(Long id) {
+        return categoryRepository.categoryFindById(id);
     }
 }

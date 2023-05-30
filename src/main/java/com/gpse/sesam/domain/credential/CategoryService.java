@@ -10,9 +10,17 @@ public interface CategoryService {
 
     Optional<Category> getCategory(Long id);
 
+
     Optional<Category> getCategory(List<Location> locations);
 
     void deleteAll();
 
     void saveAll(Iterable<Category> category);
+
+    public void updateCategory(Category category, String name, List<ExternalCredential> externalCredential, List<Credential> credential);
+
+    public void deleteCategory(final Category category);
+
+    Category categoryGetById(Long id);
+
 }

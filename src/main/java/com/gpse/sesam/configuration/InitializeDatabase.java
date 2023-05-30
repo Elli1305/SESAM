@@ -6,12 +6,8 @@ import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
-import com.gpse.sesam.web.cmd.CredentialCmd;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceContext;
-import org.hibernate.Session;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,16 +36,20 @@ public class InitializeDatabase implements InitializingBean {
     private final PasswordEncoder passwordEncoder;
 
     private final List<Location> locationsList = new ArrayList<>();
+    List<ExternalCredential> externalCredentials = new ArrayList<>();
+
+    private final ExternalCredentialService externalCredentialService;
 
     public InitializeDatabase(LocationService locationService, SesamUserService userService,
                               CredentialService credentialService,
-                              CategoryService categoryService, PasswordEncoder passwordEncoder) {
+                              CategoryService categoryService, PasswordEncoder passwordEncoder, ExternalCredentialService externalCredentialService) {
 		this.credentialService = credentialService;
 		this.categoryService = categoryService;
 		this.passwordEncoder = passwordEncoder;
 		this.locationService = locationService;
 		this.userService = userService;
-	}
+        this.externalCredentialService = externalCredentialService;
+    }
 
     @Override
     public void afterPropertiesSet() {
@@ -57,6 +57,7 @@ public class InitializeDatabase implements InitializingBean {
         locationService.deleteAll();
         credentialService.deleteAll();
         userService.deleteAll();
+        externalCredentialService.deleteAll();
 
         List<Location> locations = createLocations();
         List<SesamUser> users = createUsers();
@@ -68,6 +69,7 @@ public class InitializeDatabase implements InitializingBean {
         credentialService.saveAll(credentials);
         categoryService.saveAll(categories);
         locationService.saveAll(locationsList);
+        externalCredentialService.saveAll(externalCredentials);
     }
 
     private List<SesamUser> createUsers() {
@@ -302,10 +304,11 @@ public class InitializeDatabase implements InitializingBean {
                 issuers
         );
         credentials.add(safety);
-        List<ExternalCredential> externalCredentials = new ArrayList<>();
+
         ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-MEMBER");
 
         externalCredentials.add(safety3);
+
 
 
         //First-Aid-Credential
