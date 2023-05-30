@@ -1,0 +1,159 @@
+<template>
+  <q-dialog ref="dialog" @hide="onDialogHide">
+    <q-card class="q-dialog-plugin" style="width: 80em; max-width: fit-content">
+      <q-card-section class="q-pa-md">
+        <div class="text-h6">Tür zuweisen</div>
+        <div class="q-mt-md">
+          <q-select
+              filled
+              v-model="room"
+              use-input
+              hide-selected
+              label="Raum auswählen"
+              option-label="name"
+              fill-input
+              input-debounce="0"
+              :options="rooms"
+              @filter="filterFn"
+              style="width: 250px; padding-bottom: 32px"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  No results
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+        </div>
+        <div class="q-gutter-sm">
+          <div>
+            <q-select
+                filled
+                multiple
+                label="Credentials"
+                option-label="name"
+                hint="Werbung1"
+                :options="allCredentials"
+                v-model="credentials"
+                use-chips
+            >
+            </q-select>
+          </div>
+          <div class="row q-gutter-sm no-margin" style="justify-content: center; min-width: 60em">
+            <q-select
+                filled
+                multiple
+                class="col"
+                label="Credentials für Und"
+                option-label="name"
+                hint="Werbung2"
+                :options="credentials"
+                v-model="credAnd"
+                use-chips
+            >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+            <q-select
+                filled
+                multiple
+                class="col"
+                label="Credentials für Oder"
+                option-label="name"
+                hint="Werbung3"
+                :options="credentials"
+                v-model="credOr"
+                use-chips
+            >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+          <div class="row" v-for="cred in credentials">
+            <q-toolbar class="bg-primary text-white shadow-2">
+              <q-toolbar-title>{{cred.name}}</q-toolbar-title>
+            </q-toolbar>
+            <q-list>
+
+            </q-list>
+          </div>
+
+
+        </div>
+
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn color="primary" label="Abbrechen" @click="onCancelClick"/>
+        <q-btn color="primary" label="Speichern" @click="onOKClick"/>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+</template>
+
+<script>
+import {useFloorStore} from "@/main/vue/stores/floor";
+import {ref} from "vue";
+import {useCredentialStore} from "@/main/vue/stores/credential";
+
+export default {
+  props: {
+    rooms: {
+      required: true
+    }
+  },
+
+  emits: [
+    'ok', 'hide'
+  ],
+
+  methods: {
+    show() {
+      console.log(this.$refs)
+      this.$refs.dialog.show()
+    },
+    hide() {
+      this.$refs.dialog.hide()
+    },
+    onDialogHide() {
+      this.$emit('hide')
+    },
+
+    onOKClick() {
+      this.$emit('ok', this.room)
+      this.hide()
+    },
+    onCancelClick() {
+      this.hide()
+    }
+  },
+  setup(props) {
+    const room = ref(null)
+    const roomOptions = ref(props.rooms)
+    const credentialStore = useCredentialStore()
+    credentialStore.getAllCredentials()
+    const allCredentials = credentialStore.allCredentials
+    const credentials = ref()
+    const credOr = ref()
+    const credAnd = ref()
+    const filterFn = function (val, update, abort) {
+      update(() => {
+        const needle = val.toLowerCase()
+        roomOptions.value = props.rooms.filter(room => room.name.toLowerCase().indexOf(needle) > -1)
+      })
+    }
+
+    return {room, allCredentials, credentials, credOr, credAnd, filterFn}
+  }
+}
+</script>

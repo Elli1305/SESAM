@@ -20,7 +20,7 @@ import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import {storeToRefs} from "pinia";
 import {watch} from "vue";
 import {useQuasar} from "quasar";
-import SelectRoom from "@/main/vue/views/SelectRoom.vue";
+import CreateDoor from "@/main/vue/views/CreateDoor.vue";
 import {useRoomStore} from "@/main/vue/stores/room";
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
@@ -149,7 +149,7 @@ export default {
         })
       } else if (e.shape === 'Line' || e.shape === 'Polyline') {
         $q.dialog({
-          component: SelectRoom,
+          component: CreateDoor,
           componentProps: {
             rooms: this.floorPlanStore.rooms
           }
