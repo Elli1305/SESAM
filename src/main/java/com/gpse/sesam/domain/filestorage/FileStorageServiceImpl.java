@@ -13,68 +13,72 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
-    private final Path fileStorageLocation;
+	private final Path fileStorageLocation;
 
-    public FileStorageServiceImpl(final FileStorageConfiguration fileStorageConfiguration) {
-        this.fileStorageLocation = Paths.get(fileStorageConfiguration.getBaseDir()).normalize();
-        try {
-            Files.createDirectories(fileStorageLocation);
-        } catch (IOException e) {
-            throw new BeanCreationException("Could not initialize file storage", e);
-        }
-    }
+	public FileStorageServiceImpl(final FileStorageConfiguration fileStorageConfiguration) {
+		fileStorageLocation = Paths.get(fileStorageConfiguration.getBaseDir()).normalize();
+		try {
+			Files.createDirectories(fileStorageLocation);
+		} catch (final IOException e) {
+			throw new BeanCreationException("Could not initialize file storage", e);
+		}
+	}
 
-    @Override
-    public String storeFile(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        try {
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
-        } catch (IOException e) {
-            throw new FileStorageException("Could not store file " + fileName, e);
-        }
-    }
+	@Override
+	public String storeFile(final MultipartFile file) {
+		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		try {
 
-    @Override
-    public String storeLogo(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        try {
-            Path targetLocation = this.fileStorageLocation.resolve("Logo.svg");
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
-        } catch (IOException e) {
-            throw new FileStorageException("Could not store file " + fileName, e);
-        }
-    }
+			final String randomFileName = String.format("%s.%s",
+					UUID.randomUUID().toString().replace("-", ""), fileName.split("\\.")[1]);
+			final Path targetLocation = fileStorageLocation.resolve(randomFileName);
+			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+			return randomFileName;
+		} catch (final IOException e) {
+			throw new FileStorageException("Could not store file " + fileName, e);
+		}
+	}
 
-    @Override
-    public String storeFavicon(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        try {
-            Path targetLocation = this.fileStorageLocation.resolve("Favicon.ico");
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
-        } catch (IOException e) {
-            throw new FileStorageException("Could not store file " + fileName, e);
-        }
-    }
+	@Override
+	public String storeLogo(final MultipartFile file) {
+		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		try {
+			final Path targetLocation = fileStorageLocation.resolve("Logo.svg");
+			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+			return fileName;
+		} catch (final IOException e) {
+			throw new FileStorageException("Could not store file " + fileName, e);
+		}
+	}
 
-    @Override
-    public void reset() {
-        try (InputStream logoFile = Files.newInputStream(this.fileStorageLocation.resolve("T_logo_white.svg"));
-             InputStream faviconFile = Files.newInputStream(this.fileStorageLocation.resolve("T_favicon.ico"))) {
-            Path logoLocation = this.fileStorageLocation.resolve("Logo.svg");
-            Path faviconLocation = this.fileStorageLocation.resolve("Favicon.ico");
-            Files.copy(logoFile, logoLocation, StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(faviconFile, faviconLocation, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new FileStorageException("Could not reset resources", e);
-        }
-    }
+	@Override
+	public String storeFavicon(final MultipartFile file) {
+		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		try {
+			final Path targetLocation = fileStorageLocation.resolve("Favicon.ico");
+			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+			return fileName;
+		} catch (final IOException e) {
+			throw new FileStorageException("Could not store file " + fileName, e);
+		}
+	}
+
+	@Override
+	public void reset() {
+		try (final InputStream logoFile = Files.newInputStream(fileStorageLocation.resolve("T_logo_white.svg"));
+			 final InputStream faviconFile = Files.newInputStream(fileStorageLocation.resolve("T_favicon.ico"))) {
+			final Path logoLocation = fileStorageLocation.resolve("Logo.svg");
+			final Path faviconLocation = fileStorageLocation.resolve("Favicon.ico");
+			Files.copy(logoFile, logoLocation, StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(faviconFile, faviconLocation, StandardCopyOption.REPLACE_EXISTING);
+		} catch (final IOException e) {
+			throw new FileStorageException("Could not reset resources", e);
+		}
+	}
 
 }

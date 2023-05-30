@@ -15,7 +15,6 @@ export const useUserStore = defineStore('users', () => {
     const editUser: Ref<User | null> = ref(null)
 
 
-
     if (sessionStorage.getItem("users")) {
         const state = JSON.parse((sessionStorage.getItem("users") || ''));
         authenticated.value = state.authenticated;
@@ -120,7 +119,9 @@ export const useUserStore = defineStore('users', () => {
                 lastName: lastname,
                 username: mail,
                 roles: roles,
-            }).then(_ => resolve())
+            }).then(_ => {
+                resolve()
+            })
                 .catch(reject);
         });
     }

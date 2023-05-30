@@ -13,14 +13,25 @@
           v-for="(location,i) in locationStore.allLocations"
           :header-inset-level="0"
           :default-opened="i===0"
-          :default-closed="i!==1">
+          :default-closed="i!==1"
+          class="show-location">
         <template v-slot:header>
           <q-item-section>
             {{ location.name }}
           </q-item-section>
           <q-item-section side>
-            <q-icon name="edit" @click.stop="editLocation(location)" v-ripple
-                    style="border-radius: 50%; display: flex; width: 33px; height: 33px"/>
+            <q-btn round @click.stop icon="more_vert" flat class="edit-menu-location">
+              <q-menu>
+                <q-list style="min-width: 100px">
+                  <q-item clickable @click.stop="editLocation(location)" v-close-popup>
+                    <q-item-section>Standort bearbeiten</q-item-section>
+                  </q-item>
+                  <q-item clickable @click.stop="addBuilding(location)" v-close-popup>
+                    <q-item-section>Gebäude hinzufügen</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
           </q-item-section>
         </template>
         <q-expansion-item
@@ -29,26 +40,50 @@
             :header-inset-level="1"
             :default-opened="i===0"
             :default-closed="i!==1"
-            default-closed>
+            default-closed
+            class="show-building"
+        >
+
           <template v-slot:header>
             <q-item-section>
               {{ building.name }}
             </q-item-section>
             <q-item-section side>
-              <q-icon name="edit" @click.stop="editBuilding(building)" v-ripple
-                      style="border-radius: 50%; display: flex; width: 33px; height: 33px"/>
+              <q-btn round @click.stop icon="more_vert" flat class="edit-menu-building">
+                <q-menu class="show-building">
+                  <q-list style="min-width: 100px">
+                    <q-item clickable @click.stop="editBuilding(building)" v-close-popup>
+                      <q-item-section>Gebäude bearbeiten</q-item-section>
+                    </q-item>
+                    <q-item clickable @click.stop="addFloor(building)" v-close-popup>
+                      <q-item-section>Etage hinzufügen</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
             </q-item-section>
           </template>
           <q-item clickable v-ripple v-for="(floor,i) in building.floors" :inset-level="2"
-                  @click="changeFloorPlan(floor)" :active="floorPlanStore.selectedFloorId === floor.id">
+                  @click="changeFloorPlan(floor)" :active="floorPlanStore.selectedFloorId === floor.id" class="show">
             <q-item-section>{{ floor.floorLevel === 0 ? "Erdgeschoss" : "Etage " + floor.floorLevel }}</q-item-section>
+
             <q-item-section side>
-              <q-icon name="edit" @click.stop="editFloor(floor)" v-ripple
-                      style="border-radius: 50%; display: flex; width: 33px; height: 33px"/>
+              <q-btn round icon="more_vert" @click.stop flat class="edit-menu">
+                <q-menu>
+                  <q-list style="min-width: 100px">
+                    <q-item clickable @click.stop="editFloor(floor)" v-close-popup>
+                      <q-item-section>Etage bearbeiten</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
             </q-item-section>
           </q-item>
         </q-expansion-item>
       </q-expansion-item>
+      <q-item>
+        <q-btn color="primary" icon="add" label="Standort hinzufügen" @click="addLocation" flat/>
+      </q-item>
     </q-list>
     <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
       <q-btn
@@ -92,6 +127,7 @@ import EditLocation from "@/main/vue/views/EditLocation.vue";
 import EditBuilding from "@/main/vue/views/EditBuilding.vue";
 import EditFloor from "@/main/vue/views/EditFloor.vue";
 import FloorPlanRoomList from "@/main/vue/views/FloorPlanRoomList.vue";
+import {useBuildingStore} from "@/main/vue/stores/buildings";
 
 
 export default {
@@ -101,6 +137,7 @@ export default {
   setup() {
     const locationStore = useLocationStore()
     const floorPlanStore = useFloorPlanStore()
+    const buildingStore = useBuildingStore()
     let show = ref(true)
     const $q = useQuasar()
     const {t} = useI18n()
@@ -126,6 +163,22 @@ export default {
       })
     }
 
+    const addLocation = function () {
+      $q.dialog({
+        component: EditLocation,
+        componentProps: {
+          location: {}
+        }
+      }).onOk(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Standort wurde erfolgreich hizugefügt',
+          position: 'bottom',
+          timeout: 3000,
+        });
+      })
+    }
+
     const editBuilding = function (building: Building) {
       $q.dialog({
         component: EditBuilding,
@@ -135,10 +188,29 @@ export default {
       }).onOk(() => {
         $q.notify({
           type: 'positive',
-          message: 'Gebäude wurde erfolgreich gespeichert',
+          message: 'Gebäude wurde erfolgreich hizugefügt',
           position: 'bottom',
           timeout: 3000,
         });
+      })
+    }
+
+    const addBuilding = function (location: Location) {
+      $q.dialog({
+        component: EditBuilding,
+        componentProps: {
+          building: {}
+        }
+      }).onOk((building) => {
+        location.buildings.push(building)
+        locationStore.save(location).then(() => {
+          $q.notify({
+            type: 'positive',
+            message: 'Gebäude wurde erfolgreich gespeichert',
+            position: 'bottom',
+            timeout: 3000,
+          });
+        })
       })
     }
 
@@ -158,12 +230,80 @@ export default {
       })
     }
 
+    const addFloor = function (building: Building) {
+      $q.dialog({
+        component: EditFloor,
+        componentProps: {
+          floor: {}
+        }
+      }).onOk((floor) => {
+        building.floors.push(floor)
+        buildingStore.save(building).then(_ => {
+          $q.notify({
+            type: 'positive',
+            message: 'Etage wurde erfolgreich hizugefügt',
+            position: 'bottom',
+            timeout: 3000,
+          });
+        })
+      })
+    }
+
     locationStore.getLocations().then((res: Location[]) => {
       changeFloorPlan(res[0].buildings[0].floors[0])
     })
 
 
-    return {show, t, locationStore, changeFloorPlan, editLocation, editBuilding, editFloor, floorPlanStore}
+    return {
+      show,
+      t,
+      locationStore,
+      changeFloorPlan,
+      editLocation,
+      editBuilding,
+      editFloor,
+      floorPlanStore,
+      addFloor,
+      addBuilding,
+      addLocation
+    }
   }
 }
 </script>
+<style>
+.show .edit-menu {
+  visibility: hidden;
+  opacity: 0;
+  transition: .3s;
+}
+
+.show:hover .edit-menu {
+  visibility: visible;
+  opacity: 1;
+  transition: .3s;
+}
+
+.show-building .edit-menu-building {
+  visibility: hidden;
+  opacity: 0;
+  transition: .3s;
+}
+
+.show-building:hover .edit-menu-building {
+  visibility: visible;
+  opacity: 1;
+  transition: .3s;
+}
+
+.show-location .edit-menu-location {
+  visibility: hidden;
+  opacity: 0;
+  transition: .3s;
+}
+
+.show-location:hover .edit-menu-location {
+  visibility: visible;
+  opacity: 1;
+  transition: .3s;
+}
+</style>

@@ -55,7 +55,7 @@ class BuildingServiceImplTest {
 
 	@Test
 	void saveShouldCallRepositoryWithCorrectArguments() {
-		Building building = new Building("Test", Collections.emptyList());
+		final Building building = new Building("Test");
 
 		buildingService.save(building);
 
