@@ -207,6 +207,7 @@ import {useI18n} from "vue-i18n";
 import {useQuasar} from "quasar";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {prop} from "vue-class-component";
+import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 
 const columns = [
     {
@@ -250,11 +251,14 @@ export default {
         const {t} = useI18n();
         const $q = useQuasar();
         const locationStore = useLocationStore()
+        const roomGroupStore = useRoomGroupStore()
         let optionsLocations = ref([])
         let editGroupName = ref(null);
         let editGroupRooms = ref(null);
         let locationList = [];
         let locationListNames = [];
+        let roomGroupList = [];
+        let roomGroupListNames = [];
         let buildingList = ref([]);
         let buildingListNames = ref([]);
         let buildingListForFilter=ref([]);
@@ -267,19 +271,32 @@ export default {
                 for (const loc of locations) {
                     locationList.push(loc);
                 }
-                for(const loc of locationList) {
+                for (const loc of locationList) {
                     locationListNames.push(loc.name);
                 }
                 optionsLocations.value = locationList;
             })
             console.log("Locations");
             console.log(optionsLocations.value);
-            if(optionsLocations.value !== null) {
+            if (optionsLocations.value !== null) {
                 modelForLocation.value = optionsLocations.value[0].name;
                 adjustBuildingList(modelForLocation.value);
             }
-
         }
+        async function loadRoomGroups() {
+            await roomGroupStore.getRoomGroups().then(() => {
+                console.log(roomGroupStore.allRoomGroups);
+                for (const roomG of roomGroupStore.allRoomGroups) {
+                    roomGroupList.push(roomG);
+                }
+                console.log("hier");
+                for (const roomG of roomGroupStore.allRoomGroups) {
+                    //roomGroupListNames.push(roomG.name);
+                }
+                console.log(roomGroupList);
+            })
+        }
+        loadRoomGroups();
 
         loadLocations();
 
@@ -342,6 +359,7 @@ export default {
             modelRoomsNew: ref(editGroupRooms.value),
             checkName,
             loadLocations,
+            loadRoomGroups,
             locationList,
             buildingListNames,
             toDefault,
