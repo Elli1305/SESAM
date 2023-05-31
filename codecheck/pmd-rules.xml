@@ -2,7 +2,7 @@
 <ruleset name="GSE-PMD-Rules"
          xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd ">
     <description>
         PMD-rules for GSE
     </description>
@@ -79,7 +79,7 @@
     <rule ref="category/java/codestyle.xml/ClassNamingConventions">
         <priority>5</priority>
         <properties>
-            <property name="utilityClassPattern" value="[A-Z][a-zA-Z]+(s|Utils?|Helper|Singleton)"/>
+            <property name="utilityClassPattern" value="[A-Z][a-zA-Z]+(s|Utils?|Helper|Singleton|Parser)"/>
         </properties>
     </rule>
     <!--Allow more static imports - especially for tests-->

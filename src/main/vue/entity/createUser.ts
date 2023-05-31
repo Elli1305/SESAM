@@ -6,4 +6,4 @@ export interface CreateUser {
     requestedRoles: AttainableRole[];
 }
 
-export type AttainableRole = 'ADMINISTRATOR' | 'EDITOR' | 'ISSUER';
+export enum AttainableRole { ADMINISTRATOR = 'ADMINISTRATOR', EDITOR = 'EDITOR', ISSUER = 'ISSUER'}

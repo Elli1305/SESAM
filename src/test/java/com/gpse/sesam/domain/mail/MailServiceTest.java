@@ -68,7 +68,7 @@ class MailServiceTest {
 		String to = "to";
 		String from = "from";
 
-		mailService.send(from, to, subject, text);
+		mailService.send(new MailInformation(from, to, subject, text));
 
 		verify(taskExecutor).execute(runnableArgumentCaptor.capture());
 		runnableArgumentCaptor.getValue().run();
@@ -94,7 +94,7 @@ class MailServiceTest {
 
 		doThrow(new MailSendException("Test")).when(mailSender).send(isA(SimpleMailMessage.class));
 
-		mailService.send(from, to, subject, text);
+		mailService.send(new MailInformation(from, to, subject, text));
 
 		verify(taskExecutor).execute(runnableArgumentCaptor.capture());
 		runnableArgumentCaptor.getValue().run();

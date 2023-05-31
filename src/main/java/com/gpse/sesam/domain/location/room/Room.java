@@ -1,13 +1,18 @@
-package com.gpse.sesam.domain.location;
+package com.gpse.sesam.domain.location.room;
 
+import com.gpse.sesam.domain.location.Coordinate;
+import com.gpse.sesam.domain.location.door.Door;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,22 +25,22 @@ public class Room {
 	@Column
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Door> doors;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "ROOM_ID")
+	private List<Door> doors = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<Coordinate> coordinates;
+	private List<Coordinate> coordinates = new ArrayList<>();
 
 	protected Room() {
 
 	}
 
-	public Room(String name, List<Door> doors) {
+	public Room(final String name) {
 		this.name = name;
-		this.doors = doors;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -47,7 +52,7 @@ public class Room {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -55,7 +60,7 @@ public class Room {
 		return doors;
 	}
 
-	public void setDoors(List<Door> doors) {
+	public void setDoors(final List<Door> doors) {
 		this.doors = doors;
 	}
 
@@ -63,7 +68,11 @@ public class Room {
 		return coordinates;
 	}
 
-	public void setCoordinates(List<Coordinate> coordinates) {
+	public void setCoordinates(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
+	}
+
+	public void addDoor(final Door door) {
+		doors.add(door);
 	}
 }

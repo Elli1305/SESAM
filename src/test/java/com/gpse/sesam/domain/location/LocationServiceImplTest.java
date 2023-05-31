@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.location;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,27 +51,16 @@ class LocationServiceImplTest {
 		when(locationRepository.findAll()).thenReturn(Collections.singletonList(new Location()));
 
 		// act
-		List<Location> locations = locationService.getLocations();
+		final List<Location> locations = locationService.getLocations();
 
 		// assert
 		assertThat(locations.size(), is(1));
 	}
 
-
-	@Test
-	void deleteAllShouldCallRepository() {
-		//arrange
-		// act
-		locationService.deleteAll();
-
-		// assert
-		verify(locationRepository).deleteAll();
-	}
-
 	@Test
 	void saveAllShouldCallRepositoryWithCorrectArguments() {
 		// arrange
-		List<Location> locations = Collections.singletonList(new Location());
+		final List<Location> locations = Collections.singletonList(new Location());
 
 		// act
 		locationService.saveAll(locations);
@@ -82,9 +72,31 @@ class LocationServiceImplTest {
 	}
 
 	@Test
+	void saveShouldCallRepositoryWithCorrectArguments() {
+		final Location location = new Location("Test");
+
+		when(locationRepository.save(location)).thenReturn(location);
+
+		final Location savedLocation = locationService.save(location);
+
+		assertThat(savedLocation.getName(), is(location.getName()));
+		assertThat(savedLocation.getBuildings(), is(location.getBuildings()));
+
+	}
+
+	@Test
+	void deleteShouldCallRepositoryWithCorrectArguments() {
+		locationService.deleteById(1L);
+
+		verify(locationRepository).deleteById(idCaptor.capture());
+		assertThat(idCaptor.getValue(), Matchers.is(1L));
+	}
+
+
+	@Test
 	void getLocationShouldCallRepositoryWithCorrectArguments() {
 		// arrange
-		long id = 1;
+		final long id = 1;
 
 		// act
 		locationService.getLocation(id);

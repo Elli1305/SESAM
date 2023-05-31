@@ -2,9 +2,9 @@ import {defineStore} from 'pinia'
 import {Ref, ref} from 'vue'
 import api from '../api'
 import {AttainableRole} from "@/main/vue/entity/createUser"
-import axios from "axios";
-import {Credentials} from "@/main/vue/entity/credentials"
-import {User} from "@/main/vue/entity/loginResponse"
+import axios from 'axios';
+import {User} from "@/main/vue/entity/loginResponse";
+import {LoginData} from "@/main/vue/entity/loginData"
 
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
@@ -59,7 +59,7 @@ export const useUserStore = defineStore('users', () => {
         validEmail.value = email.match(emailRegex)
     }
 
-    function requestToken(credentials: Credentials): Promise<void> {
+    function requestToken(credentials: LoginData): Promise<void> {
         return new Promise((resolve, reject) => {
             api.auth.login(credentials).then((res) => {
                 authenticate(res.data.token)
@@ -112,18 +112,21 @@ export const useUserStore = defineStore('users', () => {
         })
     }
 
-    function saveEdits(prename: string, lastname: string, mail: string, roles: []){
+    function saveEdits(prename: string, lastname: string, mail: string, roles: []) {
         return new Promise<void>((resolve, reject) => {
             api.auth.editUser({
                 firstName: prename,
                 lastName: lastname,
                 username: mail,
                 roles: roles,
-            }).then(_ => resolve())
+            }).then(_ => {
+                resolve()
+            })
                 .catch(reject);
         });
     }
-    function deleteUser(mail:string) {
+
+    function deleteUser(mail: string) {
         new Promise<void>((resolve, reject) => {
             api.auth.deleteUser(mail).then(_ => resolve())
                 .catch(reject);

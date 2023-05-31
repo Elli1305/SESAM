@@ -1,10 +1,10 @@
 import {defineStore} from "pinia";
 import {Ref, ref} from "vue";
-import {Floor, Room} from "@/main/vue/entity/location";
+import {Room} from "@/main/vue/entity/location";
 
 export const useFloorPlanStore = defineStore('floorPlan', () => {
     const selectedFloorPlan: Ref<String> = ref('')
-    const selectedFloorId: Ref<Number> = ref(0)
+    const selectedFloorId: Ref<BigInt> = ref(BigInt(0))
     const rooms: Ref<Room[]> = ref([])
     const selectedRooms = ref([])
 
@@ -14,6 +14,7 @@ export const useFloorPlanStore = defineStore('floorPlan', () => {
         selectedFloorPlan.value = state.selectedFloorPlan;
         rooms.value = state.rooms;
     }
+
 
     return {selectedFloorPlan, selectedFloorId, rooms, selectedRooms}
 })

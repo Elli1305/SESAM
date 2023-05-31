@@ -7,7 +7,7 @@
       <q-item-label
           header
           class="text-grey-8">
-        Locations
+        {{ t('floorplan.locations') }}
       </q-item-label>
       <Node
           v-for="node in locationTreeStructure"
@@ -48,6 +48,7 @@ import {useLocationStore} from "@/main/vue/stores/locations";
 import Node from "@/main/vue/views/Node.vue";
 import {ref} from "vue";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
+import {useI18n} from "vue-i18n";
 
 
 export default {
@@ -58,6 +59,7 @@ export default {
     const floorPlanStore = useFloorPlanStore()
     let locationTreeStructure = ref([])
     let show = ref(true)
+    const {t} = useI18n()
 
     function getParentIDs(locations, selectFloorId) {
       for (const location of locations) {
@@ -83,31 +85,12 @@ export default {
           } else {
             ({locationId, buildingId} = getParentIDs(locations, floorPlanStore.selectedFloorId));
           }
-
-          locationTreeStructure.value = locations.map((location) => ({
-            id: location.id,
-            title: location.name,
-            level: 0,
-            expanded: location.id === locationId,
-            children: location.buildings.map((building) => ({
-              id: building.id,
-              title: building.name,
-              level: 1,
-              expanded: building.id === buildingId,
-              children: building.floors.map(floor => ({
-                id: floor.id,
-                level: 2,
-                floorPlan: floor.floorPlanPath,
-                title: "Etage " + floor.floorLevel,
-                rooms: floor.rooms
-              }))
-            }))
-          }))
+          locationTreeStructure.value = locationStore.getLocationTreeStructure(locationId, buildingId);
         }
     )
 
 
-    return {locationTreeStructure, show}
+    return {locationTreeStructure, show, t}
   }
 }
 </script>
