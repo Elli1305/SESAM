@@ -33,7 +33,8 @@ public class FloorController {
 	@PostMapping(path = "/uploadImage", consumes = {MediaType.APPLICATION_OCTET_STREAM_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
-	public Floor save(final String floor, @RequestPart("file") final MultipartFile file) throws JsonProcessingException {
+	public Floor save(final String floor,
+					  @RequestPart("file") final MultipartFile file) throws JsonProcessingException {
 		return floorService.save(new ObjectMapper().readValue(floor, Floor.class), file);
 	}
 
