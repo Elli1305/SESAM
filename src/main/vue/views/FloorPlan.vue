@@ -188,9 +188,9 @@ export default {
           componentProps: {
             rooms: this.floorPlanStore.rooms
           }
-        }).onOk((room) => {
+        }).onOk(({room, doorName}) => {
           room.doors.push({
-            name: 'door',
+            name: doorName,
             coordinates: e.layer._latlngs.map((latLng) => ({
                   lat: latLng.lat,
                   lng: latLng.lng
