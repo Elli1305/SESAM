@@ -17,6 +17,7 @@ import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.RoomGroups;
+import com.gpse.sesam.domain.location.RoomGroupService;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.floor.Floor;
@@ -86,7 +87,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<Credential> credentials = createCredentials();
 		final List<Category> categories = createCredentialCategories();
 		final List<Colors> colors = createColors();
-		final List<RoomGroups> roomGroups = roomGroups(locations);
 
 		colorsService.saveAll(colors);
 		locationService.saveAll(locations);
@@ -94,6 +94,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		credentialService.saveAll(credentials);
 		locationService.saveAll(locationsList);
 		categoryService.saveAll(categories);
+		final List<RoomGroups> roomGroups = roomGroups(locations);
 		roomGroupService.saveAll(roomGroups);
 	}
 
@@ -363,12 +364,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		issuerRole10.setGranted(true);
 		final Room room = new Room("0.007");
 		final Room room2 = new Room("0.112");
-
-
 		final List<Issuer> issuers = new ArrayList<>();
 		final Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
 				Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
-
 		final Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann",
 				"Hombach", Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
 		issuers.add(issuer1);
@@ -390,7 +388,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 		externalCredentials.add(safety3);
 
-
 		//First-Aid-Credential
 		final List<Issuer> issuers2 = new ArrayList<>();
 		issuers2.add(issuer1);
@@ -411,7 +408,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		form6.add(lastName6);
 		form6.add(birthDate6);
 		form6.add(date6);
-
 
 		final List<Credential> credentials2 = new ArrayList<>();
 		final Credential firstAid = new Credential(
@@ -458,49 +454,31 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 		final Building building3 = new Building("Citec");
 		building3.addFloor(floor3);
-
 		final List<Building> buildingList = new ArrayList<>();
-
 		buildingList.add(building3);
-
 		final Location location = new Location("Hamburg");
 		location.addBuilding(building3);
-
 		final Door door4 = new Door("Tor1506", null);
 		door4.addCredential(firstAid);
-
 		final List<Door> doors4 = new ArrayList<>();
-
 		doors4.add(door4);
-
 		final Room room4 = new Room("0.150");
 		room4.addDoor(door4);
-
 		final List<Room> roomList2 = new ArrayList<>();
-
 		roomList2.add(room4);
-
 		final Floor floor4 = new Floor(1, "/citec-gebaeudeplan.png");
 		floor4.addRoom(room4);
-
 		final List<Floor> floorList2 = new ArrayList<>();
-
 		floorList2.add(floor4);
-
 		final Building building4 = new Building("Citec2");
-
 		final List<Building> buildingList2 = new ArrayList<>();
 		building4.addFloor(floor4);
-
 		buildingList2.add(building4);
-
 		final Location location2 = new Location("Bremen");
 		location2.addBuilding(building4);
 		locationsList.add(location);
 		locationsList.add(location2);
-
 		// Category
-
 		final List<Category> categories = new ArrayList<>();
 		final Category category = new Category("Sicherheitsbelehrung", externalCredentials);
 		category.addCredential(safety);
@@ -514,9 +492,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		credentialCmdService.saveAll(credentialCmds);
 		categories.add(category);
 		categories.add(category2);
-
 		return categories;
 	}
+
 
 
 	private String readJsonFile() {

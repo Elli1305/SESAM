@@ -1,5 +1,7 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.domain.location.building.Building;
+import com.gpse.sesam.domain.location.room.Room;
 
 import jakarta.persistence.*;
 
@@ -17,11 +19,11 @@ public class RoomGroups {
     private String name;
 
     @Column
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.MERGE)
     private List<Room> rooms;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Building building;
 
     protected RoomGroups() {
