@@ -6,16 +6,15 @@ import com.gpse.sesam.domain.credential.Credential;
 import com.gpse.sesam.domain.credential.CredentialService;
 import com.gpse.sesam.domain.credential.*;
 import com.gpse.sesam.domain.user.Issuer;
+import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.web.cmd.CategoryCmd;
+import com.gpse.sesam.web.cmd.CategoryResponseCmd;
 import com.gpse.sesam.web.cmd.CredentialCmd;
+import com.gpse.sesam.web.cmd.SesamUserCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,7 @@ public class CategoryController {
 		List<Category> categories = categoryService.getCategory();
         List<CategoryCmd> cmd = new ArrayList<>();
         for (Category category : categories) {
+            Long id = category.getId();
             String name = category.getName();
             List<String> credentials = new ArrayList<>();
             List<String> externalcredentials = new ArrayList<>();
@@ -54,7 +54,7 @@ public class CategoryController {
             for (ExternalCredential externalCredential: category.getExternalCredentials()) {
                 externalcredentials.add(externalCredential.getName());
             }
-            cmd.add(new CategoryCmd(name, credentials, externalcredentials));
+            cmd.add(new CategoryCmd(id, name, credentials, externalcredentials));
         }
         return cmd;
     }
@@ -65,12 +65,11 @@ public class CategoryController {
     }
 
 
-    /*
-    @DeleteMapping("/credentialmapping/{id}/delete")
+
+    @DeleteMapping("/credentialmapping/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCategory(@PathVariable("id") final String id) {
-        final Category category = categoryService.categoryGetById(Long.valueOf(id));
-        categoryService.deleteCategory(category);
+        categoryService.deleteCategoryById(Long.valueOf(id));
     }
 
      /*
@@ -97,4 +96,11 @@ public class CategoryController {
         final ExternalCredential externalCredential = externalCredentialService.findExternalById(Long.valueOf(id));
         externalCredentialService.deleteExternalCredential(externalCredential);
     }*/
+
+    @PostMapping("/category")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createCategory(@RequestBody final CategoryResponseCmd category) {
+        categoryService.createCategory(category);
+    }
+
 }

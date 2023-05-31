@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.credential;
 
 import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.web.cmd.CategoryResponseCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +62,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category categoryGetById(Long id) {
-        return categoryRepository.categoryFindById(id);
+    public void deleteCategoryById(Long id) {
+        categoryRepository.deleteCategoryById(id);
     }
+
+    @Override
+    public void createCategory(CategoryResponseCmd categoryCmd) {
+        final Category category = new Category(categoryCmd.getName(), categoryCmd.getExternalCredentials());
+        category.setCredentials(categoryCmd.getCredentials());
+
+        categoryRepository.save(category);
+    }
+
+
 }

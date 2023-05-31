@@ -6,11 +6,14 @@ import jdk.jfr.Category;
 import java.util.List;
 
 public class CategoryCmd {
+
+    Long id;
     String name;
     List<String> credentials;
     List<String> externalCredentials;
 
-    public CategoryCmd(String name, List<String> credentials, List<String> externalCredentials) {
+    public CategoryCmd(Long id, String name, List<String> credentials, List<String> externalCredentials) {
+        this.id = id;
         this.name = name;
         this.credentials = credentials;
         this.externalCredentials = externalCredentials;
@@ -34,6 +37,14 @@ public class CategoryCmd {
 
     public List<String> getCredentials() {
         return credentials;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public List<String> getExternalCredentials() {
