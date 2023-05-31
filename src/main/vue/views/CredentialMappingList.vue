@@ -13,6 +13,8 @@
           row-key="name"
           :separator="'cell'"
           :filter="filter"
+          visible-columns="['category', 'credential', 'externalCredential', 'actions']"
+          :row-key="row => row.id"
       >
         <template v-slot:top-right>
           <div style="padding-right: 1em">
@@ -46,7 +48,7 @@
 
       <q-card-actions align="evenly" class="text-primary">
         <q-btn flat v-close-popup> Cancel</q-btn>
-        <q-btn flat v-close-popup> Save </q-btn>
+        <q-btn flat v-close-popup @click="deleteCategory"> Save </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -71,7 +73,9 @@
             multiple
             label="Interne Credentials"
             emit-value
-            :options="options"
+            :options="credentialStore.allCredentials"
+            option-label="name"
+            options-cover
         ></q-select>
       </div>
       <div style="float: left; width: 20em; padding-top: 2em">
@@ -81,13 +85,15 @@
             multiple
             label="Externe Credentials"
             emit-value
-            :options="options2"
+            :options="credentialStore.external"
+            option-label="name"
+            options-cover
         ></q-select>
       </div>
       </q-card-section>
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup> Cancel</q-btn>
-        <q-btn flat v-close-popup> Save </q-btn>
+        <q-btn flat v-close-popup @click="createCategory"> Save </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -107,21 +113,23 @@
         <div style="float: right; width: 20em; padding-top: 2em ; padding-left: 2em">
           <q-select
               filled
-              v-model="model"
               multiple
               label="Interne Credentials"
               emit-value
-              :options="options"
+              :options="credentialStore.allCredentials"
+              option-label="name"
+              options-cover
           ></q-select>
         </div>
         <div style="float: left; width: 20em; padding-top: 2em">
           <q-select
               filled
-              v-model="model2"
               multiple
               label="Externe Credentials"
               emit-value
-              :options="options2"
+              :options="credentialStore.external"
+              option-label="name"
+              options-cover
           ></q-select>
         </div>
       </q-card-section>
@@ -140,6 +148,7 @@ import {useI18n} from "vue-i18n";
 import {useRouter} from 'vue-router'
 
 const columns = [
+  { name: 'id', required: true, label: 'Id', align: 'center', field: row => row.name, sortable: true },
   { name: 'category', required: true, label: 'Kategorie', align: 'center', field: row => row.name, sortable: true },
   { name: 'credential', align: 'center', label: "Credential (intern)", field: row => row.credentials,  format: (val, row) => val.join(', '), sortable: true},
   { name: 'externalCredential', align: 'center', label: 'Credential (extern)', field: row => row.externalCredentials, format: (val, row) => val.join(', '), sortable: true},
@@ -153,25 +162,47 @@ rows.value = []
 export default {
   name: "CredentialMappingList",
   setup() {
+    const model = ref([])
+    const model2 = ref([])
+    const address = ref('')
     const credentialStore = useCredentialStore()
 
     credentialStore.getCategory().then((categories) => {
         rows.value = categories
     })
 
+    credentialStore.getExternalCredentials().then((external) => {
+    })
+    credentialStore.getCredentials().then((external) => {})
+
+    function deleteCategory() {
+      credentialStore.deleteCategory(row-key)
+      credentialStore.getCategory().then((categories) => {
+        rows.value = categories
+      })
+    }
+
+    function createCategory() {
+      credentialStore.createCategory(address.value, model.value, model2.value);
+      credentialStore.getCategory().then((categories) => {
+        rows.value = categories
+      })
+    }
+
 
     return {
       credentialStore,
       rows,
       columns,
+      model,
+      model2,
+      address,
       alert: ref(false),
       prompt: ref(false),
       filter: ref(''),
       changeCategory:ref(false),
-      options: [
-        'DRLG', 'Johanniter'
-      ],
-      options2:['Telekom', 'DRK'],
+      deleteCategory,
+      createCategory
     }
   }
 }

@@ -60,7 +60,18 @@ export interface CredentialCmd {
 }
 
 export interface CategoryCmd {
-    nameCategory: string,
-    internalCredentials: string[],
-    externalCredentialsCmd: string[]
+    nameCategory: string;
+    internalCredentials: string[];
+    externalCredentialsCmd: string[];
+}
+
+export interface CredentialMappingCmd {
+    id: bigint;
+    name: string;
+}
+
+export interface CategoryResponse {
+    name: string;
+    credentials: Credential[];
+    externalCredentials: ExternalCredential[];
 }

@@ -3,6 +3,7 @@ package com.gpse.sesam.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.credential.Credential;
 import com.gpse.sesam.domain.credential.CredentialService;
+import com.gpse.sesam.web.cmd.CredentialMappingCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,18 @@ public class CredentialController {
     @GetMapping("/credentials")
     public List<Credential> getCredential() {
         return service.getCredentials();
+    }
+
+    @GetMapping("/credentiallist")
+    public List<CredentialMappingCmd> getCredentialsForMapping(){
+        List<Credential> credentials = service.getCredentials();
+        List<CredentialMappingCmd> credentialList = new ArrayList<>();
+        for (Credential credential: credentials) {
+            Long id = credential.getId();
+            String name = credential.getName();
+            credentialList.add(new CredentialMappingCmd(id, name));
+        }
+        return credentialList;
     }
 
     @GetMapping(value = "/credentials/{id}")

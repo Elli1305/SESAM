@@ -1,9 +1,16 @@
 import axios, {
     AxiosResponse,
 } from "axios";
-import {Credential, IssueCredentialAttribute} from "@/main/vue/entity/credentialDefinition";
+import {
+    Category, CategoryResponse,
+    Credential,
+    CredentialMappingCmd,
+    ExternalCredential,
+    IssueCredentialAttribute
+} from "@/main/vue/entity/credentialDefinition";
 import {CredentialCmd} from "@/main/vue/entity/credentialDefinition";
 import {CategoryCmd} from "@/main/vue/entity/credentialDefinition";
+import {SignUpResponse} from "@/main/vue/entity/signUpResponse";
 
 export default {
     get(id: string): Promise<AxiosResponse<Credential>> {
@@ -23,5 +30,22 @@ export default {
     },
     getCredentialsByLocation(param: string): Promise<AxiosResponse<CredentialCmd[]>>{
         return axios.get("api/credentialview/" + param)
+    },
+
+    getExternalCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
+        return axios.get("/api/externalcredentials")
+    },
+
+    getCredentialsForMapping(): Promise<AxiosResponse<CredentialMappingCmd[]>> {
+        return axios.get("/api/credentiallist")
+    },
+
+    deleteCategory(param: String): Promise<AxiosResponse<void>> {
+        return axios.delete('/api/credentialmapping/delete/'+param);
+    },
+
+    createCategory(category: CategoryResponse): Promise<AxiosResponse<CategoryResponse>> {
+        return axios.post('/api/category', category)
     }
+
 }
