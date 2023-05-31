@@ -30,7 +30,7 @@ public class Room {
 	private List<Door> doors = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<Coordinate> coordinates;
+	private List<Coordinate> coordinates = new ArrayList<>();
 
 	protected Room() {
 

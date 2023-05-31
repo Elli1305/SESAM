@@ -25,8 +25,6 @@ import {useRoomStore} from "@/main/vue/stores/room";
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
-import credential from "@/main/vue/api/credential";
-import credentialView from "@/main/vue/views/CredentialView.vue";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -105,6 +103,18 @@ export default {
       weight: 3
     });
 
+    floorPlanMap.on('pm:drawstart', ({workingLayer}) => {
+      workingLayer.on('pm:vertexadded', (e) => {
+        if (e.shape === 'Line' && workingLayer.getLatLngs().length >= 2) {
+          floorPlanMap.pm.Draw.Line._finishShape();
+        }
+      });
+
+    });
+    floorPlanMap.pm.Draw.Line.setOptions({
+      hideMiddleMarkers: true
+    })
+
     floorPlanMap.eachLayer(layer => floorPlanMap.removeLayer(layer));
     this.applyImageToMap(this.floorPlanStore.selectedFloorPlan);
     this.drawRooms(this.floorPlanStore.rooms)
@@ -167,7 +177,11 @@ export default {
         }
         floor.rooms.push(room)
 
-        this.floorStore.save(floor)
+        this.floorStore.save(floor).then((savedFloor) => {
+          const savedRoom = savedFloor.rooms.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+          e.layer.id = savedRoom.id
+          this.addCallbacksPolygon(e.layer)
+        })
       } else if (e.shape === 'Line' || e.shape === 'Polyline') {
         $q.dialog({
           component: SelectRoom,
@@ -183,12 +197,10 @@ export default {
                 }
             )),
           })
-          console.log(room.doors)
           this.roomStore.save(room).then((savedRoom) => {
-            const doorTest = savedRoom.doors.find(door => {
-              return door.coordinates.some()
-            })
-            console.log(doorTest)
+            const savedDoor = savedRoom.doors.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+            e.layer.id = savedDoor.id
+            this.addCallbacksLine(e.layer)
           })
         })
       }
@@ -209,19 +221,6 @@ export default {
           rotateMode: false,
           drawMarker: false,
         });
-
-        floorPlanMap.on('pm:drawstart', ({workingLayer}) => {
-          workingLayer.on('pm:vertexadded', (e) => {
-            if (e.shape === 'Line' && workingLayer.getLatLngs().length >= 2) {
-              floorPlanMap.pm.Draw.Line._finishShape();
-            }
-          });
-
-        });
-        floorPlanMap.pm.Draw.Line.setOptions({
-          hideMiddleMarkers: true
-        })
-        console.log(floorPlanMap.pm)
       }
 
     },
@@ -237,118 +236,124 @@ export default {
 
         let center = overlay.getCenter();
         floorPlanMap.panTo(center);
+        this.addEditControls(this.editView)
       });
     },
-    drawRooms(rooms) {
-      let polygons = [];
-      for (const room of rooms) {
-        const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
-          color: 'black',
-          width: 5,
-          fillOpacity: 0.1
-        })
-
-          polygons.push(polygon);
-          let doorsname = room.doors.map(door => door.name).join(", ");
-          let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential.name).join(", ");
-          let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstname +" " + issuer.lastname).join(", ");
-          console.log(room.doors);
-          const popup = L.popup();
-          let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
-          let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
-
-          popup.setContent(url);
-          polygon.bindTooltip(string).openTooltip();
-          polygon.bindPopup(popup);
-          polygon.addTo(floorPlanMap);
-
-          polygon.on('click', function() {
-              for (const p of polygons) {
-                  p.setStyle({
-                      color: 'black',
-                      fillColor: 'black',
-                      weight: 5,
-                      fillOpacity: 0.1
-                  });
-              }
-
-              polygon.setStyle({
-                  color: 'red',
-                  fillColor: 'red',
-                  weight: 2,
-                  fillOpacity: 0.1
-              })});
-
-          polygon.id = room.id
-        polygon.type = "Room"
-        for (const door of room.doors) {
-          const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
-            color: '#b0b0b0',
-            weight: 3
-          }).addTo(floorPlanMap)
-          line.id = door.id
-          line.roomId = room.id
-
-          line.on('pm:update', (e) => {
-            const door = this.locationStore.getDoorById(e.layer.id)
-            door.coordinates = e.layer._latlngs.map((latLng) => ({
-                  lat: latLng.lat,
-                  lng: latLng.lng
-                }
-            ))
-            this.doorStore.save(door)
-          })
-
-          line.on('pm:dragend', (e) => {
-            const door = this.locationStore.getDoorById(e.layer.id)
-            door.coordinates = e.layer._latlngs[0].map((latLng) => ({
-                  lat: latLng.lat,
-                  lng: latLng.lng
-                }
-            ))
-            this.doorStore.save(door)
-          });
-
-          line.on('pm:remove', (e) => {
-            const room = this.locationStore.getRoomById(e.layer.roomId)
-            const index = room.doors.findIndex(door => e.layer.id === door.id)
-            room.doors.splice(index, 1)
-            this.roomStore.save(room)
-          });
-
-          line.pm._createMiddleMarker = () => {
-          };
-        }
-        polygon.on('pm:update', (e) => {
-          const room = this.locationStore.getRoomById(e.layer.id)
-          room.coordinates = e.layer._latlngs[0].map((latLng) => ({
-                lat: latLng.lat,
-                lng: latLng.lng
-              }
-          ))
-          this.roomStore.save(room)
-        })
-        polygon.on('pm:dragend', (e) => {
-          const room = this.locationStore.getRoomById(e.layer.id)
-          room.coordinates = e.layer._latlngs[0].map((latLng) => ({
-                lat: latLng.lat,
-                lng: latLng.lng
-              }
-          ))
-          this.roomStore.save(room)
-        });
-
-        polygon.on('pm:remove', (e) => {
-          const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
-          const index = floor.rooms.findIndex(room => e.layer.id === room.id)
-          floor.rooms.splice(index, 1)
-          this.floorStore.save(floor)
-          floorPlanMap.eachLayer(layer => {
-            if (layer.roomId === e.layer.id) {
-              floorPlanMap.removeLayer(layer)
+    addCallbacksLine: function (line) {
+      line.on('pm:update', (e) => {
+        const door = this.locationStore.getDoorById(e.layer.id)
+        door.coordinates = e.layer._latlngs.map((latLng) => ({
+              lat: latLng.lat,
+              lng: latLng.lng
             }
-          })
-        });
+        ))
+        this.doorStore.save(door)
+      })
+
+      line.on('pm:dragend', (e) => {
+        const door = this.locationStore.getDoorById(e.layer.id)
+        door.coordinates = e.layer._latlngs.map((latLng) => ({
+              lat: latLng.lat,
+              lng: latLng.lng
+            }
+        ))
+        this.doorStore.save(door)
+      });
+
+      line.on('pm:remove', (e) => {
+        const room = this.locationStore.getRoomById(e.layer.roomId)
+        const index = room.doors.findIndex(door => e.layer.id === door.id)
+        room.doors.splice(index, 1)
+        this.roomStore.save(room)
+      });
+
+      line.pm._createMiddleMarker = () => {
+      };
+    },
+    addCallbacksPolygon: function (polygon) {
+      polygon.on('pm:update', (e) => {
+        const room = this.locationStore.getRoomById(e.layer.id)
+        room.coordinates = e.layer._latlngs[0].map((latLng) => ({
+              lat: latLng.lat,
+              lng: latLng.lng
+            }
+        ))
+        this.roomStore.save(room)
+      })
+      polygon.on('pm:dragend', (e) => {
+        const room = this.locationStore.getRoomById(e.layer.id)
+        room.coordinates = e.layer._latlngs[0].map((latLng) => ({
+              lat: latLng.lat,
+              lng: latLng.lng
+            }
+        ))
+        this.roomStore.save(room)
+      });
+
+      polygon.on('pm:remove', (e) => {
+        const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
+        const index = floor.rooms.findIndex(room => e.layer.id === room.id)
+        floor.rooms.splice(index, 1)
+        this.floorStore.save(floor)
+        floorPlanMap.eachLayer(layer => {
+          if (layer.roomId === e.layer.id) {
+            floorPlanMap.removeLayer(layer)
+          }
+        })
+      });
+    }, drawRooms(rooms) {
+          let polygons = [];
+          for (const room of rooms) {
+              const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
+                  color: 'black',
+                  width: 5,
+                  fillOpacity: 0.1
+              })
+
+              polygons.push(polygon);
+              let doorsname = room.doors.map(door => door.name).join(", ");
+              let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential.name).join(", ");
+              let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstname +" " + issuer.lastname).join(", ");
+              console.log(room.doors);
+              const popup = L.popup();
+              let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
+              let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
+
+              popup.setContent(url);
+              polygon.bindTooltip(string).openTooltip();
+              polygon.bindPopup(popup);
+              polygon.addTo(floorPlanMap);
+
+              polygon.on('click', function() {
+                  for (const p of polygons) {
+                      p.setStyle({
+                          color: 'black',
+                          fillColor: 'black',
+                          weight: 5,
+                          fillOpacity: 0.1
+                      });
+                  }
+
+                  polygon.setStyle({
+                      color: 'red',
+                      fillColor: 'red',
+                      weight: 2,
+                      fillOpacity: 0.1
+                  })});
+
+              polygon.id = room.id
+              polygon.type = "Room"
+              for (const door of room.doors) {
+                  const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
+                      color: '#b0b0b0',
+                      weight: 3
+                  }).addTo(floorPlanMap)
+                  line.id = door.id
+                  line.roomId = room.id
+                  this.addCallbacksLine(line);
+              }
+              this.addCallbacksPolygon(polygon);
+
       }
 
     }
