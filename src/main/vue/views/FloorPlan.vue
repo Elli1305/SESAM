@@ -210,6 +210,14 @@ export default {
     mapContainerObserver.observe(this.$refs.mapContainer)
   },
   methods: {
+    removeLayer() {
+      floorPlanMap.eachLayer(layer => {
+            if (layer.id) {
+              floorPlanMap.removeLayer(layer)
+            }
+          }
+      );
+    },
     addEditControls(editView) {
       if (editView) {
         floorPlanMap.pm.addControls({

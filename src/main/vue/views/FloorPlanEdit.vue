@@ -135,6 +135,7 @@ export default {
   methods: {
     redrawRooms(room) {
       console.log(this.$refs.floorPlanRef)
+      this.$refs.floorPlanRef.removeLayer()
       this.$refs.floorPlanRef.drawRooms(this.floorPlanStore.rooms)
     }
 
