@@ -73,11 +73,11 @@ class LocationServiceImplTest {
 
 	@Test
 	void saveShouldCallRepositoryWithCorrectArguments() {
-		Location location = new Location("Test", Collections.emptyList());
+		final Location location = new Location("Test");
 
 		when(locationRepository.save(location)).thenReturn(location);
 
-		Location savedLocation = locationService.save(location);
+		final Location savedLocation = locationService.save(location);
 
 		assertThat(savedLocation.getName(), is(location.getName()));
 		assertThat(savedLocation.getBuildings(), is(location.getBuildings()));
