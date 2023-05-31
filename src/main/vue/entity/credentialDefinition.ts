@@ -1,3 +1,5 @@
+import {Issuer} from "@/main/vue/entity/issuer";
+
 type CredentialFormEntryType = "text" | "number" | "date";
 
 export interface Credential {
@@ -6,6 +8,7 @@ export interface Credential {
     credentialDefinitionId: string;
     form: FormEntry[];
     checklist: ChecklistEntry[];
+    issuer: Issuer[];
 }
 
 export interface IssueCredential {

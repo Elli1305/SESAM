@@ -310,12 +310,45 @@ export default {
         })
       });
     }, drawRooms(rooms) {
-      for (const room of rooms) {
-        const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
-          color: 'black',
-          width: 5,
-          fillOpacity: 0.1
-        }).addTo(floorPlanMap)
+          let polygons = [];
+          for (const room of rooms) {
+              const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
+                  color: 'black',
+                  width: 5,
+                  fillOpacity: 0.1
+              })
+
+              polygons.push(polygon);
+              let doorsname = room.doors.map(door => door.name).join(", ");
+              let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential.name).join(", ");
+              let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstname +" " + issuer.lastname).join(", ");
+              console.log(room.doors);
+              const popup = L.popup();
+              let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
+              let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
+
+              popup.setContent(url);
+              polygon.bindTooltip(string).openTooltip();
+              polygon.bindPopup(popup);
+              polygon.addTo(floorPlanMap);
+
+              polygon.on('click', function() {
+                  for (const p of polygons) {
+                      p.setStyle({
+                          color: 'black',
+                          fillColor: 'black',
+                          weight: 5,
+                          fillOpacity: 0.1
+                      });
+                  }
+
+                  polygon.setStyle({
+                      color: 'red',
+                      fillColor: 'red',
+                      weight: 2,
+                      fillOpacity: 0.1
+                  })});
+
         polygon.id = room.id
         polygon.type = "Room"
         for (const door of room.doors) {
