@@ -99,7 +99,7 @@ export default {
 
     const columns = [
       {
-        name: t('adminRolesRequest.name'),
+                name: t('adminRolesRequest.lastname'),
         required: true,
         label: 'Name',
         align: 'center',

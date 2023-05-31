@@ -46,6 +46,14 @@ const router = createRouter({
             component: EditUser,
             props: true,
         },
+
+        {
+            path: '/admin/rolesRequest',
+            name: 'rolesRequest',
+            component: RolesRequest,
+            props: true,
+        },
+
         {
             path: '/admin/currentuserlist',
             name: 'currentuserlist',

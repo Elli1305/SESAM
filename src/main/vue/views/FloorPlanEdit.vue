@@ -108,19 +108,18 @@
       direction="right"
   ></q-fab>
   <div class="q-gutter-x-md" style="display: flex">
-    <FloorPlan :edit-view="true" class="fit"></FloorPlan>
-    <FloorPlanRoomList></FloorPlanRoomList>
+    <FloorPlan ref="floorPlanRef" :edit-view="true" class="fit"></FloorPlan>
+    <FloorPlanRoomList @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
   </div>
 
 </template>
 
-<script lang="ts">
+<script>
 
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {ref} from "vue";
 import {useI18n} from "vue-i18n";
-import {Building, Floor, Location} from "@/main/vue/entity/location";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import {useQuasar} from "quasar";
 import EditLocation from "@/main/vue/views/EditLocation.vue";
@@ -133,7 +132,14 @@ import {useBuildingStore} from "@/main/vue/stores/buildings";
 export default {
   name: 'FloorPlanEdit',
   components: {FloorPlanRoomList, FloorPlan},
-  methods: {},
+  methods: {
+    redrawRooms(room) {
+      console.log(this.$refs.floorPlanRef)
+      this.$refs.floorPlanRef.removeLayer()
+      this.$refs.floorPlanRef.drawRooms(this.floorPlanStore.rooms)
+    }
+
+  },
   setup() {
     const locationStore = useLocationStore()
     const floorPlanStore = useFloorPlanStore()
@@ -142,12 +148,12 @@ export default {
     const $q = useQuasar()
     const {t} = useI18n()
 
-    const changeFloorPlan = function (floor: Floor) {
+    const changeFloorPlan = function (floor) {
       floorPlanStore.selectedFloorId = floor.id
       floorPlanStore.selectedFloorPlan = floor.floorPlanPath
       floorPlanStore.rooms = floor.rooms
     }
-    const editLocation = function (location: Location) {
+    const editLocation = function (location) {
       $q.dialog({
         component: EditLocation,
         componentProps: {
@@ -179,7 +185,7 @@ export default {
       })
     }
 
-    const editBuilding = function (building: Building) {
+    const editBuilding = function (building) {
       $q.dialog({
         component: EditBuilding,
         componentProps: {
@@ -195,7 +201,7 @@ export default {
       })
     }
 
-    const addBuilding = function (location: Location) {
+    const addBuilding = function (location) {
       $q.dialog({
         component: EditBuilding,
         componentProps: {
@@ -214,7 +220,7 @@ export default {
       })
     }
 
-    const editFloor = function (floor: Floor) {
+    const editFloor = function (floor) {
       $q.dialog({
         component: EditFloor,
         componentProps: {
@@ -230,7 +236,7 @@ export default {
       })
     }
 
-    const addFloor = function (building: Building) {
+    const addFloor = function (building) {
       $q.dialog({
         component: EditFloor,
         componentProps: {
@@ -249,7 +255,7 @@ export default {
       })
     }
 
-    locationStore.getLocations().then((res: Location[]) => {
+    locationStore.getLocations().then((res) => {
       changeFloorPlan(res[0].buildings[0].floors[0])
     })
 
