@@ -341,19 +341,18 @@ export default {
                       fillOpacity: 0.1
                   })});
 
-              polygon.id = room.id
-              polygon.type = "Room"
-              for (const door of room.doors) {
-                  const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
-                      color: '#b0b0b0',
-                      weight: 3
-                  }).addTo(floorPlanMap)
-                  line.id = door.id
-                  line.roomId = room.id
-                  this.addCallbacksLine(line);
-              }
-              this.addCallbacksPolygon(polygon);
-
+        polygon.id = room.id
+        polygon.type = "Room"
+        for (const door of room.doors) {
+          const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
+            color: '#b0b0b0',
+            weight: 3
+          }).addTo(floorPlanMap)
+          line.id = door.id
+          line.roomId = room.id
+          this.addCallbacksLine(line);
+        }
+        this.addCallbacksPolygon(polygon);
       }
 
     }
