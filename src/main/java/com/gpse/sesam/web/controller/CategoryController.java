@@ -70,8 +70,7 @@ public class CategoryController {
         categoryService.deleteById(Long.valueOf(id));
     }
 
-
-    @Secured("ADMINISTRATOR")
+    /*@Secured("ADMINISTRATOR")
     @PostMapping("/credentialmapping/edit/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void updateCategory(@PathVariable("id") @RequestBody final String id, CategoryResponseCmd cmd) {
@@ -82,12 +81,20 @@ public class CategoryController {
             credentials.add(credential);
         }
         categoryService.updateCategory(category, cmd.getName(), cmd.getExternalCredentials(), credentials);
+    } */
+
+    @Secured("ADMINISTRATOR")
+    @PostMapping("/credentialmapping/edit/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateCategory(@PathVariable("id") @RequestBody final String id, CategoryResponseCmdReplicate cmd) {
+        final Category category = categoryService.getCategoryById(Long.valueOf(id));
+        categoryService.updateCategory(category, cmd.getName(), cmd.getExternalCredentials(), cmd.getCredentials());
     }
 
     @Secured("ADMINISTRATOR")
     @PostMapping("/category")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createCategory(@RequestBody final CategoryResponseCmd category) {
+    public void createCategory(@RequestBody final CategoryResponseCmdReplicate category) {
         categoryService.createCategory(category);
     }
 

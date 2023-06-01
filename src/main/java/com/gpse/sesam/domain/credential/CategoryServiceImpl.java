@@ -2,6 +2,7 @@ package com.gpse.sesam.domain.credential;
 
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.web.cmd.CategoryResponseCmd;
+import com.gpse.sesam.web.cmd.CategoryResponseCmdReplicate;
 import com.gpse.sesam.web.cmd.CredentialForMappingCmd;
 import com.gpse.sesam.web.cmd.CredentialMappingCmd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,16 +77,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void createCategory(CategoryResponseCmd categoryCmd) {
+    public void createCategory(CategoryResponseCmdReplicate categoryCmd) {
         final Category category = new Category(categoryCmd.getName());
-        List<Credential> credentials = new ArrayList<>();
-        for (CredentialMappingCmd cmd : categoryCmd.getCredentials()) {
-            Credential credential = credentialRepository.findByName(cmd.getName());
-            credentials.add(credential);
-        }
+        category.setCredentials(categoryCmd.getCredentials());
         category.setExternalCredentialList(categoryCmd.getExternalCredentials());
-        category.setCredentials(credentials);
-
         categoryRepository.save(category);
     }
 

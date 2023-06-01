@@ -13,7 +13,6 @@ import java.io.Serial;
 import java.util.List;
 
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Issuer extends SesamUser {
 	@Serial
 	private static final long serialVersionUID = 215982L;

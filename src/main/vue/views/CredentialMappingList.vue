@@ -177,7 +177,7 @@ export default {
 
     credentialStore.getExternalCredentials().then((external) => {
     })
-    credentialStore.getCredentialsForMapping().then((external) => {})
+    //credentialStore.getCredentialsForMapping().then((external) => {})
 
     credentialStore.getCredentials().then((external) => {})
 
