@@ -50,7 +50,17 @@ const messages = {
             otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
         },
         floorplan: {
-            locations: 'Standorte'
+            locations: 'Standorte',
+            doorName: 'Türname',
+            editDoor: 'Tür bearbeiten',
+            editRoom: 'Raum bearbeiten',
+            save: 'speichern',
+            cancel: 'abbrechen',
+            confirmDeletion: 'Bestätigen Sie das Löschen',
+            confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            doors: 'Türe',
+            roomName: 'Raumname',
+            edit: 'Bearbeiten'
         },
 
         common: {
@@ -261,7 +271,17 @@ const messages = {
             room: "Room: "
         },
         floorplan: {
-            locations: 'Locations'
+            locations: 'Locations',
+            doorName: 'Name of Door',
+            editDoor:'Edit Door',
+            editRoom:'Edit Room',
+            save: 'save',
+            cancel: 'cancel',
+            confirmDeletion: 'Confirm deletion',
+            confirmDeletionText:'Are you sure you want to delete the door?',
+            doors:'Doors',
+            roomName: 'Name of room',
+            edit: 'Edit'
         },
         home: {
             header: "SESAM",
