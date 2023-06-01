@@ -18,10 +18,10 @@ const messages = {
             headline: "Aktuelle Nutzer",
             roles: {ADMINISTRATOR: "Administrator", EDITOR: "Bearbeiter", ISSUER: "Herausgeber"},
             prename: "Vorname",
-            lastname: "Nachname",
+            lastname: "Name",
             email: "Email",
             role: "Rollen",
-            bearbeiten: "edit",
+            edit: "Bearbeiten",
             showAdmin: "Administratoren",
             showEditor: "Bearbeiter",
             showIssuer: "Herausgeber",
@@ -33,7 +33,7 @@ const messages = {
             lastname: "Nachname",
             email: "Email",
             role: "Rollen",
-            save:"speichern",
+            save: "Speichern",
             showAdmin: "Administratoren",
             showEditor: "Bearbeiter",
             showIssuer: "Herausgeber",
@@ -56,6 +56,9 @@ const messages = {
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
+            noData: "Keine Daten vorhanden.",
+            noResults: "Kein Einträge gefunden.",
+            of: "von"
         },
         credentialview :{
             credentialview: "Credentialansicht",
@@ -217,10 +220,11 @@ const messages = {
         adminCurrentUser: {
             headline: "Current Users",
             roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
-            prename: "Prename",
+            prename: "Firstname",
             lastname: "Name",
             email: "Email",
             role: "Roles",
+            edit: "Edit",
             showAdmin: "Show Admin",
             showEditor: "Show Editor",
             showIssuer: "Show Issuer",
@@ -249,6 +253,9 @@ const messages = {
         common: {
             internalServerError: "The server could not process the request",
             unkownError: "An unknown error occured",
+            noData: "No data available.",
+            noResults: "No entries found.",
+            of: "of"
         },
         credentialview :{
             credentialview: "View Credentials",
