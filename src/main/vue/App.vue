@@ -20,7 +20,14 @@ corpdesign.getColors().then( c => {
   r.style.setProperty('--text-color', c.data.textC)
 })
 
+function getLanguage(){
+    return i18nLocale.locale.value.toString() === 'de' ? 'de' : 'gb';
+}
 
+function changeLanguage(language) {
+    sessionStorage.setItem("locale", language)
+    i18nLocale.locale.value = language
+}
 async function logout() {
   await userStore.logout()
   if (!userStore.authenticated) {
@@ -58,10 +65,10 @@ async function logout() {
               <q-btn class="row no-padding" round unelevated style="width: 3em">
                 <country-flag class="self-center no-margin shadow-16"
                               style="height: 3em; width: 3em; border-radius: 100%"
-                              :country="i18nLocale.locale.value.toString() === 'de' ? 'de' : 'gb'" size="normal"/>
+                              :country="getLanguage()" size="normal"/>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
                   <q-list>
-                    <q-item @click="i18nLocale.locale.value = 'de'" clickable v-close-popup>
+                    <q-item @click="changeLanguage('de')" clickable v-close-popup>
                       <q-item-section text-color="black" style="width: 7.5em" unelevated>
                         <div class="row justify-start items-center no-wrap">
                           <country-flag rounded country='de' size="small"
@@ -70,7 +77,7 @@ async function logout() {
                         </div>
                       </q-item-section>
                     </q-item>
-                    <q-item @click="i18nLocale.locale.value = 'en'" clickable v-close-popup>
+                    <q-item @click="changeLanguage('en')" clickable v-close-popup>
                       <q-item-section style="width: 7.5em" unelevated>
                         <div class="row justify-start items-center no-wrap">
                           <country-flag rounded country='gb' size="small"
