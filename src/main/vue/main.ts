@@ -411,10 +411,13 @@ const messages = {
     }
 }
 
-
+let currentLanguage = sessionStorage.getItem("locale");
+if(currentLanguage==null){
+    currentLanguage = 'de'
+}
 const i18n = createI18n({
     legacy: false,
-    locale: 'de',
+    locale: currentLanguage,
     allowComposition: true,
     fallbackLocale: 'en',
     globalInjection: true,
