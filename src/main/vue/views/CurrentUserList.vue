@@ -2,45 +2,45 @@
   <q-page class="column justify-evenly" style="padding: 2em 5em" >
     <p class="row text-h3 justify-center">{{t("adminCurrentUser.headline")}}</p>
     <div class="row justify-center">
-        <q-table
-            style="width: 75vw; height: 25em"
-            :rows-per-page-options="[0]"
-            :rows="rows"
-            :columns="columns"
-            row-key="username"
-            :separator="'cell'"
-            :no-data-label="t('common.noData')"
-            :no-results-label="t('common.noResults')"
-            :pagination-label="getPaginationLabel"
-            :filter="filter"
-            :filter-method="customFilter">
-          <template v-slot:body-cell-actions="props">
-              <q-td :props="props">
-                  <q-btn dense round flat color="grey" @click="" icon="edit"></q-btn>
-              </q-td>
-          </template>
-          <template v-slot:top-left>
-              <div class="col-9">
-                  <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR" :label="t( 'adminCurrentUser.showAdmin')"/>
-                  <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t( 'adminCurrentUser.showEditor')" />
-                  <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t( 'adminCurrentUser.showIssuer')" />
-              </div>
-          </template>
-          <template v-slot:top-right>
-              <q-input borderless dense debounce="250" v-model="filter.search" :placeholder="t( 'adminCurrentUser.search')" >
-                  <template v-slot:append>
-                      <q-icon name="search" />
-                  </template>
-              </q-input>
-          </template>
-          <template v-slot:body-cell-roles="props">
-              <q-td :props="props">
-                  <div v-for="role in props.value">
-                      {{t( `adminCurrentUser.roles.${role.role}` )}}
-                  </div>
-              </q-td>
-          </template>
-        </q-table>
+      <q-table
+          style="width: 75vw; height: 25em"
+          :rows-per-page-options="[0]"
+          :rows="rows"
+          :columns="columns"
+          row-key="username"
+          :separator="'cell'"
+          :no-data-label="t('common.noData')"
+          :no-results-label="t('common.noResults')"
+          :pagination-label="getPaginationLabel"
+          :filter="filter"
+          :filter-method="customFilter">
+        <template v-slot:body-cell-actions="props">
+            <q-td :props="props">
+                <q-btn dense round flat color="grey" @click="" icon="edit"></q-btn>
+            </q-td>
+        </template>
+        <template v-slot:top-left>
+            <div class="col-9">
+                <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR" :label="t( 'adminCurrentUser.showAdmin')"/>
+                <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t( 'adminCurrentUser.showEditor')" />
+                <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t( 'adminCurrentUser.showIssuer')" />
+            </div>
+        </template>
+        <template v-slot:top-right>
+            <q-input borderless dense debounce="250" v-model="filter.search" :placeholder="t( 'adminCurrentUser.search')" >
+                <template v-slot:append>
+                    <q-icon name="search" />
+                </template>
+            </q-input>
+        </template>
+        <template v-slot:body-cell-roles="props">
+            <q-td :props="props">
+                <div v-for="role in props.value">
+                    {{t( `adminCurrentUser.roles.${role.role}` )}}
+                </div>
+            </q-td>
+        </template>
+      </q-table>
     </div>
   </q-page>
 </template>
