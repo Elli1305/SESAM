@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" >
-      <p class="row text-h3 justify-center">{{t("credentialview.credentialview")}}</p>
+    <p class="row text-h3 justify-center">{{t("credentialview.credentialview")}}</p>
     <div class="row self-center">
       <q-table
           style="width: 75vw; height: 25em"
@@ -8,7 +8,7 @@
           :rows="rows"
           :columns="columns"
           :title="t('credentialview.credentialview')"
-          :separator="'horizontal'"
+          :separator="'cell'"
           :no-data-label="t('common.noData')"
           :no-results-label="t('common.noResults')"
           :pagination-label="getPaginationLabel"
