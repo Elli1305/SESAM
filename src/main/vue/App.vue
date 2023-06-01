@@ -21,13 +21,15 @@ corpdesign.getColors().then( c => {
 })
 
 function getLanguage(){
-    return i18nLocale.locale.value.toString() === 'de' ? 'de' : 'gb';
+  return i18nLocale.locale.value.toString() === 'de' ? 'de' : 'gb';
 }
 
 function changeLanguage(language) {
-    sessionStorage.setItem("locale", language)
-    i18nLocale.locale.value = language
+  sessionStorage.setItem("locale", language)
+  i18nLocale.locale.value = language
+  location.reload()
 }
+
 async function logout() {
   await userStore.logout()
   if (!userStore.authenticated) {
@@ -211,12 +213,12 @@ async function logout() {
   line-height: 1;
   font-weight: 500;
   font-size: 1.5em;
-  font-variant-caps: small-caps;
-    vertical-align: center;
+  vertical-align: center;
   }
-  .headerLink {
-    color: white;
-    text-decoration: none;}
+
+.headerLink {
+  color: white;
+  text-decoration: none;}
 
 .foldMenu {
   cursor: pointer;
