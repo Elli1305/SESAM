@@ -7,10 +7,7 @@ import com.gpse.sesam.domain.credential.CredentialService;
 import com.gpse.sesam.domain.credential.*;
 import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.domain.user.SesamUser;
-import com.gpse.sesam.web.cmd.CategoryCmd;
-import com.gpse.sesam.web.cmd.CategoryResponseCmd;
-import com.gpse.sesam.web.cmd.CredentialCmd;
-import com.gpse.sesam.web.cmd.SesamUserCmd;
+import com.gpse.sesam.web.cmd.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -59,48 +56,50 @@ public class CategoryController {
         return cmd;
     }
 
+    @Secured("ADMINISTRATOR")
     @GetMapping("/externalcredentials")
     public List<ExternalCredential> getExternalInfos() {
         return externalCredentialService.getExternalCredentials();
     }
 
 
-
+    @Secured("ADMINISTRATOR")
     @DeleteMapping("/credentialmapping/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCategory(@PathVariable("id") final String id) {
-        categoryService.deleteCategoryById(Long.valueOf(id));
+        categoryService.deleteById(Long.valueOf(id));
     }
 
-     /*
-    @PostMapping("/credentialmapping/{id}/edit")
+
+    @Secured("ADMINISTRATOR")
+    @PostMapping("/credentialmapping/edit/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateCategory(@PathVariable("id") @RequestBody final String id, CredentialCmd cmd) {
-        final Category category = categoryService.categoryGetById(Long.valueOf(id));
-        categoryService.updateCategory(category, cmd.getCategoryName(), cmd.getCredentialName(), cmd.getExternalCredential());
-    }*/
+    public void updateCategory(@PathVariable("id") @RequestBody final String id, CategoryResponseCmd cmd) {
+        final Category category = categoryService.getCategoryById(Long.valueOf(id));
+        List<Credential> credentials = new ArrayList<>();
+        for (CredentialMappingCmd cmds: cmd.getCredentials()) {
+            Credential credential = credentialService.findByName(cmds.getName());
+            credentials.add(credential);
+        }
+        categoryService.updateCategory(category, cmd.getName(), cmd.getExternalCredentials(), credentials);
+    }
 
-
-    /*
-    @PostMapping("/externalcredential/{id}/edit")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateExternal(@PathVariable("id") @ResponseStatus final String id, ExternalCmd dm) {
-        final ExternalCredential externalCredential = externalCredentialService.findExternalById(Long.valueOf(id));
-        externalCredentialService.updateExternalCredential(externalCredential, cmd.getName(), cmd.getDefintionID());
-    }*/
-
-    /*
-    @DeleteMapping("/externalcredential/{id}/delete")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteExternalCredential(@PathVariable("id") final String id) {
-        final ExternalCredential externalCredential = externalCredentialService.findExternalById(Long.valueOf(id));
-        externalCredentialService.deleteExternalCredential(externalCredential);
-    }*/
-
+    @Secured("ADMINISTRATOR")
     @PostMapping("/category")
     @ResponseStatus(HttpStatus.CREATED)
     public void createCategory(@RequestBody final CategoryResponseCmd category) {
         categoryService.createCategory(category);
     }
 
+    @Secured("ADMINISTRATOR")
+    @DeleteMapping("/category/delete/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCategoryByName(@PathVariable("name") final String name) {
+        categoryService.deleteCategoryByName(name);
+    }
+
+    @GetMapping("/category/{id}")
+    public void getCategoryByName(@PathVariable("id") final String id) {
+        categoryService.getCategory(Long.valueOf(id));
+    }
 }

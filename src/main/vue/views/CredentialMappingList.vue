@@ -2,7 +2,7 @@
   <q-page class="items-center justify-center" style="display: flex">
     <div class="q-gutter-y-md column" style="max-width: 80%; min-width: 20em; display: flex">
       <div>
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Credentialmapping</h1>
+      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Credentialmapping {{credentialStore.categories}}</h1>
       </div>
       <div style="width: 100em">
       <q-table
@@ -103,7 +103,7 @@
         <div class="text-h6">Kategorie ändern</div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <q-input dense label="Name der Kategorie" v-model="address" autofocus @keyup.enter="prompt = false" placeholder="Kategorie">
+        <q-input dense label="Name der Kategorie" v-model="catname" autofocus @keyup.enter="prompt = false" placeholder="Kategorie">
         <template v-slot:append>
           <q-icon name="edit" />
         </template>
@@ -116,6 +116,7 @@
               multiple
               label="Interne Credentials"
               emit-value
+              v-model="model3"
               :options="credentialStore.allCredentials"
               option-label="name"
               options-cover
@@ -127,6 +128,7 @@
               multiple
               label="Externe Credentials"
               emit-value
+              v-model="model4"
               :options="credentialStore.external"
               option-label="name"
               options-cover
@@ -135,7 +137,7 @@
       </q-card-section>
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup> Cancel</q-btn>
-        <q-btn flat v-close-popup> Save </q-btn>
+        <q-btn flat v-close-popup @click="updateCategory"> Save </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -148,7 +150,6 @@ import {useI18n} from "vue-i18n";
 import {useRouter} from 'vue-router'
 
 const columns = [
-  { name: 'id', required: true, label: 'Id', align: 'center', field: row => row.name, sortable: true },
   { name: 'category', required: true, label: 'Kategorie', align: 'center', field: row => row.name, sortable: true },
   { name: 'credential', align: 'center', label: "Credential (intern)", field: row => row.credentials,  format: (val, row) => val.join(', '), sortable: true},
   { name: 'externalCredential', align: 'center', label: 'Credential (extern)', field: row => row.externalCredentials, format: (val, row) => val.join(', '), sortable: true},
@@ -164,26 +165,47 @@ export default {
   setup() {
     const model = ref([])
     const model2 = ref([])
+    const model3 = ref([])
+    const model4 = ref([])
     const address = ref('')
+    const catname = ref('')
     const credentialStore = useCredentialStore()
 
     credentialStore.getCategory().then((categories) => {
-        rows.value = categories
+      rows.value = categories
     })
 
     credentialStore.getExternalCredentials().then((external) => {
     })
+    credentialStore.getCredentialsForMapping().then((external) => {})
+
     credentialStore.getCredentials().then((external) => {})
 
+
     function deleteCategory() {
-      credentialStore.deleteCategory(row-key)
+      credentialStore.deleteCategory(1)
       credentialStore.getCategory().then((categories) => {
         rows.value = categories
       })
     }
 
+    function deleteCategoryByName(){
+      credentialStore.deleteCategoryByName('Sicherheitsbelehrung').then((res)=>{})
+    }
+
     function createCategory() {
       credentialStore.createCategory(address.value, model.value, model2.value);
+      address.value =''
+      model.value =[]
+      model2.value =[]
+      credentialStore.getCategory().then((categories) => {
+        rows.value = categories
+      })
+    }
+
+
+    function updateCategory() {
+      credentialStore.updateCredentials(1, catname.value, model3.value, model4.value);
       credentialStore.getCategory().then((categories) => {
         rows.value = categories
       })
@@ -191,18 +213,23 @@ export default {
 
 
     return {
+      catname,
       credentialStore,
       rows,
       columns,
       model,
       model2,
+      model3,
+      model4,
       address,
       alert: ref(false),
       prompt: ref(false),
       filter: ref(''),
       changeCategory:ref(false),
       deleteCategory,
-      createCategory
+      createCategory,
+      updateCategory,
+      deleteCategoryByName
     }
   }
 }

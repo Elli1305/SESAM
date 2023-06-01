@@ -14,6 +14,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -44,20 +45,19 @@ public class Credential {
 	private List<ChecklistEntry> checklist;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	private List<Issuer> issuer;
+	private List<Issuer> issuers = new ArrayList<>();
 
 	protected Credential() {
 	}
 
 	public Credential(final String name, final String credentialDefinitionId, final String agent,
 					  final List<FormEntry> form,
-					  final List<ChecklistEntry> checklist, final List<Issuer> issuer) {
+					  final List<ChecklistEntry> checklist) {
 		this.name = name;
 		this.credentialDefinitionId = credentialDefinitionId;
 		this.agent = agent;
 		this.form = form;
 		this.checklist = checklist;
-		this.issuer = issuer;
 	}
 
 	public Long getId() {
@@ -101,11 +101,11 @@ public class Credential {
 	}
 
 	public List<Issuer> getIssuer() {
-		return issuer;
+		return issuers;
 	}
 
-	public void setIssuer(final List<Issuer> issuer) {
-		this.issuer = issuer;
+	public void setIssuer(final List<Issuer> issuers) {
+		this.issuers = issuers;
 	}
 
 	public String getAgent() {
@@ -123,5 +123,9 @@ public class Credential {
 
 	public void setCategory(final Category category) {
 		this.category = category;
+	}
+
+	public void addIssuer(final Issuer issuer) {
+		issuers.add(issuer);
 	}
 }

@@ -2,6 +2,8 @@ package com.gpse.sesam.domain.credential;
 
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.web.cmd.CategoryResponseCmd;
+import com.gpse.sesam.web.cmd.CredentialForMappingCmd;
+import com.gpse.sesam.web.cmd.CredentialMappingCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,12 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CredentialRepository credentialRepository;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CredentialRepository credentialRepository) {
         this.categoryRepository = categoryRepository;
+        this.credentialRepository = credentialRepository;
     }
 
     @Override
@@ -29,6 +33,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Optional<Category> getCategory(Long id) {
         return categoryRepository.findById(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
     }
 
 
@@ -68,10 +77,31 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void createCategory(CategoryResponseCmd categoryCmd) {
-        final Category category = new Category(categoryCmd.getName(), categoryCmd.getExternalCredentials());
-        category.setCredentials(categoryCmd.getCredentials());
+        final Category category = new Category(categoryCmd.getName());
+        List<Credential> credentials = new ArrayList<>();
+        for (CredentialMappingCmd cmd : categoryCmd.getCredentials()) {
+            Credential credential = credentialRepository.findByName(cmd.getName());
+            credentials.add(credential);
+        }
+        category.setExternalCredentialList(categoryCmd.getExternalCredentials());
+        category.setCredentials(credentials);
 
         categoryRepository.save(category);
+    }
+
+    @Override
+    public Category getCategoryById(Long id) {
+        return categoryRepository.categoryGetById(id);
+    }
+
+    @Override
+    public void deleteCategoryByName(String name) {
+        categoryRepository.deleteCategoryByName(name);
+    }
+
+    @Override
+    public Category getCategoryByName(String name) {
+        return categoryRepository.getCategoriesByName(name);
     }
 
 

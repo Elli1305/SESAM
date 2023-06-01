@@ -10,12 +10,14 @@ import {
     ExternalCredential,
     Credential
 } from "@/main/vue/entity/credentialDefinition";
+import {User} from "@/main/vue/entity/loginResponse";
 
 export const useCredentialStore = defineStore('credential', () =>{
     const credentials: Ref<CredentialCmd[]|null> = ref(null)
     const allCredentials: Ref<Credential[]|null> = ref(null)
     const categories: Ref<CategoryCmd[]|null> = ref(null)
     const external: Ref<ExternalCredential[]|null> = ref(null)
+    const categoryEdit: Ref<Category | null> = ref(null)
     const credentialsForMapping: Ref<CredentialMappingCmd[]|null> = ref(null)
 
 
@@ -64,9 +66,22 @@ export const useCredentialStore = defineStore('credential', () =>{
     }
 
     function deleteCategory(id: string) {
-        new Promise<void>((resolve, reject) => {
-            api.credential.deleteCategory(id).then(_ => resolve())
-                .catch(reject);
+        return new Promise<void>((resolve, reject) => {
+            api.credential.deleteCategory(id).then(() => {
+                resolve()
+            }).catch((error) => {
+                reject(error)
+            })
+        });
+    }
+
+    function deleteCategoryByName(name: string) {
+        return new Promise<void>((resolve, reject) => {
+            api.credential.deleteCategoryByName(name).then(() => {
+                resolve()
+            }).catch((error) => {
+                reject(error)
+            })
         });
     }
 
@@ -92,6 +107,20 @@ export const useCredentialStore = defineStore('credential', () =>{
         });
     }
 
+    function updateCredentials(id: string, name: string, credential: Credential[], external: ExternalCredential[]) {
+        return new Promise<void>((resolve, reject) => {
+            api.credential.updateCategory(id,
+                {
+                    name: name,
+                    credentials: credential,
+                    externalCredentials: external
+            }).then(_ => {
+                resolve()
+            })
+                .catch(reject);
+        })
+    }
+
 
     return {
         getCredentialsByLocation,
@@ -105,7 +134,9 @@ export const useCredentialStore = defineStore('credential', () =>{
         deleteCategory,
         allCredentials,
         getCredentials,
-        createCategory
+        createCategory,
+        deleteCategoryByName,
+        updateCredentials
     }
 
 })

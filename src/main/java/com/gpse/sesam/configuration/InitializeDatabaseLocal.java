@@ -142,7 +142,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
 				Collections.singletonList(adminRole));
 		final SesamUser issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
-				Collections.singletonList(issuerRole), new Room("0.007"), null);
+				Collections.singletonList(issuerRole), new Room("0.007"));
 		final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
 				Collections.singletonList(editorRole));
 		final SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User",
@@ -279,10 +279,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		location.addBuilding(building);
 		final List<Issuer> issuers = new ArrayList<>();
 		final Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters",
-				Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
+				Collections.singletonList(issuerRole10), room);
 
 		final Issuer issuer2 = new Issuer("muster@test.com", "Hallo123!", "Erik", "Muster",
-				Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
+				Collections.singletonList(issuerRole11), room2);
 
 		issuers.add(issuer1);
 		issuers.add(issuer2);
@@ -290,7 +290,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		// Safety-Credential
 		final List<Credential> credentials = new ArrayList<>();
 		final Credential safety = new Credential("Sicherheitsbelehrung-Uni", "$U-MEMBER",
-				"university", form, checklist, issuers);
+				"university", form, checklist);
+		safety.addIssuer(issuer1);
+		safety.addIssuer(issuer2);
 
 		final List<ChecklistEntry> checklist3 = new ArrayList<>();
 		checklist3.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
@@ -308,7 +310,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		form3.add(birthDate3);
 		form3.add(date3);
 		final Credential safety2 = new Credential("Sicherheitsbelehrung-FH", "$T-MEMBER",
-				"tlabs", form3, checklist3, issuers);
+				"tlabs", form3, checklist3);
+		safety2.addIssuer(issuer1);
+		safety2.addIssuer(issuer2);
 		credentials.add(safety);
 		credentials.add(safety2);
 
@@ -345,10 +349,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 		final List<Issuer> issuers = new ArrayList<>();
 		final Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
-				Collections.singletonList(issuerRole10), room, Collections.singletonList(null));
+				Collections.singletonList(issuerRole10), room);
 
 		final Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann",
-				"Hombach", Collections.singletonList(issuerRole11), room2, Collections.singletonList(null));
+				"Hombach", Collections.singletonList(issuerRole11), room2);
 		issuers.add(issuer1);
 		issuers.add(issuer2);
 
@@ -359,9 +363,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 				"$T-MEMBER",
 				"tlabs",
 				form4,
-				checklist4,
-				issuers
+				checklist4
 		);
+		safety.addIssuer(issuer1);
+		safety.addIssuer(issuer2);
 		credentials.add(safety);
 		final List<ExternalCredential> externalCredentials = new ArrayList<>();
 		final ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-MEMBER");
@@ -397,9 +402,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 				"$U-TRAINING",
 				"university",
 				form6,
-				checklist6,
-				issuers2
+				checklist6
 		);
+		firstAid.addIssuer(issuer2);
 		credentials2.add(firstAid);
 
 		final List<ExternalCredential> externalCredentials2 = new ArrayList<>();
@@ -480,10 +485,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		// Category
 
 		final List<Category> categories = new ArrayList<>();
-		final Category category = new Category("Sicherheitsbelehrung", externalCredentials);
+		final Category category = new Category("Sicherheitsbelehrung");
+		category.addExternalCredential(safety3);
 		category.addCredential(safety);
-		final Category category2 = new Category("Erste-Hilfe-Kurs", externalCredentials2);
+		final Category category2 = new Category("Erste-Hilfe-Kurs");
 		category2.addCredential(firstAid);
+		category2.addExternalCredential(firstAid2);
+		category2.addExternalCredential(firstAid3);
 		final CredentialCmd credentialCmd = CredentialServiceImpl.createCredentialCmd(category, safety);
 		final CredentialCmd credentialCmd2 = CredentialServiceImpl.createCredentialCmd(category2, firstAid);
 		final List<CredentialCmd> credentialCmds = new ArrayList<>();

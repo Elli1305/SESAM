@@ -11,6 +11,8 @@ public interface CategoryService {
 
     Optional<Category> getCategory(Long id);
 
+    void deleteById(Long id);
+
 
     Optional<Category> getCategory(List<Location> locations);
 
@@ -18,12 +20,18 @@ public interface CategoryService {
 
     void saveAll(Iterable<Category> category);
 
-    public void updateCategory(Category category, String name, List<ExternalCredential> externalCredential, List<Credential> credential);
+    void updateCategory(Category category, String name, List<ExternalCredential> externalCredential, List<Credential> credential);
 
-    public void deleteCategory(final Category category);
+    void deleteCategory(final Category category);
 
-    public void deleteCategoryById(Long id);
+    void deleteCategoryById(Long id);
 
-    public void createCategory(final CategoryResponseCmd categoryCmd);
+    void createCategory(final CategoryResponseCmd categoryCmd);
+
+    Category getCategoryById(Long id);
+
+    void deleteCategoryByName(String name);
+
+    Category getCategoryByName(String name);
 
 }

@@ -100,6 +100,11 @@ public class CredentialServiceImpl implements CredentialService {
 		return credentialRepository.findByLocation(id);
 	}
 
+	@Override
+	public Credential findByName(String name) {
+		return credentialRepository.findByName(name);
+	}
+
 	public static CredentialCmd createCredentialCmd(final Category category, final Credential credential) {
 		final List<String> externalCred = new ArrayList<>();
 		final List<String> issuerName = new ArrayList<>();

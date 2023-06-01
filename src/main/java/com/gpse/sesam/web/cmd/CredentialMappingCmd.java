@@ -7,6 +7,7 @@ public class CredentialMappingCmd {
 
     String name;
 
+    protected CredentialMappingCmd(){}
     public CredentialMappingCmd(Long id, String name) {
         this.id = id;
         this.name = name;

@@ -13,12 +13,14 @@ public class CategoryResponseCmd {
 
     private String name;
 
-    private List<Credential> credentials = new ArrayList<>();
+    private List<CredentialMappingCmd> credentials = new ArrayList<>();
 
     private List<ExternalCredential> externalCredentials = new ArrayList<>();
 
 
-    public CategoryResponseCmd(final String name, final List<Credential> credentials, final List<ExternalCredential> externalCredentials) {
+    public CategoryResponseCmd() {
+    }
+    public CategoryResponseCmd(final String name, final List<CredentialMappingCmd> credentials, final List<ExternalCredential> externalCredentials) {
         this.name = name;
         this.credentials = credentials;
         this.externalCredentials = externalCredentials;
@@ -37,24 +39,15 @@ public class CategoryResponseCmd {
         return externalCredentials;
     }
 
-    public List<Credential> getCredentials() {
+    public List<CredentialMappingCmd> getCredentials() {
         return credentials;
     }
-
-    public List<ExternalCredential> getExternalCredentialList() {
-        return externalCredentials;
-    }
-
-    public void setExternalCredentialList(final List<ExternalCredential> externalCredentials) {
-        this.externalCredentials = externalCredentials;
-    }
-
 
     public void setExternalCredentials(final List<ExternalCredential> externalCredentials) {
         this.externalCredentials = externalCredentials;
     }
 
-    public void setCredentials(final List<Credential> credentials) {
+    public void setCredentials(final List<CredentialMappingCmd> credentials) {
         this.credentials = credentials;
     }
 }

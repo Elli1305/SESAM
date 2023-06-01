@@ -22,4 +22,6 @@ public interface CredentialService {
 
 	List<Credential> credentialFindByLocation(Long id);
 
+	Credential findByName(String name);
+
 }

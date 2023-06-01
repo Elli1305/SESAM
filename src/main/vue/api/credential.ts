@@ -44,8 +44,15 @@ export default {
         return axios.delete('/api/credentialmapping/delete/'+param);
     },
 
+    deleteCategoryByName(param: String): Promise<AxiosResponse<void>> {
+        return axios.delete('/api/category/delete/'+param);
+    },
+
     createCategory(category: CategoryResponse): Promise<AxiosResponse<CategoryResponse>> {
         return axios.post('/api/category', category)
-    }
+    },
 
+    updateCategory(param: String, category: CategoryResponse): Promise<AxiosResponse<CategoryResponse>>{
+        return axios.post('api/credentialmapping/edit/'+ param, category)
+    }
 }
