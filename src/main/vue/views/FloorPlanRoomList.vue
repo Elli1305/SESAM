@@ -24,8 +24,8 @@
             <div class="col no-wrap">
               <div class="row" style="padding: 0.5em">
                 <q-list>
-                  <q-item-label>Raumbezeichnung: {{ room.name }}</q-item-label>
-                  <q-item-label>Türen: {{ room.doors.map(door => door.name).join(", ") }}</q-item-label>
+                  <q-item-label>{{t("floorplan.roomName")}}: {{ room.name }}</q-item-label>
+                  <q-item-label>{{t("floorplan.doors")}}: {{ room.doors.map(door => door.name).join(", ") }}</q-item-label>
                   <q-item-label>Credentials:
                     {{ room.doors.flatMap(door => door.credentials).map(credential => credential?.name).join(", ") }}
                   </q-item-label>
@@ -37,20 +37,20 @@
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                 <q-separator spaced></q-separator>
                 <div class="row justify-end" style="padding: 0.7em">
-                  <q-btn size="sm" label="Bearbeiten" color="primary" @click="setOldValueR(room)"></q-btn>
+                  <q-btn size="sm" :label="t( 'floorplan.edit')" color="primary" @click="setOldValueR(room)"></q-btn>
                   <q-dialog v-model="inception">
                     <q-card>
                       <q-card-section>
-                        <div class="text-h6">Raum Bearbeiten</div>
+                        <div class="text-h6">{{t("floorplan.editRoom")}}</div>
                         <div class="q-mt-md">
-                          <q-input filled v-model="currentRoomName" label="Raumname" stack-label
+                          <q-input filled v-model="currentRoomName" :label="t( 'floorplan.roomName')" stack-label
                                    style="width: 250px; padding-bottom: 32px"/>
                         </div>
                         <div class="q-mt-md">
                           <q-list bordered class="rounded-borders" style="max-width: 600px">
                             <q-item-label header>
                               <div class="row items-center">
-                                <div class="q-mr-sm">Türe</div>
+                                <div class="q-mr-sm">{{t("floorplan.doors")}}</div>
 
                               </div>
                             </q-item-label>
@@ -81,14 +81,14 @@
                                           transition-hide="scale">
                                   <q-card>
                                     <q-card-section class="q-pa-md">
-                                      <div class="text-h6">Löschen bestätigen</div>
-                                      <div class="q-mt-md">Sind Sie sicher, dass Sie die Tür löschen möchten?</div>
+                                      <div class="text-h6">{{t("floorplan.confirmDeletion")}}</div>
+                                      <div class="q-mt-md">{{t("floorplan.confirmDeletionText")}}</div>
                                     </q-card-section>
 
                                     <q-card-actions align="right" class="bg-white text-teal">
-                                      <q-btn color="primary" label="Löschen" @click="deleteDoor(room, door)"
-                                             v-close-popup/>
-                                      <q-btn color="primary" label="Abbrechen" v-close-popup/>
+                                      <q-btn color="primary" @click="deleteDoor(room, door)"
+                                             :label="t( 'floorplan.save')" v-close-popup/>
+                                      <q-btn color="primary" :label="t( 'floorplan.cancel')" v-close-popup/>
                                     </q-card-actions>
                                   </q-card>
                                 </q-dialog>
@@ -96,16 +96,16 @@
                                           transition-hide="scale">
                                   <q-card>
                                     <q-card-section>
-                                      <div class="text-h6">Tür Bearbeiten</div>
+                                      <div class="text-h6">{{t("floorplan.editDoor")}}</div>
                                     </q-card-section>
                                     <q-card-section>
-                                      <q-input filled v-model="editedDoorName" label="Türname" stack-label/>
+                                      <q-input filled v-model="editedDoorName" stack-label :label="t( 'floorplan.doorName')"/>
                                     </q-card-section>
 
 
                                     <q-card-actions align="right" class="bg-white text-teal">
-                                      <q-btn flat label="speichern" @click="editDoor(room, door)" v-close-popup/>
-                                      <q-btn flat label="abbrechen" v-close-popup/>
+                                      <q-btn color="primary"  @click="editDoor(room, door)" :label="t( 'floorplan.save')" v-close-popup/>
+                                      <q-btn color="primary"  :label="t( 'floorplan.cancel')" v-close-popup/>
                                     </q-card-actions>
                                   </q-card>
                                 </q-dialog>
@@ -115,8 +115,8 @@
                           </q-list>
                         </div>
                         <q-card-actions align="right" class="text-primary">
-                          <q-btn label="abbrechen" color="primary" v-close-popup/>
-                          <q-btn label="speichern" color="primary" @click="save(room)" v-close-popup/>
+                          <q-btn color="primary"  :label="t( 'floorplan.cancel')" v-close-popup/>
+                          <q-btn color="primary" @click="save(room)" :label="t( 'floorplan.save')" v-close-popup/>
                         </q-card-actions>
                       </q-card-section>
                     </q-card>

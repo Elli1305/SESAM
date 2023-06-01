@@ -50,7 +50,17 @@ const messages = {
             otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
         },
         floorplan: {
-            locations: 'Standorte'
+            locations: 'Standorte',
+            doorName: 'Türname',
+            editDoor: 'Tür bearbeiten',
+            editRoom: 'Raum bearbeiten',
+            save: 'speichern',
+            cancel: 'abbrechen',
+            confirmDeletion: 'Bestätigen Sie das Löschen',
+            confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            doors: 'Türe',
+            roomName: 'Raumname',
+            edit: 'Bearbeiten'
         },
 
         common: {
@@ -97,6 +107,14 @@ const messages = {
             toRegister: "Zur Registrierung",
             password: "Passwort"
         },
+        signUp:{
+          prename: "Vorname",
+          name: "Nachname",
+          password: "Passwort",
+          passwordRepeat: "Passwort wiederholen",
+          signup: "Registrierung",
+          alreadySignedUp: "Bereits registriert:"
+        },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
             email: "E-Mail",
@@ -108,7 +126,7 @@ const messages = {
         passwordChange: {
             changePassword: "Passwort ändern",
             password: "Passwort",
-            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein, ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
+            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein, \n ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
             repeatPassword: "Passwort wiederholen",
             failedToReset: "Password zurücksetzen fehlgeschlagen",
             passwordDoesNotConform: "Passwort erfüllt nicht die Kriterien",
@@ -261,7 +279,17 @@ const messages = {
             room: "Room: "
         },
         floorplan: {
-            locations: 'Locations'
+            locations: 'Locations',
+            doorName: 'Name of Door',
+            editDoor:'Edit Door',
+            editRoom:'Edit Room',
+            save: 'save',
+            cancel: 'cancel',
+            confirmDeletion: 'Confirm deletion',
+            confirmDeletionText:'Are you sure you want to delete the door?',
+            doors:'Doors',
+            roomName: 'Name of room',
+            edit: 'Edit'
         },
         home: {
             header: "SESAM",
@@ -291,6 +319,14 @@ const messages = {
             notRegistered: "Not registered",
             toRegister: "Go to Register",
             password: "Password"
+        },
+        signUp:{
+            prename: "Prename",
+            name: "Name",
+            password: "Password",
+            passwordRepeat: "Repeat password",
+            signup: "Sign up",
+            alreadySignedUp: "Already signed up:"
         },
         passwordReset: {
             resetPassword: "Reset Password",
