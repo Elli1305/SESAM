@@ -75,6 +75,6 @@ export interface CredentialMappingCmd {
 
 export interface CategoryResponse {
     name: string;
-    credentials: Credential[];
-    externalCredentials: ExternalCredential[];
+    credentials: bigint[];
+    externalCredentials: bigint[];
 }

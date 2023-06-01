@@ -2,7 +2,7 @@
   <q-page class="items-center justify-center" style="display: flex">
     <div class="q-gutter-y-md column" style="max-width: 80%; min-width: 20em; display: flex">
       <div>
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Credentialmapping {{credentialStore.categories}}</h1>
+      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Credentialmapping</h1>
       </div>
       <div style="width: 100em">
       <q-table
@@ -74,6 +74,7 @@
             label="Interne Credentials"
             emit-value
             :options="credentialStore.allCredentials"
+            option-value="id"
             option-label="name"
             options-cover
         ></q-select>
@@ -86,6 +87,7 @@
             label="Externe Credentials"
             emit-value
             :options="credentialStore.external"
+            option-value="id"
             option-label="name"
             options-cover
         ></q-select>
@@ -118,6 +120,7 @@
               emit-value
               v-model="model3"
               :options="credentialStore.allCredentials"
+              option-value="id"
               option-label="name"
               options-cover
           ></q-select>
@@ -130,6 +133,7 @@
               emit-value
               v-model="model4"
               :options="credentialStore.external"
+              option-value="id"
               option-label="name"
               options-cover
           ></q-select>
@@ -151,8 +155,8 @@ import {useRouter} from 'vue-router'
 
 const columns = [
   { name: 'category', required: true, label: 'Kategorie', align: 'center', field: row => row.name, sortable: true },
-  { name: 'credential', align: 'center', label: "Credential (intern)", field: row => row.credentials,  format: (val, row) => val.join(', '), sortable: true},
-  { name: 'externalCredential', align: 'center', label: 'Credential (extern)', field: row => row.externalCredentials, format: (val, row) => val.join(', '), sortable: true},
+  { name: 'credential', align: 'center', label: "Credential (intern)", field: row => row.credentials,  format: (val, row) => val.map(c => c.name).join(', '), sortable: true},
+  { name: 'externalCredential', align: 'center', label: 'Credential (extern)', field: row => row.externalCredentials, format: (val, row) => val.map(e => e.name).join(', '), sortable: true},
   { name: 'actions', align: 'center', label: 'Bearbeiten'}
 ]
 
@@ -173,25 +177,22 @@ export default {
 
     credentialStore.getCategory().then((categories) => {
       rows.value = categories
+
     })
 
     credentialStore.getExternalCredentials().then((external) => {
     })
-    //credentialStore.getCredentialsForMapping().then((external) => {})
 
     credentialStore.getCredentials().then((external) => {})
-
 
     function deleteCategory() {
       credentialStore.deleteCategory(1)
       credentialStore.getCategory().then((categories) => {
         rows.value = categories
+
       })
     }
 
-    function deleteCategoryByName(){
-      credentialStore.deleteCategoryByName('Sicherheitsbelehrung').then((res)=>{})
-    }
 
     function createCategory() {
       credentialStore.createCategory(address.value, model.value, model2.value);
@@ -229,7 +230,6 @@ export default {
       deleteCategory,
       createCategory,
       updateCategory,
-      deleteCategoryByName
     }
   }
 }

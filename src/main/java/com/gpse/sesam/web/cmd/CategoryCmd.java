@@ -9,21 +9,21 @@ public class CategoryCmd {
 
     Long id;
     String name;
-    List<String> credentials;
-    List<String> externalCredentials;
+    List<Long> credentials;
+    List<Long> externalCredentials;
 
-    public CategoryCmd(Long id, String name, List<String> credentials, List<String> externalCredentials) {
+    public CategoryCmd(Long id, String name, List<Long> credentials, List<Long> externalCredentials) {
         this.id = id;
         this.name = name;
         this.credentials = credentials;
         this.externalCredentials = externalCredentials;
     }
 
-    public void setCredentials(List<String> credentials) {
+    public void setCredentials(List<Long> credentials) {
         this.credentials = credentials;
     }
 
-    public void setExternalCredentials(List<String> externalCredentials) {
+    public void setExternalCredentials(List<Long> externalCredentials) {
         this.externalCredentials = externalCredentials;
     }
 
@@ -35,7 +35,7 @@ public class CategoryCmd {
         return name;
     }
 
-    public List<String> getCredentials() {
+    public List<Long> getCredentials() {
         return credentials;
     }
 
@@ -47,7 +47,7 @@ public class CategoryCmd {
         return id;
     }
 
-    public List<String> getExternalCredentials() {
+    public List<Long> getExternalCredentials() {
         return externalCredentials;
     }
 }

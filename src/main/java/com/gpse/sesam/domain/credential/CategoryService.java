@@ -1,8 +1,8 @@
 package com.gpse.sesam.domain.credential;
 
 import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.web.cmd.CategoryCmd;
 import com.gpse.sesam.web.cmd.CategoryResponseCmd;
-import com.gpse.sesam.web.cmd.CategoryResponseCmdReplicate;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +21,13 @@ public interface CategoryService {
 
     void saveAll(Iterable<Category> category);
 
-    void updateCategory(Category category, String name, List<ExternalCredential> externalCredential, List<Credential> credential);
+    void updateCategory(Long id, CategoryResponseCmd cmd);
 
     void deleteCategory(final Category category);
 
     void deleteCategoryById(Long id);
 
-    void createCategory(final CategoryResponseCmdReplicate categoryCmd);
+    void createCategory(final CategoryResponseCmd categoryCmd);
 
     Category getCategoryById(Long id);
 

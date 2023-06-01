@@ -18,6 +18,8 @@ import EditUser from "@/main/vue/views/EditUser.vue";
 import CredentialView from "@/main/vue/views/CredentialView.vue";
 import RolesRequest from "@/main/vue/views/RolesRequest.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
+import IssueCredential from "@/main/vue/views/IssueCredential.vue";
+import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -116,6 +118,17 @@ const router = createRouter({
             path: "/corporatedesign",
             component: CorporateDesign,
             meta: {requiresAdmin: true},
+        },
+        {
+            path: "/credentials",
+            component: IssueCredentials,
+            meta: {requiresAuth: true},
+        },
+        {
+            path: "/credentials/:id/issue",
+            component: IssueCredential,
+            props: true,
+            meta: { requiresAuth: true },
         },
   ],
 });

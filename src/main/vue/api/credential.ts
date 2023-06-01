@@ -53,6 +53,6 @@ export default {
     },
 
     updateCategory(param: String, category: CategoryResponse): Promise<AxiosResponse<CategoryResponse>>{
-        return axios.post('api/credentialmapping/edit/'+ param, category)
+        return axios.put('api/credentialmapping/edit/'+ param, category)
     }
 }

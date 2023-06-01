@@ -277,11 +277,12 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		building.addFloor(floor);
 		final Location location = new Location("Köln");
 		location.addBuilding(building);
+		final String defaultPassword = passwordEncoder.encode("Hallo123!");
 		final List<Issuer> issuers = new ArrayList<>();
-		final Issuer issuer1 = new Issuer("peters@test.com", "Hallo123!", "Gerda", "Peters",
+		final Issuer issuer1 = new Issuer("peters@test.com", defaultPassword, "Gerda", "Peters",
 				Collections.singletonList(issuerRole10), room);
 
-		final Issuer issuer2 = new Issuer("muster@test.com", "Hallo123!", "Erik", "Muster",
+		final Issuer issuer2 = new Issuer("muster@test.com", defaultPassword, "Erik", "Muster",
 				Collections.singletonList(issuerRole11), room2);
 
 		issuers.add(issuer1);

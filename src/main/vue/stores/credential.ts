@@ -96,7 +96,7 @@ export const useCredentialStore = defineStore('credential', () =>{
         })
     }
 
-    function createCategory(name: string, credential: Credential[], external: ExternalCredential[]) {
+    function createCategory(name: string, credential: bigint[], external: bigint[]) {
         return new Promise<void>((resolve, reject) => {
             api.credential.createCategory({
                 name: name,
@@ -107,7 +107,7 @@ export const useCredentialStore = defineStore('credential', () =>{
         });
     }
 
-    function updateCredentials(id: string, name: string, credential: Credential[], external: ExternalCredential[]) {
+    function updateCredentials(id: string, name: string, credential: bigint[], external: bigint[]) {
         return new Promise<void>((resolve, reject) => {
             api.credential.updateCategory(id,
                 {

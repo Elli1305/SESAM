@@ -1,10 +1,8 @@
 package com.gpse.sesam.domain.credential;
 
 import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.web.cmd.CategoryCmd;
 import com.gpse.sesam.web.cmd.CategoryResponseCmd;
-import com.gpse.sesam.web.cmd.CategoryResponseCmdReplicate;
-import com.gpse.sesam.web.cmd.CredentialForMappingCmd;
-import com.gpse.sesam.web.cmd.CredentialMappingCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +16,13 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CredentialRepository credentialRepository;
 
+    private final ExternalCredentialRepository externalCredentialRepository;
+
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CredentialRepository credentialRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CredentialRepository credentialRepository, ExternalCredentialRepository externalCredentialRepository) {
         this.categoryRepository = categoryRepository;
         this.credentialRepository = credentialRepository;
+        this.externalCredentialRepository = externalCredentialRepository;
     }
 
     @Override
@@ -59,11 +60,30 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void updateCategory(Category category, String name, List<ExternalCredential> externalCredential, List<Credential> credential) {
-        category.setName(name);
-        category.setCredentials(credential);
-        category.setExternalCredentials(externalCredential);
-        categoryRepository.save(category);
+    public void updateCategory(Long id, CategoryResponseCmd cmd) {
+        Optional<Category> category = getCategory(id);
+        if (category.isPresent()) {
+            category.get().setName(cmd.getName());
+            List<Credential> credentials = new ArrayList<>();
+            for (Long cred: cmd.getCredentials() ) {
+                Optional<Credential> credential = credentialRepository.findById((cred));
+                if (credential.isPresent()) {
+                    credentials.add(credential.get());
+                }
+            }
+            List<ExternalCredential> external = new ArrayList<>();
+            category.get().setCredentials(credentials);
+            for (Long cred: cmd.getExternalCredentials() ) {
+                Optional<ExternalCredential> credential = externalCredentialRepository.findById((cred));
+                if (credential.isPresent()) {
+                    external.add(credential.get());
+                }
+            }
+
+            category.get().setExternalCredentials(external);
+            categoryRepository.save(category.get());
+
+        }
     }
 
     @Override
@@ -77,10 +97,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void createCategory(CategoryResponseCmdReplicate categoryCmd) {
+    public void createCategory(CategoryResponseCmd categoryCmd) {
         final Category category = new Category(categoryCmd.getName());
-        category.setCredentials(categoryCmd.getCredentials());
-        category.setExternalCredentialList(categoryCmd.getExternalCredentials());
+        List<Credential> credentials = new ArrayList<>();
+        for (Long cred: categoryCmd.getCredentials() ) {
+        Optional<Credential> credential = credentialRepository.findById((cred));
+            if (credential.isPresent()) {
+                credentials.add(credential.get());
+            }
+        }
+        List<ExternalCredential> external = new ArrayList<>();
+        category.setCredentials(credentials);
+        for (Long cred: categoryCmd.getExternalCredentials() ) {
+            Optional<ExternalCredential> credential = externalCredentialRepository.findById((cred));
+            if (credential.isPresent()) {
+                external.add(credential.get());
+            }
+        }
+        category.setExternalCredentialList(external);
         categoryRepository.save(category);
     }
 

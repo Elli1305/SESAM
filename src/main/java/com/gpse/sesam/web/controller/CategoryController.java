@@ -32,8 +32,7 @@ public class CategoryController {
         this.credentialService = credentialService;
         this.externalCredentialService = externalCredentialService;
     }
-
-
+    /*
     @Secured("ADMINISTRATOR")
     @GetMapping("/credentialmapping")
 	public List<CategoryCmd> getCategoriesInfo() {
@@ -54,6 +53,11 @@ public class CategoryController {
             cmd.add(new CategoryCmd(id, name, credentials, externalcredentials));
         }
         return cmd;
+    }*/
+
+    @GetMapping("/credentialmapping")
+    public List<Category> getCategoriesInfo() {
+        return categoryService.getCategory();
     }
 
     @Secured("ADMINISTRATOR")
@@ -70,43 +74,52 @@ public class CategoryController {
         categoryService.deleteById(Long.valueOf(id));
     }
 
-    /*@Secured("ADMINISTRATOR")
-    @PostMapping("/credentialmapping/edit/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateCategory(@PathVariable("id") @RequestBody final String id, CategoryResponseCmd cmd) {
-        final Category category = categoryService.getCategoryById(Long.valueOf(id));
-        List<Credential> credentials = new ArrayList<>();
-        for (CredentialMappingCmd cmds: cmd.getCredentials()) {
-            Credential credential = credentialService.findByName(cmds.getName());
-            credentials.add(credential);
-        }
-        categoryService.updateCategory(category, cmd.getName(), cmd.getExternalCredentials(), credentials);
-    } */
-
     @Secured("ADMINISTRATOR")
-    @PostMapping("/credentialmapping/edit/{id}")
+    @PutMapping("/credentialmapping/edit/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateCategory(@PathVariable("id") @RequestBody final String id, CategoryResponseCmdReplicate cmd) {
-        final Category category = categoryService.getCategoryById(Long.valueOf(id));
-        categoryService.updateCategory(category, cmd.getName(), cmd.getExternalCredentials(), cmd.getCredentials());
+    public void updateCategory(@PathVariable("id") final Long id, @RequestBody CategoryResponseCmd cmd) {
+        categoryService.updateCategory(id, cmd);
     }
+
+    /*
+    @Secured("ADMINISTRATOR")
+    @PostMapping(value = "/credentialmapping/edit/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateCategory(@PathVariable("id") @RequestBody final Long id, CategoryResponseCmdReplicate cmd) {
+        final Optional<Category> category = categoryService.getCategory(id);
+        if (category.isPresent()) {
+            categoryService.updateCategory(category.get(), cmd.getName(), cmd.getExternalCredentials(), cmd.getCredentials());
+        }
+    }*/
 
     @Secured("ADMINISTRATOR")
     @PostMapping("/category")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createCategory(@RequestBody final CategoryResponseCmdReplicate category) {
+    public void createCategory(@RequestBody final CategoryResponseCmd category) {
         categoryService.createCategory(category);
     }
 
-    @Secured("ADMINISTRATOR")
+    /*@Secured("ADMINISTRATOR")
     @DeleteMapping("/category/delete/{name}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCategoryByName(@PathVariable("name") final String name) {
         categoryService.deleteCategoryByName(name);
+    }*/
+
+    @Secured("ADMINISTRATOR")
+    @DeleteMapping("/category/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCategoryByName(@PathVariable("id") final Long id) {
+        categoryService.deleteCategoryById(id);
     }
 
     @GetMapping("/category/{id}")
-    public void getCategoryByName(@PathVariable("id") final String id) {
+    public void getCategoryById(@PathVariable("id") final String id) {
         categoryService.getCategory(Long.valueOf(id));
+    }
+
+    @GetMapping("/categoryname/{name}")
+    public void getCategoryByName(@PathVariable("name") final String name) {
+        categoryService.getCategoryByName(name);
     }
 }
