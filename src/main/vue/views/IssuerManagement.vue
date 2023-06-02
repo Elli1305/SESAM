@@ -30,6 +30,11 @@
               <div>{{ props.row.room.name }}</div>
             </q-td>
           </template>
+          <template v-slot:body-cell-crendetials="props">
+            <q-td :props="props">
+              <div>{{ props.row.credentials }}</div>
+            </q-td>
+          </template>
 
 
 
@@ -43,7 +48,7 @@
           <q-form @submit="saveChanges">
             <q-input v-model="editedRow.lastName" label="Last Name" outlined readonly></q-input>
             <q-input v-model="editedRow.firstName" label="First Name" outlined readonly></q-input>
-            <q-input v-model="editedRow.username" label="Email" outlined readonly></q-input>
+            <q-input v-model="editedRow.room.name" label="Room Name" outlined readonly></q-input>
             <q-select
                 filled
                 v-model="editedRow.category"
@@ -51,7 +56,6 @@
                 :label="t('issuermanagement.list')"
                 emit-value
                 :options="credentialStore.allCredentials"
-                option-value="id"
                 option-label="name"
                 options-cover
             ></q-select>
