@@ -87,6 +87,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<Credential> credentials = createCredentials();
 		final List<Category> categories = createCredentialCategories();
 		final List<Colors> colors = createColors();
+		final List<RoomGroups> roomGroups = roomGroups(locations);
 
 		colorsService.saveAll(colors);
 		locationService.saveAll(locations);
@@ -94,7 +95,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		credentialService.saveAll(credentials);
 		locationService.saveAll(locationsList);
 		categoryService.saveAll(categories);
-		final List<RoomGroups> roomGroups = roomGroups(locations);
+
 		roomGroupService.saveAll(roomGroups);
 	}
 
@@ -169,7 +170,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final Building build2 = locations.get(0).getBuildings().get(1);
 		final List<Room> rooms = build.getFloors().get(0).getRooms();
 
-		final List<Room> rooms2 = build2.getFloors().get(0).getRooms();
+		final List<Room> rooms2 = build2.getFloors().get(1).getRooms();
 		roomGroups.add(new RoomGroups("Frozen Jaghurt", rooms, build));
 		roomGroups.add(new RoomGroups("Group 2", rooms2, build2));
 		return roomGroups;
