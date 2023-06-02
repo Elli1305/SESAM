@@ -91,6 +91,7 @@ import axios from 'axios';
 import {Dialog} from 'quasar';
 import {useCredentialStore} from "@/main/vue/stores/credential"
 import {useRoomStore} from "@/main/vue/stores/room";
+import {useUserStore} from "@/main/vue/stores/users";
 
 
 export default {
@@ -108,6 +109,7 @@ export default {
     const {t} = useI18n();
     const credentialStore = useCredentialStore()
     const roomStore = useRoomStore()
+    const userStore = useUserStore();
 
     const filter=ref('')
     const columns = [
@@ -204,6 +206,8 @@ export default {
 
     credentialStore.getCredentials().then((external) => {})
     roomStore.getRooms().then((rooms) =>{})
+
+    useUserStore.updateIssuer().then((issuer) =>{})
 
 
 

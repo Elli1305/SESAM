@@ -6,3 +6,9 @@ export interface Issuer extends User {
     room: Room
     credentials: Credential []
 }
+
+export interface IssuerCmd {
+    id: bigint
+    room: string
+    credentials: string[]
+}
