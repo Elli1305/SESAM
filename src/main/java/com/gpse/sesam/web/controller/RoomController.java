@@ -29,7 +29,7 @@ public class RoomController {
 		roomService.deleteById(id);
 	}
 
-	@Secured("ADMINSTRATOR")
+
 	@GetMapping("/rooms")
 	public java.util.List<Room> getRooms(){
 		return roomService.getRooms();

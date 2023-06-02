@@ -15,7 +15,6 @@
               </q-input>
             </div>
           </template>
-
           <template v-slot:body-cell-actions="props">
             <q-td :props="props">
               <q-btn dense round flat color="grey" @click="openForm(props.row)" icon="edit"></q-btn>
@@ -51,12 +50,11 @@
           <q-form @submit="saveChanges">
             <q-input v-model="editedRow.lastName" label="Last Name" outlined readonly></q-input>
             <q-input v-model="editedRow.firstName" label="First Name" outlined readonly></q-input>
-            <q-input v-model="editedRow.room.name" label="Room Name" outlined readonly></q-input>
             <q-select
                 filled
                 v-model="editedRow.credential"
                 multiple
-                :label="t('issuermanagement.list')"
+                :label="t('issuermanagement.credentialsList')"
                 emit-value
                 :options="credentialStore.allCredentials"
                 option-label="name"
@@ -66,7 +64,7 @@
             <q-select
                 filled
                 v-model="model"
-                :label="Räume"
+                :label="t('issuermanagement.roomsList')"
                 emit-value
                 :options="roomStore.rooms"
                 option-label="name"
@@ -87,7 +85,7 @@
 </template>
 
 <script>
-import {ref, watchEffect} from 'vue';
+import {ref} from 'vue';
 import {useI18n} from 'vue-i18n';
 import axios from 'axios';
 import {Dialog} from 'quasar';
@@ -151,7 +149,6 @@ export default {
 
     const confirmSave = () => {
       Dialog.create({
-        title: t('issuermanagement.saveConfirmationTitle'),
         message: t('issuermanagement.saveConfirmationMessage'),
         persistent: true,
         ok: {
@@ -169,7 +166,7 @@ export default {
             saveChanges();
           })
           .onCancel(() => {
-            isFormOpen.value = false; // Close the dialog without making changes
+            isFormOpen.value = false;
           });
     };
     const closeForm = () => {
@@ -224,6 +221,7 @@ export default {
       editedItem,
       confirmSave,
       closeForm,
+      roomStore,
 
     };
   },

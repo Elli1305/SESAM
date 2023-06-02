@@ -11,6 +11,6 @@ export default {
     },
 
     getRooms(): Promise<AxiosResponse<Room[]>> {
-        return axios.get("api/rooms")
+        return axios.get("api/room/rooms")
     }
 }

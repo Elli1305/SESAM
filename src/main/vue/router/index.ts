@@ -107,7 +107,8 @@ const router = createRouter({
         {path: "/:pathMatch(.*)*", component: StartView},
         {
             path: '/issuermanagement',
-            component: IssuerManagement
+            component: IssuerManagement,
+            meta: {requiresAdmin: true},
         },
 
 
