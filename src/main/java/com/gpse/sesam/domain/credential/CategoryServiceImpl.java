@@ -19,7 +19,8 @@ public class CategoryServiceImpl implements CategoryService {
     private final ExternalCredentialRepository externalCredentialRepository;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CredentialRepository credentialRepository, ExternalCredentialRepository externalCredentialRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CredentialRepository credentialRepository,
+                               ExternalCredentialRepository externalCredentialRepository) {
         this.categoryRepository = categoryRepository;
         this.credentialRepository = credentialRepository;
         this.externalCredentialRepository = externalCredentialRepository;
@@ -91,10 +92,6 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(category);
     }
 
-    @Override
-    public void deleteCategoryById(Long id) {
-        categoryRepository.deleteCategoryById(id);
-    }
 
     @Override
     public void createCategory(CategoryResponseCmd categoryCmd) {
@@ -117,21 +114,5 @@ public class CategoryServiceImpl implements CategoryService {
         category.setExternalCredentialList(external);
         categoryRepository.save(category);
     }
-
-    @Override
-    public Category getCategoryById(Long id) {
-        return categoryRepository.categoryGetById(id);
-    }
-
-    @Override
-    public void deleteCategoryByName(String name) {
-        categoryRepository.deleteCategoryByName(name);
-    }
-
-    @Override
-    public Category getCategoryByName(String name) {
-        return categoryRepository.getCategoriesByName(name);
-    }
-
 
 }

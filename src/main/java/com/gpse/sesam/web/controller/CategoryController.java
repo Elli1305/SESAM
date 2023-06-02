@@ -32,28 +32,6 @@ public class CategoryController {
         this.credentialService = credentialService;
         this.externalCredentialService = externalCredentialService;
     }
-    /*
-    @Secured("ADMINISTRATOR")
-    @GetMapping("/credentialmapping")
-	public List<CategoryCmd> getCategoriesInfo() {
-		List<Category> categories = categoryService.getCategory();
-        List<CategoryCmd> cmd = new ArrayList<>();
-        for (Category category : categories) {
-            Long id = category.getId();
-            String name = category.getName();
-            List<String> credentials = new ArrayList<>();
-            List<String> externalcredentials = new ArrayList<>();
-            List<Credential> credentialList = category.getCredentials();
-            for (Credential cred : credentialList) {
-                credentials.add(cred.getName());
-            }
-            for (ExternalCredential externalCredential: category.getExternalCredentials()) {
-                externalcredentials.add(externalCredential.getName());
-            }
-            cmd.add(new CategoryCmd(id, name, credentials, externalcredentials));
-        }
-        return cmd;
-    }*/
 
     @GetMapping("/credentialmapping")
     public List<Category> getCategoriesInfo() {
@@ -89,27 +67,9 @@ public class CategoryController {
         categoryService.createCategory(category);
     }
 
-    /*@Secured("ADMINISTRATOR")
-    @DeleteMapping("/category/delete/{name}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteCategoryByName(@PathVariable("name") final String name) {
-        categoryService.deleteCategoryByName(name);
-    }*/
-
-    @Secured("ADMINISTRATOR")
-    @DeleteMapping("/category/delete/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteCategoryByName(@PathVariable("id") final Long id) {
-        categoryService.deleteCategoryById(id);
-    }
-
     @GetMapping("/category/{id}")
-    public void getCategoryById(@PathVariable("id") final String id) {
-        categoryService.getCategory(Long.valueOf(id));
+    public void getCategoryById(@PathVariable("id") Long id) {
+        categoryService.getCategory(id);
     }
 
-    @GetMapping("/categoryname/{name}")
-    public void getCategoryByName(@PathVariable("name") final String name) {
-        categoryService.getCategoryByName(name);
-    }
 }

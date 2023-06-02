@@ -14,10 +14,4 @@ public interface ExternalCredentialService {
     void deleteAll();
 
     void saveAll(Iterable<ExternalCredential> externalCredentials);
-
-    void updateExternalCredential(ExternalCredential externalCredential, String name, String defintionId);
-
-    void deleteExternalCredential(final ExternalCredential externalCredential);
-
-    ExternalCredential findExternalById(Long id);
 }

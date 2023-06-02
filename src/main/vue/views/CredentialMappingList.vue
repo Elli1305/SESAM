@@ -48,7 +48,7 @@
 
       <q-card-actions align="evenly" class="text-primary">
         <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteCategory(editedRow.id)">  {{ t("credentialmapping.save")}} </q-btn>
+        <q-btn flat v-close-popup @click="deleteCategory">  {{ t("credentialmapping.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -141,8 +141,7 @@
       </q-card-section>
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="updateCategory(editedRow.id)">
-          {{ t("credentialmapping.save")}} </q-btn>
+        <q-btn flat v-close-popup @click="updateCategory(editedRow.id)"> {{ t("credentialmapping.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -188,11 +187,10 @@ export default {
 
     credentialStore.getCredentials().then((external) => {})
 
-    function deleteCategory(id) {
-      credentialStore.deleteCategory(id)
+    function deleteCategory() {
+      credentialStore.deleteCategory(1)
       credentialStore.getCategory().then((categories) => {
         rows.value = categories
-
       })
     }
 
@@ -219,8 +217,6 @@ export default {
     const openForm = (row) => {
       editedRow.value = {...row}; // Assign the selected item to editedRow
       catname.value = row.name
-      model3.value = row.credentials
-      model4.value = row.externalCredentials
     };
 
 

@@ -37,22 +37,4 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
     public void saveAll(Iterable<ExternalCredential> externalCredentials) {
         externalCredentialRepository.saveAll(externalCredentials);
     }
-
-    @Override
-    public void updateExternalCredential(ExternalCredential externalCredential, String name, String defintionId) {
-        externalCredential.setName(name);
-        externalCredential.setCredentialDefinitionId(defintionId);
-        externalCredentialRepository.save(externalCredential);
-    }
-
-    @Override
-    public void deleteExternalCredential(ExternalCredential externalCredential) {
-        externalCredentialRepository.delete(externalCredential);
-    }
-
-    @Override
-    public ExternalCredential findExternalById(Long id) {
-        return externalCredentialRepository.externalFindById(id);
-    }
-
 }

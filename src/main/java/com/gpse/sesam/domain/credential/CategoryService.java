@@ -25,14 +25,5 @@ public interface CategoryService {
 
     void deleteCategory(final Category category);
 
-    void deleteCategoryById(Long id);
-
     void createCategory(final CategoryResponseCmd categoryCmd);
-
-    Category getCategoryById(Long id);
-
-    void deleteCategoryByName(String name);
-
-    Category getCategoryByName(String name);
-
 }

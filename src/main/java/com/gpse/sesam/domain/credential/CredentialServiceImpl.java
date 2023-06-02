@@ -89,21 +89,12 @@ public class CredentialServiceImpl implements CredentialService {
 		credentialRepository.saveAll(credentials);
 	}
 
-	@Override
-	public Optional<Credential> credentialFindByLocation(final Location location) {
-		return Optional.empty();
-	}
-
 
 	@Override
 	public List<Credential> credentialFindByLocation(final Long id) {
 		return credentialRepository.findByLocation(id);
 	}
 
-	@Override
-	public Credential findByName(String name) {
-		return credentialRepository.findByName(name);
-	}
 
 	public static CredentialCmd createCredentialCmd(final Category category, final Credential credential) {
 		final List<String> externalCred = new ArrayList<>();

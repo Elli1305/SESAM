@@ -18,10 +18,6 @@ public interface CredentialService {
 
 	void saveAll(Iterable<Credential> credentials);
 
-	Optional<Credential> credentialFindByLocation(Location location);
-
 	List<Credential> credentialFindByLocation(Long id);
-
-	Credential findByName(String name);
 
 }
