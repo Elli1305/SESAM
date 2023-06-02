@@ -214,13 +214,13 @@ const messages = {
                     title: "Sind Sie sicher, dass sie zurücksetzen wollen?",
                     message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
                     ok: "Zurücksetzen",
-                    cancel: "Abbruch"
+                    cancel: "Abbrechen"
                 },
                 save: {
                     title: "Sind Sie sicher, dass sie speichern wollen?",
                     message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
                     ok: "Speichern",
-                    cancel: "Abbruch"
+                    cancel: "Abbrechen"
                 }
             },
             resetFailure: "Zurücksetzen fehlgeschlagen",

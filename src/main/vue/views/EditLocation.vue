@@ -8,8 +8,8 @@
         </div>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn color="primary" label="Abbrechen" @click="onCancelClick"/>
-        <q-btn color="primary" label="Speichern" @click="onOKClick"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.ok')" @click="onOKClick"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -18,6 +18,7 @@
 <script>
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {ref} from "vue";
+import {useI18n} from "vue-i18n";
 
 export default {
   props: {
@@ -60,8 +61,9 @@ export default {
   },
   setup(props) {
     const locationStore = useLocationStore()
+    const { t } = useI18n()
     let locationName = ref(props.location.name);
-    return {locationName, locationStore}
+    return {locationName, locationStore, t}
   }
 }
 </script>

@@ -53,20 +53,20 @@
                         <div class="text-h6">Raum Bearbeiten</div>
                         <div class="q-mt-md">
                           <q-input filled v-model="currentRoomName" label="Raumname" stack-label
-                                   style="width: 250px; padding-bottom: 32px"/>
+                                   style="width: 250px; padding-bottom: 1em"/>
                         </div>
-                        <div class="q-mt-md">
+                        <div class="q-my-xs">
                           <q-list bordered class="rounded-borders" style="max-width: 600px">
                             <q-item-label header>
                               <div class="row items-center">
-                                <div class="q-mr-sm">Türe</div>
+                                <div class="q-mr-sm">Türen</div>
 
                               </div>
                             </q-item-label>
                             <template v-for="door in room.doors">
                               <q-item>
                                 <q-item-section avatar top>
-                                  <q-icon name="crop_portrait" color="black" size="34px"/>
+                                  <q-icon name="meeting_room" color="black" size="34px"/>
                                 </q-item-section>
 
                                 <q-item-section>
@@ -95,10 +95,10 @@
                                     </q-card-section>
 
                                     <q-card-actions align="right" class="bg-white text-teal">
-                                      <q-btn color="primary" label="Löschen" @click="deleteDoor(room, door)"
+                                      <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.cancel')" v-close-popup/>
+                                      <q-btn flat color="primary" :label="t('adminEdit.delete')" @click="deleteDoor(room, door)"
                                              v-close-popup/>
-                                      <q-btn color="primary" label="Abbrechen" v-close-popup/>
-                                    </q-card-actions>
+                                      </q-card-actions>
                                   </q-card>
                                 </q-dialog>
                                 <q-dialog v-model="editDoorDialog" persistent transition-show="scale"
@@ -112,9 +112,9 @@
                                     </q-card-section>
 
 
-                                    <q-card-actions align="right" class="bg-white text-teal">
-                                      <q-btn flat label="speichern" @click="editDoor(room, door)" v-close-popup/>
-                                      <q-btn flat label="abbrechen" v-close-popup/>
+                                    <q-card-actions align="right" class="bg-white text-primary">
+                                      <q-btn flat :label="t('corporateDesign.confirm.save.cancel')" @click="editDoor(room, door)" v-close-popup/>
+                                      <q-btn flat :label="t('corporateDesign.confirm.save.ok')" v-close-popup/>
                                     </q-card-actions>
                                   </q-card>
                                 </q-dialog>
@@ -124,8 +124,8 @@
                           </q-list>
                         </div>
                         <q-card-actions align="right" class="text-primary">
-                          <q-btn label="abbrechen" color="primary" v-close-popup/>
-                          <q-btn label="speichern" color="primary" @click="save(room)" v-close-popup/>
+                          <q-btn flat :label="t('corporateDesign.confirm.save.cancel')" color="primary" v-close-popup/>
+                          <q-btn flat :label="t('corporateDesign.confirm.save.ok')" color="primary" @click="save(room)" v-close-popup/>
                         </q-card-actions>
                       </q-card-section>
                     </q-card>
