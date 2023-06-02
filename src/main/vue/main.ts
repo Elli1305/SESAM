@@ -124,6 +124,7 @@ const messages = {
             editor: "Bearbeiter",
             issuer: "Herausgeber",
         },
+
         issueCredential: {
             title: "{0} Credential Ausstellung",
             description: [
@@ -211,7 +212,25 @@ const messages = {
             },
             resetFailure: "Zurücksetzen fehlgeschlagen",
             saveFailure: "Speichern fehlgeschlagen"
-        }
+        },
+        issuermanagement: {
+            title: "Herausgeber verwalten",
+            firstname: "Vorname",
+            lastname: "Name",
+            email: "E-Mail",
+            credential:"Credential",
+            search: "Suche",
+            issuerFilter:"Herausgebern filtern",
+            edit: "Bearbeiten",
+            list:"Liste aller Credentials",
+            roomId: "Raum ID",
+            credentials:"Credential",
+            dialogTitle:"Credentials verwalten",
+            save:"Speichern",
+            cancel: "Abbrechen",
+            saveConfirmationTitle: "Speichern?",
+            saveConfirmationMessage: "Sind Sie sicher, dass sie speichern wollen?",
+        },
     },
     en: {
         adminCurrentUser: {
@@ -407,7 +426,28 @@ const messages = {
             },
             resetFailure: "Reset failed",
             saveFailure: "Saving failed"
-        }
+        },
+
+        issuermanagement: {
+            title: "Issuer Management",
+            firstname: "Prename",
+            lastname: "Name",
+            email: "E-Mail",
+            credential:"Credential",
+            search: "Search",
+            issuerFilter:"Issuer filter",
+            edit: "Edit",
+            list:"List of all credentials",
+            roomId:"Room ID",
+            credentials:"Credential",
+            dialogTitle:"Credentials Management",
+            save:"Save",
+            cancel: "Cancel",
+            saveConfirmationTitle: "Save?",
+            saveConfirmationMessage: "Are you sure you want to save?",
+
+
+        },
     }
 }
 

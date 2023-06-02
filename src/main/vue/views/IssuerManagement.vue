@@ -1,17 +1,21 @@
 <template>
   <div class="q-pa-md">
     <div class="q-mb-xl">
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t('issuermanagement.title') }}  </h1>
+      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t('issuermanagement.title') }}</h1>
     </div>
     <div class="items-center justify-center" style="display: flex">
       <div class="center" style="max-width: 80em; min-width: 60em">
-        <q-input v-model="searchQuery" dense outlined placeholder="Search" class="q-mb-md" @input="filterRows">
-          <template v-slot:append>
-            <q-icon name="search"/>
+        <q-table :rows="rows" :columns="columns" row-key="username" :separator="'cell'" :filter="filter">
+          <template v-slot:top-right="props">
+            <div class="q-pa-md">
+              <q-input dense debounce="300" v-model="filter" :placeholder="t('issuermanagement.search')">
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
+            </div>
           </template>
-        </q-input>
 
-        <q-table :rows="filteredRows" :columns="columns" row-key="username" :separator="'cell'">
           <template v-slot:body-cell-actions="props">
             <q-td :props="props">
               <q-btn dense round flat color="grey" @click="openForm(props.row)" icon="edit"></q-btn>
@@ -25,33 +29,32 @@
               </div>
             </q-td>
           </template>
+
           <template v-slot:body-cell-roomId="props">
             <q-td :props="props">
               <div>{{ props.row.room.name }}</div>
             </q-td>
           </template>
+
           <template v-slot:body-cell-crendetials="props">
             <q-td :props="props">
               <div>{{ props.row.credentials }}</div>
             </q-td>
           </template>
-
-
-
         </q-table>
       </div>
     </div>
     <q-dialog v-model="isFormOpen" content-class="form-dialog">
       <q-card class="form-card">
         <q-card-section>
-          <h2>Edit User</h2>
+          <h2>{{ t('issuermanagement.dialogTitle') }}</h2>
           <q-form @submit="saveChanges">
             <q-input v-model="editedRow.lastName" label="Last Name" outlined readonly></q-input>
             <q-input v-model="editedRow.firstName" label="First Name" outlined readonly></q-input>
             <q-input v-model="editedRow.room.name" label="Room Name" outlined readonly></q-input>
             <q-select
                 filled
-                v-model="editedRow.category"
+                v-model="editedRow.credential"
                 multiple
                 :label="t('issuermanagement.list')"
                 emit-value
@@ -71,9 +74,10 @@
                 options-cover
             ></q-select>
 
+
             <q-card-actions align="right">
-              <q-btn label="Cancel" color="primary" @click="closeForm"/>
-              <q-btn type="submit" label="Save" color="primary" class="q-ml-md" @click="confirmSave"/>
+              <q-btn :label="t('issuermanagement.cancel')" color="primary" @click="closeForm"/>
+              <q-btn type="submit" :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="confirmSave"/>
             </q-card-actions>
           </q-form>
         </q-card-section>
@@ -92,14 +96,11 @@ import {useRoomStore} from "@/main/vue/stores/room";
 
 
 export default {
-  name: 'IssuerManagement',
-
   setup() {
     const rows = ref([]);
     const searchQuery = ref('');
-
     const isFormOpen = ref(false);
-    const editedItem = ref(null); // Separate edited item object
+    const editedItem = ref(null);
     axios.get('api/issuers').then((res) => {
       rows.value = res.data;
     });
@@ -110,7 +111,7 @@ export default {
     const credentialStore = useCredentialStore()
     const roomStore = useRoomStore()
 
-
+    const filter=ref('')
     const columns = [
       {
         name: 'firstName',
@@ -144,35 +145,22 @@ export default {
         field: 'room.name',
         sortable: true,
       },
-      { name: 'actions', label: t('issuermanagement.edit'), style: 'width: 40px', align: 'center' },
+      {name: 'actions', label: t('issuermanagement.edit'), style: 'width: 40px', align: 'center'},
     ];
 
 
-    const filteredRows = ref([]);
-
-    const filterRows = () => {
-      filteredRows.value = rows.value.filter((row) =>
-          row.roles.some((role) => role.role === 'ISSUER')
-      ).filter((row) =>
-          row.lastName.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-          row.firstName.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-          row.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-          row.credential.some((option) => option.includes(searchQuery.value.toLowerCase()))
-      );
-    };
-
     const confirmSave = () => {
       Dialog.create({
-        title: 'Confirm Save',
-        message: 'Are you sure you want to save the changes?',
+        title: t('issuermanagement.saveConfirmationTitle'),
+        message: t('issuermanagement.saveConfirmationMessage'),
         persistent: true,
         ok: {
-          label: 'Save',
+          label: t('issuermanagement.save'),
           color: 'primary',
           classes: 'q-ma-sm',
         },
         cancel: {
-          label: 'Cancel',
+          label: t('issuermanagement.cancel'),
           color: 'primary',
           classes: 'q-ma-sm',
         },
@@ -188,24 +176,23 @@ export default {
       isFormOpen.value = false;
     };
     const openForm = (row) => {
-      editedItem.value = {...row}; // Assign the selected item to editedItem
-      editedRow.value = {...row}; // Assign the selected item to editedRow
+      editedItem.value = {...row};
+      editedRow.value = {...row};
       isFormOpen.value = true;
     };
 
 
     const editedRow = ref({
-      // other properties...
-      credential: [], // Initialize as an empty array for multiple selection
+
+      credential: [],
     });
 
-    // ...
 
     const saveChanges = () => {
       const index = rows.value.findIndex((row) => row.username === editedItem.value.username);
       if (index !== -1) {
-        // Update the category property as an array of selected options
-        const updatedRow = {...rows.value[index], category: editedRow.value.category};
+
+        const updatedRow = {...rows.value[index], credential: editedRow.value.credential};
         rows.value.splice(index, 1, updatedRow);
       }
 
@@ -215,16 +202,16 @@ export default {
     };
 
 
+    credentialStore.getCredentials().then((external) => {
+    })
 
     credentialStore.getCredentials().then((external) => {})
     roomStore.getRooms().then((rooms) =>{})
 
 
-    watchEffect(filterRows);
 
     return {
       columns,
-      filteredRows,
       searchQuery,
       credentialStore,
       t,
@@ -233,18 +220,18 @@ export default {
       openForm,
       saveChanges,
       rows,
+      filter,
       editedItem,
       confirmSave,
       closeForm,
+
     };
   },
 };
 </script>
 
 <style scoped>
-.form-dialog {
-  max-width: 500px;
-}
+
 
 .form-card {
   width: 100%;

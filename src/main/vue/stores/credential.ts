@@ -2,9 +2,12 @@ import {defineStore} from "pinia";
 import {Ref, ref} from "vue";
 import api from "@/main/vue/api";
 import {Category, CredentialCmd} from "@/main/vue/entity/credentialDefinition";
+import {Credential} from "@/main/vue/entity/credentialDefinition";
+
 
 export const useCredentialStore = defineStore('credential', () =>{
     const credentials: Ref<CredentialCmd[]|null> = ref(null)
+    const allCredentials: Ref<Credential[]|null> = ref(null)
 
 
     function getCredentialsByLocation(id: string) {
@@ -18,12 +21,25 @@ export const useCredentialStore = defineStore('credential', () =>{
         })
     }
 
+    function getCredentials() {
+        return new Promise((resolve, reject) => {
+            api.credential.all().then((response) => {
+                allCredentials.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
 
 
 
     return {
         getCredentialsByLocation,
         credentials,
+        allCredentials,
+        getCredentials,
     }
 
 })
