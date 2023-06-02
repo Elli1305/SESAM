@@ -3,6 +3,7 @@ package com.gpse.sesam.web.controller;
 import com.gpse.sesam.domain.issuer.IssuerService;
 import com.gpse.sesam.domain.user.Issuer;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class IssuerController {
     public IssuerController(IssuerService service) {
         this.service = service;
     }
-
+    @Secured("ADMINISTRATOR")
     @GetMapping("/issuers")
     @ResponseStatus(HttpStatus.OK)
     public List<Issuer> getIssuers() {

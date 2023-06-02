@@ -47,6 +47,7 @@ export const useRoomStore = defineStore('room', () => {
     return {
         save,
         deleteById,
+        getRooms,
         rooms
     }
 })
