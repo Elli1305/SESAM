@@ -22,5 +22,9 @@ export default {
     },
     getCredentialsByLocation(param: string): Promise<AxiosResponse<CredentialCmd[]>>{
         return axios.get("api/credentialview/" + param)
+    },
+
+    getCredentialsByIssuer(id: number | undefined): Promise<AxiosResponse<Credential[]>> {
+        return axios.get(`api/credentials/getByIssuer/${id}`)
     }
 }

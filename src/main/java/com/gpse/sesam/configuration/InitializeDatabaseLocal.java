@@ -78,18 +78,18 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() {
 		final List<Location> locations = createLocations();
-		final List<SesamUser> users = createUsers();
 		final List<Credential> credentials = createCredentials();
+		final List<SesamUser> users = createUsers(credentials);
 		final List<Category> categories = createCredentialCategories();
 		final List<Colors> colors = createColors();
 
 
 		colorsService.saveAll(colors);
 		locationService.saveAll(locations);
-		userService.saveAll(users);
 		credentialService.saveAll(credentials);
 		locationService.saveAll(locationsList);
 		categoryService.saveAll(categories);
+		userService.saveAll(users);
 	}
 
 	private List<Colors> createColors() {
@@ -122,7 +122,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		defaultColors.setWarning("#fec705");
 	}
 
-	private List<SesamUser> createUsers() {
+	private List<SesamUser> createUsers(List<Credential> credentials) {
 		final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
 		adminRole.setGranted(true);
 		final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
@@ -146,12 +146,16 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final String defaultPassword = passwordEncoder.encode("Hallo123!");
 		final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
 				Collections.singletonList(adminRole));
-		final SesamUser issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
-				Collections.singletonList(issuerRole), new Room("0.007"), null);
+		final Issuer issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
+				Collections.singletonList(issuerRole), new Room("0.007"), credentials);
 		final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
 				Collections.singletonList(editorRole));
 		final SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User",
 				Collections.emptyList());
+
+		for (Credential cred: credentials) {
+			cred.getIssuer().add(issuer);
+		}
 
 
 		return List.of(admin, issuer, editor, user);
