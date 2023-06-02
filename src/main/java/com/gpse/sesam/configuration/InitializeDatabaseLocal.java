@@ -124,20 +124,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		issuerRole.setGranted(true);
 		final SesamUserRole editorRole = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
 		editorRole.setGranted(true);
-
-		final Door door = new Door("Door100", null);
-		final List<Door> doors = new ArrayList<>();
-		final Room room = new Room("0.007");
-		final Floor floor = new Floor(40, null);
-		floor.addRoom(room);
-		final Building building = new Building("UHG");
-		building.addFloor(floor);
-		final Location location = new Location("Heidelberg");
-		location.addBuilding(building);
-
-		room.addDoor(door);
-		doors.add(door);
-
 		final String defaultPassword = passwordEncoder.encode("Hallo123!");
 		final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
 				Collections.singletonList(adminRole));
@@ -194,18 +180,12 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<Floor> floors2 = new ArrayList<>();
 		for (int i = 0; i < 6; i++) {
 			final Floor floor = new Floor(i % 2, "/citec-gebaeudeplan.png");
-			floor.addRoom(rooms.get(i * 5));
-			floor.addRoom(rooms.get(i * 5 + 1));
-			floor.addRoom(rooms.get(i * 5 + 2));
-			floor.addRoom(rooms.get(i * 5 + 3));
-			floor.addRoom(rooms.get(i * 5 + 4));
-			floors.add(floor);
 			final Floor floor2 = new Floor(i % 2, "/citec-gebaeudeplan.png");
-			floor2.addRoom(rooms2.get(i * 5));
-			floor2.addRoom(rooms2.get(i * 5 + 1));
-			floor2.addRoom(rooms2.get(i * 5 + 2));
-			floor2.addRoom(rooms2.get(i * 5 + 3));
-			floor2.addRoom(rooms2.get(i * 5 + 4));
+			for(int j = 0; j<5; j++){
+				floor.addRoom(rooms.get(i * 5 + j));
+				floor2.addRoom(rooms2.get(i * 5 + j));
+			}
+			floors.add(floor);
 			floors2.add(floor2);
 		}
 
@@ -232,13 +212,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		return List.of(location1, location2);
 	}
 
-	private List<Credential> createCredentials() {
-		// Checklist
-		final List<ChecklistEntry> checklist = new ArrayList<>();
-		checklist.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
-		checklist.add(new ChecklistEntry("Wurde der notwendige Nachweis erbracht?"));
-
-		//Form
+	private List<FormEntry>  form(){
 		final List<FormEntry> form = new ArrayList<>();
 		final FormEntry id = new FormEntry("ID", FormEntryType.NUMBER, "id");
 		final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name");
@@ -250,6 +224,22 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		form.add(lastName);
 		form.add(birthDate);
 		form.add(date);
+		return form;
+	}
+
+	private List<ChecklistEntry>  checklist(){
+		final List<ChecklistEntry> checklist = new ArrayList<>();
+		checklist.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
+		checklist.add(new ChecklistEntry("Wurde der notwendige Nachweis erbracht?"));
+		return checklist;
+	}
+
+	private List<Credential> createCredentials() {
+		// Checklist
+		final List<ChecklistEntry> checklist = checklist();
+
+		//Form
+		final List<FormEntry> form = form();
 
 		// Issuer
 		final SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
@@ -259,12 +249,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 
 		final Door door = new Door("Door999", null);
-		final List<Door> doors = new ArrayList<>();
-		doors.add(door);
-
 		final Door door2 = new Door("Door666", null);
-		final List<Door> doors2 = new ArrayList<>();
-		doors2.add(door2);
 
 		final Room room = new Room("0.007");
 		room.addDoor(door);
@@ -295,21 +280,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		safety.addIssuer(issuer1);
 		safety.addIssuer(issuer2);
 
-		final List<ChecklistEntry> checklist3 = new ArrayList<>();
-		checklist3.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
-		checklist3.add(new ChecklistEntry("Wurde der notwendige Nachweis erbracht?"));
+		final List<ChecklistEntry> checklist3 = checklist();
 
-		final List<FormEntry> form3 = new ArrayList<>();
-		final FormEntry id3 = new FormEntry("ID", FormEntryType.NUMBER, "id");
-		final FormEntry firstName3 = new FormEntry("Vorname", FormEntryType.TEXT, "first_name");
-		final FormEntry lastName3 = new FormEntry("Nachname", FormEntryType.TEXT, "last_name");
-		final FormEntry birthDate3 = new FormEntry("Geburtstagsdatum", FormEntryType.DATE, "birth_date");
-		final FormEntry date3 = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
-		form3.add(id3);
-		form3.add(firstName3);
-		form3.add(lastName3);
-		form3.add(birthDate3);
-		form3.add(date3);
+		final List<FormEntry> form3 = form();  //Form
 		final Credential safety2 = new Credential("Sicherheitsbelehrung-FH", "$T-MEMBER",
 				"tlabs", form3, checklist3);
 		safety2.addIssuer(issuer1);
@@ -322,22 +295,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private List<Category> createCredentialCategories() {
 		// Checklist
-		final List<ChecklistEntry> checklist4 = new ArrayList<>();
-		checklist4.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
-		checklist4.add(new ChecklistEntry("Wurde der notwendige Nachweis erbracht?"));
+		final List<ChecklistEntry> checklist4 = checklist();
 
 		//Form
-		final List<FormEntry> form4 = new ArrayList<>();
-		final FormEntry id4 = new FormEntry("ID", FormEntryType.NUMBER, "id");
-		final FormEntry firstName4 = new FormEntry("Vorname", FormEntryType.TEXT, "first_name");
-		final FormEntry lastName4 = new FormEntry("Nachname", FormEntryType.TEXT, "last_name");
-		final FormEntry birthDate4 = new FormEntry("Geburtstagsdatum", FormEntryType.DATE, "birth_date");
-		final FormEntry date4 = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
-		form4.add(id4);
-		form4.add(firstName4);
-		form4.add(lastName4);
-		form4.add(birthDate4);
-		form4.add(date4);
+		final List<FormEntry> form4 = form();
 
 		// Issuer
 		final SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
@@ -356,6 +317,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 				"Hombach", Collections.singletonList(issuerRole11), room2);
 		issuers.add(issuer1);
 		issuers.add(issuer2);
+
 
 		// Safety-Credential
 		final List<Credential> credentials = new ArrayList<>();
@@ -379,23 +341,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<Issuer> issuers2 = new ArrayList<>();
 		issuers2.add(issuer1);
 		// Checklist
-		final List<ChecklistEntry> checklist6 = new ArrayList<>();
-		checklist6.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
-		checklist6.add(new ChecklistEntry("Wurde der notwendige Nachweis erbracht?"));
+		final List<ChecklistEntry> checklist6 = checklist();
 
 		//Form
-		final List<FormEntry> form6 = new ArrayList<>();
-		final FormEntry id6 = new FormEntry("ID", FormEntryType.NUMBER, "id");
-		final FormEntry firstName6 = new FormEntry("Vorname", FormEntryType.TEXT, "first_name");
-		final FormEntry lastName6 = new FormEntry("Nachname", FormEntryType.TEXT, "last_name");
-		final FormEntry birthDate6 = new FormEntry("Geburtstagsdatum", FormEntryType.DATE, "birth_date");
-		final FormEntry date6 = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
-		form6.add(id6);
-		form6.add(firstName6);
-		form6.add(lastName6);
-		form6.add(birthDate6);
-		form6.add(date6);
-
+		final List<FormEntry> form6 = form();
 
 		final List<Credential> credentials2 = new ArrayList<>();
 		final Credential firstAid = new Credential(
@@ -428,7 +377,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		room3.addDoor(door3);
 
 		final List<Room> roomList = new ArrayList<>();
-
 		roomList.add(room3);
 
 		final Floor floor3 = new Floor(1, "/citec-gebaeudeplan.png");

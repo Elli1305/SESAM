@@ -3,6 +3,8 @@ package com.gpse.sesam.domain.credential;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.domain.user.Issuer;
+import com.gpse.sesam.domain.user.IssuerRepository;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 import jakarta.validation.Valid;
@@ -27,13 +29,16 @@ public class CredentialServiceImpl implements CredentialService {
 
 	private final ObjectMapper mapper;
 
+	private final IssuerRepository issuerRepository;
 	private final CredentialRepository credentialRepository;
 
 	@Autowired
 	public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
+								 final IssuerRepository issuerRepository,
 								 final CredentialRepository credentialRepository) {
 		this.client = client;
 		this.mapper = mapper;
+		this.issuerRepository = issuerRepository;
 		this.credentialRepository = credentialRepository;
 	}
 
@@ -42,6 +47,12 @@ public class CredentialServiceImpl implements CredentialService {
 		final List<Credential> credentials = new ArrayList<>();
 		credentialRepository.findAll().forEach(credentials::add);
 		return credentials;
+	}
+
+	@Override
+	public List<Credential> getCredentialsByIssuerId(final Long id) {
+		final Issuer issuer = issuerRepository.findById(id).orElseThrow();
+		return issuer.getCredentials();
 	}
 
 	@Override
