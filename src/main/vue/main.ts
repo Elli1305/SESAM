@@ -126,7 +126,7 @@ const messages = {
         passwordChange: {
             changePassword: "Passwort ändern",
             password: "Passwort",
-            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein, \n ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
+            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein, ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
             repeatPassword: "Passwort wiederholen",
             failedToReset: "Password zurücksetzen fehlgeschlagen",
             passwordDoesNotConform: "Passwort erfüllt nicht die Kriterien",
