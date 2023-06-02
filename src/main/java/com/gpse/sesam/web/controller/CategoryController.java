@@ -70,8 +70,8 @@ public class CategoryController {
     @Secured("ADMINISTRATOR")
     @DeleteMapping("/credentialmapping/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCategory(@PathVariable("id") final String id) {
-        categoryService.deleteById(Long.valueOf(id));
+    public void deleteCategory(@PathVariable("id") final Long id) {
+        categoryService.deleteById(id);
     }
 
     @Secured("ADMINISTRATOR")
@@ -81,16 +81,6 @@ public class CategoryController {
         categoryService.updateCategory(id, cmd);
     }
 
-    /*
-    @Secured("ADMINISTRATOR")
-    @PostMapping(value = "/credentialmapping/edit/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateCategory(@PathVariable("id") @RequestBody final Long id, CategoryResponseCmdReplicate cmd) {
-        final Optional<Category> category = categoryService.getCategory(id);
-        if (category.isPresent()) {
-            categoryService.updateCategory(category.get(), cmd.getName(), cmd.getExternalCredentials(), cmd.getCredentials());
-        }
-    }*/
 
     @Secured("ADMINISTRATOR")
     @PostMapping("/category")

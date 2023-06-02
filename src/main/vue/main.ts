@@ -76,8 +76,22 @@ const messages = {
             qualification: "Vergleichbare Qualifikation",
             issuer: "Herausgeber",
             room: "Raum: "
-        }
-        ,
+        },
+        credentialmapping: {
+            credentialmapping: 'Credentialmapping',
+            newcategory: 'Neue Kategorie',
+            category: 'Kategorie',
+            search: 'Suche',
+            name: 'Name der Kategorie',
+            save: 'Speichern',
+            cancel: 'Abbrechen',
+            internal: 'Interne Credentials',
+            external: 'Externe Credentials',
+            categorycreate: 'Neue Kategorie erstellen',
+            categorychange: 'Kategorie ändern',
+            categorydelete: 'Löschen der Kategorie',
+            delete: 'Möchten Sie die Kategorie wirklich löschen?'
+        },
         home: {
             header: "SESAM",
             signup: "Registrierung",
@@ -277,6 +291,21 @@ const messages = {
             qualification: "Comparable Qualifications",
             issuer: "Issuer",
             room: "Room: "
+        },
+        credentialmapping: {
+            credentialmapping: 'Credential mapping',
+            newcategory: 'New Category',
+            search: 'Search',
+            name: 'Name of the Category',
+            category: 'Category',
+            save: 'Save',
+            cancel: 'Cancel',
+            internal: 'Internal Credentials',
+            external: 'External Credentials',
+            categorycreate: 'Create new category',
+            categorychange: 'Change category',
+            categorydelete: 'Delete category',
+            delete: 'Are you sure you want to delete the category?'
         },
         floorplan: {
             locations: 'Locations',
