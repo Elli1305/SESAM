@@ -16,6 +16,8 @@ import {useUserStore} from "@/main/vue/stores/users";
 import EditUser from "@/main/vue/views/EditUser.vue";
 import CredentialView from "@/main/vue/views/CredentialView.vue";
 import RolesRequest from "@/main/vue/views/RolesRequest.vue";
+import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
+import IssueCredential from "@/main/vue/views/IssueCredential.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -102,6 +104,15 @@ const router = createRouter({
         {
             path: '/admin/rolesRequest',
             component: RolesRequest
+        },
+        {
+            path: '/credentials',
+            component: IssueCredentials
+        },
+        {
+            path: '/credentials/:id/issue',
+            component: IssueCredential,
+            props: true
         },
         {path: "/:pathMatch(.*)*", component: StartView}
 

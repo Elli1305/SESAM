@@ -136,7 +136,7 @@ async function logout() {
               </router-link>
               <router-link
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ISSUER' && r.granted)"
-                  to="/" class="headerLink">
+                  to="/credentials" class="headerLink">
                 <p class="headerText">{{ t("home.issuerPages") }}</p>
               </router-link>
             </div>
