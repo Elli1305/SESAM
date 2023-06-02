@@ -4,6 +4,10 @@
       <q-card-section class="q-pa-md">
         <div class="text-h6">Tür zuweisen</div>
         <div class="q-mt-md">
+          <q-input filled v-model="doorName" label="Türname" stack-label
+                   style="width: 250px; padding-bottom: 32px"/>
+        </div>
+        <div class="q-mt-md">
           <q-select
               filled
               v-model="room"
@@ -44,31 +48,11 @@
             <q-select
                 filled
                 multiple
-                class="col"
                 label="Credentials für Und"
                 option-label="name"
                 hint="Werbung2"
                 :options="credentials"
                 v-model="credAnd"
-                use-chips
-            >
-              <template v-slot:no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    No results
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-            <q-select
-                filled
-                multiple
-                class="col"
-                label="Credentials für Oder"
-                option-label="name"
-                hint="Werbung3"
-                :options="credentials"
-                v-model="credOr"
                 use-chips
             >
               <template v-slot:no-option>
@@ -130,7 +114,7 @@ export default {
     },
 
     onOKClick() {
-      this.$emit('ok', this.room)
+      this.$emit('ok', {room: this.room, doorName: this.doorName})
       this.hide()
     },
     onCancelClick() {
@@ -146,6 +130,7 @@ export default {
     const credentials = ref()
     const credOr = ref()
     const credAnd = ref()
+    const doorName = ref('')
     const filterFn = function (val, update, abort) {
       update(() => {
         const needle = val.toLowerCase()
@@ -153,7 +138,7 @@ export default {
       })
     }
 
-    return {room, allCredentials, credentials, credOr, credAnd, filterFn}
+    return {room, allCredentials, credentials, credOr, credAnd, filterFn, doorName}
   }
 }
 </script>
