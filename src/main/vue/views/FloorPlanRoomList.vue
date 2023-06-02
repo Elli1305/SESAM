@@ -2,11 +2,13 @@
   <q-page-container class="no-padding no-margin">
     <q-page style="padding-right: 1em; padding-top: 2em">
       <q-input
-          :label="t('home.roomSearch')"
+          :placeholder="t('home.roomSearch')"
           v-model="search"
           @update:model-value="roomFilter"
           clearable
           outlined
+          rounded
+          clear-icon="clear"
           style="margin-bottom: 1em; min-width: 20em">
         <template v-slot:append>
           <q-icon name="search"/>
@@ -14,30 +16,37 @@
       </q-input>
       <q-list>
         <q-item v-for="room in filteredRooms" style="padding-left: 0">
+          <q-checkbox @click="toggleRoomCheckbox(room)" v-model="selectedRooms" :val="room" color="blue"/>
           <q-btn-dropdown
               split
+              flat
               style="min-width: 16em"
               :label="room.name"
-              color="primary"
-              @click="toggleRoomCheckbox(room)"
-          >
-            <div class="col no-wrap">
-              <div class="row" style="padding: 0.5em">
-                <q-list>
-                  <q-item-label>Raumbezeichnung: {{ room.name }}</q-item-label>
-                  <q-item-label>Türen: {{ room.doors.map(door => door.name).join(", ") }}</q-item-label>
-                  <q-item-label>Credentials:
-                    {{ room.doors.flatMap(door => door.credentials).map(credential => credential?.name).join(", ") }}
-                  </q-item-label>
-                </q-list>
-
-
+              dropdown-icon="expand_more"
+              color="var(--text-color)"
+              @click="toggleRoomCheckbox(room)">
+            <div class="column no-wrap" style="background-color: var(--bg-color)">
+              <div class="row no-wrap">
+                <div class="column no-wrap" style="padding: 0.5em">
+                  <q-list>
+                    <q-item-label>Raumbezeichnung:</q-item-label>
+                    <q-item-label>Türen:</q-item-label>
+                    <q-item-label>Credentials:</q-item-label>
+                  </q-list>
+                </div>
+                <div class="column no-wrap" style="padding: 0.5em">
+                  <q-list>
+                    <q-item-label>{{ room.name }}</q-item-label>
+                    <q-item-label>{{ room.doors.map(door => door.name).join(", ") }}</q-item-label>
+                    <q-item-label>{{ room.doors.flatMap(door => door.credentials).map(credential => credential?.name).join(", ") }}</q-item-label>
+                  </q-list>
+                </div>
               </div>
               <div
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
-                <q-separator spaced></q-separator>
-                <div class="row justify-end" style="padding: 0.7em">
-                  <q-btn size="sm" label="Bearbeiten" color="primary" @click="setOldValueR(room)"></q-btn>
+                <q-separator></q-separator>
+                <div class="row justify-center" style="padding: 0.5em">
+                  <p class="cursor-pointer q-mb-none" :style="{color: getCssVar('primary')}" @click="setOldValueR(room)">{{t('adminCurrentUser.edit')}}</p>
                   <q-dialog v-model="inception">
                     <q-card>
                       <q-card-section>
@@ -125,7 +134,6 @@
               </div>
             </div>
           </q-btn-dropdown>
-          <q-checkbox v-model="selectedRooms" :val="room" color="blue"></q-checkbox>
         </q-item>
       </q-list>
     </q-page>
@@ -139,8 +147,10 @@ import {ref, watch} from "vue";
 import {useI18n} from 'vue-i18n';
 import {storeToRefs} from "pinia";
 import {useRoomStore} from "@/main/vue/stores/room";
+import {getCssVar} from "quasar";
 
 export default {
+  methods: {getCssVar},
   props: {
     edit: {
       type: Boolean,

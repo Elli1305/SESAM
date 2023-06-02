@@ -29,17 +29,14 @@
       />
     </div>
   </q-drawer>
-  <q-fab
+  <q-btn
       v-if="show === false"
-      style="z-index: 10; margin-top: 15px; margin-left: -22px"
+      style="width: 4.8em; height: 2.4em; padding-right: 0; z-index: 10; margin-top: 15px; margin-left: -2.4em; border-radius: 2.4em"
       @click="show = true"
       class="absolute"
-      label="   "
-      label-position="left"
       color="primary"
-      icon="menu"
       direction="right"
-  ></q-fab>
+  ><q-icon name="chevron_right" right/></q-btn>
 
 </template>
 

@@ -1,9 +1,9 @@
 <template>
   <NavigationTree></NavigationTree>
-    <div class="q-gutter-x-md" style="display: flex">
+  <q-page class="row no-wrap">
         <FloorPlan class="fit"></FloorPlan>
         <FloorPlanRoomList></FloorPlanRoomList>
-    </div>
+  </q-page>
 </template>
 
 <script>
