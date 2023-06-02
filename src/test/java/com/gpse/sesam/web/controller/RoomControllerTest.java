@@ -9,8 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Collections;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
@@ -38,11 +36,11 @@ class RoomControllerTest {
 
 	@Test
 	void saveShouldCallServiceWithCorrectArguments() {
-		Room newRoom = new Room("Test", Collections.emptyList());
+		final Room newRoom = new Room("Test");
 
 		when(roomService.save(newRoom)).thenReturn(newRoom);
 
-		Room buildingSaved = roomController.save(newRoom);
+		final Room buildingSaved = roomController.save(newRoom);
 
 		assertThat(buildingSaved.getName(), is(newRoom.getName()));
 		assertThat(buildingSaved.getDoors(), is(newRoom.getDoors()));

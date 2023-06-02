@@ -12,8 +12,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.util.Collections;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
@@ -41,7 +39,7 @@ class FloorControllerTest {
 
 	@Test
 	void saveShouldCallServiceWithCorrectArguments() throws JsonProcessingException {
-		final Floor newFloor = new Floor(1, "test", Collections.emptyList());
+		final Floor newFloor = new Floor(1, "test");
 		final MockMultipartFile mockMultipartFile = new MockMultipartFile("test_file", new byte[]{});
 
 		when(floorService.save(newFloor, mockMultipartFile)).thenReturn(newFloor);

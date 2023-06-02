@@ -83,12 +83,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<Category> categories = createCredentialCategories();
 		final List<Colors> colors = createColors();
 
+
 		colorsService.saveAll(colors);
 		locationService.saveAll(locations);
 		userService.saveAll(users);
 		credentialService.saveAll(credentials);
-		categoryService.saveAll(categories);
 		locationService.saveAll(locationsList);
+		categoryService.saveAll(categories);
 	}
 
 	private List<Colors> createColors() {

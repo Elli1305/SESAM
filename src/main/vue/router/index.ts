@@ -9,10 +9,13 @@ import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 import Imprint from "../views/Imprint.vue";
 import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
+import {AttainableRole} from "@/main/vue/entity/createUser";
 
 import FloorPlanEdit from "@/main/vue/views/FloorPlanEdit.vue";
 import {useUserStore} from "@/main/vue/stores/users";
 import EditUser from "@/main/vue/views/EditUser.vue";
+import CredentialView from "@/main/vue/views/CredentialView.vue";
+import RolesRequest from "@/main/vue/views/RolesRequest.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -41,6 +44,14 @@ const router = createRouter({
             component: EditUser,
             props: true,
         },
+
+        {
+            path: '/admin/rolesRequest',
+            name: 'rolesRequest',
+            component: RolesRequest,
+            props: true,
+        },
+
         {
             path: '/admin/currentuserlist',
             name: 'currentuserlist',
@@ -49,7 +60,10 @@ const router = createRouter({
         },
         {
             path: '/editFloorPlan',
-            component: FloorPlanEdit
+            component: FloorPlanEdit,
+            meta: {
+                authorize: AttainableRole.EDITOR
+            }
         },
         {
             path: '/signup',
@@ -81,25 +95,29 @@ const router = createRouter({
             component: ImprintEditor,
             meta: {requiresAdmin: true},
         },
-
+        {
+            path: '/credentialview',
+            component: CredentialView
+        },
+        {
+            path: '/admin/rolesRequest',
+            component: RolesRequest
+        },
+        {path: "/:pathMatch(.*)*", component: StartView}
 
     ],
 });
 
 
 router.beforeEach((to, from, next) => {
-    const {authenticated} = useUserStore();
-
-    if (to.meta.requiresAuth && !authenticated) {
-        return {
-            path: "/login",
-            query: {redirect: to.fullPath},
-        };
+    const {authenticated, user} = useUserStore();
+    const {authorize} = to.meta;
+    if ((to.meta.requiresAuth || authorize) && !authenticated) {
+        return next({path: '/login', query: {returnUrl: to.path}});
+    } else if (authorize && !user?.roles.some(role => role.role === authorize && role.granted)) {
+        return next({path: '/'});
     }
 
-    if (to.path === "/ImprintEditor") {
-        return next("/imprinteditor");
-    }
     next();
 });
 

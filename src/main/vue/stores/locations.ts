@@ -61,6 +61,21 @@ export const useLocationStore = defineStore('locations', () => {
         }
     )
 
+    const getDoorById = computed(() => {
+            return (doorId: number) => {
+                return allLocations
+                    .value
+                    .flatMap((location) =>
+                        location
+                            .buildings
+                            .flatMap(building => building.floors))
+                    .flatMap(floor => floor.rooms)
+                    .flatMap(room => room.doors)
+                    .find(door => door.id === doorId)
+            }
+        }
+    )
+
 
     function getLocations(): Promise<Location[]> {
         return new Promise((resolve, reject) => {
@@ -98,6 +113,7 @@ export const useLocationStore = defineStore('locations', () => {
     return {
         allLocations,
         getLocations,
+        getDoorById,
         locationByName,
         getLocationTreeStructure,
         save,

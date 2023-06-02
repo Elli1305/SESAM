@@ -37,7 +37,8 @@ public class Issuer extends SesamUser {
 	 * @param credentials the list of credentials that the issuer is handing out
 	 */
 	public Issuer(final String email, final String password, final String firstName, final String lastName,
-				  final List<SesamUserRole> roles, final Room room, final List<Credential> credentials) {
+				  final List<SesamUserRole> roles,
+				  final Room room, final List<Credential> credentials) {
 		super(email, password, firstName, lastName, roles);
 		this.room = room;
 		this.credentials = credentials;
