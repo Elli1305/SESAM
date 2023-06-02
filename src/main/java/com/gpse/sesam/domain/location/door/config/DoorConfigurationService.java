@@ -25,10 +25,13 @@ public class DoorConfigurationService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DoorConfigurationService.class);
 
 	private final DoorApiConfig appConfig;
+	private final ProofConfigRepository proofConfigRepository;
 
 	@Autowired
-	public DoorConfigurationService(final DoorApiConfig appConfig) {
+	public DoorConfigurationService(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository) {
 		this.appConfig = appConfig;
+		this.proofConfigRepository = proofConfigRepository;
+		proofConfigRepository.save(createProofConfig());
 	}
 
 	public void getDoorConfigurations() {
@@ -89,11 +92,11 @@ public class DoorConfigurationService {
 		attributeInfo.setName("first_name");
 		final List<AttributeFilter> restrictions = new ArrayList<>();
 		restrictions.add(new AttributeFilter());
-		//restrictions.get(0).setAttributeValue(new AttributeValue("first_name", "David"));
+		restrictions.get(0).setAttributeValue(new AttributeValue("first_name", "David"));
 		restrictions.add(new AttributeFilter());
 		restrictions.get(1).setCredentialDefinitionId("$T-MEMBER");
 		attributeInfo.setRestrictions(restrictions);
-		requestedAttributes.put("first_name", attributeInfo);
+		requestedAttributes.put("first_name_test", attributeInfo);
 		proofConfig.setRequestedAttributes(requestedAttributes);
 
 		final Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();

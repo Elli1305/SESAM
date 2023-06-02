@@ -16,7 +16,7 @@ public class AttributeFilter {
 	@Column
 	private String credentialDefinitionId;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private AttributeValue attributeValue;
 
 	protected AttributeFilter() {

@@ -19,15 +19,15 @@ public class ProofConfig {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "config_attribute_mapping",
 			joinColumns = {@JoinColumn(name = "config_id", referencedColumnName = "id")},
-			inverseJoinColumns = {@JoinColumn(name = "attribute_name", referencedColumnName = "name")})
-	@MapKey(name = "name")
+			inverseJoinColumns = {@JoinColumn(name = "attribute_id", referencedColumnName = "id")})
+	@Column
 	private Map<String, ProofAttributeInfo> requestedAttributes;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "config_predicate_mapping",
 			joinColumns = {@JoinColumn(name = "config_id", referencedColumnName = "id")},
-			inverseJoinColumns = {@JoinColumn(name = "predicate_name", referencedColumnName = "name")})
-	@MapKey(name = "name")
+			inverseJoinColumns = {@JoinColumn(name = "predicate_id", referencedColumnName = "id")})
+	@Column
 	private Map<String, ProofPredicateInfo> requestedPredicates;
 
 	protected ProofConfig() {

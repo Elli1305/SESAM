@@ -12,6 +12,7 @@ public class ProofPredicateInfo {
 	@Column
 	private Long id;
 
+
 	@Column
 	private String name;
 
