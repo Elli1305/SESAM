@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface CredentialService {
 	List<Credential> getCredentials();
 
+	List<Credential> getCredentialsByIssuerId(Long di);
+
 	Optional<Credential> getCredential(Long id);
 
 	String issueCredential(Long id, List<IssueCredentialAttributeCmd> attributeCmds)
