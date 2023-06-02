@@ -85,6 +85,7 @@ import { useI18n } from 'vue-i18n';
 import { AxiosError, AxiosResponse } from "axios";
 import api from '@/main/vue/api';
 import {IssueCredential} from "@/main/vue/entity/credentialDefinition";
+import QRCode from 'qrcode.vue';
 
 const props = defineProps<{ id: string }>();
 
