@@ -57,6 +57,17 @@
                 emit-value
                 :options="credentialStore.allCredentials"
                 option-label="name"
+                option-value="id"
+                options-cover
+            ></q-select>
+            <q-select
+                filled
+                v-model="model"
+                :label="Räume"
+                emit-value
+                :options="roomStore.rooms"
+                option-label="name"
+                option-value="id"
                 options-cover
             ></q-select>
 
@@ -76,7 +87,8 @@ import {ref, watchEffect} from 'vue';
 import {useI18n} from 'vue-i18n';
 import axios from 'axios';
 import {Dialog} from 'quasar';
-import {useCredentialStore} from "@/main/vue/stores/credential";
+import {useCredentialStore} from "@/main/vue/stores/credential"
+import {useRoomStore} from "@/main/vue/stores/room";
 
 
 export default {
@@ -92,8 +104,11 @@ export default {
       rows.value = res.data;
     });
 
+
+
     const {t} = useI18n();
     const credentialStore = useCredentialStore()
+    const roomStore = useRoomStore()
 
 
     const columns = [
@@ -202,6 +217,7 @@ export default {
 
 
     credentialStore.getCredentials().then((external) => {})
+    roomStore.getRooms().then((rooms) =>{})
 
 
     watchEffect(filterRows);
