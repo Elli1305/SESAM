@@ -73,7 +73,7 @@ const messages = {
             search: "Suche",
             category: "Kategorie",
             availablecredentials: "Verfügbbare Credential",
-            qualification: "Vergleichbare Qualifikation",
+            qualification: "Vergleichbare Credential",
             issuer: "Herausgeber",
             room: "Raum: "
         },
@@ -288,7 +288,7 @@ const messages = {
             search: "Search",
             category: "Category",
             availablecredentials: "Available Credentials",
-            qualification: "Comparable Qualifications",
+            qualification: "Comparable Credential",
             issuer: "Issuer",
             room: "Room: "
         },

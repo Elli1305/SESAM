@@ -48,7 +48,7 @@
 
       <q-card-actions align="evenly" class="text-primary">
         <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteCategory">  {{ t("credentialmapping.save")}} </q-btn>
+        <q-btn flat v-close-popup @click="deleteCategory(editedRow.id)">  {{ t("credentialmapping.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -66,7 +66,7 @@
         </q-input>
       </q-card-section>
       <q-card-section class="q-pt-none" style="padding-bottom: 10em ">
-      <div style="float: right; width: 20em; padding-top: 2em ; padding-left: 2em">
+      <div style="float: left; width: 20em; padding-top: 2em">
         <q-select
             filled
             v-model="model"
@@ -79,7 +79,7 @@
             options-cover
         ></q-select>
       </div>
-      <div style="float: left; width: 20em; padding-top: 2em">
+      <div style="float: right; width: 20em; padding-top: 2em; padding-left: 2em">
         <q-select
             filled
             v-model="model2"
@@ -112,7 +112,7 @@
         </q-input>
       </q-card-section>
       <q-card-section class="q-pt-none" style="padding-bottom: 10em ">
-        <div style="float: right; width: 20em; padding-top: 2em ; padding-left: 2em">
+        <div style="float: left; width: 20em; padding-top: 2em ">
           <q-select
               filled
               multiple
@@ -125,7 +125,7 @@
               options-cover
           ></q-select>
         </div>
-        <div style="float: left; width: 20em; padding-top: 2em">
+        <div style="float: right; width: 20em; padding-top: 2em; padding-left: 2em">
           <q-select
               filled
               multiple
@@ -187,8 +187,8 @@ export default {
 
     credentialStore.getCredentials().then((external) => {})
 
-    function deleteCategory() {
-      credentialStore.deleteCategory(1)
+    function deleteCategory(id) {
+      credentialStore.deleteCategory(id)
       credentialStore.getCategory().then((categories) => {
         rows.value = categories
       })
