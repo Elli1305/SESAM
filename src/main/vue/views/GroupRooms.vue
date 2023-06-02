@@ -211,16 +211,16 @@ import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 
 const columns = [
     {
-        name: 'groupname',
+        name: 'name',
         required: true,
         label: 'Gruppen',
         align: 'center',
-        field: row => row.groupname,
+        field: row => row.name,
         sortable: true,
         headerStyle: 'max-width: 50px',
         //headerClasses: 'bg-primary text-white',
     },
-    {name: 'rooms', align: 'center', label: "Räume", field: row => row.rooms.join(", "),  sortable: true},
+    {name: 'rooms', align: 'center', label: "Räume", field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
     {name: 'actions', label: 'Bearbeiten', style: 'max-width 10px', headerStyle: 'max-width: 20px', align: 'center'}
 ]
 
@@ -228,18 +228,18 @@ const rows = ref([]);
 
 rows.value = [
 
-    {
-        groupname: 'Frozen Yogurt',
+ /*   {
+        name: 'Frozen Yogurt',
         rooms: ['Room 1', 'Room 7'],
         location: 'ExampleLocation',
         building: 'Building 0',
     },
     {
-        groupname: 'Labore',
+        name: 'Labore',
         rooms: ['Room 2', 'Room 5', 'Room 7', 'Room 13'],
         location: 'ExampleLocation',
         building: 'Building 1',
-    },
+    },*/
 ]
 
 
@@ -258,8 +258,8 @@ export default {
         let locationList = [];
         let locationListNames = [];
         let roomGroupList = [];
-        let roomGroupListNames = [];
         let buildingList = ref([]);
+        const currentBuilding = ref(null);
         let buildingListNames = ref([]);
         let buildingListForFilter=ref([]);
         let listOfAllRoomsViaBuilding = ref([]);
@@ -289,16 +289,33 @@ export default {
                 for (const roomG of roomGroupStore.allRoomGroups) {
                     roomGroupList.push(roomG);
                 }
-                console.log("hier");
-                for (const roomG of roomGroupStore.allRoomGroups) {
-                    //roomGroupListNames.push(roomG.name);
-                }
+                console.log("Groups of rooms");
+
+                //rows.value.push(roomGroupList);
                 console.log(roomGroupList);
+
+                adaptRoomGroupsToBuilding();
             })
         }
-        loadRoomGroups();
 
-        loadLocations();
+        function adaptRoomGroupsToBuilding() {
+            rows.value = [];
+            for (const roomGs of roomGroupList) {
+                console.log("roomGs ", roomGs.building)
+                console.log("Current building: " , currentBuilding.value)
+                if (currentBuilding.value != null) {
+                    if (roomGs.building.id === currentBuilding.value.id) {
+                        rows.value.push(roomGs);
+                    }
+                }
+            }
+            console.log("hiereere");
+            console.log(rows.value);
+        }
+
+        loadLocations().then(()=>loadRoomGroups());
+
+
 
 
         function adjustBuildingList(nameLoc) {
@@ -316,6 +333,7 @@ export default {
             console.log(buildingListNames.value);
             if(buildingListNames.value !==null) {
                 modelForBuilding.value = buildingListNames.value[0];
+                currentBuilding.value = buildingListNames.value[0];
                 console.log(modelForBuilding.value.id);
             }
         }
@@ -371,7 +389,8 @@ export default {
             changed(val){
                 if(val !==null) {
                     adjustBuildingList(val.name);
-                    console.log("Change", val.name)
+                    console.log("Change", val.name);
+                    adaptRoomGroupsToBuilding();
                 }
                 else {
                     buildingListNames.value=[];
@@ -379,8 +398,10 @@ export default {
             },
 
             getBuilding(building) {
-                console.log(building);
+                console.log("Changed building", building);
                 updateRoomList(building);
+                currentBuilding.value = building;
+                adaptRoomGroupsToBuilding();
             },
 
             filter: ref({
@@ -446,14 +467,23 @@ export default {
 
                     //Assume true in case there is no search
                     let s1 = true
+                    let s2 = true
 
                     //If search term exists, convert to lower case and see which rows contain it
                     if (lowerSearch !== "") {
                         s1 = false
+                        s2 = false
                         //Get the values
                         let s1_values = Object.values(row)
+                        let s2_values = row.rooms.map(r => r.name);
+                        console.log("s1_values: ",s1_values);
+                        console.log("s2_values: ",s2_values);
                         //Convert to lowercase
                         let s1_lower = s1_values.map(x => x.toString().toLowerCase())
+                        let s2_lower = s2_values.map(x => x.toString().toLowerCase())
+
+                        console.log("s1_lower: ",s1_lower);
+                        console.log("s2_lower: ",s2_lower);
 
                         for (let val = 0; val < s1_lower.length; val++) {
                             if (s1_lower[val].includes(lowerSearch)) {
@@ -461,11 +491,17 @@ export default {
                                 break
                             }
                         }
+                        for (let val = 0; val < s2_lower.length; val++) {
+                            if (s2_lower[val].includes(lowerSearch)) {
+                                s2 = true
+                                break
+                            }
+                        }
                     }
                     //assume row doesn't match
                     ans = false
                     //check if any of the conditions match
-                    if ((s1)) {
+                    if ((s1)|| s2) {
                         ans = true
                     }
                     return ans
