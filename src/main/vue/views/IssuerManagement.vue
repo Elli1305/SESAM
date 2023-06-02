@@ -47,7 +47,7 @@
     <q-dialog v-model="isFormOpen" content-class="form-dialog">
       <q-card class="form-card">
         <q-card-section>
-          <h2>Edit User</h2>
+          <h2>{{ t('issuermanagement.dialogTitle') }}</h2>
           <q-form @submit="saveChanges">
             <q-input v-model="editedRow.lastName" label="Last Name" outlined readonly></q-input>
             <q-input v-model="editedRow.firstName" label="First Name" outlined readonly></q-input>
@@ -64,8 +64,8 @@
             ></q-select>
 
             <q-card-actions align="right">
-              <q-btn label="Cancel" color="primary" @click="closeForm"/>
-              <q-btn type="submit" label="Save" color="primary" class="q-ml-md" @click="confirmSave"/>
+              <q-btn :label="t('issuermanagement.cancel')" color="primary" @click="closeForm"/>
+              <q-btn type="submit" :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="confirmSave"/>
             </q-card-actions>
           </q-form>
         </q-card-section>
@@ -83,14 +83,11 @@ import {useCredentialStore} from "@/main/vue/stores/credential";
 
 
 export default {
-  name: 'IssuerManagement',
-
   setup() {
     const rows = ref([]);
     const searchQuery = ref('');
-
     const isFormOpen = ref(false);
-    const editedItem = ref(null); // Separate edited item object
+    const editedItem = ref(null);
     axios.get('api/issuers').then((res) => {
       rows.value = res.data;
     });
@@ -138,16 +135,16 @@ export default {
 
     const confirmSave = () => {
       Dialog.create({
-        title: 'Confirm Save',
-        message: 'Are you sure you want to save the changes?',
+        title: t('issuermanagement.saveConfirmationTitle'),
+        message: t('issuermanagement.saveConfirmationMessage'),
         persistent: true,
         ok: {
-          label: 'Save',
+          label: t('issuermanagement.save'),
           color: 'primary',
           classes: 'q-ma-sm',
         },
         cancel: {
-          label: 'Cancel',
+          label: t('issuermanagement.cancel'),
           color: 'primary',
           classes: 'q-ma-sm',
         },
@@ -197,7 +194,6 @@ export default {
 
     return {
       columns,
-
       searchQuery,
       credentialStore,
       t,
@@ -217,9 +213,7 @@ export default {
 </script>
 
 <style scoped>
-.form-dialog {
-  max-width: 500px;
-}
+
 
 .form-card {
   width: 100%;
