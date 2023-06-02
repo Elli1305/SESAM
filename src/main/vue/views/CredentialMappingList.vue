@@ -192,6 +192,7 @@ export default {
       credentialStore.getCategory().then((categories) => {
         rows.value = categories
       })
+      window.location.reload()
     }
 
 
@@ -203,6 +204,7 @@ export default {
       credentialStore.getCategory().then((categories) => {
         rows.value = categories
       })
+      window.location.reload()
     }
 
 
@@ -211,6 +213,7 @@ export default {
       credentialStore.getCategory().then((categories) => {
         rows.value = categories
       })
+      window.location.reload()
     }
 
     const editedRow = ref({})
