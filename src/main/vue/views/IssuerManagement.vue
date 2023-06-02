@@ -54,7 +54,7 @@
             <q-input v-model="editedRow.room.name" label="Room Name" outlined readonly></q-input>
             <q-select
                 filled
-                v-model="editedRow.category"
+                v-model="editedRow.credential"
                 multiple
                 :label="t('issuermanagement.list')"
                 emit-value
@@ -62,6 +62,7 @@
                 option-label="name"
                 options-cover
             ></q-select>
+
 
             <q-card-actions align="right">
               <q-btn :label="t('issuermanagement.cancel')" color="primary" @click="closeForm"/>
