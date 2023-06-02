@@ -1,24 +1,26 @@
 <template>
-  <q-page class="items-center justify-center" style="display: flex">
-    <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
-      <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
-        <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Impressum bearbeiten</h1>
-        <div v-if="!showEditor" class="imprint-content" v-html="imprintContent || initialImprintContent"></div>
+  <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">{{t('imprintEdit.title')}}</p>
+      <div class="row justify-evenly no-wrap" style="width: 75vw; height: 25em">
+        <q-btn class="self-end q-mr-lg" round icon="delete" color="negative" text-color="positive" @click="showDeleteDialog" style="width: 4em; height: 4em"/>
+        <q-editor
+            class="column full-height"
+            toolbar-rounded
+            :definitions="{
+              left: {icon: 'format_align_left', tip: ''},
+              center: {icon: 'format_align_center', tip: ''},
+              right: {icon: 'format_align_right', tip: ''},
+              justify: {icon: 'format_align_justify', tip: ''},
+              bold: {icon: 'format_bold', tip: ''},
+              italic: {icon: 'format_italic', tip: ''},
+              underline: {icon: 'format_underline', tip: ''},
+              strike: {icon: 'format_strikethrough', tip: ''},
+              undo: {icon: 'undo', tip: ''},
+              redo: {icon: 'redo', tip: ''}}"
+            v-model="editorContent"
+            style="width: 50vw"/>
+        <q-btn class="self-end q-ml-lg" round icon="save" color="positive" text-color="negative" @click="showConfirmDialog" style="width: 4em; height: 4em"/>
       </div>
-      <q-editor v-model="editorContent" v-if="showEditor"/>
-      <div class="editor-result" v-html="editorContent" v-if="showEditor"></div>
-
-
-      <div class="action-buttons" v-if="showEditor"
-           style="display: flex; justify-content: space-between; width: 100%; margin-top: 1em; margin-bottom: 2em;">
-        <q-btn icon="delete" color="primary" @click="showDeleteDialog" size="md"/>
-        <q-btn icon="save" color="primary" @click="showConfirmDialog" size="md"/>
-      </div>
-      <div class="action-buttons"
-           style="display: flex; justify-content: center; width: 100%; margin-top: 1em; margin-bottom: 2em;">
-        <q-btn icon="edit" color="primary" @click="toggleEditor" v-if="!showEditor" size="md"/>
-      </div>
-    </div>
     <q-dialog v-model="confirmDialog">
       <q-card>
         <q-card-section class="q-pa-md">
@@ -47,9 +49,10 @@
   </q-page>
 </template>
 <script lang="ts">
-import {ref, onMounted,nextTick} from 'vue';
+import {ref, onMounted} from 'vue';
 import {QDialog, useQuasar} from 'quasar';
 import {getImprintContent, postImprintContent, deleteImprintContent, getLatestImprint} from '../api/imprint';
+import { useI18n } from 'vue-i18n';
 
 export default {
   name: "ImprintEditor",
@@ -58,6 +61,7 @@ export default {
   },
   setup() {
     const $q = useQuasar();
+    const { t } = useI18n()
     const editorContent = ref('');
     const imprintContent = ref('');
     const showEditor = ref(false);
@@ -105,14 +109,6 @@ export default {
           });
     };
 
-
-    const toggleEditor = () => {
-      showEditor.value = !showEditor.value;
-      if (showEditor.value) {
-        loadLatestContent();
-      }
-    };
-
     const deletePostedContent = () => {
       deleteImprintContent()
           .then(() => {
@@ -152,7 +148,6 @@ export default {
       editorContent,
       imprintContent: imprintContent,
       showEditor,
-      toggleEditor,
       loadLatestContent,
       confirmDialog,
       deleteDialog,
@@ -160,6 +155,7 @@ export default {
       postText,
       showDeleteDialog,
       deletePostedContent,
+      t,
 
 
       initialImprintContent: initialImprintContent
@@ -167,16 +163,6 @@ export default {
   }
 }
 </script>
+
 <style scoped>
-h1 {
-  font-size: 3em;
-  text-align: center;
-  margin-bottom: -0.5em;
-}
-
-.editor-result {
-  margin-top: 2em;
-}
-
-
 </style>

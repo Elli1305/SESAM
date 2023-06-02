@@ -225,6 +225,9 @@ const messages = {
             },
             resetFailure: "Zurücksetzen fehlgeschlagen",
             saveFailure: "Speichern fehlgeschlagen"
+        },
+        imprintEdit: {
+            title: "Impressum bearbeiten"
         }
     },
     en: {
@@ -436,6 +439,9 @@ const messages = {
             },
             resetFailure: "Reset failed",
             saveFailure: "Saving failed"
+        },
+        imprintEdit: {
+            title: "Edit imprint"
         }
     }
 }
