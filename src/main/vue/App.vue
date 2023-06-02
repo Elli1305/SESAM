@@ -58,7 +58,7 @@ async function logout() {
         </div>
         <div class="column full-width justify-between" style="height: 95px">
           <div id="upper" class="row justify-between" style="height: 42px">
-            <div class="row">
+            <div class="row text-accent">
               <q-toolbar-title style="font-weight: 800; font-size: 3.25em; line-height: 1">
                 {{ t("home.header") }}
               </q-toolbar-title>
@@ -95,11 +95,11 @@ async function logout() {
           </div>
           <div id="lower" class="row justify-end items-center no-wrap">
             <div class="row">
-              <router-link to="/" class="headerLink"><p class="headerText">{{ t("home.floorplan") }}</p></router-link>
-              <router-link to="/credentialview" class="headerLink"><p class="headerText">{{ t("home.credentials") }}</p></router-link>
+              <router-link to="/" class="headerLink text-accent"><p class="headerText">{{ t("home.floorplan") }}</p></router-link>
+              <router-link to="/credentialview" class="headerLink text-accent"><p class="headerText">{{ t("home.credentials") }}</p></router-link>
               <div>
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
-                   class="headerText foldMenu">
+                   class="headerText foldMenu text-accent">
                   {{ t("home.profileManagement") }}
                 </p>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
@@ -115,7 +115,7 @@ async function logout() {
               </div>
               <div>
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
-                   class="headerText foldMenu">
+                   class="headerText foldMenu text-accent">
                   {{ t("home.corporateDesign") }}
                 </p>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
@@ -128,17 +128,17 @@ async function logout() {
               </div>
               <router-link
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
-                  to="/" class="headerLink">
+                  to="/" class="headerLink text-accent">
                 <p class="headerText">{{ t("home.credentialManagement") }}</p>
               </router-link>
               <router-link
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
-                  to="/editFloorPlan" class="headerLink">
+                  to="/editFloorPlan" class="headerLink text-accent">
                 <p class="headerText">{{ t("home.editorPages") }}</p>
               </router-link>
               <router-link
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ISSUER' && r.granted)"
-                  to="/" class="headerLink">
+                  to="/" class="headerLink text-accent">
                 <p class="headerText">{{ t("home.issuerPages") }}</p>
               </router-link>
             </div>
@@ -181,11 +181,11 @@ async function logout() {
       <router-view/>
     </q-page-container>
 
-    <q-footer elevated class="bg-grey-8 text-white">
-      <q-toolbar class="bg-grey-7">
+    <q-footer elevated>
+      <q-toolbar class="bg-dark">
         <q-toolbar-title style="text-align: center; font-size: 1em">
 
-          <router-link to="./imprint" style="color: white">{{ t('home.imprint') }}</router-link>
+          <router-link to="./imprint" class="text-accent">{{ t('home.imprint') }}</router-link>
 
         </q-toolbar-title>
       </q-toolbar>
@@ -217,7 +217,6 @@ async function logout() {
   }
 
 .headerLink {
-  color: white;
   text-decoration: none;}
 
 .foldMenu {

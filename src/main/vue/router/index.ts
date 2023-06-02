@@ -16,6 +16,7 @@ import {useUserStore} from "@/main/vue/stores/users";
 import EditUser from "@/main/vue/views/EditUser.vue";
 import CredentialView from "@/main/vue/views/CredentialView.vue";
 import RolesRequest from "@/main/vue/views/RolesRequest.vue";
+import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -102,6 +103,11 @@ const router = createRouter({
         {
             path: '/admin/rolesRequest',
             component: RolesRequest
+        },
+        {
+            path: "/corporatedesign",
+            component: CorporateDesign,
+            meta: {requiresAdmin: true},
         },
         {path: "/:pathMatch(.*)*", component: StartView}
 
