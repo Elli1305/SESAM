@@ -1,6 +1,5 @@
-package com.gpse.sesam.domain.issuer;
+package com.gpse.sesam.domain.user.issuer;
 
-import com.gpse.sesam.domain.user.Issuer;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

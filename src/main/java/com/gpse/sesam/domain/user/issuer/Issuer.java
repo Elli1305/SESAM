@@ -1,7 +1,9 @@
-package com.gpse.sesam.domain.user;
+package com.gpse.sesam.domain.user.issuer;
 
 import com.gpse.sesam.domain.credential.Credential;
 import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.domain.user.SesamUser;
+import com.gpse.sesam.domain.user.SesamUserRole;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -2,7 +2,7 @@ package com.gpse.sesam.domain.credential;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gpse.sesam.domain.user.Issuer;
+import com.gpse.sesam.domain.user.issuer.Issuer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
