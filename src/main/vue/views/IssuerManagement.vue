@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <div class="q-mb-xl">
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t('issuermanagement.title') }}</h1>
+      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t('issuermanagement.title') }}  </h1>
     </div>
     <div class="items-center justify-center" style="display: flex">
       <div class="center" style="max-width: 80em; min-width: 60em">
@@ -25,6 +25,12 @@
               </div>
             </q-td>
           </template>
+          <template v-slot:body-cell-roomId="props">
+            <q-td :props="props">
+              <div>{{ props.row.room.name }}</div>
+            </q-td>
+          </template>
+
 
 
         </q-table>
@@ -42,7 +48,7 @@
                 filled
                 v-model="editedRow.category"
                 multiple
-                :label="t('credentialmapping.internal')"
+                :label="t('issuermanagement.list')"
                 emit-value
                 :options="credentialStore.allCredentials"
                 option-value="id"
@@ -78,7 +84,7 @@ export default {
 
     const isFormOpen = ref(false);
     const editedItem = ref(null); // Separate edited item object
-    axios.get('/api/user').then((res) => {
+    axios.get('api/issuers').then((res) => {
       rows.value = res.data;
     });
 
@@ -87,7 +93,6 @@ export default {
 
 
     const columns = [
-
       {
         name: 'firstName',
         align: 'center',
@@ -105,28 +110,24 @@ export default {
         sortable: true,
       },
       {
-        name: 'username',
+        name: 'credentials',
         align: 'center',
-        label: t('issuermanagement.email'),
-        field: 'username',
+        label: t('issuermanagement.credentials'),
+        field: 'credentials',
+        format: (val) => val.map((credential) => credential.name).join(', '),
         sortable: true,
       },
+
       {
-        name: 'room',
+        name: 'roomId',
         align: 'center',
-        label: "room",
-        field: 'room',
+        label: t('issuermanagement.roomId'),
+        field: 'room.name',
         sortable: true,
       },
-      {
-        name: 'credential',
-        align: 'center',
-        label: t('issuermanagement.credential'),
-        field: 'credential',
-        sortable: true,
-      },
-      {name: 'actions', label: t('issuermanagement.edit'), style: "width: 40px", align: 'center'}
+      { name: 'actions', label: t('issuermanagement.edit'), style: 'width: 40px', align: 'center' },
     ];
+
 
     const filteredRows = ref([]);
 
@@ -211,7 +212,7 @@ export default {
       isFormOpen,
       openForm,
       saveChanges,
-
+      rows,
       editedItem,
       confirmSave,
       closeForm,
