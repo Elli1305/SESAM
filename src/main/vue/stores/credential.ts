@@ -3,10 +3,7 @@ import {Ref, ref} from "vue";
 import api from "@/main/vue/api";
 import {
     Category,
-    CategoryCmd,
     CredentialCmd,
-    CategoryResponse,
-    CredentialMappingCmd,
     ExternalCredential,
     Credential
 } from "@/main/vue/entity/credentialDefinition";
@@ -14,10 +11,8 @@ import {
 export const useCredentialStore = defineStore('credential', () =>{
     const credentials: Ref<CredentialCmd[]|null> = ref(null)
     const allCredentials: Ref<Credential[]|null> = ref(null)
-    const categories: Ref<CategoryCmd[]|null> = ref(null)
+    const categories: Ref<Category[]|null> = ref(null)
     const external: Ref<ExternalCredential[]|null> = ref(null)
-    const categoryEdit: Ref<Category | null> = ref(null)
-    const credentialsForMapping: Ref<CredentialMappingCmd[]|null> = ref(null)
 
 
     function getCredentialsByLocation(id: string) {
@@ -53,30 +48,10 @@ export const useCredentialStore = defineStore('credential', () =>{
         })
     }
 
-    function getCredentialsForMapping() {
-        return new Promise((resolve, reject) => {
-            api.credential.getCredentialsForMapping().then((response) => {
-                credentialsForMapping.value = response.data
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
-            })
-        })
-    }
 
     function deleteCategory(id: string) {
         return new Promise<void>((resolve, reject) => {
             api.credential.deleteCategory(id).then(() => {
-                resolve()
-            }).catch((error) => {
-                reject(error)
-            })
-        });
-    }
-
-    function deleteCategoryByName(name: string) {
-        return new Promise<void>((resolve, reject) => {
-            api.credential.deleteCategoryByName(name).then(() => {
                 resolve()
             }).catch((error) => {
                 reject(error)
@@ -128,14 +103,10 @@ export const useCredentialStore = defineStore('credential', () =>{
         categories,
         external,
         getExternalCredentials,
-        credentialsForMapping,
-        getCredentialsForMapping,
         deleteCategory,
         allCredentials,
         getCredentials,
         createCategory,
-        deleteCategoryByName,
         updateCredentials
     }
-
 })

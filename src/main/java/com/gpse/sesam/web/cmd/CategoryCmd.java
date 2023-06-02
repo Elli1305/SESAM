@@ -1,8 +1,5 @@
 package com.gpse.sesam.web.cmd;
 
-import jdk.dynalink.linker.LinkerServices;
-import jdk.jfr.Category;
-
 import java.util.List;
 
 public class CategoryCmd {

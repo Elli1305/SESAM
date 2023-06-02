@@ -215,12 +215,9 @@ export default {
 
     const editedRow = ref({})
     const openForm = (row) => {
-      editedRow.value = {...row}; // Assign the selected item to editedRow
+      editedRow.value = {...row};
       catname.value = row.name
     };
-
-
-
 
     return {
       catname,

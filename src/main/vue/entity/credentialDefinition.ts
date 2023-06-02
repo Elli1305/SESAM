@@ -68,11 +68,6 @@ export interface CategoryCmd {
     externalCredentialsCmd: string[];
 }
 
-export interface CredentialMappingCmd {
-    id: bigint;
-    name: string;
-}
-
 export interface CategoryResponse {
     name: string;
     credentials: bigint[];
