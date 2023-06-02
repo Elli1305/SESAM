@@ -141,7 +141,8 @@
                         filled
                         v-model="modelRoomsNew"
                         multiple
-                        :options="optionsRooms"
+                        :options="listOfAllRoomsViaBuilding"
+                        option-label="name"
 
                     />
                 </div>
@@ -335,6 +336,7 @@ export default {
                 modelForBuilding.value = buildingListNames.value[0];
                 currentBuilding.value = buildingListNames.value[0];
                 console.log(modelForBuilding.value.id);
+                updateRoomList(currentBuilding.value);
             }
         }
 
@@ -376,12 +378,9 @@ export default {
             modelRooms: ref(null),
             modelRoomsNew: ref(editGroupRooms.value),
             checkName,
-            loadLocations,
-            loadRoomGroups,
             locationList,
             buildingListNames,
             toDefault,
-            adjustBuildingList,
             getOldName() {
               this.editName = editGroupName;
               this.modelRoomsNew= editGroupRooms;
@@ -399,7 +398,6 @@ export default {
 
             getBuilding(building) {
                 console.log("Changed building", building);
-                updateRoomList(building);
                 currentBuilding.value = building;
                 adaptRoomGroupsToBuilding();
             },
@@ -416,7 +414,7 @@ export default {
             optionsLocations,
             listOfAllRoomsViaBuilding,
             editGroup(value) {
-              editGroupName = value[1].groupname;
+              editGroupName = value[1].name;
               editGroupRooms = value[1].rooms;
               console.log(editGroupRooms);
               console.log(editGroupName);
@@ -476,14 +474,9 @@ export default {
                         //Get the values
                         let s1_values = Object.values(row)
                         let s2_values = row.rooms.map(r => r.name);
-                        console.log("s1_values: ",s1_values);
-                        console.log("s2_values: ",s2_values);
                         //Convert to lowercase
                         let s1_lower = s1_values.map(x => x.toString().toLowerCase())
                         let s2_lower = s2_values.map(x => x.toString().toLowerCase())
-
-                        console.log("s1_lower: ",s1_lower);
-                        console.log("s2_lower: ",s2_lower);
 
                         for (let val = 0; val < s1_lower.length; val++) {
                             if (s1_lower[val].includes(lowerSearch)) {
