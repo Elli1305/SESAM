@@ -1,6 +1,15 @@
 package com.gpse.sesam.domain.location.door.config;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gpse.sesam.util.StringToIntSerializer;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.util.List;
 
@@ -10,6 +19,7 @@ public class ProofPredicateInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
+	@JsonIgnore
 	private Long id;
 
 
@@ -20,13 +30,14 @@ public class ProofPredicateInfo {
 	private String predicateType;
 
 	@Column
+	@JsonSerialize(using = StringToIntSerializer.class)
 	private String predicateValue;
 
 	@Column
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<AttributeFilter> restrictions;
 
-	protected ProofPredicateInfo() {
+	public ProofPredicateInfo() {
 
 	}
 

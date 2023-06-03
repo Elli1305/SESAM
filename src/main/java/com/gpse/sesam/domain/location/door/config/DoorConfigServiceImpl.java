@@ -3,6 +3,7 @@ package com.gpse.sesam.domain.location.door.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.configuration.DoorApiConfig;
+import com.gpse.sesam.web.exception.InvalidDoorConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +21,21 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class DoorConfigurationService {
+public class DoorConfigServiceImpl implements DoorConfigService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DoorConfigurationService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DoorConfigServiceImpl.class);
 
 	private final DoorApiConfig appConfig;
 	private final ProofConfigRepository proofConfigRepository;
 
 	@Autowired
-	public DoorConfigurationService(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository) {
+	public DoorConfigServiceImpl(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository) {
 		this.appConfig = appConfig;
 		this.proofConfigRepository = proofConfigRepository;
 		proofConfigRepository.save(createProofConfig());
 	}
 
+	@Override
 	public void getDoorConfigurations() {
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setBasicAuth(appConfig.getUsername(), appConfig.getPassword());
@@ -55,28 +57,27 @@ public class DoorConfigurationService {
 	}
 
 
-	public void sendProofConfig() {
-		final String url = appConfig.getUrl() + "/api/proof/config/T.100";
+	@Override
+	public void sendProofConfig(final String doorId, final ProofConfig proofConfig) {
+		final String url = appConfig.getUrl() + "/api/proof/config/" + doorId;
 
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setBasicAuth(appConfig.getUsername(), appConfig.getPassword());
 
-		final ProofConfig request = createProofConfig();
-
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper();
-			final String requestBody = objectMapper.writeValueAsString(request);
+			final String requestBody = objectMapper.writeValueAsString(proofConfig);
 			final HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+
+			LOGGER.info(requestBody);
 
 			final RestTemplate restTemplate = new RestTemplate();
 			final ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
-			if (response.getStatusCode().is2xxSuccessful()) {
-				final String responseData = response.getBody();
-				LOGGER.info("POST Request erfolgreich gesendet! Antwortdaten: " + responseData);
-			} else {
-				LOGGER.error("POST Request fehlgeschlagen. Statuscode: " + response.getStatusCode());
+			if (!response.getStatusCode().is2xxSuccessful()) {
+				LOGGER.error("POST Request fehlgeschlagen. Statuscode: {} ", response.getStatusCode());
+				throw new InvalidDoorConfiguration("Could not configure door. Reason: " + response.getBody());
 			}
 		} catch (final JsonProcessingException e) {
 			LOGGER.error("Fehler beim Erstellen des Request-Bodies.", e);

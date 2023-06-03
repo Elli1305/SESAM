@@ -24,8 +24,8 @@ public class RoomController {
 	}
 
 	@PostMapping("/save")
-	public Room save(@RequestBody final Room building) {
-		return roomService.save(building);
+	public Room save(@RequestBody final Room room) {
+		return roomService.save(room);
 	}
 
 	@DeleteMapping("/{id:\\d+}")

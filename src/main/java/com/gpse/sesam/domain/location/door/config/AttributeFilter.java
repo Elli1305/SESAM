@@ -1,8 +1,15 @@
 package com.gpse.sesam.domain.location.door.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gpse.sesam.util.AttributeFilterSerializer;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @JsonSerialize(using = AttributeFilterSerializer.class)
 @Entity
@@ -11,6 +18,7 @@ public class AttributeFilter {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
+	@JsonIgnore
 	private Long id;
 
 	@Column
@@ -19,7 +27,7 @@ public class AttributeFilter {
 	@OneToOne(cascade = CascadeType.ALL)
 	private AttributeValue attributeValue;
 
-	protected AttributeFilter() {
+	public AttributeFilter() {
 
 	}
 

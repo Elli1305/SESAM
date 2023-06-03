@@ -44,7 +44,6 @@ public class Credential {
 	private List<ChecklistEntry> checklist;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JsonBackReference("credential_issuers")
 	private List<Issuer> issuer;
 
 	protected Credential() {
