@@ -116,7 +116,7 @@
             </q-card-section>
 
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat :label="t('adminEdit.delete')" @click="deleteGroup()"/>
+                <q-btn flat :label="t('adminEdit.delete')" @click="deleteGroup(); deleteAlert=false"/>
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
             </q-card-actions>
         </q-card>
