@@ -122,7 +122,7 @@ const router = createRouter({
         {
             path: "/credentials",
             component: IssueCredentials,
-            meta: {requiresAuth: true},
+            meta: {requiresAdmin: true},
         },
         {
             path: "/credentials/:id/issue",
@@ -137,7 +137,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const {authenticated, user} = useUserStore();
     const {authorize} = to.meta;
-    if ((to.meta.requiresAuth || authorize) && !authenticated) {
+    if ((to.meta.requiresAuth || authorize || to.meta.requiresAdmin) && !authenticated) {
         return next({path: '/login', query: {returnUrl: to.path}});
     } else if (authorize && !user?.roles.some(role => role.role === authorize && role.granted)) {
         return next({path: '/'});

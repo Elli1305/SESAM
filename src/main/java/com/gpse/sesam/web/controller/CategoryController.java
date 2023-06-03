@@ -29,6 +29,7 @@ public class CategoryController {
         this.externalCredentialService = externalCredentialService;
     }
 
+    @Secured("ADMINISTRATOR")
     @GetMapping("/credentialmapping")
     public List<Category> getCategoriesInfo() {
         return categoryService.getCategory();
