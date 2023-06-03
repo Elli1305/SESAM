@@ -18,7 +18,7 @@
       >
         <template v-slot:top-right>
           <div style="padding-right: 1em">
-          <q-btn dense flat color="grey" :label="t('credentialmapping.newcategory')"  :disable="loading" icon="add" rounded @click="prompt=true"/>
+          <q-btn dense flat color="grey" :label="t('credentialmapping.newcategory')" icon="add" rounded @click="prompt=true"/>
           </div>
           <q-input v-model="filter" :placeholder="t('credentialview.search')" dense>
             <template v-slot:append>
@@ -29,7 +29,7 @@
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <q-btn dense round flat color="grey" @click="changeCategory = true; openForm(props.row)" icon="edit"></q-btn>
-            <q-btn dense round flat color="grey" icon="delete" :disable="loading" @click="alert = true" />
+            <q-btn dense round flat color="grey" icon="delete" @click="alert = true" />
           </q-td>
         </template>
       </q-table>
@@ -199,9 +199,6 @@ export default {
           }), 250)
     }
 
-    function reload () {
-
-    }
 
     function createCategory() {
       credentialStore.createCategory(address.value, model.value, model2.value);
