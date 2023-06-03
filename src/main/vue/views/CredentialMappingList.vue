@@ -77,6 +77,7 @@
             option-value="id"
             option-label="name"
             options-cover
+            map-options
         ></q-select>
       </div>
       <div style="float: right; width: 20em; padding-top: 2em; padding-left: 2em">
@@ -90,6 +91,7 @@
             option-value="id"
             option-label="name"
             options-cover
+            map-options
         ></q-select>
       </div>
       </q-card-section>
@@ -123,6 +125,7 @@
               option-value="id"
               option-label="name"
               options-cover
+              map-options
           ></q-select>
         </div>
         <div style="float: right; width: 20em; padding-top: 2em; padding-left: 2em">
@@ -136,6 +139,7 @@
               option-value="id"
               option-label="name"
               options-cover
+              map-options
           ></q-select>
         </div>
       </q-card-section>
@@ -213,14 +217,15 @@ export default {
       credentialStore.getCategory().then((categories) => {
         rows.value = categories
       })
-      window.location.reload()
     }
 
     const editedRow = ref({})
     const openForm = (row) => {
       editedRow.value = {...row};
       catname.value = row.name
-    };
+      model3.value = row.credentials.map(c =>c.id)
+      model4.value = row.externalCredentials.map(e =>e.id)
+    }
 
     return {
       catname,
