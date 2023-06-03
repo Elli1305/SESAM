@@ -7,7 +7,6 @@ import com.gpse.sesam.domain.credential.Category;
 import com.gpse.sesam.domain.credential.CategoryService;
 import com.gpse.sesam.domain.credential.ChecklistEntry;
 import com.gpse.sesam.domain.credential.Credential;
-import com.gpse.sesam.domain.credential.CredentialCmdService;
 import com.gpse.sesam.domain.credential.CredentialService;
 import com.gpse.sesam.domain.credential.CredentialServiceImpl;
 import com.gpse.sesam.domain.credential.ExternalCredential;
@@ -54,8 +53,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private final CredentialService credentialService;
 	private final ColorsService colorsService;
 
-	private final CredentialCmdService credentialCmdService;
-
 	private final CategoryService categoryService;
 
 	private final PasswordEncoder passwordEncoder;
@@ -63,8 +60,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private final List<Location> locationsList = new ArrayList<>();
 
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
-								   final CredentialService credentialService,
-								   final CredentialCmdService credentialCmdService, final ColorsService colorsService,
+								   final CredentialService credentialService, final ColorsService colorsService,
 								   final CategoryService categoryService, final PasswordEncoder passwordEncoder) {
 		this.credentialService = credentialService;
 		this.colorsService = colorsService;
@@ -72,7 +68,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		this.passwordEncoder = passwordEncoder;
 		this.locationService = locationService;
 		this.userService = userService;
-		this.credentialCmdService = credentialCmdService;
 	}
 
 	@Override
@@ -442,7 +437,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<CredentialCmd> credentialCmds = new ArrayList<>();
 		credentialCmds.add(credentialCmd);
 		credentialCmds.add(credentialCmd2);
-		credentialCmdService.saveAll(credentialCmds);
 		categories.add(category);
 		categories.add(category2);
 

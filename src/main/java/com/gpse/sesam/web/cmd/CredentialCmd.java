@@ -1,30 +1,21 @@
 package com.gpse.sesam.web.cmd;
 
-import jakarta.persistence.*;
-
 import java.util.List;
 
-@Entity
+
 public class CredentialCmd {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
 
-    @Column
     private String categoryName;
 
-    @Column
     private String credentialName;
 
-    @ElementCollection
+
     private List<String> externalCredential;
 
-    @ElementCollection
+
     private List<String> issuerName;
 
-    @ElementCollection
     private List<String> room;
 
     protected CredentialCmd() { }

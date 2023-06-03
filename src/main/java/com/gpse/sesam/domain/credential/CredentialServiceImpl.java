@@ -100,15 +100,37 @@ public class CredentialServiceImpl implements CredentialService {
 		credentialRepository.saveAll(credentials);
 	}
 
-	@Override
-	public Optional<Credential> credentialFindByLocation(final Location location) {
-		return Optional.empty();
-	}
-
 
 	@Override
 	public List<Credential> credentialFindByLocation(final Long id) {
 		return credentialRepository.findByLocation(id);
+	}
+
+
+	public List<CredentialCmd> getCredentialByLocation(final Long id) {
+		List<Credential> credentials = credentialRepository.findByLocation(id);
+		List<CredentialCmd> cmds = new ArrayList<>();
+
+		for (Credential credential : credentials) {
+			String categoryName = credential.getCategory().getName();
+			String credentialName = credential.getName();
+			List<String> externalCredentials = new ArrayList<>();
+			for (ExternalCredential externalCredential : credential.getCategory().getExternalCredentials()) {
+				String external = externalCredential.getName();
+				externalCredentials.add(external);
+			}
+			List<String> issuers = new ArrayList<>();
+			List<String> rooms = new ArrayList<>();
+			for (Issuer issuer: credential.getIssuer()) {
+				String issuerName = issuer.getFirstName()+ " " + issuer.getLastName();
+				String room = issuer.getRoom().getName();
+				issuers.add(issuerName);
+				rooms.add(room);
+			}
+			cmds.add(new CredentialCmd(categoryName, credentialName, externalCredentials, issuers, rooms));
+		}
+
+		return cmds;
 	}
 
 	public static CredentialCmd createCredentialCmd(final Category category, final Credential credential) {
