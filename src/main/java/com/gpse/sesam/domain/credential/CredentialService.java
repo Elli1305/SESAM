@@ -22,6 +22,6 @@ public interface CredentialService {
 
 	List<Credential> credentialFindByLocation(Long id);
 
-	List<CredentialCmd> getCredentialByLocation(final Long id);
+	List<CredentialCmd> getCredentialByLocation(Long id);
 
 }
