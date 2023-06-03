@@ -75,12 +75,11 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> category = getCategory(id);
         if (category.isPresent()) {
             category.get().setName(cmd.getName());
-            if (cmd.getCredentials().isEmpty()) {
-                for (Credential credential : category.get().getCredentials()) {
-                    credential.setCategory(null);
-                }
-                category.get().setCredentials(null);
-            } else {
+            for (Credential credential : category.get().getCredentials()) {
+                credential.setCategory(null);
+            }
+            category.get().setCredentials(null);
+            if (!cmd.getCredentials().isEmpty()) {
                 List<Credential> internal = new ArrayList<>();
                 for (Long cred : cmd.getCredentials()) {
                     Optional<Credential> credential = credentialRepository.findById(cred);
