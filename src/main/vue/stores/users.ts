@@ -127,7 +127,7 @@ export const useUserStore = defineStore('users', () => {
     }
 
     function deleteUser(mail: string) {
-        new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             api.auth.deleteUser(mail).then(_ => resolve())
                 .catch(reject);
         });
