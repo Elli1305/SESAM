@@ -22,7 +22,7 @@ public interface CategoryService {
 
     void updateCategory(Long id, CategoryResponseCmd cmd);
 
-    void deleteCategory(final Category category);
+    void deleteCategory(Category category);
 
-    void createCategory(final CategoryResponseCmd categoryCmd);
+    void createCategory(CategoryResponseCmd categoryCmd);
 }
