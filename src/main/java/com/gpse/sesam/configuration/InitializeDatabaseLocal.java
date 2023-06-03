@@ -181,7 +181,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		for (int i = 0; i < 6; i++) {
 			final Floor floor = new Floor(i % 2, "/citec-gebaeudeplan.png");
 			final Floor floor2 = new Floor(i % 2, "/citec-gebaeudeplan.png");
-			for(int j = 0; j < 5; j ++){
+			for (int j = 0; j < 5; j++) {
 				floor.addRoom(rooms.get(i * 5 + j));
 				floor2.addRoom(rooms2.get(i * 5 + j));
 			}
@@ -227,7 +227,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		return form;
 	}
 
-	private List<ChecklistEntry>  checklist(){
+	private List<ChecklistEntry> checklist() {
 		final List<ChecklistEntry> checklist = new ArrayList<>();
 		checklist.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
 		checklist.add(new ChecklistEntry("Wurde der notwendige Nachweis erbracht?"));
