@@ -1,7 +1,4 @@
-package com.gpse.sesam.domain.credential;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
+package com.gpse.sesam.domain.credential.credentials;
 
 import java.util.List;
 import java.util.Optional;

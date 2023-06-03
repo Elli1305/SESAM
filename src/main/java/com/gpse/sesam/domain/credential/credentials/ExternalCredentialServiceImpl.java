@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.credential;
+package com.gpse.sesam.domain.credential.credentials;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

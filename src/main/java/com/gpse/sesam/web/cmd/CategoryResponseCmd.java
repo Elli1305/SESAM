@@ -1,10 +1,5 @@
 package com.gpse.sesam.web.cmd;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.gpse.sesam.domain.credential.Credential;
-import com.gpse.sesam.domain.credential.ExternalCredential;
-import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.gpse.sesam.domain.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.gpse.sesam.domain.credential.Credential;
+import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.location.room.Room;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

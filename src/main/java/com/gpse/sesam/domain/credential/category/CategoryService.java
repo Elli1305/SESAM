@@ -1,7 +1,6 @@
-package com.gpse.sesam.domain.credential;
+package com.gpse.sesam.domain.credential.category;
 
 import com.gpse.sesam.domain.location.Location;
-import com.gpse.sesam.web.cmd.CategoryCmd;
 import com.gpse.sesam.web.cmd.CategoryResponseCmd;
 
 import java.util.List;

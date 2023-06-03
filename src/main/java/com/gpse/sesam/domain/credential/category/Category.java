@@ -1,6 +1,8 @@
-package com.gpse.sesam.domain.credential;
+package com.gpse.sesam.domain.credential.category;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

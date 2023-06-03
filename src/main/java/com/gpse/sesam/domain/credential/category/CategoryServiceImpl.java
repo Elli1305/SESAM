@@ -1,7 +1,10 @@
-package com.gpse.sesam.domain.credential;
+package com.gpse.sesam.domain.credential.category;
 
+import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.CredentialRepository;
+import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.ExternalCredentialRepository;
 import com.gpse.sesam.domain.location.Location;
-import com.gpse.sesam.web.cmd.CategoryCmd;
 import com.gpse.sesam.web.cmd.CategoryResponseCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

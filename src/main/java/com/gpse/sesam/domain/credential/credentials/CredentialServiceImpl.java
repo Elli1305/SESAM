@@ -1,8 +1,12 @@
-package com.gpse.sesam.domain.credential;
+package com.gpse.sesam.domain.credential.credentials;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.issuing.IssueCredential;
+import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
+import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
+import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.domain.user.IssuerRepository;
 import com.gpse.sesam.web.cmd.CredentialCmd;

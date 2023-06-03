@@ -1,21 +1,17 @@
 package com.gpse.sesam.web.controller;
 
-import com.gpse.sesam.domain.credential.Category;
-import com.gpse.sesam.domain.credential.CategoryService;
-import com.gpse.sesam.domain.credential.Credential;
-import com.gpse.sesam.domain.credential.CredentialService;
-import com.gpse.sesam.domain.credential.*;
-import com.gpse.sesam.domain.user.Issuer;
-import com.gpse.sesam.domain.user.SesamUser;
+import com.gpse.sesam.domain.credential.category.Category;
+import com.gpse.sesam.domain.credential.category.CategoryService;
+import com.gpse.sesam.domain.credential.credentials.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.ExternalCredentialService;
 import com.gpse.sesam.web.cmd.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
