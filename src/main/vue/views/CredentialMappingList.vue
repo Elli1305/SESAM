@@ -29,7 +29,7 @@
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <q-btn dense round flat color="grey" @click="changeCategory = true; openForm(props.row)" icon="edit"></q-btn>
-            <q-btn dense round flat color="grey" icon="delete" @click="alert = true" />
+            <q-btn dense round flat color="grey" icon="delete" @click="alert = true; openForm(props.row)" />
           </q-td>
         </template>
       </q-table>
@@ -178,6 +178,8 @@ export default {
     const address = ref('')
     const catname = ref('')
     const { t } = useI18n()
+
+    const categoryId = ref()
 
     const credentialStore = useCredentialStore()
 

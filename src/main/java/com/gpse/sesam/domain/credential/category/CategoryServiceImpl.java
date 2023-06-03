@@ -43,7 +43,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteById(Long id) {
-        categoryRepository.deleteById(id);
+        Optional<Category> category = getCategory(id);
+        if (category.isPresent()) {
+            for (Credential credential: category.get().getCredentials()) {
+                credential.setCategory(null);
+            }
+            category.get().setCredentials(null);
+            categoryRepository.deleteById(id);
+        }
     }
 
 
