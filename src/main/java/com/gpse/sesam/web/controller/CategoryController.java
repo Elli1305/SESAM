@@ -2,7 +2,6 @@ package com.gpse.sesam.web.controller;
 
 import com.gpse.sesam.domain.credential.Category;
 import com.gpse.sesam.domain.credential.CategoryService;
-import com.gpse.sesam.domain.credential.Credential;
 import com.gpse.sesam.domain.credential.CredentialService;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +30,6 @@ public class CategoryController {
 	public List<Category> getCategoriesInfo() {
 		return categoryService.getCategory();
 	}
-
-    /*@GetMapping("/credentialview/{id:\\d+}")
-    public Category getCategoryInfo(@PathVariable("id") final Long id) {
-        if (categoryService.getCategory(id).isPresent()) {
-            return categoryService.getCategory(id).get();
-        } else {
-            throw new CategoryNotFoundException("Category not found with ID:" + id);
-        }
-    }*/
 
 	@GetMapping("/credentialview/{id}")
 	public List<CredentialCmd> getCredentialInfos(@PathVariable("id") final Long id) {

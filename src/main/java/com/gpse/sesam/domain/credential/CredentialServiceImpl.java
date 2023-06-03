@@ -2,7 +2,6 @@ package com.gpse.sesam.domain.credential;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.user.Issuer;
 import com.gpse.sesam.domain.user.IssuerRepository;
 import com.gpse.sesam.web.cmd.CredentialCmd;
@@ -122,7 +121,7 @@ public class CredentialServiceImpl implements CredentialService {
 			List<String> issuers = new ArrayList<>();
 			List<String> rooms = new ArrayList<>();
 			for (Issuer issuer: credential.getIssuer()) {
-				String issuerName = issuer.getFirstName()+ " " + issuer.getLastName();
+				String issuerName = issuer.getFirstName() + " " + issuer.getLastName();
 				String room = issuer.getRoom().getName();
 				issuers.add(issuerName);
 				rooms.add(room);
