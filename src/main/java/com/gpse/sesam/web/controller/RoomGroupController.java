@@ -3,6 +3,7 @@ package com.gpse.sesam.web.controller;
 import com.gpse.sesam.domain.location.RoomGroupService;
 import com.gpse.sesam.domain.location.RoomGroups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +29,11 @@ public class RoomGroupController {
     @PostMapping("/save")
     @Secured("EDITOR")
     public void save(@RequestBody final RoomGroups roomGroup) {
-        System.out.println("Hier COntroller");
         roomGroupService.save(roomGroup);
     }
     @DeleteMapping("/{id:\\d+}")
     @Secured("EDITOR")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteById(@PathVariable("id") final Long id) {
         roomGroupService.deleteById(id);
     }

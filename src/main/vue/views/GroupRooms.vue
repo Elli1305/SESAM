@@ -26,7 +26,7 @@
                                    @click="editGroup(Object.values(props)); getOldName(); editAlert = true"
                                    test="props.value" icon="edit"></q-btn>
                             <q-btn dense round flat color="grey" icon="delete"
-                                   @click="deleteAlert = true; delGroup(Object.values(props))"></q-btn>
+                                   @click="deleteAlert = true; delGroup(Object.values(props));"></q-btn>
 
                         </q-td>
                     </template>
@@ -293,14 +293,13 @@ export default {
             }
         }
         async function loadRoomGroups() {
+            roomGroupList = [];
             await roomGroupStore.getRoomGroups().then(() => {
                 console.log(roomGroupStore.allRoomGroups);
                 for (const roomG of roomGroupStore.allRoomGroups) {
                     roomGroupList.push(roomG);
                 }
                 console.log("Groups of rooms");
-
-                //rows.value.push(roomGroupList);
                 console.log(roomGroupList);
 
                 adaptRoomGroupsToBuilding();
@@ -387,8 +386,14 @@ export default {
             console.log("currentGroup: ", currentGroup.value);
             saveGroup();
         }
-        function deleteGroup(Group) {
-            roomGroupStore.deleteGroup(Group.id);
+        async function deleteGroup() {
+            console.log("Delete Group", currentGroup.value);
+            if(currentGroup.value !==null) {
+                await roomGroupStore.deleteGroup(currentGroup.value.id).then(() => {
+                    loadRoomGroups();
+                });
+
+            }
         }
         function saveGroup() {
             roomGroupStore.save(currentGroup.value);
@@ -406,6 +411,7 @@ export default {
             checkName,
             updateCurrentGroup,
             deleteGroup,
+            loadRoomGroups,
             saveGroup,
             locationList,
             buildingListNames,
