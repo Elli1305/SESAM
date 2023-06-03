@@ -68,16 +68,23 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> category = getCategory(id);
         if (category.isPresent()) {
             category.get().setName(cmd.getName());
-            List<Credential> internal = new ArrayList<>();
-            for (Long cred: cmd.getCredentials() ) {
-                Optional<Credential> credential = credentialRepository.findById(cred);
-                if (credential.isPresent()) {
-                    credential.get().setCategory(category.get());
-                    internal.add(credential.get());
+            if (cmd.getCredentials().isEmpty()) {
+                for (Credential credential : category.get().getCredentials()) {
+                    credential.setCategory(null);
                 }
+                category.get().setCredentials(null);
+            } else {
+                List<Credential> internal = new ArrayList<>();
+                for (Long cred : cmd.getCredentials()) {
+                    Optional<Credential> credential = credentialRepository.findById(cred);
+                    if (credential.isPresent()) {
+                        credential.get().setCategory(category.get());
+                        internal.add(credential.get());
+                    }
+                }
+                category.get().setCredentials(internal);
             }
             List<ExternalCredential> external = new ArrayList<>();
-            category.get().setCredentials(internal);
             for (Long cred: cmd.getExternalCredentials() ) {
                 Optional<ExternalCredential> credential = externalCredentialRepository.findById(cred);
                 if (credential.isPresent()) {

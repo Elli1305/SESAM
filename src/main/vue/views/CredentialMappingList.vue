@@ -193,31 +193,34 @@ export default {
 
     function deleteCategory(id) {
       credentialStore.deleteCategory(id)
-      credentialStore.getCategory().then((categories) => {
-        rows.value = categories
-      })
-      window.location.reload()
+      this.timeout = setTimeout(() =>
+          credentialStore.getCategory().then((categories) => {
+            rows.value = categories
+          }), 250)
     }
 
+    function reload () {
+
+    }
 
     function createCategory() {
       credentialStore.createCategory(address.value, model.value, model2.value);
       address.value =''
       model.value =[]
       model2.value =[]
-      credentialStore.getCategory().then((categories) => {
-        rows.value = categories
-      })
-      window.location.reload()
+      this.timeout = setTimeout(() =>
+          credentialStore.getCategory().then((categories) => {
+            rows.value = categories
+          }), 250)
     }
 
 
     function updateCategory(id) {
       credentialStore.updateCredentials(id, catname.value, model3.value, model4.value);
-      credentialStore.getCategory().then((categories) => {
-        rows.value = categories
-      })
-      window.location.reload()
+      this.timeout = setTimeout(() =>
+          credentialStore.getCategory().then((categories) => {
+            rows.value = categories
+          }), 250)
     }
 
     const editedRow = ref({})
