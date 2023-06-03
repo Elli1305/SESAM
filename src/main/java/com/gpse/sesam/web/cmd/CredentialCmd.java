@@ -1,7 +1,5 @@
 package com.gpse.sesam.web.cmd;
 
-import jakarta.persistence.*;
-
 import java.util.List;
 
 

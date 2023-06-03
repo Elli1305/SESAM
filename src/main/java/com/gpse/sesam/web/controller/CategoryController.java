@@ -6,6 +6,7 @@ import com.gpse.sesam.domain.credential.credentials.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredentialService;
 import com.gpse.sesam.web.cmd.*;
+import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -42,6 +43,10 @@ public class CategoryController {
     }
 
 
+	@GetMapping("/credentialview/{id}")
+	public List<CredentialCmd> getCredentialInfos(@PathVariable("id") final Long id) {
+		return credentialService.getCredentialByLocation(id);
+	}
     @Secured("ADMINISTRATOR")
     @DeleteMapping("/credentialmapping/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
