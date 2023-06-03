@@ -5,14 +5,13 @@ import java.util.List;
 
 public class CredentialCmd {
 
+    private Long id;
 
     private String categoryName;
 
     private String credentialName;
 
-
     private List<String> externalCredential;
-
 
     private List<String> issuerName;
 

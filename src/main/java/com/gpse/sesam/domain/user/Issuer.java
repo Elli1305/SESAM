@@ -1,6 +1,6 @@
 package com.gpse.sesam.domain.user;
 
-import com.gpse.sesam.domain.credential.Credential;
+import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.location.room.Room;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -34,14 +34,12 @@ public class Issuer extends SesamUser {
 	 * @param lastName    the user's last name
 	 * @param roles       the user's roles
 	 * @param room        the issuer's office
-	 * @param credentials the list of credentials that the issuer is handing out
 	 */
 	public Issuer(final String email, final String password, final String firstName, final String lastName,
 				  final List<SesamUserRole> roles,
-				  final Room room, final List<Credential> credentials) {
+				  final Room room) {
 		super(email, password, firstName, lastName, roles);
 		this.room = room;
-		this.credentials = credentials;
 	}
 
 	public List<Credential> getCredentials() {
@@ -58,5 +56,9 @@ public class Issuer extends SesamUser {
 
 	public Room getRoom() {
 		return room;
+	}
+
+	public void addCredential(final Credential credential) {
+		credentials.add(credential);
 	}
 }

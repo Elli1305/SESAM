@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.credential;
+package com.gpse.sesam.domain.credential.issuing;
 
 public enum FormEntryType {
     TEXT("text"),

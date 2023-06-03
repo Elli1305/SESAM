@@ -1,14 +1,9 @@
-package com.gpse.sesam.domain.credential;
+package com.gpse.sesam.domain.credential.category;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +24,14 @@ public class Category {
 	private List<Credential> credentials = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<ExternalCredential> externalCredentials;
+	@JoinColumn(name = "CATEGORY_ID")
+	private List<ExternalCredential> externalCredentials = new ArrayList<>();
 
 	protected Category() {
 	}
 
-	public Category(final String name, final List<ExternalCredential> externalCredentials) {
+	public Category(final String name) {
 		this.name = name;
-		this.externalCredentials = externalCredentials;
 	}
 
 	public Long getId() {
@@ -87,6 +82,10 @@ public class Category {
 
 	public List<ExternalCredential> getExternalCredentials() {
 		return externalCredentials;
+	}
+
+	public void addExternalCredential(ExternalCredential externalCredential){
+		externalCredentials.add(externalCredential);
 	}
 
 	public void setCredentials(final List<Credential> credentials) {

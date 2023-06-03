@@ -1,6 +1,6 @@
 package com.gpse.sesam.domain.location.door;
 
-import com.gpse.sesam.domain.credential.Credential;
+import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.location.Coordinate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

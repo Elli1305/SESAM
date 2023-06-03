@@ -13,9 +13,13 @@ import {AttainableRole} from "@/main/vue/entity/createUser";
 
 import FloorPlanEdit from "@/main/vue/views/FloorPlanEdit.vue";
 import {useUserStore} from "@/main/vue/stores/users";
+import CredentialMapping from "@/main/vue/views/CredentialMappingList.vue";
 import EditUser from "@/main/vue/views/EditUser.vue";
 import CredentialView from "@/main/vue/views/CredentialView.vue";
 import RolesRequest from "@/main/vue/views/RolesRequest.vue";
+import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
+import IssueCredential from "@/main/vue/views/IssueCredential.vue";
+import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -103,16 +107,37 @@ const router = createRouter({
             path: '/admin/rolesRequest',
             component: RolesRequest
         },
-        {path: "/:pathMatch(.*)*", component: StartView}
+        {path: "/:pathMatch(.*)*", component: StartView},
 
-    ],
+        {
+            path: "/credentialmapping",
+            component: CredentialMapping,
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/corporatedesign",
+            component: CorporateDesign,
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/credentials",
+            component: IssueCredentials,
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/credentials/:id/issue",
+            component: IssueCredential,
+            props: true,
+            meta: { requiresAuth: true },
+        },
+  ],
 });
 
 
 router.beforeEach((to, from, next) => {
     const {authenticated, user} = useUserStore();
     const {authorize} = to.meta;
-    if ((to.meta.requiresAuth || authorize) && !authenticated) {
+    if ((to.meta.requiresAuth || authorize || to.meta.requiresAdmin) && !authenticated) {
         return next({path: '/login', query: {returnUrl: to.path}});
     } else if (authorize && !user?.roles.some(role => role.role === authorize && role.granted)) {
         return next({path: '/'});
