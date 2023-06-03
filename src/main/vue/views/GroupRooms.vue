@@ -93,7 +93,7 @@
 
 
                         <q-btn dense round icon="add" label="Neue Gruppe" flat color="primary" stretch
-                               @click="newGroup = true"></q-btn>
+                               @click="newGroup = true; toDefault()"></q-btn>
                     </template>
                 </q-table>
 
@@ -194,7 +194,8 @@
                 </q-card-section>
 
                 <q-card-actions align="right" class="text-primary">
-                    <q-btn flat label="Speichern" @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
+                    <q-btn flat label="Speichern"
+                           @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
                     <q-btn flat :label="t('adminEdit.back')" @click="toDefault()" v-close-popup/>
                 </q-card-actions>
             </q-card>
@@ -266,6 +267,8 @@ export default {
         let buildingListNames = ref([]);
         let buildingListForFilter=ref([]);
         let listOfAllRoomsViaBuilding = ref([]);
+        const checkNameAllowed = ref(false);
+        const closeNow = ref(false);
         let currentGroup=ref({
             id: null,
             name: null,
@@ -348,6 +351,8 @@ export default {
 
         async function checkName(newName) {
             console.log(newName);
+            console.log("room Group List:", roomGroupList);
+            checkNameAllowed.value = false;
             if(newName.trim() === ""){
                 $q.notify({
                     type:'negative',
@@ -355,11 +360,27 @@ export default {
                     caption: 'Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.'
                 })
             }
+
+            else {
+                checkNameAllowed.value = true;
+            }
+            for(const theGroup of roomGroupList) {
+                console.log("roomGroup:", theGroup)
+                if (theGroup.name === newName) {
+                    $q.notify({
+                        type:'negative',
+                        message: 'Name für dieses Gebäude bereits vergeben',
+                        caption: 'Bitte wählen Sie einen neuen Namen.'
+                    })
+                    checkNameAllowed.value = false;
+                }
+            }
         }
 
         function toDefault(){
             this.newGroupName=ref('');
             this.modelRooms=ref(null);
+            console.log("hier default");
 
         }
         function updateRoomList(building){
@@ -387,7 +408,12 @@ export default {
             saveGroup();
         }
         async function makeNewGroup(newGroupName, newGroupRooms) {
-            await roomGroupStore.makeNewGroup(newGroupName, currentBuilding.value, newGroupRooms);
+            if (checkNameAllowed.value) {
+                await roomGroupStore.makeNewGroup(newGroupName, currentBuilding.value, newGroupRooms);
+                await loadRoomGroups();
+                this.newGroup = false;
+
+            }
         }
         async function deleteGroup() {
             console.log("Delete Group", currentGroup.value);
@@ -407,6 +433,7 @@ export default {
         return {
             deleteAlert: ref(false),
             editAlert: ref(false),
+            closeNow,
 
             newGroup: ref(false),
             newGroupName: ref(''),
@@ -414,6 +441,7 @@ export default {
             modelRooms: ref(null),
             modelRoomsNew: ref(editGroupRooms.value),
             checkName,
+            checkNameAllowed,
             updateCurrentGroup,
             makeNewGroup,
             deleteGroup,
