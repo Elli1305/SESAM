@@ -11,4 +11,8 @@ public interface RoomGroupService {
     void deleteAll();
 
     void saveAll(Iterable<RoomGroups> roomGroups);
+
+    RoomGroups save(RoomGroups roomGroup);
+
+    void deleteById(Long id);
 }

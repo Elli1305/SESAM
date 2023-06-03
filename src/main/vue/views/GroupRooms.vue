@@ -22,9 +22,11 @@
 
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
-                            <q-btn dense round flat color="grey" @click="editGroup(Object.values(props)); getOldName(); editAlert = true"
+                            <q-btn dense round flat color="grey"
+                                   @click="editGroup(Object.values(props)); getOldName(); editAlert = true"
                                    test="props.value" icon="edit"></q-btn>
-                            <q-btn dense round flat color="grey" icon="delete" @click="deleteAlert = true"></q-btn>
+                            <q-btn dense round flat color="grey" icon="delete"
+                                   @click="deleteAlert = true; delGroup(Object.values(props))"></q-btn>
 
                         </q-td>
                     </template>
@@ -114,7 +116,7 @@
             </q-card-section>
 
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat :label="t('adminEdit.delete')" @click=""/>
+                <q-btn flat :label="t('adminEdit.delete')" @click="deleteGroup()"/>
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
             </q-card-actions>
         </q-card>
@@ -149,7 +151,7 @@
             </div>
 
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat label="Speichern" @click="checkName(editName)" />
+                <q-btn flat label="Speichern" @click="checkName(editName); updateCurrentGroup(editName,modelRoomsNew)" />
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
             </q-card-actions>
         </q-card>
@@ -264,6 +266,12 @@ export default {
         let buildingListNames = ref([]);
         let buildingListForFilter=ref([]);
         let listOfAllRoomsViaBuilding = ref([]);
+        let currentGroup=ref({
+            id: null,
+            name: null,
+            building: null,
+            rooms: []
+        });
 
         let modelForBuilding = ref(null);
         let modelForLocation = ref(null);
@@ -310,8 +318,6 @@ export default {
                     }
                 }
             }
-            console.log("hiereere");
-            console.log(rows.value);
         }
 
         loadLocations().then(()=>loadRoomGroups());
@@ -368,6 +374,26 @@ export default {
             console.log(listOfAllRoomsViaBuilding.value);
         }
 
+        function setCurrentGroup(GroupId, GroupName, GroupRooms, GroupBuilding) {
+            currentGroup.value.name = GroupName;
+            currentGroup.value.id = GroupId;
+            currentGroup.value.building = GroupBuilding
+            currentGroup.value.rooms = GroupRooms;
+            console.log("currentGroup: ", currentGroup.value);
+        }
+        function updateCurrentGroup(GroupName, GroupRooms) {
+            currentGroup.value.name = GroupName;
+            currentGroup.value.rooms = GroupRooms;
+            console.log("currentGroup: ", currentGroup.value);
+            saveGroup();
+        }
+        function deleteGroup(Group) {
+            roomGroupStore.deleteGroup(Group.id);
+        }
+        function saveGroup() {
+            roomGroupStore.save(currentGroup.value);
+        }
+
         return {
             deleteAlert: ref(false),
             editAlert: ref(false),
@@ -378,6 +404,9 @@ export default {
             modelRooms: ref(null),
             modelRoomsNew: ref(editGroupRooms.value),
             checkName,
+            updateCurrentGroup,
+            deleteGroup,
+            saveGroup,
             locationList,
             buildingListNames,
             toDefault,
@@ -413,11 +442,15 @@ export default {
             modelForLocation,
             optionsLocations,
             listOfAllRoomsViaBuilding,
+            delGroup(value) {
+                setCurrentGroup(value[1].id, value[1].name, value[1].rooms, value[1].building);
+            },
             editGroup(value) {
               editGroupName = value[1].name;
               editGroupRooms = value[1].rooms;
               console.log(editGroupRooms);
               console.log(editGroupName);
+              setCurrentGroup(value[1].id, value[1].name, value[1].rooms, value[1].building);
             },
 
             filterBuilding(val, update) {

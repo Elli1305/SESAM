@@ -3,15 +3,14 @@ package com.gpse.sesam.web.controller;
 import com.gpse.sesam.domain.location.RoomGroupService;
 import com.gpse.sesam.domain.location.RoomGroups;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/roomGroups")
-//@Secured("EDITOR")
+@Secured("EDITOR")
 public class RoomGroupController {
 
     private final RoomGroupService roomGroupService;
@@ -24,5 +23,17 @@ public class RoomGroupController {
     @GetMapping
     public List<RoomGroups> getAllRoomGroups() {
         return roomGroupService.getRoomGroups();
+    }
+
+    @PostMapping("/save")
+    @Secured("EDITOR")
+    public void save(@RequestBody final RoomGroups roomGroup) {
+        System.out.println("Hier COntroller");
+        roomGroupService.save(roomGroup);
+    }
+    @DeleteMapping("/{id:\\d+}")
+    @Secured("EDITOR")
+    public void deleteById(@PathVariable("id") final Long id) {
+        roomGroupService.deleteById(id);
     }
 }

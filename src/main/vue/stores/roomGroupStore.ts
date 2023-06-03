@@ -20,9 +20,33 @@ export const useRoomGroupStore = defineStore('roomGroups',() => {
             })
         })
     }
+    function save(roomGroup: RoomGroup): Promise<RoomGroup> {
+        return new Promise((resolve, reject) => {
+
+            console.log("hier1")
+            api.roomGroups.save(roomGroup).then((response) => {
+
+                console.log("hier2")
+                getRoomGroups();
+
+                console.log("hier3")
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+    function deleteGroup(id: bigint) {
+        new Promise<void>((resolve, reject) => {
+            api.roomGroups.deleteGroup(id).then(_=> resolve())
+                .catch(reject);
+        })
+    }
 
     return {
         allRoomGroups,
         getRoomGroups,
+        save,
+        deleteGroup,
     }
 })

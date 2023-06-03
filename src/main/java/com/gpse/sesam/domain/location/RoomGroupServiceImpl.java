@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.location;
 
+import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,16 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     @Override
     public void saveAll(final Iterable<RoomGroups> roomGroups) {
         roomGroupRepository.saveAll(roomGroups);
+    }
+
+    @Override
+    public RoomGroups save(RoomGroups roomGroup) {
+
+        System.out.println("hier Service Impl");
+        return roomGroupRepository.save(roomGroup);
+    }
+    @Override
+    public void deleteById(Long id) {
+        roomGroupRepository.deleteById(id);
     }
 }
