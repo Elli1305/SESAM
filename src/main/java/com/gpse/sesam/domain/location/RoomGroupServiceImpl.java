@@ -1,6 +1,9 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.web.cmd.RoomGroupCmd;
+import com.gpse.sesam.web.exception.ConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +19,20 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     @Autowired
     public RoomGroupServiceImpl(final RoomGroupRepository roomGroupRepository) {
         this.roomGroupRepository = roomGroupRepository;
+    }
+
+    @Override
+    public RoomGroups createRoomGroup(final RoomGroupCmd roomGroupCmd) {
+        final RoomGroups newRoomgroup = new RoomGroups(
+                roomGroupCmd.getName(),
+                roomGroupCmd.getRooms(),
+                roomGroupCmd.getBuilding()
+        );
+        try {
+            return roomGroupRepository.save(newRoomgroup);
+        } catch (final DataIntegrityViolationException e) {
+            throw new ConflictException("A group with this id already exists", e);
+        }
     }
 
     @Override

@@ -19,7 +19,7 @@ public class RoomGroups {
     private String name;
 
     @Column
-    @OneToMany(cascade = CascadeType.MERGE)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Room> rooms;
 
 

@@ -8,6 +8,10 @@ export default {
     save(roomGroup: RoomGroup): Promise<AxiosResponse<RoomGroup>> {
         return axios.post('api/roomGroups/save', roomGroup)
     },
+
+    saveNewGroup(roomGroup: RoomGroup): Promise<RoomGroup> {
+        return axios.post('/api/roomGroups/newgroup', roomGroup);
+    },
     getRoomGroupByName(): Promise<AxiosResponse<RoomGroup>> {
         return axios.get("api/roomGroups/{name}")
     },

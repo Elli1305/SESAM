@@ -194,7 +194,7 @@
                 </q-card-section>
 
                 <q-card-actions align="right" class="text-primary">
-                    <q-btn flat label="Speichern" @click="checkName(newGroupName);"/>
+                    <q-btn flat label="Speichern" @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
                     <q-btn flat :label="t('adminEdit.back')" @click="toDefault()" v-close-popup/>
                 </q-card-actions>
             </q-card>
@@ -373,18 +373,21 @@ export default {
             console.log(listOfAllRoomsViaBuilding.value);
         }
 
-        function setCurrentGroup(GroupId, GroupName, GroupRooms, GroupBuilding) {
-            currentGroup.value.name = GroupName;
-            currentGroup.value.id = GroupId;
-            currentGroup.value.building = GroupBuilding
-            currentGroup.value.rooms = GroupRooms;
+        function setCurrentGroup(groupId, groupName, groupRooms, groupBuilding) {
+            currentGroup.value.name = groupName;
+            currentGroup.value.id = groupId;
+            currentGroup.value.building = groupBuilding
+            currentGroup.value.rooms = groupRooms;
             console.log("currentGroup: ", currentGroup.value);
         }
-        function updateCurrentGroup(GroupName, GroupRooms) {
-            currentGroup.value.name = GroupName;
-            currentGroup.value.rooms = GroupRooms;
+        function updateCurrentGroup(groupName, groupRooms) {
+            currentGroup.value.name = groupName;
+            currentGroup.value.rooms = groupRooms;
             console.log("currentGroup: ", currentGroup.value);
             saveGroup();
+        }
+        async function makeNewGroup(newGroupName, newGroupRooms) {
+            await roomGroupStore.makeNewGroup(newGroupName, currentBuilding.value, newGroupRooms);
         }
         async function deleteGroup() {
             console.log("Delete Group", currentGroup.value);
@@ -396,7 +399,9 @@ export default {
             }
         }
         function saveGroup() {
-            roomGroupStore.save(currentGroup.value);
+            roomGroupStore.save(currentGroup.value).then(() => {
+                loadRoomGroups();
+            });
         }
 
         return {
@@ -410,6 +415,7 @@ export default {
             modelRoomsNew: ref(editGroupRooms.value),
             checkName,
             updateCurrentGroup,
+            makeNewGroup,
             deleteGroup,
             loadRoomGroups,
             saveGroup,

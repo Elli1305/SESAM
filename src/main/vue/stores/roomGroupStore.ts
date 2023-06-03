@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {RoomGroup} from "@/main/vue/entity/roomGroup";
 import {ref, Ref} from "vue";
 import api from "@/main/vue/api";
+import {Building} from "@/main/vue/entity/roomGroup";
 
 
 export const useRoomGroupStore = defineStore('roomGroups', () => {
@@ -24,14 +25,25 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
         return new Promise((resolve, reject) => {
 
             api.roomGroups.save(roomGroup).then((response) => {
-
                 getRoomGroups();
-
                 resolve(response.data)
             }).catch((error) => {
                 reject(error)
             })
         })
+    }
+    function makeNewGroup(name: string, building: Building, rooms: []) {
+        return new Promise<void>((resolve, reject) => {
+            console.log("Name, Geb, Räume", name, building, rooms);
+            api.roomGroups.saveNewGroup({
+
+                name: name,
+                rooms: rooms,
+                building: building,
+
+            }).then(_ => resolve())
+                .catch(reject);
+        });
     }
 
     function deleteGroup(id: bigint) {
@@ -49,6 +61,7 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
         allRoomGroups,
         getRoomGroups,
         save,
+        makeNewGroup,
         deleteGroup,
     }
 })

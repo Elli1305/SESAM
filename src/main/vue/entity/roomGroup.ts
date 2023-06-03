@@ -17,7 +17,7 @@ export interface Building {
 }
 
 export interface RoomGroup {
-    id: bigint
+    id?: bigint
     name: string
     building: Building
     rooms: Room[]
