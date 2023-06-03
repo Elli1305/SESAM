@@ -12,7 +12,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
     private final ExternalCredentialRepository externalCredentialRepository;
 
     @Autowired
-    public ExternalCredentialServiceImpl(ExternalCredentialRepository externalCredentialRepository){
+    public ExternalCredentialServiceImpl(ExternalCredentialRepository externalCredentialRepository) {
         this.externalCredentialRepository = externalCredentialRepository;
     }
 

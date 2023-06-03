@@ -84,7 +84,7 @@ public class Category {
 		return externalCredentials;
 	}
 
-	public void addExternalCredential(ExternalCredential externalCredential){
+	public void addExternalCredential(ExternalCredential externalCredential) {
 		externalCredentials.add(externalCredential);
 	}
 

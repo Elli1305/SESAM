@@ -91,7 +91,7 @@ public class CategoryServiceImpl implements CategoryService {
                 category.get().setCredentials(internal);
             }
             List<ExternalCredential> external = new ArrayList<>();
-            for (Long cred: cmd.getExternalCredentials() ) {
+            for (Long cred: cmd.getExternalCredentials()) {
                 Optional<ExternalCredential> credential = externalCredentialRepository.findById(cred);
                 if (credential.isPresent()) {
                     external.add(credential.get());
@@ -114,7 +114,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void createCategory(CategoryResponseCmd categoryCmd) {
         final Category category = new Category(categoryCmd.getName());
         List<Credential> internal = new ArrayList<>();
-        for (Long cred: categoryCmd.getCredentials() ) {
+        for (Long cred: categoryCmd.getCredentials()) {
         Optional<Credential> credential = credentialRepository.findById(cred);
             if (credential.isPresent()) {
                 internal.add(credential.get());
@@ -123,7 +123,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         List<ExternalCredential> external = new ArrayList<>();
         category.setCredentials(internal);
-        for (Long cred: categoryCmd.getExternalCredentials() ) {
+        for (Long cred: categoryCmd.getExternalCredentials()) {
             Optional<ExternalCredential> credential = externalCredentialRepository.findById(cred);
             if (credential.isPresent()) {
                 external.add(credential.get());
