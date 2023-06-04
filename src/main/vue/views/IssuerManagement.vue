@@ -18,7 +18,7 @@
               </template>
               <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
-                  <q-btn dense round flat color="grey" @click="openForm(props.row)" icon="edit"></q-btn>
+                  <q-btn dense round flat color="grey" @click="prompt=true; openForm(props.row)" icon="edit"></q-btn>
                 </q-td>
               </template>
 
@@ -44,16 +44,17 @@
             </q-table>
           </div>
         </div>
-        <q-dialog v-model="isFormOpen" content-class="form-dialog">
+          <q-dialog v-model="prompt" persistent>
           <q-card class="form-card">
             <q-card-section>
               <h2>{{ t('issuermanagement.dialogTitle') }}</h2>
               <q-form @submit="saveChanges">
-                <q-input v-model="editedRow.lastName" label="Last Name" outlined readonly></q-input>
-                <q-input v-model="editedRow.firstName" label="First Name" outlined readonly></q-input>
+                <q-input v-model="model1" label="Last Name" outlined readonly style="padding-bottom: 1em"></q-input>
+                <q-input v-model="model2" label="First Name" outlined readonly style="padding-bottom: 1em"></q-input>
                 <q-select
+                    style="padding-bottom: 1em"
                     filled
-                    v-model="editedRow.credential"
+                    v-model="model4"
                     multiple
                     :label="t('issuermanagement.credentialsList')"
                     emit-value
@@ -61,23 +62,24 @@
                     option-label="name"
                     option-value="id"
                     options-cover
+                    map-options
                 ></q-select>
                 <q-select
                     filled
-                    v-model="editedRow.room"
-                    multiple
+                    v-model="model3"
                     :label="t('issuermanagement.roomsList')"
                     emit-value
                     :options="roomStore.rooms"
                     option-label="name"
                     option-value="id"
                     options-cover
+                    map-options
                 ></q-select>
 
 
                 <q-card-actions align="right">
-                  <q-btn :label="t('issuermanagement.cancel')" color="primary" @click="closeForm"/>
-                  <q-btn type="submit" :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="confirmSave"/>
+                  <q-btn :label="t('issuermanagement.cancel')" color="primary"/>
+                  <q-btn type="submit" :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="editIssuers(editedRow.id)"/>
                 </q-card-actions>
               </q-form>
             </q-card-section>
@@ -101,11 +103,11 @@ export default {
   setup() {
     const rows = ref([]);
     const searchQuery = ref('');
-    const isFormOpen = ref(false);
     const editedItem = ref(null);
-    const id = ref(null);
-    const credential = ref([]);
-    const room = ref('');
+    const model1 = ref('');
+    const model2 = ref('');
+    const model3 = ref([]);
+    const model4 = ref([]);
 
     axios.get('api/issuers').then((res) => {
       rows.value = res.data;
@@ -155,61 +157,16 @@ export default {
       {name: 'actions', label: t('issuermanagement.edit'), style: 'width: 40px', align: 'center'},
     ];
 
-
-    const confirmSave = () => {
-      Dialog.create({
-        message: t('issuermanagement.saveConfirmationMessage'),
-        persistent: true,
-        ok: {
-          label: t('issuermanagement.save'),
-          color: 'primary',
-          classes: 'q-ma-sm',
-        },
-        cancel: {
-          label: t('issuermanagement.cancel'),
-          color: 'primary',
-          classes: 'q-ma-sm',
-        },
-      })
-          .onOk(() => {
-            saveChanges();
-          })
-          .onCancel(() => {
-            isFormOpen.value = false;
-          });
-    };
-    const closeForm = () => {
-      isFormOpen.value = false;
-    };
     const openForm = (row) => {
+      model1.value = row.lastName;
+      model2.value = row.firstName;
+      model3.value = row.room.map(c => c.id);
+      model4.value = row.credentials.map(c => c.id);
       editedItem.value = { ...row };
-      id.value = row.id;
-
-      room.value = row.room.name;
-      isFormOpen.value = true;
     };
 
 
-    const editedRow = ref({
-      room: '',
-      credential: [],
-    });
-
-
-
-    const saveChanges = () => {
-      const index = rows.value.findIndex((row) => row.id === editedItem.value.id);
-      if (index !== -1) {
-        const updatedRow = {
-          ...rows.value[index],
-          credential: editedRow.value.credential,
-          room: { name: editedRow.value.room },
-        };
-        rows.value.splice(index, 1, updatedRow);
-      }
-
-      isFormOpen.value = false;
-    };
+    const editedRow = ref({});
 
 
     credentialStore.getCredentials().then((external) => {
@@ -220,52 +177,32 @@ export default {
 
 
 
-
-    const updateIssuer = () => {
-      if (!id.value) {
-        console.error('No issuer ID provided');
-        return;
-      }
-
-      userStore
-          .updateIssuer(id.value, credential.value, room.value)
-          .then(() => {
-            const updatedRows = rows.value.map((row) => {
-              if (row.id === id.value) {
-                return {
-                  ...row,
-                  credential: credential.value,
-                  room: { name: room.value },
-                };
-              }
-              return row;
-            });
-            rows.value = updatedRows;
-            isFormOpen.value = false;
-          })
-          .catch((error) => {
-            console.error('Failed to update issuer:', error);
-          });
-    };
+    function editIssuers(id){
+        userStore.updateIssuer(id, model4, model3)
+        this.timeout= setTimeout(() => axios.get('api/issuers').then((res) => {
+            rows.value = res.data;
+        }), 250)
+    }
 
 
 
     return {
+      model1,
+      model2,
+      model3,
+      model4,
       columns,
       searchQuery,
       credentialStore,
       t,
       editedRow,
-      isFormOpen,
       openForm,
-      saveChanges,
       rows,
       filter,
       editedItem,
-      confirmSave,
-      closeForm,
       roomStore,
-      updateIssuer
+      editIssuers,
+      prompt: ref(false)
 
     };
   },
