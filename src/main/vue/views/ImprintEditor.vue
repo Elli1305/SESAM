@@ -23,26 +23,30 @@
       </div>
     <q-dialog v-model="confirmDialog">
       <q-card>
-        <q-card-section class="q-pa-md">
+        <q-card-section>
           <div class="text-h6">Bestätigen</div>
-          <div class="q-mt-md">Möchten Sie das bestehende Impressum wirklich überschreiben?</div>
+          </q-card-section>
+        <q-card-section class="row items-center">
+          <div class="q-mx-sm">Möchten Sie das bestehende Impressum wirklich überschreiben?</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn label="Abbrechen" color="primary" @click="confirmDialog = false"/>
-          <q-btn label="Ok" color="primary" @click="postText"/>
+          <q-btn flat label="Abbrechen" color="primary" @click="confirmDialog = false"/>
+          <q-btn flat label="Ok" color="primary" @click="postText"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <q-dialog v-model="deleteDialog">
       <q-card>
-        <q-card-section class="q-pa-md">
+        <q-card-section>
           <div class="text-h6">Löschen bestätigen</div>
-          <div class="q-mt-md">Sind Sie sicher, dass Sie das Impressum löschen wollen?</div>
+        </q-card-section>
+        <q-card-section class="row items-center">
+          <div class="q-mx-sm">Sind Sie sicher, dass Sie das Impressum löschen wollen?</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn label="Abbrechen" color="primary" @click="deleteDialog = false"/>
-          <q-btn label="Löschen" color="primary" @click="deletePostedContent"/>
+          <q-btn flat label="Abbrechen" color="primary" @click="deleteDialog = false"/>
+          <q-btn flat label="Löschen" color="primary" @click="deletePostedContent"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -98,7 +102,9 @@ export default {
               type: 'positive',
               message: 'Inhalt erfolgreich gespeichert',
               position: 'bottom',
-              timeout: 3000,
+              color: "positive",
+              textColor: "negative",
+              timeout: 1500,
             });
           })
           .catch(error => {
@@ -122,7 +128,9 @@ export default {
               type: 'negative',
               message: 'Inhalt erfolgreich gelöscht',
               position: 'bottom',
-              timeout: 3000,
+              timeout: 1500,
+              color: "negative",
+              textColor: "positive",
             });
           })
           .catch(error => {
