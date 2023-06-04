@@ -1,39 +1,26 @@
-package com.gpse.sesam.domain.location;
+package com.gpse.sesam.web.cmd;
 
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.room.Room;
 
-import jakarta.persistence.*;
-
 import java.util.List;
 
-@Entity
-public class RoomGroups {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+public class RoomGroupEditCmd {
     private Long id;
-
-    @Column
     private String name;
-
-    @Column
-    @ManyToMany(fetch = FetchType.EAGER)
+    private Building building;
     private List<Room> rooms;
 
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    private Building building;
-
-    protected RoomGroups() {
+    public RoomGroupEditCmd() {
 
     }
 
-    public RoomGroups(String name, List<Room> rooms, Building building) {
+    public RoomGroupEditCmd(final Long id, final String name, final Building building, final List<Room> rooms) {
+
+        this.id = id;
         this.name = name;
-        this.rooms = rooms;
         this.building = building;
+        this.rooms = rooms;
     }
 
     public Long getId() {
@@ -52,19 +39,19 @@ public class RoomGroups {
         this.name = name;
     }
 
-    public List<Room> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
-    }
-
     public Building getBuilding() {
         return building;
     }
 
     public void setBuilding(Building building) {
         this.building = building;
+    }
+
+    public final List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(final List<Room> rooms) {
+        this.rooms = rooms;
     }
 }

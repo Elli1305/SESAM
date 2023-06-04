@@ -1,7 +1,9 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
 import com.gpse.sesam.web.exception.ConflictException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,12 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     }
 
     @Override
+    public RoomGroups getGroupById(Long id) {
+        return roomGroupRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
+    }
+
+    @Override
     public void deleteAll() {
         roomGroupRepository.deleteAll();
     }
@@ -60,6 +68,14 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     @Override
     public RoomGroups save(RoomGroups roomGroup) {
         return roomGroupRepository.save(roomGroup);
+    }
+
+    @Override
+    public void makeGroupEdit(final RoomGroups editGroup, final String newName, final List<Room> newRooms) {
+        editGroup.setName(newName);
+        editGroup.setRooms(newRooms);
+
+        roomGroupRepository.save(editGroup);
     }
 
     @Override

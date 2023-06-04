@@ -3,10 +3,10 @@ package com.gpse.sesam.web.controller;
 import com.gpse.sesam.domain.location.RoomGroupService;
 import com.gpse.sesam.domain.location.RoomGroups;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
+import com.gpse.sesam.web.cmd.RoomGroupEditCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,11 +33,23 @@ public class RoomGroupController {
     public RoomGroups save(@RequestBody final RoomGroups roomGroup) {
         return roomGroupService.save(roomGroup);
     }
+
     @PostMapping("/newgroup")
     @ResponseStatus(HttpStatus.CREATED)
     public RoomGroups createRoomGroup(@RequestBody final RoomGroupCmd roomGroupCmd) {
         return roomGroupService.createRoomGroup(roomGroupCmd);
     }
+
+    @Secured("EDITOR")
+    @PostMapping("/edit_group")
+    @ResponseStatus(HttpStatus.OK)
+    public void makeGroupEdit(@RequestBody final RoomGroupEditCmd roomGroupEditCmd) {
+        final RoomGroups roomGroup = roomGroupService.getGroupById(roomGroupEditCmd.getId());
+        roomGroupService.makeGroupEdit(roomGroup,
+                roomGroupEditCmd.getName(),
+                roomGroupEditCmd.getRooms());
+    }
+
     @DeleteMapping("/{id:\\d+}")
     @Secured("EDITOR")
     @ResponseStatus(HttpStatus.OK)

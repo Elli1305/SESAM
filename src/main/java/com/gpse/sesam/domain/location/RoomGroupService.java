@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
 
 import java.util.List;
@@ -13,8 +14,10 @@ public interface RoomGroupService {
     RoomGroups createRoomGroup(RoomGroupCmd roomGroupCmd);
 
     void deleteAll();
+    RoomGroups getGroupById(Long id);
 
     void saveAll(Iterable<RoomGroups> roomGroups);
+    void makeGroupEdit(RoomGroups oldGroup, String newName, List<Room> newRooms);
 
     RoomGroups save(RoomGroups roomGroup);
 

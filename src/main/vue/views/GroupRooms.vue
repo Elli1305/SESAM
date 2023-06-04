@@ -424,7 +424,7 @@ export default {
             }
             console.log("currentGroup.value.name: ", currentGroup.value.name, " EditGroupName.value: ", editGroupName.value);
             if(checkNameAllowed.value) {
-                //await roomGroupStore.editGroup(currentGroup.value, editGroupName.value, editGroupRooms.value);
+                await roomGroupStore.editGroup(currentGroup.value);
             }
         }
         async function deleteGroup() {

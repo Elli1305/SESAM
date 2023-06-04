@@ -45,6 +45,20 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
                 .catch(reject);
         });
     }
+    function editGroup(editGroup: RoomGroup) {
+        return new Promise<void>((resolve, reject) => {
+            console.log("Store editGroup:", editGroup);
+            api.roomGroups.editGroup( {
+                id: editGroup.id,
+                name: editGroup.name,
+                building: editGroup.building,
+                rooms: editGroup.rooms,
+            }).then(_=> {
+                resolve()
+            })
+                .catch(reject);
+        });
+    }
 
     function deleteGroup(id: bigint) {
         return new Promise<void>((resolve, reject) => {
@@ -59,6 +73,7 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
 
     return {
         allRoomGroups,
+        editGroup,
         getRoomGroups,
         save,
         makeNewGroup,
