@@ -1,10 +1,8 @@
 <template>
-  <q-page class="items-center justify-center" style="display: flex">
-    <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t('imprint.imprintTitle') }}</h1>
-
-      <div class="imprint-content" v-html="imprintContent"></div>
-
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">{{t('imprint.imprintTitle')}}</p>
+    <div class="row self-center justify-center" style="width: 80vw; height: 25em">
+      <p style="font-size: 1.25em" v-html="imprintContent"/>
     </div>
   </q-page>
 </template>
@@ -41,9 +39,4 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  font-size: 3em;
-  text-align: center;
-  margin-bottom: -0.5em;
-}
 </style>

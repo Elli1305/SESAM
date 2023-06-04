@@ -16,8 +16,8 @@
         </div>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn color="primary" label="Abbrechen" @click="onCancelClick"/>
-        <q-btn color="primary" label="Speichern" @click="onOKClick" :disable="validate()"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.ok')" @click="onOKClick" :disable="validate()"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -26,6 +26,7 @@
 <script>
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {ref} from "vue";
+import {useI18n} from "vue-i18n";
 
 export default {
   props: {
@@ -72,8 +73,9 @@ export default {
     const floorStore = useFloorStore()
     const floorLevel = ref(props.floor.floorLevel)
     const image = ref()
+    const { t } = useI18n()
 
-    return {floorLevel, floorStore, image}
+    return {floorLevel, floorStore, image, t}
   }
 }
 </script>

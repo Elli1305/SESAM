@@ -1,26 +1,28 @@
 <template>
-  <q-page class="items-center justify-center" style="display: flex">
-    <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t("passwordChange.changePassword") }}</h1>
-      <q-input v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('passwordChange.password')">
-        <template v-slot:append>
-          <q-icon class="q-mr-xs" color="grey" size="16px" name="info" />
-          <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
-            <div style="max-width: 20em">
-              {{ t('passwordChange.passwordHint') }}
-            </div>
-          </q-tooltip>
-          <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
-        </template>
-      </q-input>
-      <q-input v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'"
-        :label="t('passwordChange.repeatPassword')">
-        <template v-slot:append>
-          <q-icon :name="isPwdRepeat ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-            @click="isPwdRepeat = !isPwdRepeat" />
-        </template>
-      </q-input>
-      <q-btn @click="passwordChange" color="primary" :label="t('passwordChange.changePassword')" />
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">{{t("passwordChange.changePassword")}}</p>
+    <div class="column self-center items-center justify-evenly no-wrap" style="width: 22.5em; height: 25em">
+      <div class="full-width">
+        <q-input class="q-my-md" v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('passwordChange.password')">
+          <template v-slot:append>
+            <q-icon class="q-mr-xs" color="grey" size="16px" name="info" />
+            <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
+              <div style="max-width: 20em">
+                {{ t('passwordChange.passwordHint') }}
+              </div>
+            </q-tooltip>
+            <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+          </template>
+        </q-input>
+        <q-input class="q-my-md" v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'"
+          :label="t('passwordChange.repeatPassword')">
+          <template v-slot:append>
+            <q-icon :name="isPwdRepeat ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+              @click="isPwdRepeat = !isPwdRepeat" />
+          </template>
+        </q-input>
+      </div>
+      <q-btn class="full-width" @click="passwordChange" color="primary" :label="t('passwordChange.changePassword')" />
     </div>
   </q-page>
 </template>

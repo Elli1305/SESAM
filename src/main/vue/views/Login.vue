@@ -1,22 +1,26 @@
 <template>
-  <q-page class="items-center justify-center" style="display: flex">
-    <q-form @submit.prevent="login" class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Login</h1>
-      <q-input outlined v-model="eMail" label="E-Mail"/>
-      <q-input outlined :type="isPwd ? 'password' : 'text'" v-model="password" :label="t('login.password')">
-        <template v-slot:append>
-          <q-icon
-              :name="isPwd ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
-              @click="isPwd = !isPwd"
-          />
-        </template>
-      </q-input>
-      <p style="font-size: 1em">{{ t("login.forgotPassword") }}
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">Login</p>
+    <q-form @submit.prevent="login" class="column self-center items-center justify-evenly no-wrap" style="width: 22.5em; height: 25em">
+      <div class="full-width">
+        <q-input class="q-my-sm" outlined v-model="eMail" label="E-Mail"/>
+        <q-input class="q-my-sm" outlined :type="isPwd ? 'password' : 'text'" v-model="password" :label="t('login.password')">
+          <template v-slot:append>
+            <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+                color="grey"
+                size="0.75em"
+            />
+          </template>
+        </q-input>
+      </div>
+      <p class="full-width" style="font-size: 1em">{{ t("login.forgotPassword") }}
         <router-link to="./passwordreset">{{t('login.resetPassword')}}</router-link>
       </p>
-      <q-btn color="primary" label="Login" type="submit"/>
-      <p style="font-size: 1em">{{ t("login.notRegistered") }}
+      <q-btn class="full-width" color="primary" text-color="accent" label="Login" type="submit"/>
+      <p class="full-width" style="font-size: 1em">{{ t("login.notRegistered") }}
         <router-link to="./signup">{{ t("login.toRegister") }}</router-link>
       </p>
     </q-form>
@@ -53,6 +57,8 @@ export default {
                 message: t('login.loginFailed'),
                 caption: t('login.wrongEmailPassword'),
                 position: "top",
+                color: 'negative',
+                textColor: 'postitive',
                 timeout: 3000,
                 classes: "loginNotify"
               })
@@ -62,6 +68,8 @@ export default {
                 message: t('login.loginFailed'),
                 caption: t('common.internalServerError'),
                 position: "top",
+                color: 'negative',
+                textColor: 'postitive',
                 timeout: 3000,
                 classes: "loginNotify"
               })
@@ -71,6 +79,8 @@ export default {
                 message: t('login.loginFailed'),
                 caption: t('common.unknownError'),
                 position: "top",
+                color: 'negative',
+                textColor: 'postitive',
                 timeout: 3000,
                 classes: "loginNotify"
               })

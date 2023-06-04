@@ -1,11 +1,11 @@
 <template>
-  <q-page class="column justify-evenly" style="padding: 0 5em" >
+  <q-page class="column justify-evenly items-center" style="padding: 2em 5em" >
     <p class="row text-h3 justify-center">{{t('corporateDesign.title')}}</p>
-    <div class="row self-center no-wrap">
+    <div class="row fit justify-center no-wrap" style="width: 75vw; height: 25em">
       <div class="column q-mx-xs">
         <q-input label="Primary" label-color="grey-10" rounded outlined v-model="primary" class="my-input q-my-xs" style="width: 14em">
           <template v-slot:prepend>
-            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: primary, borderRadius: '100%'}"/>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: primary, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
@@ -17,7 +17,7 @@
         </q-input>
         <q-input label="Secondary" label-color="grey-10" rounded outlined v-model="secondary" class="my-input q-my-xs" style="width: 14em">
           <template v-slot:prepend>
-            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: secondary, borderRadius: '100%'}"/>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: secondary, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
@@ -29,7 +29,7 @@
         </q-input>
         <q-input label="Accent" label-color="grey-10" rounded outlined v-model="accent" class="my-input q-my-xs" style="width: 14em">
           <template v-slot:prepend>
-            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: accent, borderRadius: '100%'}"/>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: accent, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
@@ -43,7 +43,7 @@
       <div class="column q-mx-xs">
         <q-input label="Dark" label-color="grey-10" rounded outlined v-model="dark" class="my-input q-my-xs" style="width: 14em">
           <template v-slot:prepend>
-            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: dark, borderRadius: '100%'}"/>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: dark, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
@@ -55,7 +55,7 @@
         </q-input>
         <q-input label="Light-Blue" label-color="grey-10" rounded outlined v-model="lightBlue" class="my-input q-my-xs" style="width: 14em">
           <template v-slot:prepend>
-            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: lightBlue, borderRadius: '100%'}"/>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: lightBlue, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
@@ -67,7 +67,7 @@
         </q-input>
         <q-input label="Positive" label-color="grey-10" rounded outlined v-model="positive" class="my-input q-my-xs" style="width: 14em">
           <template v-slot:prepend>
-            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: positive, borderRadius: '100%'}"/>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: positive, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
@@ -81,7 +81,7 @@
       <div class="column q-mx-xs">
         <q-input label="Negative" label-color="grey-10" rounded outlined v-model="negative" class="my-input q-my-xs" style="width: 14em">
           <template v-slot:prepend>
-            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: negative, borderRadius: '100%'}"/>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: negative, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
@@ -93,7 +93,7 @@
         </q-input>
         <q-input label="Info" label-color="grey-10" rounded outlined v-model="info" class="my-input q-my-xs" style="width: 14em">
           <template v-slot:prepend>
-            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: info, borderRadius: '100%'}"/>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: info, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
@@ -105,7 +105,7 @@
         </q-input>
         <q-input label="Warning" label-color="grey-10" rounded outlined v-model="warning" class="my-input q-my-xs" style="width: 14em">
           <template v-slot:prepend>
-            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: warning, borderRadius: '100%'}"/>
+            <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: warning, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
           <template v-slot:append>
             <q-icon name="colorize" class="cursor-pointer">
@@ -118,24 +118,55 @@
       </div>
       <q-icon @mouseover="menu = true" @mouseleave="menu = false" name="info_outlined" color="info">
         <q-menu v-model="menu">
-          <q-card class="q-pa-sm bg-grey-10" style="width: fit-content; height: fit-content">
-            <p class="no-wrap q-my-xs" :style="{color: primary}">Primary: banner, buttons</p>
-            <p class="no-wrap q-my-xs" :style="{color: secondary}">Secondary: badges (roles)</p>
-            <p class="no-wrap q-my-xs" :style="{color: accent}">Accent: ...</p>
-            <p class="no-wrap q-my-xs" :style="{color: dark}">Dark: ...</p>
-            <p class="no-wrap q-my-xs" :style="{color: lightBlue}">Light-Blue: ...</p>
-            <p class="no-wrap q-my-xs" :style="{color: positive}">Positive: positive notifications</p>
-            <p class="no-wrap q-my-xs" :style="{color: negative}">Negative: negative notifications</p>
-            <p class="no-wrap q-my-xs" :style="{color: info}">Info: profile button, informational content</p>
-            <p class="no-wrap q-my-xs" :style="{color: warning}">Warning: warnings</p>
+          <q-card class="row q-pa-sm no-wrap" style="width: fit-content; height: fit-content">
+            <div class="column q-mx-xs">
+              <p class="row items-center no-wrap q-my-xs">
+                <q-badge class="q-mr-xs" rounded :style="{width: '1em', height: '1em', backgroundColor: primary, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                Primary:</p>
+              <p class="row items-center no-wrap q-my-xs">
+                <q-badge class="q-mr-xs" rounded :style="{width: '1em', height: '1em', backgroundColor: secondary, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                Secondary:</p>
+              <p class="row items-center no-wrap q-my-xs">
+                <q-badge class="q-mr-xs" rounded :style="{width: '1em', height: '1em', backgroundColor: accent, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                Accent:</p>
+              <p class="row items-center no-wrap q-my-xs">
+                <q-badge class="q-mr-xs" rounded :style="{width: '1em', height: '1em', backgroundColor: dark, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                Dark:</p>
+              <p class="row items-center no-wrap q-my-xs">
+                <q-badge class="q-mr-xs" rounded :style="{width: '1em', height: '1em', backgroundColor: lightBlue, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                Light-Blue:</p>
+              <p class="row items-center no-wrap q-my-xs">
+                <q-badge class="q-mr-xs" rounded :style="{width: '1em', height: '1em', backgroundColor: positive, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                Positive:</p>
+              <p class="row items-center no-wrap q-my-xs">
+                <q-badge class="q-mr-xs" rounded :style="{width: '1em', height: '1em', backgroundColor: negative, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                Negative:</p>
+              <p class="row items-center no-wrap q-my-xs">
+                <q-badge class="q-mr-xs" rounded :style="{width: '1em', height: '1em', backgroundColor: info, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                Info:</p>
+              <p class="row items-center no-wrap q-my-xs">
+                <q-badge class="q-mr-xs" rounded :style="{width: '1em', height: '1em', backgroundColor: warning, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                Warning:</p>
+            </div>
+            <div class="column q-mx-xs">
+              <p class="row no-wrap q-my-xs">{{t('corporateDesign.primaryInfo')}}</p>
+              <p class="row no-wrap q-my-xs">{{t('corporateDesign.secondaryInfo')}}</p>
+              <p class="row no-wrap q-my-xs">{{t('corporateDesign.accentInfo')}}</p>
+              <p class="row no-wrap q-my-xs">{{t('corporateDesign.darkInfo')}}</p>
+              <p class="row no-wrap q-my-xs">{{t('corporateDesign.lightBlueInfo')}}</p>
+              <p class="row no-wrap q-my-xs">{{t('corporateDesign.positiveInfo')}}</p>
+              <p class="row no-wrap q-my-xs">{{t('corporateDesign.negativeInfo')}}</p>
+              <p class="row no-wrap q-my-xs">{{t('corporateDesign.infoInfo')}}</p>
+              <p class="row no-wrap q-my-xs">{{t('corporateDesign.warningInfo')}}</p>
+            </div>
           </q-card>
         </q-menu>
       </q-icon>
     </div>
-    <div class="row justify-center no-wrap" >
-      <q-input label="Background" rounded outlined v-model="bgColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
+    <div class="row fit justify-center no-wrap" >
+      <q-input :label="t('corporateDesign.background')" rounded outlined v-model="bgColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
         <template v-slot:prepend>
-          <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: bgColor, borderRadius: '100%'}"/>
+          <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: bgColor, borderRadius: '100%', border: '1px solid lightgrey'}"/>
         </template>
         <template v-slot:append>
           <q-icon name="colorize" class="cursor-pointer">
@@ -145,9 +176,9 @@
           </q-icon>
         </template>
       </q-input>
-      <q-input label="Text-Color" rounded outlined v-model="fontColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
+      <q-input :label="t('corporateDesign.textColor')" rounded outlined v-model="fontColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
         <template v-slot:prepend>
-          <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: fontColor, borderRadius: '100%'}"/>
+          <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: fontColor, borderRadius: '100%', border: '1px solid lightgrey'}"/>
         </template>
         <template v-slot:append>
           <q-icon name="colorize" class="cursor-pointer">
@@ -158,7 +189,7 @@
         </template>
       </q-input>
     </div>
-    <div class="row justify-evenly no-wrap" >
+    <div class="row fit justify-evenly no-wrap" >
       <q-btn @click="confirmReset = true" round icon="restart_alt" color="negative" text-color="positive" style="width: 4em; height: 4em"/>
       <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" :hint="t('corporateDesign.logoHint')" bg-color="white" style="width: 14em">
         <template v-slot:prepend>

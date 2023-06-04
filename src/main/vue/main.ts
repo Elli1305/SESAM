@@ -18,10 +18,10 @@ const messages = {
             headline: "Aktuelle Nutzer",
             roles: {ADMINISTRATOR: "Administrator", EDITOR: "Bearbeiter", ISSUER: "Herausgeber"},
             prename: "Vorname",
-            lastname: "Nachname",
+            lastname: "Name",
             email: "Email",
             role: "Rollen",
-            bearbeiten: "edit",
+            edit: "Bearbeiten",
             showAdmin: "Administratoren",
             showEditor: "Bearbeiter",
             showIssuer: "Herausgeber",
@@ -33,7 +33,7 @@ const messages = {
             lastname: "Nachname",
             email: "Email",
             role: "Rollen",
-            save:"speichern",
+            save: "Speichern",
             showAdmin: "Administratoren",
             showEditor: "Bearbeiter",
             showIssuer: "Herausgeber",
@@ -74,6 +74,9 @@ const messages = {
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
+            noData: "Keine Daten vorhanden.",
+            noResults: "Kein Einträge gefunden.",
+            of: "von"
         },
         credentialview :{
             credentialview: "Credentialansicht",
@@ -180,7 +183,7 @@ const messages = {
                 list: "Checklist",
                 qrcode: "QR-Code",
             },
-            next: "Nächster Schritt",
+            next: "Weiter",
             previous: "Zurück",
             checklistHint:
                 "Um das Credential ausstellen zu können muss jede Bedingung der Checkliste erfüllt sein.",
@@ -192,7 +195,7 @@ const messages = {
                 cancel: "Abbrechen",
             },
             addCredential: {
-                title: "Ihr neues Credential ({0}) wurde erfolgreich ausgestellt!",
+                title: "Ihr neues Credential wurde erfolgreich ausgestellt!",
                 howTo: "So fügen Sie ein Credential zur BC Wallet hinzu:",
                 steps: {
                     step1:
@@ -236,18 +239,29 @@ const messages = {
             logoHint: "Nur SVG Dateien",
             favicon: "Favicon",
             faviconHint: "Nur ICO Dateien",
+            background: "Hintergrund",
+            textColor: "Schriftfarbe",
+            primaryInfo: "Banner, Buttons",
+            secondaryInfo: "Rollenschilder",
+            accentInfo: "Schriftfarbe in Banner, Footer, Buttons",
+            darkInfo: "Footer",
+            lightBlueInfo: "...",
+            positiveInfo: "Positive Nachricht, Speichern Button",
+            negativeInfo: "Negative Nachricht, Löschen/Zurücksetzen Button",
+            infoInfo: "Profilbild, Informationen",
+            warningInfo: "Warnungen",
             confirm: {
                 reset: {
                     title: "Sind Sie sicher, dass sie zurücksetzen wollen?",
                     message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
                     ok: "Zurücksetzen",
-                    cancel: "Abbruch"
+                    cancel: "Abbrechen"
                 },
                 save: {
                     title: "Sind Sie sicher, dass sie speichern wollen?",
                     message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
                     ok: "Speichern",
-                    cancel: "Abbruch"
+                    cancel: "Abbrechen"
                 }
             },
             resetFailure: "Zurücksetzen fehlgeschlagen",
@@ -290,10 +304,11 @@ const messages = {
         adminCurrentUser: {
             headline: "Current Users",
             roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
-            prename: "Prename",
+            prename: "Firstname",
             lastname: "Name",
             email: "Email",
             role: "Roles",
+            edit: "Edit",
             showAdmin: "Show Admin",
             showEditor: "Show Editor",
             showIssuer: "Show Issuer",
@@ -332,6 +347,9 @@ const messages = {
         common: {
             internalServerError: "The server could not process the request",
             unkownError: "An unknown error occured",
+            noData: "No data available.",
+            noResults: "No entries found.",
+            of: "of"
         },
         credentialview :{
             credentialview: "View Credentials",
@@ -451,7 +469,7 @@ const messages = {
                 list: "Checklist",
                 qrcode: "QR Code",
             },
-            next: "Next Step",
+            next: "Next",
             previous: "Previous",
             checklistHint:
                 "To issue the credential, all conditions on the checklist must be met.",
@@ -463,7 +481,7 @@ const messages = {
                 cancel: "Cancel",
             },
             addCredential: {
-                title: "Your new credential ({0}) has been successfully issued!",
+                title: "Your new credential has been successfully issued!",
                 howTo: "How to add a credential to the BC Wallet:",
                 steps: {
                     step1:
@@ -507,6 +525,17 @@ const messages = {
             logoHint: "Only SVG files",
             favicon: "Favicon",
             faviconHint: "Only ICO files",
+            background: "Background",
+            textColor: "Text-Color",
+            primaryInfo: "banner, buttons",
+            secondaryInfo: "role badges",
+            accentInfo: "text-color in banner, footer, buttons",
+            darkInfo: "footer",
+            lightBlueInfo: "...",
+            positiveInfo: "positive notifications, save buttons",
+            negativeInfo: "negative notifications, delete/reset buttons",
+            infoInfo: "profile button, informational content",
+            warningInfo: "warnings",
             confirm: {
                 reset: {
                     title: "Are you sure you want to reset?",

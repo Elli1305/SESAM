@@ -1,26 +1,33 @@
 <template>
-    <q-page>
-      <div class="q-pa-md">
-        <div class="q-mb-xl">
-          <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t('issuermanagement.title') }}</h1>
-        </div>
-        <div class="items-center justify-center" style="display: flex">
-          <div class="center" style="max-width: 80em; min-width: 60em">
-            <q-table :rows="rows" :columns="columns" row-key="username" :separator="'cell'" :filter="filter">
-              <template v-slot:top-right="props">
-                <div class="q-pa-md">
-                  <q-input dense debounce="300" v-model="filter" :placeholder="t('issuermanagement.search')">
-                    <template v-slot:append>
-                      <q-icon name="search" />
-                    </template>
-                  </q-input>
-                </div>
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">{{t('issuermanagement.title')}}</p>
+    <div class="row self-center" style="display: flex">
+      <q-table
+          style="width: 75vw; height: 25em"
+          :rows-per-page-options="[0]"
+          :rows="rows"
+          :columns="columns"
+          :title="t('profile.issuer')"
+          :separator="'cell'"
+          :no-data-label="t('common.noData')"
+          :no-results-label="t('common.noResults')"
+          :pagination-label="getPaginationLabel"
+          :filter="filter"
+          row-key="username">
+        <template v-slot:top-right>
+          <div class="q-pa-md">
+            <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('issuermanagement.search')">
+              <template v-slot:append>
+                <q-icon name="search" />
               </template>
-              <template v-slot:body-cell-actions="props">
-                <q-td :props="props">
-                  <q-btn dense round flat color="grey" @click="prompt=true; openForm(props.row)" icon="edit"></q-btn>
-                </q-td>
-              </template>
+            </q-input>
+          </div>
+        </template>
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props">
+            <q-btn dense round flat color="grey" @click="prompt=true; openForm(props.row)" icon="edit"></q-btn>
+          </q-td>
+        </template>
 
               <template v-slot:body-cell-roles="props">
                 <q-td :props="props">
@@ -36,57 +43,53 @@
                 </q-td>
               </template>
 
-              <template v-slot:body-cell-crendetials="props">
-                <q-td :props="props">
-                  <div>{{ props.row.credentials }}</div>
-                </q-td>
-              </template>
-            </q-table>
-          </div>
-        </div>
-          <q-dialog v-model="prompt" persistent>
-          <q-card class="form-card">
-            <q-card-section>
-              <h2>{{ t('issuermanagement.dialogTitle') }}</h2>
-              <q-form @submit="saveChanges">
-                <q-input v-model="model1" label="Last Name" outlined readonly style="padding-bottom: 1em"></q-input>
-                <q-input v-model="model2" label="First Name" outlined readonly style="padding-bottom: 1em"></q-input>
-                <q-select
-                    style="padding-bottom: 1em"
-                    filled
-                    v-model="model4"
-                    multiple
-                    :label="t('issuermanagement.credentialsList')"
-                    emit-value
-                    :options="credentialStore.allCredentials"
-                    option-label="name"
-                    option-value="id"
-                    options-cover
-                    map-options
-                ></q-select>
-                <q-select
-                    filled
-                    v-model="model3"
-                    :label="t('issuermanagement.roomsList')"
-                    emit-value
-                    :options="roomStore.rooms"
-                    option-label="name"
-                    option-value="id"
-                    options-cover
-                    map-options
-                ></q-select>
-
-
-                <q-card-actions align="right">
-                  <q-btn :label="t('issuermanagement.cancel')" color="primary"/>
-                  <q-btn type="submit" :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="editIssuers(editedRow.id)"/>
-                </q-card-actions>
-              </q-form>
-            </q-card-section>
-          </q-card>
-        </q-dialog>
-      </div>
-    </q-page>
+        <template v-slot:body-cell-crendetials="props">
+          <q-td :props="props">
+            <div>{{ props.row.credentials }}</div>
+          </q-td>
+        </template>
+      </q-table>
+    </div>
+      <q-dialog v-model="prompt" persistent>
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">{{t('issuermanagement.dialogTitle')}}</div>
+        </q-card-section>
+        <q-card-section>
+          <q-form style="width: 20em" @submit="saveChanges">
+            <q-input class="q-my-sm" v-model="model1" label="Last Name" outlined readonly></q-input>
+            <q-input class="q-my-sm" v-model="model2" label="First Name" outlined readonly></q-input>
+            <q-select class="q-my-sm"
+                filled
+                v-model="model4"
+                multiple
+                :label="t('issuermanagement.credentialsList')"
+                emit-value
+                :options="credentialStore.allCredentials"
+                option-label="name"
+                option-value="id"
+                map-options
+                options-cover/>
+            <q-select class="q-my-sm"
+                filled
+                v-model="model3"
+                multiple
+                :label="t('issuermanagement.roomsList')"
+                emit-value
+                :options="roomStore.rooms"
+                option-label="name"
+                option-value="id"
+                map-options
+                options-cover/>
+          </q-form>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat  :label="t('issuermanagement.cancel')" color="primary"/>
+          <q-btn flat type="submit" :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="editIssuers(editedRow.id)"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </q-page>
 </template>
 
 <script>
@@ -167,6 +170,10 @@ export default {
 
     const editedRow = ref({});
 
+    function getPaginationLabel(firstRowIndex, endRowIndex, totalRowsNumber) {
+      return firstRowIndex.toString() + "-" + endRowIndex.toString() + " / " + totalRowsNumber.toString()
+    }
+
 
     credentialStore.getCredentials().then((external) => {
     })
@@ -201,7 +208,6 @@ export default {
       roomStore,
       editIssuers,
       prompt: ref(false)
-
     };
   },
 };
