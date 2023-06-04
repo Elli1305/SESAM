@@ -198,7 +198,6 @@ export default {
       openForm,
       rows,
       filter,
-      editedItem,
       roomStore,
       editIssuers,
       prompt: ref(false)
