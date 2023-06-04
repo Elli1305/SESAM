@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.credential;
+package com.gpse.sesam.domain.credential.category;
 
 import org.springframework.data.repository.CrudRepository;
 

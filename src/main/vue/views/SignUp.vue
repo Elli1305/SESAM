@@ -2,15 +2,14 @@
     <q-page class="items-center justify-center" style="display: flex">
         <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
             <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Registrierung</h1>
-            <q-input outlined v-model="prename" label="Vorname"/>
-            <q-input outlined v-model="lastname" label="Nachname"/>
+            <q-input outlined v-model="prename" :label="t('signUp.prename')"/>
+            <q-input outlined v-model="lastname" :label="t('signUp.name')"/>
             <q-input v-model="email" outlined type="email" label="Email" />
-            <q-input v-model="password" outlined :type="isPwd ? 'password' : 'text'" label="Passwort" >
+            <q-input v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('signUp.password')">
                 <template v-slot:append>
                     <q-icon class="q-mr-xs" color="grey" size="16px" name="info" />
-                    <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
-                               :offset="[0, 8]">Das Passwort muss mind. 8 Zeichen lang  <br> sein, ein Sonderzeichen,
-                        eine Ziffer und  <br> einen Großbuchstaben beinhalten</q-tooltip>
+                    <q-tooltip class="bg-grey-8" anchor="bottom left" self="bottom left"
+                               :offset="[0, 8]">{{t('passwordChange.passwordHint')}}</q-tooltip>
                     <q-icon
                             :name="isPwd ? 'visibility_off' : 'visibility'"
                             class="cursor-pointer"
@@ -18,7 +17,7 @@
                     />
                 </template>
             </q-input>
-            <q-input v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'" label="Passwort wiederholen">
+            <q-input v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'" :label="t('signUp.passwordRepeat')">
                 <template v-slot:append>
                     <q-icon
                             :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
@@ -34,9 +33,9 @@
                     size = "25px"
                     inline
             />
-            <q-btn @click="signUp()" color="primary" label="Registrieren"/>
-            <p style="font-size: 1em">Bereits registriert:
-                <router-link to="./login">Zum Login</router-link>
+            <q-btn @click="signUp()" color="primary" :label="t('signUp.signup')"/>
+            <p style="font-size: 1em">{{ t('signUp.alreadySignedUp') }}
+                <router-link to="./login"> Login</router-link>
             </p>
         </div>
     </q-page>
@@ -48,6 +47,7 @@ import { ref } from 'vue'
 import {useUserStore} from "../stores/users"
 import {useQuasar} from 'quasar'
 import {useRouter} from 'vue-router'
+import {useI18n} from "vue-i18n";
 export default {
     name: "SignUp.vue",
     setup () {
@@ -60,6 +60,7 @@ export default {
         const passwordRepeat = ref('')
         const group = ref([])
         const userStore = useUserStore()
+        const { t } = useI18n()
         async function signUp() {
             userStore.validateEmail(email.value);
             userStore.validatePassword(password.value, passwordRepeat.value);
@@ -150,6 +151,7 @@ export default {
             }
         }
         return {
+            t,
             signUp,
             password,
             isPwd: ref(true),

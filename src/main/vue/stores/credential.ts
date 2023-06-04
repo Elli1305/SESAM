@@ -1,13 +1,19 @@
 import {defineStore} from "pinia";
 import {Ref, ref} from "vue";
 import api from "@/main/vue/api";
-import {Category, CredentialCmd} from "@/main/vue/entity/credentialDefinition";
+import {
+    Category,
+    CredentialCmd,
+    ExternalCredential,
+    Credential
+} from "@/main/vue/entity/credentialDefinition";
 import {Credential} from "@/main/vue/entity/credentialDefinition";
-
 
 export const useCredentialStore = defineStore('credential', () =>{
     const credentials: Ref<CredentialCmd[]|null> = ref(null)
     const allCredentials: Ref<Credential[]|null> = ref(null)
+    const categories: Ref<Category[]|null> = ref(null)
+    const external: Ref<ExternalCredential[]|null> = ref(null)
 
 
     function getCredentialsByLocation(id: string) {
@@ -21,6 +27,39 @@ export const useCredentialStore = defineStore('credential', () =>{
         })
     }
 
+    function getCategory() {
+        return new Promise((resolve, reject) => {
+            api.credential.getCategories().then((response) => {
+                categories.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+    function getExternalCredentials() {
+        return new Promise((resolve, reject) => {
+            api.credential.getExternalCredentials().then((response) => {
+                external.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+
+    function deleteCategory(id: string) {
+        return new Promise<void>((resolve, reject) => {
+            api.credential.deleteCategory(id).then(() => {
+                resolve()
+            }).catch((error) => {
+                reject(error)
+            })
+        });
+    }
+
     function getCredentials() {
         return new Promise((resolve, reject) => {
             api.credential.all().then((response) => {
@@ -32,14 +71,43 @@ export const useCredentialStore = defineStore('credential', () =>{
         })
     }
 
+    function createCategory(name: string, credential: bigint[], external: bigint[]) {
+        return new Promise<void>((resolve, reject) => {
+            api.credential.createCategory({
+                name: name,
+                credentials: credential,
+                externalCredentials: external
+            }).then(_ => resolve())
+                .catch(reject);
+        });
+    }
 
+    function updateCredentials(id: string, name: string, credential: bigint[], external: bigint[]) {
+        return new Promise<void>((resolve, reject) => {
+            api.credential.updateCategory(id,
+                {
+                    name: name,
+                    credentials: credential,
+                    externalCredentials: external
+            }).then(_ => {
+                resolve()
+            })
+                .catch(reject);
+        })
+    }
 
 
     return {
         getCredentialsByLocation,
         credentials,
+        getCategory,
+        categories,
+        external,
+        getExternalCredentials,
+        deleteCategory,
         allCredentials,
         getCredentials,
+        createCategory,
+        updateCredentials
     }
-
 })

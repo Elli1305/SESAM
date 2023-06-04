@@ -29,7 +29,7 @@
               option-label="name"
               options-cover
               style="min-width: 13em; padding-right: 1em"
-              @click="updateCredentials"
+              @update:model-value="updateCredentials"
           />
           <q-input dense debounce="300" v-model="filter" :placeholder="t('credentialview.search')">
             <template v-slot:append>
@@ -114,11 +114,9 @@ export default {
 
 
 
-    let baum = ref()
     async function updateCredentials(){
       credentialStore.getCredentialsByLocation(model.value).then((credentials) => {
       rows.value = credentials
-      console.log(rows.value)
     })}
 
 
@@ -133,7 +131,6 @@ export default {
       t,
       updateCredentials,
         queryParam,
-      baum
     }
   }
 }
