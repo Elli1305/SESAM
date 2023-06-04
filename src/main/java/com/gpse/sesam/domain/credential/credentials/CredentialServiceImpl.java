@@ -7,8 +7,8 @@ import com.gpse.sesam.domain.credential.issuing.IssueCredential;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
 import com.gpse.sesam.domain.credential.category.Category;
-import com.gpse.sesam.domain.user.Issuer;
-import com.gpse.sesam.domain.user.IssuerRepository;
+import com.gpse.sesam.domain.user.issuer.Issuer;
+import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 import jakarta.validation.Valid;
@@ -55,7 +55,7 @@ public class CredentialServiceImpl implements CredentialService {
 
 	@Override
 	public List<Credential> getCredentialsByIssuerId(final Long id) {
-		final Issuer issuer = issuerRepository.findById(id).orElseThrow();
+		final Issuer issuer = issuerRepository.findById(String.valueOf(id)).orElseThrow();
 		return issuer.getCredentials();
 	}
 
