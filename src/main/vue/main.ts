@@ -175,7 +175,7 @@ const messages = {
                 list: "Checklist",
                 qrcode: "QR-Code",
             },
-            next: "Nächster Schritt",
+            next: "Weiter",
             previous: "Zurück",
             checklistHint:
                 "Um das Credential ausstellen zu können muss jede Bedingung der Checkliste erfüllt sein.",
@@ -451,7 +451,7 @@ const messages = {
                 list: "Checklist",
                 qrcode: "QR Code",
             },
-            next: "Next Step",
+            next: "Next",
             previous: "Previous",
             checklistHint:
                 "To issue the credential, all conditions on the checklist must be met.",
