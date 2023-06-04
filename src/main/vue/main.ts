@@ -50,7 +50,17 @@ const messages = {
             otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
         },
         floorplan: {
-            locations: 'Standorte'
+            locations: 'Standorte',
+            doorName: 'Türname',
+            editDoor: 'Tür bearbeiten',
+            editRoom: 'Raum bearbeiten',
+            save: 'speichern',
+            cancel: 'abbrechen',
+            confirmDeletion: 'Bestätigen Sie das Löschen',
+            confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            doors: 'Türe',
+            roomName: 'Raumname',
+            edit: 'Bearbeiten'
         },
 
         common: {
@@ -66,11 +76,25 @@ const messages = {
             search: "Suche",
             category: "Kategorie",
             availablecredentials: "Verfügbbare Credential",
-            qualification: "Vergleichbare Qualifikation",
+            qualification: "Vergleichbare Credential",
             issuer: "Herausgeber",
             room: "Raum: "
-        }
-        ,
+        },
+        credentialmapping: {
+            credentialmapping: 'Credentialmapping',
+            newcategory: 'Neue Kategorie',
+            category: 'Kategorie',
+            search: 'Suche',
+            name: 'Name der Kategorie',
+            save: 'Speichern',
+            cancel: 'Abbrechen',
+            internal: 'Interne Credentials',
+            external: 'Externe Credentials',
+            categorycreate: 'Neue Kategorie erstellen',
+            categorychange: 'Kategorie ändern',
+            categorydelete: 'Löschen der Kategorie',
+            delete: 'Möchten Sie die Kategorie wirklich löschen?'
+        },
         home: {
             header: "SESAM",
             signup: "Registrierung",
@@ -99,6 +123,14 @@ const messages = {
             notRegistered: "Nicht registriert:",
             toRegister: "Zur Registrierung",
             password: "Passwort"
+        },
+        signUp:{
+          prename: "Vorname",
+          name: "Nachname",
+          password: "Passwort",
+          passwordRepeat: "Passwort wiederholen",
+          signup: "Registrierung",
+          alreadySignedUp: "Bereits registriert:"
         },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
@@ -277,12 +309,37 @@ const messages = {
             search: "Search",
             category: "Category",
             availablecredentials: "Available Credentials",
-            qualification: "Comparable Qualifications",
+            qualification: "Comparable Credential",
             issuer: "Issuer",
             room: "Room: "
         },
+        credentialmapping: {
+            credentialmapping: 'Credential mapping',
+            newcategory: 'New Category',
+            search: 'Search',
+            name: 'Name of the Category',
+            category: 'Category',
+            save: 'Save',
+            cancel: 'Cancel',
+            internal: 'Internal Credentials',
+            external: 'External Credentials',
+            categorycreate: 'Create new category',
+            categorychange: 'Change category',
+            categorydelete: 'Delete category',
+            delete: 'Are you sure you want to delete the category?'
+        },
         floorplan: {
-            locations: 'Locations'
+            locations: 'Locations',
+            doorName: 'Name of Door',
+            editDoor:'Edit Door',
+            editRoom:'Edit Room',
+            save: 'save',
+            cancel: 'cancel',
+            confirmDeletion: 'Confirm deletion',
+            confirmDeletionText:'Are you sure you want to delete the door?',
+            doors:'Doors',
+            roomName: 'Name of room',
+            edit: 'Edit'
         },
         home: {
             header: "SESAM",
@@ -312,6 +369,14 @@ const messages = {
             notRegistered: "Not registered",
             toRegister: "Go to Register",
             password: "Password"
+        },
+        signUp:{
+            prename: "Prename",
+            name: "Name",
+            password: "Password",
+            passwordRepeat: "Repeat password",
+            signup: "Sign up",
+            alreadySignedUp: "Already signed up:"
         },
         passwordReset: {
             resetPassword: "Reset Password",

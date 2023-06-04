@@ -29,7 +29,7 @@
               option-label="name"
               options-cover
               style="min-width: 12em; padding-right: 2em"
-              @click="updateCredentials"
+              @update:model-value="updateCredentials"
           />
           <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('credentialview.search')">
             <template v-slot:append>
@@ -114,7 +114,6 @@ export default {
     async function updateCredentials(){
       credentialStore.getCredentialsByLocation(model.value).then((credentials) => {
       rows.value = credentials
-      console.log(rows.value)
     })}
 
 

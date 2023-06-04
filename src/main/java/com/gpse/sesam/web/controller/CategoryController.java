@@ -1,15 +1,16 @@
 package com.gpse.sesam.web.controller;
 
-import com.gpse.sesam.domain.credential.Category;
-import com.gpse.sesam.domain.credential.CategoryService;
-import com.gpse.sesam.domain.credential.Credential;
-import com.gpse.sesam.domain.credential.CredentialService;
+import com.gpse.sesam.domain.credential.category.Category;
+import com.gpse.sesam.domain.credential.category.CategoryService;
+import com.gpse.sesam.domain.credential.credentials.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.ExternalCredentialService;
+import com.gpse.sesam.web.cmd.*;
+import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,29 +20,58 @@ import java.util.List;
 public class CategoryController {
 	private final CategoryService categoryService;
 	private final CredentialService credentialService;
+    private final ExternalCredentialService externalCredentialService;
 
 	@Autowired
-	public CategoryController(final CategoryService categoryService, final CredentialService credentialService) {
-		this.categoryService = categoryService;
-		this.credentialService = credentialService;
-	}
+	public CategoryController(final CategoryService categoryService, final CredentialService credentialService,
+                              ExternalCredentialService externalCredentialService) {
+        this.categoryService = categoryService;
+        this.credentialService = credentialService;
+        this.externalCredentialService = externalCredentialService;
+    }
 
-	@GetMapping("/credentialview")
-	public List<Category> getCategoriesInfo() {
-		return categoryService.getCategory();
-	}
+    @Secured("ADMINISTRATOR")
+    @GetMapping("/credentialmapping")
+    public List<Category> getCategoriesInfo() {
+        return categoryService.getCategory();
+    }
 
-    /*@GetMapping("/credentialview/{id:\\d+}")
-    public Category getCategoryInfo(@PathVariable("id") final Long id) {
-        if (categoryService.getCategory(id).isPresent()) {
-            return categoryService.getCategory(id).get();
-        } else {
-            throw new CategoryNotFoundException("Category not found with ID:" + id);
-        }
-    }*/
+    @Secured("ADMINISTRATOR")
+    @GetMapping("/externalcredentials")
+    public List<ExternalCredential> getExternalInfos() {
+        return externalCredentialService.getExternalCredentials();
+    }
+
 
 	@GetMapping("/credentialview/{id}")
-	public List<Credential> getCredentialInfos(@PathVariable("id") final Long id) {
-		return credentialService.credentialFindByLocation(id);
+	public List<CredentialCmd> getCredentialInfos(@PathVariable("id") final Long id) {
+		return credentialService.getCredentialByLocation(id);
 	}
+    @Secured("ADMINISTRATOR")
+    @DeleteMapping("/credentialmapping/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCategory(@PathVariable("id") final Long id) {
+        categoryService.deleteById(id);
+    }
+
+    @Secured("ADMINISTRATOR")
+    @PutMapping("/credentialmapping/edit/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateCategory(@PathVariable("id") final Long id, @RequestBody CategoryResponseCmd cmd) {
+        categoryService.updateCategory(id, cmd);
+    }
+
+
+    @Secured("ADMINISTRATOR")
+    @PostMapping("/category")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createCategory(@RequestBody final CategoryResponseCmd category) {
+        categoryService.createCategory(category);
+    }
+
+    @GetMapping("/category/{id}")
+    public void getCategoryById(@PathVariable("id") Long id) {
+        categoryService.getCategory(id);
+    }
+
 }
