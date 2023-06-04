@@ -1,5 +1,5 @@
 <template>
-  <q-page class="column justify-evenly" style="padding: 0 5em" >
+  <q-page class="column justify-evenly" style="padding: 2em 5em" >
     <p class="row text-h3 justify-center">{{t('profile.title')}}</p>
     <div class="self-center" style="margin: 2em; width: 25em" >
       <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined readonly/>

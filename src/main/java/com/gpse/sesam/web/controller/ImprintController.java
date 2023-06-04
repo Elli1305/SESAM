@@ -4,58 +4,55 @@ import com.gpse.sesam.domain.imprint.ImprintServiceImpl;
 import com.gpse.sesam.web.cmd.UpdateImprintCmd;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-
-import static com.gpse.sesam.web.controller.SesamUserController.ADMINISTRATOR;
 
 @RestController
 @CrossOrigin
 public class ImprintController {
 
-	private final ImprintServiceImpl imprintService;
+    private final ImprintServiceImpl imprintService;
 
-	public ImprintController(final ImprintServiceImpl imprintService) {
-		this.imprintService = imprintService;
-	}
+    public ImprintController(final ImprintServiceImpl imprintService) {
+        this.imprintService = imprintService;
+    }
 
-	@GetMapping("/api/imprint")
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<String> getImprintContent() {
-		String imprintContent = imprintService.getLatestImprintEntry();
+    @GetMapping("/api/imprint")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getImprintContent() {
+        String imprintContent = imprintService.getLatestImprintEntry();
 
-		if (imprintContent == null) {
-			imprintContent = "";
-		}
+        if (imprintContent == null) {
+            imprintContent = "";
+        }
 
-		return new ResponseEntity<>(imprintContent, HttpStatus.OK);
-	}
+        return new ResponseEntity<>(imprintContent, HttpStatus.OK);
+    }
 
-	@GetMapping("/api/imprint/latest")
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<String> getLatestImprint() {
-		String latestImprintContent = imprintService.getLatestImprintEntry();
+    @GetMapping("/api/imprint/latest")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getLatestImprint() {
+        String latestImprintContent = imprintService.getLatestImprintEntry();
 
-		if (latestImprintContent == null) {
-			latestImprintContent = "";
-		}
+        if (latestImprintContent == null) {
+            latestImprintContent = "";
+        }
 
-		return new ResponseEntity<>(latestImprintContent, HttpStatus.OK);
-	}
+        return new ResponseEntity<>(latestImprintContent, HttpStatus.OK);
+    }
 
-	@PostMapping("/api/imprint")
-	@ResponseStatus(HttpStatus.OK)
-	public void saveImprintContent(@RequestBody final UpdateImprintCmd imprintContent) {
-		if (imprintContent != null) {
-			imprintService.createImprintEntry(imprintContent.getContent());
-		}
-	}
+    @PostMapping("/api/imprint")
+    @ResponseStatus(HttpStatus.OK)
+    public void saveImprintContent(@RequestBody final UpdateImprintCmd imprintContent) {
+        if (imprintContent != null) {
+            imprintService.createImprintEntry(imprintContent.getContent());
+        }
+    }
 
 
-	@DeleteMapping("/api/imprint")
-	@ResponseStatus(HttpStatus.OK)
-	public void deleteImprintContent() {
-		imprintService.deleteImprintEntry();
-	}
+    @DeleteMapping("/api/imprint")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteImprintContent() {
+        imprintService.deleteImprintEntry();
+    }
 }
 

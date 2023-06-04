@@ -1,26 +1,24 @@
 <template>
-  <q-page class="items-center justify-center" style="display: flex">
-    <div class="q-gutter-y-md column" style="max-width: 80%; min-width: 20em; display: flex">
-      <div>
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t("credentialmapping.credentialmapping")}}</h1>
-      </div>
-      <div style="width: 100em">
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">{{t("credentialmapping.credentialmapping")}}</p>
+    <div class="row self-center">
       <q-table
-          flat bordered
-          :title="t('credentialmapping.credentialmapping')"
+          style="width: 75vw; height: 25em"
+          :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
-          row-key="name"
+          :title="t('credentialmapping.credentialmapping')"
           :separator="'cell'"
+          :no-data-label="t('common.noData')"
+          :no-results-label="t('common.noResults')"
+          :pagination-label="getPaginationLabel"
           :filter="filter"
+          row-key="name"
           visible-columns="['category', 'credential', 'externalCredential', 'actions']"
-          :row-key="row => row.id"
-      >
+          :row-key="row => row.id">
         <template v-slot:top-right>
-          <div style="padding-right: 1em">
-          <q-btn dense flat color="grey" :label="t('credentialmapping.newcategory')" icon="add" rounded @click="prompt=true"/>
-          </div>
-          <q-input v-model="filter" :placeholder="t('credentialview.search')" dense>
+          <q-btn class="q-mr-xs" flat color="grey" :label="t('credentialmapping.newcategory')" icon="add" rounded @click="prompt=true"/>
+          <q-input class="q-ml-xs" borderless dense debounce="250" v-model="filter" :placeholder="t('credentialview.search')">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -34,26 +32,24 @@
         </template>
       </q-table>
     </div>
-    </div>
   </q-page>
-  <q-dialog v-model="alert">
+  <q-dialog v-model="alert" persistent>
     <q-card>
       <q-card-section>
         <div class="text-h6"> {{ t("credentialmapping.categorydelete")}}</div>
       </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        {{ t("credentialmapping.delete")}}
+      <q-card-section class="row items-center">
+        <span class="q-mx-sm">{{ t("credentialmapping.delete")}}</span>
       </q-card-section>
 
-      <q-card-actions align="evenly" class="text-primary">
+      <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
         <q-btn flat v-close-popup @click="deleteCategory(editedRow.id)">  {{ t("credentialmapping.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-dialog v-model="prompt" persistent>
-    <q-card style="max-width: 80%; padding-bottom: 2em">
+    <q-card>
       <q-card-section>
         <div class="text-h6"> {{ t("credentialmapping.categorycreate")}}</div>
       </q-card-section>
@@ -65,9 +61,9 @@
           </template>
         </q-input>
       </q-card-section>
-      <q-card-section class="q-pt-none" style="padding-bottom: 10em ">
-      <div style="float: left; width: 20em; padding-top: 2em">
+      <q-card-section class="column q-py-none no-wrap">
         <q-select
+            class="q-my-sm"
             filled
             v-model="model"
             multiple
@@ -77,11 +73,9 @@
             option-value="id"
             option-label="name"
             options-cover
-            map-options
-        ></q-select>
-      </div>
-      <div style="float: right; width: 20em; padding-top: 2em; padding-left: 2em">
+            map-options/>
         <q-select
+            class="q-my-sm"
             filled
             v-model="model2"
             multiple
@@ -91,9 +85,7 @@
             option-value="id"
             option-label="name"
             options-cover
-            map-options
-        ></q-select>
-      </div>
+            map-options/>
       </q-card-section>
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
@@ -102,7 +94,7 @@
     </q-card>
   </q-dialog>
   <q-dialog v-model="changeCategory" persistent>
-    <q-card style="max-width: 80%; padding-bottom: 2em">
+    <q-card>
       <q-card-section>
         <div class="text-h6"> {{ t("credentialmapping.categorychange")}}</div>
       </q-card-section>
@@ -113,9 +105,9 @@
         </template>
         </q-input>
       </q-card-section>
-      <q-card-section class="q-pt-none" style="padding-bottom: 10em ">
-        <div style="float: left; width: 20em; padding-top: 2em ">
+      <q-card-section class="column q-py-none">
           <q-select
+              class="q-my-sm"
               filled
               multiple
               :label="t('credentialmapping.internal')"
@@ -125,11 +117,9 @@
               option-value="id"
               option-label="name"
               options-cover
-              map-options
-          ></q-select>
-        </div>
-        <div style="float: right; width: 20em; padding-top: 2em; padding-left: 2em">
+              map-options/>
           <q-select
+              class="q-my-sm"
               filled
               multiple
               :label="t('credentialmapping.external')"
@@ -139,9 +129,7 @@
               option-value="id"
               option-label="name"
               options-cover
-              map-options
-          ></q-select>
-        </div>
+              map-options/>
       </q-card-section>
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
@@ -155,12 +143,11 @@
 import {ref} from 'vue'
 import {useCredentialStore} from "@/main/vue/stores/credential";
 import {useI18n} from "vue-i18n";
-import {useRouter} from 'vue-router'
 
 const columns = [
   { name: 'category', required: true, label: 'Kategorie', align: 'center', field: row => row.name, sortable: true },
-  { name: 'credential', align: 'center', label: "Credential (intern)", field: row => row.credentials,  format: (val, row) => val.map(c => c.name).join(', '), sortable: true},
-  { name: 'externalCredential', align: 'center', label: 'Credential (extern)', field: row => row.externalCredentials, format: (val, row) => val.map(e => e.name).join(', '), sortable: true},
+  { name: 'credential', align: 'center', label: "Credential (intern)", field: row => row.credentials,  format: (val) => val.map(c => c.name).join(', '), sortable: true},
+  { name: 'externalCredential', align: 'center', label: 'Credential (extern)', field: row => row.externalCredentials, format: (val) => val.map(e => e.name).join(', '), sortable: true},
   { name: 'actions', align: 'center', label: 'Bearbeiten'}
 ]
 
@@ -179,8 +166,6 @@ export default {
     const catname = ref('')
     const { t } = useI18n()
 
-    const categoryId = ref()
-
     const credentialStore = useCredentialStore()
 
     credentialStore.getCategory().then((categories) => {
@@ -188,10 +173,10 @@ export default {
 
     })
 
-    credentialStore.getExternalCredentials().then((external) => {
+    credentialStore.getExternalCredentials().then(() => {
     })
 
-    credentialStore.getCredentials().then((external) => {})
+    credentialStore.getCredentials().then(() => {})
 
     function deleteCategory(id) {
       credentialStore.deleteCategory(id)
@@ -201,6 +186,9 @@ export default {
           }), 250)
     }
 
+    function getPaginationLabel(firstRowIndex, endRowIndex, totalRowsNumber) {
+      return firstRowIndex.toString() + "-" + endRowIndex.toString() + " / " + totalRowsNumber.toString()
+    }
 
     function createCategory() {
       credentialStore.createCategory(address.value, model.value, model2.value);
@@ -250,6 +238,7 @@ export default {
       createCategory,
       updateCategory,
       t,
+      getPaginationLabel
     }
   }
 }

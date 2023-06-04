@@ -32,16 +32,16 @@
         </div>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn color="primary" label="Abbrechen" @click="onCancelClick"/>
-        <q-btn color="primary" label="Speichern" @click="onOKClick"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.ok')" @click="onOKClick"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import {useFloorStore} from "@/main/vue/stores/floor";
 import {ref} from "vue";
+import {useI18n} from "vue-i18n";
 
 export default {
   props: {
@@ -77,14 +77,15 @@ export default {
     const room = ref(null)
     const doorName = ref('')
     const roomOptions = ref(props.rooms)
-    const filterFn = function (val, update, abort) {
+    const { t } = useI18n()
+    const filterFn = function (val, update) {
       update(() => {
         const needle = val.toLowerCase()
         roomOptions.value = props.rooms.filter(room => room.name.toLowerCase().indexOf(needle) > -1)
       })
     }
 
-    return {room, filterFn, doorName}
+    return {room, filterFn, doorName, t}
   }
 }
 </script>

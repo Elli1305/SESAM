@@ -1,44 +1,49 @@
 <template>
-    <q-page class="items-center justify-center" style="display: flex">
-        <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
-            <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Registrierung</h1>
-            <q-input outlined v-model="prename" :label="t('signUp.prename')"/>
-            <q-input outlined v-model="lastname" :label="t('signUp.name')"/>
-            <q-input v-model="email" outlined type="email" label="Email" />
-            <q-input v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('signUp.password')">
-                <template v-slot:append>
-                    <q-icon class="q-mr-xs" color="grey" size="16px" name="info" />
-                    <q-tooltip class="bg-grey-8" anchor="bottom left" self="bottom left"
-                               :offset="[0, 8]">{{t('passwordChange.passwordHint')}}</q-tooltip>
-                    <q-icon
-                            :name="isPwd ? 'visibility_off' : 'visibility'"
-                            class="cursor-pointer"
-                            @click="isPwd = !isPwd"
-                    />
-                </template>
-            </q-input>
-            <q-input v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'" :label="t('signUp.passwordRepeat')">
-                <template v-slot:append>
-                    <q-icon
-                            :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
-                            class="cursor-pointer"
-                            @click="isPwdRepeat = !isPwdRepeat"
-                    />
-                </template>
-            </q-input>
-            <q-option-group
-                    :options="options"
-                    type="checkbox"
-                    v-model="group"
-                    size = "25px"
-                    inline
-            />
-            <q-btn @click="signUp()" color="primary" :label="t('signUp.signup')"/>
-            <p style="font-size: 1em">{{ t('signUp.alreadySignedUp') }}
-                <router-link to="./login"> Login</router-link>
-            </p>
-        </div>
-    </q-page>
+  <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">Registrierung</p>
+    <div class="column items-center justify-evenly content-stretch" style="width: 22.5em; height: 25em">
+      <q-input class="full-width" outlined v-model="prename" :label="t('signUp.prename')"/>
+      <q-input class="full-width" outlined v-model="lastname" :label="t('signUp.name')"/>
+      <q-input class="full-width" v-model="email" outlined type="email" label="Email" />
+      <q-input class="full-width" v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('signUp.password')">
+        <template v-slot:append>
+          <q-icon
+              :name="isPwd ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="isPwd = !isPwd"
+              color="grey"
+              size="0.75em"/>
+          <q-icon style="position: absolute; margin-left: 1.25em; margin-top: 0.25em" class="self-start" color="info" size="0.5em" name="info_outlined">
+            <q-tooltip class="bg-grey-8" anchor="bottom right" self="top middle" :offset="[0, 0]">
+              {{t('passwordChange.passwordHint')}}
+            </q-tooltip>
+          </q-icon>
+        </template>
+      </q-input>
+      <q-input class="full-width" v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'" :label="t('signUp.passwordRepeat')">
+        <template v-slot:append>
+          <q-icon
+              :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="isPwdRepeat = !isPwdRepeat"
+              color="grey"
+              size="0.75em"/>
+        </template>
+      </q-input>
+      <q-option-group
+          class="row justify-evenly"
+          style="width: 22.5em"
+          :options="options"
+          type="checkbox"
+          v-model="group"
+          size = "25px"
+          inline/>
+    </div>
+      <q-btn style="width: 22.5em" @click="signUp()" color="primary" :label="t('signUp.signup')"/>
+      <p style="width: 22.5em; font-size: 1em">{{ t('signUp.alreadySignedUp') }}
+          <router-link to="./login"> Login</router-link>
+      </p>
+  </q-page>
 
 </template>
 
@@ -68,21 +73,27 @@ export default {
                 $q.notify({
                     type: 'negative',
                     message: 'Registrierung fehlgeschlagen',
-                    caption: 'E-Mail erfüllt nicht die Kriterien'
+                    caption: 'E-Mail erfüllt nicht die Kriterien',
+                  color: 'negative',
+                  textColor: 'positive',
                 })
             }
             if(!userStore.validPassword){
                 $q.notify({
                     type: 'negative',
                     message: 'Registrierung fehlgeschlagen',
-                    caption: 'Passwort erfüllt nicht die Kriterien'
+                    caption: 'Passwort erfüllt nicht die Kriterien',
+                  color: 'negative',
+                  textColor: 'positive',
                 })
             }
             if(!userStore.comparePassword){
                 $q.notify({
                     type: 'negative',
                     message: 'Registrierung fehlgeschlagen',
-                    caption: 'Die Passworte stimmen nicht überein'
+                    caption: 'Die Passworte stimmen nicht überein',
+                  color: 'negative',
+                  textColor: 'positive',
                 })
             }
             if (!userStore.validPassword || !userStore.validEmail || !userStore.comparePassword) {
@@ -97,7 +108,9 @@ export default {
               $q.notify({
                 type: 'negative',
                 message: 'Nutzer konnte nicht registriert werden.',
-                caption: 'Bitte versuchen Sie es später erneut.'
+                caption: 'Bitte versuchen Sie es später erneut.',
+                color: 'negative',
+                textColor: 'positive',
               });
 
               return;
@@ -112,6 +125,8 @@ export default {
                     message: 'Login Fehlgeschlagen',
                     caption: 'Falsches Passwort oder Benutzername',
                     position: "top",
+                    color: 'negative',
+                    textColor: 'positive',
                     timeout: 3000,
                     classes: "loginNotify"
                   })
@@ -121,6 +136,8 @@ export default {
                     message: 'Login Fehlgeschlagen',
                     caption: 'Der Server konnte die Anfrage nicht verarbeiten',
                     position: "top",
+                    color: 'negative',
+                    textColor: 'positive',
                     timeout: 3000,
                     classes: "loginNotify"
                   })
@@ -130,6 +147,8 @@ export default {
                     message: 'Login Fehlgeschlagen',
                     caption: 'Etwas ist schiefgelaufen',
                     position: "top",
+                    color: 'negative',
+                    textColor: 'positive',
                     timeout: 3000,
                     classes: "loginNotify"
                   })
@@ -139,14 +158,18 @@ export default {
             if (userStore.authenticated) {
                 await router.push('/')
                 $q.notify({
-                    type: 'positive',
-                    message: 'Registrierung erfolgreich'
+                  type: 'positive',
+                  message: 'Registrierung erfolgreich',
+                  color: 'positive',
+                  textColor: 'negative',
                 })
             } else {
                 $q.notify({
-                    type: 'negative',
-                    message: 'Registrierung fehlgeschlagen',
-                    caption: 'Nutzer (Email) bereits vergeben'
+                  type: 'negative',
+                  message: 'Registrierung fehlgeschlagen',
+                  caption: 'Nutzer (Email) bereits vergeben',
+                  color: 'negative',
+                  textColor: 'positive',
                 })
             }
         }

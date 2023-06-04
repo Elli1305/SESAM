@@ -1,81 +1,77 @@
 <template>
-  <div class="q-pa-md">
-    <q-stepper v-model="step" ref="stepper" color="primary" animated flat>
-      <q-step :name="1" :title="t('issueCredential.steps.form')" icon="description" :done="step > 1">
-        <div class="row q-col-gutter-lg">
-          <div class="col-12 col-md">
-            <i18n-t keypath="issueCredential.title" tag="h5" class="q-ma-none q-pb-md">
-              <i>{{ credential?.name }}</i>
-            </i18n-t>
+  <q-page class="column justify-evenly items-center" style="padding: 2em 5em" >
+      <q-stepper v-model="step" ref="stepper" color="primary" animated flat style="width: 80vw">
 
-            <p>{{ t('issueCredential.description[0]', [credential?.name]) }}</p>
-            <p>{{ t('issueCredential.description[1]') }}</p>
-          </div>
-          <div class="col-12 col-md">
-            <q-form ref="form" @submit.prevent>
-              <q-input class="q-mt-sm" outlined v-for="attribute in credential?.form" v-model="attribute.value"
+        <q-step :name="1" class="row justify-center" :title="t('issueCredential.steps.form')" icon="description" :done="step > 1">
+          <div class="row justify-around no-wrap" style="height: 25em">
+            <div class="column no-wrap" style="width: 40%">
+              <p class="row text-h4">{{t('issueCredential.title')}}</p>
+              <p class="row text-h6 text-bold">{{ credential?.name }}</p>
+              <p>{{ t('issueCredential.description[0]', [credential?.name]) }}</p>
+              <p>{{ t('issueCredential.description[1]') }}</p>
+            </div>
+            <q-form class="column no-wrap" style="width: 40%" ref="form" @submit.prevent>
+              <q-input class="q-my-sm no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
                 :label="attribute.label" :type="attribute.type" :rules="[required]" />
             </q-form>
           </div>
-        </div>
-      </q-step>
+        </q-step>
 
-      <q-step :name="2" :title="t('issueCredential.steps.list')" icon="checklist" :done="step > 2">
-        <div class="row q-col-gutter-lg">
-          <div class="col-12 col-md">
-            <q-input class="q-mt-sm" outlined v-for="attribute in credential?.form" v-model="attribute.value"
-              :label="attribute.label" :type="attribute.type" readonly />
+        <q-step :name="2" class="row justify-center" :title="t('issueCredential.steps.list')" icon="checklist" :done="step > 2">
+          <div class="row justify-around no-wrap" style="height: 25em">
+            <div class="column no-wrap" style="width: 40%">
+              <q-input class="q-my-sm no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
+                :label="attribute.label" :type="attribute.type" readonly />
+            </div>
+            <div class="column q-mt-sm no-wrap" style="width: 40%">
+              <p>{{ t('issueCredential.checkConditions') }}</p>
+              <q-option-group class="q-gutter-md q-ma-sm" :options="conditions" type="checkbox" v-model="selectedConditions" />
+            </div>
+
           </div>
-          <div class="col-12 col-md">
-            <p>{{ t('issueCredential.checkConditions') }}</p>
-            <q-option-group :options="conditions" type="checkbox" v-model="selectedConditions" />
+        </q-step>
+
+        <q-step :name="3" class="row justify-center" :title="t('issueCredential.steps.qrcode')" icon="qr_code_scanner">
+          <div class="row justify-around no-wrap">
+            <div class="column no-wrap" style="width: 60%; height: 25em">
+              <p class="q-mb-xs text-h5">{{ t('issueCredential.addCredential.title') }}</p>
+              <span class="q-mb-lg sub-title text-grey">{{ credential?.name }}</span>
+              <p class="q-mb-xs">{{ t('issueCredential.addCredential.howTo') }}</p>
+              <ol class="q-gutter-xs">
+                <i18n-t keypath="issueCredential.addCredential.steps.step1" tag="li">
+                  <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet" target="_blank">
+                    BC Wallet App
+                  </a>
+                </i18n-t>
+                <li>{{ t('issueCredential.addCredential.steps.step2') }}</li>
+                <li>{{ t('issueCredential.addCredential.steps.step3') }}</li>
+                <li>{{ t('issueCredential.addCredential.steps.step4') }}</li>
+                <li>{{ t('issueCredential.addCredential.steps.step5') }}</li>
+                <li>{{ t('issueCredential.addCredential.steps.step6') }}</li>
+                <li>{{ t('issueCredential.addCredential.steps.step7') }}</li>
+                <li>{{ t('issueCredential.addCredential.steps.step8') }}</li>
+              </ol>
+            </div>
+            <div class="column justify-center no-wrap" style="width: 20%">
+              <QRCode class="q-ma-md q-pa-sm qr-border" :value="oobUrl" :size="300"/>
+            </div>
           </div>
+        </q-step>
 
-        </div>
-      </q-step>
-
-      <q-step :name="3" :title="t('issueCredential.steps.qrcode')" icon="qr_code_scanner">
-        <i18n-t keypath="issueCredential.addCredential.title" tag="h5" class="q-ma-none q-pb-md q-mb-sm">
-          <span>{{ credential?.name }}</span>
-        </i18n-t>
-
-        <div class="row q-col-gutter-xl">
-          <div class="col-12 col-md-8">
-            <p>{{ t('issueCredential.addCredential.howTo') }}</p>
-            <ol>
-              <i18n-t keypath="issueCredential.addCredential.steps.step1" tag="li">
-                <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet" target="_blank">BC Wallet
-                  App</a>
-              </i18n-t>
-              <li>{{ t('issueCredential.addCredential.steps.step2') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step3') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step4') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step5') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step6') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step7') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step8') }}</li>
-            </ol>
-          </div>
-          <div class="col-12 col-md-4" style="justify-content: center; text-align: center;">
-            <QRCode class="q-ma-md q-pa-sm qr-border" :value="oobUrl" :size="300" />
-          </div>
-        </div>
-      </q-step>
-
-      <template v-slot:navigation>
-        <q-stepper-navigation>
-          <q-btn v-if="step < 3" @click="next($refs)" color="primary" :label="t('issueCredential.next')"
-            :disable="checklistIncomplete">
-            <q-tooltip v-if="checklistIncomplete">
-              {{ t('issueCredential.checklistHint') }}
-            </q-tooltip>
-          </q-btn>
-          <q-btn v-if="step > 1 && step < 3" flat color="primary" @click="previous($refs)"
-            :label="t('issueCredential.previous')" class="q-ml-sm" />
-        </q-stepper-navigation>
-      </template>
-    </q-stepper>
-  </div>
+        <template style="width: 40vw" v-slot:navigation>
+          <q-stepper-navigation class="row q-mt-md justify-end">
+            <q-btn v-if="step > 1 && step < 3" flat rounded color="primary" @click="previous($refs)"
+                   :label="t('issueCredential.previous')" class="q-ml-sm" />
+            <q-btn v-if="step < 3" @click="next($refs)" flat rounded color="primary" :label="t('issueCredential.next')"
+                   :disable="checklistIncomplete">
+              <q-tooltip v-if="checklistIncomplete">
+                {{ t('issueCredential.checklistHint') }}
+              </q-tooltip>
+            </q-btn>
+            </q-stepper-navigation>
+        </template>
+      </q-stepper>
+  </q-page>
 </template>
 
 <script setup lang="ts">

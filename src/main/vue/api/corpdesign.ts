@@ -42,7 +42,7 @@ export default {
             setCssVar('secondary', colors.data.secondary)
             setCssVar('accent', colors.data.accent)
             setCssVar('dark', colors.data.dark)
-            setCssVar('light-blue', colors.data.lightBlue)
+            setCssVar('dark-separator', colors.data.lightBlue)
             setCssVar('positive', colors.data.positive)
             setCssVar('negative', colors.data.negative)
             setCssVar('info', colors.data.info)
