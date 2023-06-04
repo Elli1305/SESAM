@@ -183,7 +183,7 @@ async function logout() {
       <q-toolbar class="bg-grey-7">
         <q-toolbar-title style="text-align: center; font-size: 1em">
 
-          <router-link to="./imprint" style="color: white">{{ t('home.imprint') }}</router-link>
+          <router-link to="/imprint" style="color: white">{{ t('home.imprint') }}</router-link>
 
         </q-toolbar-title>
       </q-toolbar>

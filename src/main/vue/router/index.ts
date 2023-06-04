@@ -18,6 +18,7 @@ import CredentialView from "@/main/vue/views/CredentialView.vue";
 import RolesRequest from "@/main/vue/views/RolesRequest.vue";
 import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
 import IssueCredential from "@/main/vue/views/IssueCredential.vue";
+import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -113,6 +114,10 @@ const router = createRouter({
             path: '/credentials/:id/issue',
             component: IssueCredential,
             props: true
+        },
+        {
+            path: '/corporatedesign',
+            component: CorporateDesign
         },
         {path: "/:pathMatch(.*)*", component: StartView}
 

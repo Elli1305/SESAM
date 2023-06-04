@@ -1,5 +1,5 @@
 <template>
-
+<q-page>
   <div class="q-gutter-y-md column" style="align-items: center; min-width: 20em; display: flex">
     <q-table
         title="Credentials"
@@ -18,6 +18,7 @@
       </template>
     </q-table>
   </div>
+</q-page>
 </template>
 
 <script setup lang="ts">

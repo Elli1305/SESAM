@@ -75,7 +75,7 @@
                                   </div>
                                 </q-item-section>
                               </q-item>
-                              <div class="row justify-end" style="padding: 0.7em">
+                              <div class="row justify-end">
 
                                 <q-dialog v-model="deleteDoorDialog" persistent transition-show="scale"
                                           transition-hide="scale">
@@ -94,17 +94,19 @@
                                 </q-dialog>
                                 <q-dialog v-model="editDoorDialog" persistent transition-show="scale"
                                           transition-hide="scale">
-                                  <q-card>
+
+                                  <q-card style="max-width: min-content">
                                     <q-card-section>
                                       <div class="text-h6">{{t("floorplan.editDoor")}}</div>
                                     </q-card-section>
                                     <q-card-section>
                                       <q-input filled v-model="editedDoorName" stack-label :label="t( 'floorplan.doorName')"/>
                                     </q-card-section>
-
-
+                                    <q-card-section >
+                                      <DoorConfig ref="doorConfig" :room="room" :door-name="editedDoorName.value"></DoorConfig>
+                                    </q-card-section>
                                     <q-card-actions align="right" class="bg-white text-teal">
-                                      <q-btn color="primary"  @click="editDoor(room, door)" :label="t( 'floorplan.save')" v-close-popup/>
+                                      <q-btn color="primary"  @click="editDoor(room, door, getConfig)" :label="t( 'floorplan.save')" v-close-popup/>
                                       <q-btn color="primary"  :label="t( 'floorplan.cancel')" v-close-popup/>
                                     </q-card-actions>
                                   </q-card>
@@ -139,12 +141,20 @@ import {ref, watch} from "vue";
 import {useI18n} from 'vue-i18n';
 import {storeToRefs} from "pinia";
 import {useRoomStore} from "@/main/vue/stores/room";
+import DoorConfig from "@/main/vue/views/DoorConfig.vue";
+import api from "@/main/vue/api";
 
 export default {
+  components: {DoorConfig},
   props: {
     edit: {
       type: Boolean,
       required: false
+    }
+  },
+  methods: {
+    getConfig() {
+      return this.$refs.doorConfig.qSelects
     }
   },
   name: "FloorPlanRoomList",
@@ -163,6 +173,9 @@ export default {
     const editDoorDialog = ref();
     const editedDoorName = ref();
     const currentRoomName = ref();
+    let doorConfig = ref()
+
+
 
     filteredRooms.value = rooms.value
 
@@ -188,12 +201,19 @@ export default {
       currentRoomName.value = room.name;
     }
 
-    function editDoor(room, door) {
+    const editDoor = function (room, door, config) {
       editDoorDialog.value = false;
       const doors = room.doors;
       door.name = editedDoorName.value;
       const index = doors.indexOf(door);
       doors[index].name = editedDoorName.value;
+      console.log(config)
+      doorConfig.value = config
+      console.log(doorConfig.value)
+      doorConfig.value.description = 'Test' // TODO: allow input of description
+      doorConfig.value.doorId = door.name + '_' + door.id
+      doorConfig.value.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+      api.doorConfig.save(doorConfig.value.configParts).then(() => console.log("success"))
     }
 
     function save(room) {
