@@ -31,18 +31,17 @@
           </div>
         </q-step>
 
-        <q-step :name="3" :title="t('issueCredential.steps.qrcode')" icon="qr_code_scanner">
-          <i18n-t keypath="issueCredential.addCredential.title" tag="h5" class="q-ma-none q-pb-md q-mb-sm">
-            <span>{{ credential?.name }}</span>
-          </i18n-t>
-
-          <div class="row q-col-gutter-xl">
-            <div class="col-12 col-md-8">
-              <p>{{ t('issueCredential.addCredential.howTo') }}</p>
-              <ol>
+        <q-step :name="3" class="row justify-center" :title="t('issueCredential.steps.qrcode')" icon="qr_code_scanner">
+          <div class="row justify-around no-wrap">
+            <div class="column no-wrap" style="width: 60%; height: 25em">
+              <p class="q-mb-xs text-h5">{{ t('issueCredential.addCredential.title') }}</p>
+              <span class="q-mb-lg sub-title text-grey">{{ credential?.name }}</span>
+              <p class="q-mb-xs">{{ t('issueCredential.addCredential.howTo') }}</p>
+              <ol class="q-gutter-xs">
                 <i18n-t keypath="issueCredential.addCredential.steps.step1" tag="li">
-                  <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet" target="_blank">BC Wallet
-                    App</a>
+                  <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet" target="_blank">
+                    BC Wallet App
+                  </a>
                 </i18n-t>
                 <li>{{ t('issueCredential.addCredential.steps.step2') }}</li>
                 <li>{{ t('issueCredential.addCredential.steps.step3') }}</li>
@@ -53,8 +52,8 @@
                 <li>{{ t('issueCredential.addCredential.steps.step8') }}</li>
               </ol>
             </div>
-            <div class="col-12 col-md-4" style="justify-content: center; text-align: center;">
-              <QRCode class="q-ma-md q-pa-sm qr-border" :value="oobUrl" :size="300" />
+            <div class="column justify-center no-wrap" style="width: 20%">
+              <QRCode class="q-ma-md q-pa-sm qr-border" :value="oobUrl" :size="300"/>
             </div>
           </div>
         </q-step>

@@ -187,7 +187,7 @@ const messages = {
                 cancel: "Abbrechen",
             },
             addCredential: {
-                title: "Ihr neues Credential ({0}) wurde erfolgreich ausgestellt!",
+                title: "Ihr neues Credential wurde erfolgreich ausgestellt!",
                 howTo: "So fügen Sie ein Credential zur BC Wallet hinzu:",
                 steps: {
                     step1:
@@ -463,7 +463,7 @@ const messages = {
                 cancel: "Cancel",
             },
             addCredential: {
-                title: "Your new credential ({0}) has been successfully issued!",
+                title: "Your new credential has been successfully issued!",
                 howTo: "How to add a credential to the BC Wallet:",
                 steps: {
                     step1:
