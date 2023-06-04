@@ -131,4 +131,6 @@ public class Credential {
 	public void addIssuer(final Issuer issuer) {
 		issuers.add(issuer);
 	}
+
+	public void removeIssuer(final Issuer issuer) { issuers.remove(issuer);}
 }

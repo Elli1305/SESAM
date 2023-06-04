@@ -5,10 +5,12 @@ import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.filestorage.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@Secured("ADMINISTRATOR")
 @RequestMapping("api/corpdesign")
 public class CorporateDesignController {
 
@@ -22,6 +24,7 @@ public class CorporateDesignController {
     }
 
     @PostMapping(path = "/save/logo")
+    @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveLogo(@RequestPart("file") MultipartFile file) {
 
@@ -30,6 +33,7 @@ public class CorporateDesignController {
     }
 
     @PostMapping(path = "/save/favicon")
+    @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveFavicon(@RequestPart("file") MultipartFile file) {
 
@@ -38,6 +42,7 @@ public class CorporateDesignController {
     }
 
     @PostMapping(path = "/save/colors")
+    @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.CREATED)
     public Colors changeColors(@RequestBody Colors colors) {
 
@@ -46,6 +51,7 @@ public class CorporateDesignController {
     }
 
     @GetMapping(path = "/get/colors")
+    @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.OK)
     public Colors getColors() {
 
@@ -54,6 +60,7 @@ public class CorporateDesignController {
     }
 
     @PostMapping(path = "/reset")
+    @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.CREATED)
     public Colors reset() {
 
