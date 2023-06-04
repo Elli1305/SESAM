@@ -23,7 +23,7 @@
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
                             <q-btn dense round flat color="grey"
-                                   @click="editGroup(Object.values(props)); getOldName(); editAlert = true"
+                                   @click="getInfosForEditGroup(Object.values(props)); getOldName(); editAlert = true"
                                    test="props.value" icon="edit"></q-btn>
                             <q-btn dense round flat color="grey" icon="delete"
                                    @click="deleteAlert = true; delGroup(Object.values(props));"></q-btn>
@@ -151,7 +151,7 @@
             </div>
 
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat label="Speichern" @click="checkName(editName); updateCurrentGroup(editName,modelRoomsNew)" />
+                <q-btn flat label="Speichern" @click="updateCurrentGroup(editName,modelRoomsNew);" />
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
             </q-card-actions>
         </q-card>
@@ -366,6 +366,7 @@ export default {
             }
             for(const theGroup of roomGroupList) {
                 console.log("roomGroup:", theGroup)
+                console.log("newName: ", newName);
                 if (theGroup.name === newName) {
                     $q.notify({
                         type:'negative',
@@ -405,7 +406,7 @@ export default {
             currentGroup.value.name = groupName;
             currentGroup.value.rooms = groupRooms;
             console.log("currentGroup: ", currentGroup.value);
-            saveGroup();
+            editGroup();
         }
         async function makeNewGroup(newGroupName, newGroupRooms) {
             if (checkNameAllowed.value) {
@@ -413,6 +414,17 @@ export default {
                 await loadRoomGroups();
                 this.newGroup = false;
 
+            }
+        }
+        async function editGroup() {
+            console.log("currentGroup.value.name: ", currentGroup.value.name, " EditGroupName.value: ", editGroupName.value);
+            console.log((currentGroup.value.name === editGroupName.value))
+            if(!(currentGroup.value.name === editGroupName.value)) {
+                await checkName(currentGroup.value.name);
+            }
+            console.log("currentGroup.value.name: ", currentGroup.value.name, " EditGroupName.value: ", editGroupName.value);
+            if(checkNameAllowed.value) {
+                //await roomGroupStore.editGroup(currentGroup.value, editGroupName.value, editGroupRooms.value);
             }
         }
         async function deleteGroup() {
@@ -445,14 +457,15 @@ export default {
             updateCurrentGroup,
             makeNewGroup,
             deleteGroup,
-            loadRoomGroups,
-            saveGroup,
+            editGroup,
+            editGroupName,
+            editGroupRooms,
             locationList,
             buildingListNames,
             toDefault,
             getOldName() {
-              this.editName = editGroupName;
-              this.modelRoomsNew= editGroupRooms;
+              this.editName = editGroupName.value;
+              this.modelRoomsNew= editGroupRooms.value;
             },
             changed(val){
                 if(val !==null) {
@@ -485,11 +498,11 @@ export default {
             delGroup(value) {
                 setCurrentGroup(value[1].id, value[1].name, value[1].rooms, value[1].building);
             },
-            editGroup(value) {
-              editGroupName = value[1].name;
-              editGroupRooms = value[1].rooms;
-              console.log(editGroupRooms);
-              console.log(editGroupName);
+            getInfosForEditGroup(value) {
+              editGroupName.value = value[1].name;
+              editGroupRooms.value = value[1].rooms;
+              console.log("EditGroupRooms in getInfosForEditGroup: ", editGroupRooms.value);
+              console.log("EditGroupName in getInfosForEditGroup: ", editGroupName.value);
               setCurrentGroup(value[1].id, value[1].name, value[1].rooms, value[1].building);
             },
 
