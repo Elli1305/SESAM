@@ -213,6 +213,19 @@ const messages = {
             resetFailure: "Zurücksetzen fehlgeschlagen",
             saveFailure: "Speichern fehlgeschlagen"
         },
+        imprint:{
+            imprintTitle: "Impressum",
+            imprintEditorTitle: "Impressum bearbeiten",
+            imprintEditorMessageSave: "Sind Sie sicher, dass sie speichern wollen?",
+            imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
+            save:"Speichern",
+            cancel: "Abbrechen",
+            delete:"Löschen",
+            imprintEditorMessageSaveConfirmation:"Inhalt erfolgreich gespeichert",
+            imprintEditorMessageDeleteConfirmation:"Inhalt erfolgreich gelöscht"
+
+        },
+
         issuermanagement: {
             title: "Herausgeber verwalten",
             firstname: "Vorname",
@@ -428,6 +441,18 @@ const messages = {
             resetFailure: "Reset failed",
             saveFailure: "Saving failed"
         },
+        imprint:{
+            imprintTitle: "Imprint",
+            imprintEditorTitle: "Imprint Editor",
+            imprintEditorMessageSave: "Are you sure you want to save?",
+            imprintEditorMessageDelete: "Are you sure you want to delete?",
+            save:"Save",
+            cancel: "Cancel",
+            delete:"Delete",
+            imprintEditorMessageSaveConfirmation:"Content saved successfully",
+            imprintEditorMessageDeleteConfirmation:"Content successfully deleted"
+
+        },
 
         issuermanagement: {
             title: "Issuer Management",
@@ -447,6 +472,7 @@ const messages = {
             cancel: "Cancel",
             saveConfirmationTitle: "Save?",
             saveConfirmationMessage: "Are you sure you want to save?",
+
 
 
         },
