@@ -106,7 +106,7 @@ async function logout() {
                     <router-link to="/admin/currentUserlist" class="q-ma-sm headerLink text-black">{{ t("home.currentUsers") }}</router-link>
                     <router-link to="/admin/rolesRequest" class="q-ma-sm headerLink text-black">{{ t("home.currentRegistrations") }}
                     </router-link>
-                    <router-link to="/" class="q-ma-sm headerLink text-black">{{ t("home.issuerManagement") }}
+                    <router-link to="/issuermanagement" class="q-ma-sm headerLink text-black">{{ t("home.issuerManagement") }}
                     </router-link>
                   </div>
                 </q-menu>

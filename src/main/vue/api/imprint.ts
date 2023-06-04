@@ -6,7 +6,6 @@ export const getImprintContent = async () => {
 };
 
 export const postImprintContent = async (content: string) => {
-
     return axios.post('api/imprint', {content});
 
 
@@ -18,7 +17,8 @@ export const deleteImprintContent = async () => {
 
 };
 
-export async function getLatestImprint() {
+export const  getLatestImprint =async () => {
     return axios.get('api/imprint/latest');
 
 }
+

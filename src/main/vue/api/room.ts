@@ -8,5 +8,9 @@ export default {
 
     deleteById(id: BigInt): Promise<AxiosResponse<void>> {
         return axios.delete(`api/room/${id}`)
+    },
+
+    getRooms(): Promise<AxiosResponse<Room[]>> {
+        return axios.get("api/room/rooms")
     }
 }

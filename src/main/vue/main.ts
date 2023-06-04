@@ -156,6 +156,7 @@ const messages = {
             editor: "Bearbeiter",
             issuer: "Herausgeber",
         },
+
         issueCredential: {
             title: "{0} Credential Ausstellung",
             description: [
@@ -243,7 +244,39 @@ const messages = {
             },
             resetFailure: "Zurücksetzen fehlgeschlagen",
             saveFailure: "Speichern fehlgeschlagen"
-        }
+        },
+        imprint:{
+            imprintTitle: "Impressum",
+            imprintEditorTitle: "Impressum bearbeiten",
+            imprintEditorMessageSave: "Sind Sie sicher, dass sie speichern wollen?",
+            imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
+            save:"Speichern",
+            cancel: "Abbrechen",
+            delete:"Löschen",
+            imprintEditorMessageSaveConfirmation:"Inhalt erfolgreich gespeichert",
+            imprintEditorMessageDeleteConfirmation:"Inhalt erfolgreich gelöscht"
+
+        },
+
+        issuermanagement: {
+            title: "Herausgeber verwalten",
+            firstname: "Vorname",
+            lastname: "Name",
+            email: "E-Mail",
+            credential:"Credential",
+            search: "Suche",
+            issuerFilter:"Herausgebern filtern",
+            edit: "Bearbeiten",
+            credentialsList:"Liste aller Credentials",
+            roomsList:"Liste aller Räume",
+            roomId: "Raum ID",
+            credentials:"Credential",
+            dialogTitle:"Credentials verwalten",
+            save:"Speichern",
+            cancel: "Abbrechen",
+            saveConfirmationTitle: "Speichern?",
+            saveConfirmationMessage: "Sind Sie sicher, dass sie speichern wollen?",
+        },
     },
     en: {
         adminCurrentUser: {
@@ -472,7 +505,42 @@ const messages = {
             },
             resetFailure: "Reset failed",
             saveFailure: "Saving failed"
-        }
+        },
+        imprint:{
+            imprintTitle: "Imprint",
+            imprintEditorTitle: "Imprint Editor",
+            imprintEditorMessageSave: "Are you sure you want to save?",
+            imprintEditorMessageDelete: "Are you sure you want to delete?",
+            save:"Save",
+            cancel: "Cancel",
+            delete:"Delete",
+            imprintEditorMessageSaveConfirmation:"Content saved successfully",
+            imprintEditorMessageDeleteConfirmation:"Content successfully deleted"
+
+        },
+
+        issuermanagement: {
+            title: "Issuer Management",
+            firstname: "Prename",
+            lastname: "Name",
+            email: "E-Mail",
+            credential:"Credential",
+            search: "Search",
+            issuerFilter:"Issuer filter",
+            edit: "Edit",
+            credentialsList:"List of all credentials",
+            roomsList:"List of all rooms",
+            roomId:"Room ID",
+            credentials:"Credential",
+            dialogTitle:"Credentials Management",
+            save:"Save",
+            cancel: "Cancel",
+            saveConfirmationTitle: "Save?",
+            saveConfirmationMessage: "Are you sure you want to save?",
+
+
+
+        },
     }
 }
 
