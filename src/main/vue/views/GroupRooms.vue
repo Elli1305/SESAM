@@ -151,7 +151,8 @@
             </div>
 
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat label="Speichern" @click="updateCurrentGroup(editName,modelRoomsNew);" />
+                <q-btn flat label="Speichern" @click="updateCurrentGroup(editName,modelRoomsNew);"
+                v-close-popup="closeEditAlert"/>
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
             </q-card-actions>
         </q-card>
@@ -256,6 +257,8 @@ export default {
         const $q = useQuasar();
         const locationStore = useLocationStore()
         const roomGroupStore = useRoomGroupStore()
+        let editAlert = ref(false);
+        let newGroup = ref(false);
         let optionsLocations = ref([])
         let editGroupName = ref(null);
         let editGroupRooms = ref(null);
@@ -269,6 +272,7 @@ export default {
         let listOfAllRoomsViaBuilding = ref([]);
         const checkNameAllowed = ref(false);
         const closeNow = ref(false);
+        const closeEditAlert = ref(false);
         let currentGroup=ref({
             id: null,
             name: null,
@@ -412,7 +416,7 @@ export default {
             if (checkNameAllowed.value) {
                 await roomGroupStore.makeNewGroup(newGroupName, currentBuilding.value, newGroupRooms);
                 await loadRoomGroups();
-                this.newGroup = false;
+                newGroup.value = false;
 
             }
         }
@@ -429,7 +433,9 @@ export default {
             if(checkNameAllowed.value) {
                 await roomGroupStore.editGroup(currentGroup.value);
                 await loadRoomGroups();
-                this.editAlert = false;
+                editAlert.value = false;
+
+                console.log(closeEditAlert.value);
             }
         }
         async function deleteGroup() {
@@ -444,10 +450,10 @@ export default {
 
         return {
             deleteAlert: ref(false),
-            editAlert: ref(false),
+            editAlert,
             closeNow,
 
-            newGroup: ref(false),
+            newGroup,
             newGroupName: ref(''),
             editName:ref(''),
             modelRooms: ref(null),
@@ -460,6 +466,7 @@ export default {
             editGroup,
             editGroupName,
             editGroupRooms,
+            closeEditAlert,
             locationList,
             buildingListNames,
             toDefault,
