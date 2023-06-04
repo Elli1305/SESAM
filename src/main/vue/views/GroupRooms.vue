@@ -422,9 +422,14 @@ export default {
             if(!(currentGroup.value.name === editGroupName.value)) {
                 await checkName(currentGroup.value.name);
             }
+            else {
+                checkNameAllowed.value = true;
+            }
             console.log("currentGroup.value.name: ", currentGroup.value.name, " EditGroupName.value: ", editGroupName.value);
             if(checkNameAllowed.value) {
                 await roomGroupStore.editGroup(currentGroup.value);
+                await loadRoomGroups();
+                this.editAlert = false;
             }
         }
         async function deleteGroup() {
@@ -435,11 +440,6 @@ export default {
                 });
 
             }
-        }
-        function saveGroup() {
-            roomGroupStore.save(currentGroup.value).then(() => {
-                loadRoomGroups();
-            });
         }
 
         return {
