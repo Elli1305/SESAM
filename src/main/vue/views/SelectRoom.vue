@@ -4,6 +4,10 @@
       <q-card-section class="q-pa-md">
         <div class="text-h6">Tür zuweisen</div>
         <div class="q-mt-md">
+          <q-input filled v-model="doorName" label="Türname" stack-label
+                   style="width: 250px; padding-bottom: 32px"/>
+        </div>
+        <div class="q-mt-md">
           <q-select
               filled
               v-model="room"
@@ -52,7 +56,6 @@ export default {
 
   methods: {
     show() {
-      console.log(this.$refs)
       this.$refs.dialog.show()
     },
     hide() {
@@ -63,7 +66,7 @@ export default {
     },
 
     onOKClick() {
-      this.$emit('ok', this.room)
+      this.$emit('ok', {room: this.room, doorName: this.doorName})
       this.hide()
     },
     onCancelClick() {
@@ -72,6 +75,7 @@ export default {
   },
   setup(props) {
     const room = ref(null)
+    const doorName = ref('')
     const roomOptions = ref(props.rooms)
     const filterFn = function (val, update, abort) {
       update(() => {
@@ -80,7 +84,7 @@ export default {
       })
     }
 
-    return {room, filterFn}
+    return {room, filterFn, doorName}
   }
 }
 </script>

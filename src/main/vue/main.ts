@@ -50,7 +50,17 @@ const messages = {
             otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
         },
         floorplan: {
-            locations: 'Standorte'
+            locations: 'Standorte',
+            doorName: 'Türname',
+            editDoor: 'Tür bearbeiten',
+            editRoom: 'Raum bearbeiten',
+            save: 'speichern',
+            cancel: 'abbrechen',
+            confirmDeletion: 'Bestätigen Sie das Löschen',
+            confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            doors: 'Türe',
+            roomName: 'Raumname',
+            edit: 'Bearbeiten'
         },
         groupRooms: {
             title: "Gruppierungen von Räumen",
@@ -71,11 +81,25 @@ const messages = {
             search: "Suche",
             category: "Kategorie",
             availablecredentials: "Verfügbbare Credential",
-            qualification: "Vergleichbare Qualifikation",
+            qualification: "Vergleichbare Credential",
             issuer: "Herausgeber",
             room: "Raum: "
-        }
-        ,
+        },
+        credentialmapping: {
+            credentialmapping: 'Credentialmapping',
+            newcategory: 'Neue Kategorie',
+            category: 'Kategorie',
+            search: 'Suche',
+            name: 'Name der Kategorie',
+            save: 'Speichern',
+            cancel: 'Abbrechen',
+            internal: 'Interne Credentials',
+            external: 'Externe Credentials',
+            categorycreate: 'Neue Kategorie erstellen',
+            categorychange: 'Kategorie ändern',
+            categorydelete: 'Löschen der Kategorie',
+            delete: 'Möchten Sie die Kategorie wirklich löschen?'
+        },
         home: {
             header: "SESAM",
             signup: "Registrierung",
@@ -105,6 +129,14 @@ const messages = {
             toRegister: "Zur Registrierung",
             password: "Passwort"
         },
+        signUp:{
+          prename: "Vorname",
+          name: "Nachname",
+          password: "Passwort",
+          passwordRepeat: "Passwort wiederholen",
+          signup: "Registrierung",
+          alreadySignedUp: "Bereits registriert:"
+        },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
             email: "E-Mail",
@@ -132,6 +164,7 @@ const messages = {
             editor: "Bearbeiter",
             issuer: "Herausgeber",
         },
+
         issueCredential: {
             title: "{0} Credential Ausstellung",
             description: [
@@ -219,7 +252,39 @@ const messages = {
             },
             resetFailure: "Zurücksetzen fehlgeschlagen",
             saveFailure: "Speichern fehlgeschlagen"
-        }
+        },
+        imprint:{
+            imprintTitle: "Impressum",
+            imprintEditorTitle: "Impressum bearbeiten",
+            imprintEditorMessageSave: "Sind Sie sicher, dass sie speichern wollen?",
+            imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
+            save:"Speichern",
+            cancel: "Abbrechen",
+            delete:"Löschen",
+            imprintEditorMessageSaveConfirmation:"Inhalt erfolgreich gespeichert",
+            imprintEditorMessageDeleteConfirmation:"Inhalt erfolgreich gelöscht"
+
+        },
+
+        issuermanagement: {
+            title: "Herausgeber verwalten",
+            firstname: "Vorname",
+            lastname: "Name",
+            email: "E-Mail",
+            credential:"Credential",
+            search: "Suche",
+            issuerFilter:"Herausgebern filtern",
+            edit: "Bearbeiten",
+            credentialsList:"Liste aller Credentials",
+            roomsList:"Liste aller Räume",
+            roomId: "Raum ID",
+            credentials:"Credential",
+            dialogTitle:"Credentials verwalten",
+            save:"Speichern",
+            cancel: "Abbrechen",
+            saveConfirmationTitle: "Speichern?",
+            saveConfirmationMessage: "Sind Sie sicher, dass sie speichern wollen?",
+        },
     },
     en: {
         adminCurrentUser: {
@@ -274,12 +339,37 @@ const messages = {
             search: "Search",
             category: "Category",
             availablecredentials: "Available Credentials",
-            qualification: "Comparable Qualifications",
+            qualification: "Comparable Credential",
             issuer: "Issuer",
             room: "Room: "
         },
+        credentialmapping: {
+            credentialmapping: 'Credential mapping',
+            newcategory: 'New Category',
+            search: 'Search',
+            name: 'Name of the Category',
+            category: 'Category',
+            save: 'Save',
+            cancel: 'Cancel',
+            internal: 'Internal Credentials',
+            external: 'External Credentials',
+            categorycreate: 'Create new category',
+            categorychange: 'Change category',
+            categorydelete: 'Delete category',
+            delete: 'Are you sure you want to delete the category?'
+        },
         floorplan: {
-            locations: 'Locations'
+            locations: 'Locations',
+            doorName: 'Name of Door',
+            editDoor:'Edit Door',
+            editRoom:'Edit Room',
+            save: 'save',
+            cancel: 'cancel',
+            confirmDeletion: 'Confirm deletion',
+            confirmDeletionText:'Are you sure you want to delete the door?',
+            doors:'Doors',
+            roomName: 'Name of room',
+            edit: 'Edit'
         },
         home: {
             header: "SESAM",
@@ -309,6 +399,14 @@ const messages = {
             notRegistered: "Not registered",
             toRegister: "Go to Register",
             password: "Password"
+        },
+        signUp:{
+            prename: "Prename",
+            name: "Name",
+            password: "Password",
+            passwordRepeat: "Repeat password",
+            signup: "Sign up",
+            alreadySignedUp: "Already signed up:"
         },
         passwordReset: {
             resetPassword: "Reset Password",
@@ -425,14 +523,52 @@ const messages = {
             },
             resetFailure: "Reset failed",
             saveFailure: "Saving failed"
-        }
+        },
+        imprint:{
+            imprintTitle: "Imprint",
+            imprintEditorTitle: "Imprint Editor",
+            imprintEditorMessageSave: "Are you sure you want to save?",
+            imprintEditorMessageDelete: "Are you sure you want to delete?",
+            save:"Save",
+            cancel: "Cancel",
+            delete:"Delete",
+            imprintEditorMessageSaveConfirmation:"Content saved successfully",
+            imprintEditorMessageDeleteConfirmation:"Content successfully deleted"
+
+        },
+
+        issuermanagement: {
+            title: "Issuer Management",
+            firstname: "Prename",
+            lastname: "Name",
+            email: "E-Mail",
+            credential:"Credential",
+            search: "Search",
+            issuerFilter:"Issuer filter",
+            edit: "Edit",
+            credentialsList:"List of all credentials",
+            roomsList:"List of all rooms",
+            roomId:"Room ID",
+            credentials:"Credential",
+            dialogTitle:"Credentials Management",
+            save:"Save",
+            cancel: "Cancel",
+            saveConfirmationTitle: "Save?",
+            saveConfirmationMessage: "Are you sure you want to save?",
+
+
+
+        },
     }
 }
 
-
+let currentLanguage = sessionStorage.getItem("locale");
+if(currentLanguage==null){
+    currentLanguage = 'de'
+}
 const i18n = createI18n({
     legacy: false,
-    locale: 'de',
+    locale: currentLanguage,
     allowComposition: true,
     fallbackLocale: 'en',
     globalInjection: true,

@@ -25,7 +25,7 @@ public class Location {
 	@Column(unique = true, nullable = false)
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "LOCATION_ID")
 	private List<Building> buildings = new ArrayList<>();
 
