@@ -21,3 +21,4 @@ export const  getLatestImprint =async () => {
     return axios.get('api/imprint/latest');
 
 }
+
