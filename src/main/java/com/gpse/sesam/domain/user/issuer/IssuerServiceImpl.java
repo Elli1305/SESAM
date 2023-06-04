@@ -21,7 +21,8 @@ public class IssuerServiceImpl implements IssuerService {
     private final CredentialRepository credentialRepository;
 
     @Autowired
-    public IssuerServiceImpl(IssuerRepository issuerRepository, RoomRepository roomRepository, CredentialRepository credentialRepository) {
+    public IssuerServiceImpl(IssuerRepository issuerRepository, RoomRepository roomRepository,
+                             CredentialRepository credentialRepository) {
         this.issuerRepository = issuerRepository;
         this.roomRepository = roomRepository;
         this.credentialRepository = credentialRepository;

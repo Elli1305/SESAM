@@ -4,10 +4,7 @@ import com.gpse.sesam.domain.imprint.ImprintServiceImpl;
 import com.gpse.sesam.web.cmd.UpdateImprintCmd;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-
-import static com.gpse.sesam.web.controller.SesamUserController.ADMINISTRATOR;
 
 @RestController
 @CrossOrigin
