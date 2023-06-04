@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@Secured("ADMINISTRATOR")
 @RequestMapping("api/corpdesign")
 public class CorporateDesignController {
 
@@ -51,7 +50,6 @@ public class CorporateDesignController {
     }
 
     @GetMapping(path = "/get/colors")
-    @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.OK)
     public Colors getColors() {
 

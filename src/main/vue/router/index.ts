@@ -45,21 +45,21 @@ const router = createRouter({
             component: LoginView
         },
         {
-            path: '/admin/currentuserlist/edit/:email',
+            path: '/currentuserlist/edit/:email',
             name: 'edit',
             component: EditUser,
             props: true,
         },
 
         {
-            path: '/admin/rolesRequest',
+            path: '/rolesRequest',
             name: 'rolesRequest',
             component: RolesRequest,
             props: true,
         },
 
         {
-            path: '/admin/currentuserlist',
+            path: '/currentuserlist',
             name: 'currentuserlist',
             component: CurrentUserList,
             meta: {requiresAdmin: true}
@@ -114,8 +114,9 @@ const router = createRouter({
             component: CredentialView
         },
         {
-            path: '/admin/rolesRequest',
-            component: RolesRequest
+            path: '/rolesRequest',
+            component: RolesRequest,
+            meta: {requiresAdmin: true}
         },
         {path: "/:pathMatch(.*)*", component: StartView},
         {
