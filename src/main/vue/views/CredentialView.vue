@@ -38,15 +38,16 @@
           </q-input>
         </template>
         <template v-slot:body-cell-issuer="props">
-          <div>
-            <q-td :props="props" v-for="(index) in props.row.issuerName">
-              {{props.row.issuerName[index]}}
-              <q-icon class="q-mr-xs" color="grey" size="20px" name="info" />
-              <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left"
-                         :offset="[0, 8]"> {{t("credentialview.room")}} {{props.row.room[index]}}
-              </q-tooltip>
+            <q-td style="height: fit-content" class="column no-wrap" :props="props">
+              <div class="row q-my-xs justify-between items-center no-wrap" v-for="(elem, index) in props.row.issuerName">
+                <p class="no-margin" style="line-height: 1">{{props.row.issuerName[index]}}</p>
+                <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
+                  <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
+                    {{t("credentialview.room")}} {{props.row.room[index]}}
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </q-td>
-          </div>
         </template>
       </q-table>
     </div>
