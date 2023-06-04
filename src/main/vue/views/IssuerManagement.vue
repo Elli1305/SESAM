@@ -103,7 +103,6 @@ export default {
   setup() {
     const rows = ref([]);
     const searchQuery = ref('');
-    const editedItem = ref(null);
     const model1 = ref('');
     const model2 = ref('');
     const model3 = ref([]);
@@ -162,7 +161,7 @@ export default {
       model2.value = row.firstName;
       model3.value = row.room.map(c => c.id);
       model4.value = row.credentials.map(c => c.id);
-      editedItem.value = { ...row };
+      editedRow.value = {...row};
     };
 
 

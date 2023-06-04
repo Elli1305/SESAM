@@ -61,7 +61,7 @@ const router = createRouter({
             path: '/admin/currentuserlist',
             name: 'currentuserlist',
             component: CurrentUserList,
-            //meta: {requiresAdmin: true}
+            meta: {requiresAdmin: true}
         },
         {
             path: '/editFloorPlan',
