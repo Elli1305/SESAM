@@ -109,7 +109,6 @@ const router = createRouter({
             component: RolesRequest
         },
         {path: "/:pathMatch(.*)*", component: StartView},
-        {path: "/:pathMatch(.*)*", component: StartView},
         {
             path: '/issuermanagement',
             component: IssuerManagement,
@@ -148,6 +147,7 @@ router.beforeEach((to, from, next) => {
         return next({path: '/login', query: {returnUrl: to.path}});
     } else if (authorize && !user?.roles.some(role => role.role === authorize && role.granted)) {
         return next({path: '/'});
+    }
     if (to.fullPath.toLowerCase().endsWith("/imprinteditor")) {
         if (!authenticated) {
             return next("/");
