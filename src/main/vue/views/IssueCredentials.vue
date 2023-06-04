@@ -1,7 +1,12 @@
 <template>
-  <div v-for="credential in credentials">
-    <router-link :to="'/credentials/' + credential.id + '/issue'">{{ credential.name }}</router-link>
-  </div>
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">Credentials</p>
+    <div class="column content-center self-center justify-around" style="width: 80vw; height: 25em">
+      <router-link v-for="credential in credentials" :to="'/credentials/' + credential.id + '/issue'">
+        <q-btn size="1.25em" color="primary" flat>{{ credential.name }}</q-btn>
+      </router-link>
+    </div>
+  </q-page>
 </template>
 
 <script setup lang="ts">
