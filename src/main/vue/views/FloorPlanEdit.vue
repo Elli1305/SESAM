@@ -25,10 +25,10 @@
               <q-menu>
                 <q-list style="min-width: 100px">
                   <q-item clickable @click.stop="editLocation(location)" v-close-popup>
-                    <q-item-section>Standort bearbeiten</q-item-section>
+                    <q-item-section>{{t('floorplan.editLocation')}}</q-item-section>
                   </q-item>
                   <q-item clickable @click.stop="addBuilding(location)" v-close-popup>
-                    <q-item-section>Gebäude hinzufügen</q-item-section>
+                    <q-item-section>{{t('floorplan.addBuilding')}}</q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -54,10 +54,10 @@
                 <q-menu class="show-building">
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editBuilding(building)" v-close-popup>
-                      <q-item-section>Gebäude bearbeiten</q-item-section>
+                      <q-item-section>{{t('floorplan.editBuilding')}}</q-item-section>
                     </q-item>
                     <q-item clickable @click.stop="addFloor(building)" v-close-popup>
-                      <q-item-section>Etage hinzufügen</q-item-section>
+                      <q-item-section>{{t('floorplan.addFloor')}}</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
@@ -73,7 +73,7 @@
                 <q-menu>
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editFloor(floor)" v-close-popup>
-                      <q-item-section>Etage bearbeiten</q-item-section>
+                      <q-item-section>{{t('floorplan.editFloor')}}</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
@@ -83,7 +83,7 @@
         </q-expansion-item>
       </q-expansion-item>
       <q-item>
-        <q-btn color="primary" icon="add" label="Standort hinzufügen" @click="addLocation" flat/>
+        <q-btn color="primary" icon="add" :label="t('floorplan.addLocation')" @click="addLocation" flat/>
       </q-item>
     </q-list>
     <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">

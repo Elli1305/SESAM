@@ -2,7 +2,7 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <q-card-section class="q-pa-md">
-        <div class="text-h6">Gebäude bearbeiten</div>
+        <div class="text-h6">{{t('floorplan.editBuilding')}}</div>
         <div class="q-mt-md">
           <q-input outlined v-model="buildingName" label="Name"/>
         </div>

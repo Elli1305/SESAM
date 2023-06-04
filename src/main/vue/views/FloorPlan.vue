@@ -325,10 +325,9 @@ export default {
               console.log(room.doors);
               const popup = L.popup();
               let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
-              let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
+              let url = `<a href="/credentialview?q=${room.id}">Mehr Informationen zu Credentials</a>`;
 
-              popup.setContent(url);
-              polygon.bindTooltip(string).openTooltip();
+              popup.setContent(string + "<br>" +url);
               polygon.bindPopup(popup);
               polygon.addTo(floorPlanMap);
 
