@@ -16,7 +16,7 @@
           :filter-method="customFilter">
         <template v-slot:body-cell-actions="props">
             <q-td :props="props">
-                <q-btn dense round flat color="grey" @click="" icon="edit"></q-btn>
+                <q-btn dense round flat color="grey" @click="editUser(Object.values(props))" icon="edit"></q-btn>
             </q-td>
         </template>
         <template v-slot:top-left>
@@ -51,6 +51,7 @@ import {ref} from 'vue'
 
 import {useI18n} from "vue-i18n";
 import axios from "axios";
+import router from "@/main/vue/router";
 
 
 const rows = ref([]);
@@ -93,6 +94,11 @@ export default {
                 },
                 search: ''
             }),
+            editUser(value) {
+
+                router.push('/admin/currentuserlist/edit/' + value[0]);
+
+            },
             columns,
             rows,
             t

@@ -7,6 +7,7 @@ public class IssuerResponseCmd {
     Long room;
 
     protected IssuerResponseCmd() {
+
     }
 
     public IssuerResponseCmd(java.util.List<Long> credentials, Long room) {

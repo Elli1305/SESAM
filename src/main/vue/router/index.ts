@@ -15,6 +15,7 @@ import FloorPlanEdit from "@/main/vue/views/FloorPlanEdit.vue";
 import {useUserStore} from "@/main/vue/stores/users";
 import CredentialMapping from "@/main/vue/views/CredentialMappingList.vue";
 import EditUser from "@/main/vue/views/EditUser.vue";
+import GroupRooms from "@/main/vue/views/GroupRooms.vue";
 import CredentialView from "@/main/vue/views/CredentialView.vue";
 import RolesRequest from "@/main/vue/views/RolesRequest.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
@@ -62,6 +63,11 @@ const router = createRouter({
             name: 'currentuserlist',
             component: CurrentUserList,
             //meta: {requiresAdmin: true}
+        },
+        {
+            path: '/grouprooms',
+            name: 'GroupRooms',
+            component: GroupRooms,
         },
         {
             path: '/editFloorPlan',
