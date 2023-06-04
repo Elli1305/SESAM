@@ -20,6 +20,7 @@ import RolesRequest from "@/main/vue/views/RolesRequest.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 import IssueCredential from "@/main/vue/views/IssueCredential.vue";
 import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
+import IssuerManagement from "@/main/vue/views/IssuerManagement.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -108,6 +109,12 @@ const router = createRouter({
             component: RolesRequest
         },
         {path: "/:pathMatch(.*)*", component: StartView},
+        {
+            path: '/issuermanagement',
+            component: IssuerManagement,
+            meta: {requiresAdmin: true},
+        },
+
 
         {
             path: "/credentialmapping",
@@ -133,7 +140,6 @@ const router = createRouter({
   ],
 });
 
-
 router.beforeEach((to, from, next) => {
     const {authenticated, user} = useUserStore();
     const {authorize} = to.meta;
@@ -142,9 +148,15 @@ router.beforeEach((to, from, next) => {
     } else if (authorize && !user?.roles.some(role => role.role === authorize && role.granted)) {
         return next({path: '/'});
     }
+    if (to.fullPath.toLowerCase().endsWith("/imprinteditor")) {
+        if (!authenticated) {
+            return next("/");
+        }
+    }
 
     next();
 });
+
 
 
 export default router

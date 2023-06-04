@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{t('imprintEdit.title')}}</p>
+    <p class="row text-h3 justify-center">{{t('imprint.imprintEditorTitle')}}</p>
       <div class="row justify-evenly no-wrap" style="width: 75vw; height: 25em">
         <q-btn class="self-end q-mr-lg" round icon="delete" color="negative" text-color="positive" @click="showDeleteDialog" style="width: 4em; height: 4em"/>
         <q-editor
@@ -27,11 +27,11 @@
           <div class="text-h6">Bestätigen</div>
           </q-card-section>
         <q-card-section class="row items-center">
-          <div class="q-mx-sm">Möchten Sie das bestehende Impressum wirklich überschreiben?</div>
+          <div class="q-mx-sm">{{t('imprint.imprintEditorMessageSave')}}</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Abbrechen" color="primary" @click="confirmDialog = false"/>
-          <q-btn flat label="Ok" color="primary" @click="postText"/>
+          <q-btn flat :label="t('imprint.cancel')" color="primary" @click="confirmDialog = false"/>
+          <q-btn flat :label="t('imprint.save')" color="primary" @click="postText"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -42,24 +42,25 @@
           <div class="text-h6">Löschen bestätigen</div>
         </q-card-section>
         <q-card-section class="row items-center">
-          <div class="q-mx-sm">Sind Sie sicher, dass Sie das Impressum löschen wollen?</div>
+          <div class="q-mx-sm">{{t('imprint.imprintEditorMessageDelete')}}</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Abbrechen" color="primary" @click="deleteDialog = false"/>
-          <q-btn flat label="Löschen" color="primary" @click="deletePostedContent"/>
+          <q-btn flat :label="t('imprint.cancel')" color="primary" @click="deleteDialog = false"/>
+          <q-btn flat :label="t('imprint.delete')" color="primary" @click="deletePostedContent"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
   </q-page>
 </template>
+
 <script lang="ts">
 import {ref, onMounted} from 'vue';
 import {QDialog, useQuasar} from 'quasar';
 import {getImprintContent, postImprintContent, deleteImprintContent, getLatestImprint} from '../api/imprint';
-import { useI18n } from 'vue-i18n';
+import {useI18n} from "vue-i18n";
 
 export default {
-  name: "ImprintEditor",
+
   components: {
     QDialog,
   },
@@ -72,7 +73,7 @@ export default {
     const confirmDialog = ref(false);
     const deleteDialog = ref(false);
     const initialImprintContent = ref('');
-
+    const {t} = useI18n();
 
     onMounted(async () => {
       try {
@@ -85,13 +86,12 @@ export default {
       }
     });
 
-
     const showConfirmDialog = () => {
       confirmDialog.value = true;
     };
 
     const postText = () => {
-      console.log("postText called");
+      console.log('postText called');
       postImprintContent(editorContent.value)
           .then(() => {
             imprintContent.value = editorContent.value;
@@ -100,14 +100,14 @@ export default {
 
             $q.notify({
               type: 'positive',
-              message: 'Inhalt erfolgreich gespeichert',
+              message: t('imprint.imprintEditorMessageSaveConfirmation'),
               position: 'bottom',
               color: "positive",
               textColor: "negative",
               timeout: 1500,
             });
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           })
           .finally(() => {
@@ -126,17 +126,18 @@ export default {
 
             $q.notify({
               type: 'negative',
-              message: 'Inhalt erfolgreich gelöscht',
+              message: t('imprint.imprintEditorMessageDeleteConfirmation'),
               position: 'bottom',
               timeout: 1500,
               color: "negative",
               textColor: "positive",
             });
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
     };
+
 
     const showDeleteDialog = () => {
       deleteDialog.value = true;
@@ -154,7 +155,7 @@ export default {
 
     return {
       editorContent,
-      imprintContent: imprintContent,
+      imprintContent,
       showEditor,
       loadLatestContent,
       confirmDialog,
@@ -163,13 +164,11 @@ export default {
       postText,
       showDeleteDialog,
       deletePostedContent,
+      initialImprintContent,
       t,
-
-
-      initialImprintContent: initialImprintContent
     };
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

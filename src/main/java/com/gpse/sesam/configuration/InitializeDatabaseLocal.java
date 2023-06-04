@@ -19,7 +19,7 @@ import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
-import com.gpse.sesam.domain.user.Issuer;
+import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;

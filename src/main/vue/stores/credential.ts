@@ -7,6 +7,7 @@ import {
     ExternalCredential,
     Credential
 } from "@/main/vue/entity/credentialDefinition";
+import {Credential} from "@/main/vue/entity/credentialDefinition";
 
 export const useCredentialStore = defineStore('credential', () =>{
     const credentials: Ref<CredentialCmd[]|null> = ref(null)

@@ -134,6 +134,21 @@ export const useUserStore = defineStore('users', () => {
     }
 
 
+    function updateIssuer(id: bigint, credential: string[], room: string) {
+        return new Promise<void>((resolve, reject) => {
+            const idString = id.toString();
+            api.auth.updateIssuer(idString, {
+                credentials: credential,
+                room: room,
+            })
+                .then(() => {
+                    resolve();
+                })
+                .catch(reject);
+        });
+    }
+
+
     return {
         user,
         authenticated,
@@ -152,5 +167,6 @@ export const useUserStore = defineStore('users', () => {
         editUser,
         saveEdits,
         deleteUser,
+        updateIssuer,
     };
-})
+});
