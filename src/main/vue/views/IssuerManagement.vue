@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center"> {{userStore.issuers}}{{t('issuermanagement.title')}}</p>
+    <p class="row text-h3 justify-center">{{t('issuermanagement.title')}}</p>
     <div class="row self-center" style="display: flex">
       <q-table
           style="width: 75vw; height: 25em"
@@ -82,9 +82,9 @@
                 options-cover/>
           </q-form>
         </q-card-section>
-        <q-card-actions align="right">
+        <q-card-actions align="right" class="text-primary">
           <q-btn flat  v-close-popup :label="t('issuermanagement.cancel')" color="primary"/>
-          <q-btn flat v-close-popup type="submit" :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="editIssuers(id)"/>
+          <q-btn flat v-close-popup :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="editIssuers(id)"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -94,8 +94,6 @@
 <script>
 import {ref} from 'vue';
 import {useI18n} from 'vue-i18n';
-import axios from 'axios';
-import {Dialog} from 'quasar';
 import {useCredentialStore} from "@/main/vue/stores/credential"
 import {useRoomStore} from "@/main/vue/stores/room";
 import {useUserStore} from "@/main/vue/stores/users";
@@ -107,7 +105,7 @@ export default {
     const searchQuery = ref('');
     const model1 = ref('');
     const model2 = ref('');
-    const model3 = ref([]);
+    const model3 = ref();
     const model4 = ref([]);
 
 
@@ -185,7 +183,7 @@ export default {
 
 
     function editIssuers(id){
-        userStore.updateIssuer(id, model4, model3)
+        userStore.updateIssuer(id, model4.value, model3.value)
         this.timeout= setTimeout(() =>
             userStore.getIssuers().then((issuers) => {
                 rows.value = issuers
@@ -211,7 +209,8 @@ export default {
       editIssuers,
       prompt: ref(false),
       userStore,
-        id
+      id,
+      getPaginationLabel,
     };
   },
 };
