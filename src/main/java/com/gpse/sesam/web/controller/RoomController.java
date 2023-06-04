@@ -31,7 +31,7 @@ public class RoomController {
 
 
 	@GetMapping("/rooms")
-	public java.util.List<Room> getRooms(){
+	public java.util.List<Room> getRooms() {
 		return roomService.getRooms();
 	}
 }

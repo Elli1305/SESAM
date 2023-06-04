@@ -15,6 +15,8 @@ import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
+import com.gpse.sesam.domain.location.RoomGroups;
+import com.gpse.sesam.domain.location.RoomGroupService;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.floor.Floor;
@@ -47,6 +49,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
 
 	private final LocationService locationService;
+	private final RoomGroupService roomGroupService;
 
 	private final SesamUserService userService;
 
@@ -61,13 +64,15 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
 								   final CredentialService credentialService, final ColorsService colorsService,
-								   final CategoryService categoryService, final PasswordEncoder passwordEncoder) {
+								   final CategoryService categoryService, final PasswordEncoder passwordEncoder,
+								   final RoomGroupService roomGroupService) {
 		this.credentialService = credentialService;
 		this.colorsService = colorsService;
 		this.categoryService = categoryService;
 		this.passwordEncoder = passwordEncoder;
 		this.locationService = locationService;
 		this.userService = userService;
+		this.roomGroupService = roomGroupService;
 	}
 
 	@Override
@@ -77,7 +82,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<Credential> credentials = createCredentials();
 		final List<Category> categories = createCredentialCategories();
 		final List<Colors> colors = createColors();
-
+		final List<RoomGroups> roomGroups = roomGroups(locations);
 
 		colorsService.saveAll(colors);
 		locationService.saveAll(locations);
@@ -85,6 +90,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		credentialService.saveAll(credentials);
 		locationService.saveAll(locationsList);
 		categoryService.saveAll(categories);
+		roomGroupService.saveAll(roomGroups);
 	}
 
 	private List<Colors> createColors() {
@@ -136,6 +142,18 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 
 		return List.of(admin, issuer, editor, user);
+	}
+
+	private List<RoomGroups> roomGroups(List<Location> locations) {
+		final List<RoomGroups> roomGroups = new ArrayList<>();
+		final Building build = locations.get(0).getBuildings().get(0);
+		final Building build2 = locations.get(0).getBuildings().get(1);
+		final List<Room> rooms = build.getFloors().get(0).getRooms();
+
+		final List<Room> rooms2 = build2.getFloors().get(1).getRooms();
+		roomGroups.add(new RoomGroups("Frozen Jaghurt", rooms, build));
+		roomGroups.add(new RoomGroups("Group 2", rooms2, build2));
+		return roomGroups;
 	}
 
 	private List<Location> createLocations() {
