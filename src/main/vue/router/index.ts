@@ -115,18 +115,18 @@ const router = createRouter({
     ],
 });
 
-
 router.beforeEach((to, from, next) => {
-    const {authenticated, user} = useUserStore();
-    const {authorize} = to.meta;
-    if ((to.meta.requiresAuth || authorize) && !authenticated) {
-        return next({path: '/login', query: {returnUrl: to.path}});
-    } else if (authorize && !user?.roles.some(role => role.role === authorize && role.granted)) {
-        return next({path: '/'});
+    const { authenticated } = useUserStore();
+
+    if (to.fullPath.toLowerCase().endsWith("/imprinteditor")) {
+        if (!authenticated) {
+            return next("/");
+        }
     }
 
     next();
 });
+
 
 
 export default router
