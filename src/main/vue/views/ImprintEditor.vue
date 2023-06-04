@@ -73,7 +73,6 @@ export default {
     const confirmDialog = ref(false);
     const deleteDialog = ref(false);
     const initialImprintContent = ref('');
-    const {t} = useI18n();
 
     onMounted(async () => {
       try {
