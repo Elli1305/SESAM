@@ -56,7 +56,7 @@ async function logout() {
           <q-img src="/Logo.svg" @click="router.push('/')" class="foldMenu"
                  style="height: 95px; width: 80px; margin-right: 24px"/>
         </div>
-        <div class="column full-width justify-between" style="height: 95px">
+        <div class="column full-width justify-between no-wrap" style="height: 95px">
           <div id="upper" class="row justify-between" style="height: 42px">
             <div class="row text-accent">
               <q-toolbar-title style="font-weight: 800; font-size: 3.25em; line-height: 1">
