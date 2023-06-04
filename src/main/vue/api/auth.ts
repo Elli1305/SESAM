@@ -42,7 +42,7 @@ export default {
     deleteUser(param: String): Promise<AxiosResponse<SignUpResponse>> {
         return axios.delete('/api/delete_user/'+param);
     },
-    updateIssuer(param: String): Promise<AxiosResponse<IssuerCmd>> {
-        return axios.put('/api/issuer/'+param)
+    updateIssuer(param: String, issuer:IssuerCmd): Promise<AxiosResponse<IssuerCmd>> {
+        return axios.put('/api/issuer/'+param,issuer)
     }
 }

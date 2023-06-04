@@ -20,7 +20,7 @@ public class IssuerController {
     public IssuerController(IssuerService service) {
         this.service = service;
     }
-    @Secured("ADMINISTRATOR")
+
     @GetMapping("/issuers")
     public List<Issuer> getIssuers() {
         return service.getIssuers();
@@ -28,7 +28,7 @@ public class IssuerController {
 
     @PutMapping("/issuer/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void makeUserEdit(@PathVariable("id") final Long id, @RequestBody final IssuerResponseCmd cmd) {
-       service.updateIssuer(id, cmd);
+    public void updateIssuer(@PathVariable("id") final Long id, @RequestBody final IssuerResponseCmd cmd) {
+        service.updateIssuer(id, cmd);
     }
 }

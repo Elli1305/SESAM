@@ -63,7 +63,8 @@
             ></q-select>
             <q-select
                 filled
-                v-model="model"
+                v-model="editedRow.room"
+                multiple
                 :label="t('issuermanagement.roomsList')"
                 emit-value
                 :options="roomStore.rooms"
@@ -100,6 +101,10 @@ export default {
     const searchQuery = ref('');
     const isFormOpen = ref(false);
     const editedItem = ref(null);
+    const id = ref(null);
+    const credential = ref([]);
+    const room = ref('');
+
     axios.get('api/issuers').then((res) => {
       rows.value = res.data;
     });
@@ -175,29 +180,33 @@ export default {
       isFormOpen.value = false;
     };
     const openForm = (row) => {
-      editedItem.value = {...row};
-      editedRow.value = {...row};
+      editedItem.value = { ...row };
+      id.value = row.id;
+
+      room.value = row.room.name;
       isFormOpen.value = true;
     };
 
 
     const editedRow = ref({
-
+      room: '',
       credential: [],
     });
 
 
-    const saveChanges = () => {
-      const index = rows.value.findIndex((row) => row.username === editedItem.value.username);
-      if (index !== -1) {
 
-        const updatedRow = {...rows.value[index], credential: editedRow.value.credential};
+    const saveChanges = () => {
+      const index = rows.value.findIndex((row) => row.id === editedItem.value.id);
+      if (index !== -1) {
+        const updatedRow = {
+          ...rows.value[index],
+          credential: editedRow.value.credential,
+          room: { name: editedRow.value.room },
+        };
         rows.value.splice(index, 1, updatedRow);
       }
 
       isFormOpen.value = false;
-
-      // Perform any additional logic or API calls to save the changes
     };
 
 
@@ -207,7 +216,35 @@ export default {
     credentialStore.getCredentials().then((external) => {})
     roomStore.getRooms().then((rooms) =>{})
 
-    useUserStore.updateIssuer().then((issuer) =>{})
+
+
+
+    const updateIssuer = () => {
+      if (!id.value) {
+        console.error('No issuer ID provided');
+        return;
+      }
+
+      userStore
+          .updateIssuer(id.value, credential.value, room.value)
+          .then(() => {
+            const updatedRows = rows.value.map((row) => {
+              if (row.id === id.value) {
+                return {
+                  ...row,
+                  credential: credential.value,
+                  room: { name: room.value },
+                };
+              }
+              return row;
+            });
+            rows.value = updatedRows;
+            isFormOpen.value = false;
+          })
+          .catch((error) => {
+            console.error('Failed to update issuer:', error);
+          });
+    };
 
 
 
@@ -226,6 +263,7 @@ export default {
       confirmSave,
       closeForm,
       roomStore,
+      updateIssuer
 
     };
   },

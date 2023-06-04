@@ -8,7 +8,6 @@ export interface Issuer extends User {
 }
 
 export interface IssuerCmd {
-    id: bigint
     room: string
     credentials: string[]
 }
