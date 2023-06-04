@@ -1,7 +1,7 @@
 <template>
   <q-page class="items-center justify-center" style="display: flex">
     <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">Impressum</h1>
+      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t('imprint.imprintTitle') }}</h1>
 
       <div class="imprint-content" v-html="imprintContent"></div>
 
@@ -12,9 +12,11 @@
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import {useI18n} from "vue-i18n";
+
 
 export default {
-  name: "Imprint",
+
   setup() {
     const imprintContent = ref('');
 
@@ -26,11 +28,13 @@ export default {
         console.error('Error fetching imprint content:', error);
       }
     };
+    const {t} = useI18n();
 
     onMounted(fetchImprintContent);
 
     return {
       imprintContent,
+      t,
     };
   },
 };
