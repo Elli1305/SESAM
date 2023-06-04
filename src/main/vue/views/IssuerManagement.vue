@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{t('issuermanagement.title')}}</p>
+    <p class="row text-h3 justify-center"> {{userStore.issuers}}{{t('issuermanagement.title')}}</p>
     <div class="row self-center" style="display: flex">
       <q-table
           style="width: 75vw; height: 25em"
@@ -73,7 +73,6 @@
             <q-select class="q-my-sm"
                 filled
                 v-model="model3"
-                multiple
                 :label="t('issuermanagement.roomsList')"
                 emit-value
                 :options="roomStore.rooms"
@@ -84,8 +83,8 @@
           </q-form>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat  :label="t('issuermanagement.cancel')" color="primary"/>
-          <q-btn flat type="submit" :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="editIssuers(editedRow.id)"/>
+          <q-btn flat  v-close-popup :label="t('issuermanagement.cancel')" color="primary"/>
+          <q-btn flat v-close-popup type="submit" :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="editIssuers(id)"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -111,16 +110,17 @@ export default {
     const model3 = ref([]);
     const model4 = ref([]);
 
-    axios.get('api/issuers').then((res) => {
-      rows.value = res.data;
-    });
-
 
 
     const {t} = useI18n();
     const credentialStore = useCredentialStore()
     const roomStore = useRoomStore()
     const userStore = useUserStore();
+    const id = ref();
+
+    userStore.getIssuers().then((issuers) => {
+        rows.value = issuers
+    })
 
     const filter=ref('')
     const columns = [
@@ -160,9 +160,10 @@ export default {
     ];
 
     const openForm = (row) => {
+      id.value = row.id;
       model1.value = row.lastName;
       model2.value = row.firstName;
-      model3.value = row.room.map(c => c.id);
+      model3.value = row.room;
       model4.value = row.credentials.map(c => c.id);
       editedRow.value = {...row};
     };
@@ -185,9 +186,10 @@ export default {
 
     function editIssuers(id){
         userStore.updateIssuer(id, model4, model3)
-        this.timeout= setTimeout(() => axios.get('api/issuers').then((res) => {
-            rows.value = res.data;
-        }), 250)
+        this.timeout= setTimeout(() =>
+            userStore.getIssuers().then((issuers) => {
+                rows.value = issuers
+            }), 250)
     }
 
 
@@ -207,7 +209,9 @@ export default {
       filter,
       roomStore,
       editIssuers,
-      prompt: ref(false)
+      prompt: ref(false),
+      userStore,
+        id
     };
   },
 };

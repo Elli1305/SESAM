@@ -68,6 +68,9 @@ const router = createRouter({
             path: '/grouprooms',
             name: 'GroupRooms',
             component: GroupRooms,
+            meta: {
+                authorize: AttainableRole.EDITOR
+            }
         },
         {
             path: '/editFloorPlan',

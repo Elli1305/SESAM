@@ -6,7 +6,7 @@ import {LoginResponse, User} from "@/main/vue/entity/loginResponse";
 import {CurrentUserListResponse} from "@/main/vue/entity/currentUserListResponse";
 import {ResetPassword} from "@/main/vue/entity/resetPassword";
 import {ChangePassword} from "@/main/vue/entity/changePassword";
-import {IssuerCmd} from "@/main/vue/entity/issuer";
+import {Issuer, IssuerCmd} from "@/main/vue/entity/issuer";
 
 export default {
     signUp(user: CreateUser): Promise<SignUpResponse> {
@@ -44,5 +44,8 @@ export default {
     },
     updateIssuer(param: String, issuer:IssuerCmd): Promise<AxiosResponse<IssuerCmd>> {
         return axios.put('/api/issuer/'+param,issuer)
+    },
+    getIssuer(): Promise<AxiosResponse<Issuer []>> {
+        return axios.get('/api/issuers');
     }
 }

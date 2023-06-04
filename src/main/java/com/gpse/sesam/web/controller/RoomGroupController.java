@@ -24,6 +24,7 @@ public class RoomGroupController {
     }
 
     @GetMapping
+    @Secured("EDITOR")
     public List<RoomGroups> getAllRoomGroups() {
         return roomGroupService.getRoomGroups();
     }
@@ -35,6 +36,7 @@ public class RoomGroupController {
     }
 
     @PostMapping("/newgroup")
+    @Secured("EDITOR")
     @ResponseStatus(HttpStatus.CREATED)
     public RoomGroups createRoomGroup(@RequestBody final RoomGroupCmd roomGroupCmd) {
         return roomGroupService.createRoomGroup(roomGroupCmd);
