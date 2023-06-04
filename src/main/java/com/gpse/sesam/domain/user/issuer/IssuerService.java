@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.user.issuer;
 
-import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.web.cmd.IssuerResponseCmd;
 
 import java.util.List;
