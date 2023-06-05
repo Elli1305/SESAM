@@ -230,7 +230,11 @@ export default {
     }
 
     if (props.doorConfig) {
-      configDescription.value = props.doorConfig
+      console.log(props.doorConfig)
+      configDescription.value = props.doorConfig.description
+      qSelects.value = props.doorConfig
+      console.log(qSelects.value)
+      console.log(qSelects.value.configParts)
     }
 
     const filterFn = function (val, update, abort) {

@@ -2,11 +2,11 @@ package com.gpse.sesam.domain.credential.credentials;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.credential.issuing.IssueCredential;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
-import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.CredentialCmd;
@@ -60,6 +60,12 @@ public class CredentialServiceImpl implements CredentialService {
 	}
 
 	@Override
+	public List<Credential> getCredentialByCredentialIssuerId(final String id) {
+		return credentialRepository.findAllByCredentialDefinitionId(id);
+	}
+
+
+	@Override
 	public Optional<Credential> getCredential(final Long id) {
 		return credentialRepository.findById(id);
 	}
@@ -111,23 +117,24 @@ public class CredentialServiceImpl implements CredentialService {
 	}
 
 
+	@Override
 	public List<CredentialCmd> getCredentialByLocation(final Long id) {
-		List<Credential> credentials = credentialRepository.findByLocation(id);
-		List<CredentialCmd> cmds = new ArrayList<>();
+		final List<Credential> credentials = credentialRepository.findByLocation(id);
+		final List<CredentialCmd> cmds = new ArrayList<>();
 
-		for (Credential credential : credentials) {
-			String categoryName = credential.getCategory().getName();
-			String credentialName = credential.getName();
-			List<String> externalCredentials = new ArrayList<>();
-			for (ExternalCredential externalCredential : credential.getCategory().getExternalCredentials()) {
-				String external = externalCredential.getName();
+		for (final Credential credential : credentials) {
+			final String categoryName = credential.getCategory().getName();
+			final String credentialName = credential.getName();
+			final List<String> externalCredentials = new ArrayList<>();
+			for (final ExternalCredential externalCredential : credential.getCategory().getExternalCredentials()) {
+				final String external = externalCredential.getName();
 				externalCredentials.add(external);
 			}
-			List<String> issuers = new ArrayList<>();
-			List<String> rooms = new ArrayList<>();
-			for (Issuer issuer: credential.getIssuer()) {
-				String issuerName = issuer.getFirstName() + " " + issuer.getLastName();
-				String room = issuer.getRoom().getName();
+			final List<String> issuers = new ArrayList<>();
+			final List<String> rooms = new ArrayList<>();
+			for (final Issuer issuer : credential.getIssuer()) {
+				final String issuerName = issuer.getFirstName() + " " + issuer.getLastName();
+				final String room = issuer.getRoom().getName();
 				issuers.add(issuerName);
 				rooms.add(room);
 			}

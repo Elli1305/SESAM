@@ -189,18 +189,22 @@ export default {
     }
 
     function openDialog(door) {
-      $q.dialog({
-        component: CreateDoor,
-        componentProps: {
-          door: door
-        }
-      }).onOk(({doorName, configuration, configDescription}) => {
-        door.name = doorName
-        doorStore.save(door).then((savedDoor) => {
-          configuration.description = configDescription
-          configuration.doorId = savedDoor.name + '_' + savedDoor.id
-          configuration.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-          api.doorConfig.save(configuration).then(() => console.log("success"))
+      api.doorConfig.get(door.name + '_' + door.id).then((config) => {
+
+        $q.dialog({
+          component: CreateDoor,
+          componentProps: {
+            door: door,
+            doorConfig: config.data
+          }
+        }).onOk(({doorName, configuration, configDescription}) => {
+          door.name = doorName
+          doorStore.save(door).then((savedDoor) => {
+            configuration.description = configDescription
+            configuration.doorId = savedDoor.name + '_' + savedDoor.id
+            configuration.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+            api.doorConfig.save(configuration).then(() => console.log("success"))
+          })
         })
       })
     }

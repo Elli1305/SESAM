@@ -12,6 +12,8 @@ public interface CredentialService {
 
 	List<Credential> getCredentialsByIssuerId(Long di);
 
+	List<Credential> getCredentialByCredentialIssuerId(String id);
+
 	Optional<Credential> getCredential(Long id);
 
 	String issueCredential(Long id, List<IssueCredentialAttributeCmd> attributeCmds)
