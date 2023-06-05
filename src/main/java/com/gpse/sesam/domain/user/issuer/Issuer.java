@@ -23,7 +23,7 @@ public class Issuer extends SesamUser {
 	@OneToOne(cascade = CascadeType.MERGE)
 	private Room room;
 
-	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnoreProperties("issuer")
 	private List<Credential> credentials = new ArrayList<>();
 
@@ -33,12 +33,12 @@ public class Issuer extends SesamUser {
 	/**
 	 * Creates a new {@link SesamUser}
 	 *
-	 * @param email       the user's email
-	 * @param password    the user's password
-	 * @param firstName   the user's first name
-	 * @param lastName    the user's last name
-	 * @param roles       the user's roles
-	 * @param room        the issuer's office
+	 * @param email     the user's email
+	 * @param password  the user's password
+	 * @param firstName the user's first name
+	 * @param lastName  the user's last name
+	 * @param roles     the user's roles
+	 * @param room      the issuer's office
 	 */
 	public Issuer(final String email, final String password, final String firstName, final String lastName,
 				  final List<SesamUserRole> roles,

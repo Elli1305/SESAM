@@ -80,25 +80,29 @@
                 <div class="row q-mt-sm justify-around items-center no-wrap"
                      v-for="(attributeFilter,j) in qSelects.configParts[i].attributeFilter" style="min-width: 100%">
                   <q-select style="width: 12em"
-                      rounded outlined dropdown-icon="expand_more" v-model="qSelects.configParts[i].attributeFilter[j].attribute"
-                      :options="commonAttributeFilter(qSelects.configParts[i].credentials)"
-                      :display-value="qSelects.configParts[i].attributeFilter[j].attribute?.label"
-                      @update:model-value="resetPredicateType(i,j)">
+                            rounded outlined dropdown-icon="expand_more"
+                            v-model="qSelects.configParts[i].attributeFilter[j].attribute"
+                            :options="commonAttributeFilter(qSelects.configParts[i].credentials)"
+                            :display-value="qSelects.configParts[i].attributeFilter[j].attribute?.label"
+                            @update:model-value="resetPredicateType(i,j)">
 
                   </q-select>
                   <q-select style="width: 5em"
-                      rounded outlined dropdown-icon="expand_more" v-model="qSelects.configParts[i].attributeFilter[j].predicateType" ref="predicateType"
-                      :options="getPredicates(qSelects.configParts[i].attributeFilter[j].attribute)"/>
+                            rounded outlined dropdown-icon="expand_more"
+                            v-model="qSelects.configParts[i].attributeFilter[j].predicateType" ref="predicateType"
+                            :options="getPredicates(qSelects.configParts[i].attributeFilter[j].attribute)"/>
                   <q-input style="width: 10em"
-                      rounded outlined v-model="qSelects.configParts[i].attributeFilter[j].value"
-                     :type="getType(qSelects.configParts[i].attributeFilter[j].attribute)"
-                     :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
+                           rounded outlined v-model="qSelects.configParts[i].attributeFilter[j].value"
+                           :type="getType(qSelects.configParts[i].attributeFilter[j].attribute)"
+                           :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
                   </q-input>
                   <q-btn style="width: 3em; height: 3em"
-                      flat round icon="delete" @click="removeFilter(i,j)"/>
+                         flat round icon="delete" @click="removeFilter(i,j)"/>
                 </div>
               </q-card-section>
-              <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addAttributeFilter(i)">Attribut hinzufügen</q-btn>
+              <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add"
+                     @click="addAttributeFilter(i)">Attribut hinzufügen
+              </q-btn>
             </q-card>
           </q-card-section>
           <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfigurationGroup">
@@ -230,11 +234,8 @@ export default {
     }
 
     if (props.doorConfig) {
-      console.log(props.doorConfig)
       configDescription.value = props.doorConfig.description
       qSelects.value = props.doorConfig
-      console.log(qSelects.value)
-      console.log(qSelects.value.configParts)
     }
 
     const filterFn = function (val, update, abort) {

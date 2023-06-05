@@ -25,7 +25,6 @@ import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.util.GeoJsonParser;
-import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -38,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -131,12 +131,12 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		editorRole.setGranted(true);
 		final String defaultPassword = passwordEncoder.encode("Hallo123!");
 		final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
-				Collections.singletonList(adminRole));
+				List.of(adminRole));
 		final Issuer issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
-				Collections.singletonList(issuerRole), new Room("0.007"));
+				List.of(issuerRole), new Room("0.007"));
 		issuer.setCredentials(credentials);
 		final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
-				Collections.singletonList(editorRole));
+				List.of(editorRole));
 		final SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User",
 				Collections.emptyList());
 
@@ -204,7 +204,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 //		for (int i = 0; i < doorCoordinates.size(); i++) {
 //			final Door door = new Door("door" + i, doorCoordinates.get(i));
-//			rooms.get(i).setDoors(Collections.singletonList(door));
+//			rooms.get(i).setDoors(List.of(door));
 //		}
 
 		final List<Floor> floors = new ArrayList<>();
@@ -296,16 +296,15 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final String defaultPassword = passwordEncoder.encode("Hallo123!");
 		final List<Issuer> issuers = new ArrayList<>();
 		final Issuer issuer1 = new Issuer("peters@test.com", defaultPassword, "Gerda", "Peters",
-				Collections.singletonList(issuerRole10), room);
+				List.of(issuerRole10), room);
 
 		final Issuer issuer2 = new Issuer("muster@test.com", defaultPassword, "Erik", "Muster",
-				Collections.singletonList(issuerRole11), room2);
+				List.of(issuerRole11), room2);
 
 		issuers.add(issuer1);
 		issuers.add(issuer2);
 
 		// Safety-Credential
-		final List<Credential> credentials = new ArrayList<>();
 		final Credential safety = new Credential("Sicherheitsbelehrung-Uni", "$U-MEMBER",
 				"university", form, checklist);
 		safety.addIssuer(issuer1);
@@ -318,10 +317,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 				"tlabs", form3, checklist3);
 		safety2.addIssuer(issuer1);
 		safety2.addIssuer(issuer2);
-		credentials.add(safety);
-		credentials.add(safety2);
 
-		return credentials;
+
+		return Arrays.asList(safety, safety2);
 	}
 
 	private List<Category> createCredentialCategories() {
@@ -342,10 +340,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 		final List<Issuer> issuers = new ArrayList<>();
 		final Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
-				Collections.singletonList(issuerRole10), room);
+				List.of(issuerRole10), room);
 
 		final Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann",
-				"Hombach", Collections.singletonList(issuerRole11), room2);
+				"Hombach", List.of(issuerRole11), room2);
 		issuers.add(issuer1);
 		issuers.add(issuer2);
 

@@ -5,6 +5,7 @@ type CredentialFormEntryType = "text" | "number" | "date";
 export interface Credential {
     id: bigint;
     name: string;
+    agent: string;
     credentialDefinitionId: string;
     form: FormEntry[];
     checklist: ChecklistEntry[];
@@ -28,6 +29,7 @@ export interface FormEntry {
     attributeName: string
     label: string;
     type: CredentialFormEntryType;
+    attributeName: string;
 }
 
 export interface ChecklistEntry {
@@ -61,6 +63,25 @@ export interface CredentialCmd {
     externalCredential: string[];
     issuerName: string[];
     issuerRoom: string[];
+}
+
+interface CreateAttribute {
+    type: string;
+    name: string;
+    attributeName: string;
+}
+
+interface CreateCondition {
+    label: string;
+}
+
+export interface CreateCredential {
+    name: string;
+    agent: string;
+    credentialDefinitionId: string;
+
+    attributes: CreateAttribute[];
+    conditions: CreateCondition[];
 }
 
 export interface CategoryCmd {

@@ -3,7 +3,15 @@ package com.gpse.sesam.domain.credential.category;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +28,7 @@ public class Category {
 	private String name;
 
 	@JsonManagedReference("credential_category")
-	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "category", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.EAGER)
 	private List<Credential> credentials = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -84,7 +92,7 @@ public class Category {
 		return externalCredentials;
 	}
 
-	public void addExternalCredential(ExternalCredential externalCredential) {
+	public void addExternalCredential(final ExternalCredential externalCredential) {
 		externalCredentials.add(externalCredential);
 	}
 

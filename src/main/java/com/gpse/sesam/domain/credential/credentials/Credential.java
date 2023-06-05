@@ -2,9 +2,9 @@ package com.gpse.sesam.domain.credential.credentials;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
-import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -38,7 +38,7 @@ public class Credential {
 	private String agent;
 
 	@JsonBackReference("credential_category")
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Category category;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -133,5 +133,6 @@ public class Credential {
 	}
 
 	public void removeIssuer(final Issuer issuer) {
-		issuers.remove(issuer); }
+		issuers.remove(issuer);
+	}
 }

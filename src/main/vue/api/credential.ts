@@ -2,6 +2,7 @@ import axios, {AxiosResponse,} from "axios";
 import {
     Category,
     CategoryResponse,
+    CreateCredential,
     Credential,
     CredentialCmd,
     ExternalCredential,
@@ -19,6 +20,18 @@ export default {
 
     all(): Promise<AxiosResponse<Credential[]>> {
         return axios.get("/api/credentials")
+    },
+    externalCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
+        return axios.get("/api/external_credentials")
+    },
+    create(credential: CreateCredential): Promise<AxiosResponse<CreateCredential>> {
+        return axios.post(`/api/credentials`, credential);
+    },
+    delete(id: number): Promise<AxiosResponse<void>> {
+        return axios.delete(`/api/credentials/${id}`);
+    },
+    update(id: number, credential: CreateCredential): Promise<AxiosResponse<void>> {
+        return axios.put(`/api/credentials/${id}`, credential);
     },
 
     getCategories(): Promise<AxiosResponse<Category[]>> {

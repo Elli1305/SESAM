@@ -324,7 +324,7 @@ export default {
         polygons.push(polygon);
         let doorsname = room.doors.map(door => door.name).join(", ");
         let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential.name).join(", ");
-        let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstname + " " + issuer.lastname).join(", ");
+        let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstName + " " + issuer.lastName).join(", ");
         const popup = L.popup();
         let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
         let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
