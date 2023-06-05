@@ -1,106 +1,99 @@
 <template>
-    <div class="q-pa-md">
+  <q-page class="column justify-evenly" style="padding: 2em 5em" >
+    <p class="row text-h3 justify-center">{{t("groupRooms.title")}}</p>
+    <div class="row self-center">
+      <q-table
+          style="width: 75vw; height: 25em"
+          :rows-per-page-options="[0]"
+          :rows="rows"
+          :columns="columns"
+          :separator="'cell'"
+          :no-data-label="t('common.noData')"
+          :no-results-label="t('common.noResults')"
+          :pagination-label="getPaginationLabel"
+          row-key="username"
+          :filter="filter"
+          :filter-method="customFilter">
 
-        <div class="q-mb-xl">
-            <div class="items-center justify-center row">
-                <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">
-                    {{ t("groupRooms.title") }}</h1>
-            </div>
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props">
+              <q-btn
+                  dense
+                  round
+                  flat
+                  icon="edit"
+                  color="grey"
+                  @click="getInfosForEditGroup(Object.values(props)); getOldName(); editAlert = true"
+                  test="props.value"/>
+              <q-btn
+                  dense
+                  round
+                  flat
+                  icon="delete"
+                  color="grey"
+                  @click="deleteAlert = true; delGroup(Object.values(props));"/>
+          </q-td>
+        </template>
 
-        </div>
-        <div class="items-center justify-center" style="display: flex">
-            <div class="center" style="max-width: 80em; min-width: 60em">
-
-                <q-table
-                        :rows="rows"
-                        :columns="columns"
-                        row-key="username"
-                        :separator="'cell'"
-                        :filter="filter"
-                        :filter-method="customFilter"
-                >
-
-                    <template v-slot:body-cell-actions="props">
-                        <q-td :props="props">
-                            <q-btn dense round flat color="grey"
-                                   @click="getInfosForEditGroup(Object.values(props)); getOldName(); editAlert = true"
-                                   test="props.value" icon="edit"></q-btn>
-                            <q-btn dense round flat color="grey" icon="delete"
-                                   @click="deleteAlert = true; delGroup(Object.values(props));"></q-btn>
-
-                        </q-td>
-                    </template>
-
-                    <template v-slot:top-right>
-                        <q-input borderless dense debounce="300" v-model="filter.search"
-                                 :placeholder="t( 'adminCurrentUser.search')">
-                            <template v-slot:append>
-                                <q-icon name="search"/>
-                            </template>
-                        </q-input>
-                    </template>
-
-
-                    <template v-slot:top-left >
-                        <q-select
-                                filled
-                                v-model="modelForLocation"
-                                use-input
-                                input-debounce="0"
-                                :label="t( 'groupRooms.chooseLocation')"
-                                :options="optionsLocations"
-                                option-label="name"
-
-                                @filter="filterLocations"
-                                @update:model-value="changed"
-                                style="width: 280px"
-                                behavior="menu"
-                        >
-                            <template v-slot:no-option>
-                                <q-item>
-                                    <q-item-section class="text-grey">
-                                        No results
-                                    </q-item-section>
-                                </q-item>
-                            </template>
-                        </q-select>
-                        <q-space style="width: 30px"></q-space>
+        <template class="row no-wrap" v-slot:top-right>
+          <q-btn
+              flat
+              rounded
+              icon="add"
+              color="grey"
+              label="Neue Gruppe"
+              @click="newGroup = true; toDefault()"
+              style="margin-right: 2em"/>
+          <q-input borderless dense debounce="300" v-model="filter.search"
+                   :placeholder="t( 'adminCurrentUser.search')">
+              <template v-slot:append>
+                  <q-icon name="search"/>
+              </template>
+          </q-input>
+        </template>
 
 
-                        <q-select
-                                filled
-                                v-model="modelForBuilding"
-                                use-input
-                                input-debounce="0"
-                                :label="t( 'groupRooms.chooseBuilding')"
-                                :options="buildingListNames"
-                                option-label="name"
-                                @filter="filterBuilding"
-                                @update:model-value="getBuilding"
-                                style="width: 280px"
-                                behavior="menu"
-                        >
-                            <template v-slot:no-option>
-                                <q-item>
-                                    <q-item-section class="text-grey">
-                                        No results
-                                    </q-item-section>
-                                </q-item>
-                            </template>
-                        </q-select>
-
-                        <q-space style="width: 30px"></q-space>
-
-
-                        <q-btn dense round icon="add" label="Neue Gruppe" flat color="primary" stretch
-                               @click="newGroup = true; toDefault()"></q-btn>
-                    </template>
-                </q-table>
-
-
-            </div>
-        </div>
-
+        <template class="row no-wrap" v-slot:top-left >
+          <q-select
+              :label="t( 'groupRooms.chooseLocation')"
+              behavior="menu"
+              v-model="modelForLocation"
+              borderless
+              options-dense
+              :options="optionsLocations"
+              option-label="name"
+              @filter="filterLocations"
+              style="width: 12em; margin-right: 2em"
+              @update:model-value="changed">
+            <template v-slot:no-option>
+                <q-item>
+                    <q-item-section class="text-grey">
+                        No results
+                    </q-item-section>
+                </q-item>
+            </template>
+          </q-select>
+          <q-select
+              :label="t( 'groupRooms.chooseBuilding')"
+              behavior="menu"
+              v-model="modelForBuilding"
+              borderless
+              options-dense
+              :options="buildingListNames"
+              option-label="name"
+              @filter="filterBuilding"
+              style="width: 12em"
+              @update:model-value="getBuilding">
+            <template v-slot:no-option>
+                <q-item>
+                    <q-item-section class="text-grey">
+                        No results
+                    </q-item-section>
+                </q-item>
+            </template>
+          </q-select>
+        </template>
+      </q-table>
     </div>
 
     <q-dialog
@@ -202,6 +195,7 @@
             </q-card>
         </q-dialog>
     </div>
+  </q-page>
 </template>
 
 <script>
