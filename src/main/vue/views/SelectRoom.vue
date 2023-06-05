@@ -1,35 +1,30 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card class="q-dialog-plugin">
-      <q-card-section class="q-pa-md">
+    <q-card>
+      <q-card-section>
         <div class="text-h6">Tür zuweisen</div>
-        <div class="q-mt-md">
-          <q-input filled v-model="doorName" label="Türname" stack-label
-                   style="width: 250px; padding-bottom: 32px"/>
-        </div>
-        <div class="q-mt-md">
-          <q-select
-              filled
-              v-model="room"
-              use-input
-              hide-selected
-              label="Raum auswählen"
-              option-label="name"
-              fill-input
-              input-debounce="0"
-              :options="rooms"
-              @filter="filterFn"
-              style="width: 250px; padding-bottom: 32px"
-          >
-            <template v-slot:no-option>
-              <q-item>
-                <q-item-section class="text-grey">
-                  No results
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
-        </div>
+      </q-card-section>
+      <q-card-section>
+        <q-input class="q-mb-md" filled v-model="doorName" label="Türname" stack-label/>
+        <q-select
+            filled
+            v-model="room"
+            use-input
+            hide-selected
+            label="Raum auswählen"
+            option-label="name"
+            fill-input
+            input-debounce="0"
+            :options="rooms"
+            @filter="filterFn">
+          <template v-slot:no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                No results
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>

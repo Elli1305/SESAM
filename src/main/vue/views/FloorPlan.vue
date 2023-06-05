@@ -1,8 +1,6 @@
 <template>
-  <q-page-container style="padding: 2em">
+  <q-page-container style="height: 75vh; padding: 2em">
     <q-page>
-      <q-btn v-if="false" dense round unelevated class="bg-black"
-             style="z-index: 1000; top: 15px; left: -17px"></q-btn>
       <div ref="mapContainer" class="floor-plan-editor-map">
         <div id="floor-plan-map"></div>
       </div>
@@ -376,7 +374,7 @@ export default {
 }
 
 #floor-plan-map {
-  height: 100%;
+  height: 70vh;
   position: relative;
 }
 </style>
