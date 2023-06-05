@@ -1,60 +1,41 @@
 <template>
-    <q-page class="column justify-evenly" style="padding: 0 5em" v-if="user!=null">
-        <p class="row text-h3 justify-center">{{t('adminEdit.title') }}</p>
+  <q-page class="column justify-evenly" style="padding: 2em 5em" v-if="user!=null">
+    <p class="row text-h3 justify-center">{{t('adminEdit.title') }}</p>
+    <div class="column justify-evenly self-center no-wrap" style="width: 75vw; height: 50vh">
+      <div class="column q-gutter-md self-center" style="width: 25em">
+        <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined/>
+        <q-input id="lastname" v-model="user.lastName" :label="t('profile.lastname')" outlined/>
+        <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined disable/>
+        <q-select
+            filled
+            v-model="modelMultiple"
+            multiple
+            :options="options"
+            use-chips
+            stack-label
+            :label= "t('adminEdit.changeRoles')"/>
+      </div>
+      <div class="row justify-around">
+          <q-btn round color="negative" text-color="positive" icon="delete" @click="deleteAlert = true" style="width: 4em; height: 4em"/>
+          <q-btn round color="positive" text-color="negative" @click="saveEditedUser()" icon="save" style="width: 4em; height: 4em"/>
+      </div>
+    </div>
+  </q-page>
 
-        <div class="self-center" style="margin: 2em; width: 25em">
-            <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined style = "width: 500px"/>
-            <q-space style="height: 1em"/>
-            <q-input id="lastname" v-model="user.lastName" :label="t('profile.lastname')" outlined style = "width: 500px"/>
-            <q-space style="height: 1em"/>
-            <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined disable style = "width: 500px"/>
-
-            <div>
-                <q-space style="height: 2em"/>
-            </div>
-            <div style="min-width: 250px; max-width: 300px">
-                <q-badge color="secondary" class="q-mb-md">
-                    Rollen: {{ modelMultiple || '[]' }}
-                </q-badge>
-
-                <q-select
-                    filled
-                    v-model="modelMultiple"
-                    multiple
-                    :options="options"
-                    use-chips
-                    stack-label
-                    :label= "t('adminEdit.changeRoles')"
-                    style = "width: 500px"
-                />
-            </div>
-
-        </div>
-        <div class="row justify-evenly">
-            <q-btn dense round flat color="negative" icon="delete" @click="deleteAlert = true" size="34px"></q-btn>
-            <q-btn dense round flat color="positive" @click="saveEditedUser()" icon="save" size="34px"></q-btn>
-        </div>
-
-    </q-page>
-
-    <q-dialog
-            v-model="deleteAlert"
-    >
-        <q-card style="width: 400px">
-            <q-card-section>
-                <div class="text-h6">{{ t('adminEdit.attention') }}</div>
-            </q-card-section>
-
-            <q-card-section class="q-pt-none">
-                {{ t('adminEdit.question') }}
-            </q-card-section>
-
-            <q-card-actions align="right" class="bg-white text-teal">
-                <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
-                <q-btn flat :label="t('adminEdit.delete')" @click="deleteUser()"/>
-            </q-card-actions>
-        </q-card>
-    </q-dialog>
+  <q-dialog v-model="deleteAlert">
+      <q-card>
+          <q-card-section>
+              <div class="text-h6">{{ t('adminEdit.attention') }}</div>
+          </q-card-section>
+          <q-card-section class="q-pt-none">
+              {{ t('adminEdit.question') }}
+          </q-card-section>
+          <q-card-actions align="right" class="bg-white text-primary">
+              <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
+              <q-btn flat :label="t('adminEdit.delete')" @click="deleteUser()"/>
+          </q-card-actions>
+      </q-card>
+  </q-dialog>
 
 </template>
 
