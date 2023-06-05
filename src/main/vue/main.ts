@@ -43,7 +43,7 @@ const messages = {
             title: "Nutzer bearbeiten",
             changeRoles: "Rollen vergeben/entfernen: ",
             delete: "Löschen",
-            back: "Zurück",
+            back: "Abbrechen",
             attention: "ACHTUNG",
             question: "Nutzer wirklich löschen?",
             deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
