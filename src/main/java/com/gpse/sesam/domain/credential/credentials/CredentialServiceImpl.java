@@ -2,7 +2,6 @@ package com.gpse.sesam.domain.credential.credentials;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
@@ -46,31 +45,14 @@ public class CredentialServiceImpl implements CredentialService {
 
 	@Autowired
 	public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
-								 final CredentialRepository credentialRepository, final IssuerRepository issuerRepository,
+								 final CredentialRepository credentialRepository,
+								 final IssuerRepository issuerRepository,
 								 final ExternalCredentialRepository externalCredentialRepository) {
 		this.client = client;
 		this.mapper = mapper;
 		this.issuerRepository = issuerRepository;
 		this.credentialRepository = credentialRepository;
 		this.externalCredentialRepository = externalCredentialRepository;
-	}
-
-	public static CredentialCmd createCredentialCmd(final Category category, final Credential credential) {
-		final List<String> externalCred = new ArrayList<>();
-		final List<String> issuerName = new ArrayList<>();
-		final List<String> issuerRoom = new ArrayList<>();
-
-		for (int i = 0; i < category.getExternalCredentials().size(); i++) {
-			externalCred.add(category.getExternalCredentials().get(i).getName());
-		}
-
-		for (int i = 0; i < credential.getIssuer().size(); i++) {
-			issuerRoom.add(credential.getIssuer().get(i).getRoom().getName());
-			issuerName.add(credential.getIssuer().get(i).getFirstName() + " " + credential.getIssuer().get(i)
-					.getLastName());
-		}
-
-		return new CredentialCmd(category.getName(), credential.getName(), externalCred, issuerName, issuerRoom);
 	}
 
 	@Override

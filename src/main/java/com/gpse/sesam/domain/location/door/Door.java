@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.location.door;
 
-import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.location.Coordinate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,7 +8,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
@@ -28,9 +26,6 @@ public class Door {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
-
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<Credential> credentials = new ArrayList<>();
 
 	protected Door() {
 
@@ -57,14 +52,6 @@ public class Door {
 		this.name = name;
 	}
 
-	public List<Credential> getCredentials() {
-		return credentials;
-	}
-
-	public void setCredentials(final List<Credential> credentials) {
-		this.credentials = credentials;
-	}
-
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
@@ -73,7 +60,4 @@ public class Door {
 		this.coordinates = coordinates;
 	}
 
-	public void addCredential(final Credential credential) {
-		credentials.add(credential);
-	}
 }
