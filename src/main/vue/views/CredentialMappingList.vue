@@ -144,17 +144,6 @@ import {ref} from 'vue'
 import {useCredentialStore} from "@/main/vue/stores/credential";
 import {useI18n} from "vue-i18n";
 
-const columns = [
-  { name: 'category', required: true, label: 'Kategorie', align: 'center', field: row => row.name, sortable: true },
-  { name: 'credential', align: 'center', label: "Credential (intern)", field: row => row.credentials,  format: (val) => val.map(c => c.name).join(', '), sortable: true},
-  { name: 'externalCredential', align: 'center', label: 'Credential (extern)', field: row => row.externalCredentials, format: (val) => val.map(e => e.name).join(', '), sortable: true},
-  { name: 'actions', align: 'center', label: 'Bearbeiten'}
-]
-
-const rows = ref([]);
-
-rows.value = []
-
 export default {
   name: "CredentialMappingList",
   setup() {
@@ -165,6 +154,16 @@ export default {
     const address = ref('')
     const catname = ref('')
     const { t } = useI18n()
+
+    const rows = ref([]);
+    rows.value = []
+
+    const columns = [
+        { name: 'category', required: true, label: t('credentialmapping.category'), align: 'center', field: row => row.name, sortable: true },
+        { name: 'credential', align: 'center', label: t('credentialmapping.internal'), field: row => row.credentials,  format: (val) => val.map(c => c.name).join(', '), sortable: true},
+        { name: 'externalCredential', align: 'center', label: t('credentialmapping.external'), field: row => row.externalCredentials, format: (val) => val.map(e => e.name).join(', '), sortable: true},
+        { name: 'actions', align: 'center', label: t('issuermanagement.edit')}
+    ]
 
     const credentialStore = useCredentialStore()
 

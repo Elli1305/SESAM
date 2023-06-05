@@ -92,7 +92,7 @@
                         <q-space style="width: 30px"></q-space>
 
 
-                        <q-btn dense round icon="add" label="Neue Gruppe" flat color="primary" stretch
+                        <q-btn dense round icon="add" :label="t('groupRooms.new')" flat color="grey" stretch
                                @click="newGroup = true; toDefault()"></q-btn>
                     </template>
                 </q-table>

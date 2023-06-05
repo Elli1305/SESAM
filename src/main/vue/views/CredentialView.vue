@@ -63,19 +63,6 @@ import {useI18n} from "vue-i18n";
 import {useCredentialStore} from "@/main/vue/stores/credential";
 import {useLocationStore} from "@/main/vue/stores/locations";
 
-const filter=ref('')
-const columns = [
-  { name: 'category', required: true, label: "Kategorie", align: 'center', field: row => row.categoryName, format: val => `${val}`, sortable: true },
-  { name: 'availableCredential', align: 'center', label : 'Verfügbares Credential' , field: row => row.credentialName, sortable: true },
-  { name: 'qualification', align: 'center', label: 'Vergleichbare Credentials', field: row => row.externalCredential, format: (val) => val.join(', '), sortable: true },
-  { name: 'issuer', align: 'center', label: 'Herausgeber', field: row => row.issuerName, format: (val) => val.join(', '), sortable: true },
-  { name: 'room', align: 'center', label: 'Raum', sortable: true }
-]
-
-let rows = ref([])
-
-rows.value =[]
-
 export default {
   setup () {
 
@@ -86,6 +73,20 @@ export default {
     const model = ref()
     const route = useRoute()
     const queryParam = ref('')
+
+
+    const filter=ref('')
+    const columns = [
+        { name: 'category', required: true, label: t('credentialmapping.category'), align: 'center', field: row => row.categoryName, format: val => `${val}`, sortable: true },
+        { name: 'availableCredential', align: 'center', label : t('credentialview.availablecredentials'), field: row => row.credentialName, sortable: true },
+        { name: 'qualification', align: 'center', label: t('credentialview.qualification'), field: row => row.externalCredential, format: (val) => val.join(', '), sortable: true },
+        { name: 'issuer', align: 'center', label: t('credentialview.issuer'), field: row => row.issuerName, format: (val) => val.join(', '), sortable: true },
+        { name: 'room', align: 'center', label: t('credentialview.room'), sortable: true }
+    ]
+
+    let rows = ref([])
+
+    rows.value =[]
     function setLocation(id) {
         locationStore.getLocations().then((locations) => {
             model.value = locations[0].id;

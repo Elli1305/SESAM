@@ -2,12 +2,12 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <q-card-section class="q-pa-md">
-        <div class="text-h6">Ebene bearbeiten</div>
+        <div class="text-h6">{{t('floorplan.editFloor')}}</div>
         <div class="q-mt-md">
-          <q-input outlined v-model.number="floorLevel" type="number" label="Etagen Nummer"/>
+          <q-input outlined v-model.number="floorLevel" type="number" :label="t('floorplan.floorlevel')"/>
         </div>
         <div class="q-mt-md">
-          <q-file outlined label="Etagenplan hochladen" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff"
+          <q-file outlined :label="t('floorplan.floorplanUpload')" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff"
                   bg-color="white">
             <template v-slot:prepend>
               <q-icon name="attach_file"/>
