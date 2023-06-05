@@ -17,6 +17,7 @@ import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.RoomGroupService;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
+import com.gpse.sesam.domain.location.door.config.*;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.user.SesamUser;
@@ -32,12 +33,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Profile("presentation")
@@ -52,6 +52,8 @@ public class InitalizeDatabasePresentation implements InitializingBean {
     private final CredentialService credentialService;
     private final ColorsService colorsService;
 
+    private final DoorConfigService doorConfigService;
+
     private final CategoryService categoryService;
 
     private final PasswordEncoder passwordEncoder;
@@ -59,10 +61,12 @@ public class InitalizeDatabasePresentation implements InitializingBean {
     private final List<Location> locationsList = new ArrayList<>();
     private final List<Category> categoryList = new ArrayList<>();
 
+    private ProofConfig proofConfig;
+
     public InitalizeDatabasePresentation(final LocationService locationService, final SesamUserService userService,
-                                   final CredentialService credentialService, final ColorsService colorsService,
-                                   final CategoryService categoryService, final PasswordEncoder passwordEncoder,
-                                   final RoomGroupService roomGroupService) {
+                                         final CredentialService credentialService, final ColorsService colorsService,
+                                         final CategoryService categoryService, final PasswordEncoder passwordEncoder,
+                                         final RoomGroupService roomGroupService, DoorConfigService doorConfigService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
         this.categoryService = categoryService;
@@ -70,10 +74,12 @@ public class InitalizeDatabasePresentation implements InitializingBean {
         this.locationService = locationService;
         this.userService = userService;
         this.roomGroupService = roomGroupService;
+        this.doorConfigService = doorConfigService;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        proofConfig = createProofConfig();
         final List<Colors> colors = createColors();
         final List<Credential> credentials = createCredentials();
         final List<SesamUser> users = createUsers();
@@ -148,15 +154,43 @@ public class InitalizeDatabasePresentation implements InitializingBean {
         final SesamUserRole editorRole2 = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
         editorRole2.setGranted(true);
 
+        //Tür 1
+        Coordinate coordinate = new Coordinate(new BigDecimal(-83.62), new BigDecimal(-12.49));
+        Coordinate coordinate1 = new Coordinate(new BigDecimal(-77), new BigDecimal(-12.49));
 
-        final Door door = new Door("Tür 1", doorCoordinates.get(0));
-        final Door door2 = new Door("Tür 2", doorCoordinates.get(1));
+        //Tür 2
+        Coordinate coordinate2 = new Coordinate(new BigDecimal(-45.76), new BigDecimal(-12.49));
+        Coordinate coordinate3 = new Coordinate(new BigDecimal(-39.64), new BigDecimal(-12.49));
+
+        //Room 0.007
+        Coordinate coordinate4 = new Coordinate(new BigDecimal(-86.62), new BigDecimal(-90));
+        Coordinate coordinate5 = new Coordinate(new BigDecimal(-86.62), new BigDecimal(-12.49));
+
+        Coordinate coordinate6 = new Coordinate(new BigDecimal(-37.10), new BigDecimal(-12.49));
+        Coordinate coordinate7 = new Coordinate(new BigDecimal(-37.10), new BigDecimal(-90));
+
+        List<Coordinate> coordinates = new ArrayList<>();
+        coordinates.add(coordinate);
+        coordinates.add(coordinate1);
+        List<Coordinate> coordinates1 = new ArrayList<>();
+        coordinates1.add(coordinate2);
+        coordinates1.add(coordinate3);
+        List<Coordinate> coordinates2 = new ArrayList<>();
+        coordinates2.add(coordinate4);
+        coordinates2.add(coordinate5);
+        coordinates2.add(coordinate6);
+        coordinates2.add(coordinate7);
+
+        final Door door = new Door("Door1", coordinates);
+        final Door door2 = new Door("Door2", coordinates1);
         final Room room = new Room("0.007");
         room.addDoor(door);
-        room.setCoordinates(roomCoordinates.get(0));
+        room.addDoor(door2);
+        room.setCoordinates(coordinates2);
+        final Door door3 = new Door("Door3", doorCoordinates.get(0));
         final Room room2 = new Room("0.112");
-        room2.setCoordinates(roomCoordinates.get(1));
-        room2.addDoor(door2);
+        room2.setCoordinates(roomCoordinates.get(0));
+        room2.addDoor(door3);
         final Floor floor = new Floor(0, "/citec-gebaeudeplan.png");
         final Floor floor2 = new Floor(1, "/citec-gebaeudeplan.png");
         floor.addRoom(room);
@@ -166,7 +200,6 @@ public class InitalizeDatabasePresentation implements InitializingBean {
         building.addFloor(floor2);
         final Location location = new Location("Bielefeld");
         location.addBuilding(building);
-        final Location location2 = new Location("Berlin");
 
 
         final String defaultPassword = passwordEncoder.encode("Hallo123!");
@@ -180,13 +213,16 @@ public class InitalizeDatabasePresentation implements InitializingBean {
         final List<Credential> credentials = new ArrayList<>();
         final Credential safety = new Credential("U-MEMBER", "$U-MEMBER",
                 "university", form, checklist);
+        door.addCredential(safety);
         safety.addIssuer(issuer1);
+        issuer1.addCredential(safety);
         final List<ChecklistEntry> checklist3 = checklist();
 
         final List<FormEntry> form3 = form();  //Form
         final Credential safety2 = new Credential("T-MEMBER", "$T-MEMBER",
                 "tlabs", form3, checklist3);
         safety2.addIssuer(issuer1);
+        issuer1.addCredential(safety2);
         credentials.add(safety);
         credentials.add(safety2);
 
@@ -194,6 +230,7 @@ public class InitalizeDatabasePresentation implements InitializingBean {
         final List<ChecklistEntry> checklist4 = checklist();
         final Credential safety3 = new Credential("T-TRAINING", "$T-TRAINING", "tlabs", form4, checklist4);
         credentials.add(safety3);
+        issuer1.addCredential(safety3);
 
         final List<ExternalCredential> externalCredentials2 = new ArrayList<>();
         final ExternalCredential external = new ExternalCredential("FH-MEMBER", "$U-MEMBER");
@@ -211,8 +248,9 @@ public class InitalizeDatabasePresentation implements InitializingBean {
         category2.addExternalCredential(external2);
 
         locationsList.add(location);
-        locationsList.add(location2);
         locationService.saveAll(locationsList);
+
+        doorConfigService.sendProofConfig( "Door1_" + door.getId(), proofConfig );
         categoryList.add(category2);
         categoryList.add(category);
         categoryService.saveAll(categoryList);
@@ -283,5 +321,24 @@ public class InitalizeDatabasePresentation implements InitializingBean {
             LOG.warn("Coordination Data could not be initialized", e);
         }
         return Collections.emptyList();
+    }
+
+    private ProofConfig createProofConfig() {
+        final ProofConfig proofConfig = new ProofConfig();
+        proofConfig.setDescription("Bitte präsentieren Sie ein U-Member-Credential.");
+
+        final Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
+        final ProofPredicateInfo predicateInfo = new ProofPredicateInfo();
+        predicateInfo.setName("expiration_date");
+        predicateInfo.setPredicateType(">");
+        predicateInfo.setPredicateValue("$TODAY-YYYYMMDD");
+        final List<AttributeFilter> predicateRestrictions = new ArrayList<>();
+        predicateRestrictions.add(new AttributeFilter());
+        predicateRestrictions.get(0).setCredentialDefinitionId("$U-MEMBER");
+        predicateInfo.setRestrictions(predicateRestrictions);
+        requestedPredicates.put("expiration_date", predicateInfo);
+        proofConfig.setRequestedPredicates(requestedPredicates);
+
+        return proofConfig;
     }
 }

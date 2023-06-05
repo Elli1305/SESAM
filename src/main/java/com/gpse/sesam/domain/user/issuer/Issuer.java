@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,7 +25,7 @@ public class Issuer extends SesamUser {
 
 	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JsonIgnoreProperties("issuer")
-	private List<Credential> credentials;
+	private List<Credential> credentials = new ArrayList<>();
 
 	protected Issuer() {
 	}
