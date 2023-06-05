@@ -77,7 +77,7 @@
                     </q-item>
                   </template>
                 </q-select>
-                <div class="row q-mt-sm justify-around items-center no-wrap"
+                <div class="row q-mt-sm justify-around no-wrap"
                      v-for="(attributeFilter,j) in qSelects.configParts[i].attributeFilter" style="min-width: 100%">
                   <q-select style="width: 12em"
                             rounded outlined dropdown-icon="expand_more"
@@ -92,12 +92,22 @@
                             v-model="qSelects.configParts[i].attributeFilter[j].predicateType" ref="predicateType"
                             :options="getPredicates(qSelects.configParts[i].attributeFilter[j].attribute)"/>
                   <q-input style="width: 10em"
-                           rounded outlined v-model="qSelects.configParts[i].attributeFilter[j].value"
-                           :type="getType(qSelects.configParts[i].attributeFilter[j].attribute)"
-                           :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
+                           bottom-slots rounded outlined v-model="qSelects.configParts[i].attributeFilter[j].value"
+                     :type="getType(qSelects.configParts[i].attributeFilter[j].attribute)"
+                     :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
+                    <template v-slot:hint>
+                      <q-checkbox
+                          label="Aktueller Zeitpunkt"
+                          dense
+                          size="2em"
+                          v-model="qSelects.configParts[i].attributeFilter[j].currentDate"
+                          v-if="qSelects.configParts[i].attributeFilter[j].attribute?.type.toLowerCase() === 'date'"
+                          @update:model-value="setDate(i,j)">
+                      </q-checkbox>
+                    </template>
                   </q-input>
-                  <q-btn style="width: 3em; height: 3em"
-                         flat round icon="delete" @click="removeFilter(i,j)"/>
+                  <q-btn style="width: 4em; height: 4em"
+                      flat round icon="delete" @click="removeFilter(i,j)"/>
                 </div>
               </q-card-section>
               <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add"
