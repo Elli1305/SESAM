@@ -138,11 +138,17 @@ async function logout() {
                   </div>
                 </q-menu>
               </div>
-              <router-link
-                  v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
-                  to="/editFloorPlan" class="headerLink text-accent">
-                <p class="headerText">{{ t("home.editorPages") }}</p>
-              </router-link>
+              <div>
+                <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
+                   class="headerText foldMenu text-accent">{{ t("home.editorPages") }}</p>
+                <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
+                        self="top right" style="background-color: var(--bg-color)">
+                  <div class="column">
+                    <router-link to="/editFloorPlan" class="q-ma-sm headerLink text-black">{{ t("home.editFloorplan") }}</router-link>
+                    <router-link to="/grouprooms" class="q-ma-sm headerLink text-black">{{ t("home.groupRooms") }}</router-link>
+                  </div>
+                </q-menu>
+              </div>
               <router-link
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ISSUER' && r.granted)"
                   to="/credentials" class="headerLink text-accent">

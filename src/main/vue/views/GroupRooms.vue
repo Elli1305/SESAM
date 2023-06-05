@@ -96,18 +96,14 @@
       </q-table>
     </div>
 
-    <q-dialog
-            v-model="deleteAlert"
-    >
-        <q-card style="width: 400px">
+    <q-dialog v-model="deleteAlert">
+        <q-card>
             <q-card-section>
                 <div class="text-h6">{{ t('adminEdit.attention') }}</div>
             </q-card-section>
-
             <q-card-section class="q-pt-none">
                 {{ t('groupRooms.question') }}
             </q-card-section>
-
             <q-card-actions align="right" class="text-primary">
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
                 <q-btn flat :label="t('adminEdit.delete')" @click="deleteGroup(); deleteAlert=false"/>
@@ -115,10 +111,8 @@
         </q-card>
     </q-dialog>
 
-    <q-dialog
-        v-model="editAlert"
-    >
-        <q-card style="width: 500px">
+    <q-dialog v-model="editAlert">
+        <q-card>
             <q-card-section>
                 <div class="text-h6">Name der Gruppe</div>
             </q-card-section>
@@ -126,23 +120,17 @@
                 <q-input dense v-model="editName" autofocus @keyup.enter="prompt = false"/>
             </q-card-section>
 
-            <q-card-section class="a-pt-none">
+            <q-card-section class="q-pt-none">
                 <div class="text-h6">{{t('groupRooms.chooseRooms')}}</div>
             </q-card-section>
-
-            <div class="q-pl-md q-pr-md q-pb-md" style="max-width: 500px">
-                <div class="q-gutter-md">
-                    <q-select
-                        filled
-                        v-model="modelRoomsNew"
-                        multiple
-                        :options="listOfAllRoomsViaBuilding"
-                        option-label="name"
-
-                    />
-                </div>
-            </div>
-
+            <q-card-section class="q-pt-none">
+              <q-select
+                  filled
+                  v-model="modelRoomsNew"
+                  multiple
+                  :options="listOfAllRoomsViaBuilding"
+                  option-label="name"/>
+            </q-card-section>
             <q-card-actions align="right" class="text-primary">
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
                 <q-btn flat label="Speichern" @click="updateCurrentGroup(editName,modelRoomsNew);"
@@ -153,48 +141,31 @@
 
     </q-dialog>
 
-  <!--    the dialog for adding a new group-->
-    <div class="q-pa-md q-gutter-sm">
-
-        <q-dialog v-model="newGroup">
-            <q-card style="width: 500px">
-
-
-                <q-card-section>
-                    <div class="text-h6">Name der Gruppe</div>
-                </q-card-section>
-                <q-card-section class="q-pt-none">
-                    <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
-                </q-card-section>
-                <q-card-section>
-                    <div class="text-h6">Räume auswählen</div>
-                </q-card-section>
-
-                <q-card-section class="q-pt-none">
-
-                    <div class="q-pa-md" style="max-width: 500px">
-                        <div class="q-gutter-md">
-                            <q-select
-                                filled
-                                v-model="modelRooms"
-                                multiple
-                                :options="listOfAllRoomsViaBuilding"
-                                option-label="name"
-
-                            />
-                        </div>
-                    </div>
-
-                </q-card-section>
-
-                <q-card-actions align="right" class="text-primary">
-                    <q-btn flat :label="t('adminEdit.back')" @click="toDefault()" v-close-popup/>
-                    <q-btn flat label="Speichern"
-                           @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
-                </q-card-actions>
-            </q-card>
-        </q-dialog>
-    </div>
+    <q-dialog v-model="newGroup">
+        <q-card>
+            <q-card-section>
+                <div class="text-h6">Name der Gruppe</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+                <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
+            </q-card-section>
+            <q-card-section>
+                <div class="text-h6">Räume auswählen</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+              <q-select
+                  filled
+                  v-model="modelRooms"
+                  multiple
+                  :options="listOfAllRoomsViaBuilding"
+                  option-label="name"/>
+            </q-card-section>
+            <q-card-actions align="right" class="text-primary">
+                <q-btn flat :label="t('adminEdit.back')" @click="toDefault()" v-close-popup/>
+                <q-btn flat :label="t('adminEdit.save')" @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
