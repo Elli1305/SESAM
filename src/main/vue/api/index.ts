@@ -6,6 +6,7 @@ import building from "@/main/vue/api/building";
 import floor from "@/main/vue/api/floor";
 import room from "@/main/vue/api/room";
 import door from "@/main/vue/api/door";
+import doorConfig from "@/main/vue/api/doorConfig";
 import roomGroups from "@/main/vue/api/roomGroups";
 
 export default {
@@ -16,6 +17,7 @@ export default {
     floor,
     credential,
     room,
+    door,
     roomGroups,
-    door
+    doorConfig
 };

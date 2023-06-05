@@ -16,64 +16,60 @@ import java.util.Optional;
 @Service
 @Primary
 public class IssuerServiceImpl implements IssuerService {
-    private final IssuerRepository issuerRepository;
-    private final RoomRepository roomRepository;
-    private final CredentialRepository credentialRepository;
+	private final IssuerRepository issuerRepository;
+	private final RoomRepository roomRepository;
+	private final CredentialRepository credentialRepository;
 
-    @Autowired
-    public IssuerServiceImpl(IssuerRepository issuerRepository,
-                             RoomRepository roomRepository, CredentialRepository credentialRepository) {
-        this.issuerRepository = issuerRepository;
-        this.roomRepository = roomRepository;
-        this.credentialRepository = credentialRepository;
-    }
-
-
-
-    @Override
-    public List<Issuer> getIssuers() {
-        final List<Issuer> issuers = new ArrayList<>();
-        issuerRepository.findAll().forEach(issuers::add);
-        return issuers;
-    }
-
-    @Override
-    public Issuer getIssuerByMail(String email) {
-        return issuerRepository.findByEmail(email).orElse(null);
-    }
-
-    @Override
-    public Optional<Issuer> getIssuer(Long id) {
-        return issuerRepository.findById(String.valueOf(id));
-    }
+	@Autowired
+	public IssuerServiceImpl(final IssuerRepository issuerRepository,
+							 final RoomRepository roomRepository, final CredentialRepository credentialRepository) {
+		this.issuerRepository = issuerRepository;
+		this.roomRepository = roomRepository;
+		this.credentialRepository = credentialRepository;
+	}
 
 
-    @Override
-    public void deleteIssuer(Issuer issuer) {
-        issuerRepository.delete(issuer);
-    }
+	@Override
+	public List<Issuer> getIssuers() {
+		final List<Issuer> issuers = new ArrayList<>();
+		issuerRepository.findAll().forEach(issuers::add);
+		return issuers;
+	}
 
-    @Override
-    public void saveAll(Iterable<Issuer> issuers) {
-        issuerRepository.saveAll(issuers);
-    }
+	@Override
+	public Issuer getIssuerByMail(final String email) {
+		return issuerRepository.findByEmail(email).orElse(null);
+	}
 
-    @Override
-    public void updateIssuer(Long id, IssuerResponseCmd cmd) {
-        Optional<Issuer> issuer = getIssuer(id);
-        List<Credential> credentials = new ArrayList<>();
-        if (issuer.isPresent()) {
-            Optional<Room> room = roomRepository.findById(cmd.getRoom());
-            if (room.isPresent()) {
-                issuer.get().setRoom(room.get());
-            }
-            for (Long cred: cmd.getCredentials()) {
-                Optional<Credential> credential = credentialRepository.findById(cred);
-                if (credential.isPresent()) {
-                    credentials.add(credential.get());
-                }
-            }
-            issuer.get().setCredentials(credentials);
-        }
-    }
+	@Override
+	public Optional<Issuer> getIssuer(final Long id) {
+		return issuerRepository.findById(String.valueOf(id));
+	}
+
+
+	@Override
+	public void deleteIssuer(final Issuer issuer) {
+		issuerRepository.delete(issuer);
+	}
+
+	@Override
+	public void saveAll(final Iterable<Issuer> issuers) {
+		issuerRepository.saveAll(issuers);
+	}
+
+	@Override
+	public void updateIssuer(final IssuerResponseCmd cmd) {
+		final Optional<Issuer> issuer = getIssuer(cmd.getIssuerId());
+		final List<Credential> credentials = new ArrayList<>();
+		if (issuer.isPresent()) {
+			final Optional<Room> room = roomRepository.findById(cmd.getRoom().getId());
+			room.ifPresent(value -> issuer.get().setRoom(value));
+			for (final Long cred : cmd.getCredentials()) {
+				final Optional<Credential> credential = credentialRepository.findById(cred);
+				credential.ifPresent(credentials::add);
+			}
+			issuer.get().setCredentials(credentials);
+			issuerRepository.save(issuer.get());
+		}
+	}
 }

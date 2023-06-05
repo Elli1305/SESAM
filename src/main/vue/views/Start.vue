@@ -1,7 +1,7 @@
 <template>
   <NavigationTree></NavigationTree>
   <q-page class="row no-wrap">
-        <FloorPlan class="fit"></FloorPlan>
+        <FloorPlan class="full-width"></FloorPlan>
         <FloorPlanRoomList></FloorPlanRoomList>
   </q-page>
 </template>

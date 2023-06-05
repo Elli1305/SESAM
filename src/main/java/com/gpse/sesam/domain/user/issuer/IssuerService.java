@@ -8,15 +8,15 @@ import java.util.Optional;
 
 public interface IssuerService {
 
-    List<Issuer> getIssuers();
+	List<Issuer> getIssuers();
 
-    Issuer getIssuerByMail(String username);
+	Issuer getIssuerByMail(String username);
 
-    Optional<Issuer> getIssuer(Long id);
+	Optional<Issuer> getIssuer(Long id);
 
-    void deleteIssuer(Issuer issuer);
+	void deleteIssuer(Issuer issuer);
 
-    void saveAll(Iterable<Issuer> issuer);
+	void saveAll(Iterable<Issuer> issuer);
 
-    public void updateIssuer(Long id, IssuerResponseCmd cmd);
+	public void updateIssuer(IssuerResponseCmd cmd);
 }

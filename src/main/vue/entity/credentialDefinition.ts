@@ -25,6 +25,7 @@ export interface IssueCredential {
 
 export interface FormEntry {
     id: bigint;
+    attributeName: string
     label: string;
     type: CredentialFormEntryType;
 }

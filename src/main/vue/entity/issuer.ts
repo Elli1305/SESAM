@@ -8,6 +8,8 @@ export interface Issuer extends User {
 }
 
 export interface IssuerCmd {
+
+    issuerId: number
     room: string
     credentials: string[]
 }

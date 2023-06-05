@@ -19,8 +19,8 @@ public class RoomController {
 
 	@Secured("EDITOR")
 	@PostMapping("/save")
-	public Room save(@RequestBody final Room building) {
-		return roomService.save(building);
+	public Room save(@RequestBody final Room room) {
+		return roomService.save(room);
 	}
 
 	@Secured("EDITOR")

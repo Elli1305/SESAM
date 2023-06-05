@@ -29,8 +29,8 @@
               <div class="row no-wrap">
                 <div class="column no-wrap" style="padding: 0.5em">
                   <q-list>
-                    <q-item-label>{{t("floorplan.roomName")}}:</q-item-label>
-                    <q-item-label>{{t("floorplan.doors")}}:</q-item-label>
+                    <q-item-label>{{ t("floorplan.roomName") }}:</q-item-label>
+                    <q-item-label>{{ t("floorplan.doors") }}:</q-item-label>
                     <q-item-label>Credentials:</q-item-label>
                   </q-list>
                 </div>
@@ -38,7 +38,9 @@
                   <q-list>
                     <q-item-label>{{ room.name }}</q-item-label>
                     <q-item-label>{{ room.doors.map(door => door.name).join(", ") }}</q-item-label>
-                    <q-item-label>{{ room.doors.flatMap(door => door.credentials).map(credential => credential?.name).join(", ") }}</q-item-label>
+                    <q-item-label>
+                      {{ room.doors.flatMap(door => door.credentials).map(credential => credential?.name).join(", ") }}
+                    </q-item-label>
                   </q-list>
                 </div>
               </div>
@@ -46,11 +48,12 @@
                   v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                 <q-separator></q-separator>
                 <div class="row justify-center" style="padding: 0.5em">
-                  <p class="cursor-pointer q-mb-none" :style="{color: getCssVar('primary')}" @click="setOldValueR(room)">{{t( 'floorplan.edit')}}</p>
+                  <p class="cursor-pointer q-mb-none" :style="{color: getCssVar('primary')}"
+                     @click="setOldValueR(room)">{{ t('floorplan.edit') }}</p>
                   <q-dialog v-model="inception">
                     <q-card>
                       <q-card-section>
-                        <div class="text-h6">{{t("floorplan.editRoom")}}</div>
+                        <div class="text-h6">{{ t("floorplan.editRoom") }}</div>
                         <div class="q-mt-md">
                           <q-input filled v-model="currentRoomName" :label="t( 'floorplan.roomName')" stack-label
                                    style="width: 250px; padding-bottom: 1em"/>
@@ -59,12 +62,12 @@
                           <q-list bordered class="rounded-borders" style="max-width: 600px">
                             <q-item-label header>
                               <div class="row items-center">
-                                <div class="q-mr-sm">{{t("floorplan.doors")}}</div>
+                                <div class="q-mr-sm">{{ t("floorplan.doors") }}</div>
 
                               </div>
                             </q-item-label>
                             <template v-for="door in room.doors">
-                              <q-item>
+                              <q-item class="q-mb-sm">
                                 <q-item-section avatar top>
                                   <q-icon name="meeting_room" color="black" size="34px"/>
                                 </q-item-section>
@@ -84,37 +87,21 @@
                                   </div>
                                 </q-item-section>
                               </q-item>
-                              <div class="row justify-end" style="padding: 0.7em">
+                              <div class="row justify-end">
 
                                 <q-dialog v-model="deleteDoorDialog" persistent transition-show="scale"
                                           transition-hide="scale">
                                   <q-card>
                                     <q-card-section class="q-pa-md">
-                                      <div class="text-h6">{{t("floorplan.confirmDeletion")}}</div>
-                                      <div class="q-mt-md">{{t("floorplan.confirmDeletionText")}}</div>
+                                      <div class="text-h6">{{ t("floorplan.confirmDeletion") }}</div>
+                                      <div class="q-mt-md">{{ t("floorplan.confirmDeletionText") }}</div>
                                     </q-card-section>
 
                                     <q-card-actions align="right" class="bg-white text-teal">
                                       <q-btn flat color="primary" :label="t( 'floorplan.cancel')" v-close-popup/>
-                                      <q-btn flat color="primary" :label="t('adminEdit.delete')" @click="deleteDoor(room, door)"
+                                      <q-btn flat color="primary" :label="t('adminEdit.delete')"
+                                             @click="deleteDoor(room, door)"
                                              v-close-popup/>
-                                      </q-card-actions>
-                                  </q-card>
-                                </q-dialog>
-                                <q-dialog v-model="editDoorDialog" persistent transition-show="scale"
-                                          transition-hide="scale">
-                                  <q-card>
-                                    <q-card-section>
-                                      <div class="text-h6">{{t("floorplan.editDoor")}}</div>
-                                    </q-card-section>
-                                    <q-card-section>
-                                      <q-input filled v-model="editedDoorName" stack-label :label="t( 'floorplan.doorName')"/>
-                                    </q-card-section>
-
-
-                                    <q-card-actions align="right" class="bg-white text-primary">
-                                      <q-btn flat :label="t( 'floorplan.cancel')" @click="editDoor(room, door)" v-close-popup/>
-                                      <q-btn flat :label="t( 'floorplan.save')" v-close-popup/>
                                     </q-card-actions>
                                   </q-card>
                                 </q-dialog>
@@ -147,15 +134,25 @@ import {ref, watch} from "vue";
 import {useI18n} from 'vue-i18n';
 import {storeToRefs} from "pinia";
 import {useRoomStore} from "@/main/vue/stores/room";
-import {getCssVar} from "quasar";
+import DoorConfig from "@/main/vue/views/DoorConfig.vue";
+import {getCssVar, useQuasar} from "quasar";
+import api from "@/main/vue/api";
+import CreateDoor from "@/main/vue/views/CreateDoor.vue";
+import {useDoorStore} from "@/main/vue/stores/door";
 
 export default {
-  methods: {getCssVar},
+  components: {DoorConfig},
   props: {
     edit: {
       type: Boolean,
       required: false
     }
+  },
+  methods: {
+    getConfig() {
+      return this.$refs.doorConfig.qSelects
+    },
+    getCssVar
   },
   name: "FloorPlanRoomList",
 
@@ -165,6 +162,7 @@ export default {
     const {rooms} = storeToRefs(floorPlanStore)
     const selectedRooms = floorPlanStore.selectedRooms
     const userStore = useUserStore()
+    const doorStore = useDoorStore()
     const roomStore = useRoomStore();
     const filteredRooms = ref([])
     const search = ref()
@@ -173,6 +171,8 @@ export default {
     const editDoorDialog = ref();
     const editedDoorName = ref();
     const currentRoomName = ref();
+    const $q = useQuasar();
+
 
     filteredRooms.value = rooms.value
 
@@ -189,21 +189,25 @@ export default {
     }
 
     function openDialog(door) {
-      editDoorDialog.value = true;
-      editedDoorName.value = door.name;
+      $q.dialog({
+        component: CreateDoor,
+        componentProps: {
+          door: door
+        }
+      }).onOk(({doorName, configuration, configDescription}) => {
+        door.name = doorName
+        doorStore.save(door).then((savedDoor) => {
+          configuration.description = configDescription
+          configuration.doorId = savedDoor.name + '_' + savedDoor.id
+          configuration.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+          api.doorConfig.save(configuration).then(() => console.log("success"))
+        })
+      })
     }
 
     function setOldValueR(room) {
       inception.value = true;
       currentRoomName.value = room.name;
-    }
-
-    function editDoor(room, door) {
-      editDoorDialog.value = false;
-      const doors = room.doors;
-      door.name = editedDoorName.value;
-      const index = doors.indexOf(door);
-      doors[index].name = editedDoorName.value;
     }
 
     function save(room) {
@@ -257,7 +261,6 @@ export default {
       openDialog,
       roomStore,
       deleteDoor,
-      editDoor,
       save,
       currentRoomName,
       setOldValueR

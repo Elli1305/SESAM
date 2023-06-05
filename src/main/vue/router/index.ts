@@ -18,9 +18,9 @@ import EditUser from "@/main/vue/views/EditUser.vue";
 import GroupRooms from "@/main/vue/views/GroupRooms.vue";
 import CredentialView from "@/main/vue/views/CredentialView.vue";
 import RolesRequest from "@/main/vue/views/RolesRequest.vue";
+import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 import IssueCredential from "@/main/vue/views/IssueCredential.vue";
-import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
 import IssuerManagement from "@/main/vue/views/IssuerManagement.vue";
 
 const router = createRouter({
@@ -118,6 +118,19 @@ const router = createRouter({
             component: RolesRequest,
             meta: {requiresAdmin: true}
         },
+        {
+            path: '/credentials',
+            component: IssueCredentials
+        },
+        {
+            path: '/credentials/:id/issue',
+            component: IssueCredential,
+            props: true
+        },
+        {
+            path: '/corporatedesign',
+            component: CorporateDesign
+        },
         {path: "/:pathMatch(.*)*", component: StartView},
         {
             path: '/issuermanagement',
@@ -145,9 +158,9 @@ const router = createRouter({
             path: "/credentials/:id/issue",
             component: IssueCredential,
             props: true,
-            meta: { requiresAuth: true },
+            meta: {requiresAuth: true},
         },
-  ],
+    ],
 });
 
 router.beforeEach((to, from, next) => {
@@ -166,7 +179,6 @@ router.beforeEach((to, from, next) => {
 
     next();
 });
-
 
 
 export default router

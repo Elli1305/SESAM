@@ -1,33 +1,45 @@
 package com.gpse.sesam.web.cmd;
 
+import com.gpse.sesam.domain.location.room.Room;
+
 import java.util.List;
 
 public class IssuerResponseCmd {
-    java.util.List<Long> credentials;
-    Long room;
 
-    protected IssuerResponseCmd() {
+	private Long issuerId;
+	private List<Long> credentials;
+	private Room room;
 
-    }
+	protected IssuerResponseCmd() {
 
-    public IssuerResponseCmd(java.util.List<Long> credentials, Long room) {
-        this.credentials = credentials;
-        this.room = room;
-    }
+	}
 
-    public void setCredentials(List<Long> credentials) {
-        this.credentials = credentials;
-    }
+	public IssuerResponseCmd(final java.util.List<Long> credentials, final Room room) {
+		this.credentials = credentials;
+		this.room = room;
+	}
 
-    public void setRoom(Long room) {
-        this.room = room;
-    }
+	public void setCredentials(final List<Long> credentials) {
+		this.credentials = credentials;
+	}
 
-    public List<Long> getCredentials() {
-        return credentials;
-    }
+	public void setRoom(final Room room) {
+		this.room = room;
+	}
 
-    public Long getRoom() {
-        return room;
-    }
+	public List<Long> getCredentials() {
+		return credentials;
+	}
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public Long getIssuerId() {
+		return issuerId;
+	}
+
+	public void setIssuerId(final Long issuerId) {
+		this.issuerId = issuerId;
+	}
 }

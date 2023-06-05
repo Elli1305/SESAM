@@ -3,7 +3,7 @@
       <q-stepper v-model="step" ref="stepper" color="primary" animated flat style="width: 80vw">
 
         <q-step :name="1" class="row justify-center" :title="t('issueCredential.steps.form')" icon="description" :done="step > 1">
-          <div class="row justify-around no-wrap" style="height: 25em">
+          <div class="row justify-around no-wrap" style="height: 45vh">
             <div class="column no-wrap" style="width: 40%">
               <p class="row text-h4">{{t('issueCredential.title')}}</p>
               <p class="row text-h6 text-bold">{{ credential?.name }}</p>
@@ -18,7 +18,7 @@
         </q-step>
 
         <q-step :name="2" class="row justify-center" :title="t('issueCredential.steps.list')" icon="checklist" :done="step > 2">
-          <div class="row justify-around no-wrap" style="height: 25em">
+          <div class="row justify-around no-wrap" style="height: 45vh">
             <div class="column no-wrap" style="width: 40%">
               <q-input class="q-my-sm no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
                 :label="attribute.label" :type="attribute.type" readonly />
@@ -33,7 +33,7 @@
 
         <q-step :name="3" class="row justify-center" :title="t('issueCredential.steps.qrcode')" icon="qr_code_scanner">
           <div class="row justify-around no-wrap">
-            <div class="column no-wrap" style="width: 60%; height: 25em">
+            <div class="column no-wrap" style="width: 60%; height: 45vh">
               <p class="q-mb-xs text-h5">{{ t('issueCredential.addCredential.title') }}</p>
               <span class="q-mb-lg sub-title text-grey">{{ credential?.name }}</span>
               <p class="q-mb-xs">{{ t('issueCredential.addCredential.howTo') }}</p>
@@ -52,8 +52,8 @@
                 <li>{{ t('issueCredential.addCredential.steps.step8') }}</li>
               </ol>
             </div>
-            <div class="column justify-center no-wrap" style="width: 20%">
-              <QRCode class="q-ma-md q-pa-sm qr-border" :value="oobUrl" :size="300"/>
+            <div class="column justify-center no-wrap" style="padding-left: 2em">
+              <QRCode class="q-pa-sm qr-border" style="width: 20vw; height: 20vw" :value="oobUrl" :size="300"/>
             </div>
           </div>
         </q-step>
@@ -81,6 +81,7 @@ import { useI18n } from 'vue-i18n';
 import { AxiosError, AxiosResponse } from "axios";
 import api from '@/main/vue/api';
 import {IssueCredential} from "@/main/vue/entity/credentialDefinition";
+import QRCode from 'qrcode.vue';
 
 const props = defineProps<{ id: string }>();
 

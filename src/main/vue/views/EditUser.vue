@@ -1,60 +1,53 @@
 <template>
-    <q-page class="column justify-evenly" style="padding: 0 5em" v-if="user!=null">
-        <p class="row text-h3 justify-center">{{t('adminEdit.title') }}</p>
+  <q-page class="column justify-evenly" style="padding: 2em 5em" v-if="user!=null">
+    <p class="row text-h3 justify-center">{{t('adminEdit.title') }}</p>
+    <div class="column justify-evenly self-center no-wrap" style="width: 80vw; height: 50vh">
+      <div class="column q-gutter-md self-center" style="width: 25em">
+        <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined/>
+        <q-input id="lastname" v-model="user.lastName" :label="t('profile.lastname')" outlined/>
+        <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined disable/>
+        <q-select
+            filled
+            v-model="modelMultiple"
+            multiple
+            :options="options"
+            use-chips
+            stack-label
+            :label= "t('adminEdit.changeRoles')">
+          <template v-slot:selected-item="scope">
+            <q-chip
+                class="q-pa-sm"
+                style="line-height: 1"
+                :label="scope.opt.toString()"
+                :tabindex="scope.tabindex"
+                dense
+                removable
+                icon-remove="clear"
+                @remove="scope.removeAtIndex(scope.index)"/>
+          </template>
+        </q-select>
+      </div>
+      <div class="row justify-around">
+          <q-btn round color="negative" text-color="positive" icon="delete" @click="deleteAlert = true" style="width: 4em; height: 4em"/>
+          <q-btn round color="positive" text-color="negative" @click="saveEditedUser()" icon="save" style="width: 4em; height: 4em"/>
+      </div>
+    </div>
+  </q-page>
 
-        <div class="self-center" style="margin: 2em; width: 25em">
-            <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined style = "width: 500px"/>
-            <q-space style="height: 1em"/>
-            <q-input id="lastname" v-model="user.lastName" :label="t('profile.lastname')" outlined style = "width: 500px"/>
-            <q-space style="height: 1em"/>
-            <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined disable style = "width: 500px"/>
-
-            <div>
-                <q-space style="height: 2em"/>
-            </div>
-            <div style="min-width: 250px; max-width: 300px">
-                <q-badge color="secondary" class="q-mb-md">
-                    Rollen: {{ modelMultiple || '[]' }}
-                </q-badge>
-
-                <q-select
-                    filled
-                    v-model="modelMultiple"
-                    multiple
-                    :options="options"
-                    use-chips
-                    stack-label
-                    :label= "t('adminEdit.changeRoles')"
-                    style = "width: 500px"
-                />
-            </div>
-
-        </div>
-        <div class="row justify-evenly">
-            <q-btn dense round flat color="negative" icon="delete" @click="deleteAlert = true" size="34px"></q-btn>
-            <q-btn dense round flat color="positive" @click="saveEditedUser()" icon="save" size="34px"></q-btn>
-        </div>
-
-    </q-page>
-
-    <q-dialog
-            v-model="deleteAlert"
-    >
-        <q-card style="width: 400px">
-            <q-card-section>
-                <div class="text-h6">{{ t('adminEdit.attention') }}</div>
-            </q-card-section>
-
-            <q-card-section class="q-pt-none">
-                {{ t('adminEdit.question') }}
-            </q-card-section>
-
-            <q-card-actions align="right" class="bg-white text-teal">
-                <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
-                <q-btn flat :label="t('adminEdit.delete')" @click="deleteUser()"/>
-            </q-card-actions>
-        </q-card>
-    </q-dialog>
+  <q-dialog v-model="deleteAlert">
+      <q-card>
+          <q-card-section>
+              <div class="text-h6">{{ t('adminEdit.attention') }}</div>
+          </q-card-section>
+          <q-card-section class="q-pt-none">
+              {{ t('adminEdit.question') }}
+          </q-card-section>
+          <q-card-actions align="right" class="bg-white text-primary">
+              <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
+              <q-btn flat :label="t('adminEdit.delete')" @click="deleteUser()"/>
+          </q-card-actions>
+      </q-card>
+  </q-dialog>
 
 </template>
 
@@ -71,99 +64,98 @@ import {useQuasar} from "quasar";
 let test = ref('')
 
 export default {
-    name: "EditUser",
+  name: "EditUser",
 
-    props:['email'],
-
-
-    setup(props) {
-        const userStore = useUserStore()
-        const $q = useQuasar()
-        const currentUser = userStore.user
-
-        let roles= ref([])
-        const {t} = useI18n()
-
-        let user = ref(null)
+  props: ['email'],
 
 
-        userStore.getEditUser(props.email).then( ()=> {
-            user.value = userStore.editUser
+  setup(props) {
+    const userStore = useUserStore()
+    const $q = useQuasar()
+    const currentUser = userStore.user
+
+    let roles = ref([])
+    const {t} = useI18n()
+
+    let user = ref(null)
 
 
-            let adminRole = user.value.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)
-            let editorRole = user.value.roles.some(r => r.role === 'EDITOR' && r.granted)
-            let issuerRole = user.value.roles.some(r => r.role === 'ISSUER' && r.granted)
+    userStore.getEditUser(props.email).then(() => {
+      user.value = userStore.editUser
 
-            if(adminRole) {
-                roles.value.push('Admin');
-            }
-            if(editorRole) {
-                roles.value.push('Bearbeiter');
-            }
-            if(issuerRole) {
-                roles.value.push('Herausgeber');
-            }
 
+      let adminRole = user.value.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)
+      let editorRole = user.value.roles.some(r => r.role === 'EDITOR' && r.granted)
+      let issuerRole = user.value.roles.some(r => r.role === 'ISSUER' && r.granted)
+
+      if (adminRole) {
+        roles.value.push('Admin');
+      }
+      if (editorRole) {
+        roles.value.push('Bearbeiter');
+      }
+      if (issuerRole) {
+        roles.value.push('Herausgeber');
+      }
+
+    })
+
+    function saveEditedUser() {
+
+      let prename;
+      let lastname;
+      let mail;
+      prename = user.value.firstName
+      lastname = user.value.lastName
+      mail = user.value.username
+
+      userStore.saveEdits(prename, lastname, mail, roles.value.map(r => {
+        if (r === 'Admin') {
+          return 'ADMINISTRATOR'
+        }
+        if (r === 'Bearbeiter') {
+          return 'EDITOR'
+        }
+        if (r === 'Herausgeber') {
+          return 'ISSUER'
+        }
+      })).then(() => {
+        router.push('/admin/currentuserlist');
+      })
+    }
+
+    function deleteUser() {
+      let mail = user.value.username
+
+      if (mail === currentUser.username) {
+        $q.notify({
+          type: 'negative',
+          message: t('adminEdit.deleteOwnAccount'),
+          caption: t('adminEdit.otherAdmin'),
         })
 
-        function saveEditedUser() {
-
-            let prename;
-            let lastname;
-            let mail;
-            prename = user.value.firstName
-            lastname = user.value.lastName
-            mail = user.value.username
-
-            userStore.saveEdits(prename, lastname, mail, roles.value.map(r => {
-                if(r==='Admin') {
-                    return 'ADMINISTRATOR'
-                }
-                if(r==='Bearbeiter') {
-                    return 'EDITOR'
-                }
-                if(r==='Herausgeber') {
-                    return 'ISSUER'
-                }
-            })).then( ()=> {
-                router.push('/admin/currentuserlist'); } )
-        }
-
-        function deleteUser() {
-            let mail = user.value.username
-
-            if(mail === currentUser.username) {
-                $q.notify({
-                    type: 'negative',
-                    message: t('adminEdit.deleteOwnAccount'),
-                    caption: t('adminEdit.otherAdmin'),
-                })
-
-            } else {
-                userStore.deleteUser(mail);
-                router.push('/admin/currentuserlist');
-            }
-        }
-
-//Sprache überall anpassen
-
-
-        return {
-            user: user,
-            deleteAlert: ref(false),
-            t,
-            deleteUser,
-
-
-            saveEditedUser,
-            modelMultiple: roles,
-
-            options: [
-                'Admin', 'Bearbeiter', 'Herausgeber'
-            ]
-        }
+      } else {
+        userStore.deleteUser(mail);
+        router.push('/currentuserlist');
+      }
     }
+
+
+    return {
+      user: user,
+      deleteAlert: ref(false),
+      t,
+      deleteUser,
+
+
+      saveEditedUser,
+      modelMultiple: roles,
+
+      options: [
+        'Admin', 'Bearbeiter', 'Herausgeber'
+      ]
+    }
+  }
 }
 </script>
 
