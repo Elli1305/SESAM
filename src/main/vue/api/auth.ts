@@ -40,10 +40,10 @@ export default {
         return axios.post('/api/edit_user', param);
     },
     deleteUser(param: String): Promise<AxiosResponse<SignUpResponse>> {
-        return axios.delete('/api/delete_user/'+param);
+        return axios.delete('/api/delete_user/' + param);
     },
-    updateIssuer(param: String, issuer:IssuerCmd): Promise<AxiosResponse<IssuerCmd>> {
-        return axios.put('/api/issuer/'+param,issuer)
+    updateIssuer(issuer: IssuerCmd): Promise<AxiosResponse<IssuerCmd>> {
+        return axios.put('/api/issuer', issuer)
     },
     getIssuer(): Promise<AxiosResponse<Issuer []>> {
         return axios.get('/api/issuers');

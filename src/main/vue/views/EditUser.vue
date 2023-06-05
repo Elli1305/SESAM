@@ -64,99 +64,98 @@ import {useQuasar} from "quasar";
 let test = ref('')
 
 export default {
-    name: "EditUser",
+  name: "EditUser",
 
-    props:['email'],
-
-
-    setup(props) {
-        const userStore = useUserStore()
-        const $q = useQuasar()
-        const currentUser = userStore.user
-
-        let roles= ref([])
-        const {t} = useI18n()
-
-        let user = ref(null)
+  props: ['email'],
 
 
-        userStore.getEditUser(props.email).then( ()=> {
-            user.value = userStore.editUser
+  setup(props) {
+    const userStore = useUserStore()
+    const $q = useQuasar()
+    const currentUser = userStore.user
+
+    let roles = ref([])
+    const {t} = useI18n()
+
+    let user = ref(null)
 
 
-            let adminRole = user.value.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)
-            let editorRole = user.value.roles.some(r => r.role === 'EDITOR' && r.granted)
-            let issuerRole = user.value.roles.some(r => r.role === 'ISSUER' && r.granted)
+    userStore.getEditUser(props.email).then(() => {
+      user.value = userStore.editUser
 
-            if(adminRole) {
-                roles.value.push('Admin');
-            }
-            if(editorRole) {
-                roles.value.push('Bearbeiter');
-            }
-            if(issuerRole) {
-                roles.value.push('Herausgeber');
-            }
 
+      let adminRole = user.value.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)
+      let editorRole = user.value.roles.some(r => r.role === 'EDITOR' && r.granted)
+      let issuerRole = user.value.roles.some(r => r.role === 'ISSUER' && r.granted)
+
+      if (adminRole) {
+        roles.value.push('Admin');
+      }
+      if (editorRole) {
+        roles.value.push('Bearbeiter');
+      }
+      if (issuerRole) {
+        roles.value.push('Herausgeber');
+      }
+
+    })
+
+    function saveEditedUser() {
+
+      let prename;
+      let lastname;
+      let mail;
+      prename = user.value.firstName
+      lastname = user.value.lastName
+      mail = user.value.username
+
+      userStore.saveEdits(prename, lastname, mail, roles.value.map(r => {
+        if (r === 'Admin') {
+          return 'ADMINISTRATOR'
+        }
+        if (r === 'Bearbeiter') {
+          return 'EDITOR'
+        }
+        if (r === 'Herausgeber') {
+          return 'ISSUER'
+        }
+      })).then(() => {
+        router.push('/admin/currentuserlist');
+      })
+    }
+
+    function deleteUser() {
+      let mail = user.value.username
+
+      if (mail === currentUser.username) {
+        $q.notify({
+          type: 'negative',
+          message: t('adminEdit.deleteOwnAccount'),
+          caption: t('adminEdit.otherAdmin'),
         })
 
-        function saveEditedUser() {
-
-            let prename;
-            let lastname;
-            let mail;
-            prename = user.value.firstName
-            lastname = user.value.lastName
-            mail = user.value.username
-
-            userStore.saveEdits(prename, lastname, mail, roles.value.map(r => {
-                if(r==='Admin') {
-                    return 'ADMINISTRATOR'
-                }
-                if(r==='Bearbeiter') {
-                    return 'EDITOR'
-                }
-                if(r==='Herausgeber') {
-                    return 'ISSUER'
-                }
-            })).then( ()=> {
-                router.push('/admin/currentuserlist'); } )
-        }
-
-        function deleteUser() {
-            let mail = user.value.username
-
-            if(mail === currentUser.username) {
-                $q.notify({
-                    type: 'negative',
-                    message: t('adminEdit.deleteOwnAccount'),
-                    caption: t('adminEdit.otherAdmin'),
-                })
-
-            } else {
-                userStore.deleteUser(mail);
-                router.push('/admin/currentuserlist');
-            }
-        }
-
-//Sprache überall anpassen
-
-
-        return {
-            user: user,
-            deleteAlert: ref(false),
-            t,
-            deleteUser,
-
-
-            saveEditedUser,
-            modelMultiple: roles,
-
-            options: [
-                'Admin', 'Bearbeiter', 'Herausgeber'
-            ]
-        }
+      } else {
+        userStore.deleteUser(mail);
+        router.push('/currentuserlist');
+      }
     }
+
+
+    return {
+      user: user,
+      deleteAlert: ref(false),
+      t,
+      deleteUser,
+
+
+      saveEditedUser,
+      modelMultiple: roles,
+
+      options: [
+        'Admin', 'Bearbeiter', 'Herausgeber'
+      ]
+    }
+  }
 }
 </script>
 
