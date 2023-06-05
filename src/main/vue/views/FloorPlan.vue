@@ -190,7 +190,7 @@ export default {
           componentProps: {
             rooms: this.floorPlanStore.rooms
           }
-        }).onOk(({room, doorName, configuration}) => {
+        }).onOk(({room, doorName, configuration, configDescription}) => {
           room.doors.push({
             name: doorName,
             coordinates: e.layer._latlngs.map((latLng) => ({
@@ -203,8 +203,7 @@ export default {
             const savedDoor = savedRoom.doors.reduce((prev, current) => (prev.id > current.id) ? prev : current)
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
-            console.log(configuration.configParts)
-            configuration.description = 'Test' // TODO: allow input of description
+            configuration.description = configDescription
             configuration.doorId = savedDoor.name + '_' + savedDoor.id
             configuration.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
             api.doorConfig.save(configuration).then(() => console.log("success"))

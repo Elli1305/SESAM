@@ -105,28 +105,6 @@
                                     </q-card-actions>
                                   </q-card>
                                 </q-dialog>
-                                <q-dialog v-model="editDoorDialog" persistent transition-show="scale"
-                                          transition-hide="scale">
-
-                                  <q-card style="max-width: min-content">
-                                    <q-card-section>
-                                      <div class="text-h6">{{ t("floorplan.editDoor") }}</div>
-                                    </q-card-section>
-                                    <q-card-section>
-                                      <q-input filled v-model="editedDoorName" stack-label
-                                               :label="t( 'floorplan.doorName')"/>
-                                    </q-card-section>
-                                    <q-card-section>
-                                      <DoorConfig ref="doorConfig" :room="room"
-                                                  :door-name="editedDoorName.value"></DoorConfig>
-                                    </q-card-section>
-                                    <q-card-actions>
-                                      <q-btn flat :label="t( 'floorplan.cancel')" @click="editDoor(room, door)"
-                                             v-close-popup/>
-                                      <q-btn flat :label="t( 'floorplan.save')" v-close-popup/>
-                                    </q-card-actions>
-                                  </q-card>
-                                </q-dialog>
 
                               </div>
                             </template>
@@ -157,12 +135,13 @@ import {useI18n} from 'vue-i18n';
 import {storeToRefs} from "pinia";
 import {useRoomStore} from "@/main/vue/stores/room";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
-import {getCssVar} from "quasar";
+import {getCssVar, useQuasar} from "quasar";
 import api from "@/main/vue/api";
+import CreateDoor from "@/main/vue/views/CreateDoor.vue";
+import {useDoorStore} from "@/main/vue/stores/door";
 
 export default {
   components: {DoorConfig},
-  methods: {getCssVar},
   props: {
     edit: {
       type: Boolean,
@@ -172,7 +151,8 @@ export default {
   methods: {
     getConfig() {
       return this.$refs.doorConfig.qSelects
-    }
+    },
+    getCssVar
   },
   name: "FloorPlanRoomList",
 
@@ -182,6 +162,7 @@ export default {
     const {rooms} = storeToRefs(floorPlanStore)
     const selectedRooms = floorPlanStore.selectedRooms
     const userStore = useUserStore()
+    const doorStore = useDoorStore()
     const roomStore = useRoomStore();
     const filteredRooms = ref([])
     const search = ref()
@@ -190,7 +171,7 @@ export default {
     const editDoorDialog = ref();
     const editedDoorName = ref();
     const currentRoomName = ref();
-    let doorConfig = ref()
+    const $q = useQuasar();
 
 
     filteredRooms.value = rooms.value
@@ -208,28 +189,25 @@ export default {
     }
 
     function openDialog(door) {
-      editDoorDialog.value = true;
-      editedDoorName.value = door.name;
+      $q.dialog({
+        component: CreateDoor,
+        componentProps: {
+          door: door
+        }
+      }).onOk(({doorName, configuration, configDescription}) => {
+        door.name = doorName
+        doorStore.save(door).then((savedDoor) => {
+          configuration.description = configDescription
+          configuration.doorId = savedDoor.name + '_' + savedDoor.id
+          configuration.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+          api.doorConfig.save(configuration).then(() => console.log("success"))
+        })
+      })
     }
 
     function setOldValueR(room) {
       inception.value = true;
       currentRoomName.value = room.name;
-    }
-
-    const editDoor = function (room, door, config) {
-      editDoorDialog.value = false;
-      const doors = room.doors;
-      door.name = editedDoorName.value;
-      const index = doors.indexOf(door);
-      doors[index].name = editedDoorName.value;
-      console.log(config)
-      doorConfig.value = config
-      console.log(doorConfig.value)
-      doorConfig.value.description = 'Test' // TODO: allow input of description
-      doorConfig.value.doorId = door.name + '_' + door.id
-      doorConfig.value.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-      api.doorConfig.save(doorConfig.value.configParts).then(() => console.log("success"))
     }
 
     function save(room) {
@@ -283,7 +261,6 @@ export default {
       openDialog,
       roomStore,
       deleteDoor,
-      editDoor,
       save,
       currentRoomName,
       setOldValueR

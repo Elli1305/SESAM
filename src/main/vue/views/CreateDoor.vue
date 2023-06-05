@@ -18,6 +18,7 @@
               fill-input
               input-debounce="0"
               :options="rooms"
+              v-if="!door"
               @filter="filterFn"
               style="width: 250px; padding-bottom: 32px"
           >
@@ -35,11 +36,15 @@
           <q-card bordered flat style="min-width: 60em">
             <q-toolbar class="bg-primary text-white shadow-2" style="margin-bottom: 1em">
               <q-toolbar-title>Konfigurationsgruppen</q-toolbar-title>
-              <q-icon class="q-mr-xs" color="white" size="2em" name="info" />
+              <q-icon class="q-mr-xs" color="white" size="2em" name="info"/>
               <q-tooltip class="bg-grey-14" anchor="center middle" self="center middle" style="font-size: medium">
-                Konfigurationsgruppen sind untereinander mit AND verknüpft
+                Konfigurationsgruppen sind untereinander mit UND verknüpft
               </q-tooltip>
             </q-toolbar>
+            <q-card-section>
+              <q-input filled v-model="configDescription" label="Beschreibung der Konfiguration" stack-label
+                       style="min-width: 100%"/>
+            </q-card-section>
             <div v-for="(select,i) in qSelects.configParts">
 
               <q-separator v-if="i !== 0"/>
@@ -114,7 +119,7 @@
       </q-card-section>
       <q-card-actions align="right">
         <q-btn color="primary" label="Abbrechen" @click="onCancelClick"/>
-        <q-btn color="primary" label="Speichern" @click="onOKClick"/>
+        <q-btn color="primary" label="Speichern" :disable="!doorName || (!room && !door)" @click="onOKClick"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -127,8 +132,12 @@ import {PredicateType} from "@/main/vue/entity/doorConfiguration";
 
 export default {
   props: {
-    rooms: {
-      required: true
+    rooms: Array,
+    door: {
+      required: false
+    },
+    doorConfig: {
+      required: false
     }
   },
 
@@ -148,7 +157,12 @@ export default {
     },
 
     onOKClick() {
-      this.$emit('ok', {room: this.room, doorName: this.doorName, configuration: this.qSelects})
+      this.$emit('ok', {
+        room: this.room,
+        doorName: this.doorName,
+        configuration: this.qSelects,
+        configDescription: this.configDescription
+      })
       this.hide()
     },
     onCancelClick() {
@@ -208,6 +222,7 @@ export default {
     const credentialStore = useCredentialStore()
     credentialStore.getAllCredentials()
     const credentials = ref()
+    const configDescription = ref()
 
     const qSelects = ref({
       configParts: [{
@@ -220,6 +235,14 @@ export default {
         }]
       }]
     })
+
+    if (props.door) {
+      doorName.value = props.door.name
+    }
+
+    if (props.doorConfig) {
+      configDescription.value = props.doorConfig
+    }
 
     const filterFn = function (val, update, abort) {
       update(() => {
@@ -249,6 +272,7 @@ export default {
       doorName,
       credentialStore,
       qSelects,
+      configDescription,
       commonAttributeFilter
     }
   }

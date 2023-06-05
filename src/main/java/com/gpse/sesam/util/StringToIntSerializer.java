@@ -13,8 +13,8 @@ public class StringToIntSerializer extends JsonSerializer<String> {
 
 	private static final long serialVersionUID = 1234567L;
 
-	private final Set<String> magicKeys = new HashSet<>(Arrays.asList("$T-MEMBER", "$T-TRAINING", "$U-MEMBER", "$U" +
-			"-TRAINING", "$TODAY-YYYYMMDD"));
+	private final Set<String> magicKeys = new HashSet<>(Arrays.asList("$T-MEMBER", "$T-TRAINING", "$U-MEMBER", "$U"
+			+ "-TRAINING", "$TODAY-YYYYMMDD"));
 
 	@Override
 	public void serialize(final String value,

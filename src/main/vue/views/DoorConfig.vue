@@ -4,7 +4,7 @@
     <q-card bordered flat style="min-width: 70em; margin: 0.5em">
       <q-toolbar class="bg-primary text-white shadow-2" style="margin-bottom: 1em">
         <q-toolbar-title>Konfigurationsgruppen</q-toolbar-title>
-        <q-icon class="q-mr-xs" color="white" size="2em" name="info" />
+        <q-icon class="q-mr-xs" color="white" size="2em" name="info"/>
         <q-tooltip class="bg-grey-14" anchor="center middle" self="center middle" style="font-size: medium">
           Konfigurationsgruppen sind untereinander mit AND verknüpft
         </q-tooltip>
@@ -92,9 +92,6 @@ export default {
   props: {
     room: {
       required: true
-    },
-    doorName: {
-      required: true
     }
   },
   emits: [
@@ -152,7 +149,6 @@ export default {
   },
   setup(props) {
     const room = ref(props.room)
-    const doorName = ref(props.doorName)
     const credentialStore = useCredentialStore()
     credentialStore.getAllCredentials()
     const credentials = ref()
@@ -186,7 +182,6 @@ export default {
     return {
       room,
       credentials,
-      doorName,
       credentialStore,
       qSelects,
       commonAttributeFilter

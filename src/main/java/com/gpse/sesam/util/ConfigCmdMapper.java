@@ -16,6 +16,10 @@ import java.util.List;
 
 public final class ConfigCmdMapper {
 
+
+	private ConfigCmdMapper() {
+	}
+
 	public static ProofConfig fromCmd(final ConfigCmd configCmd) {
 		final ProofConfig proofConfig = new ProofConfig();
 
