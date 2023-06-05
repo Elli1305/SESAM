@@ -396,7 +396,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		//Rooms with Credentials
 
 		final Door door3 = new Door("Tor120", null);
-		door3.addCredential(safety);
 
 		final List<Door> doors3 = new ArrayList<>();
 
@@ -428,7 +427,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		location.addBuilding(building3);
 
 		final Door door4 = new Door("Tor1506", null);
-		door4.addCredential(firstAid);
 
 		final List<Door> doors4 = new ArrayList<>();
 

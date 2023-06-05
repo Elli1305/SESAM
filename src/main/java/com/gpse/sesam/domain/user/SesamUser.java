@@ -1,7 +1,16 @@
 package com.gpse.sesam.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,125 +22,125 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class SesamUser implements UserDetails {
-    @Serial
-    private static final long serialVersionUID = 0L;
+	@Serial
+	private static final long serialVersionUID = 0L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+	@Column(unique = true, nullable = false)
+	private String email;
 
-    @JsonIgnore
-    @Column(nullable = false)
-    private String password;
+	@JsonIgnore
+	@Column(nullable = false)
+	private String password;
 
-    @Column(nullable = false)
-    private String firstName;
+	@Column(nullable = false)
+	private String firstName;
 
-    @Column(nullable = false)
-    private String lastName;
+	@Column(nullable = false)
+	private String lastName;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<SesamUserRole> roles;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<SesamUserRole> roles;
 
-    protected SesamUser() {
-    }
+	protected SesamUser() {
+	}
 
-    /**
-     * Creates a new {@link SesamUser}
-     *
-     * @param email     the user's email
-     * @param password  the user's password
-     * @param firstName the user's first name
-     * @param lastName  the user's last name
-     * @param roles     the user's roles
-     */
-    public SesamUser(final String email, final String password, final String firstName, final String lastName,
+	/**
+	 * Creates a new {@link SesamUser}
+	 *
+	 * @param email     the user's email
+	 * @param password  the user's password
+	 * @param firstName the user's first name
+	 * @param lastName  the user's last name
+	 * @param roles     the user's roles
+	 */
+	public SesamUser(final String email, final String password, final String firstName, final String lastName,
 					 final List<SesamUserRole> roles) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.roles = roles;
-    }
+		this.email = email;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.roles = roles;
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList(
-                roles.stream()
-                        .filter(SesamUserRole::isGranted)
-                        .map(e -> e.getRole().toString())
-                        .toList()
-                        .toArray(new String[0])
-        );
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return AuthorityUtils.createAuthorityList(
+				roles.stream()
+						.filter(SesamUserRole::isGranted)
+						.map(e -> e.getRole().toString())
+						.toList()
+						.toArray(new String[0])
+		);
+	}
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+	@Override
+	public String getUsername() {
+		return email;
+	}
 
-    public void setEmail(final String email) {
-        this.email = email;
-    }
+	public void setEmail(final String email) {
+		this.email = email;
+	}
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+	@Override
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(final String password) {
-        this.password = password;
-    }
+	public void setPassword(final String password) {
+		this.password = password;
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
+	public void setFirstName(final String firstName) {
+		this.firstName = firstName;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
-    }
+	public void setLastName(final String lastName) {
+		this.lastName = lastName;
+	}
 
-    public List<SesamUserRole> getRoles() {
-        return roles;
-    }
+	public List<SesamUserRole> getRoles() {
+		return roles;
+	}
 
-    public void setRoles(final List<SesamUserRole> roles) {
-        this.roles = roles;
-    }
+	public void setRoles(final List<SesamUserRole> roles) {
+		this.roles = roles;
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 }
