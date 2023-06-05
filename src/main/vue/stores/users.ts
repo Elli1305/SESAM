@@ -5,7 +5,6 @@ import {AttainableRole} from "@/main/vue/entity/createUser"
 import axios from 'axios';
 import {User} from "@/main/vue/entity/loginResponse";
 import {LoginData} from "@/main/vue/entity/loginData"
-import {Credential} from "@/main/vue/entity/credentialDefinition";
 import {Issuer} from "@/main/vue/entity/issuer";
 
 export const useUserStore = defineStore('users', () => {
@@ -15,7 +14,7 @@ export const useUserStore = defineStore('users', () => {
     const user: Ref<User | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
     const editUser: Ref<User | null> = ref(null)
-    const issuers: Ref<Issuer []|null> = ref(null)
+    const issuers: Ref<Issuer [] | null> = ref(null)
 
 
     if (sessionStorage.getItem("users")) {
@@ -137,10 +136,10 @@ export const useUserStore = defineStore('users', () => {
     }
 
 
-    function updateIssuer(id: bigint, credential: string[], room: string) {
+    function updateIssuer(id: number, credential: string[], room: string) {
         return new Promise<void>((resolve, reject) => {
-            const idString = id.toString();
-            api.auth.updateIssuer(idString, {
+            api.auth.updateIssuer({
+                issuerId: id,
                 credentials: credential,
                 room: room,
             })
@@ -151,13 +150,14 @@ export const useUserStore = defineStore('users', () => {
         });
     }
 
-    function getIssuers(){
-        return new Promise((resolve, reject) => {api.auth.getIssuer().then((response) => {
-            issuers.value = response.data
-            resolve(response.data)
-        }).catch((error) => {
-            reject(error)
-        })
+    function getIssuers() {
+        return new Promise((resolve, reject) => {
+            api.auth.getIssuer().then((response) => {
+                issuers.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
         })
     }
 

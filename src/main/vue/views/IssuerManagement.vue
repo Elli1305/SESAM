@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{t('issuermanagement.title')}}</p>
+    <p class="row text-h3 justify-center">{{ t('issuermanagement.title') }}</p>
     <div class="row self-center" style="display: flex">
       <q-table
           style="width: 75vw; height: 25em"
@@ -18,7 +18,7 @@
           <div class="q-pa-md">
             <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('issuermanagement.search')">
               <template v-slot:append>
-                <q-icon name="search" />
+                <q-icon name="search"/>
               </template>
             </q-input>
           </div>
@@ -29,19 +29,19 @@
           </q-td>
         </template>
 
-              <template v-slot:body-cell-roles="props">
-                <q-td :props="props">
-                  <div>
-                    {{ props.row.credential.map(option => option).join(',') }}
-                  </div>
-                </q-td>
-              </template>
+        <template v-slot:body-cell-roles="props">
+          <q-td :props="props">
+            <div>
+              {{ props.row.credential.map(option => option).join(',') }}
+            </div>
+          </q-td>
+        </template>
 
-              <template v-slot:body-cell-roomId="props">
-                <q-td :props="props">
-                  <div>{{ props.row.room.name }}</div>
-                </q-td>
-              </template>
+        <template v-slot:body-cell-roomId="props">
+          <q-td :props="props">
+            <div>{{ props.row.room.name }}</div>
+          </q-td>
+        </template>
 
         <template v-slot:body-cell-crendetials="props">
           <q-td :props="props">
@@ -50,41 +50,42 @@
         </template>
       </q-table>
     </div>
-      <q-dialog v-model="prompt" persistent>
+    <q-dialog v-model="prompt" persistent>
       <q-card>
         <q-card-section>
-          <div class="text-h6">{{t('issuermanagement.dialogTitle')}}</div>
+          <div class="text-h6">{{ t('issuermanagement.dialogTitle') }}</div>
         </q-card-section>
         <q-card-section>
           <q-form style="width: 20em" @submit="saveChanges">
             <q-input class="q-my-sm" v-model="model1" label="Last Name" outlined readonly></q-input>
             <q-input class="q-my-sm" v-model="model2" label="First Name" outlined readonly></q-input>
             <q-select class="q-my-sm"
-                filled
-                v-model="model4"
-                multiple
-                :label="t('issuermanagement.credentialsList')"
-                emit-value
-                :options="credentialStore.allCredentials"
-                option-label="name"
-                option-value="id"
-                map-options
-                options-cover/>
+                      filled
+                      v-model="model4"
+                      multiple
+                      :label="t('issuermanagement.credentialsList')"
+                      emit-value
+                      :options="credentialStore.allCredentials"
+                      option-label="name"
+                      option-value="id"
+                      map-options
+                      options-cover/>
             <q-select class="q-my-sm"
-                filled
-                v-model="model3"
-                :label="t('issuermanagement.roomsList')"
-                emit-value
-                :options="roomStore.rooms"
-                option-label="name"
-                option-value="id"
-                map-options
-                options-cover/>
+                      filled
+                      v-model="model3"
+                      :label="t('issuermanagement.roomsList')"
+                      emit-value
+                      :options="roomStore.rooms"
+                      option-label="name"
+                      option-value="id"
+                      map-options
+                      options-cover/>
           </q-form>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat  v-close-popup :label="t('issuermanagement.cancel')" color="primary"/>
-          <q-btn flat v-close-popup :label="t('issuermanagement.save')" color="primary" class="q-ml-md" @click="editIssuers(id)"/>
+          <q-btn flat v-close-popup :label="t('issuermanagement.cancel')" color="primary"/>
+          <q-btn flat v-close-popup :label="t('issuermanagement.save')" color="primary" class="q-ml-md"
+                 @click="editIssuers(id)"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -109,7 +110,6 @@ export default {
     const model4 = ref([]);
 
 
-
     const {t} = useI18n();
     const credentialStore = useCredentialStore()
     const roomStore = useRoomStore()
@@ -117,10 +117,10 @@ export default {
     const id = ref();
 
     userStore.getIssuers().then((issuers) => {
-        rows.value = issuers
+      rows.value = issuers
     })
 
-    const filter=ref('')
+    const filter = ref('')
     const columns = [
       {
         name: 'firstName',
@@ -177,19 +177,21 @@ export default {
     credentialStore.getCredentials().then((external) => {
     })
 
-    credentialStore.getCredentials().then((external) => {})
-    roomStore.getRooms().then((rooms) =>{})
+    credentialStore.getCredentials().then((external) => {
+    })
+    roomStore.getRooms().then((rooms) => {
+    })
 
 
+    function editIssuers(id) {
+      userStore.updateIssuer(id, model4.value, model3.value).then(() => {
 
-    function editIssuers(id){
-        userStore.updateIssuer(id, model4.value, model3.value)
-        this.timeout= setTimeout(() =>
             userStore.getIssuers().then((issuers) => {
-                rows.value = issuers
-            }), 250)
+              rows.value = issuers
+            })
+          }
+      )
     }
-
 
 
     return {
