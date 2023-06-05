@@ -1,24 +1,28 @@
 <template>
-<q-page>
-  <div class="q-gutter-y-md column" style="align-items: center; min-width: 20em; display: flex">
-    <q-table
-        title="Credentials"
-        no-data-label="No Credentials found"
-        bordered
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        :filter="filter"
-        style="min-width: 60em; margin-top: 10em">
-
-      <template v-slot:body-cell-actions="props">
-        <q-td :props="props">
-          <q-btn color="primary" label="Ausstellen" :to="'/credentials/' + props.row.id + '/issue'"/>
-        </q-td>
-      </template>
-    </q-table>
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">{{t("home.issuerPages")}}</p>
+    <div class="row self-center">
+      <q-table
+          style="width: 80vw; height: 50vh"
+          :rows-per-page-options="[0]"
+          :rows="rows"
+          :columns="columns"
+          title="Credentials"
+          :separator="'none'"
+          hide-header
+          hide-bottom
+          :no-data-label="t('common.noData')"
+          :no-results-label="t('common.noResults')"
+          :filter="filter"
+          row-key="name">
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props">
+            <q-btn flat rounded color="primary" label="Ausstellen" :to="'/credentials/' + props.row.id + '/issue'"/>
+          </q-td>
+        </template>
+      </q-table>
     </div>
-</q-page>
+  </q-page>
 </template>
 
 <script setup lang="ts">
@@ -27,11 +31,13 @@ import {Credential} from "@/main/vue/entity/credentialDefinition";
 import {ref, Ref} from "vue";
 import {useCredentialStore} from "@/main/vue/stores/credential";
 import {useUserStore} from "@/main/vue/stores/users";
+import {useI18n} from "vue-i18n";
 
 const credentialStore = useCredentialStore()
 const userStore = useUserStore()
 const credentials: Ref<Credential[]> = ref([]);
 const filter = ref('')
+const { t } = useI18n()
 const columns = [
   {
     name: 'name',
@@ -47,6 +53,7 @@ const rows: Ref<Credential[]> = ref([])
 credentialStore.getCredentialsByIssuer(userStore.user?.id).then((response) => {
   rows.value = response
 })
+
 
 api.credential.all().then((r) => credentials.value = r.data);
 </script>
