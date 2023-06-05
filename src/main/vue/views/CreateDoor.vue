@@ -1,125 +1,114 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card class="q-dialog-plugin" style="width: 80em; max-width: fit-content">
-      <q-card-section class="q-pa-md">
-        <div class="text-h3">Tür zuweisen</div>
-        <div class="q-mt-md">
-          <q-input filled v-model="doorName" label="Türname" stack-label
-                   style="width: 250px; padding-bottom: 32px"/>
-        </div>
-        <div class="q-mt-md">
-          <q-select
-              filled
-              v-model="room"
-              use-input
-              hide-selected
-              label="Raum auswählen"
-              option-label="name"
-              fill-input
-              input-debounce="0"
-              :options="rooms"
-              v-if="!door"
-              @filter="filterFn"
-              style="width: 250px; padding-bottom: 32px"
-          >
-            <template v-slot:no-option>
-              <q-item>
-                <q-item-section class="text-grey">
-                  No results
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
-        </div>
-        <div class="q-gutter-sm">
-
-          <q-card bordered flat style="min-width: 60em">
-            <q-toolbar class="bg-primary text-white shadow-2" style="margin-bottom: 1em">
-              <q-toolbar-title>Konfigurationsgruppen</q-toolbar-title>
-              <q-icon class="q-mr-xs" color="white" size="2em" name="info"/>
-              <q-tooltip class="bg-grey-14" anchor="center middle" self="center middle" style="font-size: medium">
+    <q-card style="width: 40em">
+      <q-card-section>
+        <div class="text-h6">Tür zuweisen</div>
+      </q-card-section>
+      <q-card-section class="row justify-around no-wrap">
+        <q-input style="width: 18em" filled v-model="doorName" label="Türname" stack-label/>
+        <q-select
+            style="width: 18em"
+            filled
+            v-model="room"
+            use-input
+            hide-selected
+            label="Raum auswählen"
+            option-label="name"
+            fill-input
+            input-debounce="0"
+            :options="rooms"
+            v-if="!door"
+            @filter="filterFn">
+          <template v-slot:no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                No results
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+      </q-card-section>
+      <q-card-section>
+        <q-card bordered flat>
+          <q-toolbar class="bg-primary text-accent">
+            <q-toolbar-title>Konfigurationsgruppen</q-toolbar-title>
+            <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
+              <q-tooltip class="bg-grey-14" anchor="bottom middle" self="top middle" :offset="[0,0]">
                 Konfigurationsgruppen sind untereinander mit UND verknüpft
               </q-tooltip>
-            </q-toolbar>
-            <q-card-section>
-              <q-input filled v-model="configDescription" label="Beschreibung der Konfiguration" stack-label
-                       style="min-width: 100%"/>
-            </q-card-section>
-            <div v-for="(select,i) in qSelects.configParts">
+            </q-icon>
+          </q-toolbar>
+          <q-card-section>
+            <q-input filled v-model="configDescription" label="Beschreibung der Konfiguration" stack-label/>
+          </q-card-section>
+          <q-card-section v-for="(select,i) in qSelects.configParts">
+            <q-card bordered flat>
+              <q-toolbar class="bg-primary text-white shadow-2">
+                <q-toolbar-title>Konfiguration</q-toolbar-title>
+                <q-btn flat round icon="delete" size="0.75em" @click="removeConfigGroup(i)"/>
+              </q-toolbar>
+              <q-card-section class="column">
+                <q-select
+                    class="q-mb-sm"
+                    filled
+                    multiple
+                    label="Credentials"
+                    option-label="name"
+                    hint="Credentials in dieser Auswahl sind ODER-Verknüpft"
+                    :options="credentialStore.allCredentials"
+                    v-model="qSelects.configParts[i].credentials"
+                    use-chips>
+                  <template v-slot:selected-item="scope">
+                    <q-chip
+                        class="q-pa-sm"
+                        style="line-height: 1"
+                        :label="scope.opt.name"
+                        :tabindex="scope.tabindex"
+                        dense
+                        removable
+                        icon-remove="clear"
+                        @remove="scope.removeAtIndex(scope.index)"/>
+                  </template>
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        No results
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+                <div class="row q-mt-sm justify-around items-center no-wrap"
+                     v-for="(attributeFilter,j) in qSelects.configParts[i].attributeFilter" style="min-width: 100%">
+                  <q-select style="width: 12em"
+                      rounded outlined dropdown-icon="expand_more" v-model="qSelects.configParts[i].attributeFilter[j].attribute"
+                      :options="commonAttributeFilter(qSelects.configParts[i].credentials)"
+                      :display-value="qSelects.configParts[i].attributeFilter[j].attribute?.label"
+                      @update:model-value="resetPredicateType(i,j)">
 
-              <q-separator v-if="i !== 0"/>
-              <q-card-section>
-                <div class="row q-gutter-sm">
-                  <q-toolbar class="bg-primary text-white shadow-2" style="min-width: 100%; margin-bottom: 0.5em">
-                    <q-toolbar-title>Konfiguration</q-toolbar-title>
-                    <q-btn flat icon="delete" @click="removeConfigGroup(i)"/>
-                  </q-toolbar>
-                  <q-select
-                      filled
-                      multiple
-                      label="Credentials"
-                      option-label="name"
-                      hint="Credentials in dieser Auswahl sind ODER-Verknüpft"
-                      :options="credentialStore.allCredentials"
-                      v-model="qSelects.configParts[i].credentials"
-                      use-chips
-                      style="min-width: 100%"
-                  >
-                    <template v-slot:no-option>
-                      <q-item>
-                        <q-item-section class="text-grey">
-                          No results
-                        </q-item-section>
-                      </q-item>
-                    </template>
                   </q-select>
-
-                  <div class="q-gutter-sm row no-wrap"
-                       v-for="(attributeFilter,j) in qSelects.configParts[i].attributeFilter" style="min-width: 100%">
-                    <div style="width: 40%">
-                      <q-select v-model="qSelects.configParts[i].attributeFilter[j].attribute"
-                                :options="commonAttributeFilter(qSelects.configParts[i].credentials)"
-                                :display-value="qSelects.configParts[i].attributeFilter[j].attribute?.label"
-                                @update:model-value="resetPredicateType(i,j)">
-
-                      </q-select>
-                    </div>
-                    <div style="width: 16%">
-                      <q-select v-model="qSelects.configParts[i].attributeFilter[j].predicateType" ref="predicateType"
-                                :options="getPredicates(qSelects.configParts[i].attributeFilter[j].attribute)"
-                      >
-
-                      </q-select>
-                    </div>
-                    <div style="width: 40%">
-                      <q-input v-model="qSelects.configParts[i].attributeFilter[j].value"
-                               :type="getType(qSelects.configParts[i].attributeFilter[j].attribute)"
-                               :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
-                      </q-input>
-                      <q-checkbox v-model="qSelects.configParts[i].attributeFilter[j].currentDate"
-                                  v-if="qSelects.configParts[i].attributeFilter[j].attribute?.type.toLowerCase() === 'date'"
-                                  @update:model-value="setDate(i,j)"
-                      >
-                        Aktueller Zeitpunkt
-                      </q-checkbox>
-                    </div>
-                    <q-btn flat icon="delete" @click="removeFilter(i,j)"/>
-                  </div>
-                  <q-btn flat color="primary" icon="add" @click="addAttributeFilter(i)">Attribut hinzufügen</q-btn>
+                  <q-select style="width: 5em"
+                      rounded outlined dropdown-icon="expand_more" v-model="qSelects.configParts[i].attributeFilter[j].predicateType" ref="predicateType"
+                      :options="getPredicates(qSelects.configParts[i].attributeFilter[j].attribute)"/>
+                  <q-input style="width: 10em"
+                      rounded outlined v-model="qSelects.configParts[i].attributeFilter[j].value"
+                     :type="getType(qSelects.configParts[i].attributeFilter[j].attribute)"
+                     :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
+                  </q-input>
+                  <q-btn style="width: 3em; height: 3em"
+                      flat round icon="delete" @click="removeFilter(i,j)"/>
                 </div>
               </q-card-section>
-            </div>
-            <q-separator color="bg-grey"/>
-            <q-btn flat color="primary" icon="add" @click="addConfigurationGroup">
-              Konfigurationsgruppe hinzufügen
-            </q-btn>
-          </q-card>
-        </div>
-
+              <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addAttributeFilter(i)">Attribut hinzufügen</q-btn>
+            </q-card>
+          </q-card-section>
+          <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfigurationGroup">
+            Konfigurationsgruppe hinzufügen
+          </q-btn>
+        </q-card>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn color="primary" label="Abbrechen" @click="onCancelClick"/>
-        <q-btn color="primary" label="Speichern" :disable="!doorName || (!room && !door)" @click="onOKClick"/>
+        <q-btn flat color="primary" label="Abbrechen" @click="onCancelClick"/>
+        <q-btn flat color="primary" label="Speichern" :disable="!doorName || (!room && !door)" @click="onOKClick"/>
       </q-card-actions>
     </q-card>
   </q-dialog>

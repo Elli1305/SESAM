@@ -67,7 +67,7 @@
                               </div>
                             </q-item-label>
                             <template v-for="door in room.doors">
-                              <q-item>
+                              <q-item class="q-mb-sm">
                                 <q-item-section avatar top>
                                   <q-icon name="meeting_room" color="black" size="34px"/>
                                 </q-item-section>

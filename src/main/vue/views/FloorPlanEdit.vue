@@ -99,14 +99,14 @@
   </q-drawer>
   <q-btn
       v-if="show === false"
-      style="width: 4.8em; height: 2.4em; padding-right: 0; z-index: 10; margin-top: 15px; margin-left: -2.4em; border-radius: 2.4em"
+      style="width: 4.8em; height: 2.4em; padding-right: 0; z-index: 1000; margin-top: 15px; margin-left: -2.4em; border-radius: 2.4em"
       @click="show = true"
       class="absolute"
       color="primary"
       direction="right"
   ><q-icon name="chevron_right" right/></q-btn>
   <q-page class="row no-wrap">
-    <FloorPlan ref="floorPlanRef" :edit-view="true" class="fit"></FloorPlan>
+    <FloorPlan ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
     <FloorPlanRoomList @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
   </q-page>
 

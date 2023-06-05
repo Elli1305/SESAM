@@ -1,7 +1,7 @@
 <template>
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
     <p class="row text-h3 justify-center">{{t('imprint.imprintEditorTitle')}}</p>
-      <div class="row justify-evenly no-wrap" style="width: 75vw; height: 25em">
+      <div class="row justify-evenly no-wrap" style="width: 80vw; height: 50vh">
         <q-btn class="self-end q-mr-lg" round icon="delete" color="negative" text-color="positive" @click="showDeleteDialog" style="width: 4em; height: 4em"/>
         <q-editor
             class="column full-height"

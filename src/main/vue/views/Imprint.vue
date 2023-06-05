@@ -1,7 +1,7 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
     <p class="row text-h3 justify-center">{{t('imprint.imprintTitle')}}</p>
-    <div class="row self-center justify-center" style="width: 80vw; height: 25em">
+    <div class="row self-center justify-center" style="width: 80vw; height: 50vh">
       <p style="font-size: 1.25em" v-html="imprintContent"/>
     </div>
   </q-page>
