@@ -19,7 +19,7 @@ public class Issuer extends SesamUser {
 	@Serial
 	private static final long serialVersionUID = 215982L;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	private Room room;
 
 	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)

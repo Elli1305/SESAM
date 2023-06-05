@@ -7,7 +7,6 @@ import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.CredentialServiceImpl;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
@@ -473,11 +472,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		category2.addCredential(firstAid);
 		category2.addExternalCredential(firstAid2);
 		category2.addExternalCredential(firstAid3);
-		final CredentialCmd credentialCmd = CredentialServiceImpl.createCredentialCmd(category, safety);
-		final CredentialCmd credentialCmd2 = CredentialServiceImpl.createCredentialCmd(category2, firstAid);
-		final List<CredentialCmd> credentialCmds = new ArrayList<>();
-		credentialCmds.add(credentialCmd);
-		credentialCmds.add(credentialCmd2);
 		categories.add(category);
 		categories.add(category2);
 

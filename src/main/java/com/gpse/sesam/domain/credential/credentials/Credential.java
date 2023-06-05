@@ -38,7 +38,7 @@ public class Credential {
 	private String agent;
 
 	@JsonBackReference("credential_category")
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	private Category category;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
