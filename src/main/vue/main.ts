@@ -18,10 +18,10 @@ const messages = {
             headline: "Aktuelle Nutzer",
             roles: {ADMINISTRATOR: "Administrator", EDITOR: "Bearbeiter", ISSUER: "Herausgeber"},
             prename: "Vorname",
-            lastname: "Nachname",
+            lastname: "Name",
             email: "Email",
             role: "Rollen",
-            bearbeiten: "edit",
+            edit: "Bearbeiten",
             showAdmin: "Administratoren",
             showEditor: "Bearbeiter",
             showIssuer: "Herausgeber",
@@ -33,7 +33,7 @@ const messages = {
             lastname: "Nachname",
             email: "Email",
             role: "Rollen",
-            save:"speichern",
+            save: "Speichern",
             showAdmin: "Administratoren",
             showEditor: "Bearbeiter",
             showIssuer: "Herausgeber",
@@ -60,12 +60,32 @@ const messages = {
             confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
             doors: 'Türe',
             roomName: 'Raumname',
-            edit: 'Bearbeiten'
+            edit: 'Bearbeiten',
+            editFloor: 'Etage bearbeiten',
+            floorlevel: 'Etagennummer',
+            floorplanUpload: 'Etagenplan hochladen',
+            editBuilding: 'Gebäude bearbeiten',
+            editLocation: 'Standort bearbeiten',
+            addLocation: 'Standort hinzufügen',
+            addBuilding: 'Gebäude hinzufügen',
+            addFloor: 'Etage hinzufügen',
+        },
+        groupRooms: {
+            title: "Gruppierungen von Räumen",
+            question: "Gruppierung wirklich löschen?",
+            chooseBuilding: "Gebäude wählen",
+            chooseLocation: "Location wählen",
+            chooseRooms: "Räume auswählen",
+            editGroup:"Gruppierung bearbeiten",
+            new: "Neue Gruppe"
         },
 
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
+            noData: "Keine Daten vorhanden.",
+            noResults: "Kein Einträge gefunden.",
+            of: "von"
         },
         credentialview :{
             credentialview: "Credentialansicht",
@@ -73,11 +93,25 @@ const messages = {
             search: "Suche",
             category: "Kategorie",
             availablecredentials: "Verfügbbare Credential",
-            qualification: "Vergleichbare Qualifikation",
+            qualification: "Vergleichbare Credential",
             issuer: "Herausgeber",
             room: "Raum: "
-        }
-        ,
+        },
+        credentialmapping: {
+            credentialmapping: 'Credentialmapping',
+            newcategory: 'Neue Kategorie',
+            category: 'Kategorie',
+            search: 'Suche',
+            name: 'Name der Kategorie',
+            save: 'Speichern',
+            cancel: 'Abbrechen',
+            internal: 'Interne Credentials',
+            external: 'Externe Credentials',
+            categorycreate: 'Neue Kategorie erstellen',
+            categorychange: 'Kategorie ändern',
+            categorydelete: 'Löschen der Kategorie',
+            delete: 'Möchten Sie die Kategorie wirklich löschen?'
+        },
         home: {
             header: "SESAM",
             signup: "Registrierung",
@@ -126,7 +160,7 @@ const messages = {
         passwordChange: {
             changePassword: "Passwort ändern",
             password: "Passwort",
-            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein, \n ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
+            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein, ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
             repeatPassword: "Passwort wiederholen",
             failedToReset: "Password zurücksetzen fehlgeschlagen",
             passwordDoesNotConform: "Passwort erfüllt nicht die Kriterien",
@@ -142,6 +176,7 @@ const messages = {
             editor: "Bearbeiter",
             issuer: "Herausgeber",
         },
+
         issueCredential: {
             title: "{0} Credential Ausstellung",
             description: [
@@ -157,7 +192,7 @@ const messages = {
                 list: "Checklist",
                 qrcode: "QR-Code",
             },
-            next: "Nächster Schritt",
+            next: "Weiter",
             previous: "Zurück",
             checklistHint:
                 "Um das Credential ausstellen zu können muss jede Bedingung der Checkliste erfüllt sein.",
@@ -169,7 +204,7 @@ const messages = {
                 cancel: "Abbrechen",
             },
             addCredential: {
-                title: "Ihr neues Credential ({0}) wurde erfolgreich ausgestellt!",
+                title: "Ihr neues Credential wurde erfolgreich ausgestellt!",
                 howTo: "So fügen Sie ein Credential zur BC Wallet hinzu:",
                 steps: {
                     step1:
@@ -213,32 +248,76 @@ const messages = {
             logoHint: "Nur SVG Dateien",
             favicon: "Favicon",
             faviconHint: "Nur ICO Dateien",
+            background: "Hintergrund",
+            textColor: "Schriftfarbe",
+            primaryInfo: "Banner, Buttons",
+            secondaryInfo: "Rollenschilder",
+            accentInfo: "Schriftfarbe in Banner, Footer, Buttons",
+            darkInfo: "Footer",
+            lightBlueInfo: "...",
+            positiveInfo: "Positive Nachricht, Speichern Button",
+            negativeInfo: "Negative Nachricht, Löschen/Zurücksetzen Button",
+            infoInfo: "Profilbild, Informationen",
+            warningInfo: "Warnungen",
             confirm: {
                 reset: {
                     title: "Sind Sie sicher, dass sie zurücksetzen wollen?",
                     message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
                     ok: "Zurücksetzen",
-                    cancel: "Abbruch"
+                    cancel: "Abbrechen"
                 },
                 save: {
                     title: "Sind Sie sicher, dass sie speichern wollen?",
                     message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
                     ok: "Speichern",
-                    cancel: "Abbruch"
+                    cancel: "Abbrechen"
                 }
             },
             resetFailure: "Zurücksetzen fehlgeschlagen",
             saveFailure: "Speichern fehlgeschlagen"
-        }
+        },
+        imprint:{
+            imprintTitle: "Impressum",
+            imprintEditorTitle: "Impressum bearbeiten",
+            imprintEditorMessageSave: "Sind Sie sicher, dass sie speichern wollen?",
+            imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
+            save:"Speichern",
+            cancel: "Abbrechen",
+            delete:"Löschen",
+            imprintEditorMessageSaveConfirmation:"Inhalt erfolgreich gespeichert",
+            imprintEditorMessageDeleteConfirmation:"Inhalt erfolgreich gelöscht"
+
+        },
+
+        issuermanagement: {
+            title: "Herausgeber verwalten",
+            firstname: "Vorname",
+            lastname: "Name",
+            email: "E-Mail",
+            credential:"Credential",
+            search: "Suche",
+            issuerFilter:"Herausgebern filtern",
+            edit: "Bearbeiten",
+            credentialsList:"Liste aller Credentials",
+            roomsList:"Liste aller Räume",
+            roomId: "Raum ID",
+            credentials:"Credential",
+            dialogTitle:"Credentials verwalten",
+            save:"Speichern",
+            cancel: "Abbrechen",
+            saveConfirmationTitle: "Speichern?",
+            saveConfirmationMessage: "Sind Sie sicher, dass sie speichern wollen?",
+        },
     },
     en: {
         adminCurrentUser: {
             headline: "Current Users",
             roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
-            prename: "Prename",
+            prename: "Firstname",
             lastname: "Name",
             email: "Email",
             role: "Roles",
+            edit: "Edit",
             showAdmin: "Show Admin",
             showEditor: "Show Editor",
             showIssuer: "Show Issuer",
@@ -254,8 +333,20 @@ const messages = {
             showAdmin: "Show Admin",
             showEditor: "Show Editor",
             showIssuer: "Show Issuer",
-            search: "Search"
+            search: "Search",
+            save: "Save"
         },
+
+        groupRooms: {
+            title: "Groupings of rooms",
+            question: "Do you really want to delete this group?",
+            chooseBuilding: "Choose a building",
+            chooseLocation: "Choose a location",
+            chooseRooms: "Choose the rooms",
+            editGroup:"Edit group",
+            new: "New group"
+        },
+
         adminEdit: {
             title: "Edit user",
             changeRoles: "Give/take Roles: ",
@@ -267,6 +358,9 @@ const messages = {
         common: {
             internalServerError: "The server could not process the request",
             unkownError: "An unknown error occured",
+            noData: "No data available.",
+            noResults: "No entries found.",
+            of: "of"
         },
         credentialview :{
             credentialview: "View Credentials",
@@ -274,22 +368,46 @@ const messages = {
             search: "Search",
             category: "Category",
             availablecredentials: "Available Credentials",
-            qualification: "Comparable Qualifications",
+            qualification: "Comparable Credential",
             issuer: "Issuer",
             room: "Room: "
+        },
+        credentialmapping: {
+            credentialmapping: 'Credential mapping',
+            newcategory: 'New Category',
+            search: 'Search',
+            name: 'Name of the Category',
+            category: 'Category',
+            save: 'Save',
+            cancel: 'Cancel',
+            internal: 'Internal Credentials',
+            external: 'External Credentials',
+            categorycreate: 'Create new category',
+            categorychange: 'Change category',
+            categorydelete: 'Delete category',
+            delete: 'Are you sure you want to delete the category?'
         },
         floorplan: {
             locations: 'Locations',
             doorName: 'Name of Door',
             editDoor:'Edit Door',
             editRoom:'Edit Room',
+            editFloor: 'Edit Floor',
+            floorlevel: 'Floor level',
+            floorplanUpload: 'Upload floor plan',
             save: 'save',
             cancel: 'cancel',
             confirmDeletion: 'Confirm deletion',
             confirmDeletionText:'Are you sure you want to delete the door?',
             doors:'Doors',
             roomName: 'Name of room',
-            edit: 'Edit'
+            edit: 'Edit',
+            editBuilding: 'Edit building',
+            editLocation: 'Edit location',
+            addLocation: 'Add location',
+            addBuilding: 'Add building',
+            addFloor: 'Add floor',
+
         },
         home: {
             header: "SESAM",
@@ -371,7 +489,7 @@ const messages = {
                 list: "Checklist",
                 qrcode: "QR Code",
             },
-            next: "Next Step",
+            next: "Next",
             previous: "Previous",
             checklistHint:
                 "To issue the credential, all conditions on the checklist must be met.",
@@ -383,7 +501,7 @@ const messages = {
                 cancel: "Cancel",
             },
             addCredential: {
-                title: "Your new credential ({0}) has been successfully issued!",
+                title: "Your new credential has been successfully issued!",
                 howTo: "How to add a credential to the BC Wallet:",
                 steps: {
                     step1:
@@ -427,6 +545,17 @@ const messages = {
             logoHint: "Only SVG files",
             favicon: "Favicon",
             faviconHint: "Only ICO files",
+            background: "Background",
+            textColor: "Text-Color",
+            primaryInfo: "banner, buttons",
+            secondaryInfo: "role badges",
+            accentInfo: "text-color in banner, footer, buttons",
+            darkInfo: "footer",
+            lightBlueInfo: "...",
+            positiveInfo: "positive notifications, save buttons",
+            negativeInfo: "negative notifications, delete/reset buttons",
+            infoInfo: "profile button, informational content",
+            warningInfo: "warnings",
             confirm: {
                 reset: {
                     title: "Are you sure you want to reset?",
@@ -443,7 +572,42 @@ const messages = {
             },
             resetFailure: "Reset failed",
             saveFailure: "Saving failed"
-        }
+        },
+        imprint:{
+            imprintTitle: "Imprint",
+            imprintEditorTitle: "Imprint Editor",
+            imprintEditorMessageSave: "Are you sure you want to save?",
+            imprintEditorMessageDelete: "Are you sure you want to delete?",
+            save:"Save",
+            cancel: "Cancel",
+            delete:"Delete",
+            imprintEditorMessageSaveConfirmation:"Content saved successfully",
+            imprintEditorMessageDeleteConfirmation:"Content successfully deleted"
+
+        },
+
+        issuermanagement: {
+            title: "Issuer Management",
+            firstname: "Prename",
+            lastname: "Name",
+            email: "E-Mail",
+            credential:"Credential",
+            search: "Search",
+            issuerFilter:"Issuer filter",
+            edit: "Edit",
+            credentialsList:"List of all credentials",
+            roomsList:"List of all rooms",
+            roomId:"Room ID",
+            credentials:"Credential",
+            dialogTitle:"Credentials Management",
+            save:"Save",
+            cancel: "Cancel",
+            saveConfirmationTitle: "Save?",
+            saveConfirmationMessage: "Are you sure you want to save?",
+
+
+
+        },
     }
 }
 
@@ -481,4 +645,3 @@ watch(
     },
     {deep: true}
 );
-

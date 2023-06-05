@@ -35,17 +35,17 @@ export interface ChecklistEntry {
     label: string;
 }
 
+export interface ExternalCredential {
+    id: bigint;
+    name: string;
+    credentialDefinitionId: string;
+}
+
 export interface Category {
     id: bigint;
     name: string;
     credentials: Credential[];
     externalCredentials: ExternalCredential[];
-}
-
-export interface ExternalCredential {
-    id: bigint;
-    name: string;
-    credentialDefinitionId: string;
 }
 
 export interface IssueCredentialAttribute {
@@ -61,4 +61,16 @@ export interface CredentialCmd {
     externalCredential: string[];
     issuerName: string[];
     issuerRoom: string[];
+}
+
+export interface CategoryCmd {
+    nameCategory: string;
+    internalCredentials: string[];
+    externalCredentialsCmd: string[];
+}
+
+export interface CategoryResponse {
+    name: string;
+    credentials: bigint[];
+    externalCredentials: bigint[];
 }

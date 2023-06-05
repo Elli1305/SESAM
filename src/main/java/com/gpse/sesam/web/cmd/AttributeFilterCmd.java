@@ -1,6 +1,6 @@
 package com.gpse.sesam.web.cmd;
 
-import com.gpse.sesam.domain.credential.FormEntry;
+import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.location.door.config.Predicate;
 
 public class AttributeFilterCmd {

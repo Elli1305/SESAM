@@ -1,6 +1,6 @@
 package com.gpse.sesam.util;
 
-import com.gpse.sesam.domain.credential.FormEntryType;
+import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.location.door.config.AttributeValue;
 import com.gpse.sesam.domain.location.door.config.Predicate;

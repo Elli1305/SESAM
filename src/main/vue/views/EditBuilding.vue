@@ -2,14 +2,14 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <q-card-section class="q-pa-md">
-        <div class="text-h6">Gebäude bearbeiten</div>
+        <div class="text-h6">{{t('floorplan.editBuilding')}}</div>
         <div class="q-mt-md">
           <q-input outlined v-model="buildingName" label="Name"/>
         </div>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn color="primary" label="Abbrechen" @click="onCancelClick"/>
-        <q-btn color="primary" label="Speichern" @click="onOKClick"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.ok')" @click="onOKClick"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -18,6 +18,7 @@
 <script>
 import {useBuildingStore} from "@/main/vue/stores/buildings";
 import {ref} from "vue";
+import {useI18n} from "vue-i18n";
 
 export default {
   props: {
@@ -60,8 +61,9 @@ export default {
   },
   setup(props) {
     const buildingStore = useBuildingStore()
+    const { t } = useI18n()
     const buildingName = ref(props.building.name)
-    return {buildingName, buildingStore}
+    return {buildingName, buildingStore, t}
   }
 }
 </script>

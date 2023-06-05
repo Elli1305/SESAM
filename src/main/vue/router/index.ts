@@ -13,12 +13,15 @@ import {AttainableRole} from "@/main/vue/entity/createUser";
 
 import FloorPlanEdit from "@/main/vue/views/FloorPlanEdit.vue";
 import {useUserStore} from "@/main/vue/stores/users";
+import CredentialMapping from "@/main/vue/views/CredentialMappingList.vue";
 import EditUser from "@/main/vue/views/EditUser.vue";
+import GroupRooms from "@/main/vue/views/GroupRooms.vue";
 import CredentialView from "@/main/vue/views/CredentialView.vue";
 import RolesRequest from "@/main/vue/views/RolesRequest.vue";
 import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
-import IssueCredential from "@/main/vue/views/IssueCredential.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
+import IssueCredential from "@/main/vue/views/IssueCredential.vue";
+import IssuerManagement from "@/main/vue/views/IssuerManagement.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,24 +45,32 @@ const router = createRouter({
             component: LoginView
         },
         {
-            path: '/admin/currentuserlist/edit/:email',
+            path: '/currentuserlist/edit/:email',
             name: 'edit',
             component: EditUser,
             props: true,
         },
 
         {
-            path: '/admin/rolesRequest',
+            path: '/rolesRequest',
             name: 'rolesRequest',
             component: RolesRequest,
             props: true,
         },
 
         {
-            path: '/admin/currentuserlist',
+            path: '/currentuserlist',
             name: 'currentuserlist',
             component: CurrentUserList,
-            //meta: {requiresAdmin: true}
+            meta: {requiresAdmin: true}
+        },
+        {
+            path: '/grouprooms',
+            name: 'GroupRooms',
+            component: GroupRooms,
+            meta: {
+                authorize: AttainableRole.EDITOR
+            }
         },
         {
             path: '/editFloorPlan',
@@ -103,8 +114,9 @@ const router = createRouter({
             component: CredentialView
         },
         {
-            path: '/admin/rolesRequest',
-            component: RolesRequest
+            path: '/rolesRequest',
+            component: RolesRequest,
+            meta: {requiresAdmin: true}
         },
         {
             path: '/credentials',
@@ -119,19 +131,50 @@ const router = createRouter({
             path: '/corporatedesign',
             component: CorporateDesign
         },
-        {path: "/:pathMatch(.*)*", component: StartView}
+        {path: "/:pathMatch(.*)*", component: StartView},
+        {
+            path: '/issuermanagement',
+            component: IssuerManagement,
+            meta: {requiresAdmin: true},
+        },
 
+
+        {
+            path: "/credentialmapping",
+            component: CredentialMapping,
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/corporatedesign",
+            component: CorporateDesign,
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/credentials",
+            component: IssueCredentials,
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/credentials/:id/issue",
+            component: IssueCredential,
+            props: true,
+            meta: {requiresAuth: true},
+        },
     ],
 });
-
 
 router.beforeEach((to, from, next) => {
     const {authenticated, user} = useUserStore();
     const {authorize} = to.meta;
-    if ((to.meta.requiresAuth || authorize) && !authenticated) {
+    if ((to.meta.requiresAuth || authorize || to.meta.requiresAdmin) && !authenticated) {
         return next({path: '/login', query: {returnUrl: to.path}});
     } else if (authorize && !user?.roles.some(role => role.role === authorize && role.granted)) {
         return next({path: '/'});
+    }
+    if (to.fullPath.toLowerCase().endsWith("/imprinteditor")) {
+        if (!authenticated) {
+            return next("/");
+        }
     }
 
     next();

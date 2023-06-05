@@ -1,8 +1,8 @@
 package com.gpse.sesam.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gpse.sesam.domain.credential.Credential;
-import com.gpse.sesam.domain.credential.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.CredentialService;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
 import jakarta.validation.Valid;

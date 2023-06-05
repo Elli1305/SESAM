@@ -17,7 +17,7 @@
         </q-td>
       </template>
     </q-table>
-  </div>
+    </div>
 </q-page>
 </template>
 

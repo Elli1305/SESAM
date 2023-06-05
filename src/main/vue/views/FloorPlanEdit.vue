@@ -2,7 +2,8 @@
   <q-drawer
       show-if-above bordered
       v-model="show"
-      content-class="bg-grey-1">
+      content-class="bg-grey-1"
+      style="background-color: var(--bg-color)">
     <q-list>
       <q-item-label
           header
@@ -24,10 +25,10 @@
               <q-menu>
                 <q-list style="min-width: 100px">
                   <q-item clickable @click.stop="editLocation(location)" v-close-popup>
-                    <q-item-section>Standort bearbeiten</q-item-section>
+                    <q-item-section>{{t('floorplan.editLocation')}}</q-item-section>
                   </q-item>
                   <q-item clickable @click.stop="addBuilding(location)" v-close-popup>
-                    <q-item-section>Gebäude hinzufügen</q-item-section>
+                    <q-item-section>{{t('floorplan.addBuilding')}}</q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -53,17 +54,17 @@
                 <q-menu class="show-building">
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editBuilding(building)" v-close-popup>
-                      <q-item-section>Gebäude bearbeiten</q-item-section>
+                      <q-item-section>{{t('floorplan.editBuilding')}}</q-item-section>
                     </q-item>
                     <q-item clickable @click.stop="addFloor(building)" v-close-popup>
-                      <q-item-section>Etage hinzufügen</q-item-section>
+                      <q-item-section>{{t('floorplan.addFloor')}}</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
               </q-btn>
             </q-item-section>
           </template>
-          <q-item clickable v-ripple v-for="(floor,i) in building.floors" :inset-level="2"
+          <q-item clickable v-ripple v-for="(floor) in building.floors" :inset-level="2"
                   @click="changeFloorPlan(floor)" :active="floorPlanStore.selectedFloorId === floor.id" class="show">
             <q-item-section>{{ floor.floorLevel === 0 ? "Erdgeschoss" : "Etage " + floor.floorLevel }}</q-item-section>
 
@@ -72,7 +73,7 @@
                 <q-menu>
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editFloor(floor)" v-close-popup>
-                      <q-item-section>Etage bearbeiten</q-item-section>
+                      <q-item-section>{{t('floorplan.editFloor')}}</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
@@ -82,7 +83,7 @@
         </q-expansion-item>
       </q-expansion-item>
       <q-item>
-        <q-btn color="primary" icon="add" label="Standort hinzufügen" @click="addLocation" flat/>
+        <q-btn color="primary" icon="add" :label="t('floorplan.addLocation')" @click="addLocation" flat/>
       </q-item>
     </q-list>
     <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
@@ -96,21 +97,18 @@
       />
     </div>
   </q-drawer>
-  <q-fab
+  <q-btn
       v-if="show === false"
-      style="z-index: 10; margin-top: 15px; margin-left: -22px"
+      style="width: 4.8em; height: 2.4em; padding-right: 0; z-index: 10; margin-top: 15px; margin-left: -2.4em; border-radius: 2.4em"
       @click="show = true"
       class="absolute"
-      label="   "
-      label-position="left"
       color="primary"
-      icon="menu"
       direction="right"
-  ></q-fab>
-  <div class="q-gutter-x-md" style="display: flex">
+  ><q-icon name="chevron_right" right/></q-btn>
+  <q-page class="row no-wrap">
     <FloorPlan ref="floorPlanRef" :edit-view="true" class="fit"></FloorPlan>
     <FloorPlanRoomList @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
-  </div>
+  </q-page>
 
 </template>
 
@@ -133,7 +131,7 @@ export default {
   name: 'FloorPlanEdit',
   components: {FloorPlanRoomList, FloorPlan},
   methods: {
-    redrawRooms(room) {
+    redrawRooms() {
       console.log(this.$refs.floorPlanRef)
       this.$refs.floorPlanRef.removeLayer()
       this.$refs.floorPlanRef.drawRooms(this.floorPlanStore.rooms)

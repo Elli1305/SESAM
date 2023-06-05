@@ -1,9 +1,9 @@
 <template>
-  <q-page class="items-center justify-center" style="display: flex">
-    <div class="q-gutter-y-md column" style="max-width: 40em; min-width: 20em; display: flex">
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">{{ t("passwordReset.resetPassword") }}</h1>
-      <q-input v-model="email" outlined type="email" :label="t('passwordReset.email')" />
-      <q-btn @click="resetPassword" color="primary" :label="t('passwordReset.resetPassword')" />
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">{{t("passwordReset.resetPassword")}}</p>
+    <div class="column self-center items-center justify-evenly no-wrap" style="width: 22.5em; height: 25em">
+      <q-input class="full-width" v-model="email" outlined type="email" :label="t('passwordReset.email')" />
+      <q-btn class="full-width" @click="resetPassword" color="primary" :label="t('passwordReset.resetPassword')" />
     </div>
   </q-page>
 </template>

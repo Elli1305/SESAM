@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.credential;
+package com.gpse.sesam.domain.credential.issuing;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

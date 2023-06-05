@@ -2,12 +2,12 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <q-card-section class="q-pa-md">
-        <div class="text-h6">Ebene bearbeiten</div>
+        <div class="text-h6">{{t('floorplan.editFloor')}}</div>
         <div class="q-mt-md">
-          <q-input outlined v-model.number="floorLevel" type="number" label="Etagen Nummer"/>
+          <q-input outlined v-model.number="floorLevel" type="number" :label="t('floorplan.floorlevel')"/>
         </div>
         <div class="q-mt-md">
-          <q-file outlined label="Etagenplan hochladen" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff"
+          <q-file outlined :label="t('floorplan.floorplanUpload')" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff"
                   bg-color="white">
             <template v-slot:prepend>
               <q-icon name="attach_file"/>
@@ -16,8 +16,8 @@
         </div>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn color="primary" label="Abbrechen" @click="onCancelClick"/>
-        <q-btn color="primary" label="Speichern" @click="onOKClick" :disable="validate()"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.ok')" @click="onOKClick" :disable="validate()"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -26,6 +26,7 @@
 <script>
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {ref} from "vue";
+import {useI18n} from "vue-i18n";
 
 export default {
   props: {
@@ -71,8 +72,9 @@ export default {
     const floorStore = useFloorStore()
     const floorLevel = ref(props.floor.floorLevel)
     const image = ref()
+    const { t } = useI18n()
 
-    return {floorLevel, floorStore, image}
+    return {floorLevel, floorStore, image, t}
   }
 }
 </script>
