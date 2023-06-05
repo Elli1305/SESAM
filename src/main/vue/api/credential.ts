@@ -1,7 +1,12 @@
 import axios, {
     AxiosResponse,
 } from "axios";
-import {CreateCredential, Credential, IssueCredentialAttribute} from "@/main/vue/entity/credentialDefinition";
+import {
+    CreateCredential,
+    Credential,
+    ExternalCredential,
+    IssueCredentialAttribute
+} from "@/main/vue/entity/credentialDefinition";
 import {CredentialCmd} from "@/main/vue/entity/credentialDefinition";
 
 export default {
@@ -14,11 +19,17 @@ export default {
     all(): Promise<AxiosResponse<Credential[]>>{
         return axios.get("/api/credentials")
     },
+    externalCredentials(): Promise<AxiosResponse<ExternalCredential[]>>{
+        return axios.get("/api/external_credentials")
+    },
     create(credential: CreateCredential): Promise<AxiosResponse<CreateCredential>> {
         return axios.post(`/api/credentials`, credential);
     },
     delete(id: number): Promise<AxiosResponse<void>> {
         return axios.delete(`/api/credentials/${id}`);
+    },
+    update(id: number, credential: CreateCredential): Promise<AxiosResponse<void>> {
+        return axios.put(`/api/credentials/${id}`, credential);
     },
     getCategories(){
         return axios.get("api/credentialview")

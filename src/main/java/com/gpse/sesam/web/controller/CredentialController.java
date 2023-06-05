@@ -3,8 +3,10 @@ package com.gpse.sesam.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.credential.Credential;
 import com.gpse.sesam.domain.credential.CredentialService;
+import com.gpse.sesam.domain.credential.ExternalCredential;
 import com.gpse.sesam.web.cmd.CreateCredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
+import com.gpse.sesam.web.cmd.UpdateCredentialCmd;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,11 @@ public class CredentialController {
     @GetMapping("/credentials")
     public List<Credential> getCredential() {
         return service.getCredentials();
+    }
+
+    @GetMapping("/external_credentials")
+    public List<ExternalCredential> getExternalCredential() {
+        return service.getExternalCredentials();
     }
 
     @GetMapping(value = "/credentials/{id}")
@@ -62,8 +69,8 @@ public class CredentialController {
     @PutMapping(value = "/credentials/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ADMINISTRATOR")
-    public CreateCredentialCmd update(@PathVariable Long id, @Valid @RequestBody CreateCredentialCmd credential) {
-        return credential;
+    public void update(@PathVariable Long id, @Valid @RequestBody UpdateCredentialCmd credential) {
+        service.update(id, credential);
     }
 
     @DeleteMapping(value = "/credentials/{id}")

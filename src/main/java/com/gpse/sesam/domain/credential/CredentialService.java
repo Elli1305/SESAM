@@ -5,12 +5,15 @@ import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.web.cmd.CreateCredentialCmd;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
+import com.gpse.sesam.web.cmd.UpdateCredentialCmd;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CredentialService {
 	List<Credential> getCredentials();
+
+	List<ExternalCredential> getExternalCredentials();
 
 	Optional<Credential> getCredential(Long id);
 
@@ -27,4 +30,6 @@ public interface CredentialService {
 	void create(CreateCredentialCmd createCredentialCmd);
 
 	void delete(Long id);
+
+	void update(Long id, UpdateCredentialCmd updateCredentialCmd);
 }

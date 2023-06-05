@@ -2,17 +2,20 @@
   <div class="q-pa-md">
     <div class="q-mb-xl">
       <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">
-        Credentials</h1>
+        Credentialverwaltung</h1>
     </div>
     <q-table
         :columns="columns"
-        :filter="filter"
+        :filter="search"
         :rows="rows"
         row-key="name"
     >
+      <template v-slot:top-left>
+        <q-btn borderless color="grey-6" flat icon="add" label="New Credential" to="/add_credential"/>
+      </template>
       <template v-slot:top-right>
-        <q-btn to="/add_credential" color="grey-6" borderless flat icon="add" label="New Credential" />
-        <q-input class="q-ml-md" v-model="filter" borderless debounce="300" dense placeholder="Search">
+        <q-select v-model="selectedTypes" :options="options" borderless emit-value label="Types" map-options multiple/>
+        <q-input v-model="filter" borderless class="q-ml-lg" debounce="300" dense placeholder="Search">
           <template v-slot:append>
             <q-icon name="search"/>
           </template>
@@ -20,7 +23,13 @@
       </template>
       <template v-slot:body-cell-name="props">
         <q-td :props="props">
-          <router-link :to="issuer ? `/credentials/${props.row.id}/issue` : `/credential_administration/${props.row.id}`">{{ props.value }}</router-link>
+          <router-link :to="`/credential_administration/${'issuer' in props.row ? 'internal' : 'external'}/${props.row.id}`">{{ props.value }}</router-link>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-type="props">
+        <q-td :props="props">
+          <q-chip v-if="props.value" color="primary" label="Internal" text-color="white"/>
+          <q-chip v-else color="secondary" label="External" text-color="white"/>
         </q-td>
       </template>
     </q-table>
@@ -28,29 +37,18 @@
 </template>
 
 <script lang="ts" setup>
-import {QTableColumn} from "quasar";
+import {QSelectOption, QTableColumn} from "quasar";
 import {useCredentialsStore} from "@/main/vue/stores/credential";
-import {computed, ref} from "vue";
-import {Credential} from "@/main/vue/entity/credentialDefinition";
-import {useUserStore} from "@/main/vue/stores/users";
+import {computed, Ref, ref} from "vue";
+import {Credential, ExternalCredential} from "@/main/vue/entity/credentialDefinition";
 
-const { issuer } = defineProps<{ issuer: boolean }>();
-
-const columns: QTableColumn<Credential>[] = [
+const columns: QTableColumn<Credential | ExternalCredential>[] = [
   {
     name: 'name',
     required: true,
     label: 'Name',
     align: 'left',
     field: 'name',
-    sortable: true,
-  },
-  {
-    name: 'agent',
-    required: true,
-    label: 'Agent',
-    align: 'left',
-    field: 'agent',
     sortable: true,
   },
   {
@@ -61,16 +59,47 @@ const columns: QTableColumn<Credential>[] = [
     field: 'credentialDefinitionId',
     sortable: true,
   },
-]
+  {
+    name: 'agent',
+    required: false,
+    label: 'Agent',
+    align: 'left',
+    field: (row) => "agent" in row ? row.agent : null,
+    format: (val) => val ?? '–',
+    sortable: true,
+  },
+  {
+    name: 'type',
+    required: true,
+    label: 'Typ',
+    align: 'center',
+    field: (row) => "issuer" in row,
+    sortable: true,
+  },
+];
 
-const filter = ref('');
+const options: QSelectOption[] = [
+  {
+    label: 'Internal',
+    value: 'internal'
+  },
+  {
+    label: 'External',
+    value: 'external'
+  },
+];
+
+const selectedTypes: Ref<string[]> = ref(['internal', 'external']);
+
+const search = ref('');
 const store = useCredentialsStore();
 
 store.fetch();
 
-const userStore = useUserStore();
-
-const rows = computed(() => issuer ? store.credentials.filter(e => e.issuer.some(i => i.id === userStore.user?.id)) : store.credentials);
+const rows = computed(
+    () => [...store.credentials, ...store.externalCredentials]
+        .filter((value) => (selectedTypes.value.includes('internal') && 'issuer' in value) || (selectedTypes.value.includes('external') && !('issuer' in value)))
+);
 </script>
 
 <style scoped></style>

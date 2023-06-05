@@ -87,12 +87,6 @@ const router = createRouter({
       component: Credentialview,
     },
     {
-        path: "/credentials",
-        component: CredentialAdministration,
-        props: {issuer: true},
-        meta: {requiresAuth: true},
-    },
-    {
       path: "/credentials/:id/issue",
       component: IssueCredential,
       props: true,
@@ -106,11 +100,10 @@ const router = createRouter({
     {
       path: "/credential_administration",
       component: CredentialAdministration,
-      props: {issuer: false},
       meta: {requiresAuth: true},
     },
     {
-      path: "/credential_administration/:id(\\d+)",
+      path: "/credential_administration/:type(internal|external)/:id(\\d+)",
       component: CredentialEditing,
       props: true,
       meta: {

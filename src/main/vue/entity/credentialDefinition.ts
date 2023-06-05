@@ -28,6 +28,7 @@ export interface FormEntry {
     id: bigint;
     label: string;
     type: CredentialFormEntryType;
+    attributeName: string;
 }
 
 export interface ChecklistEntry {

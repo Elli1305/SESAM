@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.credential;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,7 +15,6 @@ public class FormEntry {
     @Column(nullable = false)
     private FormEntryType type;
 
-    @JsonIgnore
     @Column(nullable = false)
     private String attributeName;
 

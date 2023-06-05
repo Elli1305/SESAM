@@ -1,18 +1,18 @@
 import {defineStore} from "pinia";
 import {Ref, ref} from "vue";
 import api from "@/main/vue/api";
-import {Credential, CredentialCmd} from "@/main/vue/entity/credentialDefinition";
+import {Credential, CredentialCmd, ExternalCredential} from "@/main/vue/entity/credentialDefinition";
 
 export const useCredentialsStore = defineStore('credentials', {
     state: () => {
         return {
             credentials: new Array<Credential>(),
+            externalCredentials: new Array<ExternalCredential>(),
         };
     }, actions: {
         async fetch(): Promise<void> {
             this.credentials = await api.credential.all().then(response => response.data);
-        },
-        async update(credential: Credential): Promise<void> {
+            this.externalCredentials = await api.credential.externalCredentials().then(response => response.data);
         }
     }
 },);

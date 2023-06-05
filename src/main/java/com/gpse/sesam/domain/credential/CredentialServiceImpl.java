@@ -3,9 +3,8 @@ package com.gpse.sesam.domain.credential;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.domain.location.Location;
-import com.gpse.sesam.web.cmd.CreateCredentialCmd;
-import com.gpse.sesam.web.cmd.CredentialCmd;
-import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
+import com.gpse.sesam.domain.user.Issuer;
+import com.gpse.sesam.web.cmd.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -26,12 +25,16 @@ public class CredentialServiceImpl implements CredentialService {
 
     private final CredentialRepository credentialRepository;
 
+    private final ExternalCredentialRepository externalCredentialRepository;
+
     @Autowired
     public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
-                                 final CredentialRepository credentialRepository) {
+                                 final CredentialRepository credentialRepository,
+                                 final ExternalCredentialRepository externalCredentialRepository) {
         this.client = client;
         this.mapper = mapper;
         this.credentialRepository = credentialRepository;
+        this.externalCredentialRepository = externalCredentialRepository;
     }
 
     public static CredentialCmd createCredentialCmd(final Category category, final Credential credential) {
@@ -56,6 +59,13 @@ public class CredentialServiceImpl implements CredentialService {
     public List<Credential> getCredentials() {
         final List<Credential> credentials = new ArrayList<>();
         credentialRepository.findAll().forEach(credentials::add);
+        return credentials;
+    }
+
+    @Override
+    public List<ExternalCredential> getExternalCredentials() {
+        final List<ExternalCredential> credentials = new ArrayList<>();
+        externalCredentialRepository.findAll().forEach(credentials::add);
         return credentials;
     }
 
@@ -140,6 +150,70 @@ public class CredentialServiceImpl implements CredentialService {
 
     @Override
     public void delete(Long id) {
+        final Optional<Credential> optionalCredential = credentialRepository.findById(id);
+
+        if (optionalCredential.isEmpty()) {
+            return;
+        }
+
+        final Credential credential = optionalCredential.get();
+
+        credential.setCategory(null);
+
+        for (final Issuer issuer : credential.getIssuer()) {
+            issuer.setCredentials(
+                    issuer.getCredentials()
+                            .stream()
+                            .filter(credential1 -> !credential1.getId().equals(credential.getId()))
+                            .collect(Collectors.toList())
+            );
+        }
+
+        credential.setIssuer(null);
+
         credentialRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(Long id, UpdateCredentialCmd updateCredentialCmd) {
+        final Optional<Credential> optionalCredential = credentialRepository.findById(id);
+
+        if (optionalCredential.isEmpty()) {
+            return;
+        }
+
+        final Credential credential = optionalCredential.get();
+
+        credential.setName(updateCredentialCmd.getName());
+        credential.setAgent(updateCredentialCmd.getAgent());
+        credential.setCredentialDefinitionId(updateCredentialCmd.getCredentialDefinitionId());
+
+        List<FormEntry> formEntries = new ArrayList<>();
+
+        for (final UpdateAttributeCmd attribute : updateCredentialCmd.getAttributes()) {
+            formEntries.add(
+                    new FormEntry(
+                            attribute.getName(),
+                            attribute.getType(),
+                            attribute.getAttributeName()
+                    )
+            );
+        }
+
+        credential.setForm(formEntries);
+
+        List<ChecklistEntry> checklist = new ArrayList<>();
+
+        for (final UpdateConditionCmd condition : updateCredentialCmd.getConditions()) {
+            checklist.add(
+                    new ChecklistEntry(
+                            condition.getLabel()
+                    )
+            );
+        }
+
+        credential.setChecklist(checklist);
+
+        credentialRepository.save(credential);
     }
 }
