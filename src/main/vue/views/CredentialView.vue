@@ -27,7 +27,6 @@
               :options="locationStore.allLocations"
               option-value="id"
               option-label="name"
-              options-cover
               style="min-width: 12em; padding-right: 2em"
               @update:model-value="updateCredentials"
           />
