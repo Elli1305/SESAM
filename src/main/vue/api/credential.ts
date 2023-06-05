@@ -1,15 +1,12 @@
-import axios, {
-    AxiosResponse,
-} from "axios";
+import axios, {AxiosResponse,} from "axios";
 import {
-    Category, CategoryResponse,
+    Category,
+    CategoryResponse,
     Credential,
+    CredentialCmd,
     ExternalCredential,
     IssueCredentialAttribute
 } from "@/main/vue/entity/credentialDefinition";
-import {CredentialCmd} from "@/main/vue/entity/credentialDefinition";
-import {CategoryCmd} from "@/main/vue/entity/credentialDefinition";
-import {SignUpResponse} from "@/main/vue/entity/signUpResponse";
 
 export default {
     get(id: string): Promise<AxiosResponse<Credential>> {
@@ -20,31 +17,34 @@ export default {
         return axios.post<string>(`/api/credentials/${id}/issue`, attributes);
     },
 
-    all(): Promise<AxiosResponse<Credential[]>>{
+    all(): Promise<AxiosResponse<Credential[]>> {
         return axios.get("/api/credentials")
     },
 
-    getCategories(): Promise<AxiosResponse<Category[]>>{
+    getCategories(): Promise<AxiosResponse<Category[]>> {
         return axios.get("api/credentialmapping")
     },
 
-    getCredentialsByLocation(param: string): Promise<AxiosResponse<CredentialCmd[]>>{
+    getCredentialsByLocation(param: string): Promise<AxiosResponse<CredentialCmd[]>> {
         return axios.get("api/credentialview/" + param)
     },
 
+    getCredentialsByIssuer(id: number | undefined): Promise<AxiosResponse<Credential[]>> {
+        return axios.get(`api/credentials/getByIssuer/${id}`)
+    },
     getExternalCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
         return axios.get("/api/externalcredentials")
     },
 
     deleteCategory(param: String): Promise<AxiosResponse<void>> {
-        return axios.delete('/api/credentialmapping/delete/'+param);
+        return axios.delete('/api/credentialmapping/delete/' + param);
     },
 
     createCategory(category: CategoryResponse): Promise<AxiosResponse<CategoryResponse>> {
         return axios.post('/api/category', category)
     },
 
-    updateCategory(param: String, category: CategoryResponse): Promise<AxiosResponse<CategoryResponse>>{
-        return axios.put('api/credentialmapping/edit/'+ param, category)
+    updateCategory(param: String, category: CategoryResponse): Promise<AxiosResponse<CategoryResponse>> {
+        return axios.put('api/credentialmapping/edit/' + param, category)
     }
 }

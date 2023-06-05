@@ -5,6 +5,8 @@ import {AttainableRole} from "@/main/vue/entity/createUser"
 import axios from 'axios';
 import {User} from "@/main/vue/entity/loginResponse";
 import {LoginData} from "@/main/vue/entity/loginData"
+import {Credential} from "@/main/vue/entity/credentialDefinition";
+import {Issuer} from "@/main/vue/entity/issuer";
 
 export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
@@ -13,6 +15,7 @@ export const useUserStore = defineStore('users', () => {
     const user: Ref<User | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
     const editUser: Ref<User | null> = ref(null)
+    const issuers: Ref<Issuer []|null> = ref(null)
 
 
     if (sessionStorage.getItem("users")) {
@@ -148,6 +151,16 @@ export const useUserStore = defineStore('users', () => {
         });
     }
 
+    function getIssuers(){
+        return new Promise((resolve, reject) => {api.auth.getIssuer().then((response) => {
+            issuers.value = response.data
+            resolve(response.data)
+        }).catch((error) => {
+            reject(error)
+        })
+        })
+    }
+
 
     return {
         user,
@@ -168,5 +181,7 @@ export const useUserStore = defineStore('users', () => {
         saveEdits,
         deleteUser,
         updateIssuer,
+        getIssuers,
+        issuers
     };
 });

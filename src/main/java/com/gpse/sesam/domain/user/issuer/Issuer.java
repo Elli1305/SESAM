@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.user.issuer;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.user.SesamUser;
@@ -21,7 +22,8 @@ public class Issuer extends SesamUser {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Room room;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@JsonIgnoreProperties("issuer")
 	private List<Credential> credentials;
 
 	protected Issuer() {

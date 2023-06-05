@@ -29,7 +29,7 @@ public class Room {
 	@JoinColumn(name = "ROOM_ID")
 	private List<Door> doors = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
 	protected Room() {

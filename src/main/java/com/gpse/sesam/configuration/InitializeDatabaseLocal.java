@@ -5,26 +5,26 @@ import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.CredentialServiceImpl;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
-import com.gpse.sesam.domain.location.RoomGroups;
 import com.gpse.sesam.domain.location.RoomGroupService;
+import com.gpse.sesam.domain.location.RoomGroups;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
-import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
+import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.util.GeoJsonParser;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.slf4j.Logger;
@@ -78,18 +78,18 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() {
 		final List<Location> locations = createLocations();
-		final List<SesamUser> users = createUsers();
 		final List<Credential> credentials = createCredentials();
+		final List<SesamUser> users = createUsers(credentials);
 		final List<Category> categories = createCredentialCategories();
 		final List<Colors> colors = createColors();
 		final List<RoomGroups> roomGroups = roomGroups(locations);
 
 		colorsService.saveAll(colors);
 		locationService.saveAll(locations);
-		userService.saveAll(users);
 		credentialService.saveAll(credentials);
 		locationService.saveAll(locationsList);
 		categoryService.saveAll(categories);
+		userService.saveAll(users);
 		roomGroupService.saveAll(roomGroups);
 	}
 
@@ -123,7 +123,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		defaultColors.setWarning("#fec705");
 	}
 
-	private List<SesamUser> createUsers() {
+	private List<SesamUser> createUsers(final List<Credential> credentials) {
 		final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
 		adminRole.setGranted(true);
 		final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
@@ -133,18 +133,31 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final String defaultPassword = passwordEncoder.encode("Hallo123!");
 		final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
 				Collections.singletonList(adminRole));
-		final SesamUser issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
+		final Issuer issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
 				Collections.singletonList(issuerRole), new Room("0.007"));
+		issuer.setCredentials(credentials);
 		final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
 				Collections.singletonList(editorRole));
 		final SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User",
 				Collections.emptyList());
 
+		for (final Credential cred : credentials) {
+			cred.getIssuer().add(issuer);
+		}
 
-		return List.of(admin, issuer, editor, user);
+		final SesamUserRole issuerRole20 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+		issuerRole20.setGranted(true);
+		final SesamUserRole editorRole21 = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
+		editorRole21.setGranted(true);
+
+		final SesamUser jana = new SesamUser("jana@test.de", defaultPassword, "Jana", "Editor-Issuer",
+				List.of(editorRole21, issuerRole20));
+
+
+		return List.of(admin, issuer, editor, user, jana);
 	}
 
-	private List<RoomGroups> roomGroups(List<Location> locations) {
+	private List<RoomGroups> roomGroups(final List<Location> locations) {
 		final List<RoomGroups> roomGroups = new ArrayList<>();
 		final Building build = locations.get(0).getBuildings().get(0);
 		final Building build2 = locations.get(0).getBuildings().get(1);

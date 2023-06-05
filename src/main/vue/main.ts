@@ -43,7 +43,7 @@ const messages = {
             title: "Nutzer bearbeiten",
             changeRoles: "Rollen vergeben/entfernen: ",
             delete: "Löschen",
-            back: "Zurück",
+            back: "Abbrechen",
             attention: "ACHTUNG",
             question: "Nutzer wirklich löschen?",
             deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
@@ -60,7 +60,15 @@ const messages = {
             confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
             doors: 'Türe',
             roomName: 'Raumname',
-            edit: 'Bearbeiten'
+            edit: 'Bearbeiten',
+            editFloor: 'Etage bearbeiten',
+            floorlevel: 'Etagennummer',
+            floorplanUpload: 'Etagenplan hochladen',
+            editBuilding: 'Gebäude bearbeiten',
+            editLocation: 'Standort bearbeiten',
+            addLocation: 'Standort hinzufügen',
+            addBuilding: 'Gebäude hinzufügen',
+            addFloor: 'Etage hinzufügen',
         },
         groupRooms: {
             title: "Gruppierungen von Räumen",
@@ -69,6 +77,7 @@ const messages = {
             chooseLocation: "Location wählen",
             chooseRooms: "Räume auswählen",
             editGroup:"Gruppierung bearbeiten",
+            new: "Neue Gruppe"
         },
 
         common: {
@@ -324,7 +333,8 @@ const messages = {
             showAdmin: "Show Admin",
             showEditor: "Show Editor",
             showIssuer: "Show Issuer",
-            search: "Search"
+            search: "Search",
+            save: "Save"
         },
 
         groupRooms: {
@@ -334,6 +344,7 @@ const messages = {
             chooseLocation: "Choose a location",
             chooseRooms: "Choose the rooms",
             editGroup:"Edit group",
+            new: "New group"
         },
 
         adminEdit: {
@@ -381,13 +392,22 @@ const messages = {
             doorName: 'Name of Door',
             editDoor:'Edit Door',
             editRoom:'Edit Room',
+            editFloor: 'Edit Floor',
+            floorlevel: 'Floor level',
+            floorplanUpload: 'Upload floor plan',
             save: 'save',
             cancel: 'cancel',
             confirmDeletion: 'Confirm deletion',
             confirmDeletionText:'Are you sure you want to delete the door?',
             doors:'Doors',
             roomName: 'Name of room',
-            edit: 'Edit'
+            edit: 'Edit',
+            editBuilding: 'Edit building',
+            editLocation: 'Edit location',
+            addLocation: 'Add location',
+            addBuilding: 'Add building',
+            addFloor: 'Add floor',
+
         },
         home: {
             header: "SESAM",

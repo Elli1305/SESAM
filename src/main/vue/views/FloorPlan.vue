@@ -18,11 +18,12 @@ import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import {storeToRefs} from "pinia";
 import {watch} from "vue";
 import {useQuasar} from "quasar";
-import SelectRoom from "@/main/vue/views/SelectRoom.vue";
+import CreateDoor from "@/main/vue/views/CreateDoor.vue";
 import {useRoomStore} from "@/main/vue/stores/room";
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
+import api from "@/main/vue/api";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -182,11 +183,11 @@ export default {
         })
       } else if (e.shape === 'Line' || e.shape === 'Polyline') {
         $q.dialog({
-          component: SelectRoom,
+          component: CreateDoor,
           componentProps: {
             rooms: this.floorPlanStore.rooms
           }
-        }).onOk(({room, doorName}) => {
+        }).onOk(({room, doorName, configuration, configDescription}) => {
           room.doors.push({
             name: doorName,
             coordinates: e.layer._latlngs.map((latLng) => ({
@@ -199,6 +200,10 @@ export default {
             const savedDoor = savedRoom.doors.reduce((prev, current) => (prev.id > current.id) ? prev : current)
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
+            configuration.description = configDescription
+            configuration.doorId = savedDoor.name + '_' + savedDoor.id
+            configuration.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+            api.doorConfig.save(configuration).then(() => console.log("success"))
           })
         })
       }
@@ -308,44 +313,44 @@ export default {
         })
       });
     }, drawRooms(rooms) {
-          let polygons = [];
-          for (const room of rooms) {
-              const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
-                  color: 'black',
-                  width: 5,
-                  fillOpacity: 0.1
-              })
+      let polygons = [];
+      for (const room of rooms) {
+        const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
+          color: 'black',
+          width: 5,
+          fillOpacity: 0.1
+        })
 
-              polygons.push(polygon);
-              let doorsname = room.doors.map(door => door.name).join(", ");
-              let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential.name).join(", ");
-              let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstname +" " + issuer.lastname).join(", ");
-              console.log(room.doors);
-              const popup = L.popup();
-              let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
-              let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
+        polygons.push(polygon);
+        let doorsname = room.doors.map(door => door.name).join(", ");
+        let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential.name).join(", ");
+        let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstname + " " + issuer.lastname).join(", ");
+        const popup = L.popup();
+        let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
+        let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
 
-              popup.setContent(url);
-              polygon.bindTooltip(string).openTooltip();
-              polygon.bindPopup(popup);
-              polygon.addTo(floorPlanMap);
+        popup.setContent(url);
+        polygon.bindTooltip(string).openTooltip();
+        polygon.bindPopup(popup);
+        polygon.addTo(floorPlanMap);
 
-              polygon.on('click', function() {
-                  for (const p of polygons) {
-                      p.setStyle({
-                          color: 'black',
-                          fillColor: 'black',
-                          weight: 5,
-                          fillOpacity: 0.1
-                      });
-                  }
+        polygon.on('click', function () {
+          for (const p of polygons) {
+            p.setStyle({
+              color: 'black',
+              fillColor: 'black',
+              weight: 5,
+              fillOpacity: 0.1
+            });
+          }
 
-                  polygon.setStyle({
-                      color: 'red',
-                      fillColor: 'red',
-                      weight: 2,
-                      fillOpacity: 0.1
-                  })});
+          polygon.setStyle({
+            color: 'red',
+            fillColor: 'red',
+            weight: 2,
+            fillOpacity: 0.1
+          })
+        });
 
         polygon.id = room.id
         polygon.type = "Room"

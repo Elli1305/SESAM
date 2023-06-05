@@ -96,7 +96,7 @@ export default {
             }),
             editUser(value) {
 
-                router.push('/admin/currentuserlist/edit/' + value[0]);
+                router.push('/currentuserlist/edit/' + value[0]);
 
             },
             columns,

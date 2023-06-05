@@ -41,7 +41,7 @@
               rounded
               icon="add"
               color="grey"
-              label="Neue Gruppe"
+              :label="t('groupRooms.new')"
               @click="newGroup = true; toDefault()"
               style="margin-right: 2em"/>
           <q-input borderless dense debounce="300" v-model="filter.search"
@@ -109,8 +109,8 @@
             </q-card-section>
 
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat :label="t('adminEdit.delete')" @click="deleteGroup(); deleteAlert=false"/>
                 <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
+                <q-btn flat :label="t('adminEdit.delete')" @click="deleteGroup(); deleteAlert=false"/>
             </q-card-actions>
         </q-card>
     </q-dialog>
@@ -144,9 +144,9 @@
             </div>
 
             <q-card-actions align="right" class="text-primary">
+                <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
                 <q-btn flat label="Speichern" @click="updateCurrentGroup(editName,modelRoomsNew);"
                 v-close-popup="closeEditAlert"/>
-                <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
             </q-card-actions>
         </q-card>
 
@@ -188,9 +188,9 @@
                 </q-card-section>
 
                 <q-card-actions align="right" class="text-primary">
+                    <q-btn flat :label="t('adminEdit.back')" @click="toDefault()" v-close-popup/>
                     <q-btn flat label="Speichern"
                            @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
-                    <q-btn flat :label="t('adminEdit.back')" @click="toDefault()" v-close-popup/>
                 </q-card-actions>
             </q-card>
         </q-dialog>

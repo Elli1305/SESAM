@@ -1,113 +1,136 @@
 import {defineStore} from "pinia";
 import {Ref, ref} from "vue";
 import api from "@/main/vue/api";
-import {
-    Category,
-    CredentialCmd,
-    ExternalCredential,
-    Credential
-} from "@/main/vue/entity/credentialDefinition";
-import {Credential} from "@/main/vue/entity/credentialDefinition";
+import {Category, Credential, CredentialCmd, ExternalCredential} from "@/main/vue/entity/credentialDefinition";
 
-export const useCredentialStore = defineStore('credential', () =>{
-    const credentials: Ref<CredentialCmd[]|null> = ref(null)
-    const allCredentials: Ref<Credential[]|null> = ref(null)
-    const categories: Ref<Category[]|null> = ref(null)
-    const external: Ref<ExternalCredential[]|null> = ref(null)
+export const useCredentialStore = defineStore('credential', () => {
+        const credentials: Ref<CredentialCmd[] | null> = ref(null)
+        const allCredentials: Ref<Credential[] | null> = ref(null)
+        const credsByIssuer: Ref<Credential[] | null> = ref(null)
+        const categories: Ref<Category[] | null> = ref(null)
+        const external: Ref<ExternalCredential[] | null> = ref(null)
 
 
-    function getCredentialsByLocation(id: string) {
-        return new Promise((resolve, reject) => {
-            api.credential.getCredentialsByLocation(id).then((response) => {
-                credentials.value = response.data
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
+        function getCredentialsByLocation(id: string) {
+            return new Promise((resolve, reject) => {
+                api.credential.getCredentialsByLocation(id).then((response) => {
+                    credentials.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
             })
-        })
-    }
+        }
 
-    function getCategory() {
-        return new Promise((resolve, reject) => {
-            api.credential.getCategories().then((response) => {
-                categories.value = response.data
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
+        function getAllCredentials() {
+            return new Promise((resolve, reject) => {
+                api.credential.all().then((response) => {
+                    allCredentials.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
             })
-        })
-    }
+        }
 
-    function getExternalCredentials() {
-        return new Promise((resolve, reject) => {
-            api.credential.getExternalCredentials().then((response) => {
-                external.value = response.data
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
+        function getCategory() {
+            return new Promise((resolve, reject) => {
+                api.credential.getCategories().then((response) => {
+                    categories.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
             })
-        })
-    }
+        }
 
+        function getCredentialsByIssuer(id: number | undefined): Promise<Credential[]> {
+            return new Promise((resolve, reject) => {
+                api.credential.getCredentialsByIssuer(id).then((response) => {
+                    credsByIssuer.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
 
-    function deleteCategory(id: string) {
-        return new Promise<void>((resolve, reject) => {
-            api.credential.deleteCategory(id).then(() => {
-                resolve()
-            }).catch((error) => {
-                reject(error)
             })
-        });
-    }
+        }
 
-    function getCredentials() {
-        return new Promise((resolve, reject) => {
-            api.credential.all().then((response) => {
-                allCredentials.value = response.data
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
+        function getExternalCredentials() {
+            return new Promise((resolve, reject) => {
+                api.credential.getExternalCredentials().then((response) => {
+                    external.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
+
             })
-        })
-    }
+        }
 
-    function createCategory(name: string, credential: bigint[], external: bigint[]) {
-        return new Promise<void>((resolve, reject) => {
-            api.credential.createCategory({
-                name: name,
-                credentials: credential,
-                externalCredentials: external
-            }).then(_ => resolve())
-                .catch(reject);
-        });
-    }
 
-    function updateCredentials(id: string, name: string, credential: bigint[], external: bigint[]) {
-        return new Promise<void>((resolve, reject) => {
-            api.credential.updateCategory(id,
-                {
+        function deleteCategory(id: string) {
+            return new Promise<void>((resolve, reject) => {
+                api.credential.deleteCategory(id).then(() => {
+                    resolve()
+                }).catch((error) => {
+                    reject(error)
+                })
+            });
+        }
+
+        function getCredentials() {
+            return new Promise((resolve, reject) => {
+                api.credential.all().then((response) => {
+                    allCredentials.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
+            })
+        }
+
+        function createCategory(name: string, credential: bigint[], external: bigint[]) {
+            return new Promise<void>((resolve, reject) => {
+                api.credential.createCategory({
                     name: name,
                     credentials: credential,
                     externalCredentials: external
-            }).then(_ => {
-                resolve()
+                }).then(_ => resolve())
+                    .catch(reject);
+            });
+        }
+
+        function updateCredentials(id: string, name: string, credential: bigint[], external: bigint[]) {
+            return new Promise<void>((resolve, reject) => {
+                api.credential.updateCategory(id,
+                    {
+                        name: name,
+                        credentials: credential,
+                        externalCredentials: external
+                    }).then(_ => {
+                    resolve()
+                })
+                    .catch(reject);
             })
-                .catch(reject);
-        })
-    }
+        }
 
 
-    return {
-        getCredentialsByLocation,
-        credentials,
-        getCategory,
-        categories,
-        external,
-        getExternalCredentials,
-        deleteCategory,
-        allCredentials,
-        getCredentials,
-        createCategory,
-        updateCredentials
+        return {
+            getCredentialsByLocation,
+            getAllCredentials,
+            getCredentialsByIssuer,
+            credentials,
+            credsByIssuer,
+            getCategory,
+            categories,
+            external,
+            getExternalCredentials,
+            deleteCategory,
+            allCredentials,
+            getCredentials,
+            createCategory,
+            updateCredentials
+        }
     }
-})
+)
