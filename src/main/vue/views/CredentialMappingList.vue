@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t("credentialmapping.credentialmapping")}}</p>
     <div class="row self-center">
       <q-table
-          style="width: 75vw; height: 25em"
+          style="width: 80vw; height: 50vh"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"

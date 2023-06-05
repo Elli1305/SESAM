@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t('issuermanagement.title')}}</p>
     <div class="row self-center" style="display: flex">
       <q-table
-          style="width: 75vw; height: 25em"
+          style="width: 80vw; height: 50vh"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
@@ -15,13 +15,11 @@
           :filter="filter"
           row-key="username">
         <template v-slot:top-right>
-          <div class="q-pa-md">
             <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('issuermanagement.search')">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
-          </div>
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">

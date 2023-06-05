@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t("groupRooms.title")}}</p>
     <div class="row self-center">
       <q-table
-          style="width: 75vw; height: 25em"
+          style="width: 80vw; height: 50vh"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
@@ -59,6 +59,7 @@
               behavior="menu"
               v-model="modelForLocation"
               borderless
+              dense
               options-dense
               :options="optionsLocations"
               option-label="name"
@@ -78,6 +79,7 @@
               behavior="menu"
               v-model="modelForBuilding"
               borderless
+              dense
               options-dense
               :options="buildingListNames"
               option-label="name"
@@ -278,6 +280,10 @@ export default {
             })
         }
 
+      function getPaginationLabel(firstRowIndex, endRowIndex, totalRowsNumber) {
+        return firstRowIndex.toString() + "-" + endRowIndex.toString() + " / " + totalRowsNumber.toString()
+      }
+
         function adaptRoomGroupsToBuilding() {
             rows.value = [];
             for (const roomGs of roomGroupList) {
@@ -435,6 +441,7 @@ export default {
             locationList,
             buildingListNames,
             toDefault,
+            getPaginationLabel,
             getOldName() {
               this.editName = editGroupName.value;
               this.modelRoomsNew= editGroupRooms.value;

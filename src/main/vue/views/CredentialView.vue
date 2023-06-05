@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t("credentialview.credentialview")}}</p>
     <div class="row self-center">
       <q-table
-          style="width: 75vw; height: 25em"
+          style="width: 80vw; height: 50vh"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
@@ -21,6 +21,7 @@
               behavior="menu"
               v-model="model"
               borderless
+              dense
               options-dense
               emit-value
               map-options
@@ -28,8 +29,7 @@
               option-value="id"
               option-label="name"
               style="min-width: 12em; padding-right: 2em"
-              @update:model-value="updateCredentials"
-          />
+              @update:model-value="updateCredentials"/>
           <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('credentialview.search')">
             <template v-slot:append>
               <q-icon name="search"/>

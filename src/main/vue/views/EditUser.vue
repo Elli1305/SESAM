@@ -1,7 +1,7 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" v-if="user!=null">
     <p class="row text-h3 justify-center">{{t('adminEdit.title') }}</p>
-    <div class="column justify-evenly self-center no-wrap" style="width: 75vw; height: 50vh">
+    <div class="column justify-evenly self-center no-wrap" style="width: 80vw; height: 50vh">
       <div class="column q-gutter-md self-center" style="width: 25em">
         <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined/>
         <q-input id="lastname" v-model="user.lastName" :label="t('profile.lastname')" outlined/>
@@ -13,7 +13,19 @@
             :options="options"
             use-chips
             stack-label
-            :label= "t('adminEdit.changeRoles')"/>
+            :label= "t('adminEdit.changeRoles')">
+          <template v-slot:selected-item="scope">
+            <q-chip
+                class="q-pa-sm"
+                style="line-height: 1"
+                :label="scope.opt.toString()"
+                :tabindex="scope.tabindex"
+                dense
+                removable
+                icon-remove="clear"
+                @remove="scope.removeAtIndex(scope.index)"/>
+          </template>
+        </q-select>
       </div>
       <div class="row justify-around">
           <q-btn round color="negative" text-color="positive" icon="delete" @click="deleteAlert = true" style="width: 4em; height: 4em"/>
