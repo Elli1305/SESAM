@@ -26,7 +26,6 @@ import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
 import api from "@/main/vue/api";
-import {log} from "@quasar/app/lib/helpers/logger";
 
 const mapConfig = {
   crs: CRS.Simple,
