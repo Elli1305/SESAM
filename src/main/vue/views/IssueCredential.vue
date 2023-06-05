@@ -52,8 +52,8 @@
                 <li>{{ t('issueCredential.addCredential.steps.step8') }}</li>
               </ol>
             </div>
-            <div class="column justify-center no-wrap" style="width: 20%">
-              <QRCode class="q-ma-md q-pa-sm qr-border" :value="oobUrl" :size="300"/>
+            <div class="column justify-center no-wrap" style="padding-left: 2em">
+              <QRCode class="q-pa-sm qr-border" style="width: 20vw; height: 20vw" :value="oobUrl" :size="300"/>
             </div>
           </div>
         </q-step>
