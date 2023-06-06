@@ -6,11 +6,11 @@
              label="Credential Definition ID"
              outlined type="text"/>
 
-    <h6 v-if="props.type !== 'external'" class="q-ma-none q-pa-none q-pb-sm">Credential Attributes</h6>
+    <h6 v-if="props.type !== 'external'" class="q-ma-none q-pa-none q-pb-sm">Credentialattribute</h6>
     <div v-if="props.type !== 'external'" v-for="(attribute, index) in credential.attributes">
       <div class="row q-col-gutter-sm">
         <q-input v-model="attribute.name" :rules="[required]" class="col-5" label="Name" outlined type="text"/>
-        <q-input v-model="attribute.attributeName" :rules="[required]" class="col-5" label="Attribute Name"
+        <q-input v-model="attribute.attributeName" :rules="[required]" class="col-5" label="Name des Attributes"
                  outlined type="text"/>
         <q-select v-model="attribute.type" :options="types" class="col-1" emit-value label="Type" map-options
                   outlined/>
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <h6 v-if="props.type !== 'external'" class="q-ma-none q-pa-none q-pb-sm">Credential Conditions</h6>
+    <h6 v-if="props.type !== 'external'" class="q-ma-none q-pa-none q-pb-sm">Checkliste</h6>
     <div v-if="props.type !== 'external'" v-for="(condition, index) in credential.conditions" class="row q-col-gutter-sm">
       <q-input v-model="condition.label" :rules="[required]" class="col-11" label="Name" outlined type="text"/>
 
