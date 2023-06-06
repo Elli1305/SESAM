@@ -2,7 +2,8 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <q-card-section class="q-pa-md">
-        <div class="text-h6">{{t('floorplan.addLocation')}}</div>
+        <div v-if="location.id" class="text-h6">{{t('floorplan.editLocation')}}</div>
+        <div v-if="!location.id" class="text-h6">{{t('floorplan.addLocation')}}</div>
         <div class="q-mt-md">
           <q-input outlined v-model="locationName" label="Name"/>
         </div>
