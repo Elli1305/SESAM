@@ -37,7 +37,7 @@
           </q-input>
         </template>
         <template v-slot:body-cell-issuer="props">
-          <q-td style="height: fit-content" class="column no-wrap" :props="props">
+          <q-td style="" class="column no-wrap" :props="props">
             <div class="row q-my-xs justify-between items-center no-wrap" v-for="(elem, index) in props.row.issuerName">
               <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
               <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
