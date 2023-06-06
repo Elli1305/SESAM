@@ -38,7 +38,7 @@ export default {
         return axios.get("api/credentialmapping")
     },
 
-    getCredentialsByLocation(param: string): Promise<AxiosResponse<CredentialCmd[]>> {
+    getCredentialsByLocation(param: bigint): Promise<AxiosResponse<CredentialCmd[]>> {
         return axios.get("api/credentialview/" + param)
     },
 
