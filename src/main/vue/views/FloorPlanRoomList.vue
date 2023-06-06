@@ -39,7 +39,7 @@
                     <q-item-label>{{ room.name }}</q-item-label>
                     <q-item-label>{{ room.doors.map(door => door.name).join(", ") }}</q-item-label>
                     <q-item-label>
-                      U-MEMBER
+                      {{ room?.id ? "U-MEMBER" : "" }}
                     </q-item-label>
                   </q-list>
                 </div>

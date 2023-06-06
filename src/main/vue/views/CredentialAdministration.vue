@@ -11,11 +11,11 @@
         row-key="name"
     >
       <template v-slot:top-left>
-        <q-btn borderless color="grey-6" flat icon="add" label="New Credential" to="/add_credential"/>
+        <q-btn borderless color="grey-6" flat icon="add" label="Neues Credential" to="/add_credential"/>
       </template>
       <template v-slot:top-right>
-        <q-select v-model="selectedTypes" :options="options" borderless emit-value label="Types" map-options multiple/>
-        <q-input v-model="filter" borderless class="q-ml-lg" debounce="300" dense placeholder="Search">
+        <q-select v-model="selectedTypes" :options="options" borderless emit-value label="Art" map-options multiple/>
+        <q-input v-model="filter" borderless class="q-ml-lg" debounce="300" dense placeholder="Suche">
           <template v-slot:append>
             <q-icon name="search"/>
           </template>
