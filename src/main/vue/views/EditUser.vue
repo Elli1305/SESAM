@@ -120,7 +120,7 @@ export default {
           return 'ISSUER'
         }
       })).then(() => {
-        router.push('/admin/currentuserlist');
+        router.push('/currentuserlist');
       })
     }
 

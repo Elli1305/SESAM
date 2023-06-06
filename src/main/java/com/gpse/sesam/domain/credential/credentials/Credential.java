@@ -1,7 +1,6 @@
 package com.gpse.sesam.domain.credential.credentials;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
@@ -33,7 +32,6 @@ public class Credential {
 	@Column(nullable = false)
 	private String credentialDefinitionId;
 
-	@JsonIgnore
 	@Column(nullable = false)
 	private String agent;
 

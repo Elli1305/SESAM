@@ -326,7 +326,7 @@ export default {
         let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential?.name).join(", ");
         let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred?.issuer).map(issuer => issuer?.firstName + " " + issuer?.lastName).join(", ");
         const popup = L.popup();
-        let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: U-MEMEBER" + "<br>Issuer: Jana Editor-Issuer";
+        let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: U-MEMBER" + "<br>Issuer: Jana Editor-Issuer";
         let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
 
         popup.setContent(url);
