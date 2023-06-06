@@ -116,7 +116,9 @@ export default {
     function setLocation(id) {
       locationStore.getLocations().then((locations) => {
         model.value = locations[0].id;
-
+        credentialStore.getCredentialsByLocation(locations[0].id).then((credentials) => {
+          rows.value = credentials
+        })
         for (const location of locations) {
           for (const building of location.buildings ?? []) {
             for (const floor of building.floors ?? []) {
@@ -130,6 +132,7 @@ export default {
         }
       });
     }
+
 
     function getPaginationLabel(firstRowIndex, endRowIndex, totalRowsNumber) {
       return firstRowIndex.toString() + "-" + endRowIndex.toString() + " / " + totalRowsNumber.toString()

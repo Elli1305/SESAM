@@ -25,7 +25,7 @@ export const useCredentialStore = defineStore('credential', () => {
         const external: Ref<ExternalCredential[] | null> = ref(null)
 
 
-        function getCredentialsByLocation(id: string) {
+        function getCredentialsByLocation(id: bigint) {
             return new Promise((resolve, reject) => {
                 api.credential.getCredentialsByLocation(id).then((response) => {
                     credentials.value = response.data
