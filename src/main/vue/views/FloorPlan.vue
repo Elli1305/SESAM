@@ -178,6 +178,7 @@ export default {
 
         this.floorStore.save(floor).then((savedFloor) => {
           const savedRoom = savedFloor.rooms.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+          this.floorPlanStore.rooms = savedFloor.rooms
           e.layer.id = savedRoom.id
           this.addCallbacksPolygon(e.layer)
         })
@@ -305,7 +306,9 @@ export default {
         const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
         const index = floor.rooms.findIndex(room => e.layer.id === room.id)
         floor.rooms.splice(index, 1)
-        this.floorStore.save(floor)
+        this.floorStore.save(floor).then((savedFloor) => {
+          this.floorPlanStore.rooms = savedFloor.rooms
+        })
         floorPlanMap.eachLayer(layer => {
           if (layer.roomId === e.layer.id) {
             floorPlanMap.removeLayer(layer)
