@@ -59,7 +59,7 @@ const messages = {
             cancel: 'abbrechen',
             confirmDeletion: 'Bestätigen Sie das Löschen',
             confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
-            doors: 'Türe',
+            doors: 'Türen',
             roomName: 'Raumname',
             edit: 'Bearbeiten',
             editFloor: 'Etage bearbeiten',
