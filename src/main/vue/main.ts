@@ -130,7 +130,7 @@ const messages = {
             editorPages: "Bearbeiten",
             editFloorplan: "Floorplan bearbeiten",
             groupRooms: "Räume gruppieren",
-            issuerPages: "Credential austellen",
+            issuerPages: "Credential ausstellen",
             imprint: "Impressum",
             logout: "Logout",
             roomSearch: "Raumsuche"
