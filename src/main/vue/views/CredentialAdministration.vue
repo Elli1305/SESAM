@@ -1,20 +1,20 @@
 <template>
-  <div class="q-pa-md">
-    <div class="q-mb-xl">
-      <h1 style="font-size: 3em; text-align: center; margin-bottom: -0.5em">
-        Credentialverwaltung</h1>
-    </div>
-    <q-table
-        :columns="columns"
-        :filter="search"
-        :rows="rows"
-        row-key="name"
-    >
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">Credentialverwaltung</p>
+    <div class="row self-center">
+      <q-table
+          style="width: 80vw; height: 50vh"
+          :rows-per-page-options="[0]"
+          :columns="columns"
+          :rows="rows"
+          :separator="'cell'"
+          :filter="search"
+          row-key="name">
       <template v-slot:top-left>
-        <q-btn borderless color="grey-6" flat icon="add" label="Neues Credential" to="/add_credential"/>
-      </template>
+        <q-select style="width: 12em" dense v-model="selectedTypes" :options="options" borderless emit-value label="Art" map-options multiple/>
+        </template>
       <template v-slot:top-right>
-        <q-select v-model="selectedTypes" :options="options" borderless emit-value label="Art" map-options multiple/>
+        <q-btn rounded borderless color="grey-6" flat icon="add" label="Neues Credential" to="/add_credential"/>
         <q-input v-model="filter" borderless class="q-ml-lg" debounce="300" dense placeholder="Suche">
           <template v-slot:append>
             <q-icon name="search"/>
@@ -23,7 +23,7 @@
       </template>
       <template v-slot:body-cell-name="props">
         <q-td :props="props">
-          <router-link :to="`/credential_administration/${'issuer' in props.row ? 'internal' : 'external'}/${props.row.id}`">{{ props.value }}</router-link>
+          {{ props.value }}
         </q-td>
       </template>
       <template v-slot:body-cell-type="props">
@@ -32,8 +32,14 @@
           <q-chip v-else color="secondary" label="External" text-color="white"/>
         </q-td>
       </template>
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props">
+          <q-btn :to="`/credential_administration/${'issuer' in props.row ? 'internal' : 'external'}/${props.row.id}`" dense round flat color="grey" icon="edit"></q-btn>
+          </q-td>
+      </template>
     </q-table>
-  </div>
+    </div>
+  </q-page>
 </template>
 
 <script lang="ts" setup>
@@ -76,6 +82,13 @@ const columns: QTableColumn<Credential | ExternalCredential>[] = [
     field: (row) => "issuer" in row,
     sortable: true,
   },
+  {
+    name: 'actions',
+    align: 'center',
+    label: 'Bearbeiten',
+    field: row => ''
+  }
+
 ];
 
 const options: QSelectOption[] = [
@@ -100,6 +113,7 @@ const rows = computed(
     () => [...store.credentials, ...store.externalCredentials]
         .filter((value) => (selectedTypes.value.includes('internal') && 'issuer' in value) || (selectedTypes.value.includes('external') && !('issuer' in value)))
 );
+
 </script>
 
 <style scoped></style>
