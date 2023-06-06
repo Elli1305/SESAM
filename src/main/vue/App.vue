@@ -15,12 +15,12 @@ const i18nLocale = useI18n()
 const r = document.querySelector(':root')
 
 corpdesign.setColors()
-corpdesign.getColors().then( c => {
+corpdesign.getColors().then(c => {
   r.style.setProperty('--bg-color', c.data.bgC)
   r.style.setProperty('--text-color', c.data.textC)
 })
 
-function getLanguage(){
+function getLanguage() {
   return i18nLocale.locale.value.toString() === 'de' ? 'de' : 'gb';
 }
 
@@ -68,7 +68,8 @@ async function logout() {
                 <country-flag class="self-center no-margin shadow-16"
                               style="height: 3em; width: 3em; border-radius: 100%"
                               :country="getLanguage()" size="normal"/>
-                <q-menu fit transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
+                <q-menu fit transition-show="jump-down" transition-hide="jump-up"
+                        style="background-color: var(--bg-color)">
                   <q-list>
                     <q-item @click="changeLanguage('de')" clickable v-close-popup>
                       <q-item-section text-color="black" style="width: 7.5em" unelevated>
@@ -95,8 +96,10 @@ async function logout() {
           </div>
           <div id="lower" class="row justify-end items-center no-wrap">
             <div class="row">
-              <router-link to="/" class="headerLink text-accent"><p class="headerText">{{ t("home.floorplan") }}</p></router-link>
-              <router-link to="/credentialview" class="headerLink text-accent"><p class="headerText">{{ t("home.credentials") }}</p></router-link>
+              <router-link to="/" class="headerLink text-accent"><p class="headerText">{{ t("home.floorplan") }}</p>
+              </router-link>
+              <router-link to="/credentialview" class="headerLink text-accent"><p class="headerText">
+                {{ t("home.credentials") }}</p></router-link>
               <div>
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                    class="headerText foldMenu text-accent">
@@ -105,10 +108,15 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/currentUserlist" class="q-ma-sm headerLink text-black">{{ t("home.currentUsers") }}</router-link>
-                    <router-link to="/rolesRequest" class="q-ma-sm headerLink text-black">{{ t("home.currentRegistrations") }}
+                    <router-link to="/currentUserlist" class="q-ma-sm headerLink text-black">{{
+                        t("home.currentUsers")
+                      }}
                     </router-link>
-                    <router-link to="/issuermanagement" class="q-ma-sm headerLink text-black">{{ t("home.issuerManagement") }}
+                    <router-link to="/rolesRequest" class="q-ma-sm headerLink text-black">
+                      {{ t("home.currentRegistrations") }}
+                    </router-link>
+                    <router-link to="/issuermanagement" class="q-ma-sm headerLink text-black">
+                      {{ t("home.issuerManagement") }}
                     </router-link>
                   </div>
                 </q-menu>
@@ -121,8 +129,11 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/corporatedesign" class="q-ma-sm headerLink text-black">{{t("home.editCorporateDesign")}}</router-link>
-                    <router-link to="/imprinteditor" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
+                    <router-link to="/corporatedesign" class="q-ma-sm headerLink text-black">
+                      {{ t("home.editCorporateDesign") }}
+                    </router-link>
+                    <router-link to="/imprinteditor" class="q-ma-sm headerLink text-black">{{ t("home.editImprint") }}
+                    </router-link>
                   </div>
                 </q-menu>
               </div>
@@ -134,7 +145,11 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/credentialmapping" class="q-ma-sm headerLink text-black">Credentialmapping</router-link>
+                    <router-link to="/credentialmapping" class="q-ma-sm headerLink text-black">Credentialmapping
+                    </router-link>
+                    <router-link to="/credential_administration" class="q-ma-sm headerLink text-black">Credentials
+                      verwalten
+                    </router-link>
                   </div>
                 </q-menu>
               </div>
@@ -144,8 +159,14 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/editFloorPlan" class="q-ma-sm headerLink text-black">{{ t("home.editFloorplan") }}</router-link>
-                    <router-link to="/grouprooms" class="q-ma-sm headerLink text-black">{{ t("home.groupRooms") }}</router-link>
+                    <router-link to="/editFloorPlan" class="q-ma-sm headerLink text-black">{{
+                        t("home.editFloorplan")
+                      }}
+                    </router-link>
+                    <router-link to="/grouprooms" class="q-ma-sm headerLink text-black">{{
+                        t("home.groupRooms")
+                      }}
+                    </router-link>
                   </div>
                 </q-menu>
               </div>
@@ -227,10 +248,11 @@ async function logout() {
   font-weight: 500;
   font-size: 1.5em;
   vertical-align: center;
-  }
+}
 
 .headerLink {
-  text-decoration: none;}
+  text-decoration: none;
+}
 
 .foldMenu {
   cursor: pointer;
