@@ -132,7 +132,7 @@ public class CredentialServiceImpl implements CredentialService {
 		return credentialRepository.findByLocation(id);
 	}
 
-	/*
+
 	@Override
 	public List<CredentialCmd> getCredentialByLocation(final Long id) {
 		final List<Credential> credentials = credentialRepository.findByLocation(id);
@@ -157,22 +157,6 @@ public class CredentialServiceImpl implements CredentialService {
 			cmds.add(new CredentialCmd(categoryName, credentialName, externalCredentials, issuers, rooms));
 		}
 
-		return cmds;
-	}
-	*/
-
-	public List<CredentialCmd> getCredentialByLocation(final Long id) {
-		final List<CredentialCmd> cmds = new ArrayList<>();
-		if (id == 1) {
-			List<String> extern = new ArrayList<>();
-			extern.add("FH-Member");
-			List<String> issuers = new ArrayList<>();
-			issuers.add("Jana Editor-Issuer");
-			List<String> rooms = new ArrayList<>();
-			rooms.add("0.112");
-			cmds.add(new CredentialCmd("Mitarbeiter", "U-Member", extern, issuers, rooms));
-			cmds.add(new CredentialCmd("Mitarbeiter", "T-Member", extern, issuers, rooms));
-		}
 		return cmds;
 	}
 
