@@ -9,4 +9,8 @@ public class InvalidDoorConfiguration extends RuntimeException {
 	public InvalidDoorConfiguration(final String s) {
 		super(s);
 	}
+
+	public InvalidDoorConfiguration(final String s, final Throwable e) {
+		super(s, e);
+	}
 }

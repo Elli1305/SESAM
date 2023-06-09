@@ -99,8 +99,11 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 						.getRestrictions()
 						.stream()
 						.filter(predicate -> predicate.getCredentialDefinitionId() != null)
-						.flatMap(predicate -> credentialService.getCredentialByCredentialIssuerId(predicate.getCredentialDefinitionId())
-								.stream().distinct())
+						.flatMap(predicate ->
+								credentialService
+										.getCredentialByCredentialIssuerId(predicate.getCredentialDefinitionId())
+										.stream()
+										.distinct())
 						.toList();
 
 				configPartsViewCmd.setCredentials(credentials);
@@ -133,7 +136,9 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 								attributeFilterCmd.setValue(simpleDateFormat.format(new Date()));
 							} else {
 								final SimpleDateFormat parser = new SimpleDateFormat("yyyyMMdd");
-								attributeFilterCmd.setValue(simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue())));
+								attributeFilterCmd.setValue(
+										simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue()))
+								);
 							}
 						} else {
 							attributeFilterCmd.setValue(attributeValue.getValue());
@@ -160,8 +165,11 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 						.getRestrictions()
 						.stream()
 						.filter(predicate -> predicate.getCredentialDefinitionId() != null)
-						.flatMap(predicate -> credentialService.getCredentialByCredentialIssuerId(predicate.getCredentialDefinitionId())
-								.stream().distinct())
+						.flatMap(predicate ->
+								credentialService
+										.getCredentialByCredentialIssuerId(predicate.getCredentialDefinitionId())
+										.stream()
+										.distinct())
 						.toList();
 
 				configPartsViewCmd.setCredentials(credentials);
@@ -185,7 +193,9 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 							attributeFilterCmd.setValue(simpleDateFormat.format(new Date()));
 						} else {
 							final SimpleDateFormat parser = new SimpleDateFormat("yyyyMMdd");
-							attributeFilterCmd.setValue(simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue())));
+							attributeFilterCmd.setValue(
+									simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue()))
+							);
 						}
 					} else {
 						attributeFilterCmd.setValue(proofPredicateInfo.getPredicateValue());
@@ -200,7 +210,7 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 			}
 			return doorConfigCmd;
 		} catch (final JsonProcessingException | ParseException e) {
-			throw new InvalidDoorConfiguration("could not read door configuration");
+			throw new InvalidDoorConfiguration("could not read door configuration", e);
 		}
 	}
 
