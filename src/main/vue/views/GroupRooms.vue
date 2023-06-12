@@ -23,7 +23,7 @@
                   flat
                   icon="edit"
                   color="grey"
-                  @click="getInfosForEditGroup(Object.values(props)); getOldName(); editAlert = true"
+                  @click="getInfosForEditGroup(Object.values(props)); getOldName(); updateRoomList(currentBuilding); editAlert = true"
                   test="props.value"/>
               <q-btn
                   dense
@@ -42,7 +42,7 @@
               icon="add"
               color="grey"
               :label="t('groupRooms.new')"
-              @click="newGroup = true; toDefault()"
+              @click="newGroup = true; toDefault(); updateRoomList(currentBuilding);"
               style="margin-right: 2em"/>
           <q-input borderless dense debounce="300" v-model="filter.search"
                    :placeholder="t( 'adminCurrentUser.search')">
@@ -326,7 +326,7 @@ export default {
 
         async function checkName(newName) {
             console.log(newName);
-            console.log("room Group List:", roomGroupList);
+            console.log("room Group List:", rows.value);
             checkNameAllowed.value = false;
             if(newName.trim() === ""){
                 $q.notify({
@@ -339,7 +339,7 @@ export default {
             else {
                 checkNameAllowed.value = true;
             }
-            for(const theGroup of roomGroupList) {
+            for(const theGroup of rows.value) {
                 console.log("roomGroup:", theGroup)
                 console.log("newName: ", newName);
                 if (theGroup.name === newName) {
@@ -429,9 +429,11 @@ export default {
             editName:ref(''),
             modelRooms: ref(null),
             modelRoomsNew: ref(editGroupRooms.value),
+            updateRoomList,
             checkName,
             checkNameAllowed,
             updateCurrentGroup,
+            currentBuilding,
             makeNewGroup,
             deleteGroup,
             editGroup,
@@ -460,6 +462,7 @@ export default {
             getBuilding(building) {
                 console.log("Changed building", building);
                 currentBuilding.value = building;
+                updateRoomList(building);
                 adaptRoomGroupsToBuilding();
             },
 
