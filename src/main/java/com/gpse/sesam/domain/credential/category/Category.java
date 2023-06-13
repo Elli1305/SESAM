@@ -28,7 +28,7 @@ public class Category {
 	private String name;
 
 	@JsonManagedReference("credential_category")
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "category", fetch = FetchType.EAGER)
 	private List<Credential> credentials = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)

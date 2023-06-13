@@ -20,10 +20,10 @@ public class Issuer extends SesamUser {
 	@Serial
 	private static final long serialVersionUID = 215982L;
 
-	@OneToOne(cascade = CascadeType.MERGE)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Room room;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JsonIgnoreProperties("issuer")
 	private List<Credential> credentials = new ArrayList<>();
 
