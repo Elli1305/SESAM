@@ -1,12 +1,12 @@
 import axios, {AxiosResponse} from "axios";
-import {DoorConfiguration} from "@/main/vue/entity/doorConfiguration";
+import {TwoWayDoorConfiguration} from "@/main/vue/entity/doorConfiguration";
 
 export default {
-    save(doorConfig: DoorConfiguration): Promise<AxiosResponse<void>> {
+    save(doorConfig: TwoWayDoorConfiguration): Promise<AxiosResponse<void>> {
         return axios.post("api/doorConfig/save", doorConfig)
     },
 
-    get(doorId: string): Promise<AxiosResponse<DoorConfiguration>> {
+    get(doorId: string): Promise<AxiosResponse<TwoWayDoorConfiguration>> {
         return axios.get(`api/doorConfig/${doorId}`)
     }
 }

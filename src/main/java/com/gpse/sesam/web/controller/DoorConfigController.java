@@ -2,8 +2,8 @@ package com.gpse.sesam.web.controller;
 
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
 import com.gpse.sesam.util.ConfigCmdMapper;
-import com.gpse.sesam.web.cmd.DoorConfigCmd;
-import com.gpse.sesam.web.cmd.DoorConfigViewCmd;
+import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
+import com.gpse.sesam.web.cmd.TwoWayDoorConfigViewCmd;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +24,16 @@ public class DoorConfigController {
 
 	@PostMapping("/save")
 	@Secured("EDITOR")
-	public void save(@RequestBody final DoorConfigCmd doorConfigCmd) {
-		doorConfigurationService.sendProofConfig(doorConfigCmd.getDoorId(), ConfigCmdMapper.fromCmd(doorConfigCmd));
+	public void save(@RequestBody final TwoWayDoorConfigCmd doorConfigCmd) {
+		doorConfigurationService.sendProofConfig(doorConfigCmd.getDoorConfigIn()
+				.getDoorId(), ConfigCmdMapper.fromCmd(doorConfigCmd.getDoorConfigIn()));
+		doorConfigurationService.sendProofConfig(doorConfigCmd.getDoorConfigOut()
+				.getDoorId(), ConfigCmdMapper.fromCmd(doorConfigCmd.getDoorConfigOut()));
 	}
 
 	@GetMapping("/{id}")
-	public DoorConfigViewCmd getDoorConfig(@PathVariable("id") final String id) {
-		return doorConfigurationService.getDoorConfig(id);
+	public TwoWayDoorConfigViewCmd getDoorConfigForBothDirections(@PathVariable("id") final String id) {
+		return new TwoWayDoorConfigViewCmd(doorConfigurationService.getDoorConfig(id + "_in"),
+				doorConfigurationService.getDoorConfig(id + "_out"));
 	}
 }
