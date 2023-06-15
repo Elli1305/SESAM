@@ -363,8 +363,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		safety.addIssuer(issuer1);
 		safety.addIssuer(issuer2);
 		credentials.add(safety);
+		final List<FormEntry> form7 = form();
 		final List<ExternalCredential> externalCredentials = new ArrayList<>();
-		final ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-MEMBER");
+		final ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-MEMBER", form7);
 
 		externalCredentials.add(safety3);
 
@@ -389,9 +390,11 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		firstAid.addIssuer(issuer2);
 		credentials2.add(firstAid);
 
+		final List<FormEntry> form8 = form();
+		final List<FormEntry> form9 = form();
 		final List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-TRAINING");
-		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-MEMBER");
+		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-TRAINING", form8);
+		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-MEMBER", form9);
 
 		externalCredentials2.add(firstAid2);
 		externalCredentials2.add(firstAid3);
