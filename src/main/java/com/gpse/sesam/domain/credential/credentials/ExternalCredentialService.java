@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.credential.credentials;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,4 +12,6 @@ public interface ExternalCredentialService {
     void deleteAll();
 
     void saveAll(Iterable<ExternalCredential> externalCredentials);
+
+    List<ExternalCredential> getExternalCredentialByCredentialDefinitionId(String id);
 }

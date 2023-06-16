@@ -3,6 +3,7 @@ package com.gpse.sesam.domain.location.door.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.configuration.DoorApiConfig;
+import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.credential.credentials.CredentialService;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
@@ -95,13 +96,13 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 
 				final ConfigPartsViewCmd configPartsViewCmd = new ConfigPartsViewCmd();
 
-				final List<InternalCredential> credentials = attributeInfoEntry
+				final List<Credential> credentials = attributeInfoEntry
 						.getRestrictions()
 						.stream()
 						.filter(predicate -> predicate.getCredentialDefinitionId() != null)
 						.flatMap(predicate ->
 								credentialService
-										.getCredentialByCredentialIssuerId(predicate.getCredentialDefinitionId())
+										.getCredentialByCredentialDefinitionId(predicate.getCredentialDefinitionId())
 										.stream()
 										.distinct())
 						.toList();
@@ -161,13 +162,13 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 
 				final ConfigPartsViewCmd configPartsViewCmd = new ConfigPartsViewCmd();
 
-				final List<InternalCredential> credentials = proofPredicateInfo
+				final List<Credential> credentials = proofPredicateInfo
 						.getRestrictions()
 						.stream()
 						.filter(predicate -> predicate.getCredentialDefinitionId() != null)
 						.flatMap(predicate ->
 								credentialService
-										.getCredentialByCredentialIssuerId(predicate.getCredentialDefinitionId())
+										.getCredentialByCredentialDefinitionId(predicate.getCredentialDefinitionId())
 										.stream()
 										.distinct())
 						.toList();

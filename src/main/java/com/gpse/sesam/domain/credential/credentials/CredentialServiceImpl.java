@@ -87,8 +87,12 @@ public class CredentialServiceImpl implements CredentialService {
 	}
 
 	@Override
-	public List<InternalCredential> getCredentialByCredentialIssuerId(final String id) {
-		return credentialRepository.findAllByCredentialDefinitionId(id);
+	public List<Credential> getCredentialByCredentialDefinitionId(final String id) {
+		List<Credential> credential = new ArrayList<>(credentialRepository.findAllByCredentialDefinitionId(id));
+		if (credential.isEmpty()) {
+			credential.addAll(externalCredentialService.getExternalCredentialByCredentialDefinitionId(id));
+		}
+		return credential;
 	}
 
 

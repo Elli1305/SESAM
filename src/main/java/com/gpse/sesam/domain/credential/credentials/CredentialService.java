@@ -17,7 +17,7 @@ public interface CredentialService {
 	List<InternalCredential> getCredentialsByIssuerId(Long di);
 	List<ExternalCredential> getExternalCredentials();
 
-	List<InternalCredential> getCredentialByCredentialIssuerId(String id);
+	List<Credential> getCredentialByCredentialDefinitionId(String id);
 
 	Optional<InternalCredential> getCredential(Long id);
 
