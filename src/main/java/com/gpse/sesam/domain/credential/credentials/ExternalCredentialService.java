@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.credential.credentials;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

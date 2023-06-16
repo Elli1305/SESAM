@@ -1,7 +1,6 @@
 package com.gpse.sesam.web.cmd;
 
 import com.gpse.sesam.domain.credential.credentials.Credential;
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 
 import java.util.List;
 
