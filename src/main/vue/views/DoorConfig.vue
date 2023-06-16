@@ -53,6 +53,25 @@
                 :options="credentialStore.allCredentials"
                 v-model="qSelects.configParts[i].credentials"
                 use-chips>
+              <template v-slot:after>
+                <q-icon class="cursor-pointer" size="0.75em" name="filter_none">
+                  <q-tooltip>
+                    Categories
+                  </q-tooltip>
+                <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
+                    <q-list dense>
+                        <q-item-label header class="text-bold text-primary" >
+                          KATEGORIEN
+                        </q-item-label>
+                      <q-item @click="addCategory(i, category)" v-for="category in credentialStore.categories" v-close-popup clickable>
+                        <q-item-section>
+                          {{category.name}}
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-icon>
+              </template>
               <template v-slot:selected-item="scope">
                 <q-chip
                     class="q-pa-sm"
@@ -153,6 +172,10 @@ export default {
         return Object.values(PredicateType)
       }
     },
+    addCategory(i, category) {
+      this.qSelects.configParts[i].credentials.push(...category.credentials)
+      this.qSelects.configParts[i].credentials.push(...category.externalCredentials)
+    },
     resetPredicateType(i, j) {
       this.qSelects.configParts[i].attributeFilter[j].predicateType = null;
       this.qSelects.configParts[i].attributeFilter[j].value = null;
@@ -196,6 +219,7 @@ export default {
   setup(props) {
     const credentialStore = useCredentialStore()
     credentialStore.getAllCredentials()
+    credentialStore.getCategory()
     const credentials = ref()
     const configDescription = ref()
     const direction = ref(Direction.BOTH)
@@ -223,17 +247,18 @@ export default {
     }
 
     const commonAttributeFilter = function (credentials) {
-      let formEntrys = credentials.map((credential) => {
+      let formEntries = credentials.map((credential) => {
+        console.log("Credentials: " + credential)
         return credential.form
       })
-      if (formEntrys.length > 1) {
-        return formEntrys.shift().filter((v) => {
-          return formEntrys.every((a) => {
+      if (formEntries.length > 1) {
+        return formEntries.shift().filter((v) => {
+          return formEntries.every((a) => {
             return a.some(ele => ele.attributeName === v.attributeName);
           });
         })
       }
-      return formEntrys[0];
+      return formEntries[0];
     }
 
     return {

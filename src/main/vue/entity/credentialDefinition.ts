@@ -29,7 +29,6 @@ export interface FormEntry {
     attributeName: string
     label: string;
     type: CredentialFormEntryType;
-    attributeName: string;
 }
 
 export interface ChecklistEntry {
