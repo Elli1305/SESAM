@@ -17,14 +17,16 @@
 
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
+            <div class="row justify-evenly no-wrap">
               <q-btn
                   dense
                   round
                   flat
-                  icon="edit"
                   color="grey"
                   @click="getInfosForEditGroup(Object.values(props)); getOldName(); updateRoomList(currentBuilding); editAlert = true"
-                  test="props.value"/>
+                  test="props.value">
+                <span class="material-icons-outlined">edit</span>
+              </q-btn>
               <q-btn
                   dense
                   round
@@ -32,6 +34,7 @@
                   icon="delete"
                   color="grey"
                   @click="deleteAlert = true; delGroup(Object.values(props));"/>
+            </div>
           </q-td>
         </template>
 
@@ -189,11 +192,10 @@ const columns = [
         align: 'center',
         field: row => row.name,
         sortable: true,
-        headerStyle: 'max-width: 50px',
         //headerClasses: 'bg-primary text-white',
     },
     {name: 'rooms', align: 'center', label: "Räume", field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
-    {name: 'actions', label: 'Bearbeiten', style: 'max-width 10px', headerStyle: 'max-width: 20px', align: 'center'}
+    {name: 'actions', label: 'Bearbeiten', style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'}
 ]
 
 const rows = ref([]);

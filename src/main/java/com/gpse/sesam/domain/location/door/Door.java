@@ -1,6 +1,6 @@
 package com.gpse.sesam.domain.location.door;
 
-import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.location.Coordinate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,7 +30,7 @@ public class Door {
 	private List<Coordinate> coordinates = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<Credential> credentials = new ArrayList<>();
+	private List<InternalCredential> credentials = new ArrayList<>();
 
 	protected Door() {
 
@@ -57,11 +57,11 @@ public class Door {
 		this.name = name;
 	}
 
-	public List<Credential> getCredentials() {
+	public List<InternalCredential> getCredentials() {
 		return credentials;
 	}
 
-	public void setCredentials(final List<Credential> credentials) {
+	public void setCredentials(final List<InternalCredential> credentials) {
 		this.credentials = credentials;
 	}
 
@@ -73,7 +73,7 @@ public class Door {
 		this.coordinates = coordinates;
 	}
 
-	public void addCredential(final Credential credential) {
+	public void addCredential(final InternalCredential credential) {
 		credentials.add(credential);
 	}
 }

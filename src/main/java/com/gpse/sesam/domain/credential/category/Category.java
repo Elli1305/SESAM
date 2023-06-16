@@ -1,7 +1,7 @@
 package com.gpse.sesam.domain.credential.category;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,7 +29,7 @@ public class Category {
 
 	@JsonManagedReference("credential_category")
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "category", fetch = FetchType.EAGER)
-	private List<Credential> credentials = new ArrayList<>();
+	private List<InternalCredential> credentials = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "CATEGORY_ID")
@@ -58,11 +58,11 @@ public class Category {
 		this.name = name;
 	}
 
-	public List<Credential> getCredentials() {
+	public List<InternalCredential> getCredentials() {
 		return credentials;
 	}
 
-	public void setCredentialTypes(final List<Credential> credentials) {
+	public void setCredentialTypes(final List<InternalCredential> credentials) {
 		this.credentials = credentials;
 	}
 
@@ -74,12 +74,12 @@ public class Category {
 		this.externalCredentials = externalCredentials;
 	}
 
-	public void addCredential(final Credential credential) {
+	public void addCredential(final InternalCredential credential) {
 		credentials.add(credential);
 		credential.setCategory(this);
 	}
 
-	public void removeCredential(final Credential credential) {
+	public void removeCredential(final InternalCredential credential) {
 		credentials.remove(credential);
 		credential.setCategory(null);
 	}
@@ -96,7 +96,7 @@ public class Category {
 		externalCredentials.add(externalCredential);
 	}
 
-	public void setCredentials(final List<Credential> credentials) {
+	public void setCredentials(final List<InternalCredential> credentials) {
 		this.credentials = credentials;
 	}
 }

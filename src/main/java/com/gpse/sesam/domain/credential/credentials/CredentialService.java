@@ -10,22 +10,24 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CredentialService {
-	List<Credential> getCredentials();
+	List<InternalCredential> getCredentials();
 
-	List<Credential> getCredentialsByIssuerId(Long di);
+	List<Credential> getAllCredentials();
+
+	List<InternalCredential> getCredentialsByIssuerId(Long di);
 	List<ExternalCredential> getExternalCredentials();
 
-	List<Credential> getCredentialByCredentialIssuerId(String id);
+	List<InternalCredential> getCredentialByCredentialIssuerId(String id);
 
-	Optional<Credential> getCredential(Long id);
+	Optional<InternalCredential> getCredential(Long id);
 
 	String issueCredential(Long id, List<IssueCredentialAttributeCmd> attributeCmds)
 			throws JsonProcessingException;
 
 
-	void saveAll(Iterable<Credential> credentials);
+	void saveAll(Iterable<InternalCredential> credentials);
 
-	List<Credential> credentialFindByLocation(Long id);
+	List<InternalCredential> credentialFindByLocation(Long id);
 
 	List<CredentialCmd> getCredentialByLocation(Long id);
 

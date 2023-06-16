@@ -19,7 +19,7 @@ export const useCredentialsStore = defineStore('credentials', {
 
 export const useCredentialStore = defineStore('credential', () => {
         const credentials: Ref<CredentialCmd[] | null> = ref(null)
-        const allCredentials: Ref<Credential[] | null> = ref(null)
+        const allCredentials: Ref<ExternalCredential[] | null> = ref(null)
         const credsByIssuer: Ref<Credential[] | null> = ref(null)
         const categories: Ref<Category[] | null> = ref(null)
         const external: Ref<ExternalCredential[] | null> = ref(null)
@@ -38,7 +38,7 @@ export const useCredentialStore = defineStore('credential', () => {
 
         function getAllCredentials() {
             return new Promise((resolve, reject) => {
-                api.credential.all().then((response) => {
+                api.credential.getAllCredentials().then((response) => {
                     allCredentials.value = response.data
                     resolve(response.data)
                 }).catch((error) => {

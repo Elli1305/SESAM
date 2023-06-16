@@ -1,7 +1,7 @@
 package com.gpse.sesam.domain.user.issuer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
@@ -25,7 +25,7 @@ public class Issuer extends SesamUser {
 
 	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JsonIgnoreProperties("issuer")
-	private List<Credential> credentials = new ArrayList<>();
+	private List<InternalCredential> credentials = new ArrayList<>();
 
 	protected Issuer() {
 	}
@@ -47,11 +47,11 @@ public class Issuer extends SesamUser {
 		this.room = room;
 	}
 
-	public List<Credential> getCredentials() {
+	public List<InternalCredential> getCredentials() {
 		return credentials;
 	}
 
-	public void setCredentials(final List<Credential> credentials) {
+	public void setCredentials(final List<InternalCredential> credentials) {
 		this.credentials = credentials;
 	}
 
@@ -63,7 +63,7 @@ public class Issuer extends SesamUser {
 		return room;
 	}
 
-	public void addCredential(final Credential credential) {
+	public void addCredential(final InternalCredential credential) {
 		credentials.add(credential);
 	}
 }

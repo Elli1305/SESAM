@@ -2,6 +2,7 @@ package com.gpse.sesam.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.credential.credentials.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
 import com.gpse.sesam.web.cmd.CreateCredentialCmd;
@@ -38,7 +39,7 @@ public class CredentialController {
 	}
 
 	@GetMapping("/credentials")
-	public List<Credential> getCredential() {
+	public List<InternalCredential> getCredential() {
 		return service.getCredentials();
 	}
 
@@ -47,10 +48,15 @@ public class CredentialController {
 		return service.getExternalCredentials();
 	}
 
+	@GetMapping("/credentials/getAll")
+	public List<Credential> getAllCredentials() {
+		return service.getAllCredentials();
+	}
+
 	@GetMapping(value = "/credentials/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public Credential credential(@PathVariable final Long id) {
-		final Optional<Credential> credential = service.getCredential(id);
+	public InternalCredential credential(@PathVariable final Long id) {
+		final Optional<InternalCredential> credential = service.getCredential(id);
 
 		if (credential.isPresent()) {
 			return credential.get();
@@ -61,7 +67,7 @@ public class CredentialController {
 
 	@GetMapping(value = "/credentials/getByIssuer/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<Credential> getByIssuerId(@PathVariable final Long id) {
+	public List<InternalCredential> getByIssuerId(@PathVariable final Long id) {
 		return service.getCredentialsByIssuerId(id);
 	}
 

@@ -42,28 +42,39 @@ public class CredentialServiceImpl implements CredentialService {
 	private final CredentialRepository credentialRepository;
 
 	private final ExternalCredentialRepository externalCredentialRepository;
+	private final ExternalCredentialService externalCredentialService;
 
 	@Autowired
 	public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
 								 final CredentialRepository credentialRepository,
 								 final IssuerRepository issuerRepository,
-								 final ExternalCredentialRepository externalCredentialRepository) {
+								 final ExternalCredentialRepository externalCredentialRepository,
+								 final ExternalCredentialService externalCredentialService) {
 		this.client = client;
 		this.mapper = mapper;
 		this.issuerRepository = issuerRepository;
 		this.credentialRepository = credentialRepository;
 		this.externalCredentialRepository = externalCredentialRepository;
+		this.externalCredentialService = externalCredentialService;
 	}
 
 	@Override
-	public List<Credential> getCredentials() {
-		final List<Credential> credentials = new ArrayList<>();
+	public List<InternalCredential> getCredentials() {
+		final List<InternalCredential> credentials = new ArrayList<>();
 		credentialRepository.findAll().forEach(credentials::add);
 		return credentials;
 	}
 
 	@Override
-	public List<Credential> getCredentialsByIssuerId(final Long id) {
+	public List<Credential> getAllCredentials() {
+		final List<Credential> credentials = new ArrayList<>();
+		credentialRepository.findAll().forEach(credentials::add);
+		credentials.addAll(externalCredentialService.getExternalCredentials());
+		return credentials;
+	}
+
+	@Override
+	public List<InternalCredential> getCredentialsByIssuerId(final Long id) {
 		final Issuer issuer = issuerRepository.findById(String.valueOf(id)).orElseThrow();
 		return issuer.getCredentials();
 	}
@@ -76,13 +87,13 @@ public class CredentialServiceImpl implements CredentialService {
 	}
 
 	@Override
-	public List<Credential> getCredentialByCredentialIssuerId(final String id) {
+	public List<InternalCredential> getCredentialByCredentialIssuerId(final String id) {
 		return credentialRepository.findAllByCredentialDefinitionId(id);
 	}
 
 
 	@Override
-	public Optional<Credential> getCredential(final Long id) {
+	public Optional<InternalCredential> getCredential(final Long id) {
 		return credentialRepository.findById(id);
 	}
 
@@ -96,7 +107,7 @@ public class CredentialServiceImpl implements CredentialService {
 	@Override
 	public String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds)
 			throws JsonProcessingException {
-		final Credential credential = credentialRepository.findById(id).orElseThrow();
+		final InternalCredential credential = credentialRepository.findById(id).orElseThrow();
 
 		final Map<Long, IssueCredentialAttributeCmd> attributeCmdMap = attributeCmds.stream()
 				.collect(Collectors.toMap(IssueCredentialAttributeCmd::id, Function.identity()));
@@ -122,23 +133,23 @@ public class CredentialServiceImpl implements CredentialService {
 	}
 
 	@Override
-	public void saveAll(final Iterable<Credential> credentials) {
+	public void saveAll(final Iterable<InternalCredential> credentials) {
 		credentialRepository.saveAll(credentials);
 	}
 
 
 	@Override
-	public List<Credential> credentialFindByLocation(final Long id) {
+	public List<InternalCredential> credentialFindByLocation(final Long id) {
 		return credentialRepository.findByLocation(id);
 	}
 
 
 	@Override
 	public List<CredentialCmd> getCredentialByLocation(final Long id) {
-		final List<Credential> credentials = credentialRepository.findByLocation(id);
+		final List<InternalCredential> credentials = credentialRepository.findByLocation(id);
 		final List<CredentialCmd> cmds = new ArrayList<>();
 
-		for (final Credential credential : credentials) {
+		for (final InternalCredential credential : credentials) {
 			final String categoryName = credential.getCategory().getName();
 			final String credentialName = credential.getName();
 			final List<String> externalCredentials = new ArrayList<>();
@@ -162,7 +173,7 @@ public class CredentialServiceImpl implements CredentialService {
 
 	@Override
 	public void create(final CreateCredentialCmd createCredentialCmd) {
-		final Credential credential = new Credential(
+		final InternalCredential credential = new InternalCredential(
 				createCredentialCmd.getName(),
 				createCredentialCmd.getCredentialDefinitionId(),
 				createCredentialCmd.getAgent(),
@@ -185,13 +196,13 @@ public class CredentialServiceImpl implements CredentialService {
 
 	@Override
 	public void delete(final Long id) {
-		final Optional<Credential> optionalCredential = credentialRepository.findById(id);
+		final Optional<InternalCredential> optionalCredential = credentialRepository.findById(id);
 
 		if (optionalCredential.isEmpty()) {
 			return;
 		}
 
-		final Credential credential = optionalCredential.get();
+		final InternalCredential credential = optionalCredential.get();
 
 		credential.setCategory(null);
 
@@ -211,13 +222,13 @@ public class CredentialServiceImpl implements CredentialService {
 
 	@Override
 	public void update(final Long id, final UpdateCredentialCmd updateCredentialCmd) {
-		final Optional<Credential> optionalCredential = credentialRepository.findById(id);
+		final Optional<InternalCredential> optionalCredential = credentialRepository.findById(id);
 
 		if (optionalCredential.isEmpty()) {
 			return;
 		}
 
-		final Credential credential = optionalCredential.get();
+		final InternalCredential credential = optionalCredential.get();
 
 		credential.setName(updateCredentialCmd.getName());
 		credential.setAgent(updateCredentialCmd.getAgent());

@@ -4,10 +4,11 @@
       <q-card-section>
         <div class="text-h6">Tür zuweisen</div>
       </q-card-section>
-      <q-card-section class="row justify-around no-wrap">
-        <q-input style="width: 18em" filled v-model="doorName" label="Türname" stack-label/>
+      <q-card-section class="row q-px-lg justify-between no-wrap">
+        <q-input class="full-width" filled v-model="doorName" label="Türname" stack-label/>
         <q-select
-            style="width: 18em"
+            class="q-ml-md"
+            style="min-width: 20em"
             filled
             v-model="room"
             use-input

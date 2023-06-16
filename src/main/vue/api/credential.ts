@@ -34,6 +34,10 @@ export default {
         return axios.put(`/api/credentials/${id}`, credential);
     },
 
+    getAllCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
+        return axios.get("/api/credentials/getAll")
+    },
+
     getCategories(): Promise<AxiosResponse<Category[]>> {
         return axios.get("api/credentialmapping")
     },

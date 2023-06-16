@@ -6,7 +6,7 @@ import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import java.util.List;
 
 @Entity
-public class ExternalCredential {
+public class ExternalCredential implements Credential {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column

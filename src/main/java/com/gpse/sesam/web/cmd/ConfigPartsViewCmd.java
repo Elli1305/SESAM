@@ -1,11 +1,11 @@
 package com.gpse.sesam.web.cmd;
 
-import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 
 import java.util.List;
 
 public class ConfigPartsViewCmd {
-	private List<Credential> credentials;
+	private List<InternalCredential> credentials;
 	private List<AttributeFilterCmd> attributeFilter;
 
 	public List<AttributeFilterCmd> getAttributeFilter() {
@@ -16,11 +16,11 @@ public class ConfigPartsViewCmd {
 		this.attributeFilter = attributeFilter;
 	}
 
-	public List<Credential> getCredentials() {
+	public List<InternalCredential> getCredentials() {
 		return credentials;
 	}
 
-	public void setCredentials(final List<Credential> credentials) {
+	public void setCredentials(final List<InternalCredential> credentials) {
 		this.credentials = credentials;
 	}
 }

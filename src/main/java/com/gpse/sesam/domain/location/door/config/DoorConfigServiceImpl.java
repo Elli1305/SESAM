@@ -3,7 +3,7 @@ package com.gpse.sesam.domain.location.door.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.configuration.DoorApiConfig;
-import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.credential.credentials.CredentialService;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
@@ -95,7 +95,7 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 
 				final ConfigPartsViewCmd configPartsViewCmd = new ConfigPartsViewCmd();
 
-				final List<Credential> credentials = attributeInfoEntry
+				final List<InternalCredential> credentials = attributeInfoEntry
 						.getRestrictions()
 						.stream()
 						.filter(predicate -> predicate.getCredentialDefinitionId() != null)
@@ -161,7 +161,7 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 
 				final ConfigPartsViewCmd configPartsViewCmd = new ConfigPartsViewCmd();
 
-				final List<Credential> credentials = proofPredicateInfo
+				final List<InternalCredential> credentials = proofPredicateInfo
 						.getRestrictions()
 						.stream()
 						.filter(predicate -> predicate.getCredentialDefinitionId() != null)
