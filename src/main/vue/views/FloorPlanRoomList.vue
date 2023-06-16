@@ -39,7 +39,7 @@
                     <q-item-label>{{ room.name }}</q-item-label>
                     <q-item-label>{{ room.doors.map(door => door.name).join(", ") }}</q-item-label>
                     <q-item-label>
-                      {{ room.doors.flatMap(door => door.credentials).map(credential => credential?.name).join(", ") }}
+                      {{ room?.id ? "U-MEMBER" : "" }}
                     </q-item-label>
                   </q-list>
                 </div>
@@ -189,18 +189,21 @@ export default {
     }
 
     function openDialog(door) {
-      $q.dialog({
-        component: CreateDoor,
-        componentProps: {
-          door: door
-        }
-      }).onOk(({doorName, configuration, configDescription}) => {
-        door.name = doorName
-        doorStore.save(door).then((savedDoor) => {
-          configuration.description = configDescription
-          configuration.doorId = savedDoor.name + '_' + savedDoor.id
-          configuration.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-          api.doorConfig.save(configuration).then(() => console.log("success"))
+      api.doorConfig.get(door.name + '_' + door.id).then((config) => {
+        $q.dialog({
+          component: CreateDoor,
+          componentProps: {
+            door: door,
+            doorConfigIn: config.data.doorConfigIn,
+            doorConfigOut: config.data.doorConfigOut
+          }
+        }).onOk(({doorName, configuration}) => {
+          door.name = doorName
+          doorStore.save(door).then((savedDoor) => {
+            configuration.doorConfigIn.doorId = savedDoor.name + '_' + savedDoor.id + '_in'
+            configuration.doorConfigOut.doorId = savedDoor.name + '_' + savedDoor.id + '_out'
+            api.doorConfig.save(configuration).then(() => console.log("success"))
+          })
         })
       })
     }

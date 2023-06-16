@@ -16,5 +16,7 @@ public interface CredentialRepository extends CrudRepository<Credential, Long> {
 			+ "INNER JOIN LOCATION AS lc ON lc.ID = bd.LOCATION_ID "
 			+ "WHERE lc.id = :id", nativeQuery = true)
 	List<Credential> findByLocation(@Param("id") Long id);
+
+	List<Credential> findAllByCredentialDefinitionId(String credentialDefinitionId);
 }
 

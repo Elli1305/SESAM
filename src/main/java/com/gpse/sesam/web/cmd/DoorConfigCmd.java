@@ -2,7 +2,7 @@ package com.gpse.sesam.web.cmd;
 
 import java.util.List;
 
-public class ConfigCmd {
+public class DoorConfigCmd {
 
 
 	private String doorId;
