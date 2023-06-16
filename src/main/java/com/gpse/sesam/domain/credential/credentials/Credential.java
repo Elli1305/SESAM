@@ -8,15 +8,15 @@ public interface Credential {
 
     Long getId();
 
-    void setId(final Long id);
+    void setId(Long id);
 
     String getName();
 
-    void setName(final String name);
+    void setName(String name);
 
     String getCredentialDefinitionId();
 
-    void setCredentialDefinitionId(final String credentialDefinitionId);
+    void setCredentialDefinitionId(String credentialDefinitionId);
 
     List<FormEntry> getForm();
 
