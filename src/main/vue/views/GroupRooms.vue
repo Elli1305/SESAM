@@ -193,11 +193,16 @@
         <q-card-section>
           <q-table
               flat bordered
+              :rows-per-page-options="[0]"
               title="Auswahl der Räume"
               :rows="rows2"
               :columns="columns2"
+              :filter="searchinput"
               row-key="name"
               separator="cell"
+              :no-data-label="t('common.noData')"
+              :no-results-label="t('common.noResults')"
+              :pagination-label="getPaginationLabel"
               :visible-columns="visibleColumns"
           >
             <template v-slot:top-right>
