@@ -2,23 +2,23 @@
   <q-card-section>
     <q-card bordered flat>
       <q-toolbar class="bg-primary text-accent">
-        <q-toolbar-title>Konfigurationsgruppen</q-toolbar-title>
+        <q-toolbar-title>{{t("doorconfig.configurationGroup")}}</q-toolbar-title>
         <q-field dark borderless>
           <template v-slot:control>
-            <div class="no-outline text-subtitle1">Richtung:</div>
+            <div class="no-outline text-subtitle1">{{t("doorconfig.direction")}}</div>
           </template>
           <template v-slot:append>
             <q-btn-toggle
                 toggle-indeterminate
                 v-model="direction"
                 style="margin: 1em 1em 1em 0"
-                label="Richtung"
+                :label="t('doorconfig.direction2')"
                 color="white"
                 text-color="black"
                 :options="[
-                  {label: 'Rein', value: Direction.IN},
-                  {label: 'Beide', value: Direction.BOTH},
-                  {label: 'Raus', value: Direction.OUT}
+                  {label: t('doorconfig.in'), value: Direction.IN},
+                  {label: t('doorconfig.out'), value: Direction.BOTH},
+                  {label: t('doorconfig.both'), value: Direction.OUT}
                 ]"
                 rounded
                 size="0.5em"
@@ -29,17 +29,17 @@
         </q-field>
         <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
           <q-tooltip class="bg-grey-14" anchor="bottom middle" self="top middle" :offset="[0,0]">
-            Konfigurationsgruppen sind untereinander mit UND verknüpft
+            {{t("doorconfig.hint")}}
           </q-tooltip>
         </q-icon>
       </q-toolbar>
       <q-card-section>
-        <q-input filled v-model="configDescription" label="Beschreibung der Konfiguration" stack-label/>
+        <q-input filled v-model="configDescription" :label="t('doorconfig.description')" stack-label/>
       </q-card-section>
       <q-card-section v-for="(select,i) in qSelects.configParts">
         <q-card bordered flat>
           <q-toolbar class="bg-primary text-white shadow-2">
-            <q-toolbar-title>Konfiguration</q-toolbar-title>
+            <q-toolbar-title>{{t("doorconfig.config")}}</q-toolbar-title>
             <q-btn flat round icon="delete" size="0.75em" @click="removeConfigGroup(i)"/>
           </q-toolbar>
           <q-card-section class="column">
@@ -49,7 +49,7 @@
                 multiple
                 label="Credentials"
                 option-label="name"
-                hint="Credentials in dieser Auswahl sind ODER-Verknüpft"
+                :hint="t('doorconfig.and')"
                 :options="credentialStore.allCredentials"
                 v-model="qSelects.configParts[i].credentials"
                 use-chips>
@@ -58,11 +58,11 @@
                   <q-tooltip>
                     Categories
                   </q-tooltip>
-                <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
+                  <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
                     <q-list dense>
-                        <q-item-label header class="text-bold text-primary" >
-                          KATEGORIEN
-                        </q-item-label>
+                      <q-item-label header class="text-bold text-primary" >
+                        {{t("doorconfig.category")}}
+                      </q-item-label>
                       <q-item @click="addCategory(i, category)" v-for="category in credentialStore.categories" v-close-popup clickable>
                         <q-item-section>
                           {{category.name}}
@@ -111,7 +111,7 @@
                        :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
                 <template v-slot:hint>
                   <q-checkbox
-                      label="Aktueller Zeitpunkt"
+                      :label="t('doorconfig.time')"
                       dense
                       size="2em"
                       v-model="qSelects.configParts[i].attributeFilter[j].currentDate"
@@ -125,12 +125,12 @@
             </div>
           </q-card-section>
           <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add"
-                 @click="addAttributeFilter(i)">Attribut hinzufügen
+                 @click="addAttributeFilter(i)">{{t("doorconfig.attribute")}}
           </q-btn>
         </q-card>
       </q-card-section>
       <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfigurationGroup">
-        Konfigurationsgruppe hinzufügen
+        {{t("doorconfig.add")}}
       </q-btn>
     </q-card>
   </q-card-section>

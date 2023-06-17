@@ -188,13 +188,13 @@
     <q-dialog v-model="prompt" persistent>
       <q-card style="width: 90%">
         <q-toolbar class="bg-primary text-accent">
-          <q-toolbar-title>Anpassung der Türconfiguration für Raumgruppen</q-toolbar-title>
+          <q-toolbar-title>{{t("groupRooms.groupsConfig")}}</q-toolbar-title>
         </q-toolbar>
         <q-card-section>
           <q-table
               flat bordered
               :rows-per-page-options="[0]"
-              title="Auswahl der Räume"
+              :title="t('groupRooms.roomSelection')"
               :rows="rows2"
               :columns="columns2"
               :filter="searchinput"
@@ -207,7 +207,7 @@
           >
             <template v-slot:top-right>
               <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
-                <q-toggle v-model="visibleColumns" val="door" label="Türen" ></q-toggle>
+                <q-toggle v-model="visibleColumns" val="door" :label="t('groupRooms.doors')" ></q-toggle>
               </div>
               <q-input class="q-ml-xs" borderless dense debounce="250" v-model="searchinput" :placeholder="t('credentialview.search')">
                 <template v-slot:append>
@@ -237,23 +237,23 @@
           </q-table>
         </q-card-section>
         <q-toolbar class="bg-primary text-accent">
-          <q-toolbar-title>Konfigurationsgruppen</q-toolbar-title>
+          <q-toolbar-title>{{t("doorconfig.configurationGroup")}}</q-toolbar-title>
           <q-field dark borderless>
             <template v-slot:control>
-              <div class="no-outline text-subtitle1">Richtung:</div>
+              <div class="no-outline text-subtitle1">{{t("doorconfig.direction")}}</div>
             </template>
             <template v-slot:append>
               <q-btn-toggle
                   toggle-indeterminate
                   v-model="direction"
                   style="margin: 1em 1em 1em 0"
-                  label="Richtung"
+                  :label="t('doorconfig.direction2')"
                   color="white"
                   text-color="black"
                   :options="[
-                  {label: 'Rein', value: Direction.IN},
-                  {label: 'Beide', value: Direction.BOTH},
-                  {label: 'Raus', value: Direction.OUT}
+                  {label: t('doorconfig.in'), value: Direction.IN},
+                  {label: t('doorconfig.out'), value: Direction.BOTH},
+                  {label: t('doorconfig.both'), value: Direction.OUT}
                 ]"
                   rounded
                   size="0.5em"
@@ -264,17 +264,17 @@
           </q-field>
           <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
             <q-tooltip class="bg-grey-14" anchor="bottom middle" self="top middle" :offset="[0,0]">
-              Konfigurationsgruppen sind untereinander mit UND verknüpft
+              {{t("doorconfig.hint")}}
             </q-tooltip>
           </q-icon>
         </q-toolbar>
         <q-card-section>
-          <q-input filled v-model="configDescription" label="Beschreibung der Konfiguration" stack-label/>
+          <q-input filled v-model="configDescription" :label="t('doorconfig.description')" stack-label/>
         </q-card-section>
         <q-card-section v-for="(select,i) in qSelects.configParts">
           <q-card bordered flat>
             <q-toolbar class="bg-primary text-white shadow-2">
-              <q-toolbar-title>Konfiguration</q-toolbar-title>
+              <q-toolbar-title>{{t("doorconfig.config")}}</q-toolbar-title>
               <q-btn flat round icon="delete" size="0.75em" @click="removeConfigGroup(i)"/>
             </q-toolbar>
             <q-card-section class="column">
@@ -284,7 +284,7 @@
                   multiple
                   label="Credentials"
                   option-label="name"
-                  hint="Credentials in dieser Auswahl sind ODER-Verknüpft"
+                  :hint="t('doorconfig.and')"
                   :options="credentialStore.allCredentials"
                   v-model="qSelects.configParts[i].credentials"
                   use-chips>
@@ -296,7 +296,7 @@
                     <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
                       <q-list dense>
                         <q-item-label header class="text-bold text-primary" >
-                          KATEGORIEN
+                          {{t("doorconfig.category")}}
                         </q-item-label>
                         <q-item @click="addCategory(i, category)" v-for="category in credentialStore.categories" v-close-popup clickable>
                           <q-item-section>
@@ -346,7 +346,7 @@
                          :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
                   <template v-slot:hint>
                     <q-checkbox
-                        label="Aktueller Zeitpunkt"
+                        :label="t('doorconfig.time')"
                         dense
                         size="2em"
                         v-model="qSelects.configParts[i].attributeFilter[j].currentDate"
@@ -360,12 +360,12 @@
               </div>
             </q-card-section>
             <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add"
-                   @click="addAttributeFilter(i)">Attribut hinzufügen
+                   @click="addAttributeFilter(i)">{{t("doorconfig.attribute")}}
             </q-btn>
           </q-card>
         </q-card-section>
         <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfigurationGroup">
-          Konfigurationsgruppe hinzufügen
+          {{t("doorconfig.add")}}
         </q-btn>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
@@ -388,60 +388,6 @@ import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {Direction, PredicateType} from "@/main/vue/entity/doorConfiguration";
 import {useCredentialStore} from "@/main/vue/stores/credential";
 
-const columns = [
-    {
-        name: 'name',
-        required: true,
-        label: 'Gruppen',
-        align: 'center',
-        field: row => row.name,
-        sortable: true,
-        //headerClasses: 'bg-primary text-white',
-    },
-    {name: 'rooms', align: 'center', label: "Räume", field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
-    {name: 'actions', label: 'Bearbeiten', style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
-    {name: 'doorconfig', label: 'Türkonfiguration bearbeiten', style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
-]
-
-const rows = ref([]);
-//const columns2 = [
-  //
-  //{name: 'check', label: 'Auswählen', align: 'center'},
-//]
-//const rows2 = ref([]);
-
-//rows2.value =[{room: 'Raum2'}]
-
-rows.value = [
-
- /*   {
-        name: 'Frozen Yogurt',
-        rooms: ['Room 1', 'Room 7'],
-        location: 'ExampleLocation',
-        building: 'Building 0',
-    },
-    {
-        name: 'Labore',
-        rooms: ['Room 2', 'Room 5', 'Room 7', 'Room 13'],
-        location: 'ExampleLocation',
-        building: 'Building 1',
-    },*/
-]
-
-const columns2 = [
-  { name: 'name', required: true, label: 'Raum', align: 'left', field: row => row.name, sortable: true },
-  {name: 'actions', label: 'Auswählen', style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-  {name: 'door', label: 'Türen', style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-]
-
-const rows2 = [
-  {
-    name: 'Frozen Yogurt',
-  },
-  {
-    name: 'Frozen Yogurt',
-  },
-]
 
 
 
@@ -495,6 +441,42 @@ export default {
         const checkNameAllowed = ref(false);
         const closeNow = ref(false);
         const closeEditAlert = ref(false);
+
+      const columns = [
+        {
+          name: 'name',
+          required: true,
+          label: t('groupRooms.group'),
+          align: 'center',
+          field: row => row.name,
+          sortable: true,
+          //headerClasses: 'bg-primary text-white',
+        },
+        {name: 'rooms', align: 'center', label: t('groupRooms.rooms'), field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
+        {name: 'actions', label: t('issuermanagement.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
+        {name: 'doorconfig', label: t('groupRooms.doorconfig'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
+      ]
+
+      const rows = ref([]);
+
+
+      rows.value = []
+
+      const columns2 = [
+        { name: 'name', required: true, label: t('groupRooms.room'), align: 'left', field: row => row.name, sortable: true },
+        {name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+        {name: 'door', label: t('groupRooms.doors'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+      ]
+
+      const rows2 = [
+        {
+          name: 'Frozen Yogurt',
+        },
+        {
+          name: 'Tomato',
+        },
+      ]
+
         let currentGroup=ref({
             id: null,
             name: null,

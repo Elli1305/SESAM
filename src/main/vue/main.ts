@@ -50,6 +50,22 @@ const messages = {
             deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
             otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
         },
+        doorconfig:{
+            configurationGroup: "Konfigurationsgruppen",
+            direction: "Richtung:",
+            direction2: "Richtung",
+            in: "Rein",
+            out: "Raus",
+            both: "Beide",
+            hint: "Konfigurationsgruppen sind untereinander mit UND verknüpft",
+            description: "Beschreibung der Konfiguration",
+            and: "Credentials in dieser Auswahl sind ODER-Verknüpft",
+            category: "KATEGORIEN",
+            add: "Konfigurationsgruppe hinzufügen",
+            config: "Konfiguration",
+            attribute: "Attribut hinzufügen",
+            time: "Aktueller Zeitpunkt"
+        },
         floorplan: {
             locations: 'Standorte',
             doorName: 'Türname',
@@ -80,7 +96,15 @@ const messages = {
             chooseLocation: "Location wählen",
             chooseRooms: "Räume auswählen",
             editGroup:"Gruppierung bearbeiten",
-            new: "Neue Gruppe"
+            new: "Neue Gruppe",
+            rooms: "Räume",
+            room: "Raum",
+            doorconfig: "Türkonfiguration anpassen",
+            select: "Auswählen",
+            doors: "Türen",
+            groupsConfig: "Anpassung der Türconfiguration für Raumgruppen",
+            roomSelection: "Räume auswählen",
+            group: "Gruppe"
         },
 
         common: {
@@ -349,7 +373,15 @@ const messages = {
             chooseLocation: "Choose a location",
             chooseRooms: "Choose the rooms",
             editGroup:"Edit group",
-            new: "New group"
+            new: "New group",
+            rooms: "Rooms",
+            room: "Room",
+            doorconfig: "Adjust door configuration",
+            select: "Select",
+            doors: "Doors",
+            groupsConfig: "Adjustment of door configurations for groups of rooms",
+            roomSelection: "Choose Rooms",
+            group: "Group"
         },
 
         adminEdit: {
@@ -392,6 +424,22 @@ const messages = {
             categorychange: 'Change category',
             categorydelete: 'Delete category',
             delete: 'Are you sure you want to delete the category?'
+        },
+        doorconfig:{
+            configurationGroup: "Configuration Groups",
+            direction: "Direction:",
+            direction2: "Direction",
+            in: "In",
+            out: "Out",
+            both: "Both",
+            hint: "Configuration groups are connected by AND",
+            description: "Description of the Configuration",
+            and: "Credentials in this selection are connected by OR",
+            category: "CATEGORIES",
+            add: "Add configuration group",
+            config: "Configuration",
+            attribute: "Add attribute",
+            time: "Current time point"
         },
         floorplan: {
             locations: 'Locations',
