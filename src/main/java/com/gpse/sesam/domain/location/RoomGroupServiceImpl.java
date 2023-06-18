@@ -1,16 +1,23 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.domain.location.door.Door;
+import com.gpse.sesam.domain.location.door.config.ProofAttributeInfo;
+import com.gpse.sesam.domain.location.door.config.ProofConfig;
+import com.gpse.sesam.domain.location.door.config.ProofPredicateInfo;
 import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.domain.location.room.RoomRepository;
+import com.gpse.sesam.domain.location.room.RoomService;
+import com.gpse.sesam.domain.location.room.RoomServiceImpl;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
+import com.gpse.sesam.web.cmd.RoomGroupConfigCmd;
 import com.gpse.sesam.web.exception.ConflictException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.OverridesAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 
@@ -18,9 +25,12 @@ public class RoomGroupServiceImpl implements RoomGroupService {
 
     private final RoomGroupRepository roomGroupRepository;
 
+    private final RoomRepository roomRepository;
+
     @Autowired
-    public RoomGroupServiceImpl(final RoomGroupRepository roomGroupRepository) {
+    public RoomGroupServiceImpl(final RoomGroupRepository roomGroupRepository, RoomRepository roomRepository) {
         this.roomGroupRepository = roomGroupRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Override
@@ -81,5 +91,29 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     @Override
     public void deleteById(Long id) {
         roomGroupRepository.deleteById(id);
+    }
+
+    @Override
+    public void setGroupConfig(List<RoomGroupConfigCmd> cmds) {
+        for (RoomGroupConfigCmd cmd : cmds) {
+            Optional<Room> room = roomRepository.findById(cmd.getRoom());
+            if (room.isPresent()) {
+                List<Door> doors = room.get().getDoors();
+                for (Door door : doors) {
+                    for (Long doorId : cmd.getDoors()) {
+                        if (door.getId() == doorId) {
+                            String description = cmd.getDescription();
+                            Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
+                            Map<String, ProofAttributeInfo> requestedAttributes = new HashMap<>();
+                            ProofConfig config = new ProofConfig();
+                            config.setDescription(description);
+                            config.setRequestedAttributes(requestedAttributes);
+                            config.setRequestedPredicates(requestedPredicates);
+                            //door.setConfig(proofConfig);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

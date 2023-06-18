@@ -2,6 +2,7 @@ package com.gpse.sesam.domain.location;
 
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
+import com.gpse.sesam.web.cmd.RoomGroupConfigCmd;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +23,7 @@ public interface RoomGroupService {
     RoomGroups save(RoomGroups roomGroup);
 
     void deleteById(Long id);
+
+    void setGroupConfig(List<RoomGroupConfigCmd> cmds);
+
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -32,4 +33,11 @@ public class RoomServiceImpl implements RoomService {
 		roomRepository.findAll().forEach(rooms::add);
 		return rooms;
 	}
+
+	@Override
+	public Optional<Room> getRoomById(final Long id) {
+		return roomRepository.findById(id);
+	}
+
+
 }
