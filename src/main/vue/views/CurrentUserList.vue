@@ -81,7 +81,7 @@ export default {
             },
             { name: 'firstName', align: 'center', label : t('adminCurrentUser.prename') , field: 'firstName', sortable: true },
             { name: 'username', align: 'center',label: t('adminCurrentUser.email') , field: 'username', sortable: true },
-            { name: 'roles', align: 'center',label: t('adminCurrentUser.role'), field: 'roles' },
+            { name: 'roles', align: 'center',label: t('adminCurrentUser.role'), field: row => row.roles.filter(r => r.granted) },
             { name: 'actions', label: t('adminCurrentUser.edit'), style: "width: 40px", align: 'center' }
         ]
 

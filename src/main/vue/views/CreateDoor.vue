@@ -8,7 +8,7 @@
         <q-input style="width: 18em" filled v-model="doorName" label="Türname" stack-label/>
         <q-select
             style="width: 18em"
-            filled
+            filledv-for="(select,i) in qSelectgeneral.qSelectsSet[k]general.qSelectsSet[k].configParts"
             v-model="room"
             use-input
             hide-selected
@@ -28,11 +28,58 @@
           </template>
         </q-select>
       </q-card-section>
-      <q-card-section>
+      <q-card-section  v-for="(selectConf,k) in qSelectgeneral.qSelectsSet">
         <q-card bordered flat>
           <q-toolbar class="bg-primary text-accent">
             <q-toolbar-title>Konfigurationsgruppen</q-toolbar-title>
-            <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
+
+
+              <div class="colomn q-mt-sm justify-around items-center no-wrap">
+
+                  <div class="q-pa-md">
+                      <div class="q-gutter-sm">
+                          <q-checkbox dense v-model="baseConfig" label="Basis Konfiguration" color="primary" />
+                      </div>
+                  </div>
+
+                  <div class="q-gutter-sm row">
+                      <q-input filled v-model="starttime" mask="time" :rules="['time']">
+                          <template v-slot:append>
+                              <q-icon name="access_time" class="cursor-pointer">
+                                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                                      <q-time v-model="time">
+                                          <div class="row items-center justify-end">
+                                              <q-btn v-close-popup label="Close" color="primary" flat />
+                                          </div>
+                                      </q-time>
+                                  </q-popup-proxy>
+                              </q-icon>
+                          </template>
+                      </q-input>
+
+                  </div>
+
+
+
+                  <div class="q-gutter-sm row">
+                      <q-input filled v-model="endtime" mask="time" :rules="['time']">
+                          <template v-slot:append>
+                              <q-icon name="access_time" class="cursor-pointer">
+                                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                                      <q-time v-model="time">
+                                          <div class="row items-center justify-end">
+                                              <q-btn v-close-popup label="Close" color="primary" flat />
+                                          </div>
+                                      </q-time>
+                                  </q-popup-proxy>
+                              </q-icon>
+                          </template>
+                      </q-input>
+
+                  </div>
+              </div>
+
+              <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
               <q-tooltip class="bg-grey-14" anchor="bottom middle" self="top middle" :offset="[0,0]">
                 Konfigurationsgruppen sind untereinander mit UND verknüpft
               </q-tooltip>
@@ -41,11 +88,12 @@
           <q-card-section>
             <q-input filled v-model="configDescription" label="Beschreibung der Konfiguration" stack-label/>
           </q-card-section>
-          <q-card-section v-for="(select,i) in qSelects.configParts">
+          <q-card-section v-for="(select,i) in qSelectgeneral.qSelectsSet[k].configParts">
             <q-card bordered flat>
               <q-toolbar class="bg-primary text-white shadow-2">
                 <q-toolbar-title>Konfiguration</q-toolbar-title>
-                <q-btn flat round icon="delete" size="0.75em" @click="removeConfigGroup(i)"/>
+
+                <q-btn flat round icon="delete" size="0.75em" @click="removeConfigGroup(i,k)"/>
               </q-toolbar>
               <q-card-section class="column">
                 <q-select
@@ -56,7 +104,7 @@
                     option-label="name"
                     hint="Credentials in dieser Auswahl sind ODER-Verknüpft"
                     :options="credentialStore.allCredentials"
-                    v-model="qSelects.configParts[i].credentials"
+                    v-model="qSelectgeneral.qSelectsSet[k].configParts[i].credentials"
                     use-chips>
                   <template v-slot:selected-item="scope">
                     <q-chip
@@ -78,34 +126,37 @@
                   </template>
                 </q-select>
                 <div class="row q-mt-sm justify-around items-center no-wrap"
-                     v-for="(attributeFilter,j) in qSelects.configParts[i].attributeFilter" style="min-width: 100%">
+                     v-for="(attributeFilter,j) in qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter" style="min-width: 100%">
                   <q-select style="width: 12em"
-                      rounded outlined dropdown-icon="expand_more" v-model="qSelects.configParts[i].attributeFilter[j].attribute"
-                      :options="commonAttributeFilter(qSelects.configParts[i].credentials)"
-                      :display-value="qSelects.configParts[i].attributeFilter[j].attribute?.label"
-                      @update:model-value="resetPredicateType(i,j)">
+                      rounded outlined dropdown-icon="expand_more" v-model="qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].attribute"
+                      :options="commonAttributeFilter(qSelectgeneral.qSelectsSet[k].configParts[i].credentials)"
+                      :display-value="qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].attribute?.label"
+                      @update:model-value="resetPredicateType(i,j,k)">
 
                   </q-select>
                   <q-select style="width: 5em"
-                      rounded outlined dropdown-icon="expand_more" v-model="qSelects.configParts[i].attributeFilter[j].predicateType" ref="predicateType"
-                      :options="getPredicates(qSelects.configParts[i].attributeFilter[j].attribute)"/>
+                      rounded outlined dropdown-icon="expand_more" v-model="qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].predicateType" ref="predicateType"
+                      :options="getPredicates(qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].attribute)"/>
                   <q-input style="width: 10em"
-                      rounded outlined v-model="qSelects.configParts[i].attributeFilter[j].value"
-                     :type="getType(qSelects.configParts[i].attributeFilter[j].attribute)"
-                     :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
+                      rounded outlined v-model="qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].value"
+                     :type="getType(qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].attribute)"
+                     :disable="qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].currentDate" ref="input">
                   </q-input>
                   <q-btn style="width: 3em; height: 3em"
-                      flat round icon="delete" @click="removeFilter(i,j)"/>
+                      flat round icon="delete" @click="removeFilter(i,j,k)"/>
                 </div>
               </q-card-section>
-              <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addAttributeFilter(i)">Attribut hinzufügen</q-btn>
+              <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addAttributeFilter(i,k)">Attribut hinzufügen</q-btn>
             </q-card>
           </q-card-section>
-          <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfigurationGroup">
+          <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfigurationGroup(k)">
             Konfigurationsgruppe hinzufügen
           </q-btn>
         </q-card>
       </q-card-section>
+        <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfiguration">
+            Konfiguration hinzufügen
+        </q-btn>
       <q-card-actions align="right">
         <q-btn flat color="primary" label="Abbrechen" @click="onCancelClick"/>
         <q-btn flat color="primary" label="Speichern" :disable="!doorName || (!room && !door)" @click="onOKClick"/>
@@ -118,7 +169,8 @@
 import {ref} from "vue";
 import {useCredentialStore} from "@/main/vue/stores/credential";
 import {PredicateType} from "@/main/vue/entity/doorConfiguration";
-
+const starttime = ref()
+const endtime = ref()
 export default {
   props: {
     rooms: Array,
@@ -149,7 +201,7 @@ export default {
       this.$emit('ok', {
         room: this.room,
         doorName: this.doorName,
-        configuration: this.qSelects,
+        configuration: this.qSelectgeneral.qSelectsSet[k],
         configDescription: this.configDescription
       })
       this.hide()
@@ -164,30 +216,30 @@ export default {
         return Object.values(PredicateType)
       }
     },
-    resetPredicateType(i, j) {
-      this.qSelects.configParts[i].attributeFilter[j].predicateType = null;
-      this.qSelects.configParts[i].attributeFilter[j].value = null;
+    resetPredicateType(i, j, k) {
+      this.qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].predicateType = null;
+      this.qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].value = null;
     },
 
     getType(attribute) {
       return attribute?.type.toLowerCase()
     },
-    addAttributeFilter(i) {
-      this.qSelects.configParts[i].attributeFilter.push({
+    addAttributeFilter(i,k) {
+      this.qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter.push({
         attribute: null,
         predicateType: null,
         value: null,
         currentDate: false
       })
     },
-    removeConfigGroup(i) {
-      this.qSelects.configParts.splice(i, 1)
+    removeConfigGroup(i, k) {
+      this.qSelectgeneral.qSelectsSet[k].configParts.splice(i, 1)
     },
-    removeFilter(i, j) {
-      this.qSelects.configParts[i].attributeFilter.splice(j, 1)
+    removeFilter(i, j, k) {
+      this.qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter.splice(j, 1)
     },
-    addConfigurationGroup() {
-      this.qSelects.configParts.push({
+    addConfigurationGroup(k) {
+      this.qSelectgeneral.qSelectsSet[k].configParts.push({
         credentials: [],
         attributeFilter: [{
           attribute: null,
@@ -197,10 +249,24 @@ export default {
         }]
       })
     },
+      addConfiguration() {
+        this.qSelectgeneral.qSelectsSet.push({
+            configParts: [{
+                credentials: [],
+                attributeFilter: [{
+                    attribute: null,
+                    predicateType: null,
+                    value: null,
+                    currentDate: false
+                }]
+            }]
+        })
+
+      },
     setDate(i, j) {
-      if (this.qSelects.configParts[i].attributeFilter[j].currentDate) {
+      if (this.qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].currentDate) {
         const date = new Date();
-        this.qSelects.configParts[i].attributeFilter[j].value = date.toISOString().split('T')[0];
+        this.qSelectgeneral.qSelectsSet[k].configParts[i].attributeFilter[j].value = date.toISOString().split('T')[0];
       }
     }
   },
@@ -212,8 +278,9 @@ export default {
     credentialStore.getAllCredentials()
     const credentials = ref()
     const configDescription = ref()
+    const baseConfig = ref()
 
-    const qSelects = ref({
+    const qSelects = {
       configParts: [{
         credentials: [],
         attributeFilter: [{
@@ -223,7 +290,11 @@ export default {
           currentDate: false
         }]
       }]
-    })
+    }
+
+   const qSelectgeneral = ref({
+       qSelectsSet: [qSelects]
+   })
 
     if (props.door) {
       doorName.value = props.door.name
@@ -255,6 +326,10 @@ export default {
     }
 
     return {
+      qSelectgeneral,
+      baseConfig,
+      starttime,
+      endtime,
       room,
       credentials,
       filterFn,
