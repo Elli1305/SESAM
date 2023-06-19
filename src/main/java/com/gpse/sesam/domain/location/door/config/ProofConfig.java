@@ -2,16 +2,11 @@ package com.gpse.sesam.domain.location.door.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.OneToMany;
+import com.gpse.sesam.domain.location.room.Room;
+import jakarta.persistence.*;
 
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +35,15 @@ public class ProofConfig {
 			inverseJoinColumns = {@JoinColumn(name = "predicate_id", referencedColumnName = "id")})
 	@Column
 	private Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
+
+	@Column
+	private LocalTime startTime;
+
+	@Column
+	private LocalTime endTime;
+
+	@Column
+	private boolean baseConfig;
 
 	public ProofConfig() {
 
@@ -75,5 +79,29 @@ public class ProofConfig {
 
 	public void addRequestedAttributes(final String name, final ProofAttributeInfo proofAttributeInfo) {
 		requestedAttributes.put(name, proofAttributeInfo);
+	}
+
+	public LocalTime getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public LocalTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalTime endTime) {
+		this.endTime = endTime;
+	}
+
+	public boolean isBaseConfig() {
+		return baseConfig;
+	}
+
+	public void setBaseConfig(boolean baseConfig) {
+		this.baseConfig = baseConfig;
 	}
 }

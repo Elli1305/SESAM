@@ -81,6 +81,9 @@ public final class ConfigCmdMapper {
 			}
 		}
 
+		proofConfig.setEndTime(configCmd.getEndTime());
+		proofConfig.setStartTime(configCmd.getStartTime());
+
 		return proofConfig;
 	}
 

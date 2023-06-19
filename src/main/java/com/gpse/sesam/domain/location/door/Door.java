@@ -2,15 +2,9 @@ package com.gpse.sesam.domain.location.door;
 
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.location.Coordinate;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import com.gpse.sesam.domain.location.door.config.ProofConfig;
+import com.gpse.sesam.domain.location.room.Room;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +25,9 @@ public class Door {
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<Credential> credentials = new ArrayList<>();
+
+	@OneToMany(cascade =  CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<ProofConfig> proofConfigs = new ArrayList<>();
 
 	protected Door() {
 
@@ -75,5 +72,9 @@ public class Door {
 
 	public void addCredential(final Credential credential) {
 		credentials.add(credential);
+	}
+
+	public List<ProofConfig> getProofConfigs() {
+		return proofConfigs;
 	}
 }
