@@ -189,22 +189,22 @@ export default {
             rooms: this.floorPlanStore.rooms
           }
         }).onOk(({room, doorName, configuration}) => {
-          room.doors.push({
+          let door = {
             name: doorName,
+            proofConfigIn: [configuration.doorConfigIn],
+            proofConfigOut: [configuration.doorConfigOut],
+            roomId: room.id,
             coordinates: e.layer._latlngs.map((latLng) => ({
                   lat: latLng.lat,
                   lng: latLng.lng
                 }
             )),
-          })
-          this.roomStore.save(room).then((savedRoom) => {
-            const savedDoor = savedRoom.doors.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+          };
+
+          this.doorStore.create(door).then((savedDoor) => {
+            room.doors.push(savedDoor)
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
-            console.log(configuration)
-            configuration.doorConfigIn.doorId = savedDoor.name + '_' + savedDoor.id + '_in'
-            configuration.doorConfigOut.doorId = savedDoor.name + '_' + savedDoor.id + '_out'
-            api.doorConfig.save(configuration).then(() => console.log("success"))
           })
         })
       }

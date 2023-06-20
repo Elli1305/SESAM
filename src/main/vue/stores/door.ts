@@ -19,6 +19,18 @@ export const useDoorStore = defineStore('door', () => {
         })
     }
 
+
+    function create(door: Door): Promise<Door> {
+        return new Promise((resolve, reject) => {
+            api.door.create(door).then((response) => {
+                locationStore.getLocations();
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
     function deleteById(id: BigInt): Promise<void> {
         return new Promise((resolve, reject) => {
             api.door.deleteById(id).then(() => {
@@ -31,6 +43,7 @@ export const useDoorStore = defineStore('door', () => {
     }
 
     return {
+        create,
         save,
         deleteById
     }

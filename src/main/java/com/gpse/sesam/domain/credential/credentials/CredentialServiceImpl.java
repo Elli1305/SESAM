@@ -8,6 +8,9 @@ import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.credential.issuing.IssueCredential;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
+import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.domain.location.LocationService;
+import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.CreateCredentialCmd;
@@ -30,6 +33,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CredentialServiceImpl implements CredentialService {
@@ -41,6 +45,8 @@ public class CredentialServiceImpl implements CredentialService {
 	private final IssuerRepository issuerRepository;
 	private final CredentialRepository credentialRepository;
 
+	private final LocationService locationService;
+
 	private final ExternalCredentialRepository externalCredentialRepository;
 	private final ExternalCredentialService externalCredentialService;
 
@@ -49,11 +55,13 @@ public class CredentialServiceImpl implements CredentialService {
 								 final CredentialRepository credentialRepository,
 								 final IssuerRepository issuerRepository,
 								 final ExternalCredentialRepository externalCredentialRepository,
+								 final LocationService locationService,
 								 final ExternalCredentialService externalCredentialService) {
 		this.client = client;
 		this.mapper = mapper;
 		this.issuerRepository = issuerRepository;
 		this.credentialRepository = credentialRepository;
+		this.locationService = locationService;
 		this.externalCredentialRepository = externalCredentialRepository;
 		this.externalCredentialService = externalCredentialService;
 	}
@@ -141,25 +149,27 @@ public class CredentialServiceImpl implements CredentialService {
 		credentialRepository.saveAll(credentials);
 	}
 
-
 	@Override
-	public List<InternalCredential> credentialFindByLocation(final Long id) {
-		return credentialRepository.findByLocation(id);
-	}
+	public List<CredentialCmd> getCredentialByLocation(Long id) {
 
+		final Location location = locationService.getLocation(id)
+				.orElseThrow(() -> new IllegalArgumentException("Location with id " + id + " does not exist"));
 
-	@Override
-	public List<CredentialCmd> getCredentialByLocation(final Long id) {
-		final List<InternalCredential> credentials = credentialRepository.findByLocation(id);
+		final Iterable<InternalCredential> credentials = getCredentialFromAttachedProofConfig(location);
+
 		final List<CredentialCmd> cmds = new ArrayList<>();
 
 		for (final InternalCredential credential : credentials) {
-			final String categoryName = credential.getCategory().getName();
+
 			final String credentialName = credential.getName();
 			final List<String> externalCredentials = new ArrayList<>();
-			for (final ExternalCredential externalCredential : credential.getCategory().getExternalCredentials()) {
-				final String external = externalCredential.getName();
-				externalCredentials.add(external);
+			String categoryName = "";
+			if (credential.getCategory() != null) {
+				categoryName = credential.getCategory().getName();
+				for (final ExternalCredential externalCredential : credential.getCategory().getExternalCredentials()) {
+					final String external = externalCredential.getName();
+					externalCredentials.add(external);
+				}
 			}
 			final List<String> issuers = new ArrayList<>();
 			final List<String> rooms = new ArrayList<>();
@@ -173,6 +183,31 @@ public class CredentialServiceImpl implements CredentialService {
 		}
 
 		return cmds;
+	}
+
+	private Iterable<InternalCredential> getCredentialFromAttachedProofConfig(Location location) {
+		return location
+				.getBuildings().stream()
+				.flatMap(building -> building.getFloors().stream())
+				.flatMap(floor -> floor.getRooms().stream())
+				.flatMap(room -> room.getDoors().stream())
+				.flatMap(door -> Stream.concat(door.getProofConfigIn().stream(), door.getProofConfigOut()
+						.stream()))
+				.flatMap(proofConfig -> {
+					final Stream<String> attributeFilterStream = proofConfig.getRequestedPredicates().values()
+							.stream()
+							.flatMap(proofPredicateInfo -> proofPredicateInfo.getRestrictions().stream())
+							.map(AttributeFilter::getCredentialDefinitionId);
+					final Stream<String> attributeFilterStream1 = proofConfig.getRequestedAttributes().values()
+							.stream()
+							.flatMap(proofAttributeInfo -> proofAttributeInfo.getRestrictions().stream())
+							.map(AttributeFilter::getCredentialDefinitionId);
+					return Stream.concat(attributeFilterStream, attributeFilterStream1);
+				})
+				.filter(Objects::nonNull)
+				.flatMap(definitionId -> credentialRepository.findAllByCredentialDefinitionId(definitionId)
+						.stream())
+				.collect(Collectors.toSet());
 	}
 
 	@Override

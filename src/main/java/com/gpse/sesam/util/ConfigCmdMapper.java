@@ -34,8 +34,21 @@ public final class ConfigCmdMapper {
 					attributeInfo.setName(filter.getAttribute().getAttributeName());
 
 					final AttributeFilter attributeFilter = new AttributeFilter();
-					attributeFilter.setAttributeValue(new AttributeValue(filter.getAttribute()
-							.getAttributeName(), filter.getValue()));
+
+
+					final AttributeValue attributeValue = new AttributeValue();
+					attributeValue.setName(filter.getAttribute().getAttributeName());
+					if (filter.getAttribute().getType().equals(FormEntryType.DATE)) {
+						if (filter.isCurrentDate()) {
+							attributeValue.setValue("$TODAY-YYYYMMDD");
+						} else {
+							attributeValue.setValue(filter.getValue().replace("-", ""));
+						}
+					} else {
+						attributeValue.setValue(filter.getValue());
+					}
+
+					attributeFilter.setAttributeValue(attributeValue);
 					attributeFilters.add(attributeFilter);
 
 					attributeInfo.setRestrictions(attributeFilters);

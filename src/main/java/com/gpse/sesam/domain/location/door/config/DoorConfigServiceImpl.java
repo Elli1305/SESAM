@@ -137,7 +137,7 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 							} else {
 								final SimpleDateFormat parser = new SimpleDateFormat("yyyyMMdd");
 								attributeFilterCmd.setValue(
-										simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue()))
+										simpleDateFormat.format(parser.parse(attributeValue.getValue()))
 								);
 							}
 						} else {
@@ -194,7 +194,7 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 						} else {
 							final SimpleDateFormat parser = new SimpleDateFormat("yyyyMMdd");
 							attributeFilterCmd.setValue(
-									simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue()))
+									simpleDateFormat.format(parser.parse(proofPredicateInfo.getPredicateValue()))
 							);
 						}
 					} else {

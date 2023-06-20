@@ -13,6 +13,8 @@ export interface TwoWayDoorConfiguration {
 }
 
 export interface DoorConfiguration {
+
+    description: string
     configParts: Config[],
 
     attributeFilters: AttributeFilter[]
