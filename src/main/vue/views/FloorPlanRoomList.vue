@@ -1,6 +1,15 @@
 <template>
   <q-page-container class="no-padding no-margin">
     <q-page style="padding-right: 1em; padding-top: 2em">
+        <q-tabs
+                v-model="tab"
+                no-caps
+                class="bg-primary text-white shadow-2"
+        >
+            <q-tab name="rooms" label="Rooms" />
+            <q-tab name="groups" label="Groups of rooms" />
+        </q-tabs>
+
       <q-input
           :placeholder="t('home.roomSearch')"
           v-model="search"
@@ -268,7 +277,8 @@ export default {
       deleteDoor,
       save,
       currentRoomName,
-      setOldValueR
+      setOldValueR,
+        tab: ref('rooms')
     }
   },
 
