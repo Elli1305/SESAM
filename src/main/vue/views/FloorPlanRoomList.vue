@@ -7,8 +7,12 @@
                 class="bg-primary text-white shadow-2"
         >
             <q-tab name="rooms" label="Rooms" />
-            <q-tab name="groups" label="Groups of rooms" />
+            <q-tab name="groups" label="Roomgroups" />
         </q-tabs>
+        <q-separator></q-separator>
+
+        <q-tab-panels v-model="tab" animated>
+            <q-tab-panel name="rooms">
 
       <q-input
           :placeholder="t('home.roomSearch')"
@@ -132,6 +136,10 @@
           </q-btn-dropdown>
         </q-item>
       </q-list>
+
+                </q-tab-panel>
+        </q-tab-panels>
+
     </q-page>
   </q-page-container>
 </template>
@@ -148,6 +156,7 @@ import {getCssVar, useQuasar} from "quasar";
 import api from "@/main/vue/api";
 import CreateDoor from "@/main/vue/views/CreateDoor.vue";
 import {useDoorStore} from "@/main/vue/stores/door";
+
 
 export default {
   components: {DoorConfig},
