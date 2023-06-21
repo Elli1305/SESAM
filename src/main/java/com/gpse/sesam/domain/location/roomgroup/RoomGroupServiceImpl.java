@@ -1,18 +1,15 @@
-package com.gpse.sesam.domain.location;
+package com.gpse.sesam.domain.location.roomgroup;
 
+import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.location.door.Door;
-import com.gpse.sesam.domain.location.door.config.ProofAttributeInfo;
-import com.gpse.sesam.domain.location.door.config.ProofConfig;
-import com.gpse.sesam.domain.location.door.config.ProofPredicateInfo;
+import com.gpse.sesam.domain.location.door.DoorRepository;
+import com.gpse.sesam.domain.location.door.config.*;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
-import com.gpse.sesam.domain.location.room.RoomService;
-import com.gpse.sesam.domain.location.room.RoomServiceImpl;
-import com.gpse.sesam.web.cmd.RoomGroupCmd;
-import com.gpse.sesam.web.cmd.RoomGroupConfigCmd;
+import com.gpse.sesam.util.ConfigCmdMapper;
+import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.ConflictException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.OverridesAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -24,13 +21,16 @@ import java.util.*;
 public class RoomGroupServiceImpl implements RoomGroupService {
 
     private final RoomGroupRepository roomGroupRepository;
+    private final DoorConfigService doorConfigurationService;
 
-    private final RoomRepository roomRepository;
+    private final DoorRepository doorRepository;
+
 
     @Autowired
-    public RoomGroupServiceImpl(final RoomGroupRepository roomGroupRepository, RoomRepository roomRepository) {
+    public RoomGroupServiceImpl(final RoomGroupRepository roomGroupRepository, DoorConfigService doorConfigurationService, DoorRepository doorRepository, RoomRepository roomRepository) {
         this.roomGroupRepository = roomGroupRepository;
-        this.roomRepository = roomRepository;
+        this.doorConfigurationService = doorConfigurationService;
+        this.doorRepository = doorRepository;
     }
 
     @Override
@@ -94,26 +94,38 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     }
 
     @Override
-    public void setGroupConfig(List<RoomGroupConfigCmd> cmds) {
-        for (RoomGroupConfigCmd cmd : cmds) {
-            Optional<Room> room = roomRepository.findById(cmd.getRoom());
-            if (room.isPresent()) {
-                List<Door> doors = room.get().getDoors();
-                for (Door door : doors) {
-                    for (Long doorId : cmd.getDoors()) {
-                        if (door.getId() == doorId) {
-                            String description = cmd.getDescription();
-                            Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
-                            Map<String, ProofAttributeInfo> requestedAttributes = new HashMap<>();
-                            ProofConfig config = new ProofConfig();
-                            config.setDescription(description);
-                            config.setRequestedAttributes(requestedAttributes);
-                            config.setRequestedPredicates(requestedPredicates);
-                            //door.setConfig(proofConfig);
-                        }
-                    }
-                }
+    public void setGroupConfig(List<TwoWayDoorConfigCmd> cmds) {
+        for (TwoWayDoorConfigCmd cmd : cmds) {
+            Optional<Door> door = doorRepository.findById(Long.valueOf(cmd.getDoorConfigIn().getDoorId()));
+            if (door.isPresent()) {
+                doorConfigurationService.sendProofConfig(cmd.getDoorConfigIn()
+                        .getDoorId(), ConfigCmdMapper.fromCmd(cmd.getDoorConfigIn()));
+                doorConfigurationService.sendProofConfig(cmd.getDoorConfigOut()
+                        .getDoorId(), ConfigCmdMapper.fromCmd(cmd.getDoorConfigOut()));
+                door.get().setProofConfigIn(List.of(ConfigCmdMapper.fromCmd(cmd.getDoorConfigIn())));
+                door.get().setProofConfigOut(List.of(ConfigCmdMapper.fromCmd(cmd.getDoorConfigOut())));
+                doorRepository.save(door.get());
             }
         }
+    }
+
+    @Override
+    public List<RoomGroupDoorConfigCmd> getRoomsAndDoorsByGroupId(Long id) {
+        Optional<RoomGroups> roomGroup = roomGroupRepository.findById(id);
+        List<RoomGroupDoorConfigCmd> cmds = new ArrayList<>();
+        java.util.List<String> doorNames = new ArrayList<>();
+        java.util.List<Long> doors = new ArrayList<>();
+        if (roomGroup.isPresent()) {
+            for (Room room: roomGroup.get().getRooms()) {
+                String roomName = room.getName();
+                Long roomId = room.getId();
+                for (Door door: room.getDoors()) {
+                    doorNames.add(door.getName());
+                    doors.add(door.getId());
+                }
+                cmds.add(new RoomGroupDoorConfigCmd(roomId, roomName, doors, doorNames));
+            }
+        }
+        return cmds;
     }
 }

@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.location;
+package com.gpse.sesam.domain.location.roomgroup;
 
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.room.Room;
