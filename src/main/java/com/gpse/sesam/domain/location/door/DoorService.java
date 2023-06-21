@@ -9,4 +9,6 @@ public interface DoorService {
 	Door save(Door door);
 
 	Optional<Door> findDoorById(Long id);
+
+	Door create(Long roomId, Door door);
 }

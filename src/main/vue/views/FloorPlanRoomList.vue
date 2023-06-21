@@ -199,6 +199,8 @@ export default {
           }
         }).onOk(({doorName, configuration}) => {
           door.name = doorName
+          door.proofConfigIn = [configuration.doorConfigIn]
+          door.proofConfigOut = [configuration.doorConfigOut]
           doorStore.save(door).then((savedDoor) => {
             configuration.doorConfigIn.doorId = savedDoor.name + '_' + savedDoor.id + '_in'
             configuration.doorConfigOut.doorId = savedDoor.name + '_' + savedDoor.id + '_out'

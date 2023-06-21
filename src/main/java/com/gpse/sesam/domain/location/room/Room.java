@@ -32,7 +32,7 @@ public class Room {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
-	protected Room() {
+	public Room() {
 
 	}
 
