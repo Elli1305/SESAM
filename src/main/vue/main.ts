@@ -119,7 +119,7 @@ const messages = {
             location: "Standort",
             search: "Suche",
             category: "Kategorie",
-            availablecredentials: "Verfügbbare Credential",
+            availablecredentials: "Verfügbare Credential",
             qualification: "Vergleichbare Credential",
             issuer: "Herausgeber",
             room: "Raum: "
