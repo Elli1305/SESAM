@@ -138,7 +138,61 @@
                 </q-list>
 
                 </q-tab-panel>
+            <q-tab-panel name="groups">
+            <q-input
+                    :placeholder="t('home.roomSearch')"
+                    v-model="search"
+                    @update:model-value="roomFilter"
+                    clearable
+                    outlined
+                    rounded
+                    clear-icon="clear"
+                    style="margin-bottom: 1em; min-width: 20em">
+                <template v-slot:append>
+                    <q-icon name="search"/>
+                </template>
+            </q-input>
+            <q-list>
+                <q-item v-for="group in allGroups" style="padding-left: 0">
+                    <q-checkbox @click="toggleRoomCheckbox(group)" v-model="selectedGroups" :val="group" color="blue"/>
+                    <q-btn-dropdown
+                            split
+                            flat
+                            style="min-width: 16em"
+                            :label="group.name"
+                            dropdown-icon="expand_more"
+                            color="var(--text-color)"
+                            @click="toggleRoomCheckbox(group)">
+                        <div class="column no-wrap" style="background-color: var(--bg-color)">
+                            <div class="row no-wrap">
+                                <div class="column no-wrap" style="padding: 0.5em">
+<!--                                    <q-list>
+                                        <q-item-label>{{ t("floorplan.roomName") }}:</q-item-label>
+                                        <q-item-label>{{ t("floorplan.doors") }}:</q-item-label>
+                                        <q-item-label>Credentials:</q-item-label>
+                                    </q-list>-->
+                                </div>
+                                <div class="column no-wrap" style="padding: 0.5em">
+                                    <q-list>
+<!--                                        <q-item-label>{{ room.name }}</q-item-label>-->
+                                        <q-item-label>{{ group.rooms.map(door => door.name).join(", ") }}</q-item-label>
+<!--                                        <q-item-label>-->
+<!--                                            {{ room?.id ? "U-MEMBER" : "" }}-->
+<!--                                        </q-item-label>-->
+                                    </q-list>
+                                </div>
+                            </div>
+                            <div
+                                    v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
+                                <q-separator></q-separator>
 
+
+                            </div>
+                        </div>
+                    </q-btn-dropdown>
+                </q-item>
+            </q-list>
+        </q-tab-panel>
         </q-tab-panels>
 
     </q-page>
