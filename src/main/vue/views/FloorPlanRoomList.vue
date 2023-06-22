@@ -349,6 +349,7 @@ import api from "@/main/vue/api";
 import CreateDoor from "@/main/vue/views/CreateDoor.vue";
 import {useDoorStore} from "@/main/vue/stores/door";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
+import {useLocationStore} from "@/main/vue/stores/locations";
 
 
 export default {
@@ -402,6 +403,44 @@ export default {
         })
     }
 
+      const locationStore = useLocationStore();
+
+      function getParentIDs(locations, selectFloorId) {
+          for (const location of locations) {
+              for (const building of location.buildings) {
+                  console.log("locations: ", location)
+                  if (building.floors.some(floor => floor.id === selectFloorId)) {
+                      return building.id
+                  }
+              }
+          }
+          return null;
+      }
+      let buildingID = ref();
+      locationStore.getLocations().then((locations) => {
+          if (!floorPlanStore.selectedFloorPlan) {
+              buildingID.value = locations[0].buildings[0].id
+          } else {
+              buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
+          }
+          console.log("buildingId: " ,buildingID.value);
+      });
+
+
+      const {selectedFloorId} = storeToRefs(floorPlanStore)
+
+      watch(selectedFloorId, () => {
+          locationStore.getLocations().then((locations) => {
+              if (!floorPlanStore.selectedFloorPlan) {
+                  buildingID.value = locations[0].buildings[0].id
+              } else {
+                  buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
+              }
+              console.log("buildingId: " ,buildingID.value);
+          });
+          //console.log("Orte: ", locations);
+          console.log("buildingIds: ", buildingID.value);
+      })
 
     filteredRooms.value = rooms.value
 
@@ -510,5 +549,3 @@ export default {
 <style scoped>
 
 </style>
-
-<!--todo: filter roomgroups for their building-->
