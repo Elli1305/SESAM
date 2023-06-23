@@ -388,17 +388,17 @@ export default {
     const roomGroupStore = useRoomGroupStore();
     const selectedGroups = ref([]);
     roomGroupStore.getRoomGroups();
-    let allGroups = [];
+    let filteredGroups = ref([]);
 
     async function loadRoomGroups(buildingID) {
-        allGroups = [];
+        filteredGroups.value = [];
         await roomGroupStore.getGroupByBuilding(buildingID).then(() => {
             console.log(roomGroupStore.filteredGroups);
             for (const roomG of roomGroupStore.filteredGroups) {
-                allGroups.push(roomG);
+                filteredGroups.value.push(roomG);
             }
             console.log("Groups of rooms");
-            console.log(allGroups);
+            console.log(filteredGroups.value);
 
         })
     }
@@ -424,7 +424,7 @@ export default {
               buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
           }
           console.log("buildingId: " ,buildingID.value);
-          loadRoomGroups(buildingID.value);
+          //loadRoomGroups(buildingID.value);
       });
 
 
@@ -541,7 +541,7 @@ export default {
       currentRoomName,
       setOldValueR,
         tab: ref('rooms'),
-        allGroups,
+        allGroups: filteredGroups,
         selectedGroups
     }
   },
