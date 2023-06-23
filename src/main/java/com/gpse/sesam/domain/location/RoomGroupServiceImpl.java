@@ -45,6 +45,19 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     }
 
     @Override
+    public List<RoomGroups> getGroupByBuilding(Long bId) {
+        final List <RoomGroups> allRoomGroups = getRoomGroups();
+        List<RoomGroups> filteredGroups = new ArrayList<>();
+        for(RoomGroups roomGroup : allRoomGroups) {
+            if(roomGroup.getBuilding().getId() == bId) {
+                filteredGroups.add(roomGroup);
+            }
+        }
+        return filteredGroups;
+    }
+
+
+    @Override
     public Optional<RoomGroups> getRoomGroups(final Long id) {
         return roomGroupRepository.findById(id);
     }

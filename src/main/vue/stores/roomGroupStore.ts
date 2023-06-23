@@ -8,12 +8,24 @@ import {Building} from "@/main/vue/entity/roomGroup";
 export const useRoomGroupStore = defineStore('roomGroups', () => {
 
     const allRoomGroups: Ref<RoomGroup[]> = ref([])
+    const filteredGroups: Ref<RoomGroup[]> = ref([])
     let roomGroupByName: Ref<RoomGroup | null> = ref(null)
 
     function getRoomGroups(): Promise<RoomGroup[]> {
         return new Promise((resolve, reject) => {
             api.roomGroups.getRoomGroups().then((response) => {
                 allRoomGroups.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+    function getGroupByBuilding(buildingID: bigint): Promise<RoomGroup[]> {
+        return new Promise((resolve,reject) => {
+            api.roomGroups.getGroupByBuilding(buildingID).then((response) => {
+                filteredGroups.value = response.data
                 resolve(response.data)
             }).catch((error) => {
                 reject(error)
@@ -73,8 +85,10 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
 
     return {
         allRoomGroups,
+        filteredGroups,
         editGroup,
         getRoomGroups,
+        getGroupByBuilding,
         save,
         makeNewGroup,
         deleteGroup,
