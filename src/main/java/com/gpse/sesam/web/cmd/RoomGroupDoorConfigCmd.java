@@ -9,17 +9,17 @@ public class RoomGroupDoorConfigCmd {
     String roomName;
 
     java.util.List<String> doorNames = new ArrayList<>();
-    java.util.List<Long> doors = new ArrayList<>();
+    java.util.List<Long> doorIds = new ArrayList<>();
 
-    public RoomGroupDoorConfigCmd(Long room, String roomName, List<Long> doors, List<String> doorNames) {
+    public RoomGroupDoorConfigCmd(Long room, String roomName, List<Long> doorIds, List<String> doorNames) {
         this.room = room;
         this.roomName = roomName;
         this.doorNames = doorNames;
-        this.doors = doors;
+        this.doorIds = doorIds;
     }
 
     public List<Long> getDoors() {
-        return doors;
+        return doorIds ;
     }
 
     public void setRoom(Long room) {
@@ -30,8 +30,8 @@ public class RoomGroupDoorConfigCmd {
         return room;
     }
 
-    public void setDoors(List<Long> doors) {
-        this.doors = doors;
+    public void setDoors(List<Long> doorIds ) {
+        this.doorIds  = doorIds ;
     }
 
     public List<String> getDoorNames() {

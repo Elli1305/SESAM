@@ -45,7 +45,7 @@
                 round
                 flat
                 color="grey"
-                @click="prompt=true"
+                @click="prompt=true; openForm(props.row); getRoomsAndDoors(editedRow.id)"
                 test="props.value"
                 icon="edit">
             </q-btn>
@@ -207,7 +207,7 @@
           >
             <template v-slot:top-right>
               <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
-                <q-toggle v-model="visibleColumns" val="door" :label="t('groupRooms.doors')" ></q-toggle>
+                <q-toggle v-model="visibleColumns" val="doorNames" :label="t('groupRooms.doors')" ></q-toggle>
               </div>
               <q-input class="q-ml-xs" borderless dense debounce="250" v-model="searchinput" :placeholder="t('credentialview.search')">
                 <template v-slot:append>
@@ -215,23 +215,17 @@
                 </template>
               </q-input>
             </template>
-            <template v-slot:body-cell-door="props">
+            <template v-slot:body-cell-doorNames="props">
               <q-td :props="props">
-                <q-td colspan="100%">
-                  <div><q-td :props="props">
-                    <q-option-group
-                        :options="options"
-                        type="checkbox"
-                        v-model="group"
-                    />
-                  </q-td>
-                  </div>
-                </q-td>
+                <div class="row q-my-xs justify-between items-center no-wrap" v-for="(elem, index) in props.row.doors">
+                  <p class="no-margin">{{ props.row.doorNames[index] }}</p>
+                  <q-checkbox v-model="props.row.doors[index]" />
+                </div>
               </q-td>
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td :props="props">
-                <q-checkbox v-model="val" />
+                <q-checkbox v-model="props.row.name" />
               </q-td>
             </template>
           </q-table>
@@ -463,19 +457,15 @@ export default {
       rows.value = []
 
       const columns2 = [
-        { name: 'name', required: true, label: t('groupRooms.room'), align: 'left', field: row => row.name, sortable: true },
+        { name: 'name', required: true, label: t('groupRooms.room'), align: 'left', field: row => row.roomName, sortable: true },
         {name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-        {name: 'door', label: t('groupRooms.doors'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+        {name: 'doorIds', style: 'width: 8em', field: row => row.doorIds.join(", "), headerStyle: 'width: 8em', align: 'left'},
+        {name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doorNames.join(", "), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
       ]
 
-      const rows2 = [
-        {
-          name: 'Frozen Yogurt',
-        },
-        {
-          name: 'Tomato',
-        },
-      ]
+      const rows2 =  ref([]);
+      rows2.value = []
+
 
         let currentGroup=ref({
             id: null,
@@ -514,6 +504,15 @@ export default {
           })
         }
         return formEntries[0];
+      }
+
+      function getRoomsAndDoors(id) {
+        roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => rows2.value= rooms)
+      }
+
+      const editedRow = ref({})
+      const openForm = (row) => {
+        editedRow.value = {...row};
       }
 
 
@@ -696,6 +695,9 @@ export default {
           credentialStore,
           qSelects,
           commonAttributeFilter,
+          openForm,
+          getRoomsAndDoors,
+          editedRow,
           deleteAlert: ref(false),
           editAlert,
           closeNow,
@@ -715,7 +717,7 @@ export default {
           editGroupName,
           editGroupRooms,
           closeEditAlert,
-          visibleColumns: ref(['name', 'actions', 'door']),
+          visibleColumns: ref(['name', 'actions', 'doorNames']),
           locationList,
           buildingListNames,
           group: ref([]),

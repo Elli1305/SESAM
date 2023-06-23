@@ -60,7 +60,7 @@ public class RoomGroupController {
         roomGroupService.deleteById(id);
     }
 
-    @GetMapping("/doorsandrooms/{id:\\d+}")
+    @GetMapping("/doorsandrooms/{id}")
     @Secured("EDITOR")
     public List<RoomGroupDoorConfigCmd> getRoomsAndDoorsByGroupId(@PathVariable("id") final Long id) {
         return roomGroupService.getRoomsAndDoorsByGroupId(id);

@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from "axios";
-import {RoomGroup} from "@/main/vue/entity/roomGroup"
+import {RoomGroup, RoomsAndDoors} from "@/main/vue/entity/roomGroup"
 
 export default {
     getRoomGroups(): Promise<AxiosResponse<RoomGroup[]>> {
@@ -20,5 +20,8 @@ export default {
     },
     deleteGroup(param: bigint): Promise<void> {
         return axios.delete('/api/roomGroups/' + param);
+    },
+    getDoorsAndRooms(param: bigint): Promise<AxiosResponse<RoomsAndDoors[]>> {
+        return axios.get("/api/roomGroups/doorsandrooms/" + param)
     }
 }

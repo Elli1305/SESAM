@@ -22,3 +22,10 @@ export interface RoomGroup {
     building: Building
     rooms: Room[]
 }
+
+export interface RoomsAndDoors {
+    roomId: bigint
+    roomNames: string
+    doorIds: bigint[]
+    doorNames: string[]
+}
