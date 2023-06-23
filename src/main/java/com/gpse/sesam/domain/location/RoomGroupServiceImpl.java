@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -49,7 +50,7 @@ public class RoomGroupServiceImpl implements RoomGroupService {
         final List <RoomGroups> allRoomGroups = getRoomGroups();
         List<RoomGroups> filteredGroups = new ArrayList<>();
         for(RoomGroups roomGroup : allRoomGroups) {
-            if(roomGroup.getBuilding().getId() == bId) {
+            if(Objects.equals(roomGroup.getBuilding().getId(), bId)) {
                 filteredGroups.add(roomGroup);
             }
         }
