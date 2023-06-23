@@ -350,6 +350,7 @@ import CreateDoor from "@/main/vue/views/CreateDoor.vue";
 import {useDoorStore} from "@/main/vue/stores/door";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {useLocationStore} from "@/main/vue/stores/locations";
+import {Floor} from "@/main/vue/entity/location";
 
 
 export default {
@@ -402,14 +403,54 @@ export default {
 
         })
     }
+      let newGroup = ref(false);
+      async function makeNewGroup(newGroupName) {
+          await checkName(newGroupName);
+          if (checkNameAllowed.value) {
+              await roomGroupStore.makeNewGroup(newGroupName, currentBuilding.value, []);
+              await loadRoomGroups();
+              newGroup.value = false;
+
+          }
+      }
+      const checkNameAllowed = ref(false);
+      async function checkName(newName) {
+          console.log(newName);
+          console.log("room Group List:", filteredGroups.value);
+          checkNameAllowed.value = false;
+          if(newName.trim() === ""){
+              $q.notify({
+                  type:'negative',
+                  message: 'Name darf nicht leer sein',
+                  caption: 'Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.'
+              })
+          }
+          else {
+              checkNameAllowed.value = true;
+          }
+          for(const theGroup of filteredGroups.value) {
+              console.log("roomGroup:", theGroup)
+              console.log("newName: ", newName);
+              if (theGroup.name === newName) {
+                  $q.notify({
+                      type:'negative',
+                      message: 'Name für dieses Gebäude bereits vergeben',
+                      caption: 'Bitte wählen Sie einen neuen Namen.'
+                  })
+                  checkNameAllowed.value = false;
+              }
+          }
+      }
 
       const locationStore = useLocationStore();
+      const currentBuilding = ref(null);
 
       function getParentIDs(locations, selectFloorId) {
           for (const location of locations) {
               for (const building of location.buildings) {
                   console.log("locations: ", location)
                   if (building.floors.some(floor => floor.id === selectFloorId)) {
+                      currentBuilding.value = building;
                       return building.id
                   }
               }
