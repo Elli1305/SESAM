@@ -10,8 +10,8 @@
                 no-caps
                 class="bg-primary text-white shadow-2"
         >
-            <q-tab name="rooms" label="Rooms" />
-            <q-tab name="groups" label="Roomgroups" />
+            <q-tab name="rooms" :label="t('groupRooms.rooms')" />
+            <q-tab name="groups" :label="t('groupRooms.groups')" />
         </q-tabs>
         <q-separator></q-separator>
 
@@ -144,9 +144,9 @@
                 </q-tab-panel>
             <q-tab-panel name="groups">
             <q-input
-                    :placeholder="t('home.roomSearch')"
+                    :placeholder="t('groupRooms.search')"
                     v-model="search"
-                    @update:model-value="roomFilter"
+                    @update:model-value="groupFilter"
                     clearable
                     outlined
                     rounded
@@ -520,6 +520,16 @@ export default {
         })
       }
     }
+      async function groupFilter() {
+          if (!search.value || search.value.trim() === '') {
+              filteredGroups.value = roomGroupStore.filteredGroups;
+          } else if (search.value) {
+              const request = search.value.toLowerCase().trim()
+              filteredGroups.value = roomGroupStore.filteredGroups.filter(group => {
+                  return group.name.toLowerCase().includes(request)
+              })
+          }
+      }
 
     return {
       floorPlanStore,
@@ -529,6 +539,7 @@ export default {
       search,
       filteredRooms,
       roomFilter,
+        groupFilter,
       t,
       inception,
       deleteDoorDialog,
