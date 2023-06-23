@@ -80,7 +80,10 @@ const messages = {
             chooseLocation: "Location wählen",
             chooseRooms: "Räume auswählen",
             editGroup:"Gruppierung bearbeiten",
-            new: "Neue Gruppe"
+            new: "Neue Gruppe",
+            search: "Gruppensuche",
+            rooms: "Räume",
+            groups: "Raumgruppen"
         },
 
         common: {
@@ -349,7 +352,10 @@ const messages = {
             chooseLocation: "Choose a location",
             chooseRooms: "Choose the rooms",
             editGroup:"Edit group",
-            new: "New group"
+            new: "New group",
+            search: "Search for groups",
+            rooms: "Rooms",
+            groups: "Groups of Rooms"
         },
 
         adminEdit: {
