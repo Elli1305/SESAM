@@ -389,12 +389,12 @@ export default {
     const selectedGroups = ref([]);
     roomGroupStore.getRoomGroups();
     let allGroups = [];
-    loadRoomGroups();
-    async function loadRoomGroups() {
+
+    async function loadRoomGroups(buildingID) {
         allGroups = [];
-        await roomGroupStore.getRoomGroups().then(() => {
-            console.log(roomGroupStore.allRoomGroups);
-            for (const roomG of roomGroupStore.allRoomGroups) {
+        await roomGroupStore.getGroupByBuilding(buildingID).then(() => {
+            console.log(roomGroupStore.filteredGroups);
+            for (const roomG of roomGroupStore.filteredGroups) {
                 allGroups.push(roomG);
             }
             console.log("Groups of rooms");
@@ -424,6 +424,7 @@ export default {
               buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
           }
           console.log("buildingId: " ,buildingID.value);
+          loadRoomGroups(buildingID.value);
       });
 
 
@@ -437,6 +438,8 @@ export default {
                   buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
               }
               console.log("buildingId: " ,buildingID.value);
+              loadRoomGroups(buildingID.value);
+
           });
           //console.log("Orte: ", locations);
           console.log("buildingIds: ", buildingID.value);
