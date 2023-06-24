@@ -83,7 +83,8 @@ const messages = {
             new: "Neue Gruppe",
             search: "Gruppensuche",
             rooms: "Räume",
-            groups: "Raumgruppen"
+            groups: "Raumgruppen",
+            addRooms: "Räume zu ausgewählten Gruppen zufügen",
         },
 
         common: {

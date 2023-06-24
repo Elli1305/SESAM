@@ -171,6 +171,15 @@
                                 </q-btn-dropdown>
                             </q-item>
                         </q-list>
+                        <div
+                            v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
+                            <q-separator></q-separator>
+                            <q-item>
+                                <q-btn color="primary" icon="add" :label="t('groupRooms.addRooms')" @click="addRoomsToGroups();" flat/>
+                            </q-item>
+
+
+                        </div>
 
                     </q-tab-panel>
                     <q-tab-panel name="groups">
@@ -189,7 +198,7 @@
                         </q-input>
                         <q-list>
                             <q-item v-for="group in allGroups" style="padding-left: 0">
-                                <q-checkbox @click="toggleRoomCheckbox(group)" v-model="selectedGroups" :val="group"
+                                <q-checkbox @click="" v-model="selectedGroups" :val="group"
                                             color="blue"/>
                                 <q-btn-dropdown
                                         split
@@ -198,7 +207,7 @@
                                         :label="group.name"
                                         dropdown-icon="expand_more"
                                         color="var(--text-color)"
-                                        @click="toggleRoomCheckbox(group)">
+                                        @click="">
                                     <div class="column no-wrap" style="background-color: var(--bg-color)">
                                         <div class="row no-wrap">
                                             <div class="column no-wrap" style="padding: 0.5em">
@@ -484,6 +493,7 @@ export default {
                     console.log("hier");
                 }
                 console.log("Groups of rooms (loadRoomGroups)", filteredGroups.value);
+                console.log("sel. Rooms", selectedRooms);
 
 
             })
@@ -491,18 +501,21 @@ export default {
 
 
         async function makeANewGroup(newGroupName) {
-            console.log("hier 0");
             await checkName(newGroupName);
-            console.log("hier 1");
+            //selectedGroups.value = [];
             if (checkNameAllowed.value) {
                 await roomGroupStore.makeNewGroup(newGroupName, currentBuilding.value, []);
-                console.log("hier 2", buildingID.value);
                 await loadRoomGroups(buildingID.value);
-                console.log("hier 3");
 
                 newGroup.value = false;
+                console.log("done makeANewGrop");
 
             }
+        }
+
+        async function addRoomsToGroups() {
+            console.log("selected Rooms: ", selectedRooms);
+            console.log("selected Groups: ", selectedGroups.value);
         }
 
         const checkNameAllowed = ref(false);
@@ -693,6 +706,7 @@ export default {
             newGroup,
             newGroupName: ref(''),
             makeANewGroup,
+            addRoomsToGroups,
         }
     },
 
