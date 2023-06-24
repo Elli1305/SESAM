@@ -85,6 +85,10 @@ const messages = {
             rooms: "Räume",
             groups: "Raumgruppen",
             addRooms: "Räume zu ausgewählten Gruppen zufügen",
+            noGroupSelected: "Keine Gruppe ausgewählt",
+            checkNameMessage: "Name darf nicht leer sein",
+            checkNameCaption: "Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen."
+
         },
 
         common: {
@@ -356,7 +360,11 @@ const messages = {
             new: "New group",
             search: "Search for groups",
             rooms: "Rooms",
-            groups: "Groups of Rooms"
+            groups: "Groups of Rooms",
+            addRooms: "Add rooms to selected group",
+            noGroupSelected: "No group selected",
+            checkNameMessage: "Name must not be empty",
+            checkNameCaption: "At least one letter, number or symbol."
         },
 
         adminEdit: {
