@@ -509,6 +509,7 @@ export default {
 
         async function loadRoomGroups(buildingID) {
             filteredGroups.value = [];
+            unCheck();
             await roomGroupStore.getGroupByBuilding(buildingID).then(() => {
                 filteredGroups.value = [];
                 for (const roomG of roomGroupStore.filteredGroups) {
@@ -543,12 +544,20 @@ export default {
 
         async function deleteGroup() {
             console.log("Delete Group", selectedGroups.value);
+            if(selectedGroups.value === []) {
+                unCheck();
+            }
             if(selectedGroups.value !==null) {
                 await roomGroupStore.deleteGroup(selectedGroups.value.id).then(() => {
                     loadRoomGroups(buildingID.value);
+                    unCheck();
                 });
-
             }
+            else
+                $q.notify({
+                    type:'negative',
+                    message: t('groupRooms.noGroupSelected')
+                })
         }
 
         const checkNameAllowed = ref(false);
@@ -560,8 +569,8 @@ export default {
             if (newName.trim() === "") {
                 $q.notify({
                     type: 'negative',
-                    message: 'Name darf nicht leer sein',
-                    caption: 'Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.'
+                    message: t('groupRooms.checkNameMessage'),
+                    caption: t('groupRooms.checkNameCaption')
                 })
             } else {
                 checkNameAllowed.value = true;
@@ -712,6 +721,9 @@ export default {
                 })
             }
         }
+        function unCheck() {
+            selectedGroups.value = null
+        }
 
         return {
             floorPlanStore,
@@ -741,9 +753,7 @@ export default {
             newGroupName: ref(''),
             makeANewGroup,
             addRoomsToGroups,
-            unCheck() {
-                this.selectedGroups = null
-            },
+            unCheck,
             deleteGroup,
             deleteAlert: ref(false),
         }
