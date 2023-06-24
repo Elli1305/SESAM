@@ -246,6 +246,13 @@
                             <q-item>
                                 <q-btn color="primary" icon="add" :label="t('groupRooms.new')" @click="newGroup = true;" flat/>
                                 <button @click='unCheck'>Uncheck</button>
+                                <q-btn
+                                    dense
+                                    round
+                                    flat
+                                    icon="delete"
+                                    color="grey"
+                                    @click="deleteAlert = true;"/>
                             </q-item>
 
 
@@ -426,6 +433,20 @@
                 </q-card>
             </q-dialog>
         </q-page>
+        <q-dialog v-model="deleteAlert">
+            <q-card>
+                <q-card-section>
+                    <div class="text-h6">{{ t('adminEdit.attention') }}</div>
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                    {{ t('groupRooms.question') }}
+                </q-card-section>
+                <q-card-actions align="right" class="text-primary">
+                    <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
+                    <q-btn flat :label="t('adminEdit.delete')" @click="deleteGroup(); deleteAlert=false"/>
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
 
     </q-page-container>
 </template>
@@ -518,6 +539,16 @@ export default {
         async function addRoomsToGroups() {
             console.log("selected Rooms: ", selectedRooms);
             console.log("selected Groups: ", selectedGroups.value);
+        }
+
+        async function deleteGroup() {
+            console.log("Delete Group", selectedGroups.value);
+            if(selectedGroups.value !==null) {
+                await roomGroupStore.deleteGroup(selectedGroups.value.id).then(() => {
+                    loadRoomGroups(buildingID.value);
+                });
+
+            }
         }
 
         const checkNameAllowed = ref(false);
@@ -712,7 +743,9 @@ export default {
             addRoomsToGroups,
             unCheck() {
                 this.selectedGroups = null
-            }
+            },
+            deleteGroup,
+            deleteAlert: ref(false),
         }
     },
 
