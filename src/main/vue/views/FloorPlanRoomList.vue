@@ -33,7 +33,7 @@
                         </q-input>
                         <q-list>
                             <q-item v-for="room in filteredRooms" style="padding-left: 0">
-                                <q-checkbox @click="toggleRoomCheckbox(room)" v-model="selectedRooms" :val="room"
+                                <q-checkbox v-model="selectedRooms" :val="room"
                                             color="blue"/>
                                 <q-btn-dropdown
                                         split
@@ -281,7 +281,7 @@
                 </q-input>
                 <q-list>
                     <q-item v-for="room in filteredRooms" style="padding-left: 0">
-                        <q-checkbox @click="toggleRoomCheckbox(room)" v-model="selectedRooms" :val="room" color="blue"/>
+                        <q-checkbox v-model="selectedRooms" :val="room" color="blue"/>
                         <q-btn-dropdown
                                 split
                                 flat
@@ -486,8 +486,7 @@ export default {
     setup(props, context) {
         const {t} = useI18n();
         const floorPlanStore = useFloorPlanStore()
-        const {rooms} = storeToRefs(floorPlanStore)
-        const selectedRooms = floorPlanStore.selectedRooms
+        const {rooms, selectedRooms} = storeToRefs(floorPlanStore)
         const userStore = useUserStore()
         const doorStore = useDoorStore()
         const roomStore = useRoomStore();
@@ -517,7 +516,7 @@ export default {
                     console.log("hier");
                 }
                 console.log("Groups of rooms (loadRoomGroups)", filteredGroups.value);
-                console.log("sel. Rooms", selectedRooms);
+                console.log("sel. Rooms", selectedRooms.value);
 
 
             })
@@ -538,11 +537,11 @@ export default {
         }
 
         async function addRoomsToGroups() {
-            console.log("selected Rooms: ", selectedRooms);
+            console.log("selected Rooms: ", selectedRooms.value);
             console.log("selected Groups: ", selectedGroups.value);
-            console.log("selected Groups length: ", selectedRooms.length);
+            console.log("selected Groups length: ", selectedRooms.value.length);
 
-            if(selectedRooms.length === 0) {
+            if(selectedRooms.value.length === 0) {
                 $q.notify({
                     type: 'negative',
                     message: t('groupRooms.noRoomSelected')
@@ -553,7 +552,7 @@ export default {
                     id: selectedGroups.value.id,
                     name: selectedGroups.value.name,
                     building: selectedGroups.value.building,
-                    rooms: selectedRooms
+                    rooms: selectedRooms.value
                 });
                 console.log(editedGroup.value);
                 await roomGroupStore.editGroup(editedGroup.value).then(() => {
@@ -711,24 +710,23 @@ export default {
         }
 
         function addRoom(element) {
-            selectedRooms.push(element)
+            selectedRooms.value.push(element)
         }
 
         function deleteRoom(element) {
-            selectedRooms.forEach((item, index) => {
-                if (item === element) selectedRooms.splice(index, 1);
+            selectedRooms.value.forEach((item, index) => {
+                if (item.id === element.id) selectedRooms.value.splice(index, 1);
             });
         }
 
         function toggleRoomCheckbox(element) {
-            if (selectedRooms.includes(element)) {
-                console.log("delete ", element)
+            console.log(element)
+            if (selectedRooms.value.some(e => e.id === element.id)) {
                 deleteRoom(element)
-            } else if (!selectedRooms.includes(element)) {
-                console.log("add", element)
+            } else {
                 addRoom(element)
             }
-            console.log("selected Rooms toggle:", selectedRooms);
+            console.log("selected Rooms toggle:", selectedRooms.value);
         }
 
         async function roomFilter() {
@@ -760,7 +758,7 @@ export default {
                 console.log("Raum: ", room);
                 toggleRoomCheckbox(room);
             })
-            console.log("selected Rooms after selecting Group:", selectedRooms);
+            console.log("selected Rooms after selecting Group:", selectedRooms.value);
         }
 
         return {
