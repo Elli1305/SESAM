@@ -185,7 +185,7 @@
                     <q-tab-panel name="groups">
                         <q-input
                                 :placeholder="t('groupRooms.search')"
-                                v-model="search"
+                                v-model="searchGroup"
                                 @update:model-value="groupFilter"
                                 clearable
                                 outlined
@@ -198,7 +198,7 @@
                         </q-input>
                         <q-list>
                             <q-item v-for="group in allGroups" style="padding-left: 0">
-                                <q-checkbox @click="" v-model="selectedGroups" :val="group"
+                                <q-radio @click="" v-model="selectedGroups" :val="group"
                                             color="blue"/>
                                 <q-btn-dropdown
                                         split
@@ -471,6 +471,7 @@ export default {
         const roomStore = useRoomStore();
         const filteredRooms = ref([])
         const search = ref()
+        const searchGroup = ref()
         const inception = ref();
         const deleteDoorDialog = ref();
         const editDoorDialog = ref();
@@ -670,10 +671,10 @@ export default {
         }
 
         async function groupFilter() {
-            if (!search.value || search.value.trim() === '') {
+            if (!searchGroup.value || searchGroup.value.trim() === '') {
                 filteredGroups.value = roomGroupStore.filteredGroups;
-            } else if (search.value) {
-                const request = search.value.toLowerCase().trim()
+            } else if (searchGroup.value) {
+                const request = searchGroup.value.toLowerCase().trim()
                 filteredGroups.value = roomGroupStore.filteredGroups.filter(group => {
                     return group.name.toLowerCase().includes(request)
                 })
@@ -686,6 +687,7 @@ export default {
             toggleRoomCheckbox,
             userStore,
             search,
+            searchGroup,
             filteredRooms,
             roomFilter,
             groupFilter,
