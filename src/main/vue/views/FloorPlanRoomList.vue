@@ -245,6 +245,7 @@
                             <q-separator></q-separator>
                             <q-item>
                                 <q-btn color="primary" icon="add" :label="t('groupRooms.new')" @click="newGroup = true;" flat/>
+                                <button @click='unCheck'>Uncheck</button>
                             </q-item>
 
 
@@ -709,6 +710,9 @@ export default {
             newGroupName: ref(''),
             makeANewGroup,
             addRoomsToGroups,
+            unCheck() {
+                this.selectedGroups = null
+            }
         }
     },
 
