@@ -540,6 +540,33 @@ export default {
         async function addRoomsToGroups() {
             console.log("selected Rooms: ", selectedRooms);
             console.log("selected Groups: ", selectedGroups.value);
+            console.log("selected Groups length: ", selectedRooms.length);
+
+            if(selectedRooms.length === 0) {
+                $q.notify({
+                    type: 'negative',
+                    message: t('groupRooms.noRoomSelected')
+                })
+            }
+            else if(selectedGroups.value !==null) {
+                const editedGroup = ref({
+                    id: selectedGroups.value.id,
+                    name: selectedGroups.value.name,
+                    building: selectedGroups.value.building,
+                    rooms: selectedRooms
+                });
+                console.log(editedGroup.value);
+                await roomGroupStore.editGroup(editedGroup.value).then(() => {
+                    loadRoomGroups(buildingID.value);
+                    unCheck();
+                });
+            }
+            else {
+                $q.notify({
+                    type: 'negative',
+                    message: t('groupRooms.noGroupSelected')
+                })
+            }
         }
 
         async function deleteGroup() {
@@ -553,11 +580,12 @@ export default {
                     unCheck();
                 });
             }
-            else
+            else {
                 $q.notify({
-                    type:'negative',
+                    type: 'negative',
                     message: t('groupRooms.noGroupSelected')
                 })
+            }
         }
 
         const checkNameAllowed = ref(false);
