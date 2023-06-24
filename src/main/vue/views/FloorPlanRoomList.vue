@@ -198,7 +198,7 @@
                         </q-input>
                         <q-list>
                             <q-item v-for="group in allGroups" style="padding-left: 0">
-                                <q-radio @click="" v-model="selectedGroups" :val="group"
+                                <q-radio @click="filterRoomToGroups" v-model="selectedGroups" :val="group"
                                             color="blue"/>
                                 <q-btn-dropdown
                                         split
@@ -722,10 +722,13 @@ export default {
 
         function toggleRoomCheckbox(element) {
             if (selectedRooms.includes(element)) {
+                console.log("delete ", element)
                 deleteRoom(element)
             } else if (!selectedRooms.includes(element)) {
+                console.log("add", element)
                 addRoom(element)
             }
+            console.log("selected Rooms toggle:", selectedRooms);
         }
 
         async function roomFilter() {
@@ -751,6 +754,13 @@ export default {
         }
         function unCheck() {
             selectedGroups.value = null
+        }
+        function filterRoomToGroups() {
+            selectedGroups.value.rooms.filter((room)=> {
+                console.log("Raum: ", room);
+                toggleRoomCheckbox(room);
+            })
+            console.log("selected Rooms after selecting Group:", selectedRooms);
         }
 
         return {
@@ -784,6 +794,7 @@ export default {
             unCheck,
             deleteGroup,
             deleteAlert: ref(false),
+            filterRoomToGroups,
         }
     },
 
