@@ -1,5 +1,7 @@
 package com.gpse.sesam.domain.location.door.config.predefined;
 
+import com.gpse.sesam.web.cmd.PredefinedConfigCmd;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,9 +11,9 @@ public interface PredefinedConfigService {
 
     Optional<PredefinedConfig> getPreConfig(Long id);
 
-    void update(PredefinedConfig predefinedConfig);
+    void update(PredefinedConfigCmd predefinedConfig);
 
-    void create(PredefinedConfig predefinedConfig);
+    void create(PredefinedConfigCmd predefinedConfig);
 
     void delete(Long id);
 }

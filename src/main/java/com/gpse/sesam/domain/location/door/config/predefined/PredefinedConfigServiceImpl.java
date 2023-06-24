@@ -1,5 +1,8 @@
 package com.gpse.sesam.domain.location.door.config.predefined;
 
+import com.gpse.sesam.domain.location.door.config.ProofConfig;
+import com.gpse.sesam.util.ConfigCmdMapper;
+import com.gpse.sesam.web.cmd.PredefinedConfigCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,18 +35,25 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
     }
 
     @Override
-    public void update(PredefinedConfig predefinedConfig) {
+    public void update(PredefinedConfigCmd predefinedConfig) {
         final Optional<PredefinedConfig> tempPreConfig = getPreConfig(predefinedConfig.getId());
+        final ProofConfig configIn = ConfigCmdMapper.fromCmd(predefinedConfig.getDoorConfigIn());
+        final ProofConfig configOut = ConfigCmdMapper.fromCmd(predefinedConfig.getDoorConfigOut());
         if (tempPreConfig.isPresent()) {
-            tempPreConfig.get().setDoorIn(predefinedConfig.getDoorIn());
-            tempPreConfig.get().setDoorOut(predefinedConfig.getDoorOut());
+            tempPreConfig.get().setName(predefinedConfig.getName());
+            tempPreConfig.get().setDoorIn(configIn);
+            tempPreConfig.get().setDoorOut(configOut);
             predefinedConfigRepository.save(tempPreConfig.get());
         }
     }
 
     @Override
-    public void create(PredefinedConfig predefinedConfig) {
-        predefinedConfigRepository.save(predefinedConfig);
+    public void create(PredefinedConfigCmd predefinedConfig) {
+        PredefinedConfig config = new PredefinedConfig();
+        config.setName(predefinedConfig.getName());
+        config.setDoorIn(ConfigCmdMapper.fromCmd(predefinedConfig.getDoorConfigIn()));
+        config.setDoorOut(ConfigCmdMapper.fromCmd(predefinedConfig.getDoorConfigOut()));
+        predefinedConfigRepository.save(config);
     }
 
     @Override

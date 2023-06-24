@@ -5,6 +5,7 @@ import com.gpse.sesam.domain.location.door.config.predefined.PredefinedConfig;
 import com.gpse.sesam.domain.location.door.config.predefined.PredefinedConfigService;
 import com.gpse.sesam.web.cmd.PredefinedConfigCmd;
 import com.gpse.sesam.web.exception.PredefinedConfigNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/preConfig")
+@CrossOrigin
 @Secured("EDITOR")
 public class PredefinedConfigController {
 
@@ -22,17 +24,21 @@ public class PredefinedConfigController {
         this.predefinedConfigService = predefinedConfigService;
     }
 
-    @PostMapping("/create")
-    public void create(@RequestBody final PredefinedConfigCmd predefinedConfigCmd) {
 
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody final PredefinedConfigCmd predefinedConfig) {
+        predefinedConfigService.create(predefinedConfig);
     }
 
     @PostMapping("/update")
-    public void update(@RequestBody final PredefinedConfigCmd predefinedConfigCmd) {
-
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@RequestBody final PredefinedConfigCmd predefinedConfig) {
+        predefinedConfigService.update(predefinedConfig);
     }
 
-    @DeleteMapping("/{id:\\d+}")
+    @DeleteMapping("/delete/{id:\\d+}")
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") final Long id) {
         predefinedConfigService.delete(id);
     }
@@ -42,7 +48,7 @@ public class PredefinedConfigController {
         return predefinedConfigService.getAllPreConfigs();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public PredefinedConfig getConfig(@PathVariable("id") final Long id) {
         final Optional<PredefinedConfig> tempPreConfig = predefinedConfigService.getPreConfig(id);
         if (tempPreConfig.isPresent()) {
