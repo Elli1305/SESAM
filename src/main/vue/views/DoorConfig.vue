@@ -175,8 +175,15 @@ export default {
       }
     },
     addCategory(i, category) {
-      this.qSelects.configParts[i].credentials.push(...category.credentials)
-      this.qSelects.configParts[i].credentials.push(...category.externalCredentials)
+      let credentials = this.qSelects.configParts[i].credentials
+      category.credentials.forEach(ic => {
+        if (credentials.filter(c => c.name === ic.name).length === 0)
+          credentials.push(ic)
+      })
+      category.externalCredentials.forEach(ec => {
+        if (credentials.filter(c => c.name === ec.name).length === 0)
+          credentials.push(ec)
+      })
     },
     resetPredicateType(i, j) {
       this.qSelects.configParts[i].attributeFilter[j].predicateType = null;
