@@ -21,23 +21,28 @@
                     <div class="row no-wrap">
                       <q-select style="width: 10vw" v-model="item.type" :options="types" emit-value label="Type" map-options
                                 outlined/>
-                      <q-btn-group class="column justify-evenly" flat style="width: 2em; max-height: 4em">
-                        <q-btn size="0.75em" v-if="index !== 0" color="primary" flat icon="remove"
-                               @click="() => credential.attributes.splice(index, 1)"/>
+                      <q-btn-group class="column justify-between" flat>
+                        <div class="column justify-between" style="height: 4em">
+                          <q-btn size="0.75em" flat icon="lock" @click="editValidation(item)"/>
+                          <q-btn size="0.75em" v-if="index !== 0" color="primary" flat icon="remove"
+                                 @click="() => credential.attributes.splice(index, 1)"/>
+                        </div>
                         <q-btn size="0.75em" color="primary" flat icon="add" @click="addAttribute(index)"/>
                       </q-btn-group>
-                    </div>
-                  </q-item>
+                      </div>
+                    </q-item>
                 </q-virtual-scroll>
             </div>
-            <div class="column justify-evenly" style="width: 25vw">
+            <div class="column justify-evenly" style="width: 30vw">
               <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">Checkliste</h6>
               <q-virtual-scroll class="full-width" style="height: 30vh" :items="credential.conditions" v-slot="{ item, index }">
                   <q-item class="row q-px-sm">
-                    <q-input style="width: 20vw" v-model="item.label" :rules="[required]" label="Name" outlined type="text"/>
-                    <q-btn-group class="column justify-evenly" flat style="width: 2em; max-height: 4em">
-                      <q-btn size="0.75em" v-if="index !== 0" color="primary" flat icon="remove"
-                             @click="() => credential.conditions.splice(index, 1)"/>
+                    <q-input style="width: 20vw" v-model="item.label" :rules="[required]" lazy-rules label="Name" outlined type="text"/>
+                    <q-btn-group class="column justify-between" flat>
+                      <div class="column justify-center" style="height: 4em">
+                        <q-btn size="0.75em" v-if="index !== 0" color="primary" flat icon="remove"
+                               @click="() => credential.conditions.splice(index, 1)"/>
+                      </div>
                       <q-btn size="0.75em" color="primary" flat icon="add" @click="addCondition(index)"/>
                     </q-btn-group>
                   </q-item>
@@ -54,17 +59,20 @@
 </template>
 
 <script lang="ts" setup>
-import {QForm, QSelectOption, ValidationRule} from "quasar";
+import {QForm, QSelectOption, useQuasar, ValidationRule} from "quasar";
 import {onMounted, ref, Ref} from "vue";
 import {CreateCredential} from "@/main/vue/entity/credentialDefinition";
+import {CreateAttribute} from "@/main/vue/entity/credentialDefinition";
 import api from "@/main/vue/api";
 import {useI18n} from "vue-i18n";
 import router from "@/main/vue/router";
+import ValidateCredentials from "@/main/vue/views/ValidateCredentials.vue";
 
 const props = defineProps<{ id?: number, type?: 'internal' | 'external' }>();
 
 
 const {t} = useI18n();
+const $q = useQuasar()
 
 const types: QSelectOption[] = [
   {
@@ -141,6 +149,16 @@ const save = async () => {
           console.log(reason);
         });
   }
+}
+
+const editValidation = (item: CreateAttribute) => {
+  $q.dialog({
+    component: ValidateCredentials,
+    componentProps: {
+      attribute: item
+    }
+  }).onOk(() => {
+  })
 }
 
 const deleteCredential = async () => {

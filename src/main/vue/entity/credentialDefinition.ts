@@ -64,7 +64,7 @@ export interface CredentialCmd {
     issuerRoom: string[];
 }
 
-interface CreateAttribute {
+export interface CreateAttribute {
     type: string;
     name: string;
     attributeName: string;
