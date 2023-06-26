@@ -77,6 +77,29 @@ const messages = {
             addLocation: 'Standort hinzufügen',
             addBuilding: 'Gebäude hinzufügen',
             addFloor: 'Etage hinzufügen',
+            addDoor: 'Tür zuweisen',
+            pickRoom: 'Raum auswählen',
+            configGroup: 'Konfigurationsgruppe',
+            config: 'Konfiguration',
+            direction: 'Richtung',
+            infoConfigGroups: 'Konfigurationsgruppen sind untereinander mit UND verknüpft',
+            in: 'rein',
+            both: 'beide',
+            out: 'raus',
+            configDescription: 'Beschreibung der Konfiguration',
+            infoCredential: 'Credentials sind untereinander mit ODER verknüpft',
+            infoCredentialGroups: 'Durch Credentialgruppen werden alle Credentials der Gruppe auf einmal ausgewählt',
+            addAttribute: 'Attribut hinzufügen',
+            addConfigGroup: 'Konfigurationsgruppe hinzufügen',
+            currentTime: 'Aktueller Zeitpunkt',
+            credentialAttributes: {
+                id: 'ID',
+                firstName: 'Vorname',
+                lastName: 'Nachname',
+                birthdate: 'Geburtstagsdatum',
+                expirationDate: 'Ablaufdatum'
+            }
+
         },
         groupRooms: {
             title: "Gruppierungen von Räumen",
@@ -102,7 +125,11 @@ const messages = {
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
             noData: "Keine Daten vorhanden.",
             noResults: "Kein Einträge gefunden.",
-            of: "von"
+            of: "von",
+            cancel: 'Abbrechen',
+            save: 'Speichern',
+            category: "Kategorie",
+            categories: "Kategorien",
         },
         credentialview :{
             credentialview: "Credentialansicht",
@@ -388,7 +415,11 @@ const messages = {
             unkownError: "An unknown error occured",
             noData: "No data available.",
             noResults: "No entries found.",
-            of: "of"
+            of: "of",
+            cancel: 'Cancel',
+            save: 'Save',
+            category: "Category",
+            categories: "Categories",
         },
         credentialview :{
             credentialview: "View Credentials",
@@ -417,7 +448,7 @@ const messages = {
         },
         floorplan: {
             locations: 'Locations',
-            doorName: 'Name of Door',
+            doorName: 'Door name',
             editDoor:'Edit Door',
             editRoom:'Edit Room',
             editGroup: 'Edit group',
@@ -440,6 +471,28 @@ const messages = {
             addLocation: 'Add location',
             addBuilding: 'Add building',
             addFloor: 'Add floor',
+            addDoor: 'Assign door',
+            pickRoom: 'Choose room',
+            configGroup: 'Configuration Group',
+            config: 'Configuration',
+            direction: 'Direction',
+            infoConfigGroups: 'Configuration groups are combined with AND',
+            in: 'in',
+            both: 'both',
+            out: 'out',
+            configDescription: 'Description of the configuration',
+            infoCredential: 'Credentials are combined with OR',
+            infoCredentialGroups: 'With credential groups, all credentials of the group are being added simultaneously',
+            addAttribute: 'Add attribute',
+            addConfigGroup: 'Add configuration group',
+            currentTime: 'Current time',
+            credentialAttributes: {
+                id: 'ID',
+                firstName: 'first name',
+                lastName: 'last name',
+                birthdate: 'date of birth',
+                expirationDate: 'expiration date'
+            }
 
         },
         home: {
