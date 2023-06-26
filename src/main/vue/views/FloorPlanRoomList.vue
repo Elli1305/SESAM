@@ -198,7 +198,7 @@
                         </q-input>
                         <q-list>
                             <q-item v-for="group in allGroups" style="padding-left: 0">
-                                <q-radio @click="filterRoomToGroups" v-model="selectedGroups" :val="group"
+                                <q-radio @click="filterRoomToGroups(); updateNumRoomsInGroup();" v-model="selectedGroups" :val="group"
                                             color="blue"/>
                                 <q-btn-dropdown
                                         split
@@ -207,26 +207,18 @@
                                         :label="group.name"
                                         dropdown-icon="expand_more"
                                         color="var(--text-color)"
-                                        @click="">
+                                        @click="updateNumRoomsInGroup();">
                                     <div class="column no-wrap" style="background-color: var(--bg-color)">
                                         <div class="row no-wrap">
                                             <div class="column no-wrap" style="padding: 0.5em">
-                                                <!--                                    <q-list>
-                                                                                        <q-item-label>{{ t("floorplan.roomName") }}:</q-item-label>
-                                                                                        <q-item-label>{{ t("floorplan.doors") }}:</q-item-label>
-                                                                                        <q-item-label>Credentials:</q-item-label>
-                                                                                    </q-list>-->
+                                                        <q-list>
+                                                            <q-item-label>{{ t("floorplan.roomAmount") }}:</q-item-label>
+                                                        </q-list>
                                             </div>
                                             <div class="column no-wrap" style="padding: 0.5em">
                                                 <q-list>
-                                                    <!--                                        <q-item-label>{{ room.name }}</q-item-label>-->
-                                                    <q-item-label>{{
-                                                        group.rooms.map(door => door.name).join(", ")
-                                                        }}
-                                                    </q-item-label>
-                                                    <!--                                        <q-item-label>-->
-                                                    <!--                                            {{ room?.id ? "U-MEMBER" : "" }}-->
-                                                    <!--                                        </q-item-label>-->
+                                                                                            <q-item-label>{{ numRoomsInGroup }}</q-item-label>
+
                                                 </q-list>
                                             </div>
                                         </div>
@@ -234,8 +226,67 @@
                                                 v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                                             <q-separator></q-separator>
 
+                                            <div class="row justify-center" style="padding: 0.5em">
+                                                <p class="cursor-pointer q-mb-none" :style="{color: getCssVar('primary')}"
+                                                   @click="setOldValueG(group)">{{ t('floorplan.edit') }}</p>
+                                                <q-dialog v-model="editGroupD">
+                                                    <q-card>
+                                                        <q-card-section>
+                                                            <div class="text-h6">{{ t("floorplan.editGroup") }}</div>
+                                                            <div class="q-mt-md">
+                                                                <q-input filled v-model="currentGroupName"
+                                                                         :label="t( 'floorplan.groupName')" stack-label
+                                                                         style="width: 250px; padding-bottom: 1em"/>
+                                                            </div>
+                                                            <div class="q-my-xs">
+                                                                <q-list bordered class="rounded-borders"
+                                                                        style="max-width: 600px">
+                                                                    <q-item-label header>
+                                                                        <div class="row items-center">
+                                                                            <div class="q-mr-sm">{{
+                                                                                    t("floorplan.rooms")
+                                                                                }}
+                                                                            </div>
 
+                                                                        </div>
+                                                                    </q-item-label>
+                                                                    <template v-for="room in group.rooms">
+                                                                        <q-item class="q-mb-sm">
+
+                                                                            <q-item-section>
+                                                                                <q-item-label lines="1">
+                                                                            <span class="text-weight-medium">{{
+                                                                                    room.name
+                                                                                }}</span>
+                                                                                </q-item-label>
+
+                                                                            </q-item-section>
+
+                                                                            <q-item-section top side>
+                                                                                <div class="text-grey-8 q-gutter-xs">
+
+                                                                                </div>
+                                                                            </q-item-section>
+                                                                        </q-item>
+                                                                        <div class="row justify-end">
+
+                                                                        </div>
+                                                                    </template>
+                                                                </q-list>
+                                                            </div>
+
+                                                            <q-card-actions align="right" class="text-primary">
+                                                                <q-btn flat :label="t( 'floorplan.cancel')" color="primary"
+                                                                       v-close-popup/>
+                                                                <q-btn flat :label="t( 'floorplan.save')" color="primary"
+                                                                       @click="editGroupName" v-close-popup/>
+                                                            </q-card-actions>
+                                                        </q-card-section>
+                                                    </q-card>
+                                                </q-dialog>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </q-btn-dropdown>
                             </q-item>
@@ -504,6 +555,9 @@ export default {
         roomGroupStore.getRoomGroups();
         let filteredGroups = ref([]);
         const newGroup = ref(false);
+        const currentGroupName = ref();
+        const editGroupD = ref(false);
+        const numRoomsInGroup = ref();
 
         async function loadRoomGroups(buildingID) {
             filteredGroups.value = [];
@@ -701,11 +755,36 @@ export default {
             inception.value = true;
             currentRoomName.value = room.name;
         }
+        function setOldValueG(group) {
+            editGroupD.value = true;
+            currentGroupName.value = group.name;
+            selectedGroups.value = group;
+            console.log("group:", group);
+            console.log("selected Groups in setOldValue: ", selectedGroups.value);
+        }
 
         function save(room) {
             room.name = currentRoomName.value;
             roomStore.save(room)
             context.emit('editRoom', room)
+        }
+        async function editGroupName() {
+            await checkName(currentGroupName.value);
+            //selectedGroups.value = [];
+            if (checkNameAllowed.value) {
+
+                const editedGroup = ref({
+                    id: selectedGroups.value.id,
+                    name: currentGroupName.value,
+                    building: selectedGroups.value.building,
+                    rooms: selectedGroups.value.rooms
+                });
+                console.log(editedGroup.value);
+                await roomGroupStore.editGroup(editedGroup.value).then(() => {
+                    loadRoomGroups(buildingID.value);
+                    unCheck();
+                });
+            }
         }
 
         function addRoom(element) {
@@ -716,6 +795,12 @@ export default {
             selectedRooms.value.forEach((item, index) => {
                 if (item.id === element.id) selectedRooms.value.splice(index, 1);
             });
+        }
+        function updateNumRoomsInGroup() {
+            if(selectedGroups.value !== null) {
+                numRoomsInGroup.value = selectedGroups.value.rooms.length;
+                console.log("NumRoomsInGroup: ", numRoomsInGroup.value);
+            }
         }
 
         function toggleRoomCheckbox(element) {
@@ -795,8 +880,11 @@ export default {
             roomStore,
             deleteDoor,
             save,
+            editGroupName,
             currentRoomName,
+            currentGroupName,
             setOldValueR,
+            setOldValueG,
             tab: ref('rooms'),
             allGroups: filteredGroups,
             selectedGroups,
@@ -806,8 +894,11 @@ export default {
             addRoomsToGroups,
             unCheck,
             deleteGroup,
+            editGroupD,
             deleteAlert: ref(false),
             filterRoomToGroups,
+            numRoomsInGroup,
+            updateNumRoomsInGroup,
         }
     },
 
