@@ -839,7 +839,8 @@ export default {
         }
         const prevSelectedGroup = ref();
         function filterRoomToGroups() {
-            if(prevSelectedGroup.value === null || prevSelectedGroup.value === undefined) {
+            if(prevSelectedGroup.value === null || prevSelectedGroup.value === undefined
+             || (prevSelectedGroup.value !== selectedGroups.value) ) {
                 console.log("prevSelectedGroup.value === null");
                 selectedGroups.value.rooms.filter((room)=> {
                     //console.log("Raum: ", room);
