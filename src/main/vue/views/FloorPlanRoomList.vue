@@ -245,7 +245,6 @@
                             <q-separator></q-separator>
                             <q-item>
                                 <q-btn color="primary" icon="add" :label="t('groupRooms.new')" @click="newGroup = true;" flat/>
-                                <button @click='unCheck'>Uncheck</button>
                                 <q-btn
                                     dense
                                     round
@@ -753,12 +752,28 @@ export default {
         function unCheck() {
             selectedGroups.value = null
         }
+        const prevSelectedGroup = ref();
         function filterRoomToGroups() {
-            selectedGroups.value.rooms.filter((room)=> {
-                console.log("Raum: ", room);
-                toggleRoomCheckbox(room);
-            })
-            console.log("selected Rooms after selecting Group:", selectedRooms.value);
+            if(prevSelectedGroup.value === null || prevSelectedGroup.value === undefined) {
+                console.log("prevSelectedGroup.value === null");
+                selectedGroups.value.rooms.filter((room)=> {
+                    //console.log("Raum: ", room);
+                    toggleRoomCheckbox(room);
+                })
+                //console.log("selected Rooms after selecting Group:", selectedRooms.value);
+            }
+            else {
+                console.log("else", prevSelectedGroup.value);
+                // to un-toggle the selected rooms
+                selectedGroups.value.rooms.filter((room)=> {
+                    //console.log("Raum: ", room);
+                    toggleRoomCheckbox(room);
+                })
+                //console.log("sel. rooms after un-toggle", selectedRooms.value);
+                unCheck();
+            }
+
+            prevSelectedGroup.value = selectedGroups.value;
         }
 
         return {
