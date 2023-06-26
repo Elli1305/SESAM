@@ -113,17 +113,15 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     public List<RoomGroupDoorConfigCmd> getRoomsAndDoorsByGroupId(Long id) {
         Optional<RoomGroups> roomGroup = roomGroupRepository.findById(id);
         List<RoomGroupDoorConfigCmd> cmds = new ArrayList<>();
-        java.util.List<String> doorNames = new ArrayList<>();
-        java.util.List<Long> doors = new ArrayList<>();
         if (roomGroup.isPresent()) {
             for (Room room: roomGroup.get().getRooms()) {
+                java.util.List<Door> doors = new ArrayList<>();
                 String roomName = room.getName();
                 Long roomId = room.getId();
                 for (Door door: room.getDoors()) {
-                    doorNames.add(door.getName());
-                    doors.add(door.getId());
+                    doors.add(door);
                 }
-                cmds.add(new RoomGroupDoorConfigCmd(roomId, roomName, doors, doorNames));
+                cmds.add(new RoomGroupDoorConfigCmd(roomId, roomName, doors));
             }
         }
         return cmds;

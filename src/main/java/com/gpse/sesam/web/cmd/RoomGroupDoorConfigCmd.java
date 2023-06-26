@@ -1,5 +1,7 @@
 package com.gpse.sesam.web.cmd;
 
+import com.gpse.sesam.domain.location.door.Door;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,18 +10,20 @@ public class RoomGroupDoorConfigCmd {
     Long room;
     String roomName;
 
-    java.util.List<String> doorNames = new ArrayList<>();
-    java.util.List<Long> doorIds = new ArrayList<>();
+    java.util.List<Door> doors = new ArrayList<>();
 
-    public RoomGroupDoorConfigCmd(Long room, String roomName, List<Long> doorIds, List<String> doorNames) {
+    public RoomGroupDoorConfigCmd(Long room, String roomName, List<Door> doors) {
         this.room = room;
         this.roomName = roomName;
-        this.doorNames = doorNames;
-        this.doorIds = doorIds;
+        this.doors = doors;
     }
 
-    public List<Long> getDoors() {
-        return doorIds ;
+    public void setDoors(List<Door> doors) {
+        this.doors = doors;
+    }
+
+    public List<Door> getDoors() {
+        return doors;
     }
 
     public void setRoom(Long room) {
@@ -30,21 +34,11 @@ public class RoomGroupDoorConfigCmd {
         return room;
     }
 
-    public void setDoors(List<Long> doorIds ) {
-        this.doorIds  = doorIds ;
-    }
-
-    public List<String> getDoorNames() {
-        return doorNames;
-    }
 
     public String getRoomName() {
         return roomName;
     }
 
-    public void setDoorNames(List<String> doorNames) {
-        this.doorNames = doorNames;
-    }
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;

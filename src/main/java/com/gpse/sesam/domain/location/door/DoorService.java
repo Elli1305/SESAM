@@ -11,4 +11,6 @@ public interface DoorService {
 	Optional<Door> findDoorById(Long id);
 
 	Door create(Long roomId, Door door);
+
+	java.util.List<Door> getDoorsByRoomId(Long id);
 }

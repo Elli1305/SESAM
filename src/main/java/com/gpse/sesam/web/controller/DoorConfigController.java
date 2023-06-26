@@ -36,4 +36,5 @@ public class DoorConfigController {
 		return new TwoWayDoorConfigViewCmd(doorConfigurationService.getDoorConfig(id + "_in"),
 				doorConfigurationService.getDoorConfig(id + "_out"));
 	}
+
 }

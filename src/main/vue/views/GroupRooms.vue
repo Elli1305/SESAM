@@ -216,19 +216,21 @@
               </q-input>
             </template>
             <template v-slot:body-cell-doorNames="props">
-              <q-td :props="props">
-                <q-list>
-                  <q-item class="row q-my-xs justify-between items-center no-wrap" v-for="(elem, index) in props.row.doors">
-                  <p class="no-margin">{{ props.row.doorNames[index] }}</p>
-                  <q-checkbox v-model="props.row.doors[index]" v-if="props.row.name" />
-                  </q-item>
-                </q-list>
+              <q-td :props="props" v-if="props.row.name">
+                <q-select
+                    class="q-my-sm"
+                    filled
+                    emit-value
+                    v-model="props.row.doors"
+                    multiple
+                    :options="props.row.doors"
+                    option-value="id"
+                    option-label="name"/>
               </q-td>
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td :props="props">
-                <q-checkbox v-model="props.row.name" @update:model-value="setSelection(props.row.name)"/>
-                {{props.row.name}}
+                <q-checkbox v-model="props.row.name" @update:model-value="setSelection(props.row.name); openForm2(props.row)"/>
               </q-td>
             </template>
           </q-table>
@@ -366,7 +368,7 @@
         </q-btn>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
-          <q-btn flat v-close-popup> {{ t("credentialmapping.save")}}</q-btn>
+          <q-btn flat v-close-popup @click="saveConfig(props.row.actions, props.row.doorId, props.row.doorNames)"> {{ t("credentialmapping.save")}}</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -380,6 +382,7 @@ import {ref} from 'vue'
 import {useI18n} from "vue-i18n";
 import {useQuasar} from "quasar";
 import {useLocationStore} from "@/main/vue/stores/locations";
+import {useDoorStore} from "@/main/vue/stores/door";
 import {prop} from "vue-class-component";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {Direction, PredicateType} from "@/main/vue/entity/doorConfiguration";
@@ -416,6 +419,7 @@ export default {
         const $q = useQuasar();
         const locationStore = useLocationStore()
         const roomGroupStore = useRoomGroupStore()
+      const doorStore = useDoorStore()
       const credentialStore = useCredentialStore()
       credentialStore.getAllCredentials()
       credentialStore.getCategory()
@@ -430,6 +434,7 @@ export default {
         let locationList = [];
         let locationListNames = [];
         let roomGroupList = [];
+        const options =ref([]);
         let buildingList = ref([]);
         const currentBuilding = ref(null);
         let buildingListNames = ref([]);
@@ -461,10 +466,9 @@ export default {
 
       const columns2 = [
         { name: 'name', required: true, label: t('groupRooms.room'), align: 'left', field: row => row.roomName, sortable: true },
+        { name: 'room', label: t('groupRooms.room'), align: 'left', field: row => row.room, sortable: true },
         {name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-        {name: 'doorIds', style: 'width: 8em', field: row => row.doorIds.join(", "), headerStyle: 'width: 8em', align: 'left'},
-        {name: 'doors', style: 'width: 8em', field: row => row.doorIds.join(", "), headerStyle: 'width: 8em', align: 'left'},
-        {name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doorNames.join(", "), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+        {name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doors.join(", "), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
       ]
 
       const rows2 =  ref([]);
@@ -514,9 +518,15 @@ export default {
         roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => rows2.value= rooms)
       }
 
+
       const editedRow = ref({})
       const openForm = (row) => {
         editedRow.value = {...row};
+      }
+
+      const editedRow2 = ref({})
+      const openForm2 = (row) => {
+        editedRow2.value = {...row};
       }
 
         let modelForBuilding = ref(null);
@@ -695,16 +705,52 @@ export default {
             }
         }
 
+        function saveConfig(rooms, doors, selected) {
+          let config = {}
+          let door;
+          for (door in doors) {
+            if (selected) {
+              console.log('qselects', this.$refs.configIn.qSelects)
+              if (this.$refs.configIn.direction === Direction.BOTH) {
+                config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+                config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+                config.doorConfigIn.description = this.$refs.configIn.configDescription
+                config.doorConfigOut.description = this.$refs.configIn.configDescription
+              } else if (this.$refs.configIn.direction === Direction.IN) {
+                config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+                config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+                config.doorConfigIn.description = this.$refs.configIn.configDescription
+                config.doorConfigOut.description = this.$refs.configOut.configDescription
+              } else if (this.$refs.configIn.direction === Direction.OUT) {
+                config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+                config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+                config.doorConfigIn.description = this.$refs.configOut.configDescription
+                config.doorConfigOut.description = this.$refs.configIn.configDescription
+              }
+              config.doorConfigIn?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+              config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+              this.$emit('ok', {
+                doorId: door,
+                configuration: config
+              })
+            }
+          }
+
+        }
+
         return {
           direction,
           configDescription,
           credentials,
           credentialStore,
           qSelects,
+          editedRow,
           commonAttributeFilter,
           openForm,
           getRoomsAndDoors,
-          editedRow,
+          saveConfig,
+          editedRow2,
+          openForm2,
           deleteAlert: ref(false),
           editAlert,
           closeNow,
@@ -722,6 +768,7 @@ export default {
           currentBuilding,
           makeNewGroup,
           deleteGroup,
+          options,
           editGroup,
           editGroupName,
           editGroupRooms,
@@ -767,11 +814,6 @@ export default {
           modelForBuilding,
           modelForLocation,
           optionsLocations,
-          options: [
-            { label: 'Battery too low', value: 'bat' },
-            { label: 'Friend request', value: 'friend', color: 'green' },
-            { label: 'Picture uploaded', value: 'upload', color: 'red' }
-          ],
           listOfAllRoomsViaBuilding,
           delGroup(value) {
             setCurrentGroup(value[1].id, value[1].name, value[1].rooms, value[1].building);
