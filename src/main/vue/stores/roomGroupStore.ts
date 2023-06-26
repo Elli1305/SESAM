@@ -4,6 +4,7 @@ import {ref, Ref} from "vue";
 import api from "@/main/vue/api";
 import {Building} from "@/main/vue/entity/roomGroup";
 import {Category} from "@/main/vue/entity/credentialDefinition";
+import {TwoWayDoorConfiguration} from "@/main/vue/entity/doorConfiguration";
 
 
 export const useRoomGroupStore = defineStore('roomGroups', () => {
@@ -84,6 +85,17 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
         })
     }
 
+
+    function setGroupConfig(doorId: bigint, twoWayConfig: TwoWayDoorConfiguration){
+        return new Promise<void>((resolve, reject) => {
+            api.roomGroups.setGroupConfig({
+                doorId: doorId,
+                twowaydoorconfig: twoWayConfig
+            }).then(_ => resolve())
+                .catch(reject);
+        });
+    }
+
     return {
         allRoomGroups,
         editGroup,
@@ -92,6 +104,7 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
         makeNewGroup,
         deleteGroup,
         roomsAndDoors,
-        getRoomsAndDoorsByGroupId
+        getRoomsAndDoorsByGroupId,
+        setGroupConfig
     }
 })

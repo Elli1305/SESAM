@@ -217,15 +217,18 @@
             </template>
             <template v-slot:body-cell-doorNames="props">
               <q-td :props="props">
-                <div class="row q-my-xs justify-between items-center no-wrap" v-for="(elem, index) in props.row.doors">
+                <q-list>
+                  <q-item class="row q-my-xs justify-between items-center no-wrap" v-for="(elem, index) in props.row.doors">
                   <p class="no-margin">{{ props.row.doorNames[index] }}</p>
-                  <q-checkbox v-model="props.row.doors[index]" />
-                </div>
+                  <q-checkbox v-model="props.row.doors[index]" v-if="props.row.name" />
+                  </q-item>
+                </q-list>
               </q-td>
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td :props="props">
-                <q-checkbox v-model="props.row.name" />
+                <q-checkbox v-model="props.row.name" @update:model-value="setSelection(props.row.name)"/>
+                {{props.row.name}}
               </q-td>
             </template>
           </q-table>
@@ -460,6 +463,7 @@ export default {
         { name: 'name', required: true, label: t('groupRooms.room'), align: 'left', field: row => row.roomName, sortable: true },
         {name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
         {name: 'doorIds', style: 'width: 8em', field: row => row.doorIds.join(", "), headerStyle: 'width: 8em', align: 'left'},
+        {name: 'doors', style: 'width: 8em', field: row => row.doorIds.join(", "), headerStyle: 'width: 8em', align: 'left'},
         {name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doorNames.join(", "), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
       ]
 
@@ -515,7 +519,6 @@ export default {
         editedRow.value = {...row};
       }
 
-
         let modelForBuilding = ref(null);
         let modelForLocation = ref(null);
         async function loadLocations() {
@@ -568,8 +571,12 @@ export default {
 
         loadLocations().then(()=>loadRoomGroups());
 
-
-
+      const selection = ref([false])
+      function setSelection (val) {
+        if (val) {
+          selection.value = val
+        }
+      }
 
         function adjustBuildingList(nameLoc) {
             buildingList.value=[];
@@ -702,6 +709,8 @@ export default {
           editAlert,
           closeNow,
           newGroup,
+          selection,
+          setSelection,
           newGroupName: ref(''),
           editName:ref(''),
           modelRooms: ref(null),
