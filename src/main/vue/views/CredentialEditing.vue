@@ -1,44 +1,56 @@
 <template>
-  <q-form ref="form" class="q-pa-md" @submit.prevent>
-    <q-input v-model="credential.name" :rules="[required]" label="Name" outlined type="text"/>
-    <q-input v-if="props.type !== 'external'" v-model="credential.agent" :rules="[required]" label="Agent" outlined type="text"/>
-    <q-input v-model="credential.credentialDefinitionId" :rules="[required]" class="q-mb-md"
-             label="Credential Definition ID"
-             outlined type="text"/>
-
-    <h6 v-if="props.type !== 'external'" class="q-ma-none q-pa-none q-pb-sm">Credentialattribute</h6>
-    <div v-if="props.type !== 'external'" v-for="(attribute, index) in credential.attributes">
-      <div class="row q-col-gutter-sm">
-        <q-input v-model="attribute.name" :rules="[required]" class="col-5" label="Name" outlined type="text"/>
-        <q-input v-model="attribute.attributeName" :rules="[required]" class="col-5" label="Name des Attributes"
-                 outlined type="text"/>
-        <q-select v-model="attribute.type" :options="types" class="col-1" emit-value label="Type" map-options
-                  outlined/>
-        <q-btn-group class="col-1" flat>
-          <q-btn v-if="index !== 0" color="primary" flat icon="remove"
-                 @click="() => credential.attributes.splice(index, 1)"/>
-          <q-btn color="primary" flat icon="add" @click="addAttribute(index)"/>
-        </q-btn-group>
-      </div>
-    </div>
-
-    <h6 v-if="props.type !== 'external'" class="q-ma-none q-pa-none q-pb-sm">Checkliste</h6>
-    <div v-if="props.type !== 'external'" v-for="(condition, index) in credential.conditions" class="row q-col-gutter-sm">
-      <q-input v-model="condition.label" :rules="[required]" class="col-11" label="Name" outlined type="text"/>
-
-      <q-btn-group class="col-1" flat>
-        <q-btn v-if="index !== 0" color="primary" flat icon="remove"
-               @click="() => credential.conditions.splice(index, 1)"/>
-        <q-btn color="primary" flat icon="add" @click="addCondition(index)"/>
-      </q-btn-group>
-    </div>
-  </q-form>
-  <q-page-sticky :offset="[18, 18]" position="bottom-right">
-    <q-btn color="primary" fab icon="save" unelevated @click="save"/>
-  </q-page-sticky>
-  <q-page-sticky v-if="props.id !== undefined" :offset="[18, 18]" position="bottom-left">
-    <q-btn color="primary" fab icon="delete" unelevated @click="deleteCredential"/>
-  </q-page-sticky>
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">Credential bearbeiten</p>
+      <q-form class="column justify-between self-center no-wrap" ref="form" @submit.prevent style="width: 80vw; height: 50vh">
+        <div class="column no-wrap">
+          <div class="row justify-evenly">
+            <q-input style="width: 20vw" v-model="credential.name" :rules="[required]" label="Name" outlined type="text"/>
+            <q-input style="width: 20vw" v-if="props.type !== 'external'" v-model="credential.agent" :rules="[required]" label="Agent" outlined type="text"/>
+            <q-input style="width: 20vw" v-model="credential.credentialDefinitionId" :rules="[required]" class="q-mb-md"
+                     label="Credential Definition ID"
+                     outlined type="text"/>
+          </div>
+          <div class="row no-wrap">
+            <div class="column full-width" style="padding-right: 3vw">
+              <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">Credentialattribute</h6>
+                <q-virtual-scroll class="full-width" style="height: 30vh" :items="credential.attributes" v-slot="{ item, index }">
+                  <q-item class="row justify-between q-px-sm">
+                    <q-input style="width: 15vw" v-model="item.name" :rules="[required]" lazy-rules label="Name" outlined type="text"/>
+                    <q-input style="width: 15vw" v-model="item.attributeName" :rules="[required]" lazy-rules label="Name des Attributes"
+                             outlined type="text"/>
+                    <div class="row no-wrap">
+                      <q-select style="width: 10vw" v-model="item.type" :options="types" emit-value label="Type" map-options
+                                outlined/>
+                      <q-btn-group class="column justify-evenly" flat style="width: 2em; max-height: 4em">
+                        <q-btn size="0.75em" v-if="index !== 0" color="primary" flat icon="remove"
+                               @click="() => credential.attributes.splice(index, 1)"/>
+                        <q-btn size="0.75em" color="primary" flat icon="add" @click="addAttribute(index)"/>
+                      </q-btn-group>
+                    </div>
+                  </q-item>
+                </q-virtual-scroll>
+            </div>
+            <div class="column justify-evenly" style="width: 25vw">
+              <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">Checkliste</h6>
+              <q-virtual-scroll class="full-width" style="height: 30vh" :items="credential.conditions" v-slot="{ item, index }">
+                  <q-item class="row q-px-sm">
+                    <q-input style="width: 20vw" v-model="item.label" :rules="[required]" label="Name" outlined type="text"/>
+                    <q-btn-group class="column justify-evenly" flat style="width: 2em; max-height: 4em">
+                      <q-btn size="0.75em" v-if="index !== 0" color="primary" flat icon="remove"
+                             @click="() => credential.conditions.splice(index, 1)"/>
+                      <q-btn size="0.75em" color="primary" flat icon="add" @click="addCondition(index)"/>
+                    </q-btn-group>
+                  </q-item>
+              </q-virtual-scroll>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-around">
+          <q-btn style="width: 4em; height: 4em" color="negative" text-color="positive" fab icon="delete" unelevated @click="deleteCredential"/>
+          <q-btn style="width: 4em; height: 4em" color="positive" text-color="negative" fab icon="save" unelevated @click="save"/>
+          </div>
+      </q-form>
+  </q-page>
 </template>
 
 <script lang="ts" setup>
