@@ -1,56 +1,58 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
     <p class="row text-h3 justify-center">Credential bearbeiten</p>
-      <q-form class="column justify-between self-center no-wrap" ref="form" @submit.prevent style="width: 80vw; height: 50vh">
-        <div class="column no-wrap">
-          <div class="row justify-evenly">
-            <q-input style="width: 20vw" v-model="credential.name" :rules="[required]" label="Name" outlined type="text"/>
-            <q-input style="width: 20vw" v-if="props.type !== 'external'" v-model="credential.agent" :rules="[required]" label="Agent" outlined type="text"/>
-            <q-input style="width: 20vw" v-model="credential.credentialDefinitionId" :rules="[required]" class="q-mb-md"
+      <q-form class="column justify-between self-center no-wrap full-width" ref="form" @submit.prevent style="height: 50vh">
+        <div class="row no-wrap full-width">
+          <div class="column justify-evenly" style="width: 15vw; height: 40vh; margin-right: 3vw">
+            <q-input style="width: 15vw; margin-bottom: -1em" v-model="credential.name" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
+            <q-input style="width: 15vw; margin-bottom: -1em" v-if="props.type !== 'external'" v-model="credential.agent" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Agent" outlined type="text"/>
+            <q-input style="width: 15vw; margin-bottom: -1em" v-model="credential.credentialDefinitionId" :rules="[required]" lazy-rules error-message=" " no-error-icon class="q-mb-md"
                      label="Credential Definition ID"
                      outlined type="text"/>
           </div>
-          <div class="row no-wrap">
-            <div class="column full-width" style="padding-right: 3vw">
-              <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">Credentialattribute</h6>
-                <q-virtual-scroll class="full-width" style="height: 30vh" :items="credential.attributes" v-slot="{ item, index }">
-                  <q-item class="row justify-between q-px-sm">
-                    <q-input style="width: 15vw" v-model="item.name" :rules="[required]" lazy-rules label="Name" outlined type="text"/>
-                    <q-input style="width: 15vw" v-model="item.attributeName" :rules="[required]" lazy-rules label="Name des Attributes"
-                             outlined type="text"/>
-                    <div class="row no-wrap">
-                      <q-select style="width: 10vw" v-model="item.type" :options="types" emit-value label="Type" map-options
-                                outlined/>
-                      <q-btn-group class="column justify-between" flat>
-                        <div class="column justify-between" style="height: 4em">
-                          <q-btn size="0.75em" flat icon="lock" @click="editValidation(item)"/>
-                          <q-btn size="0.75em" v-if="index !== 0" color="primary" flat icon="remove"
-                                 @click="() => credential.attributes.splice(index, 1)"/>
+          <q-virtual-scroll class="column full-width" style="height: 40vh" :items="[0]">
+            <div class="row no-wrap full-width">
+              <div class="column full-width">
+                <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">Credentialattribute</h6>
+                  <div class="full-width" v-for="(item, index) in credential.attributes">
+                    <q-item class="row justify-between q-px-sm" style="margin-bottom: -1em">
+                      <q-input style="width: 15vw" v-model="item.name" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
+                      <q-input style="width: 15vw" v-model="item.attributeName" :rules="[required]" lazy-rules error-message=" " label="Name des Attributes"
+                               outlined type="text"/>
+                      <div class="row no-wrap">
+                        <q-select style="width: 10vw" v-model="item.type" :options="types" emit-value label="Type" map-options
+                                  outlined/>
+                        <q-btn-group class="column justify-between items-center q-mx-sm" flat>
+                          <div class="column justify-center" style="height: 4em">
+                            <q-btn size="0.75em" style="width: 2em" flat icon="lock" @click="editValidation(item)"/>
+                            <q-btn size="0.75em" style="width: 2em" v-if="index !== 0" flat icon="remove"
+                                   @click="() => credential.attributes.splice(index, 1)"/>
+                          </div>
+                          <q-btn size="0.75em" style="width: 2em" color="primary" flat icon="add" @click="addAttribute(index)"/>
+                        </q-btn-group>
                         </div>
-                        <q-btn size="0.75em" color="primary" flat icon="add" @click="addAttribute(index)"/>
-                      </q-btn-group>
-                      </div>
-                    </q-item>
-                </q-virtual-scroll>
-            </div>
-            <div class="column justify-evenly" style="width: 30vw">
-              <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">Checkliste</h6>
-              <q-virtual-scroll class="full-width" style="height: 30vh" :items="credential.conditions" v-slot="{ item, index }">
-                  <q-item class="row q-px-sm">
-                    <q-input style="width: 20vw" v-model="item.label" :rules="[required]" lazy-rules label="Name" outlined type="text"/>
-                    <q-btn-group class="column justify-between" flat>
+                      </q-item>
+                  </div>
+              </div>
+              <div class="column" style="width: 20vw; margin-left: 2vw">
+                <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">Checkliste</h6>
+                <div class="full-width" v-for="(item, index) in credential.conditions">
+                  <q-item class="row q-px-sm" style="margin-bottom: -1em">
+                    <q-input style="width: 15vw" v-model="item.label" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
+                    <q-btn-group class="column justify-between items-center q-mx-sm" flat>
                       <div class="column justify-center" style="height: 4em">
-                        <q-btn size="0.75em" v-if="index !== 0" color="primary" flat icon="remove"
+                        <q-btn size="0.75em" style="width: 2em" v-if="index !== 0" flat icon="remove"
                                @click="() => credential.conditions.splice(index, 1)"/>
                       </div>
-                      <q-btn size="0.75em" color="primary" flat icon="add" @click="addCondition(index)"/>
+                      <q-btn size="0.75em" style="width: 2em" color="primary" flat icon="add" @click="addCondition(index)"/>
                     </q-btn-group>
                   </q-item>
-              </q-virtual-scroll>
+                </div>
+              </div>
             </div>
-          </div>
+          </q-virtual-scroll>
         </div>
-        <div class="row justify-around">
+        <div class="row justify-around q-mt-md">
           <q-btn style="width: 4em; height: 4em" color="negative" text-color="positive" fab icon="delete" unelevated @click="deleteCredential"/>
           <q-btn style="width: 4em; height: 4em" color="positive" text-color="negative" fab icon="save" unelevated @click="save"/>
           </div>
