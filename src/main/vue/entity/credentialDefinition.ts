@@ -1,6 +1,9 @@
 import {Issuer} from "@/main/vue/entity/issuer";
+import {ValidationRule} from "quasar";
 
 type CredentialFormEntryType = "text" | "number" | "date";
+
+type ComparisonType = "equal" | "notEqual" | "lessThan" | "greaterThan" | "lessEqual" | "greaterEqual";
 
 export interface Credential {
     id: bigint;
@@ -20,8 +23,33 @@ export interface IssueCredential {
         label: string;
         type: CredentialFormEntryType;
         value: string | null;
+        validationRules: (ComparisonRule | RangeRule | RegExRule | LengthRule)[]
     }[];
     checklist: ChecklistEntry[];
+}
+
+export interface ComparisonRule {
+    kind: "comparison"
+    comparisonType: ComparisonType
+    content: string
+}
+
+export interface RangeRule {
+    kind: "range"
+    valueFrom: string
+    valueTo: string
+}
+
+export interface RegExRule {
+    kind: "regEx"
+    regEx: string
+    description: string
+}
+
+export interface LengthRule {
+    kind: "length"
+    comparisonType: ComparisonType
+    length: string
 }
 
 export interface FormEntry {

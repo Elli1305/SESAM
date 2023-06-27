@@ -12,8 +12,8 @@
             <p>{{ t('issueCredential.description[1]') }}</p>
           </div>
           <q-form class="column no-wrap" style="width: 40%" ref="form" @submit.prevent>
-            <q-input class="q-my-sm no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
-                     :label="attribute.label" :type="attribute.type" :rules="[required]"/>
+            <q-input class="q-my-md no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
+                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)"/>
           </q-form>
         </div>
       </q-step>
@@ -83,7 +83,13 @@ import {computed, ComputedRef, Ref, ref} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {AxiosError, AxiosResponse} from "axios";
 import api from '@/main/vue/api';
-import {IssueCredential} from "@/main/vue/entity/credentialDefinition";
+import {
+  ComparisonRule,
+  IssueCredential,
+  LengthRule,
+  RangeRule,
+  RegExRule
+} from "@/main/vue/entity/credentialDefinition";
 import QRCode from 'qrcode.vue';
 
 const props = defineProps<{ id: string }>();
@@ -109,6 +115,72 @@ const opts: QNotifyCreateOptions = {
   position: 'bottom',
   timeout: 6000,
 };
+
+function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | LengthRule)[]): ValidationRule[] {
+  let rules: ValidationRule[] = []
+  rules.push(required)
+  validationRules.forEach((vr: ComparisonRule | RangeRule | RegExRule | LengthRule) => {
+    switch (vr.kind) {
+      case 'comparison':
+        switch (vr.comparisonType) {
+          case "equal":
+            rules.push((value) => value === vr.content || t('issueCredential.validation.equal', [vr.content]))
+            break
+          case "notEqual":
+            rules.push((value) => value !== vr.content || t('issueCredential.validation.notEqual', [vr.content]))
+            break
+          case "lessThan":
+            rules.push((value) => value < vr.content || t('issueCredential.validation.lessThan', [vr.content]))
+            break
+          case "greaterThan":
+            rules.push((value) => value > vr.content || t('issueCredential.validation.greaterThan', [vr.content]))
+            break
+          case "lessEqual":
+            rules.push((value) => value <= vr.content || t('issueCredential.validation.lessEqual', [vr.content]))
+            break
+          case "greaterEqual":
+            rules.push((value) => value >= vr.content || t('issueCredential.validation.greaterEqual', [vr.content]))
+            break
+          default:
+            console.error("Wrong comparison type")
+        }
+        break
+      case 'range':
+        rules.push((value) => value >= vr.valueFrom && value <= vr.valueTo || t('issueCredential.validation.range', [vr.valueFrom, vr.valueTo]))
+        break
+      case 'regEx':
+        rules.push((value) => new RegExp(vr.regEx).test(value) || vr.description)
+        break
+      case 'length':
+        switch (vr.comparisonType) {
+          case "equal":
+            rules.push((value) => value.length === vr.length || t('issueCredential.validation.equalLength', [vr.length]))
+            break
+          case "notEqual":
+            rules.push((value) => value.length !== vr.length || t('issueCredential.validation.notEqualLength', [vr.length]))
+            break
+          case "lessThan":
+            rules.push((value) => value.length < vr.length || t('issueCredential.validation.lessThanLength', [vr.length]))
+            break
+          case "greaterThan":
+            rules.push((value) => value.length > vr.length || t('issueCredential.validation.greaterThanLength', [vr.length]))
+            break
+          case "lessEqual":
+            rules.push((value) => value.length <= vr.length || t('issueCredential.validation.lessEqualLength', [vr.length]))
+            break
+          case "greaterEqual":
+            rules.push((value) => value.length >= vr.length || t('issueCredential.validation.greaterEqualLength', [vr.length]))
+            break
+          default:
+            console.error("Wrong comparison type")
+        }
+        break
+      default:
+        console.error("Wrong rule type")
+    }
+  })
+  return rules
+}
 
 api.credential.get(props.id)
     .then((v) => credential.value = {...v.data, form: v.data.form.map(a => ({...a, value: ''}))})

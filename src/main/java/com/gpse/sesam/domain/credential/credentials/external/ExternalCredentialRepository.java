@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.credential.credentials;
+package com.gpse.sesam.domain.credential.credentials.external;
 
 import org.springframework.data.repository.CrudRepository;
 

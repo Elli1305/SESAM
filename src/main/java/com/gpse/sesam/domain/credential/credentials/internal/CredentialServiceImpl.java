@@ -1,7 +1,11 @@
-package com.gpse.sesam.domain.credential.credentials;
+package com.gpse.sesam.domain.credential.credentials.internal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialRepository;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
@@ -126,7 +130,10 @@ public class CredentialServiceImpl implements CredentialService {
 
 		final List<IssueCredentialAttribute> attributes = credential.getForm().stream().map(entry -> {
 			final IssueCredentialAttributeCmd correspondingAttributeCmd = attributeCmdMap.get(entry.getId());
-
+			boolean isValid = entry.getValidationRules().stream().allMatch(rule -> rule.validate(correspondingAttributeCmd.value(), entry.getType()));
+			if (!isValid) {
+				throw new IllegalArgumentException("Input " + correspondingAttributeCmd.value() + " for attribute " + entry.getAttributeName() + " is not valid");
+			}
 			if (correspondingAttributeCmd == null) {
 				return null;
 			}

@@ -571,6 +571,19 @@ const messages = {
             checkConditions: "Please use the following checklist to ensure that all necessary steps have been taken before issuing the credential.",
             validation: {
                 inputRequired: "This field is required.",
+                equal: "This field should be equal to {0}",
+                notEqual: "This field should not be equal to {0}",
+                lessThan: "This field should be less than to {0}",
+                greaterThan: "This field should be greater than to {0}",
+                lessEqual: "This field should be less than or equal to to {0}",
+                greaterEqual: "This field should be greater than or equal to {0}",
+                range: "This field should be between {0} and {1}",
+                equalLength: "This text's length should be equal to {0}",
+                notEqualLength: "This text's length should not be equal to {0}",
+                lessThanLength: "This text's length should be less than to {0}",
+                greaterThanLength: "This text's length should be greater than to {0}",
+                lessEqualLength: "This text's length should be less than or equal to to {0}",
+                greaterEqualLength: "This text's length should be greater than or equal to {0}"
             },
             steps: {
                 form: "Form",
