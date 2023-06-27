@@ -2,6 +2,9 @@ package com.gpse.sesam.web.controller;
 
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
+import com.gpse.sesam.util.ConfigCmdMapper;
+import com.gpse.sesam.util.LocationCmdMapper;
+import com.gpse.sesam.web.cmd.LocationCmd;
 import com.gpse.sesam.web.exception.LocationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -24,15 +28,22 @@ public class LocationController {
 
 	private final LocationService locationService;
 
+	private final LocationCmdMapper locationCmdMapper;
+
 	@Autowired
-	public LocationController(final LocationService locationService) {
+	public LocationController(final LocationService locationService, ConfigCmdMapper configCmdMapper) {
+		locationCmdMapper = new LocationCmdMapper(configCmdMapper);
 		this.locationService = locationService;
 	}
 
 	@GetMapping
-	public List<Location> getNavigationTreeInfo() {
+	public List<LocationCmd> getNavigationTreeInfo() {
 
-		return locationService.getLocations();
+		return locationService
+				.getLocations()
+				.stream()
+				.map(locationCmdMapper::toCmd)
+				.collect(Collectors.toList());
 	}
 
 	@GetMapping("/{id:\\d+}")

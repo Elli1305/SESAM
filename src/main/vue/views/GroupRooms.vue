@@ -261,8 +261,6 @@ export default {
                 }
                 optionsLocations.value = locationList;
             })
-            console.log("Locations");
-            console.log(optionsLocations.value);
             if (optionsLocations.value !== null) {
                 modelForLocation.value = optionsLocations.value[0].name;
                 adjustBuildingList(modelForLocation.value);
@@ -271,12 +269,9 @@ export default {
         async function loadRoomGroups() {
             roomGroupList = [];
             await roomGroupStore.getRoomGroups().then(() => {
-                console.log(roomGroupStore.allRoomGroups);
                 for (const roomG of roomGroupStore.allRoomGroups) {
                     roomGroupList.push(roomG);
                 }
-                console.log("Groups of rooms");
-                console.log(roomGroupList);
 
                 adaptRoomGroupsToBuilding();
             })
@@ -289,8 +284,6 @@ export default {
         function adaptRoomGroupsToBuilding() {
             rows.value = [];
             for (const roomGs of roomGroupList) {
-                console.log("roomGs ", roomGs.building)
-                console.log("Current building: " , currentBuilding.value)
                 if (currentBuilding.value != null) {
                     if (roomGs.building.id === currentBuilding.value.id) {
                         rows.value.push(roomGs);
@@ -315,20 +308,15 @@ export default {
                 buildingListNames.value = building;
                 buildingListForFilter.value=building;
             }
-            console.log("Buildings");
-            console.log(buildingListNames.value);
             if(buildingListNames.value !==null) {
                 modelForBuilding.value = buildingListNames.value[0];
                 currentBuilding.value = buildingListNames.value[0];
-                console.log(modelForBuilding.value.id);
                 updateRoomList(currentBuilding.value);
             }
         }
 
 
         async function checkName(newName) {
-            console.log(newName);
-            console.log("room Group List:", rows.value);
             checkNameAllowed.value = false;
             if(newName.trim() === ""){
                 $q.notify({
@@ -342,8 +330,6 @@ export default {
                 checkNameAllowed.value = true;
             }
             for(const theGroup of rows.value) {
-                console.log("roomGroup:", theGroup)
-                console.log("newName: ", newName);
                 if (theGroup.name === newName) {
                     $q.notify({
                         type:'negative',
@@ -358,7 +344,6 @@ export default {
         function toDefault(){
             this.newGroupName=ref('');
             this.modelRooms=ref(null);
-            console.log("hier default");
 
         }
         function updateRoomList(building){
@@ -368,8 +353,6 @@ export default {
                     listOfAllRoomsViaBuilding.value.push(rooms)
                 }
             }
-            console.log("Räume:")
-            console.log(listOfAllRoomsViaBuilding.value);
         }
 
         function setCurrentGroup(groupId, groupName, groupRooms, groupBuilding) {
@@ -377,12 +360,10 @@ export default {
             currentGroup.value.id = groupId;
             currentGroup.value.building = groupBuilding
             currentGroup.value.rooms = groupRooms;
-            console.log("currentGroup: ", currentGroup.value);
         }
         function updateCurrentGroup(groupName, groupRooms) {
             currentGroup.value.name = groupName;
             currentGroup.value.rooms = groupRooms;
-            console.log("currentGroup: ", currentGroup.value);
             editGroup();
         }
         async function makeNewGroup(newGroupName, newGroupRooms) {
@@ -394,25 +375,19 @@ export default {
             }
         }
         async function editGroup() {
-            console.log("currentGroup.value.name: ", currentGroup.value.name, " EditGroupName.value: ", editGroupName.value);
-            console.log((currentGroup.value.name === editGroupName.value))
             if(!(currentGroup.value.name === editGroupName.value)) {
                 await checkName(currentGroup.value.name);
             }
             else {
                 checkNameAllowed.value = true;
             }
-            console.log("currentGroup.value.name: ", currentGroup.value.name, " EditGroupName.value: ", editGroupName.value);
             if(checkNameAllowed.value) {
                 await roomGroupStore.editGroup(currentGroup.value);
                 await loadRoomGroups();
                 editAlert.value = false;
-
-                console.log(closeEditAlert.value);
             }
         }
         async function deleteGroup() {
-            console.log("Delete Group", currentGroup.value);
             if(currentGroup.value !==null) {
                 await roomGroupStore.deleteGroup(currentGroup.value.id).then(() => {
                     loadRoomGroups();
@@ -453,7 +428,6 @@ export default {
             changed(val){
                 if(val !==null) {
                     adjustBuildingList(val.name);
-                    console.log("Change", val.name);
                     adaptRoomGroupsToBuilding();
                 }
                 else {
@@ -462,7 +436,6 @@ export default {
             },
 
             getBuilding(building) {
-                console.log("Changed building", building);
                 currentBuilding.value = building;
                 updateRoomList(building);
                 adaptRoomGroupsToBuilding();
@@ -485,8 +458,6 @@ export default {
             getInfosForEditGroup(value) {
               editGroupName.value = value[1].name;
               editGroupRooms.value = value[1].rooms;
-              console.log("EditGroupRooms in getInfosForEditGroup: ", editGroupRooms.value);
-              console.log("EditGroupName in getInfosForEditGroup: ", editGroupName.value);
               setCurrentGroup(value[1].id, value[1].name, value[1].rooms, value[1].building);
             },
 
@@ -523,8 +494,6 @@ export default {
         customFilter(rows, terms) {
             // rows contain the entire data
             // terms contains whatever you have as filter
-
-            console.log(terms, rows)
 
             const lowerSearch = terms.search ? terms.search.toLowerCase() : ""
 

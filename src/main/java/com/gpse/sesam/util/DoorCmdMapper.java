@@ -3,14 +3,17 @@ package com.gpse.sesam.util;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.web.cmd.DoorCmd;
 import com.gpse.sesam.web.cmd.DoorConfigCmd;
+import com.gpse.sesam.web.cmd.DoorConfigViewCmd;
 
 public final class DoorCmdMapper {
+	private ConfigCmdMapper configCmdMapper;
 
-	private DoorCmdMapper() {
+	public DoorCmdMapper(ConfigCmdMapper configCmdMapper) {
 
+		this.configCmdMapper = configCmdMapper;
 	}
 
-	public static Door toEntity(final DoorCmd doorCmd) {
+	public Door toEntity(final DoorCmd doorCmd) {
 		final Door door = new Door();
 
 		door.setId(doorCmd.getId());
@@ -18,12 +21,12 @@ public final class DoorCmdMapper {
 		door.setCoordinates(doorCmd.getCoordinates());
 
 		for (final DoorConfigCmd doorConfigCmd : doorCmd.getProofConfigIn()) {
-			door.addProofConfigIn(ConfigCmdMapper.fromCmd(doorConfigCmd));
+			door.addProofConfigIn(configCmdMapper.fromCmd(doorConfigCmd));
 		}
 
 
 		for (final DoorConfigCmd doorConfigCmd : doorCmd.getProofConfigOut()) {
-			door.addProofConfigOut(ConfigCmdMapper.fromCmd(doorConfigCmd));
+			door.addProofConfigOut(configCmdMapper.fromCmd(doorConfigCmd));
 		}
 
 		return door;

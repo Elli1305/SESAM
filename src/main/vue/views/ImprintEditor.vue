@@ -90,7 +90,6 @@ export default {
     };
 
     const postText = () => {
-      console.log('postText called');
       postImprintContent(editorContent.value)
           .then(() => {
             imprintContent.value = editorContent.value;
@@ -133,7 +132,7 @@ export default {
             });
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           });
     };
 
@@ -145,7 +144,6 @@ export default {
     const loadLatestContent = async () => {
       try {
         const response = await getLatestImprint();
-        console.log(response.data);
         editorContent.value = response.data;
       } catch (error) {
         console.error(error);

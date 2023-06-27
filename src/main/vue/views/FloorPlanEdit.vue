@@ -132,7 +132,6 @@ export default {
   components: {FloorPlanRoomList, FloorPlan},
   methods: {
     redrawRooms() {
-      console.log(this.$refs.floorPlanRef)
       this.$refs.floorPlanRef.removeLayer()
       this.$refs.floorPlanRef.drawRooms(this.floorPlanStore.rooms)
     }

@@ -33,7 +33,7 @@ public class Floor {
 	@JoinColumn(name = "FLOOR_ID")
 	private List<Room> rooms = new ArrayList<>();
 
-	protected Floor() {
+	public Floor() {
 
 	}
 

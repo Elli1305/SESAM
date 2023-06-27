@@ -37,7 +37,8 @@
                    :door-config="doorConfigOut" :is-config-out="true"></door-config>
       <q-card-actions align="right">
         <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick"/>
-        <q-btn flat color="primary" :label="t('common.save')" :disable="!doorName || (!room && !door)" @click="onOKClick"/>
+        <q-btn flat color="primary" :label="t('common.save')" :disable="!doorName || (!room && !door)"
+               @click="onOKClick"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -94,7 +95,6 @@ export default {
     onOKClick() {
       let config = {}
 
-      console.log('qselects', this.$refs.configIn.qSelects)
       if (this.$refs.configIn.direction === Direction.BOTH) {
         config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
         config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))

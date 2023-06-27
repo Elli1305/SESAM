@@ -258,7 +258,6 @@ export default {
 
     const commonAttributeFilter = function (credentials) {
       let formEntries = credentials.map((credential) => {
-        console.log("Credentials: " + credential)
         return credential.form
       })
       if (formEntries.length > 1) {

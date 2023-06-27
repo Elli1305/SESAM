@@ -34,7 +34,6 @@ export default {
 
   methods: {
     show() {
-      console.log(this.$refs)
       this.$refs.dialog.show()
     },
     hide() {

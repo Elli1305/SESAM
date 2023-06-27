@@ -17,18 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class DoorConfigController {
 
 	private final DoorConfigService doorConfigurationService;
+	private ConfigCmdMapper configCmdMapper;
 
-	public DoorConfigController(final DoorConfigService doorConfigurationService) {
+	public DoorConfigController(final DoorConfigService doorConfigurationService,final ConfigCmdMapper configCmdMapper) {
 		this.doorConfigurationService = doorConfigurationService;
+		this.configCmdMapper = configCmdMapper;
 	}
 
 	@PostMapping("/save")
 	@Secured("EDITOR")
 	public void save(@RequestBody final TwoWayDoorConfigCmd doorConfigCmd) {
 		doorConfigurationService.sendProofConfig(doorConfigCmd.getDoorConfigIn()
-				.getDoorId(), ConfigCmdMapper.fromCmd(doorConfigCmd.getDoorConfigIn()));
+				.getDoorId(), configCmdMapper.fromCmd(doorConfigCmd.getDoorConfigIn()));
 		doorConfigurationService.sendProofConfig(doorConfigCmd.getDoorConfigOut()
-				.getDoorId(), ConfigCmdMapper.fromCmd(doorConfigCmd.getDoorConfigOut()));
+				.getDoorId(), configCmdMapper.fromCmd(doorConfigCmd.getDoorConfigOut()));
 	}
 
 	@GetMapping("/{id}")

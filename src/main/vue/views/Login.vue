@@ -50,7 +50,6 @@ export default {
     async function login() {
       await userStore.requestToken({eMail: eMail.value, password: password.value})
           .catch((error) => {
-            console.log(error)
             if(error.response.status === 403) {
               $q.notify({
                 type: 'negative',

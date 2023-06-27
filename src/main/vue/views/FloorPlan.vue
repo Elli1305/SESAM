@@ -23,7 +23,7 @@ import {useRoomStore} from "@/main/vue/stores/room";
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
-import api from "@/main/vue/api";
+import GroupRooms from "@/main/vue/views/GroupRooms.vue";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -65,6 +65,7 @@ function getImageDimensions(imageURL) {
 let floorPlanMap;
 export default {
   name: "FloorPlan",
+  components: {GroupRooms},
   props: {
     editView: {
       type: Boolean,
@@ -183,12 +184,13 @@ export default {
           this.addCallbacksPolygon(e.layer)
         })
       } else if (e.shape === 'Line' || e.shape === 'Polyline') {
-        $q.dialog({
+        const dialog = $q.dialog({
           component: CreateDoor,
           componentProps: {
             rooms: this.floorPlanStore.rooms
           }
-        }).onOk(({room, doorName, configuration}) => {
+        })
+        dialog.onOk(({room, doorName, configuration}) => {
           let door = {
             name: doorName,
             proofConfigIn: [configuration.doorConfigIn],
@@ -206,6 +208,9 @@ export default {
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
           })
+        })
+        dialog.onCancel(() => {
+          floorPlanMap.removeLayer(e.layer)
         })
       }
     })
@@ -325,17 +330,10 @@ export default {
         })
 
         polygons.push(polygon);
-        let doorsname = room.doors.map(door => door.name).join(", ");
-        let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential?.name).join(", ");
-        let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred?.issuer).map(issuer => issuer?.firstName + " " + issuer?.lastName).join(", ");
-        const popup = L.popup();
-        let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: U-MEMBER" + "<br>Issuer: Jana Editor-Issuer";
+       const popup = L.popup();
         let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
 
         popup.setContent(url);
-        polygon.bindTooltip(string).openTooltip();
-        polygon.bindPopup(popup);
-        polygon.addTo(floorPlanMap);
 
         polygon.on('click', function () {
           for (const p of polygons) {
@@ -357,15 +355,38 @@ export default {
 
         polygon.id = room.id
         polygon.type = "Room"
+        let roomPopup = "<b>Raumnummer: </b>" + room.id.toString() + "<br><b>Konfiguration der zugehörigen Türen:</b> <br>";
         for (const door of room.doors) {
+
           const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
             color: '#b0b0b0',
             weight: 3
           }).addTo(floorPlanMap)
           line.id = door.id
           line.roomId = room.id
+
+
+          let configurationString = "<p><b>" + door.name + "</b>";
+          if(door.proofConfigIn[0]) {
+            configurationString += ":<br>Konfigutation:"
+            door.proofConfigIn[0].configParts.forEach((configPart, idx, array) => {
+              configurationString += "<p>" + configPart.credentials?.map(credential => credential.name).join('<b> ODER </b>')
+              configurationString += " <br> mit " + configPart.attributeFilter?.map(attribute => attribute.attribute.label + " " + attribute.predicateType + " " + attribute.value).join('<b> UND </b>')
+              configurationString += "</p>"
+              if (idx !== array.length - 1) {
+                configurationString += "<b> UND </b>"
+              }
+            })
+          }
+          configurationString += "</p>"
+          line.bindTooltip(configurationString).openTooltip();
           this.addCallbacksLine(line);
+          roomPopup += configurationString
         }
+
+        polygon.bindTooltip(roomPopup).openTooltip();
+        polygon.bindPopup(popup);
+        polygon.addTo(floorPlanMap);
         this.addCallbacksPolygon(polygon);
       }
 

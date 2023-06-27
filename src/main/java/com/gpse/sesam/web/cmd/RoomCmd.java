@@ -11,7 +11,7 @@ public class RoomCmd {
 
 	private String name;
 
-	private List<DoorCmd> doors = new ArrayList<>();
+	private List<DoorViewCmd> doors = new ArrayList<>();
 
 	private List<Coordinate> coordinates = new ArrayList<>();
 
@@ -32,11 +32,11 @@ public class RoomCmd {
 		this.name = name;
 	}
 
-	public List<DoorCmd> getDoors() {
+	public List<DoorViewCmd> getDoors() {
 		return doors;
 	}
 
-	public void setDoors(final List<DoorCmd> doors) {
+	public void setDoors(final List<DoorViewCmd> doors) {
 		this.doors = doors;
 	}
 
