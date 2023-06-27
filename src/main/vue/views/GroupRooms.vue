@@ -25,7 +25,7 @@
                   color="grey"
                   @click="getInfosForEditGroup(Object.values(props)); getOldName(); updateRoomList(currentBuilding); editAlert = true"
                   test="props.value">
-                <span class="material-icons-outlined">edit</span>
+                <q-icon name="edit"/>
               </q-btn>
               <q-btn
                   dense
