@@ -355,7 +355,7 @@ export default {
 
         polygon.id = room.id
         polygon.type = "Room"
-        let roomPopup = "<b>Raumnummer: </b>" + room.id.toString() + "<br><b>Konfiguration der zugehörigen Türen:</b> <br>";
+        let roomPopup = "<b>Raumname: </b>" + room.name;
         for (const door of room.doors) {
 
           const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
@@ -366,9 +366,18 @@ export default {
           line.roomId = room.id
 
 
-          let configurationString = "<p><b>" + door.name + "</b>";
+          let configurationString = "<br><b>Konfiguration für " + door.name + ":</b>";
           if(door.proofConfigIn[0]) {
-            configurationString += ":<br>Konfigutation:"
+            configurationString += "<div style='background-color: #525252; padding: 0.5em; border-radius: 1em; border: 1px solid #000000'>" // UND Block
+            door.proofConfigIn[0].configParts.forEach((configPart, idx, array) => {
+              configurationString += "<div style='background-color: #8a8a8a; padding: 0.5em; border-radius: 1em; border: 1px solid #000000'>" + configPart.credentials?.map(credential => credential.name).join('<b> ODER </b><br>') // ODER Block
+              configurationString += "<div style='background-color: #b9b9b9; margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em; border: 1px solid #5b5b5b'> mit " + configPart.attributeFilter?.map(attribute => attribute.attribute.label + " " + attribute.predicateType + " " + attribute.value).join('<b> UND </b>') + "</div>" + "</div>"
+              if (idx !== array.length - 1) {
+                configurationString += "<b style='color: #ffffff'> UND </b>"
+              }
+            })
+            configurationString += "</div>"
+            /**
             door.proofConfigIn[0].configParts.forEach((configPart, idx, array) => {
               configurationString += "<p>" + configPart.credentials?.map(credential => credential.name).join('<b> ODER </b>')
               configurationString += " <br> mit " + configPart.attributeFilter?.map(attribute => attribute.attribute.label + " " + attribute.predicateType + " " + attribute.value).join('<b> UND </b>')
@@ -377,8 +386,8 @@ export default {
                 configurationString += "<b> UND </b>"
               }
             })
+             */
           }
-          configurationString += "</p>"
           line.bindTooltip(configurationString).openTooltip();
           this.addCallbacksLine(line);
           roomPopup += configurationString
