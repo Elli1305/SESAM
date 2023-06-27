@@ -29,6 +29,12 @@ public class RoomGroupController {
         return roomGroupService.getRoomGroups();
     }
 
+    @GetMapping("/filter/{id:\\d+}")
+    @Secured("EDITOR")
+    public List<RoomGroups> getGroupsByBuilding(@PathVariable("id") final Long id) {
+        return roomGroupService.getGroupByBuilding(id);
+    }
+
     @PostMapping("/save")
     @Secured("EDITOR")
     public RoomGroups save(@RequestBody final RoomGroups roomGroup) {
