@@ -12,6 +12,11 @@
                 >
                     <q-tab name="rooms" :label="t('groupRooms.rooms')"/>
                     <q-tab name="groups" :label="t('groupRooms.groups')"/>
+                    <q-icon size="28px"  fixed-right class="self-start" color="grey-10"  name="info_outlined">
+                        <q-tooltip class="grey" anchor="bottom right" max-width="200px"  self="top middle" :offset="[0, 0]">
+                            {{t('groupRooms.info')}}
+                        </q-tooltip>
+                    </q-icon>
                 </q-tabs>
                 <q-separator></q-separator>
 
@@ -302,6 +307,7 @@
                                     flat
                                     icon="delete"
                                     color="grey"
+                                    :label="t('adminEdit.delete')"
                                     @click="deleteAlert = true;"/>
                             </q-item>
 
