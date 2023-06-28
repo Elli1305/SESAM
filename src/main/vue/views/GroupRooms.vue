@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" >
-    <p class="row text-h3 justify-center">{{t("groupRooms.title")}} {{list}}</p>
+    <p class="row text-h3 justify-center">{{t("groupRooms.title")}}</p>
     <div class="row self-center">
       <q-table
           style="width: 80vw; height: 50vh"
@@ -223,7 +223,7 @@
                     class="q-my-sm"
                     filled
                     emit-value
-                    v-model="model.rooms[props.row.room]"
+                    v-model="model[props.row.room]"
                     multiple
                     :options=options
                     option-value="id"
@@ -232,13 +232,12 @@
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td :props="props">
-                <q-checkbox v-model="props.row.name" @update:model-value="getDoors(props.row.room)"/>
+                <q-checkbox v-model="props.row.name" @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.name, props.row.room)"/>
                 {{props.row.name}}
               </q-td>
             </template>
             <template v-slot:body-cell-selected="props">
               {{model}}
-              {{props.row.room}}
             </template>
           </q-table>
         </q-card-section>
@@ -451,11 +450,7 @@ export default {
         const closeNow = ref(false);
         const closeEditAlert = ref(false);
         const list = [];
-      const model = ref({
-        rooms: [{
-          id: []
-        }]
-      })
+      const model = ref([[]])
 
       const columns = [
         {
@@ -548,7 +543,6 @@ export default {
         doorStore.getByRoomId(id).then((doors) =>{
           console.log(doors)
           options.value = doors;
-          model.rooms[id].id.value = doors;
         })
       }
 
@@ -559,9 +553,9 @@ export default {
         }
       }
 
-      function checkIfSelected(rooms, door) {
-          if (rooms) {
-            addToList(door)
+      function checkIfSelected(room, id) {
+          if (!room) {
+            model.value[id] = []
           }
       }
 
