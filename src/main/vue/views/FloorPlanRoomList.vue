@@ -295,7 +295,7 @@
                             v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                             <q-separator></q-separator>
                             <q-item>
-                                <q-btn color="primary" icon="add" :label="t('groupRooms.new')" @click="newGroup = true;" flat/>
+                                <q-btn color="primary" icon="add" :label="t('groupRooms.new')" @click="delName(); newGroup = true;" flat/>
                                 <q-btn
                                     dense
                                     round
@@ -861,6 +861,7 @@ export default {
 
             prevSelectedGroup.value = selectedGroups.value;
         }
+        const newGroupName = ref('');
 
         return {
             floorPlanStore,
@@ -890,7 +891,7 @@ export default {
             allGroups: filteredGroups,
             selectedGroups,
             newGroup,
-            newGroupName: ref(''),
+            newGroupName,
             makeANewGroup,
             addRoomsToGroups,
             unCheck,
@@ -900,6 +901,9 @@ export default {
             filterRoomToGroups,
             numRoomsInGroup,
             updateNumRoomsInGroup,
+            delName() {
+                newGroupName.value = "";
+            }
         }
     },
 
