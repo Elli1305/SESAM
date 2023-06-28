@@ -15,11 +15,11 @@ public class PredefinedConfig {
     @Column
     private String name;
 
-    @Column
+    @PrimaryKeyJoinColumn
     @OneToOne
     private ProofConfig doorIn;
 
-    @Column
+    @PrimaryKeyJoinColumn
     @OneToOne
     private ProofConfig doorOut;
 
