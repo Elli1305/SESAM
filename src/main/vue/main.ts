@@ -82,13 +82,19 @@ const messages = {
             editGroup:"Gruppierung bearbeiten",
             new: "Neue Gruppe"
         },
+        predefinedConfigs: {
+            title: "Vordefinierte Konfigurationen",
+            deleteAlert: "",
+            new: "Neue Konfiguration"
+        },
 
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
             noData: "Keine Daten vorhanden.",
             noResults: "Kein Einträge gefunden.",
-            of: "von"
+            of: "von",
+            search: "Suche"
         },
         credentialview :{
             credentialview: "Credentialansicht",
@@ -135,7 +141,8 @@ const messages = {
             issuerPages: "Credential ausstellen",
             imprint: "Impressum",
             logout: "Logout",
-            roomSearch: "Raumsuche"
+            roomSearch: "Raumsuche",
+            predefinedConfig: "Konfiguration erstellen"
         },
         login: {
             wrongEmailPassword: "Falsches Passwort oder Benutzername",
@@ -435,7 +442,8 @@ const messages = {
             issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout",
-            roomSearch: "Search"
+            roomSearch: "Search",
+            predefinedConfig: "Create Configuration"
         },
         login: {
             wrongEmailPassword: "Wrong Password oder Username",
