@@ -14,7 +14,7 @@ export default {
         return axios.delete(`api/door/${id}`)
     },
 
-    getDoorsByRoomId(param: String):Promise<AxiosResponse<Door[]>> {
+    getDoorsByRoomId(param: BigInt):Promise<AxiosResponse<Door[]>> {
         return axios.get("api/door/doorsbyroom/" + param)
     }
 }

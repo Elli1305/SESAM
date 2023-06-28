@@ -47,7 +47,7 @@ export const useDoorStore = defineStore('door', () => {
 
     function getByRoomId(id: BigInt): Promise<Door[]> {
         return new Promise((resolve, reject) => {
-            api.door.getDoorsByRoomId().then((response) => {
+            api.door.getDoorsByRoomId(id).then((response) => {
                 resolve(response.data)
             }).catch((error) => {
                 reject(error)

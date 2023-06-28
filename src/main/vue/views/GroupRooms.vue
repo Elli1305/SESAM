@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" >
-    <p class="row text-h3 justify-center">{{t("groupRooms.title")}}</p>
+    <p class="row text-h3 justify-center">{{t("groupRooms.title")}} {{list}}</p>
     <div class="row self-center">
       <q-table
           style="width: 80vw; height: 50vh"
@@ -185,6 +185,7 @@
             </q-card-actions>
         </q-card>
     </q-dialog>
+
     <q-dialog v-model="prompt" persistent>
       <q-card style="width: 90%">
         <q-toolbar class="bg-primary text-accent">
@@ -218,20 +219,26 @@
             <template v-slot:body-cell-doorNames="props">
               <q-td :props="props" v-if="props.row.name">
                 <q-select
+                    @popup-show="getDoors(props.row.room)"
                     class="q-my-sm"
                     filled
                     emit-value
-                    v-model="props.row.doors"
+                    v-model="model.rooms[props.row.room]"
                     multiple
-                    :options="props.row.doors"
+                    :options=options
                     option-value="id"
                     option-label="name"/>
               </q-td>
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td :props="props">
-                <q-checkbox v-model="props.row.name" @update:model-value="setSelection(props.row.name); openForm2(props.row)"/>
+                <q-checkbox v-model="props.row.name" @update:model-value="getDoors(props.row.room)"/>
+                {{props.row.name}}
               </q-td>
+            </template>
+            <template v-slot:body-cell-selected="props">
+              {{model}}
+              {{props.row.room}}
             </template>
           </q-table>
         </q-card-section>
@@ -443,6 +450,12 @@ export default {
         const checkNameAllowed = ref(false);
         const closeNow = ref(false);
         const closeEditAlert = ref(false);
+        const list = [];
+      const model = ref({
+        rooms: [{
+          id: []
+        }]
+      })
 
       const columns = [
         {
@@ -468,7 +481,9 @@ export default {
         { name: 'name', required: true, label: t('groupRooms.room'), align: 'left', field: row => row.roomName, sortable: true },
         { name: 'room', label: t('groupRooms.room'), align: 'left', field: row => row.room, sortable: true },
         {name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-        {name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doors.join(", "), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+        {name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+        {name: 'doors', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+        {name: 'selected', label: t('groupRooms.doors'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
       ]
 
       const rows2 =  ref([]);
@@ -527,6 +542,27 @@ export default {
       const editedRow2 = ref({})
       const openForm2 = (row) => {
         editedRow2.value = {...row};
+      }
+
+      function getDoors(id) {
+        doorStore.getByRoomId(id).then((doors) =>{
+          console.log(doors)
+          options.value = doors;
+          model.rooms[id].id.value = doors;
+        })
+      }
+
+      function addToList(value) {
+        const updated = value.replace(/[^a-zA-Z ]/g, "")
+        if (!list.includes(updated)) {
+          list.push(updated)
+        }
+      }
+
+      function checkIfSelected(rooms, door) {
+          if (rooms) {
+            addToList(door)
+          }
       }
 
         let modelForBuilding = ref(null);
@@ -751,11 +787,15 @@ export default {
           saveConfig,
           editedRow2,
           openForm2,
+          list,
+          checkIfSelected,
           deleteAlert: ref(false),
           editAlert,
+          model,
           closeNow,
           newGroup,
           selection,
+          getDoors,
           setSelection,
           newGroupName: ref(''),
           editName:ref(''),
@@ -773,7 +813,8 @@ export default {
           editGroupName,
           editGroupRooms,
           closeEditAlert,
-          visibleColumns: ref(['name', 'actions', 'doorNames']),
+          addToList,
+          visibleColumns: ref(['name', 'actions', 'doorNames', 'selected']),
           locationList,
           buildingListNames,
           group: ref([]),
