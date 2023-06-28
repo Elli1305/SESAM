@@ -110,11 +110,6 @@ export default {
         config.doorConfigIn.description = this.$refs.configOut.configDescription
         config.doorConfigOut.description = this.$refs.configIn.configDescription
       }
-      config.doorConfigIn?.configParts.forEach(part => {
-        console.log(part)
-        part.credentials = part.credentials.map(credential => credential.credentialDefinitionId)
-      })
-      config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
       this.$emit('ok', {
         room: this.room,
         doorName: this.doorName,

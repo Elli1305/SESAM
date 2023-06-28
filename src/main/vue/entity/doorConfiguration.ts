@@ -1,4 +1,4 @@
-import {FormEntry} from "@/main/vue/entity/credentialDefinition";
+import {Credential, FormEntry} from "@/main/vue/entity/credentialDefinition";
 
 
 export enum Direction {
@@ -13,15 +13,16 @@ export interface TwoWayDoorConfiguration {
 }
 
 export interface DoorConfiguration {
+
+    description: string
     configParts: Config[],
-
-    attributeFilters: AttributeFilter[]
-
 }
 
 export interface Config {
 
     credentials: Credential[]
+
+    attributeFilters: AttributeFilter[]
 
 }
 
