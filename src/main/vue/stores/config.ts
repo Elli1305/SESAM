@@ -65,6 +65,12 @@ export const useConfigStore = defineStore('config', () => {
     }
 
     return {
-        getAllConfigs
+        allPreConfigs,
+        currentConfig,
+        getAllConfigs,
+        getConfig,
+        createConfig,
+        updateConfig,
+        deleteConfig
     }
 })

@@ -31,7 +31,7 @@
                                 flat
                                 icon="delete"
                                 color="grey"
-                                @click="">
+                                @click="deleteConfig(props.row.id)">
                             </q-btn>
                         </div>
                     </q-td>
@@ -61,7 +61,7 @@
         <q-dialog v-model="configDialog">
             <q-card>
                 <q-card-section>
-                    <q-input></q-input>
+                    <q-input class="full-width" filled v-model="configName" label="Konfigurationsbezeichnung" stack-label></q-input>
                 </q-card-section>
                 <DoorConfig
                     ref="configIn" :door-config="doorConfigIn"
@@ -74,7 +74,7 @@
                 </DoorConfig>
                 <q-card-actions align="right">
                     <q-btn flat color="primary" label="Abbrechen" @click="onCancelClick()" v-close-popup></q-btn>
-                    <q-btn flat color="primary" label="Speichern" :disable="!currentConfigName" @click="onOKClick()" v-close-popup></q-btn>
+                    <q-btn flat color="primary" label="Speichern" :disable="!configName" @click="onOKClick()" v-close-popup></q-btn>
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -87,6 +87,7 @@ import {useI18n} from "vue-i18n";
 import {PredefinedConfiguration} from "@/main/vue/entity/predefinedConfiguration";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 import {Direction} from "@/main/vue/entity/doorConfiguration";
+import {useConfigStore} from "@/main/vue/stores/config";
 
 
 const direction = computed(() => {
@@ -105,7 +106,10 @@ const emits = defineEmits({
 
 })
 
-const currentConfigName = ref()
+const configStore = useConfigStore()
+const configIn = ref()
+const configOut = ref()
+const configName = ref()
 const configDialog = ref(false)
 const filter = ref('')
 const {t} = useI18n()
@@ -122,28 +126,68 @@ const columns = [
 ]
 
 const rows: Ref<PredefinedConfiguration[]> = ref([])
+const ini = configStore.getAllConfigs().then(() => rows.value = configStore.allPreConfigs)
 
-function changeDirectionOut(this: any, direction: Direction) {
+
+function changeDirectionOut(direction: Direction) {
     if (direction === Direction.IN) {
-        this.$refs.configOut.direction = Direction.OUT
+        configOut.value.direction = Direction.OUT
     } else if (direction === Direction.OUT) {
-        this.$refs.configOut.direction = Direction.IN
+        configOut.value.direction = Direction.IN
     }
 }
 
 function onCancelClick() {
-    currentConfigName.value = null
+    configName.value = null
 }
 
-function onOKClick() {
-
+async function onOKClick() {
+  await addConfig()
+  await configStore.getAllConfigs()
+  rows.value = configStore.allPreConfigs
 }
 
 async function addConfig() {
+  let config: PredefinedConfiguration = {
+    name: '',
+    doorConfigIn: {
+      description: '',
+      configParts: []
+    },
+    doorConfigOut: {
+      description: '',
+      configParts: []
+    }
+  }
 
+  console.log('qselects', configIn.value.qSelects)
+  config.name = configName.value
+  if (configIn.value.direction === Direction.BOTH) {
+    config.doorConfigIn = JSON.parse(JSON.stringify(configIn.value.qSelects))
+    config.doorConfigOut = JSON.parse(JSON.stringify(configIn.value.qSelects))
+    config.doorConfigIn.description = configIn.value.configDescription
+    config.doorConfigOut.description = configIn.value.configDescription
+  } else if (configIn.value.direction === Direction.IN) {
+    config.doorConfigIn = JSON.parse(JSON.stringify(configIn.value.qSelects))
+    config.doorConfigOut = JSON.parse(JSON.stringify(configOut.value.qSelects))
+    config.doorConfigIn.description = configIn.value.configDescription
+    config.doorConfigOut.description = configOut.value.configDescription
+  } else if (configIn.value.direction === Direction.OUT) {
+    config.doorConfigIn = JSON.parse(JSON.stringify(configOut.value.qSelects))
+    config.doorConfigOut = JSON.parse(JSON.stringify(configIn.value.qSelects))
+    config.doorConfigIn.description = configOut.value.configDescription
+    config.doorConfigOut.description = configIn.value.configDescription
+  }
+  await configStore.createConfig(config)
 }
 
-async function deleteConfig() {
+async function deleteConfig(config: any) {
+  await configStore.deleteConfig(config)
+  await configStore.getAllConfigs()
+  rows.value = configStore.allPreConfigs
+}
+
+async function editConfig() {
 
 }
 
