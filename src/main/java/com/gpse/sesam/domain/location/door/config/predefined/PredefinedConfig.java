@@ -16,11 +16,11 @@ public class PredefinedConfig {
     private String name;
 
     @PrimaryKeyJoinColumn
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private ProofConfig doorIn;
 
     @PrimaryKeyJoinColumn
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private ProofConfig doorOut;
 
     public PredefinedConfig(String name, ProofConfig in, ProofConfig out) {
