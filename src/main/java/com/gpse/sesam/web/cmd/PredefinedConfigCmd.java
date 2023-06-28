@@ -19,6 +19,13 @@ public class PredefinedConfigCmd {
         this.doorConfigOut = out;
     }
 
+    public PredefinedConfigCmd(Long id, String name, DoorConfigCmd in, DoorConfigCmd out) {
+        this.id = id;
+        this.name = name;
+        this.doorConfigIn = in;
+        this.doorConfigOut = out;
+    }
+
     public Long getId() {
         return id;
     }
