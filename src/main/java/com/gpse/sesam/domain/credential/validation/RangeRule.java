@@ -15,6 +15,15 @@ public class RangeRule extends ValidationRule {
     @Column
     private String valueTo;
 
+    public RangeRule(String valueFrom, String valueTo) {
+        this.valueFrom = valueFrom;
+        this.valueTo = valueTo;
+    }
+
+    protected RangeRule() {
+
+    }
+
     @Override
     public boolean validate(String input, FormEntryType type) {
         switch (type) {
@@ -39,4 +48,19 @@ public class RangeRule extends ValidationRule {
         }
     }
 
+    public String getValueFrom() {
+        return valueFrom;
+    }
+
+    public void setValueFrom(String valueFrom) {
+        this.valueFrom = valueFrom;
+    }
+
+    public String getValueTo() {
+        return valueTo;
+    }
+
+    public void setValueTo(String valueTo) {
+        this.valueTo = valueTo;
+    }
 }

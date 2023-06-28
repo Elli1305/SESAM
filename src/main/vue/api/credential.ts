@@ -30,7 +30,7 @@ export default {
     delete(id: number): Promise<AxiosResponse<void>> {
         return axios.delete(`/api/credentials/${id}`);
     },
-    update(id: number, credential: CreateCredential): Promise<AxiosResponse<void>> {
+    update(id: string, credential: CreateCredential): Promise<AxiosResponse<void>> {
         return axios.put(`/api/credentials/${id}`, credential);
     },
 

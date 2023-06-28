@@ -232,6 +232,20 @@ const messages = {
             checkConditions: "Bitte verwenden Sie die folgende Checkliste, um sicherzustellen, dass alle notwendigen Schritte ausgeführt wurden, bevor Sie das Credential ausstellen.",
             validation: {
                 inputRequired: "Dieses Feld ist erforderlich.",
+                equal: "Dieses Feld muss gleich {0} sein",
+                notEqual: "Dieses Feld darf nicht gleich {0} sein",
+                lessThan: "Dieses Feld muss kleiner als {0} sein",
+                greaterThan: "Dieses Feld muss größer als {0} sein",
+                lessEqual: "Dieses Feld muss kleiner gleich {0} sein",
+                greaterEqual: "Dieses Feld muss größer gleich {0} sein",
+                range: "Dieses Feld muss zwischen {0} und {1} liegen",
+                equalLength: "Die Länge dieses Texts muss gleich {0} sein",
+                notEqualLength: "Die Länge dieses Texts darf nicht gleich {0} sein",
+                lessThanLength: "Die Länge dieses Texts muss kleiner als {0} sein",
+                greaterThanLength: "Die Länge dieses Texts muss größer als {0} sein",
+                lessEqualLength: "Die Länge dieses Texts muss kleiner gleich {0} sein",
+                greaterEqualLength: "Die Länge dieses Texts muss größer gleich {0} sein",
+                addValidationRule: "Validierungsregel hinzufügen"
             },
             steps: {
                 form: "Formular",
@@ -583,7 +597,8 @@ const messages = {
                 lessThanLength: "This text's length should be less than to {0}",
                 greaterThanLength: "This text's length should be greater than to {0}",
                 lessEqualLength: "This text's length should be less than or equal to to {0}",
-                greaterEqualLength: "This text's length should be greater than or equal to {0}"
+                greaterEqualLength: "This text's length should be greater than or equal to {0}",
+                addValidationRule: "Add validation rule"
             },
             steps: {
                 form: "Form",

@@ -130,12 +130,12 @@ public class CredentialServiceImpl implements CredentialService {
 
 		final List<IssueCredentialAttribute> attributes = credential.getForm().stream().map(entry -> {
 			final IssueCredentialAttributeCmd correspondingAttributeCmd = attributeCmdMap.get(entry.getId());
+			if (correspondingAttributeCmd == null) {
+				return null;
+			}
 			boolean isValid = entry.getValidationRules().stream().allMatch(rule -> rule.validate(correspondingAttributeCmd.value(), entry.getType()));
 			if (!isValid) {
 				throw new IllegalArgumentException("Input " + correspondingAttributeCmd.value() + " for attribute " + entry.getAttributeName() + " is not valid");
-			}
-			if (correspondingAttributeCmd == null) {
-				return null;
 			}
 
 			return new IssueCredentialAttribute(entry.getAttributeName(), entry.getType() == FormEntryType.DATE
@@ -228,7 +228,8 @@ public class CredentialServiceImpl implements CredentialService {
 								new FormEntry(
 										createAttributeCmd.getName(),
 										createAttributeCmd.getType(),
-										createAttributeCmd.getAttributeName()
+										createAttributeCmd.getAttributeName(),
+										createAttributeCmd.getValidationRules()
 								)
 						)
 						.toList(),
@@ -287,7 +288,8 @@ public class CredentialServiceImpl implements CredentialService {
 					new FormEntry(
 							attribute.getName(),
 							attribute.getType(),
-							attribute.getAttributeName()
+							attribute.getAttributeName(),
+							attribute.getValidationRules()
 					)
 			);
 		}

@@ -70,7 +70,7 @@ import {useI18n} from "vue-i18n";
 import router from "@/main/vue/router";
 import ValidateCredentials from "@/main/vue/views/ValidateCredentials.vue";
 
-const props = defineProps<{ id?: number, type?: 'internal' | 'external' }>();
+const props = defineProps<{ id?: string, type?: 'internal' | 'external' }>();
 
 
 const {t} = useI18n();
@@ -95,7 +95,7 @@ const credential: Ref<CreateCredential> = ref({
   name: '',
   agent: '',
   credentialDefinitionId: '',
-  attributes: [{type: types[0].value, name: '', attributeName: ''}],
+  attributes: [{type: types[0].value, name: '', attributeName: '', validationRules: []}],
   conditions: [{label: ''}],
 });
 
@@ -110,7 +110,8 @@ onMounted(() => {
           id: f.id,
           attributeName: f.attributeName,
           type: f.type,
-          name: f.label
+          name: f.label,
+          validationRules: f.validationRules
         })),
         conditions: response.data.checklist,
       }
@@ -126,7 +127,7 @@ const addCondition = (index: number) => {
 }
 
 const addAttribute = (index: number) => {
-  credential.value.attributes.splice(index + 1, 0, {type: 'text', name: '', attributeName: ''});
+  credential.value.attributes.splice(index + 1, 0, {type: 'text', name: '', attributeName: '', validationRules: []});
 }
 
 const save = async () => {

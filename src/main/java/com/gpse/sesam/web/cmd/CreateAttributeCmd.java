@@ -1,8 +1,11 @@
 package com.gpse.sesam.web.cmd;
 
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.validation.ValidationRule;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 public class CreateAttributeCmd {
 	@NotBlank
@@ -13,6 +16,8 @@ public class CreateAttributeCmd {
 
 	@NotBlank
 	private String attributeName;
+
+	private List<ValidationRule> validationRules;
 
 	public String getName() {
 		return name;
@@ -36,5 +41,13 @@ public class CreateAttributeCmd {
 
 	public void setAttributeName(final String attributeName) {
 		this.attributeName = attributeName;
+	}
+
+	public List<ValidationRule> getValidationRules() {
+		return validationRules;
+	}
+
+	public void setValidationRules(List<ValidationRule> validationRules) {
+		this.validationRules = validationRules;
 	}
 }

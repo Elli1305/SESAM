@@ -12,6 +12,15 @@ public class RegExRule extends ValidationRule {
     @Column
     private String description;
 
+    public RegExRule(String regEx, String description) {
+        this.regEx = regEx;
+        this.description = description;
+    }
+
+    protected RegExRule() {
+
+    }
+
     @Override
     public boolean validate(String input, FormEntryType type) {
         if (type == FormEntryType.TEXT) {
@@ -20,8 +29,19 @@ public class RegExRule extends ValidationRule {
         throw new IllegalArgumentException("RegEx validation is not possible for type " + type);
     }
 
+    public String getRegEx() {
+        return regEx;
+    }
+
+    public void setRegEx(String regEx) {
+        this.regEx = regEx;
+    }
+
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

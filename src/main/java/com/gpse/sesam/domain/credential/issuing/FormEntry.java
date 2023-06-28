@@ -22,7 +22,7 @@ public class FormEntry {
 	@Column(nullable = false)
 	private String attributeName;
 
-	@OneToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<ValidationRule> validationRules;
 
 	protected FormEntry() {

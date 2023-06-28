@@ -23,7 +23,7 @@
         <div class="row justify-around no-wrap" style="height: 45vh">
           <div class="column no-wrap" style="width: 40%">
             <q-input class="q-my-sm no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
-                     :label="attribute.label" :type="attribute.type"/>
+                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)"/>
           </div>
           <div class="column q-mt-sm no-wrap" style="width: 40%">
             <p>{{ t('issueCredential.checkConditions') }}</p>
@@ -123,22 +123,22 @@ function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | Len
     switch (vr.kind) {
       case 'comparison':
         switch (vr.comparisonType) {
-          case "equal":
+          case "EQUAL":
             rules.push((value) => value === vr.content || t('issueCredential.validation.equal', [vr.content]))
             break
-          case "notEqual":
+          case "NOT_EQUAL":
             rules.push((value) => value !== vr.content || t('issueCredential.validation.notEqual', [vr.content]))
             break
-          case "lessThan":
+          case "LESS_THAN":
             rules.push((value) => value < vr.content || t('issueCredential.validation.lessThan', [vr.content]))
             break
-          case "greaterThan":
+          case "GREATER_THAN":
             rules.push((value) => value > vr.content || t('issueCredential.validation.greaterThan', [vr.content]))
             break
-          case "lessEqual":
+          case "LESS_EQUAL":
             rules.push((value) => value <= vr.content || t('issueCredential.validation.lessEqual', [vr.content]))
             break
-          case "greaterEqual":
+          case "GREATER_EQUAL":
             rules.push((value) => value >= vr.content || t('issueCredential.validation.greaterEqual', [vr.content]))
             break
           default:
@@ -153,22 +153,22 @@ function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | Len
         break
       case 'length':
         switch (vr.comparisonType) {
-          case "equal":
+          case "EQUAL":
             rules.push((value) => value.length === vr.length || t('issueCredential.validation.equalLength', [vr.length]))
             break
-          case "notEqual":
+          case "NOT_EQUAL":
             rules.push((value) => value.length !== vr.length || t('issueCredential.validation.notEqualLength', [vr.length]))
             break
-          case "lessThan":
+          case "LESS_THAN":
             rules.push((value) => value.length < vr.length || t('issueCredential.validation.lessThanLength', [vr.length]))
             break
-          case "greaterThan":
+          case "GREATER_THAN":
             rules.push((value) => value.length > vr.length || t('issueCredential.validation.greaterThanLength', [vr.length]))
             break
-          case "lessEqual":
+          case "LESS_EQUAL":
             rules.push((value) => value.length <= vr.length || t('issueCredential.validation.lessEqualLength', [vr.length]))
             break
-          case "greaterEqual":
+          case "GREATER_EQUAL":
             rules.push((value) => value.length >= vr.length || t('issueCredential.validation.greaterEqualLength', [vr.length]))
             break
           default:

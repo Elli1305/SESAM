@@ -12,6 +12,15 @@ public class LengthRule extends ValidationRule {
     @Column
     private int length;
 
+    public LengthRule(ComparisonType comparisonType, int length) {
+        this.comparisonType = comparisonType;
+        this.length = length;
+    }
+
+    protected LengthRule() {
+
+    }
+
     @Override
     public boolean validate(String input, FormEntryType type) {
         if (type == FormEntryType.NUMBER) {
@@ -20,4 +29,19 @@ public class LengthRule extends ValidationRule {
         throw new IllegalArgumentException("RegEx validation is not possible for type " + type);
     }
 
+    public ComparisonType getComparisonType() {
+        return comparisonType;
+    }
+
+    public void setComparisonType(ComparisonType comparisonType) {
+        this.comparisonType = comparisonType;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
 }

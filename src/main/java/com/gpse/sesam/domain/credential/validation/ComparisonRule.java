@@ -15,6 +15,48 @@ public class ComparisonRule extends ValidationRule {
     @Column
     private String content;
 
+    private boolean currentDay;
+
+    public ComparisonRule(ComparisonType comparisonType, String content) {
+        this.comparisonType = comparisonType;
+        this.content = content;
+        this.currentDay = false;
+    }
+
+    public ComparisonRule(ComparisonType comparisonType, boolean currentDay) {
+        this.comparisonType = comparisonType;
+        this.currentDay = currentDay;
+        this.content = "";
+    }
+
+    protected ComparisonRule() {
+
+    }
+
+    public ComparisonType getComparisonType() {
+        return comparisonType;
+    }
+
+    public void setComparisonType(ComparisonType comparisonType) {
+        this.comparisonType = comparisonType;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public boolean isCurrentDay() {
+        return currentDay;
+    }
+
+    public void setCurrentDay(boolean currentDay) {
+        this.currentDay = currentDay;
+    }
+
     @Override
     public boolean validate(String input, FormEntryType type) {
         switch (type) {
@@ -27,8 +69,9 @@ public class ComparisonRule extends ValidationRule {
                 String[] inputString = input.split("-");
                 LocalDate dateInput = LocalDate.of(Integer.parseInt(inputString[0]), Integer.parseInt(inputString[1]), Integer.parseInt(inputString[2]));
                 LocalDate dateContent;
-                if ("currentDate".equals(content))
+                if (currentDay) {
                     dateContent = LocalDate.now();
+                }
                 else {
                     String[] contentString = content.split("-");
                     dateContent = LocalDate.of(Integer.parseInt(contentString[0]), Integer.parseInt(contentString[1]), Integer.parseInt(contentString[2]));
