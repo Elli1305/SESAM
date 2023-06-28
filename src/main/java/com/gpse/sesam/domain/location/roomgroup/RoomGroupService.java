@@ -11,14 +11,18 @@ import java.util.Optional;
 public interface RoomGroupService {
     List<RoomGroups> getRoomGroups();
 
+    List<RoomGroups> getGroupByBuilding(Long id);
+
     Optional<RoomGroups> getRoomGroups(Long id);
 
     RoomGroups createRoomGroup(RoomGroupCmd roomGroupCmd);
 
     void deleteAll();
+
     RoomGroups getGroupById(Long id);
 
     void saveAll(Iterable<RoomGroups> roomGroups);
+
     void makeGroupEdit(RoomGroups oldGroup, String newName, List<Room> newRooms);
 
     RoomGroups save(RoomGroups roomGroup);

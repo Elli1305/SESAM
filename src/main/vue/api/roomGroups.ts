@@ -7,6 +7,9 @@ export default {
     getRoomGroups(): Promise<AxiosResponse<RoomGroup[]>> {
         return axios.get("api/roomGroups");
     },
+    getGroupByBuilding(param: bigint): Promise<AxiosResponse<RoomGroup[]>> {
+        return axios.get("api/roomGroups/filter/" + param);
+    },
     save(roomGroup: RoomGroup): Promise<AxiosResponse<RoomGroup>> {
         return axios.post('api/roomGroups/save', roomGroup);
     },
