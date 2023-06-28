@@ -47,10 +47,10 @@ public class RoomGroupServiceImpl implements RoomGroupService {
 
     @Override
     public List<RoomGroups> getGroupByBuilding(Long bId) {
-        final List <RoomGroups> allRoomGroups = getRoomGroups();
+        final List<RoomGroups> allRoomGroups = getRoomGroups();
         List<RoomGroups> filteredGroups = new ArrayList<>();
-        for(RoomGroups roomGroup : allRoomGroups) {
-            if(Objects.equals(roomGroup.getBuilding().getId(), bId)) {
+        for (RoomGroups roomGroup : allRoomGroups) {
+            if (Objects.equals(roomGroup.getBuilding().getId(), bId)) {
                 filteredGroups.add(roomGroup);
             }
         }
