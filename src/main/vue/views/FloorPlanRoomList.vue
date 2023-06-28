@@ -10,13 +10,14 @@
                         no-caps
                         class="bg-primary text-white shadow-2"
                 >
-                    <q-tab name="rooms" :label="t('groupRooms.rooms')"/>
-                    <q-tab name="groups" :label="t('groupRooms.groups')"/>
-                    <q-icon size="28px"  fixed-right class="self-start" color="grey-10"  name="info_outlined">
+                    <q-icon size="28px"  fixed-right color="grey-10"  name="info_outlined">
                         <q-tooltip class="grey" anchor="bottom right" max-width="200px"  self="top middle" :offset="[0, 0]">
                             {{t('groupRooms.info')}}
                         </q-tooltip>
                     </q-icon>
+                    <q-tab name="rooms" :label="t('groupRooms.rooms')"/>
+                    <q-tab name="groups" :label="t('groupRooms.groups')"/>
+
                 </q-tabs>
                 <q-separator></q-separator>
 
@@ -206,13 +207,14 @@
                                 <q-radio @click="filterRoomToGroups(); updateNumRoomsInGroup();" v-model="selectedGroups" :val="group"
                                             color="blue"/>
                                 <q-btn-dropdown
-                                        split
                                         flat
                                         style="min-width: 16em"
                                         :label="group.name"
                                         dropdown-icon="expand_more"
+                                        class="q-px-lg"
                                         color="var(--text-color)"
-                                        @click="updateNumRoomsInGroup();">
+                                        @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
+
                                     <div class="column no-wrap" style="background-color: var(--bg-color)">
                                         <div class="row no-wrap">
                                             <div class="column no-wrap" style="padding: 0.5em">
@@ -909,7 +911,10 @@ export default {
             updateNumRoomsInGroup,
             delName() {
                 newGroupName.value = "";
-            }
+            },
+            selectGroup(group) {
+                selectedGroups.value = group;
+            },
         }
     },
 
