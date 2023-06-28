@@ -132,7 +132,13 @@ const messages = {
             noGroupSelected: "Keine Gruppe ausgewählt",
             noRoomSelected: "Keine Räume ausgewählt",
             checkNameMessage: "Name darf nicht leer sein",
-            checkNameCaption: "Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen."
+            checkNameCaption: "Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.",
+            doorconfig: "Türkonfiguration anpassen",
+            select: "Auswählen",
+            doors: "Türen",
+            groupsConfig: "Anpassung der Türconfiguration für Raumgruppen",
+            roomSelection: "Räume auswählen",
+            group: "Gruppe"
 
         },
 
@@ -414,7 +420,14 @@ const messages = {
             noGroupSelected: "No group selected",
             noRoomSelected: "No rooms selected",
             checkNameMessage: "Name must not be empty",
-            checkNameCaption: "At least one letter, number or symbol."
+            checkNameCaption: "At least one letter, number or symbol.",
+            room: "Room",
+            doorconfig: "Adjust door configuration",
+            select: "Select",
+            doors: "Doors",
+            groupsConfig: "Adjustment of door configurations for groups of rooms",
+            roomSelection: "Choose Rooms",
+            group: "Group"
         },
 
         adminEdit: {

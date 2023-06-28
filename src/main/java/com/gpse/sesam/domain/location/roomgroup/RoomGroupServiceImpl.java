@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.location.roomgroup;
 
-import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorRepository;
 import com.gpse.sesam.domain.location.door.config.*;
@@ -27,7 +26,7 @@ public class RoomGroupServiceImpl implements RoomGroupService {
 
 
     @Autowired
-    public RoomGroupServiceImpl(final RoomGroupRepository roomGroupRepository, DoorConfigService doorConfigurationService, DoorRepository doorRepository, RoomRepository roomRepository) {
+    public RoomGroupServiceImpl(final RoomGroupRepository roomGroupRepository, DoorConfigService doorConfigurationService, DoorRepository doorRepository) {
         this.roomGroupRepository = roomGroupRepository;
         this.doorConfigurationService = doorConfigurationService;
         this.doorRepository = doorRepository;
@@ -52,6 +51,18 @@ public class RoomGroupServiceImpl implements RoomGroupService {
         final List<RoomGroups> roomGroups = new ArrayList<>();
         roomGroupRepository.findAll().forEach(roomGroups::add);
         return roomGroups;
+    }
+
+    @Override
+    public List<RoomGroups> getGroupByBuilding(Long bId) {
+        final List<RoomGroups> allRoomGroups = getRoomGroups();
+        List<RoomGroups> filteredGroups = new ArrayList<>();
+        for (RoomGroups roomGroup : allRoomGroups) {
+            if (Objects.equals(roomGroup.getBuilding().getId(), bId)) {
+                filteredGroups.add(roomGroup);
+            }
+        }
+        return filteredGroups;
     }
 
     @Override
