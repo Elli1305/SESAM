@@ -148,7 +148,7 @@ export default {
       {
         name: 'roomId',
         align: 'center',
-        label: t('issuermanagement.roomId'),
+        label: t('issuermanagement.room'),
         field: 'room.name',
         sortable: true,
       },
