@@ -227,17 +227,16 @@
                     multiple
                     :options=options
                     option-value="id"
-                    option-label="name"/>
+                    option-label="name"
+                    options-cover
+                    map-options
+                />
               </q-td>
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td :props="props">
                 <q-checkbox v-model="props.row.name" @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.name, props.row.room)"/>
-                {{props.row.name}}
               </q-td>
-            </template>
-            <template v-slot:body-cell-selected="props">
-              {{model}}
             </template>
           </q-table>
         </q-card-section>
@@ -477,8 +476,7 @@ export default {
         { name: 'room', label: t('groupRooms.room'), align: 'left', field: row => row.room, sortable: true },
         {name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
         {name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-        {name: 'doors', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-        {name: 'selected', label: t('groupRooms.doors'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+        {name: 'doors', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'}
       ]
 
       const rows2 =  ref([]);
@@ -543,6 +541,7 @@ export default {
         doorStore.getByRoomId(id).then((doors) =>{
           console.log(doors)
           options.value = doors;
+          model.value[id] = options.value
         })
       }
 
@@ -807,8 +806,7 @@ export default {
           editGroupName,
           editGroupRooms,
           closeEditAlert,
-          addToList,
-          visibleColumns: ref(['name', 'actions', 'doorNames', 'selected']),
+          visibleColumns: ref(['name', 'actions', 'doorNames']),
           locationList,
           buildingListNames,
           group: ref([]),
