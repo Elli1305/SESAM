@@ -1,13 +1,11 @@
 package com.gpse.sesam.configuration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
@@ -24,7 +22,6 @@ import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
 import com.gpse.sesam.domain.user.issuer.Issuer;
-import com.gpse.sesam.util.GeoJsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -32,11 +29,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -57,9 +50,6 @@ public class InitializeDatabasePresentation implements InitializingBean {
     private final CategoryService categoryService;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final List<Location> locationsList = new ArrayList<>();
-    private final List<Category> categoryList = new ArrayList<>();
 
     private ProofConfig proofConfig;
 
@@ -82,12 +72,14 @@ public class InitializeDatabasePresentation implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         proofConfig = createProofConfig();
         final List<Colors> colors = createColors();
-        final List<Credential> credentials = createCredentials();
+        final List<InternalCredential> credentials = createCredentials();
         final List<SesamUser> users = createUsers();
+        final List<Location> locations = createLocations();
 
         colorsService.saveAll(colors);
         credentialService.saveAll(credentials);
         userService.saveAll(users);
+        locationService.saveAll(locations);
     }
 
     private List<Colors> createColors() {
@@ -121,147 +113,94 @@ public class InitializeDatabasePresentation implements InitializingBean {
     }
 
     private List<SesamUser> createUsers() {
+        //User Roles
         final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
         adminRole.setGranted(true);
+
+
+        List<SesamUserRole> editorAndIssuer = new ArrayList<>();
+
         final SesamUserRole editorRole = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
         editorRole.setGranted(true);
+        final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+        issuerRole.setGranted(true);
+
+        editorAndIssuer.add(editorRole);
+        editorAndIssuer.add(issuerRole);
+
+
+        final SesamUserRole issuerRole2 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+        issuerRole2.setGranted(true);
+
+        //Users
         final String defaultPassword = passwordEncoder.encode("Hallo123!");
+
         final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
                 Collections.singletonList(adminRole));
-        final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
-                Collections.singletonList(editorRole));
+        final SesamUser editor = new Issuer("jörn@sesam.de", defaultPassword, "Jörn", "Editor",
+                editorAndIssuer, new Room("083"));
+        final SesamUser issuer = new Issuer("wunderland@sesam.de", defaultPassword, "Herr", "Wunderland",
+                Collections.singletonList(issuerRole2), new Room("106"));
 
-        return List.of(admin, editor);
+        return List.of(admin, editor, issuer);
     }
 
 
-    private List<Credential> createCredentials() {
-        // breaks jar build from mater
+    private List<InternalCredential> createCredentials() {
 
-        final String jsonContent = readJsonFile();
-        final List<List<Coordinate>> roomCoordinates = createRoomCoordinates(jsonContent);
+        List<InternalCredential> internalCredentials = new ArrayList<>();
 
-        final List<List<Coordinate>> doorCoordinates = createDoorCoordinates(jsonContent);
+        internalCredentials.add(new InternalCredential("U-Member", "$U-MEMBER", "university", formMember(), checklistMember()));
+        internalCredentials.add(new InternalCredential("T-Member", "$T-MEMBER", "tlabs", formMember(), checklistMember()));
+        internalCredentials.add(new InternalCredential("U-Training", "$U-TRAINING", "university", formTraining(), checklistTraining()));
+        internalCredentials.add(new InternalCredential("T-Training", "$T-TRAINING", "tlabs", formTraining(), checklistTraining()));
 
-        // Checklist
-        final List<ChecklistEntry> checklist = checklist();
+        return internalCredentials;
+    }
 
-        //Form
-        final List<FormEntry> form = form();
+    private List<Location> createLocations() {
 
-        // Issuer
-        final SesamUserRole issuerRole1 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-        issuerRole1.setGranted(true);
-        final SesamUserRole editorRole2 = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
-        editorRole2.setGranted(true);
-
-        //Tür 1
-        Coordinate coordinate = new Coordinate(new BigDecimal(-83.62), new BigDecimal(-12.49));
-        Coordinate coordinate1 = new Coordinate(new BigDecimal(-77), new BigDecimal(-12.49));
-
-        //Tür 2
-        Coordinate coordinate2 = new Coordinate(new BigDecimal(-45.76), new BigDecimal(-12.49));
-        Coordinate coordinate3 = new Coordinate(new BigDecimal(-39.64), new BigDecimal(-12.49));
-
-        //Room 0.007
-        Coordinate coordinate4 = new Coordinate(new BigDecimal(-86.62), new BigDecimal(-90));
-        Coordinate coordinate5 = new Coordinate(new BigDecimal(-86.62), new BigDecimal(-12.49));
-
-        Coordinate coordinate6 = new Coordinate(new BigDecimal(-37.10), new BigDecimal(-12.49));
-        Coordinate coordinate7 = new Coordinate(new BigDecimal(-37.10), new BigDecimal(-90));
-
+        //Room 0.114
         List<Coordinate> coordinates = new ArrayList<>();
-        coordinates.add(coordinate);
-        coordinates.add(coordinate1);
-        List<Coordinate> coordinates1 = new ArrayList<>();
-        coordinates1.add(coordinate2);
-        coordinates1.add(coordinate3);
-        List<Coordinate> coordinates2 = new ArrayList<>();
-        coordinates2.add(coordinate4);
-        coordinates2.add(coordinate5);
-        coordinates2.add(coordinate6);
-        coordinates2.add(coordinate7);
 
-        final Door door = new Door("Door1", coordinates);
-        final Door door2 = new Door("Door2", coordinates1);
-        final Room room = new Room("0.007");
-        room.addDoor(door);
-        room.addDoor(door2);
-        room.setCoordinates(coordinates2);
-        final Door door3 = new Door("Door3", doorCoordinates.get(0));
-        final Room room2 = new Room("0.112");
-        room2.setCoordinates(roomCoordinates.get(0));
-        room2.addDoor(door3);
+        coordinates.add(new Coordinate(new BigDecimal("21.18"), new BigDecimal("68.85")));
+        coordinates.add(new Coordinate(new BigDecimal("54.99"), new BigDecimal("68.85")));
+        coordinates.add(new Coordinate(new BigDecimal("54.99"), new BigDecimal("45.56")));
+        coordinates.add(new Coordinate(new BigDecimal("12.18"), new BigDecimal("45.56")));
+        coordinates.add(new Coordinate(new BigDecimal("12.18"), new BigDecimal("57.95")));
+        coordinates.add(new Coordinate(new BigDecimal("21.18"), new BigDecimal("57.95")));
+
+        final Room room = new Room("Forschungslabor 0.114");
+        room.setCoordinates(coordinates);
+
+        //Door to Room 0.114
+        List<Coordinate> doorCoordinates = new ArrayList<>();
+
+        doorCoordinates.add(new Coordinate(new BigDecimal("23.81"), new BigDecimal("68.85")));
+        doorCoordinates.add(new Coordinate(new BigDecimal("26.81"), new BigDecimal("68.85")));
+
+        room.addDoor(new Door("Eingang-1", doorCoordinates));
+
+        //Floor
         final Floor floor = new Floor(0, "/citec-gebaeudeplan.png");
-        final Floor floor2 = new Floor(1, "/citec-gebaeudeplan.png");
         floor.addRoom(room);
-        floor.addRoom(room2);
+
+        //Building
         final Building building = new Building("CITEC");
         building.addFloor(floor);
-        building.addFloor(floor2);
+
+        //Location
+        List<Location> locations = new ArrayList<>();
+
         final Location location = new Location("Bielefeld");
         location.addBuilding(building);
 
+        locations.add(location);
 
-        final String defaultPassword = passwordEncoder.encode("Hallo123!");
-
-        final List<SesamUser> issuers = new ArrayList<>();
-        final Issuer issuer1 = new Issuer("jana@test.com", defaultPassword, "Jana", "Editor-Issuer",
-                List.of(issuerRole1, editorRole2), room2);
-        issuers.add(issuer1);
-
-
-        final List<Credential> credentials = new ArrayList<>();
-        final Credential safety = new Credential("U-MEMBER", "$U-MEMBER",
-                "university", form, checklist);
-        door.addCredential(safety);
-        safety.addIssuer(issuer1);
-        issuer1.addCredential(safety);
-        final List<ChecklistEntry> checklist3 = checklist();
-
-        final List<FormEntry> form3 = form();  //Form
-        final Credential safety2 = new Credential("T-MEMBER", "$T-MEMBER",
-                "tlabs", form3, checklist3);
-        safety2.addIssuer(issuer1);
-        issuer1.addCredential(safety2);
-        credentials.add(safety);
-        credentials.add(safety2);
-
-        List<FormEntry> form4 = formTraining();
-        final List<ChecklistEntry> checklist4 = checklist();
-        final Credential safety3 = new Credential("T-TRAINING", "$T-TRAINING", "tlabs", form4, checklist4);
-        credentials.add(safety3);
-        issuer1.addCredential(safety3);
-
-        final List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-        final ExternalCredential external = new ExternalCredential("FH-MEMBER", "$U-MEMBER");
-        final ExternalCredential external2 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$T-TRAINING");
-
-        externalCredentials2.add(external);
-        externalCredentials2.add(external2);
-
-        final Category category = new Category("Mitarbeiter");
-        category.addExternalCredential(external);
-        category.addCredential(safety);
-        category.addCredential(safety2);
-        final Category category2 = new Category("Training");
-        category2.addCredential(safety3);
-        category2.addExternalCredential(external2);
-
-        locationsList.add(location);
-        locationService.saveAll(locationsList);
-
-        doorConfigService.sendProofConfig( "Door1_" + door.getId(), proofConfig );
-        categoryList.add(category2);
-        categoryList.add(category);
-        categoryService.saveAll(categoryList);
-        credentialService.saveAll(credentials);
-        userService.saveAll(issuers);
-
-        return credentials;
+        return locations;
     }
 
-    private List<FormEntry> form() {
+    private List<FormEntry> formMember() {
         final List<FormEntry> form = new ArrayList<>();
         final FormEntry id = new FormEntry("ID", FormEntryType.NUMBER, "id");
         final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name");
@@ -289,39 +228,17 @@ public class InitializeDatabasePresentation implements InitializingBean {
         return form;
     }
 
-    private List<ChecklistEntry> checklist() {
+    private List<ChecklistEntry> checklistMember() {
         final List<ChecklistEntry> checklist = new ArrayList<>();
-        checklist.add(new ChecklistEntry("Wurde der Kurs erfolgreich abgeschlossen?"));
         checklist.add(new ChecklistEntry("Wurde der notwendige Nachweis erbracht?"));
         return checklist;
     }
 
-    private String readJsonFile() {
-        try {
-            return String.join("", Files.readAllLines(Paths.get("src/main/resources/test_coordinates"
-                    + ".json"), StandardCharsets.UTF_8));
-        } catch (final IOException e) {
-            LOG.warn("Could not read json file", e);
-        }
-        return "";
-    }
-
-    private List<List<Coordinate>> createRoomCoordinates(final String jsonContent) {
-        try {
-            return GeoJsonParser.parsePolygonsFromGeoJson(jsonContent);
-        } catch (final JsonProcessingException e) {
-            LOG.warn("Coordination Data could not be initialized", e);
-        }
-        return Collections.emptyList();
-    }
-
-    private List<List<Coordinate>> createDoorCoordinates(final String jsonContent) {
-        try {
-            return GeoJsonParser.parseLinesFromGeoJson(jsonContent);
-        } catch (final JsonProcessingException e) {
-            LOG.warn("Coordination Data could not be initialized", e);
-        }
-        return Collections.emptyList();
+    private List<ChecklistEntry> checklistTraining() {
+        final List<ChecklistEntry> checklist = new ArrayList<>();
+        checklist.add(new ChecklistEntry("Wurde ein Gefahrentraining absolviert?"));
+        checklist.add(new ChecklistEntry("Wurde der notwendige Nachweis erbracht?"));
+        return checklist;
     }
 
     private ProofConfig createProofConfig() {
