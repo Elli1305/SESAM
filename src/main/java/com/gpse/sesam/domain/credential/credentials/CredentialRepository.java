@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CredentialRepository extends CrudRepository<Credential, Long> {
+public interface CredentialRepository extends CrudRepository<InternalCredential, Long> {
 	@Query(value = "SELECT cr.* FROM CREDENTIAL AS cr "
 			+ "INNER JOIN DOOR_CREDENTIALS AS cd ON cd.CREDENTIALS_ID = cr.ID "
 			+ "INNER JOIN DOOR AS dr ON dr.ID = cd.DOOR_ID "
@@ -15,6 +15,8 @@ public interface CredentialRepository extends CrudRepository<Credential, Long> {
 			+ "INNER JOIN BUILDING AS bd ON bd.ID = fl.BUILDING_ID "
 			+ "INNER JOIN LOCATION AS lc ON lc.ID = bd.LOCATION_ID "
 			+ "WHERE lc.id = :id", nativeQuery = true)
-	List<Credential> findByLocation(@Param("id") Long id);
+	List<InternalCredential> findByLocation(@Param("id") Long id);
+
+	List<InternalCredential> findAllByCredentialDefinitionId(String credentialDefinitionId);
 }
 

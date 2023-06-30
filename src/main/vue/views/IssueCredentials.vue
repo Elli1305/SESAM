@@ -8,7 +8,7 @@
           :rows="rows"
           :columns="columns"
           title="Credentials"
-          :separator="'none'"
+          :separator="'horizontal'"
           hide-header
           hide-bottom
           :no-data-label="t('common.noData')"

@@ -1,13 +1,14 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card style="width: 40em">
+    <q-card style="min-width: 45em">
       <q-card-section>
         <div class="text-h6">Tür zuweisen</div>
       </q-card-section>
-      <q-card-section class="row justify-around no-wrap">
-        <q-input style="width: 18em" filled v-model="doorName" label="Türname" stack-label/>
+      <q-card-section class="row q-px-lg justify-between no-wrap">
+        <q-input class="full-width" filled v-model="doorName" label="Türname" stack-label/>
         <q-select
-            style="width: 18em"
+            class="q-ml-md"
+            style="min-width: 20em"
             filledv-for="(select,i) in qSelectgeneral.qSelectsSet[k]general.qSelectsSet[k].configParts"
             v-model="room"
             use-input
@@ -28,7 +29,14 @@
           </template>
         </q-select>
       </q-card-section>
+
       <q-card-section  v-for="(selectConf,k) in qSelectgeneral.qSelectsSet">
+          <door-config ref="configIn" :door-config="doorConfigIn"
+                       :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.IN : Direction.BOTH"
+                       @changeDirection="changeDirectionOut"></door-config>
+          <door-config v-show="$refs.configIn?.direction !== Direction.BOTH" ref="configOut"
+                       :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.OUT : Direction.BOTH"
+                       :door-config="doorConfigOut" :is-config-out="true"></door-config>
         <q-card bordered flat>
           <q-toolbar class="bg-primary text-accent">
 
@@ -170,30 +178,44 @@
 
 <script>
 import {ref} from "vue";
-import {useCredentialStore} from "@/main/vue/stores/credential";
-import {PredicateType} from "@/main/vue/entity/doorConfiguration";
+import DoorConfig from "@/main/vue/views/DoorConfig.vue";
+import {Direction} from "@/main/vue/entity/doorConfiguration";
 import {useQuasar} from "quasar";
 const starttime = ref()
 const endtime = ref()
 const $q = useQuasar()
 export default {
-  //propslist:{
-      props: {
-          rooms: Array,
-          door: {
-              required: false
-          },
-          doorConfig: {
-              required: false
-          }
-      },
-  //},
+  computed: {
+    Direction() {
+      return Direction
+    }
+  },
+  components: {DoorConfig},
+  props: {
+    rooms: Array,
+    door: {
+      required: false
+    },
+    doorConfigIn: {
+      required: false
+    },
+    doorConfigOut: {
+      required: false
+    }
+  },
 
   emits: [
     'ok', 'hide'
   ],
 
   methods: {
+    changeDirectionOut(direction) {
+      if (direction === Direction.IN) {
+        this.$refs.configOut.direction = Direction.OUT
+      } else if (direction === Direction.OUT) {
+        this.$refs.configOut.direction = Direction.IN
+      }
+    },
     show() {
       this.$refs.dialog.show()
     },
@@ -204,36 +226,60 @@ export default {
       this.$emit('hide')
     },
 
-    onOKClick(props) {
-      if(this.checkBaseConf()){
-          // muss ich das mit dem emit für jede
-          for(const k of this.qSelectgeneral.qSelectsSet){
-              this.$emit('ok', {
-                  room: this.room,
-                  doorName: this.doorName,
-                  configuration: k,
-                  configDescription: this.configDescription
-              })
-              this.hide()
+    onOKClick() {
+        if(this.checkBaseConf()){
+            let config = {}
 
-              if (props.doorConfig) {
-                  k.configDescription.value = props.doorConfig
-              }
+            console.log('qselects', this.$refs.configIn.qSelectgeneral.qSelectsSet)
+            if (this.$refs.configIn.direction === Direction.BOTH) {
+                config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+                config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+                config.doorConfigIn.description = this.$refs.configIn.configDescription
+                config.doorConfigOut.description = this.$refs.configIn.configDescription
+            } else if (this.$refs.configIn.direction === Direction.IN) {
+                config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+                config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+                config.doorConfigIn.description = this.$refs.configIn.configDescription
+                config.doorConfigOut.description = this.$refs.configOut.configDescription
+            } else if (this.$refs.configIn.direction === Direction.OUT) {
+                config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+                config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+                config.doorConfigIn.description = this.$refs.configOut.configDescription
+                config.doorConfigOut.description = this.$refs.configIn.configDescription
+            }
+            config.doorConfigIn?.configParts.forEach(part => {
+                console.log(part)
+                part.credentials = part.credentials.map(credential => credential.credentialDefinitionId)
+            })
+            config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+            // muss ich das mit dem emit für jede
+            for(const k of this.qSelectgeneral.qSelectsSet){
+                this.$emit('ok', {
+                    room: this.room,
+                    doorName: this.doorName,
+                    configuration: k,
+                    configDescription: this.configDescription
+                })
+                this.hide()
 
-          }
-      }
-      else{
-          $q.notify({
-              type: 'negative',
-              message: t('You must have at least one base Configuration'),
-              caption: t('common.internalServerError'),
-              position: "top",
-              color: 'negative',
-              textColor: 'postitive',
-              timeout: 3000,
-              classes: "loginNotify"
-          })
-      }
+                if (props.doorConfig) {
+                    k.configDescription.value = props.doorConfig
+                }
+
+            }
+        }
+        else{
+            $q.notify({
+                type: 'negative',
+                message: t('You must have at least one base Configuration'),
+                caption: t('common.internalServerError'),
+                position: "top",
+                color: 'negative',
+                textColor: 'postitive',
+                timeout: 3000,
+                classes: "loginNotify"
+            })
+        }
     },
     onCancelClick() {
       this.hide()
@@ -357,27 +403,12 @@ export default {
       })
     }
 
-    const commonAttributeFilter = function (credentials) {
-      let formEntrys = credentials.map((credential) => {
-        return credential.form
-      })
-      if (formEntrys.length > 1) {
-        return formEntrys.shift().filter((v) => {
-          return formEntrys.every((a) => {
-            return a.some(ele => ele.attributeName === v.attributeName);
-          });
-        })
-      }
-      return formEntrys[0];
-    }
-
     return {
       qSelectgeneral,
       baseConfig,
       starttime,
       endtime,
       room,
-      credentials,
       filterFn,
       doorName,
       credentialStore,

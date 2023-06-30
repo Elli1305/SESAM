@@ -1,6 +1,6 @@
 package com.gpse.sesam.domain.credential.category;
 
-import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.credential.credentials.CredentialRepository;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredentialRepository;
@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteById(Long id) {
         Optional<Category> category = getCategory(id);
         if (category.isPresent()) {
-            for (Credential credential: category.get().getCredentials()) {
+            for (InternalCredential credential: category.get().getCredentials()) {
                 credential.setCategory(null);
             }
             category.get().setCredentials(null);
@@ -75,14 +75,14 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> category = getCategory(id);
         if (category.isPresent()) {
             category.get().setName(cmd.getName());
-            for (Credential credential : category.get().getCredentials()) {
+            for (InternalCredential credential : category.get().getCredentials()) {
                 credential.setCategory(null);
             }
             category.get().setCredentials(null);
             if (!cmd.getCredentials().isEmpty()) {
-                List<Credential> internal = new ArrayList<>();
+                List<InternalCredential> internal = new ArrayList<>();
                 for (Long cred : cmd.getCredentials()) {
-                    Optional<Credential> credential = credentialRepository.findById(cred);
+                    Optional<InternalCredential> credential = credentialRepository.findById(cred);
                     if (credential.isPresent()) {
                         credential.get().setCategory(category.get());
                         internal.add(credential.get());
@@ -113,9 +113,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void createCategory(CategoryResponseCmd categoryCmd) {
         final Category category = new Category(categoryCmd.getName());
-        List<Credential> internal = new ArrayList<>();
+        List<InternalCredential> internal = new ArrayList<>();
         for (Long cred: categoryCmd.getCredentials()) {
-        Optional<Credential> credential = credentialRepository.findById(cred);
+        Optional<InternalCredential> credential = credentialRepository.findById(cred);
             if (credential.isPresent()) {
                 internal.add(credential.get());
                 credential.get().setCategory(category);

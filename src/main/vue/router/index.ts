@@ -22,6 +22,8 @@ import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 import IssueCredential from "@/main/vue/views/IssueCredential.vue";
 import IssuerManagement from "@/main/vue/views/IssuerManagement.vue";
+import CredentialAdministration from "@/main/vue/views/CredentialAdministration.vue";
+import CredentialEditing from "@/main/vue/views/CredentialEditing.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -160,6 +162,30 @@ const router = createRouter({
             props: true,
             meta: {requiresAuth: true},
         },
+        {
+            path: "/credential_administration",
+            component: CredentialAdministration,
+            meta: {requiresAuth: true},
+        },
+        {
+            path: "/credential_administration/:type(internal|external)/:id(\\d+)",
+            component: CredentialEditing,
+            props: true,
+            meta: {
+                requiresRoles: [
+                    'ADMINISTRATOR',
+                ]
+            }
+        },
+        {
+            path: "/add_credential",
+            component: CredentialEditing,
+            meta: {
+                requiresRoles: [
+                    'ADMINISTRATOR',
+                ]
+            }
+        }
     ],
 });
 

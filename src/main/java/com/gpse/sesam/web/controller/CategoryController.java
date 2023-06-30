@@ -30,7 +30,7 @@ public class CategoryController {
         this.externalCredentialService = externalCredentialService;
     }
 
-    @Secured("ADMINISTRATOR")
+    @Secured({"ADMINISTRATOR", "EDITOR"})
     @GetMapping("/credentialmapping")
     public List<Category> getCategoriesInfo() {
         return categoryService.getCategory();

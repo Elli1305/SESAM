@@ -5,9 +5,8 @@ import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.CredentialServiceImpl;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
@@ -26,7 +25,6 @@ import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.util.GeoJsonParser;
-import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -39,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() {
 		final List<Location> locations = createLocations();
-		final List<Credential> credentials = createCredentials();
+		final List<InternalCredential> credentials = createCredentials();
 		final List<SesamUser> users = createUsers(credentials);
 		final List<Category> categories = createCredentialCategories();
 		final List<Colors> colors = createColors();
@@ -123,7 +122,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		defaultColors.setWarning("#fec705");
 	}
 
-	private List<SesamUser> createUsers(final List<Credential> credentials) {
+	private List<SesamUser> createUsers(final List<InternalCredential> credentials) {
 		final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
 		adminRole.setGranted(true);
 		final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
@@ -132,16 +131,16 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		editorRole.setGranted(true);
 		final String defaultPassword = passwordEncoder.encode("Hallo123!");
 		final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
-				Collections.singletonList(adminRole));
+				List.of(adminRole));
 		final Issuer issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
-				Collections.singletonList(issuerRole), new Room("0.007"));
+				List.of(issuerRole), new Room("0.007"));
 		issuer.setCredentials(credentials);
 		final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
-				Collections.singletonList(editorRole));
+				List.of(editorRole));
 		final SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User",
 				Collections.emptyList());
 
-		for (final Credential cred : credentials) {
+		for (final InternalCredential cred : credentials) {
 			cred.getIssuer().add(issuer);
 		}
 
@@ -205,7 +204,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 //		for (int i = 0; i < doorCoordinates.size(); i++) {
 //			final Door door = new Door("door" + i, doorCoordinates.get(i));
-//			rooms.get(i).setDoors(Collections.singletonList(door));
+//			rooms.get(i).setDoors(List.of(door));
 //		}
 
 		final List<Floor> floors = new ArrayList<>();
@@ -266,7 +265,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		return checklist;
 	}
 
-	private List<Credential> createCredentials() {
+	private List<InternalCredential> createCredentials() {
 		// Checklist
 		final List<ChecklistEntry> checklist = checklist();
 
@@ -297,17 +296,16 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final String defaultPassword = passwordEncoder.encode("Hallo123!");
 		final List<Issuer> issuers = new ArrayList<>();
 		final Issuer issuer1 = new Issuer("peters@test.com", defaultPassword, "Gerda", "Peters",
-				Collections.singletonList(issuerRole10), room);
+				List.of(issuerRole10), room);
 
 		final Issuer issuer2 = new Issuer("muster@test.com", defaultPassword, "Erik", "Muster",
-				Collections.singletonList(issuerRole11), room2);
+				List.of(issuerRole11), room2);
 
 		issuers.add(issuer1);
 		issuers.add(issuer2);
 
 		// Safety-Credential
-		final List<Credential> credentials = new ArrayList<>();
-		final Credential safety = new Credential("Sicherheitsbelehrung-Uni", "$U-MEMBER",
+		final InternalCredential safety = new InternalCredential("Sicherheitsbelehrung-Uni", "$U-MEMBER",
 				"university", form, checklist);
 		safety.addIssuer(issuer1);
 		safety.addIssuer(issuer2);
@@ -315,14 +313,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<ChecklistEntry> checklist3 = checklist();
 
 		final List<FormEntry> form3 = form();  //Form
-		final Credential safety2 = new Credential("Sicherheitsbelehrung-FH", "$T-MEMBER",
+		final InternalCredential safety2 = new InternalCredential("Sicherheitsbelehrung-FH", "$T-TRAINING",
 				"tlabs", form3, checklist3);
 		safety2.addIssuer(issuer1);
 		safety2.addIssuer(issuer2);
-		credentials.add(safety);
-		credentials.add(safety2);
 
-		return credentials;
+
+		return Arrays.asList(safety, safety2);
 	}
 
 	private List<Category> createCredentialCategories() {
@@ -343,17 +340,17 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 		final List<Issuer> issuers = new ArrayList<>();
 		final Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
-				Collections.singletonList(issuerRole10), room);
+				List.of(issuerRole10), room);
 
 		final Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann",
-				"Hombach", Collections.singletonList(issuerRole11), room2);
+				"Hombach", List.of(issuerRole11), room2);
 		issuers.add(issuer1);
 		issuers.add(issuer2);
 
 
 		// Safety-Credential
-		final List<Credential> credentials = new ArrayList<>();
-		final Credential safety = new Credential(
+		final List<InternalCredential> credentials = new ArrayList<>();
+		final InternalCredential safety = new InternalCredential(
 				"Sicherheitsbelehrung-Baumschule",
 				"$T-MEMBER",
 				"tlabs",
@@ -363,8 +360,9 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		safety.addIssuer(issuer1);
 		safety.addIssuer(issuer2);
 		credentials.add(safety);
+		final List<FormEntry> form7 = form();
 		final List<ExternalCredential> externalCredentials = new ArrayList<>();
-		final ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-MEMBER");
+		final ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-TRAINING", form7);
 
 		externalCredentials.add(safety3);
 
@@ -378,8 +376,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		//Form
 		final List<FormEntry> form6 = form();
 
-		final List<Credential> credentials2 = new ArrayList<>();
-		final Credential firstAid = new Credential(
+		final List<InternalCredential> credentials2 = new ArrayList<>();
+		final InternalCredential firstAid = new InternalCredential(
 				"Erste-Hilfe-Kurs-DRK",
 				"$U-TRAINING",
 				"university",
@@ -389,9 +387,11 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		firstAid.addIssuer(issuer2);
 		credentials2.add(firstAid);
 
+		final List<FormEntry> form8 = form();
+		final List<FormEntry> form9 = form();
 		final List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-TRAINING");
-		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-MEMBER");
+		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-TRAINING", form8);
+		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-MEMBER", form9);
 
 		externalCredentials2.add(firstAid2);
 		externalCredentials2.add(firstAid3);
@@ -399,7 +399,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		//Rooms with Credentials
 
 		final Door door3 = new Door("Tor120", null);
-		door3.addCredential(safety);
 
 		final List<Door> doors3 = new ArrayList<>();
 
@@ -431,7 +430,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		location.addBuilding(building3);
 
 		final Door door4 = new Door("Tor1506", null);
-		door4.addCredential(firstAid);
 
 		final List<Door> doors4 = new ArrayList<>();
 
@@ -473,11 +471,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		category2.addCredential(firstAid);
 		category2.addExternalCredential(firstAid2);
 		category2.addExternalCredential(firstAid3);
-		final CredentialCmd credentialCmd = CredentialServiceImpl.createCredentialCmd(category, safety);
-		final CredentialCmd credentialCmd2 = CredentialServiceImpl.createCredentialCmd(category2, firstAid);
-		final List<CredentialCmd> credentialCmds = new ArrayList<>();
-		credentialCmds.add(credentialCmd);
-		credentialCmds.add(credentialCmd2);
 		categories.add(category);
 		categories.add(category2);
 

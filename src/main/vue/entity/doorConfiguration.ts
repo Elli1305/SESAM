@@ -1,7 +1,18 @@
 import {FormEntry} from "@/main/vue/entity/credentialDefinition";
 
-export interface DoorConfiguration {
 
+export enum Direction {
+    IN = "IN",
+    OUT = "OUT",
+    BOTH = "BOTH"
+}
+
+export interface TwoWayDoorConfiguration {
+    doorConfigIn: DoorConfiguration,
+    doorConfigOut: DoorConfiguration
+}
+
+export interface DoorConfiguration {
     configParts: Config[],
 
     attributeFilters: AttributeFilter[]

@@ -3,15 +3,29 @@ import {Ref, ref} from "vue";
 import api from "@/main/vue/api";
 import {Category, Credential, CredentialCmd, ExternalCredential} from "@/main/vue/entity/credentialDefinition";
 
+export const useCredentialsStore = defineStore('credentials', {
+    state: () => {
+        return {
+            credentials: new Array<Credential>(),
+            externalCredentials: new Array<ExternalCredential>(),
+        };
+    }, actions: {
+        async fetch(): Promise<void> {
+            this.credentials = await api.credential.all().then(response => response.data);
+            this.externalCredentials = await api.credential.externalCredentials().then(response => response.data);
+        }
+    }
+},);
+
 export const useCredentialStore = defineStore('credential', () => {
         const credentials: Ref<CredentialCmd[] | null> = ref(null)
-        const allCredentials: Ref<Credential[] | null> = ref(null)
+        const allCredentials: Ref<ExternalCredential[] | null> = ref(null)
         const credsByIssuer: Ref<Credential[] | null> = ref(null)
         const categories: Ref<Category[] | null> = ref(null)
         const external: Ref<ExternalCredential[] | null> = ref(null)
 
 
-        function getCredentialsByLocation(id: string) {
+        function getCredentialsByLocation(id: bigint) {
             return new Promise((resolve, reject) => {
                 api.credential.getCredentialsByLocation(id).then((response) => {
                     credentials.value = response.data
@@ -24,7 +38,7 @@ export const useCredentialStore = defineStore('credential', () => {
 
         function getAllCredentials() {
             return new Promise((resolve, reject) => {
-                api.credential.all().then((response) => {
+                api.credential.getAllCredentials().then((response) => {
                     allCredentials.value = response.data
                     resolve(response.data)
                 }).catch((error) => {

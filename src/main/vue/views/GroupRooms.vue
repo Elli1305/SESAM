@@ -17,14 +17,16 @@
 
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
+            <div class="row justify-evenly no-wrap">
               <q-btn
                   dense
                   round
                   flat
-                  icon="edit"
                   color="grey"
-                  @click="getInfosForEditGroup(Object.values(props)); getOldName(); editAlert = true"
-                  test="props.value"/>
+                  @click="getInfosForEditGroup(Object.values(props)); getOldName(); updateRoomList(currentBuilding); editAlert = true"
+                  test="props.value">
+                <span class="material-icons-outlined">edit</span>
+              </q-btn>
               <q-btn
                   dense
                   round
@@ -32,6 +34,7 @@
                   icon="delete"
                   color="grey"
                   @click="deleteAlert = true; delGroup(Object.values(props));"/>
+            </div>
           </q-td>
         </template>
 
@@ -42,7 +45,7 @@
               icon="add"
               color="grey"
               :label="t('groupRooms.new')"
-              @click="newGroup = true; toDefault()"
+              @click="newGroup = true; toDefault(); updateRoomList(currentBuilding);"
               style="margin-right: 2em"/>
           <q-input borderless dense debounce="300" v-model="filter.search"
                    :placeholder="t( 'adminCurrentUser.search')">
@@ -189,11 +192,10 @@ const columns = [
         align: 'center',
         field: row => row.name,
         sortable: true,
-        headerStyle: 'max-width: 50px',
         //headerClasses: 'bg-primary text-white',
     },
     {name: 'rooms', align: 'center', label: "Räume", field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
-    {name: 'actions', label: 'Bearbeiten', style: 'max-width 10px', headerStyle: 'max-width: 20px', align: 'center'}
+    {name: 'actions', label: 'Bearbeiten', style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'}
 ]
 
 const rows = ref([]);
@@ -326,7 +328,7 @@ export default {
 
         async function checkName(newName) {
             console.log(newName);
-            console.log("room Group List:", roomGroupList);
+            console.log("room Group List:", rows.value);
             checkNameAllowed.value = false;
             if(newName.trim() === ""){
                 $q.notify({
@@ -339,7 +341,7 @@ export default {
             else {
                 checkNameAllowed.value = true;
             }
-            for(const theGroup of roomGroupList) {
+            for(const theGroup of rows.value) {
                 console.log("roomGroup:", theGroup)
                 console.log("newName: ", newName);
                 if (theGroup.name === newName) {
@@ -429,9 +431,11 @@ export default {
             editName:ref(''),
             modelRooms: ref(null),
             modelRoomsNew: ref(editGroupRooms.value),
+            updateRoomList,
             checkName,
             checkNameAllowed,
             updateCurrentGroup,
+            currentBuilding,
             makeNewGroup,
             deleteGroup,
             editGroup,
@@ -460,6 +464,7 @@ export default {
             getBuilding(building) {
                 console.log("Changed building", building);
                 currentBuilding.value = building;
+                updateRoomList(building);
                 adaptRoomGroupsToBuilding();
             },
 

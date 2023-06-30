@@ -21,4 +21,14 @@ public enum Predicate {
 		return value;
 	}
 
+
+	public static Predicate fromString(final String s) {
+		for (final Predicate predicate : Predicate.values()) {
+			if (predicate.getValue().equals(s)) {
+				return predicate;
+			}
+		}
+		return null;
+	}
+
 }

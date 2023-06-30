@@ -2,15 +2,20 @@ package com.gpse.sesam.domain.credential.credentials;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
+import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.credential.issuing.IssueCredential;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
-import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
+import com.gpse.sesam.web.cmd.CreateCredentialCmd;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
+import com.gpse.sesam.web.cmd.UpdateAttributeCmd;
+import com.gpse.sesam.web.cmd.UpdateConditionCmd;
+import com.gpse.sesam.web.cmd.UpdateCredentialCmd;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -36,31 +41,63 @@ public class CredentialServiceImpl implements CredentialService {
 	private final IssuerRepository issuerRepository;
 	private final CredentialRepository credentialRepository;
 
+	private final ExternalCredentialRepository externalCredentialRepository;
+	private final ExternalCredentialService externalCredentialService;
+
 	@Autowired
 	public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
+								 final CredentialRepository credentialRepository,
 								 final IssuerRepository issuerRepository,
-								 final CredentialRepository credentialRepository) {
+								 final ExternalCredentialRepository externalCredentialRepository,
+								 final ExternalCredentialService externalCredentialService) {
 		this.client = client;
 		this.mapper = mapper;
 		this.issuerRepository = issuerRepository;
 		this.credentialRepository = credentialRepository;
+		this.externalCredentialRepository = externalCredentialRepository;
+		this.externalCredentialService = externalCredentialService;
 	}
 
 	@Override
-	public List<Credential> getCredentials() {
-		final List<Credential> credentials = new ArrayList<>();
+	public List<InternalCredential> getCredentials() {
+		final List<InternalCredential> credentials = new ArrayList<>();
 		credentialRepository.findAll().forEach(credentials::add);
 		return credentials;
 	}
 
 	@Override
-	public List<Credential> getCredentialsByIssuerId(final Long id) {
+	public List<Credential> getAllCredentials() {
+		final List<Credential> credentials = new ArrayList<>();
+		credentialRepository.findAll().forEach(credentials::add);
+		credentials.addAll(externalCredentialService.getExternalCredentials());
+		return credentials;
+	}
+
+	@Override
+	public List<InternalCredential> getCredentialsByIssuerId(final Long id) {
 		final Issuer issuer = issuerRepository.findById(String.valueOf(id)).orElseThrow();
 		return issuer.getCredentials();
 	}
 
 	@Override
-	public Optional<Credential> getCredential(final Long id) {
+	public List<ExternalCredential> getExternalCredentials() {
+		final List<ExternalCredential> credentials = new ArrayList<>();
+		externalCredentialRepository.findAll().forEach(credentials::add);
+		return credentials;
+	}
+
+	@Override
+	public List<Credential> getCredentialByCredentialDefinitionId(final String id) {
+		List<Credential> credential = new ArrayList<>(credentialRepository.findAllByCredentialDefinitionId(id));
+		if (credential.isEmpty()) {
+			credential.addAll(externalCredentialService.getExternalCredentialByCredentialDefinitionId(id));
+		}
+		return credential;
+	}
+
+
+	@Override
+	public Optional<InternalCredential> getCredential(final Long id) {
 		return credentialRepository.findById(id);
 	}
 
@@ -74,7 +111,7 @@ public class CredentialServiceImpl implements CredentialService {
 	@Override
 	public String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds)
 			throws JsonProcessingException {
-		final Credential credential = credentialRepository.findById(id).orElseThrow();
+		final InternalCredential credential = credentialRepository.findById(id).orElseThrow();
 
 		final Map<Long, IssueCredentialAttributeCmd> attributeCmdMap = attributeCmds.stream()
 				.collect(Collectors.toMap(IssueCredentialAttributeCmd::id, Function.identity()));
@@ -100,34 +137,35 @@ public class CredentialServiceImpl implements CredentialService {
 	}
 
 	@Override
-	public void saveAll(final Iterable<Credential> credentials) {
+	public void saveAll(final Iterable<InternalCredential> credentials) {
 		credentialRepository.saveAll(credentials);
 	}
 
 
 	@Override
-	public List<Credential> credentialFindByLocation(final Long id) {
+	public List<InternalCredential> credentialFindByLocation(final Long id) {
 		return credentialRepository.findByLocation(id);
 	}
 
 
+	@Override
 	public List<CredentialCmd> getCredentialByLocation(final Long id) {
-		List<Credential> credentials = credentialRepository.findByLocation(id);
-		List<CredentialCmd> cmds = new ArrayList<>();
+		final List<InternalCredential> credentials = credentialRepository.findByLocation(id);
+		final List<CredentialCmd> cmds = new ArrayList<>();
 
-		for (Credential credential : credentials) {
-			String categoryName = credential.getCategory().getName();
-			String credentialName = credential.getName();
-			List<String> externalCredentials = new ArrayList<>();
-			for (ExternalCredential externalCredential : credential.getCategory().getExternalCredentials()) {
-				String external = externalCredential.getName();
+		for (final InternalCredential credential : credentials) {
+			final String categoryName = credential.getCategory().getName();
+			final String credentialName = credential.getName();
+			final List<String> externalCredentials = new ArrayList<>();
+			for (final ExternalCredential externalCredential : credential.getCategory().getExternalCredentials()) {
+				final String external = externalCredential.getName();
 				externalCredentials.add(external);
 			}
-			List<String> issuers = new ArrayList<>();
-			List<String> rooms = new ArrayList<>();
-			for (Issuer issuer: credential.getIssuer()) {
-				String issuerName = issuer.getFirstName() + " " + issuer.getLastName();
-				String room = issuer.getRoom().getName();
+			final List<String> issuers = new ArrayList<>();
+			final List<String> rooms = new ArrayList<>();
+			for (final Issuer issuer : credential.getIssuer()) {
+				final String issuerName = issuer.getFirstName() + " " + issuer.getLastName();
+				final String room = issuer.getRoom().getName();
 				issuers.add(issuerName);
 				rooms.add(room);
 			}
@@ -137,21 +175,95 @@ public class CredentialServiceImpl implements CredentialService {
 		return cmds;
 	}
 
-	public static CredentialCmd createCredentialCmd(final Category category, final Credential credential) {
-		final List<String> externalCred = new ArrayList<>();
-		final List<String> issuerName = new ArrayList<>();
-		final List<String> issuerRoom = new ArrayList<>();
+	@Override
+	public void create(final CreateCredentialCmd createCredentialCmd) {
+		final InternalCredential credential = new InternalCredential(
+				createCredentialCmd.getName(),
+				createCredentialCmd.getCredentialDefinitionId(),
+				createCredentialCmd.getAgent(),
+				createCredentialCmd.getAttributes().stream()
+						.map(createAttributeCmd ->
+								new FormEntry(
+										createAttributeCmd.getName(),
+										createAttributeCmd.getType(),
+										createAttributeCmd.getAttributeName()
+								)
+						)
+						.toList(),
+				createCredentialCmd.getConditions().stream()
+						.map(createConditionCmd -> new ChecklistEntry(createConditionCmd.getLabel()))
+						.toList()
+		);
 
-		for (int i = 0; i < category.getExternalCredentials().size(); i++) {
-			externalCred.add(category.getExternalCredentials().get(i).getName());
+		credentialRepository.save(credential);
+	}
+
+	@Override
+	public void delete(final Long id) {
+		final Optional<InternalCredential> optionalCredential = credentialRepository.findById(id);
+
+		if (optionalCredential.isEmpty()) {
+			return;
 		}
 
-		for (int i = 0; i < credential.getIssuer().size(); i++) {
-			issuerRoom.add(credential.getIssuer().get(i).getRoom().getName());
-			issuerName.add(credential.getIssuer().get(i).getFirstName() + " " + credential.getIssuer().get(i)
-					.getLastName());
+		final InternalCredential credential = optionalCredential.get();
+
+		credential.setCategory(null);
+
+		for (final Issuer issuer : credential.getIssuer()) {
+			issuer.setCredentials(
+					issuer.getCredentials()
+							.stream()
+							.filter(credential1 -> !credential1.getId().equals(credential.getId()))
+							.collect(Collectors.toList())
+			);
 		}
 
-		return new CredentialCmd(category.getName(), credential.getName(), externalCred, issuerName, issuerRoom);
+		credential.setIssuer(null);
+
+		credentialRepository.deleteById(id);
+	}
+
+	@Override
+	public void update(final Long id, final UpdateCredentialCmd updateCredentialCmd) {
+		final Optional<InternalCredential> optionalCredential = credentialRepository.findById(id);
+
+		if (optionalCredential.isEmpty()) {
+			return;
+		}
+
+		final InternalCredential credential = optionalCredential.get();
+
+		credential.setName(updateCredentialCmd.getName());
+		credential.setAgent(updateCredentialCmd.getAgent());
+		credential.setCredentialDefinitionId(updateCredentialCmd.getCredentialDefinitionId());
+
+		final List<FormEntry> formEntries = new ArrayList<>();
+
+		for (final UpdateAttributeCmd attribute : updateCredentialCmd.getAttributes()) {
+			formEntries.add(
+					new FormEntry(
+							attribute.getName(),
+							attribute.getType(),
+							attribute.getAttributeName()
+					)
+			);
+		}
+
+		credential.setForm(formEntries);
+
+		final List<ChecklistEntry> checklist = new ArrayList<>();
+
+		for (final UpdateConditionCmd condition : updateCredentialCmd.getConditions()) {
+			checklist.add(
+					new ChecklistEntry(
+							condition.getLabel()
+					)
+			);
+		}
+
+		credential.setChecklist(checklist);
+
+		credentialRepository.save(credential);
 	}
 }

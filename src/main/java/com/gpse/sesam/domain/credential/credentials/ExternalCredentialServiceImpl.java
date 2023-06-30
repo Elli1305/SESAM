@@ -29,6 +29,11 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
     }
 
     @Override
+    public List<ExternalCredential> getExternalCredentialByCredentialDefinitionId(String id) {
+        return externalCredentialRepository.findAllByCredentialDefinitionId(id);
+    }
+
+    @Override
     public void deleteAll() {
         externalCredentialRepository.deleteAll();
     }

@@ -4,7 +4,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.List;
 
-public class ConfigCmd {
+public class DoorConfigCmd {
 	private String doorId;
 	private String description;
 	private List<ConfigPartsCmd> configParts;

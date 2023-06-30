@@ -1,6 +1,6 @@
 package com.gpse.sesam.domain.location.door;
 
-import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.door.config.ProofConfig;
 import com.gpse.sesam.domain.location.room.Room;
@@ -23,8 +23,8 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-	private List<Credential> credentials = new ArrayList<>();
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<InternalCredential> credentials = new ArrayList<>();
 
 	@OneToMany(cascade =  CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ProofConfig> proofConfigs = new ArrayList<>();
@@ -54,11 +54,11 @@ public class Door {
 		this.name = name;
 	}
 
-	public List<Credential> getCredentials() {
+	public List<InternalCredential> getCredentials() {
 		return credentials;
 	}
 
-	public void setCredentials(final List<Credential> credentials) {
+	public void setCredentials(final List<InternalCredential> credentials) {
 		this.credentials = credentials;
 	}
 
@@ -70,7 +70,7 @@ public class Door {
 		this.coordinates = coordinates;
 	}
 
-	public void addCredential(final Credential credential) {
+	public void addCredential(final InternalCredential credential) {
 		credentials.add(credential);
 	}
 

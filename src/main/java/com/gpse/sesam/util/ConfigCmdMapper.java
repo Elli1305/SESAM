@@ -8,8 +8,8 @@ import com.gpse.sesam.domain.location.door.config.ProofAttributeInfo;
 import com.gpse.sesam.domain.location.door.config.ProofConfig;
 import com.gpse.sesam.domain.location.door.config.ProofPredicateInfo;
 import com.gpse.sesam.web.cmd.AttributeFilterCmd;
-import com.gpse.sesam.web.cmd.ConfigCmd;
 import com.gpse.sesam.web.cmd.ConfigPartsCmd;
+import com.gpse.sesam.web.cmd.DoorConfigCmd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +20,13 @@ public final class ConfigCmdMapper {
 	private ConfigCmdMapper() {
 	}
 
-	public static ProofConfig fromCmd(final ConfigCmd configCmd) {
+	public static ProofConfig fromCmd(final DoorConfigCmd doorConfigCmd) {
 		final ProofConfig proofConfig = new ProofConfig();
 
-		proofConfig.setDescription(configCmd.getDescription());
+		proofConfig.setDescription(doorConfigCmd.getDescription());
 
 		int index = 0;
-		for (final ConfigPartsCmd part : configCmd.getConfigParts()) {
+		for (final ConfigPartsCmd part : doorConfigCmd.getConfigParts()) {
 			final ProofAttributeInfo attributeInfo = new ProofAttributeInfo();
 			final List<AttributeFilter> attributeFilters = new ArrayList<>();
 			for (final AttributeFilterCmd filter : part.getAttributeFilter()) {
