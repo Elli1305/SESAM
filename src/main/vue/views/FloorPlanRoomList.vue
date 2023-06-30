@@ -202,35 +202,45 @@
                                 <q-icon name="search"/>
                             </template>
                         </q-input>
+                        <div class="row justify-between">
                         <q-list>
+
                             <q-item v-for="group in allGroups" style="padding-left: 0">
                                 <q-radio @click="filterRoomToGroups(); updateNumRoomsInGroup();" v-model="selectedGroups" :val="group"
                                             color="blue"/>
                                 <q-btn-dropdown
                                         flat
-                                        style="min-width: 16em"
+                                        style="min-width: 16em; max-width: 16em"
                                         :label="group.name"
-                                        dropdown-icon="expand_more"
-                                        class="q-px-lg"
+                                        dropdown-icon="none"
+                                        class="q-pl-xl"
                                         color="var(--text-color)"
                                         @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
+                                </q-btn-dropdown>
+                                <q-btn-dropdown
+                                    flat
+                                    menu-anchor="bottom right"
+                                    style="max-width: 0em"
+                                    dropdown-icon="expand_more"
+                                    color="var(--text-color)"
+                                    @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
 
                                     <div class="column no-wrap" style="background-color: var(--bg-color)">
-                                        <div class="row no-wrap">
-                                            <div class="column no-wrap" style="padding: 0.5em">
-                                                        <q-list>
-                                                            <q-item-label>{{ t("floorplan.roomAmount") }}:</q-item-label>
-                                                        </q-list>
+                                        <div class="row no-wrap" style="min-width: 18em">
+                                            <div class="column no-wrap q-pl-lg" style="padding: 0.5em">
+                                                <q-list>
+                                                    <q-item-label>{{ t("floorplan.roomAmount") }}:</q-item-label>
+                                                </q-list>
                                             </div>
                                             <div class="column no-wrap" style="padding: 0.5em">
                                                 <q-list>
-                                                                                            <q-item-label>{{ numRoomsInGroup }}</q-item-label>
+                                                    <q-item-label>{{ numRoomsInGroup }}</q-item-label>
 
                                                 </q-list>
                                             </div>
                                         </div>
                                         <div
-                                                v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
+                                            v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                                             <q-separator></q-separator>
 
                                             <div class="row justify-center" style="padding: 0.5em">
@@ -295,8 +305,11 @@
                                         </div>
 
                                     </div>
+
+
                                 </q-btn-dropdown>
                             </q-item>
+
                         </q-list>
                         <div
                             v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
@@ -314,6 +327,7 @@
                             </q-item>
 
 
+                        </div>
                         </div>
 
                     </q-tab-panel>
@@ -470,8 +484,11 @@
                                 </div>
                             </div>
                         </q-btn-dropdown>
+
                     </q-item>
+
                 </q-list>
+
 
             </div>
 
