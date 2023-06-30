@@ -240,140 +240,15 @@
             </template>
           </q-table>
         </q-card-section>
-        <q-toolbar class="bg-primary text-accent">
-          <q-toolbar-title>{{t("doorconfig.configurationGroup")}}</q-toolbar-title>
-          <q-field dark borderless>
-            <template v-slot:control>
-              <div class="no-outline text-subtitle1">{{t("doorconfig.direction")}}</div>
-            </template>
-            <template v-slot:append>
-              <q-btn-toggle
-                  toggle-indeterminate
-                  v-model="direction"
-                  style="margin: 1em 1em 1em 0"
-                  :label="t('doorconfig.direction2')"
-                  color="white"
-                  text-color="black"
-                  :options="[
-                  {label: t('doorconfig.in'), value: Direction.IN},
-                  {label: t('doorconfig.out'), value: Direction.BOTH},
-                  {label: t('doorconfig.both'), value: Direction.OUT}
-                ]"
-                  rounded
-                  size="0.5em"
-                  @update:model-value="$emit('changeDirection', direction)"
-                  :readonly="isConfigOut"
-              />
-            </template>
-          </q-field>
-          <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
-            <q-tooltip class="bg-grey-14" anchor="bottom middle" self="top middle" :offset="[0,0]">
-              {{t("doorconfig.hint")}}
-            </q-tooltip>
-          </q-icon>
-        </q-toolbar>
-        <q-card-section>
-          <q-input filled v-model="configDescription" :label="t('doorconfig.description')" stack-label/>
-        </q-card-section>
-        <q-card-section v-for="(select,i) in qSelects.configParts">
-          <q-card bordered flat>
-            <q-toolbar class="bg-primary text-white shadow-2">
-              <q-toolbar-title>{{t("doorconfig.config")}}</q-toolbar-title>
-              <q-btn flat round icon="delete" size="0.75em" @click="removeConfigGroup(i)"/>
-            </q-toolbar>
-            <q-card-section class="column">
-              <q-select
-                  class="q-mb-sm"
-                  filled
-                  multiple
-                  label="Credentials"
-                  option-label="name"
-                  :hint="t('doorconfig.and')"
-                  :options="credentialStore.allCredentials"
-                  v-model="qSelects.configParts[i].credentials"
-                  use-chips>
-                <template v-slot:after>
-                  <q-icon class="cursor-pointer" size="0.75em" name="filter_none">
-                    <q-tooltip>
-                      Categories
-                    </q-tooltip>
-                    <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
-                      <q-list dense>
-                        <q-item-label header class="text-bold text-primary" >
-                          {{t("doorconfig.category")}}
-                        </q-item-label>
-                        <q-item @click="addCategory(i, category)" v-for="category in credentialStore.categories" v-close-popup clickable>
-                          <q-item-section>
-                            {{category.name}}
-                          </q-item-section>
-                        </q-item>
-                      </q-list>
-                    </q-menu>
-                  </q-icon>
-                </template>
-                <template v-slot:selected-item="scope">
-                  <q-chip
-                      class="q-pa-sm"
-                      style="line-height: 1"
-                      :label="scope.opt.name"
-                      :tabindex="scope.tabindex"
-                      dense
-                      removable
-                      icon-remove="clear"
-                      @remove="scope.removeAtIndex(scope.index)"/>
-                </template>
-                <template v-slot:no-option>
-                  <q-item>
-                    <q-item-section class="text-grey">
-                      No results
-                    </q-item-section>
-                  </q-item>
-                </template>
-              </q-select>
-              <div class="row q-mt-sm justify-around no-wrap"
-                   v-for="(attributeFilter,j) in qSelects.configParts[i].attributeFilter" style="min-width: 100%">
-                <q-select style="width: 12em"
-                          rounded outlined dropdown-icon="expand_more"
-                          v-model="qSelects.configParts[i].attributeFilter[j].attribute"
-                          :options="commonAttributeFilter(qSelects.configParts[i].credentials)"
-                          :display-value="qSelects.configParts[i].attributeFilter[j].attribute?.label"
-                          @update:model-value="resetPredicateType(i,j)">
-
-                </q-select>
-                <q-select style="width: 5em"
-                          rounded outlined dropdown-icon="expand_more"
-                          v-model="qSelects.configParts[i].attributeFilter[j].predicateType" ref="predicateType"
-                          :options="getPredicates(qSelects.configParts[i].attributeFilter[j].attribute)"/>
-                <q-input style="width: 10em"
-                         bottom-slots rounded outlined v-model="qSelects.configParts[i].attributeFilter[j].value"
-                         :type="getType(qSelects.configParts[i].attributeFilter[j].attribute)"
-                         :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
-                  <template v-slot:hint>
-                    <q-checkbox
-                        :label="t('doorconfig.time')"
-                        dense
-                        size="2em"
-                        v-model="qSelects.configParts[i].attributeFilter[j].currentDate"
-                        v-if="qSelects.configParts[i].attributeFilter[j].attribute?.type.toLowerCase() === 'date'"
-                        @update:model-value="setDate(i,j)">
-                    </q-checkbox>
-                  </template>
-                </q-input>
-                <q-btn style="width: 4em; height: 4em"
-                       flat round icon="delete" @click="removeFilter(i,j)"/>
-              </div>
-            </q-card-section>
-            <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add"
-                   @click="addAttributeFilter(i)">{{t("doorconfig.attribute")}}
-            </q-btn>
-          </q-card>
-        </q-card-section>
-        <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfigurationGroup">
-          {{t("doorconfig.add")}}
-        </q-btn>
+        <door-config ref="configIn" :door-config="doorConfigIn"
+                     :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.IN : Direction.BOTH"
+                     @changeDirection="changeDirectionOut"></door-config>
+        <door-config v-show="$refs.configIn?.direction !== Direction.BOTH" ref="configOut"
+                     :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.OUT : Direction.BOTH"
+                     :door-config="doorConfigOut" :is-config-out="true"></door-config>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
-          <q-btn flat v-close-popup @click="saveConfig(props.row.actions, props.row.doorId, props.row.doorNames)"> {{ t("credentialmapping.save")}}</q-btn>
+          <q-btn flat v-close-popup @click="saveConfig() "> {{ t("credentialmapping.save")}}</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -392,12 +267,14 @@ import {prop} from "vue-class-component";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {Direction, PredicateType} from "@/main/vue/entity/doorConfiguration";
 import {useCredentialStore} from "@/main/vue/stores/credential";
+import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 
 
 
 
 export default {
     name: "GroupRooms",
+  components: {DoorConfig},
   computed: {
     Direction() {
       return Direction
@@ -405,32 +282,25 @@ export default {
   },
 
   props: {
-    isConfigOut: {
+    doorConfigIn: {
       required: false
     },
-    doorConfig: {
-      required: false
-    },
-    direction: {
+    doorConfigOut: {
       required: false
     }
   },
   emits: [
-    'ok', 'hide'
+    'ok'
   ],
-    setup(props) {
+    setup() {
 
         const {t} = useI18n();
         const $q = useQuasar();
         const locationStore = useLocationStore()
         const roomGroupStore = useRoomGroupStore()
       const doorStore = useDoorStore()
-      const credentialStore = useCredentialStore()
-      credentialStore.getAllCredentials()
-      credentialStore.getCategory()
       const credentials = ref()
       const configDescription = ref()
-      const direction = ref(Direction.BOTH)
         let editAlert = ref(false);
         let newGroup = ref(false);
         let optionsLocations = ref([])
@@ -450,6 +320,8 @@ export default {
         const closeEditAlert = ref(false);
         const list = [];
       const model = ref([[]])
+      const res = []
+      let finalArray = []
 
       const columns = [
         {
@@ -489,38 +361,6 @@ export default {
             building: null,
             rooms: []
         });
-      if (props.direction) {
-        direction.value = props.direction;
-      }
-      const qSelects = ref({
-        configParts: [{
-          credentials: [],
-          attributeFilter: [{
-            attribute: null,
-            predicateType: null,
-            value: null,
-            currentDate: false
-          }]
-        }]
-      })
-      if (props.doorConfig) {
-        configDescription.value = props.doorConfig.description
-        qSelects.value = props.doorConfig
-      }
-      const commonAttributeFilter = function (credentials) {
-        let formEntries = credentials.map((credential) => {
-          console.log("Credentials: " + credential)
-          return credential.form
-        })
-        if (formEntries.length > 1) {
-          return formEntries.shift().filter((v) => {
-            return formEntries.every((a) => {
-              return a.some(ele => ele.attributeName === v.attributeName);
-            });
-          })
-        }
-        return formEntries[0];
-      }
 
       function getRoomsAndDoors(id) {
         roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => rows2.value= rooms)
@@ -541,7 +381,8 @@ export default {
         doorStore.getByRoomId(id).then((doors) =>{
           console.log(doors)
           options.value = doors;
-          model.value[id] = options.value
+          console.log(options.value)
+          model.value[id] = options.value.map(obj => (obj['id']))
         })
       }
 
@@ -557,6 +398,18 @@ export default {
             model.value[id] = []
           }
       }
+
+      function obtainArray() {
+        console.log(model.value)
+        for (const val in model.value) {
+          if (val && val !=0) {
+            res.push(model.value[val])
+          }
+        }
+        finalArray = res.flat(1)
+        console.log(finalArray)
+      }
+
 
         let modelForBuilding = ref(null);
         let modelForLocation = ref(null);
@@ -734,54 +587,54 @@ export default {
             }
         }
 
-        function saveConfig(rooms, doors, selected) {
+        function saveConfig() {
+        obtainArray()
           let config = {}
-          let door;
-          for (door in doors) {
-            if (selected) {
-              console.log('qselects', this.$refs.configIn.qSelects)
-              if (this.$refs.configIn.direction === Direction.BOTH) {
-                config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-                config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-                config.doorConfigIn.description = this.$refs.configIn.configDescription
-                config.doorConfigOut.description = this.$refs.configIn.configDescription
-              } else if (this.$refs.configIn.direction === Direction.IN) {
-                config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-                config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
-                config.doorConfigIn.description = this.$refs.configIn.configDescription
-                config.doorConfigOut.description = this.$refs.configOut.configDescription
-              } else if (this.$refs.configIn.direction === Direction.OUT) {
-                config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
-                config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-                config.doorConfigIn.description = this.$refs.configOut.configDescription
-                config.doorConfigOut.description = this.$refs.configIn.configDescription
-              }
-              config.doorConfigIn?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-              config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+          const configlist = []
+          if (this.$refs.configIn.direction === Direction.BOTH) {
+            config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+            config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+            config.doorConfigIn.description = this.$refs.configIn.configDescription
+            config.doorConfigOut.description = this.$refs.configIn.configDescription
+          } else if (this.$refs.configIn.direction === Direction.IN) {
+            config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+            config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+            config.doorConfigIn.description = this.$refs.configIn.configDescription
+            config.doorConfigOut.description = this.$refs.configOut.configDescription
+          } else if (this.$refs.configIn.direction === Direction.OUT) {
+            config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+            config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+            config.doorConfigIn.description = this.$refs.configOut.configDescription
+            config.doorConfigOut.description = this.$refs.configIn.configDescription
+          }
+          config.doorConfigIn?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+          config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+          for (const door in finalArray) {
+            configlist.push({
+              doorId: door,
+              configuration: config
+            })
+            roomGroupStore.setGroupConfig(door, config)
               this.$emit('ok', {
                 doorId: door,
                 configuration: config
               })
-            }
           }
-
+          console.log(configlist)
+          finalArray = []
         }
 
         return {
-          direction,
-          configDescription,
-          credentials,
-          credentialStore,
-          qSelects,
           editedRow,
-          commonAttributeFilter,
           openForm,
           getRoomsAndDoors,
           saveConfig,
           editedRow2,
           openForm2,
+          finalArray,
           list,
           checkIfSelected,
+          obtainArray,
           deleteAlert: ref(false),
           editAlert,
           model,
@@ -789,6 +642,7 @@ export default {
           newGroup,
           selection,
           getDoors,
+          res,
           setSelection,
           newGroupName: ref(''),
           editName:ref(''),
@@ -886,6 +740,13 @@ export default {
     },
 
     methods: {
+      changeDirectionOut(direction) {
+        if (direction === Direction.IN) {
+          this.$refs.configOut.direction = Direction.OUT
+        } else if (direction === Direction.OUT) {
+          this.$refs.configOut.direction = Direction.IN
+        }
+      },
         prop,
         customFilter(rows, terms) {
             // rows contain the entire data
@@ -938,56 +799,6 @@ export default {
                 })
             return filteredRows
         },
-      getPredicates(attribute) {
-        if (attribute?.type.toLowerCase() === 'text') {
-          return [PredicateType.EQUALS]
-        } else if (attribute?.type.toLowerCase() === 'number' || attribute?.type.toLowerCase() === 'date') {
-          return Object.values(PredicateType)
-        }
-      },
-      addCategory(i, category) {
-        this.qSelects.configParts[i].credentials.push(...category.credentials)
-        this.qSelects.configParts[i].credentials.push(...category.externalCredentials)
-      },
-      resetPredicateType(i, j) {
-        this.qSelects.configParts[i].attributeFilter[j].predicateType = null;
-        this.qSelects.configParts[i].attributeFilter[j].value = null;
-      },
-
-      getType(attribute) {
-        return attribute?.type.toLowerCase()
-      },
-      addAttributeFilter(i) {
-        this.qSelects.configParts[i].attributeFilter.push({
-          attribute: null,
-          predicateType: null,
-          value: null,
-          currentDate: false
-        })
-      },
-      removeConfigGroup(i) {
-        this.qSelects.configParts.splice(i, 1)
-      },
-      removeFilter(i, j) {
-        this.qSelects.configParts[i].attributeFilter.splice(j, 1)
-      },
-      addConfigurationGroup() {
-        this.qSelects.configParts.push({
-          credentials: [],
-          attributeFilter: [{
-            attribute: null,
-            predicateType: null,
-            value: null,
-            currentDate: false
-          }]
-        })
-      },
-      setDate(i, j) {
-        if (this.qSelects.configParts[i].attributeFilter[j].currentDate) {
-          const date = new Date();
-          this.qSelects.configParts[i].attributeFilter[j].value = date.toISOString().split('T')[0];
-        }
-      }
     },
 
 

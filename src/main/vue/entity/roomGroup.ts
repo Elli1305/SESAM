@@ -32,6 +32,6 @@ export interface RoomsAndDoors {
 }
 
 export interface GroupConfigResponse {
-    doorId: bigint
+    doorId: string
     twowaydoorconfig: TwoWayDoorConfiguration
 }

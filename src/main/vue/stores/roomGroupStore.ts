@@ -98,7 +98,7 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
     }
 
 
-    function setGroupConfig(doorId: bigint, twoWayConfig: TwoWayDoorConfiguration){
+    function setGroupConfig(doorId: string, twoWayConfig: TwoWayDoorConfiguration){
         return new Promise<void>((resolve, reject) => {
             api.roomGroups.setGroupConfig({
                 doorId: doorId,

@@ -32,8 +32,8 @@ export default {
 
     setGroupConfig(config: {
         twowaydoorconfig: TwoWayDoorConfiguration;
-        doorId: bigint
-    }): Promise<AxiosResponse<GroupConfigResponse[]>> {
+        doorId: string
+    }): Promise<axios.AxiosResponse<GroupConfigResponse[]>> {
         return axios.post("/api/roomGroups/saveconfigs", config)
     }
 }

@@ -43,3 +43,4 @@ export interface AttributeFilter {
     currentDate?: boolean
 
 }
+
