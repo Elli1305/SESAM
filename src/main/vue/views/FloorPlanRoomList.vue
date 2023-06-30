@@ -181,8 +181,10 @@
                             v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                             <q-separator></q-separator>
                             <q-item>
-                                <q-btn color="primary" icon="add" :label="t('groupRooms.addRooms')" @click="addRoomsToGroups();" flat/>
+                                <q-btn style="min-width: 10em" color="primary" icon="add" :label="t('groupRooms.addRoomsToNewGroup')" @click="checkAddRoomsToNewGroup();" flat/>
+                                <q-btn style="min-width: 10em" color="blue" icon="add" :label="t('groupRooms.addRooms')" @click="addRoomsToExistingGroupDialog=checkIfGroupSelected();" flat/>
                             </q-item>
+
 
 
                         </div>
@@ -505,6 +507,34 @@
                     </q-card-actions>
                 </q-card>
             </q-dialog>
+            <q-dialog v-model="addRoomsToExistingGroupDialog">
+                <q-card>
+                    <q-card-section>
+                        <div class="text-h6">Ausgewählte Räume wirklich Gruppe {{selectedGroups.name}} zufügen?</div>
+                    </q-card-section>
+
+                    <q-card-actions align="right" class="text-primary">
+                        <q-btn flat :label="t('adminEdit.back')" @click="" v-close-popup/>
+                        <q-btn flat :label="t('adminEdit.save')" @click="addRoomsToGroups();"  v-close-popup/>
+                    </q-card-actions>
+                </q-card>
+            </q-dialog>
+
+            <q-dialog v-model="addRoomsToNewGroupDialog">
+                <q-card>
+                    <q-card-section>
+                        <div class="text-h6">Name der Gruppe</div>
+                    </q-card-section>
+                    <q-card-section class="q-pt-none">
+                        <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
+                    </q-card-section>
+
+                    <q-card-actions align="right" class="text-primary">
+                        <q-btn flat :label="t('adminEdit.back')" @click="" v-close-popup/>
+                        <q-btn flat :label="t('adminEdit.save')" @click="addRoomsToNewGroup();"/>
+                    </q-card-actions>
+                </q-card>
+            </q-dialog>
         </q-page>
         <q-dialog v-model="deleteAlert">
             <q-card>
@@ -578,6 +608,7 @@ export default {
         roomGroupStore.getRoomGroups();
         let filteredGroups = ref([]);
         const newGroup = ref(false);
+        const addRoomsToNewGroupDialog = ref(false);
         const currentGroupName = ref();
         const editGroupD = ref(false);
         const numRoomsInGroup = ref();
@@ -607,8 +638,46 @@ export default {
                 await loadRoomGroups(buildingID.value);
 
                 newGroup.value = false;
-                console.log("done makeANewGrop");
+                console.log("done makeANewGroup");
 
+            }
+        }
+
+        async function addRoomsToNewGroup() {
+            console.log(selectedRooms.value);
+            await checkName(newGroupName.value);
+            if (checkNameAllowed.value) {
+                await roomGroupStore.makeNewGroup(newGroupName.value, currentBuilding.value, selectedRooms.value);
+                await loadRoomGroups(buildingID.value);
+
+                addRoomsToNewGroupDialog.value = false;
+                newGroupName.value = "";
+                console.log("done makeANewGroup for selected rooms");
+
+            }
+        }
+        function checkAddRoomsToNewGroup() {
+            if(selectedRooms.value.length === 0) {
+                $q.notify({
+                    type: 'negative',
+                    message: t('groupRooms.noRoomSelected')
+                })
+            }
+            else{
+                addRoomsToNewGroupDialog.value = true;
+            }
+        }
+        function checkIfGroupSelected() {
+            console.log("Selected Group for new Group: ", selectedGroups.value);
+            if(selectedGroups.value !==null) {
+                return true;
+            }
+            else {
+                $q.notify({
+                    type: 'negative',
+                    message: t('groupRooms.noGroupSelected')
+                })
+                return false;
             }
         }
 
@@ -631,10 +700,9 @@ export default {
                     rooms: selectedRooms.value
                 });
                 console.log(editedGroup.value);
-                await roomGroupStore.editGroup(editedGroup.value).then(() => {
-                    loadRoomGroups(buildingID.value);
-                    unCheck();
-                });
+                await roomGroupStore.editGroup(editedGroup.value);
+                await loadRoomGroups(buildingID.value);
+                unCheck();
             }
             else {
                 $q.notify({
@@ -663,7 +731,7 @@ export default {
             }
         }
         function checkGroupSelected() {
-            if((selectedGroups.value === []) || selectedGroups.value !==null){
+            if(selectedGroups.value !==null){
                 return true;
             }
             else {
@@ -926,9 +994,14 @@ export default {
             allGroups: filteredGroups,
             selectedGroups,
             newGroup,
+            addRoomsToNewGroupDialog,
+            addRoomsToExistingGroupDialog: ref(false),
             newGroupName,
             makeANewGroup,
             addRoomsToGroups,
+            checkAddRoomsToNewGroup,
+            checkIfGroupSelected,
+            addRoomsToNewGroup,
             unCheck,
             deleteGroup,
             checkGroupSelected,
