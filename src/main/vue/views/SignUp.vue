@@ -2,10 +2,10 @@
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
     <p class="row text-h3 justify-center">Registrierung</p>
     <div class="column items-center justify-evenly content-stretch" style="width: 22.5em; height: 25em">
-      <q-input class="full-width" outlined v-model="prename" :label="t('signUp.firstName')"/>
-      <q-input class="full-width" outlined v-model="lastname" :label="t('signUp.name')"/>
+      <q-input class="full-width" outlined v-model="prename" :label="t('profile.firstName')"/>
+      <q-input class="full-width" outlined v-model="lastname" :label="t('profile.lastName')"/>
       <q-input class="full-width" v-model="email" outlined type="email" label="Email" />
-      <q-input class="full-width" v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('signUp.password')">
+      <q-input class="full-width" v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('profile.password')">
         <template v-slot:append>
           <q-icon
               :name="isPwd ? 'visibility_off' : 'visibility'"

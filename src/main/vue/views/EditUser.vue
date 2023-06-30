@@ -3,8 +3,8 @@
     <p class="row text-h3 justify-center">{{t('admin.currentUser.editUser.title') }}</p>
     <div class="column justify-evenly self-center no-wrap" style="width: 80vw; height: 50vh">
       <div class="column q-gutter-md self-center" style="width: 25em">
-        <q-input id="prename" v-model="user.firstName" :label="t('profile.firstname')" outlined/>
-        <q-input id="lastname" v-model="user.lastName" :label="t('profile.lastname')" outlined/>
+        <q-input id="prename" v-model="user.firstName" :label="t('profile.firstName')" outlined/>
+        <q-input id="lastname" v-model="user.lastName" :label="t('profile.lastName')" outlined/>
         <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined disable/>
         <q-select
             filled

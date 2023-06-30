@@ -18,8 +18,8 @@ const messages = {
             // General words
             cancel: 'Abbrechen',
             save: 'Speichern',
-            firstName: "Vorname",
-            lastName: "Nachname",
+            done: "Fertig",
+            edit: "Bearbeiten",
             search: "Suche",
             of: "von",
 
@@ -58,25 +58,21 @@ const messages = {
             editorPages: "Bearbeiten",
             editFloorplan: "Floorplan bearbeiten",
             groupRooms: "Räume gruppieren",
-            issuerPages: "Credential ausstellen",
+            issuerPages: "Credential Ausstellen",
             imprint: "Impressum",
             logout: "Logout",
         },
         login: {
             wrongEmailPassword: "Falsches Passwort oder Benutzername",
-            loginFailed: "Login Fehlgeschlagen",
-            forgotPassword: "Passwort vergessen:",
+            loginFailed: "Login fehlgeschlagen",
+            forgotPassword: "Passwort vergessen: ",
             resetPassword: "Passwort zurücksetzen",
-            notRegistered: "Nicht registriert:",
+            notRegistered: "Nicht registriert: ",
             toRegister: "Zur Registrierung",
-            password: "Passwort"
         },
         signUp:{
-            firstName: "Vorname",
-            name: "Nachname",
-            password: "Passwort",
             passwordRepeat: "Passwort wiederholen",
-            alreadySignedUp: "Bereits registriert:"
+            alreadySignedUp: "Bereits registriert: "
         },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
@@ -88,8 +84,7 @@ const messages = {
         },
         passwordChange: {
             changePassword: "Passwort ändern",
-            password: "Passwort",
-            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein, ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
+            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein und ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
             repeatPassword: "Passwort wiederholen",
             failedToReset: "Password zurücksetzen fehlgeschlagen",
             passwordDoesNotConform: "Passwort erfüllt nicht die Kriterien",
@@ -98,42 +93,44 @@ const messages = {
         },
         profile: {
             title: "Profilansicht",
-            firstname: "Vorname",
-            lastname: "Name",
-            email: "E-Mail",
+            firstName: "Vorname",
+            lastName: "Nachname",
+            email: "E-mail",
+            password: "Passwort",
             admin: "Admin",
             editor: "Bearbeiter",
             issuer: "Herausgeber",
         },
         floorPlan: {
+            // Locations
             locations: 'Standorte',
-            doorName: 'Türname',
-            editDoor: 'Tür bearbeiten',
-            editRoom: 'Raum bearbeiten',
-            editGroup: 'Gruppe bearbeiten',
-            save: 'speichern',
-            cancel: 'abbrechen',
-            done: 'fertig',
-            confirmDeletion: 'Bestätigen Sie das Löschen',
-            confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
-            doors: 'Türen',
+            addLocation: 'Standort hinzufügen',
+            editLocation: 'Standort bearbeiten',
+            // Buildings
+            addBuilding: 'Gebäude hinzufügen',
+            editBuilding: 'Gebäude bearbeiten',
+            // Floors
+            floorLevel: 'Etagennummer',
+            addFloor: 'Etage hinzufügen',
+            editFloor: 'Etage bearbeiten',
+            // Rooms
             rooms: 'Räume',
             roomName: 'Raumname',
-            roomAmount: 'Anzahl an Räumen',
-            groupName: 'Gruppenname',
-            edit: 'Bearbeiten',
-            newFloor: 'Etage erstellen',
-            editFloor: 'Etage bearbeiten',
-            floorlevel: 'Etagennummer',
-            floorplanUpload: 'Etagenplan hochladen',
-            newBuilding: 'Gebäude erstellen',
-            editBuilding: 'Gebäude bearbeiten',
-            editLocation: 'Standort bearbeiten',
-            addLocation: 'Standort hinzufügen',
-            addBuilding: 'Gebäude hinzufügen',
-            addFloor: 'Etage hinzufügen',
+            editRoom: 'Raum bearbeiten',
+            // Doors
+            doors: 'Türen',
+            doorName: 'Türname',
             addDoor: 'Tür zuweisen',
+            editDoor: 'Tür bearbeiten',
             pickRoom: 'Raum auswählen',
+            // Groups
+            groupName: 'Gruppenname',
+            editGroup: 'Gruppe bearbeiten',
+            //
+            confirmDeletion: 'Bestätigen Sie das Löschen',
+            confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            roomAmount: 'Anzahl an Räumen',
+            floorPlanUpload: 'Etagenplan hochladen',
             configGroup: 'Konfigurationsgruppe',
             config: 'Konfiguration',
             direction: 'Richtung',
@@ -156,14 +153,11 @@ const messages = {
             }
 
         },
-        credentialview :{
-            credentialview: "Credentialansicht",
+        credentialView :{
+            title: "Credentialansicht",
             location: "Standort",
-            search: "Suche",
-            category: "Kategorie",
-            availablecredentials: "Verfügbbare Credential",
+            availableCredentials: "Verfügbbare Credential",
             qualification: "Vergleichbare Credential",
-            issuer: "Herausgeber",
             room: "Raum: "
         },
         admin: {
@@ -388,8 +382,8 @@ const messages = {
             // General words
             cancel: 'Cancel',
             save: 'Save',
-            firstName: "First name",
-            lastName: "Last name",
+            done: "Done",
+            edit: "Edit",
             search: "Search",
             of: "of",
 
@@ -406,7 +400,7 @@ const messages = {
 
         home: {
             header: "SESAM",
-            signUp: "Sign-up",
+            signUp: "Registration",
             signIn: "Login",
             // Floorplan
             floorPlan: "Floorplan",
@@ -425,29 +419,24 @@ const messages = {
             credentialManagement: "Credential Management",
             manageCredentialCategories: "Manage credential categories",
             manageCredentials: "Manage credentials",
-            editorPages: "Bearbeiten",
-            editFloorplan: "Floorplan bearbeiten",
-            groupRooms: "Räume gruppieren",
+            editorPages: "Edit",
+            editFloorplan: "Edit floor plan",
+            groupRooms: "Group rooms",
             issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout",
         },
         login: {
-            wrongEmailPassword: "Wrong Password oder Username",
-            loginFailed: "Login Failed",
-            forgotPassword: "Forgot Password:",
-            resetPassword: "Reset Password",
-            notRegistered: "Not registered",
-            toRegister: "Go to Register",
-            password: "Password"
+            wrongEmailPassword: "Wrong password oder username",
+            loginFailed: "Login failed",
+            forgotPassword: "Forgot password: ",
+            resetPassword: "Reset password",
+            notRegistered: "Not registered: ",
+            toRegister: "Register",
         },
         signUp:{
-            firstName: "Prename",
-            name: "Name",
-            password: "Password",
             passwordRepeat: "Repeat password",
-            signup: "Sign up",
-            alreadySignedUp: "Already signed up:"
+            alreadySignedUp: "Already signed up: "
         },
         passwordReset: {
             resetPassword: "Reset Password",
@@ -459,9 +448,8 @@ const messages = {
         },
         passwordChange: {
             changePassword: "Change Password",
-            password: "Password",
             passwordHint:
-                "The password must include min. 8 characters, a special character, a number, and a capital letter",
+                "The password must include a min. of 8 characters, 1 special character, 1 number, and 1 capital letter",
             repeatPassword: "Repeat password",
             failedToReset: "Failed to reset password",
             passwordDoesNotConform: "Password does not match the required criteria",
@@ -470,40 +458,44 @@ const messages = {
         },
         profile: {
             title: "Profile View",
-            firstname: "First name",
-            lastname: "Name",
-            email: "E-mail",
+            firstName: "First name",
+            lastName: "Last name",
+            email: "Email",
+            password: "Password",
             admin: "Admin",
             editor: "Editor",
             issuer: "Issuer"
         },
         floorPlan: {
+            // Locations
             locations: 'Locations',
-            doorName: 'Door name',
-            editDoor:'Edit Door',
-            editRoom:'Edit Room',
-            editGroup: 'Edit group',
+            addLocation: 'Add location',
+            editLocation: 'Edit location',
+            // Buildings
+            addBuilding: 'Add building',
+            editBuilding: 'Edit building',
+            // Floors
+            floorLevel: 'Floor level',
+            addFloor: 'Add floor',
             editFloor: 'Edit Floor',
-            floorlevel: 'Floor level',
-            floorplanUpload: 'Upload floor plan',
-            save: 'save',
-            cancel: 'cancel',
-            done: 'done',
+            // Rooms
+            rooms: 'Rooms',
+            roomName: 'Room name',
+            editRoom:'Edit Room',
+            // Doors
+            doors:'Doors',
+            doorName: 'Door name',
+            addDoor: 'Assign door',
+            editDoor:'Edit Door',
+            pickRoom: 'Choose room',
+            // Groups
+            groupName: 'Group name',
+            editGroup: 'Edit group',
+            //
+            floorPlanUpload: 'Upload floor plan',
             confirmDeletion: 'Confirm deletion',
             confirmDeletionText:'Are you sure you want to delete the door?',
-            doors:'Doors',
-            rooms: 'Rooms',
-            roomName: 'Name of room',
             roomAmount: 'Amount of rooms',
-            groupName: 'Name of room',
-            edit: 'Edit',
-            editBuilding: 'Edit building',
-            editLocation: 'Edit location',
-            addLocation: 'Add location',
-            addBuilding: 'Add building',
-            addFloor: 'Add floor',
-            addDoor: 'Assign door',
-            pickRoom: 'Choose room',
             configGroup: 'Configuration Group',
             config: 'Configuration',
             direction: 'Direction',
@@ -526,14 +518,11 @@ const messages = {
             }
 
         },
-        credentialview :{
-            credentialview: "View Credentials",
+        credentialView :{
+            title: "Credentials",
             location: "Location",
-            search: "Search",
-            category: "Category",
-            availablecredentials: "Available Credentials",
+            availableCredentials: "Available Credentials",
             qualification: "Comparable Credential",
-            issuer: "Issuer",
             room: "Room: "
         },
 
@@ -563,8 +552,8 @@ const messages = {
             requestedRoles:{
                 headline: "Requested Roles",
                 roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
-                prename: "Prename",
-                lastname: "Name",
+                prename: "First name",
+                lastname: "Last name",
                 email: "Email",
                 role: "Roles",
                 showAdmin: "Show Admin",
@@ -575,8 +564,8 @@ const messages = {
             },
             issuerManagement: {
                 title: "Issuer Management",
-                firstname: "Prename",
-                lastname: "Name",
+                firstname: "First name",
+                lastname: "Last name",
                 email: "E-Mail",
                 credential:"Credential",
                 search: "Search",

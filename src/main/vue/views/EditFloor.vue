@@ -5,10 +5,10 @@
         <div v-if="floor.id" class="text-h6">{{t('floorPlan.editFloor')}}</div>
         <div v-if="!floor.id" class="text-h6">{{t('floorPlan.addFloor')}}</div>
         <div class="q-mt-md">
-          <q-input outlined v-model.number="floorLevel" type="number" :label="t('floorPlan.floorlevel')"/>
+          <q-input outlined v-model.number="floorLevel" type="number" :label="t('floorPlan.floorLevel')"/>
         </div>
         <div class="q-mt-md">
-          <q-file outlined :label="t('floorPlan.floorplanUpload')" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff"
+          <q-file outlined :label="t('floorPlan.floorPlanUpload')" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff"
                   bg-color="white">
             <template v-slot:prepend>
               <q-icon name="attach_file"/>
@@ -17,8 +17,8 @@
         </div>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat color="primary" :label="t('admin.corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>
-        <q-btn flat color="primary" :label="t('admin.corporateDesign.confirm.save.ok')" @click="onOKClick" :disable="validate()"/>
+        <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('common.save')" @click="onOKClick" :disable="validate()"/>
       </q-card-actions>
     </q-card>
   </q-dialog>

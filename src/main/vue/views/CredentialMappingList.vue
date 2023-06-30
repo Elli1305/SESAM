@@ -18,7 +18,7 @@
           :row-key="row => row.id">
         <template v-slot:top-right>
           <q-btn class="q-mr-xs" flat color="grey" :label="t('admin.credentialMapping.newCategory')" icon="add" rounded @click="prompt=true"/>
-          <q-input class="q-ml-xs" borderless dense debounce="250" v-model="filter" :placeholder="t('credentialview.search')">
+          <q-input class="q-ml-xs" borderless dense debounce="250" v-model="filter" :placeholder="t('common.search')">
             <template v-slot:append>
               <q-icon name="search" />
             </template>

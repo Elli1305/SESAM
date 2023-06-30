@@ -71,7 +71,7 @@
                                             <div class="row justify-center" style="padding: 0.5em">
                                                 <p class="cursor-pointer q-mb-none"
                                                    :style="{color: getCssVar('primary')}"
-                                                   @click="setOldValueR(room)">{{ t('floorPlan.edit') }}</p>
+                                                   @click="setOldValueR(room)">{{ t('common.edit') }}</p>
                                                 <q-dialog v-model="inception">
                                                     <q-card>
                                                         <q-card-section>
@@ -228,7 +228,7 @@
 
                                             <div class="row justify-center" style="padding: 0.5em">
                                                 <p class="cursor-pointer q-mb-none" :style="{color: getCssVar('primary')}"
-                                                   @click="setOldValueG(group)">{{ t('floorPlan.edit') }}</p>
+                                                   @click="setOldValueG(group)">{{ t('common.edit') }}</p>
                                                 <q-dialog v-model="editGroupD">
                                                     <q-card>
                                                         <q-card-section>
@@ -367,7 +367,7 @@
                                     <q-separator></q-separator>
                                     <div class="row justify-center" style="padding: 0.5em">
                                         <p class="cursor-pointer q-mb-none" :style="{color: getCssVar('primary')}"
-                                           @click="setOldValueR(room)">{{ t('floorPlan.edit') }}</p>
+                                           @click="setOldValueR(room)">{{ t('common.edit') }}</p>
                                         <q-dialog v-model="inception">
                                             <q-card>
                                                 <q-card-section>
