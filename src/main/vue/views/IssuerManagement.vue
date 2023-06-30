@@ -159,7 +159,7 @@ export default {
       id.value = row.id;
       model1.value = row.lastName;
       model2.value = row.firstName;
-      model3.value = row.room;
+      model3.value = row.room.map(r => r.id);
       model4.value = row.credentials.map(c => c.id);
       editedRow.value = {...row};
     };
