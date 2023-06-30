@@ -1,6 +1,9 @@
 package com.gpse.sesam.domain.location;
 
 import com.gpse.sesam.domain.location.building.Building;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupRepository;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupServiceImpl;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
 import com.gpse.sesam.web.exception.LocationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,15 +16,10 @@ import java.util.Optional;
 public class LocationServiceImpl implements LocationService {
 
 	private final LocationRepository locationRepository;
-	private final RoomGroupRepository roomGroupRepository;
-
-	private final RoomGroupServiceImpl roomGroupService;
 
 	@Autowired
-	public LocationServiceImpl(final LocationRepository locationRepository, RoomGroupRepository roomGroupRepository, RoomGroupServiceImpl roomGroupService) {
+	public LocationServiceImpl(final LocationRepository locationRepository) {
 		this.locationRepository = locationRepository;
-		this.roomGroupRepository = roomGroupRepository;
-		this.roomGroupService = roomGroupService;
 	}
 
 	@Override
@@ -56,16 +54,6 @@ public class LocationServiceImpl implements LocationService {
 
 	@Override
 	public void deleteById(Long id) {
-		Optional<Location> location = locationRepository.findById(id);
-		if (location.isPresent()) {
-			List<Building> buildings = location.get().getBuildings();
-			for (Building building : buildings) {
-				java.util.List<RoomGroups> roomGroupsList = roomGroupService.getGroupByBuilding(building.getId());
-				for (RoomGroups roomGroups: roomGroupsList) {
-					roomGroupRepository.deleteById(roomGroups.getId());
-				}
-			}
-		}
 		locationRepository.deleteById(id);
 	}
 }

@@ -1,8 +1,6 @@
 package com.gpse.sesam.domain.location.floor;
 
 import com.gpse.sesam.domain.filestorage.FileStorageService;
-import com.gpse.sesam.domain.location.RoomGroupServiceImpl;
-import com.gpse.sesam.domain.location.building.BuildingRepository;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +27,6 @@ public class FloorServiceImpl implements FloorService {
 
 	@Override
 	public void deleteById(final Long id) {
-		Optional<Floor> floor = floorRepository.findById(id);
-		if (floor.isPresent()) {
-			List<Room> floorRooms = floor.get().getRooms();
-			for (Room room : floorRooms) {
-				roomRepository.deleteById(room.getId());
-			}
-		}
 		floorRepository.deleteById(id);
 	}
 
