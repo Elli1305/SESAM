@@ -2,6 +2,7 @@ import axios, {AxiosResponse} from "axios";
 import {GroupConfigResponse, RoomGroup, RoomsAndDoors} from "@/main/vue/entity/roomGroup"
 import {CategoryResponse} from "@/main/vue/entity/credentialDefinition";
 import {TwoWayDoorConfiguration} from "@/main/vue/entity/doorConfiguration";
+import axios from "axios";
 
 export default {
     getRoomGroups(): Promise<AxiosResponse<RoomGroup[]>> {
@@ -30,10 +31,7 @@ export default {
         return axios.get("/api/roomGroups/doorsandrooms/" + param)
     },
 
-    setGroupConfig(config: {
-        twowaydoorconfig: TwoWayDoorConfiguration;
-        doorId: string
-    }): Promise<axios.AxiosResponse<GroupConfigResponse[]>> {
+    setGroupConfig(config: GroupConfigResponse[]): Promise<AxiosResponse<GroupConfigResponse[]>> {
         return axios.post("/api/roomGroups/saveconfigs", config)
     }
 }

@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {RoomGroup, RoomsAndDoors} from "@/main/vue/entity/roomGroup";
+import {GroupConfigResponse, RoomGroup, RoomsAndDoors} from "@/main/vue/entity/roomGroup";
 import {ref, Ref} from "vue";
 import api from "@/main/vue/api";
 import {Building} from "@/main/vue/entity/roomGroup";
@@ -98,12 +98,9 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
     }
 
 
-    function setGroupConfig(doorId: string, twoWayConfig: TwoWayDoorConfiguration){
+    function setGroupConfig(config: GroupConfigResponse[]){
         return new Promise<void>((resolve, reject) => {
-            api.roomGroups.setGroupConfig({
-                doorId: doorId,
-                twowaydoorconfig: twoWayConfig
-            }).then(_ => resolve())
+            api.roomGroups.setGroupConfig(config).then(_ => resolve())
                 .catch(reject);
         });
     }

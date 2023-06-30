@@ -266,7 +266,6 @@ import {useDoorStore} from "@/main/vue/stores/door";
 import {prop} from "vue-class-component";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {Direction, PredicateType} from "@/main/vue/entity/doorConfiguration";
-import {useCredentialStore} from "@/main/vue/stores/credential";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 
 
@@ -299,8 +298,6 @@ export default {
         const locationStore = useLocationStore()
         const roomGroupStore = useRoomGroupStore()
       const doorStore = useDoorStore()
-      const credentials = ref()
-      const configDescription = ref()
         let editAlert = ref(false);
         let newGroup = ref(false);
         let optionsLocations = ref([])
@@ -324,18 +321,10 @@ export default {
       let finalArray = []
 
       const columns = [
-        {
-          name: 'name',
-          required: true,
-          label: t('groupRooms.group'),
-          align: 'center',
-          field: row => row.name,
-          sortable: true,
-          //headerClasses: 'bg-primary text-white',
-        },
-        {name: 'rooms', align: 'center', label: t('groupRooms.rooms'), field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
-        {name: 'actions', label: t('issuermanagement.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
-        {name: 'doorconfig', label: t('groupRooms.doorconfig'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
+        { name: 'name', required: true, label: t('groupRooms.group'), align: 'center', field: row => row.name, sortable: true },
+        { name: 'rooms', align: 'center', label: t('groupRooms.rooms'), field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
+        { name: 'actions', label: t('issuermanagement.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
+        { name: 'doorconfig', label: t('groupRooms.doorconfig'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
       ]
 
       const rows = ref([]);
@@ -346,14 +335,13 @@ export default {
       const columns2 = [
         { name: 'name', required: true, label: t('groupRooms.room'), align: 'left', field: row => row.roomName, sortable: true },
         { name: 'room', label: t('groupRooms.room'), align: 'left', field: row => row.room, sortable: true },
-        {name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-        {name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-        {name: 'doors', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'}
+        { name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+        { name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+        { name: 'doors', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'}
       ]
 
       const rows2 =  ref([]);
       rows2.value = []
-
 
         let currentGroup=ref({
             id: null,
@@ -366,32 +354,18 @@ export default {
         roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => rows2.value= rooms)
       }
 
-
       const editedRow = ref({})
       const openForm = (row) => {
         editedRow.value = {...row};
       }
 
-      const editedRow2 = ref({})
-      const openForm2 = (row) => {
-        editedRow2.value = {...row};
-      }
-
       function getDoors(id) {
         doorStore.getByRoomId(id).then((doors) =>{
-          console.log(doors)
           options.value = doors;
-          console.log(options.value)
           model.value[id] = options.value.map(obj => (obj['id']))
         })
       }
 
-      function addToList(value) {
-        const updated = value.replace(/[^a-zA-Z ]/g, "")
-        if (!list.includes(updated)) {
-          list.push(updated)
-        }
-      }
 
       function checkIfSelected(room, id) {
           if (!room) {
@@ -400,14 +374,44 @@ export default {
       }
 
       function obtainArray() {
-        console.log(model.value)
         for (const val in model.value) {
           if (val && val !=0) {
             res.push(model.value[val])
           }
         }
         finalArray = res.flat(1)
-        console.log(finalArray)
+      }
+
+      function saveConfig() {
+        obtainArray()
+        let config = {}
+        const configlist = []
+        if (this.$refs.configIn.direction === Direction.BOTH) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+          config.doorConfigIn.description = this.$refs.configIn.configDescription
+          config.doorConfigOut.description = this.$refs.configIn.configDescription
+        } else if (this.$refs.configIn.direction === Direction.IN) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+          config.doorConfigIn.description = this.$refs.configIn.configDescription
+          config.doorConfigOut.description = this.$refs.configOut.configDescription
+        } else if (this.$refs.configIn.direction === Direction.OUT) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+          config.doorConfigIn.description = this.$refs.configOut.configDescription
+          config.doorConfigOut.description = this.$refs.configIn.configDescription
+        }
+        config.doorConfigIn?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+        config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+        for (const door in finalArray) {
+          configlist.push({
+            doorId: door,
+            configuration: config
+          })
+          roomGroupStore.setGroupConfig(configlist)
+        }
+        finalArray = []
       }
 
 
@@ -423,8 +427,6 @@ export default {
                 }
                 optionsLocations.value = locationList;
             })
-            console.log("Locations");
-            console.log(optionsLocations.value);
             if (optionsLocations.value !== null) {
                 modelForLocation.value = optionsLocations.value[0].name;
                 adjustBuildingList(modelForLocation.value);
@@ -433,13 +435,9 @@ export default {
         async function loadRoomGroups() {
             roomGroupList = [];
             await roomGroupStore.getRoomGroups().then(() => {
-                console.log(roomGroupStore.allRoomGroups);
                 for (const roomG of roomGroupStore.allRoomGroups) {
                     roomGroupList.push(roomG);
                 }
-                console.log("Groups of rooms");
-                console.log(roomGroupList);
-
                 adaptRoomGroupsToBuilding();
             })
         }
@@ -451,8 +449,6 @@ export default {
         function adaptRoomGroupsToBuilding() {
             rows.value = [];
             for (const roomGs of roomGroupList) {
-                console.log("roomGs ", roomGs.building)
-                console.log("Current building: " , currentBuilding.value)
                 if (currentBuilding.value != null) {
                     if (roomGs.building.id === currentBuilding.value.id) {
                         rows.value.push(roomGs);
@@ -463,12 +459,6 @@ export default {
 
         loadLocations().then(()=>loadRoomGroups());
 
-      const selection = ref([false])
-      function setSelection (val) {
-        if (val) {
-          selection.value = val
-        }
-      }
 
         function adjustBuildingList(nameLoc) {
             buildingList.value=[];
@@ -481,20 +471,15 @@ export default {
                 buildingListNames.value = building;
                 buildingListForFilter.value=building;
             }
-            console.log("Buildings");
-            console.log(buildingListNames.value);
             if(buildingListNames.value !==null) {
                 modelForBuilding.value = buildingListNames.value[0];
                 currentBuilding.value = buildingListNames.value[0];
-                console.log(modelForBuilding.value.id);
                 updateRoomList(currentBuilding.value);
             }
         }
 
 
         async function checkName(newName) {
-            console.log(newName);
-            console.log("room Group List:", rows.value);
             checkNameAllowed.value = false;
             if(newName.trim() === ""){
                 $q.notify({
@@ -508,8 +493,6 @@ export default {
                 checkNameAllowed.value = true;
             }
             for(const theGroup of rows.value) {
-                console.log("roomGroup:", theGroup)
-                console.log("newName: ", newName);
                 if (theGroup.name === newName) {
                     $q.notify({
                         type:'negative',
@@ -524,9 +507,8 @@ export default {
         function toDefault(){
             this.newGroupName=ref('');
             this.modelRooms=ref(null);
-            console.log("hier default");
-
         }
+
         function updateRoomList(building){
             listOfAllRoomsViaBuilding.value=[];
             for(const floor of building.floors) {
@@ -534,8 +516,6 @@ export default {
                     listOfAllRoomsViaBuilding.value.push(rooms)
                 }
             }
-            console.log("Räume:")
-            console.log(listOfAllRoomsViaBuilding.value);
         }
 
         function setCurrentGroup(groupId, groupName, groupRooms, groupBuilding) {
@@ -543,12 +523,10 @@ export default {
             currentGroup.value.id = groupId;
             currentGroup.value.building = groupBuilding
             currentGroup.value.rooms = groupRooms;
-            console.log("currentGroup: ", currentGroup.value);
         }
         function updateCurrentGroup(groupName, groupRooms) {
             currentGroup.value.name = groupName;
             currentGroup.value.rooms = groupRooms;
-            console.log("currentGroup: ", currentGroup.value);
             editGroup();
         }
         async function makeNewGroup(newGroupName, newGroupRooms) {
@@ -560,25 +538,19 @@ export default {
             }
         }
         async function editGroup() {
-            console.log("currentGroup.value.name: ", currentGroup.value.name, " EditGroupName.value: ", editGroupName.value);
-            console.log((currentGroup.value.name === editGroupName.value))
             if(!(currentGroup.value.name === editGroupName.value)) {
                 await checkName(currentGroup.value.name);
             }
             else {
                 checkNameAllowed.value = true;
             }
-            console.log("currentGroup.value.name: ", currentGroup.value.name, " EditGroupName.value: ", editGroupName.value);
             if(checkNameAllowed.value) {
                 await roomGroupStore.editGroup(currentGroup.value);
                 await loadRoomGroups();
                 editAlert.value = false;
-
-                console.log(closeEditAlert.value);
             }
         }
         async function deleteGroup() {
-            console.log("Delete Group", currentGroup.value);
             if(currentGroup.value !==null) {
                 await roomGroupStore.deleteGroup(currentGroup.value.id).then(() => {
                     loadRoomGroups();
@@ -587,63 +559,21 @@ export default {
             }
         }
 
-        function saveConfig() {
-        obtainArray()
-          let config = {}
-          const configlist = []
-          if (this.$refs.configIn.direction === Direction.BOTH) {
-            config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-            config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-            config.doorConfigIn.description = this.$refs.configIn.configDescription
-            config.doorConfigOut.description = this.$refs.configIn.configDescription
-          } else if (this.$refs.configIn.direction === Direction.IN) {
-            config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-            config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
-            config.doorConfigIn.description = this.$refs.configIn.configDescription
-            config.doorConfigOut.description = this.$refs.configOut.configDescription
-          } else if (this.$refs.configIn.direction === Direction.OUT) {
-            config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
-            config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-            config.doorConfigIn.description = this.$refs.configOut.configDescription
-            config.doorConfigOut.description = this.$refs.configIn.configDescription
-          }
-          config.doorConfigIn?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-          config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-          for (const door in finalArray) {
-            configlist.push({
-              doorId: door,
-              configuration: config
-            })
-            roomGroupStore.setGroupConfig(door, config)
-              this.$emit('ok', {
-                doorId: door,
-                configuration: config
-              })
-          }
-          console.log(configlist)
-          finalArray = []
-        }
-
         return {
           editedRow,
           openForm,
           getRoomsAndDoors,
           saveConfig,
-          editedRow2,
-          openForm2,
           finalArray,
           list,
           checkIfSelected,
-          obtainArray,
           deleteAlert: ref(false),
           editAlert,
           model,
           closeNow,
           newGroup,
-          selection,
           getDoors,
           res,
-          setSelection,
           newGroupName: ref(''),
           editName:ref(''),
           modelRooms: ref(null),
@@ -678,7 +608,6 @@ export default {
           changed(val){
             if(val !==null) {
               adjustBuildingList(val.name);
-              console.log("Change", val.name);
               adaptRoomGroupsToBuilding();
             }
             else {
@@ -686,7 +615,6 @@ export default {
             }
           },
           getBuilding(building) {
-            console.log("Changed building", building);
             currentBuilding.value = building;
             updateRoomList(building);
             adaptRoomGroupsToBuilding();
@@ -708,8 +636,6 @@ export default {
           getInfosForEditGroup(value) {
             editGroupName.value = value[1].name;
             editGroupRooms.value = value[1].rooms;
-            console.log("EditGroupRooms in getInfosForEditGroup: ", editGroupRooms.value);
-            console.log("EditGroupName in getInfosForEditGroup: ", editGroupName.value);
             setCurrentGroup(value[1].id, value[1].name, value[1].rooms, value[1].building);
           },
           filterBuilding(val, update) {
@@ -751,9 +677,6 @@ export default {
         customFilter(rows, terms) {
             // rows contain the entire data
             // terms contains whatever you have as filter
-
-            console.log(terms, rows)
-
             const lowerSearch = terms.search ? terms.search.toLowerCase() : ""
 
             const filteredRows = rows.filter(
