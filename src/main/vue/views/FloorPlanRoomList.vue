@@ -21,7 +21,7 @@
                 </q-tabs>
                 <q-separator></q-separator>
 
-                <q-tab-panels v-model="tab" animated>
+                <q-tab-panels v-model="tab" animated style="max-width: 22em">
                     <q-tab-panel name="rooms">
 
                         <q-input
@@ -44,7 +44,7 @@
                                 <q-btn-dropdown
                                         split
                                         flat
-                                        style="min-width: 16em"
+                                        style="min-width: 18em"
                                         :label="room.name"
                                         dropdown-icon="expand_more"
                                         color="var(--text-color)"
@@ -202,7 +202,6 @@
                                 <q-icon name="search"/>
                             </template>
                         </q-input>
-                        <div class="row justify-between">
                         <q-list>
 
                             <q-item v-for="group in allGroups" style="padding-left: 0">
@@ -220,7 +219,7 @@
                                 <q-btn-dropdown
                                     flat
                                     menu-anchor="bottom right"
-                                    style="max-width: 0em"
+                                    style="max-width: 0"
                                     dropdown-icon="expand_more"
                                     color="var(--text-color)"
                                     @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
@@ -323,11 +322,10 @@
                                     icon="delete"
                                     color="grey"
                                     :label="t('adminEdit.delete')"
-                                    @click="deleteAlert = true;"/>
+                                    @click="deleteAlert = checkGroupSelected();"/>
                             </q-item>
 
 
-                        </div>
                         </div>
 
                     </q-tab-panel>
@@ -664,6 +662,18 @@ export default {
                 })
             }
         }
+        function checkGroupSelected() {
+            if((selectedGroups.value === []) || selectedGroups.value !==null){
+                return true;
+            }
+            else {
+                $q.notify({
+                    type: 'negative',
+                    message: t('groupRooms.noGroupSelected')
+                })
+                return false;
+            }
+        }
 
         const checkNameAllowed = ref(false);
 
@@ -921,6 +931,7 @@ export default {
             addRoomsToGroups,
             unCheck,
             deleteGroup,
+            checkGroupSelected,
             editGroupD,
             deleteAlert: ref(false),
             filterRoomToGroups,
