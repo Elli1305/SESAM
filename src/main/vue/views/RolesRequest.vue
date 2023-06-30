@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" >
-    <p class="row text-h3 justify-center">{{t("adminRolesRequest.headline")}}</p>
+    <p class="row text-h3 justify-center">{{t("admin.requestedRoles.headline")}}</p>
     <div class="row justify-center">
       <q-table
           style="width: 80vw; height: 50vh"
@@ -31,14 +31,14 @@
         <template v-slot:top-left>
           <div class="col-9">
             <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR"
-                      :label="t( 'adminCurrentUser.showAdmin')"/>
-            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t( 'adminCurrentUser.showEditor')"/>
-            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t( 'adminCurrentUser.showIssuer')"/>
+                      :label="t('admin.currentUser.showAdmin')"/>
+            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t('admin.currentUser.showEditor')"/>
+            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t('admin.currentUser.showIssuer')"/>
           </div>
         </template>
         <template v-slot:top-right>
           <q-input borderless dense debounce="300" v-model="filter.search"
-                   :placeholder="t( 'adminCurrentUser.search')">
+                   :placeholder="t('admin.currentUser.search')">
             <template v-slot:append>
               <q-icon name="search"/>
             </template>
@@ -94,7 +94,7 @@ export default {
 
     const columns = [
       {
-                name: t('adminRolesRequest.lastname'),
+                name: t('admin.requestedRoles.lastname'),
         required: true,
         label: 'Name',
         align: 'center',
@@ -102,12 +102,12 @@ export default {
         format: val => `${val}`,
         sortable: true
       },
-      {name: 'firstName', align: 'center', label: t('adminRolesRequest.prename'), field: 'firstName', sortable: true},
-      {name: 'username', align: 'center', label: t('adminRolesRequest.email'), field: 'username', sortable: true},
-      {name: 'roles', align: 'center', label: t('adminRolesRequest.role'), field: 'roles'},
+      {name: 'firstName', align: 'center', label: t('admin.requestedRoles.prename'), field: 'firstName', sortable: true},
+      {name: 'username', align: 'center', label: t('admin.requestedRoles.email'), field: 'username', sortable: true},
+      {name: 'roles', align: 'center', label: t('admin.requestedRoles.role'), field: 'roles'},
       {
         name: 'actions',
-        label: t('adminRolesRequest.save'),
+        label: t('admin.requestedRoles.save'),
         style: "width: 40px",
         align: 'center',
         field: row => row.roles

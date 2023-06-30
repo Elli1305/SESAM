@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{t('imprint.imprintEditorTitle')}}</p>
+    <p class="row text-h3 justify-center">{{t('admin.imprint.imprintEditorTitle')}}</p>
       <div class="row justify-evenly no-wrap" style="width: 80vw; height: 50vh">
         <q-btn class="self-end q-mr-lg" round icon="delete" color="negative" text-color="positive" @click="showDeleteDialog" style="width: 4em; height: 4em"/>
         <q-editor
@@ -27,11 +27,11 @@
           <div class="text-h6">Bestätigen</div>
           </q-card-section>
         <q-card-section class="row items-center">
-          <div class="q-mx-sm">{{t('imprint.imprintEditorMessageSave')}}</div>
+          <div class="q-mx-sm">{{t('admin.imprint.imprintEditorMessageSave')}}</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat :label="t('imprint.cancel')" color="primary" @click="confirmDialog = false"/>
-          <q-btn flat :label="t('imprint.save')" color="primary" @click="postText"/>
+          <q-btn flat :label="t('admin.imprint.cancel')" color="primary" @click="confirmDialog = false"/>
+          <q-btn flat :label="t('admin.imprint.save')" color="primary" @click="postText"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -42,11 +42,11 @@
           <div class="text-h6">Löschen bestätigen</div>
         </q-card-section>
         <q-card-section class="row items-center">
-          <div class="q-mx-sm">{{t('imprint.imprintEditorMessageDelete')}}</div>
+          <div class="q-mx-sm">{{t('admin.imprint.imprintEditorMessageDelete')}}</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat :label="t('imprint.cancel')" color="primary" @click="deleteDialog = false"/>
-          <q-btn flat :label="t('imprint.delete')" color="primary" @click="deletePostedContent"/>
+          <q-btn flat :label="t('admin.imprint.cancel')" color="primary" @click="deleteDialog = false"/>
+          <q-btn flat :label="t('admin.imprint.delete')" color="primary" @click="deletePostedContent"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -99,7 +99,7 @@ export default {
 
             $q.notify({
               type: 'positive',
-              message: t('imprint.imprintEditorMessageSaveConfirmation'),
+              message: t('admin.imprint.imprintEditorMessageSaveConfirmation'),
               position: 'bottom',
               color: "positive",
               textColor: "negative",
@@ -125,7 +125,7 @@ export default {
 
             $q.notify({
               type: 'negative',
-              message: t('imprint.imprintEditorMessageDeleteConfirmation'),
+              message: t('admin.imprint.imprintEditorMessageDeleteConfirmation'),
               position: 'bottom',
               timeout: 1500,
               color: "negative",

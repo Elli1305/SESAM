@@ -79,7 +79,7 @@ export default {
       {
         name: 'category',
         required: true,
-        label: t('credentialmapping.category'),
+        label: t('common.category'),
         align: 'center',
         field: row => row.categoryName,
         format: val => `${val}`,

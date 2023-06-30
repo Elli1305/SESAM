@@ -59,7 +59,7 @@ export default {
           $q.notify({
             type: 'negative',
             message: t('passwordReset.emailSendFailed'),
-            caption: t('common.unkownError'),
+            caption: t('common.unknownError'),
             position: "top",
             timeout: 3000,
             classes: "loginNotify"

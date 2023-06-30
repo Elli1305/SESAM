@@ -2,14 +2,14 @@
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
     <q-stepper v-model="step" ref="stepper" color="primary" animated flat style="width: 80vw">
 
-      <q-step :name="1" class="row justify-center" :title="t('issueCredential.steps.form')" icon="description"
+      <q-step :name="1" class="row justify-center" :title="t('issuer.issueCredential.steps.form')" icon="description"
               :done="step > 1">
         <div class="row justify-around no-wrap" style="height: 45vh">
           <div class="column no-wrap" style="width: 40%">
-            <p class="row text-h4">{{ t('issueCredential.title') }}</p>
+            <p class="row text-h4">{{ t('issuer.issueCredential.title') }}</p>
             <p class="row text-h6 text-bold">{{ credential?.name }}</p>
-            <p>{{ t('issueCredential.description[0]', [credential?.name]) }}</p>
-            <p>{{ t('issueCredential.description[1]') }}</p>
+            <p>{{ t('issuer.issueCredential.description[0]', [credential?.name]) }}</p>
+            <p>{{ t('issuer.issueCredential.description[1]') }}</p>
           </div>
           <q-form class="column no-wrap" style="width: 40%" ref="form" @submit.prevent>
             <q-input class="q-my-md no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
@@ -18,7 +18,7 @@
         </div>
       </q-step>
 
-      <q-step :name="2" class="row justify-center" :title="t('issueCredential.steps.list')" icon="checklist"
+      <q-step :name="2" class="row justify-center" :title="t('issuer.issueCredential.steps.list')" icon="checklist"
               :done="step > 2">
         <div class="row justify-around no-wrap" style="height: 45vh">
           <div class="column no-wrap" style="width: 40%">
@@ -26,7 +26,7 @@
                      :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)"/>
           </div>
           <div class="column q-mt-sm no-wrap" style="width: 40%">
-            <p>{{ t('issueCredential.checkConditions') }}</p>
+            <p>{{ t('issuer.issueCredential.checkConditions') }}</p>
             <q-option-group class="q-gutter-md q-ma-sm" :options="conditions" type="checkbox"
                             v-model="selectedConditions"/>
           </div>
@@ -34,25 +34,25 @@
         </div>
       </q-step>
 
-      <q-step :name="3" class="row justify-center" :title="t('issueCredential.steps.qrcode')" icon="qr_code_scanner">
+      <q-step :name="3" class="row justify-center" :title="t('issuer.issueCredential.steps.qrcode')" icon="qr_code_scanner">
         <div class="row justify-around no-wrap">
           <div class="column no-wrap" style="width: 60%; height: 45vh">
-            <p class="q-mb-xs text-h5">{{ t('issueCredential.addCredential.title') }}</p>
+            <p class="q-mb-xs text-h5">{{ t('issuer.issueCredential.addCredential.title') }}</p>
             <span class="q-mb-lg sub-title text-grey">{{ credential?.name }}</span>
-            <p class="q-mb-xs">{{ t('issueCredential.addCredential.howTo') }}</p>
+            <p class="q-mb-xs">{{ t('issuer.issueCredential.addCredential.howTo') }}</p>
             <ol class="q-gutter-xs">
               <i18n-t keypath="issueCredential.addCredential.steps.step1" tag="li">
                 <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet" target="_blank">
                   BC Wallet App
                 </a>
               </i18n-t>
-              <li>{{ t('issueCredential.addCredential.steps.step2') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step3') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step4') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step5') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step6') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step7') }}</li>
-              <li>{{ t('issueCredential.addCredential.steps.step8') }}</li>
+              <li>{{ t('issuer.issueCredential.addCredential.steps.step2') }}</li>
+              <li>{{ t('issuer.issueCredential.addCredential.steps.step3') }}</li>
+              <li>{{ t('issuer.issueCredential.addCredential.steps.step4') }}</li>
+              <li>{{ t('issuer.issueCredential.addCredential.steps.step5') }}</li>
+              <li>{{ t('issuer.issueCredential.addCredential.steps.step6') }}</li>
+              <li>{{ t('issuer.issueCredential.addCredential.steps.step7') }}</li>
+              <li>{{ t('issuer.issueCredential.addCredential.steps.step8') }}</li>
             </ol>
           </div>
           <div class="column justify-center no-wrap" style="padding-left: 2em">
@@ -64,11 +64,11 @@
       <template style="width: 40vw" v-slot:navigation>
         <q-stepper-navigation class="row q-mt-md justify-end">
           <q-btn v-if="step > 1 && step < 3" flat rounded color="primary" @click="previous($refs)"
-                 :label="t('issueCredential.previous')" class="q-ml-sm"/>
-          <q-btn v-if="step < 3" @click="next($refs)" flat rounded color="primary" :label="t('issueCredential.next')"
+                 :label="t('issuer.issueCredential.previous')" class="q-ml-sm"/>
+          <q-btn v-if="step < 3" @click="next($refs)" flat rounded color="primary" :label="t('issuer.issueCredential.next')"
                  :disable="checklistIncomplete">
             <q-tooltip v-if="checklistIncomplete">
-              {{ t('issueCredential.checklistHint') }}
+              {{ t('issuer.issueCredential.checklistHint') }}
             </q-tooltip>
           </q-btn>
         </q-stepper-navigation>
@@ -124,29 +124,29 @@ function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | Len
       case 'comparison':
         switch (vr.comparisonType) {
           case "EQUAL":
-            rules.push((value) => value === vr.content || t('issueCredential.validation.equal', [vr.content]))
+            rules.push((value) => value === vr.content || t('issuer.issueCredential.validation.equal', [vr.content]))
             break
           case "NOT_EQUAL":
-            rules.push((value) => value !== vr.content || t('issueCredential.validation.notEqual', [vr.content]))
+            rules.push((value) => value !== vr.content || t('issuer.issueCredential.validation.notEqual', [vr.content]))
             break
           case "LESS_THAN":
-            rules.push((value) => value < vr.content || t('issueCredential.validation.lessThan', [vr.content]))
+            rules.push((value) => value < vr.content || t('issuer.issueCredential.validation.lessThan', [vr.content]))
             break
           case "GREATER_THAN":
-            rules.push((value) => value > vr.content || t('issueCredential.validation.greaterThan', [vr.content]))
+            rules.push((value) => value > vr.content || t('issuer.issueCredential.validation.greaterThan', [vr.content]))
             break
           case "LESS_EQUAL":
-            rules.push((value) => value <= vr.content || t('issueCredential.validation.lessEqual', [vr.content]))
+            rules.push((value) => value <= vr.content || t('issuer.issueCredential.validation.lessEqual', [vr.content]))
             break
           case "GREATER_EQUAL":
-            rules.push((value) => value >= vr.content || t('issueCredential.validation.greaterEqual', [vr.content]))
+            rules.push((value) => value >= vr.content || t('issuer.issueCredential.validation.greaterEqual', [vr.content]))
             break
           default:
             console.error("Wrong comparison type")
         }
         break
       case 'range':
-        rules.push((value) => value >= vr.valueFrom && value <= vr.valueTo || t('issueCredential.validation.range', [vr.valueFrom, vr.valueTo]))
+        rules.push((value) => value >= vr.valueFrom && value <= vr.valueTo || t('issuer.issueCredential.validation.range', [vr.valueFrom, vr.valueTo]))
         break
       case 'regEx':
         rules.push((value) => new RegExp(vr.regEx).test(value) || vr.description)
@@ -154,22 +154,22 @@ function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | Len
       case 'length':
         switch (vr.comparisonType) {
           case "EQUAL":
-            rules.push((value) => value.length === vr.length || t('issueCredential.validation.equalLength', [vr.length]))
+            rules.push((value) => value.length === vr.length || t('issuer.issueCredential.validation.equalLength', [vr.length]))
             break
           case "NOT_EQUAL":
-            rules.push((value) => value.length !== vr.length || t('issueCredential.validation.notEqualLength', [vr.length]))
+            rules.push((value) => value.length !== vr.length || t('issuer.issueCredential.validation.notEqualLength', [vr.length]))
             break
           case "LESS_THAN":
-            rules.push((value) => value.length < vr.length || t('issueCredential.validation.lessThanLength', [vr.length]))
+            rules.push((value) => value.length < vr.length || t('issuer.issueCredential.validation.lessThanLength', [vr.length]))
             break
           case "GREATER_THAN":
-            rules.push((value) => value.length > vr.length || t('issueCredential.validation.greaterThanLength', [vr.length]))
+            rules.push((value) => value.length > vr.length || t('issuer.issueCredential.validation.greaterThanLength', [vr.length]))
             break
           case "LESS_EQUAL":
-            rules.push((value) => value.length <= vr.length || t('issueCredential.validation.lessEqualLength', [vr.length]))
+            rules.push((value) => value.length <= vr.length || t('issuer.issueCredential.validation.lessEqualLength', [vr.length]))
             break
           case "GREATER_EQUAL":
-            rules.push((value) => value.length >= vr.length || t('issueCredential.validation.greaterEqualLength', [vr.length]))
+            rules.push((value) => value.length >= vr.length || t('issuer.issueCredential.validation.greaterEqualLength', [vr.length]))
             break
           default:
             console.error("Wrong comparison type")
@@ -189,8 +189,8 @@ api.credential.get(props.id)
         case 403:
           $q.notify({
             ...opts,
-            message: t('issueCredential.errors.get.failed'),
-            caption: t('issueCredential.errors.get.unauthorized'),
+            message: t('issuer.issueCredential.errors.get.failed'),
+            caption: t('issuer.issueCredential.errors.get.unauthorized'),
           })
 
           break;
@@ -200,13 +200,13 @@ api.credential.get(props.id)
 
           $q.notify({
             ...opts,
-            message: t('issueCredential.errors.get.failed'),
-            caption: t('issueCredential.errors.unknown'),
+            message: t('issuer.issueCredential.errors.get.failed'),
+            caption: t('issuer.issueCredential.errors.unknown'),
           })
       }
     });
 
-const required: ValidationRule<string> = (value) => !!value || t('issueCredential.validation.inputRequired');
+const required: ValidationRule<string> = (value) => !!value || t('issuer.issueCredential.validation.inputRequired');
 
 const next = async (refs: any) => {
   const stepper = (refs.stepper as QStepper);
@@ -219,10 +219,10 @@ const next = async (refs: any) => {
     stepper.next();
   } else if (step.value === 2) {
     $q.dialog({
-      title: t('issueCredential.confirm.title'),
-      message: t('issueCredential.confirm.message', {'name': credential.value?.name}),
-      ok: t('issueCredential.confirm.ok'),
-      cancel: t('issueCredential.confirm.cancel'),
+      title: t('issuer.issueCredential.confirm.title'),
+      message: t('issuer.issueCredential.confirm.message', {'name': credential.value?.name}),
+      ok: t('issuer.issueCredential.confirm.ok'),
+      cancel: t('issuer.issueCredential.confirm.cancel'),
     }).onOk(async () => {
       $q.loading.show({delay: 400});
 
@@ -236,16 +236,16 @@ const next = async (refs: any) => {
               case 403:
                 $q.notify({
                   ...opts,
-                  message: t('issueCredential.errors.issue.failed'),
-                  caption: t('issueCredential.errors.issue.unauthorized'),
+                  message: t('issuer.issueCredential.errors.issue.failed'),
+                  caption: t('issuer.issueCredential.errors.issue.unauthorized'),
                 })
 
                 break;
               case 424:
                 $q.notify({
                   ...opts,
-                  message: t('issueCredential.errors.issue.failed'),
-                  caption: t('issueCredential.errors.issue.failedDependency'),
+                  message: t('issuer.issueCredential.errors.issue.failed'),
+                  caption: t('issuer.issueCredential.errors.issue.failedDependency'),
                 })
 
                 break;
@@ -255,8 +255,8 @@ const next = async (refs: any) => {
 
                 $q.notify({
                   ...opts,
-                  message: t('issueCredential.errors.issue.failed'),
-                  caption: t('issueCredential.errors.unknown'),
+                  message: t('issuer.issueCredential.errors.issue.failed'),
+                  caption: t('issuer.issueCredential.errors.unknown'),
                 })
             }
           })

@@ -46,7 +46,7 @@
                          :disable="vr.currentDay">
                   <template v-slot:hint>
                     <q-checkbox
-                        :label="t('floorplan.currentTime')"
+                        :label="t('floorPlan.currentTime')"
                         v-if="attribute.type.toLowerCase() === 'date'"
                         v-model="vr.currentDay"
                         @update:model-value="vr.content = new Date().toISOString().split('T')[0]"
@@ -129,10 +129,10 @@
           <div class="row no-wrap q-ml-sm q-mb-sm">
             <q-select dense outlined style="width: 12em"
                       v-model="valRuleType"
-                      :options="getValRuleTypes()"/>
+                      :options="[t()]"/>
             <q-btn class="q-ml-sm" flat dense rounded color="primary" icon="add"
                    @click="addValidationrule(attribute)">
-              {{t('issueCredential.validation.addValidationRule')}}
+              {{t('issuer.issueCredential.validation.addValidationRule')}}
             </q-btn>
           </div>
         </q-card>

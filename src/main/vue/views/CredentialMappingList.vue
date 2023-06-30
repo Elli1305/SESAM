@@ -1,13 +1,13 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{t("credentialmapping.credentialmapping")}}</p>
+    <p class="row text-h3 justify-center">{{t("admin.credentialMapping.title")}}</p>
     <div class="row self-center">
       <q-table
           style="width: 80vw; height: 50vh"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
-          :title="t('credentialmapping.credentialmapping')"
+          :title="t('admin.credentialMapping.title')"
           :separator="'cell'"
           :no-data-label="t('common.noData')"
           :no-results-label="t('common.noResults')"
@@ -17,7 +17,7 @@
           visible-columns="['category', 'credential', 'externalCredential', 'actions']"
           :row-key="row => row.id">
         <template v-slot:top-right>
-          <q-btn class="q-mr-xs" flat color="grey" :label="t('credentialmapping.newcategory')" icon="add" rounded @click="prompt=true"/>
+          <q-btn class="q-mr-xs" flat color="grey" :label="t('admin.credentialMapping.newCategory')" icon="add" rounded @click="prompt=true"/>
           <q-input class="q-ml-xs" borderless dense debounce="250" v-model="filter" :placeholder="t('credentialview.search')">
             <template v-slot:append>
               <q-icon name="search" />
@@ -36,26 +36,26 @@
   <q-dialog v-model="alert" persistent>
     <q-card>
       <q-card-section>
-        <div class="text-h6"> {{ t("credentialmapping.categorydelete")}}</div>
+        <div class="text-h6"> {{ t("admin.credentialMapping.deleteCategory")}}</div>
       </q-card-section>
       <q-card-section class="row items-center">
-        <span class="q-mx-sm">{{ t("credentialmapping.delete")}}</span>
+        <span class="q-mx-sm">{{ t("admin.credentialMapping.delete")}}</span>
       </q-card-section>
 
       <q-card-actions align="right" class="text-primary">
-        <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteCategory(editedRow.id)">  {{ t("credentialmapping.save")}} </q-btn>
+        <q-btn flat v-close-popup>  {{ t("common.cancel")}}</q-btn>
+        <q-btn flat v-close-popup @click="deleteCategory(editedRow.id)">  {{ t("common.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-dialog v-model="prompt" persistent>
     <q-card>
       <q-card-section>
-        <div class="text-h6"> {{ t("credentialmapping.categorycreate")}}</div>
+        <div class="text-h6"> {{ t("admin.credentialMapping.createCategory")}}</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <q-input dense :label="t('credentialmapping.name')" v-model="address" autofocus @keyup.enter="prompt = false" :placeholder="t('credentialmapping.category')">
+        <q-input dense :label="t('admin.credentialMapping.credentialName')" v-model="address" autofocus @keyup.enter="prompt = false" :placeholder="t('common.category')">
           <template v-slot:append>
             <q-icon name="edit" />
           </template>
@@ -67,7 +67,7 @@
             filled
             v-model="model"
             multiple
-            :label="t('credentialmapping.internal')"
+            :label="t('admin.credentialMapping.internal')"
             emit-value
             :options="credentialStore.allCredentials"
             option-value="id"
@@ -79,7 +79,7 @@
             filled
             v-model="model2"
             multiple
-            :label="t('credentialmapping.external')"
+            :label="t('admin.credentialMapping.external')"
             emit-value
             :options="credentialStore.external"
             option-value="id"
@@ -88,18 +88,18 @@
             map-options/>
       </q-card-section>
       <q-card-actions align="right" class="text-primary">
-        <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="createCategory"> {{ t("credentialmapping.save")}}</q-btn>
+        <q-btn flat v-close-popup> {{ t("common.cancel")}}</q-btn>
+        <q-btn flat v-close-popup @click="createCategory"> {{ t("common.save")}}</q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-dialog v-model="changeCategory" persistent>
     <q-card>
       <q-card-section>
-        <div class="text-h6"> {{ t("credentialmapping.categorychange")}}</div>
+        <div class="text-h6"> {{ t("admin.credentialMapping.changeCategory")}}</div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <q-input dense :label="t('credentialmapping.name')" v-model="catname" autofocus @keyup.enter="prompt = false" :placeholder="t('credentialmapping.category')">
+        <q-input dense :label="t('admin.credentialMapping.credentialName')" v-model="catname" autofocus @keyup.enter="prompt = false" :placeholder="t('common.category')">
         <template v-slot:append>
           <q-icon name="edit" />
         </template>
@@ -110,7 +110,7 @@
               class="q-my-sm"
               filled
               multiple
-              :label="t('credentialmapping.internal')"
+              :label="t('admin.credentialMapping.internal')"
               emit-value
               v-model="model3"
               :options="credentialStore.allCredentials"
@@ -122,7 +122,7 @@
               class="q-my-sm"
               filled
               multiple
-              :label="t('credentialmapping.external')"
+              :label="t('admin.credentialMapping.external')"
               emit-value
               v-model="model4"
               :options="credentialStore.external"
@@ -132,8 +132,8 @@
               map-options/>
       </q-card-section>
       <q-card-actions align="right" class="text-primary">
-        <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="updateCategory(editedRow.id)"> {{ t("credentialmapping.save")}} </q-btn>
+        <q-btn flat v-close-popup> {{ t("common.cancel")}}</q-btn>
+        <q-btn flat v-close-popup @click="updateCategory(editedRow.id)"> {{ t("common.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -159,10 +159,10 @@ export default {
     rows.value = []
 
     const columns = [
-        { name: 'category', required: true, label: t('credentialmapping.category'), align: 'center', field: row => row.name, sortable: true },
-        { name: 'credential', align: 'center', label: t('credentialmapping.internal'), field: row => row.credentials,  format: (val) => val.map(c => c.name).join(', '), sortable: true},
-        { name: 'externalCredential', align: 'center', label: t('credentialmapping.external'), field: row => row.externalCredentials, format: (val) => val.map(e => e.name).join(', '), sortable: true},
-        { name: 'actions', align: 'center', label: t('issuermanagement.edit')}
+        { name: 'category', required: true, label: t('common.category'), align: 'center', field: row => row.name, sortable: true },
+        { name: 'credential', align: 'center', label: t('admin.credentialMapping.internal'), field: row => row.credentials,  format: (val) => val.map(c => c.name).join(', '), sortable: true},
+        { name: 'externalCredential', align: 'center', label: t('admin.credentialMapping.external'), field: row => row.externalCredentials, format: (val) => val.map(e => e.name).join(', '), sortable: true},
+        { name: 'actions', align: 'center', label: t('admin.issuerManagement.edit')}
     ]
 
     const credentialStore = useCredentialStore()

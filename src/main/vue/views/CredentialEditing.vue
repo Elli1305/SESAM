@@ -119,7 +119,7 @@ onMounted(() => {
   }
 });
 
-const required: ValidationRule<string> = (value) => !!value || t('issueCredential.validation.inputRequired');
+const required: ValidationRule<string> = (value) => !!value || t('issuer.issueCredential.validation.inputRequired');
 const form: Ref<QForm | null> = ref(null);
 
 const addCondition = (index: number) => {
