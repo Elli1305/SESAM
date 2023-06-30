@@ -248,7 +248,7 @@
                      :door-config="doorConfigOut" :is-config-out="true"></door-config>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
-          <q-btn flat v-close-popup @click="obtainArray(); saveConfig(finalArray, useRoomGroupStore)"> {{ t("credentialmapping.save")}}</q-btn>
+          <q-btn flat v-close-popup @click="saveConfig(model)"> {{ t("credentialmapping.save")}}</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -373,14 +373,6 @@ export default {
       }
     }
 
-    function obtainArray() {
-      for (const val in model.value) {
-        if (val && val !=0) {
-          res.push(model.value[val])
-        }
-      }
-      finalArray = res.flat(1)
-    }
 
 
     let modelForBuilding = ref(null);
@@ -530,7 +522,6 @@ export default {
     return {
       editedRow,
       openForm,
-      obtainArray,
       getRoomsAndDoors,
       finalArray,
       list,
@@ -693,7 +684,15 @@ export default {
           })
       return filteredRows
     },
-    saveConfig(finalArray, roomGroupStore) {
+    saveConfig(model) {
+      const roomGroupStore = useRoomGroupStore()
+      const res = []
+        for (const val in model) {
+          if (val && val !=0) {
+            res.push(model[val])
+          }
+        }
+      const finalArray = res.flat(1)
       let config = {}
       console.log('qselects', this.$refs.configIn.qSelects)
       const configlist = []
@@ -717,9 +716,10 @@ export default {
       config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
       for (const door in finalArray) {
         configlist.push({
-          doorId: door,
+          doorId: finalArray[door],
           configuration: config
         })
+        console.log(configlist)
         roomGroupStore.setGroupConfig(configlist)
       }
     }
