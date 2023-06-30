@@ -248,7 +248,7 @@
                      :door-config="doorConfigOut" :is-config-out="true"></door-config>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
-          <q-btn flat v-close-popup @click="saveConfig() "> {{ t("credentialmapping.save")}}</q-btn>
+          <q-btn flat v-close-popup @click="obtainArray(); saveConfig(finalArray, useRoomGroupStore)"> {{ t("credentialmapping.save")}}</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -265,7 +265,7 @@ import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
 import {prop} from "vue-class-component";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
-import {Direction, PredicateType} from "@/main/vue/entity/doorConfiguration";
+import {Direction} from "@/main/vue/entity/doorConfiguration";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 
 
@@ -380,38 +380,6 @@ export default {
           }
         }
         finalArray = res.flat(1)
-      }
-
-      function saveConfig() {
-        obtainArray()
-        let config = {}
-        const configlist = []
-        if (this.$refs.configIn.direction === Direction.BOTH) {
-          config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-          config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-          config.doorConfigIn.description = this.$refs.configIn.configDescription
-          config.doorConfigOut.description = this.$refs.configIn.configDescription
-        } else if (this.$refs.configIn.direction === Direction.IN) {
-          config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-          config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
-          config.doorConfigIn.description = this.$refs.configIn.configDescription
-          config.doorConfigOut.description = this.$refs.configOut.configDescription
-        } else if (this.$refs.configIn.direction === Direction.OUT) {
-          config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
-          config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-          config.doorConfigIn.description = this.$refs.configOut.configDescription
-          config.doorConfigOut.description = this.$refs.configIn.configDescription
-        }
-        config.doorConfigIn?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-        config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-        for (const door in finalArray) {
-          configlist.push({
-            doorId: door,
-            configuration: config
-          })
-          roomGroupStore.setGroupConfig(configlist)
-        }
-        finalArray = []
       }
 
 
@@ -562,8 +530,8 @@ export default {
         return {
           editedRow,
           openForm,
+          obtainArray,
           getRoomsAndDoors,
-          saveConfig,
           finalArray,
           list,
           checkIfSelected,
@@ -666,6 +634,9 @@ export default {
     },
 
     methods: {
+      useRoomGroupStore,
+
+
       changeDirectionOut(direction) {
         if (direction === Direction.IN) {
           this.$refs.configOut.direction = Direction.OUT
@@ -722,6 +693,36 @@ export default {
                 })
             return filteredRows
         },
+      saveConfig(finalArray, roomGroupStore) {
+        let config = {}
+        console.log('qselects', this.$refs.configIn.qSelects)
+        const configlist = []
+        if (this.$refs.configIn.direction === Direction.BOTH) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+          config.doorConfigIn.description = this.$refs.configIn.configDescription
+          config.doorConfigOut.description = this.$refs.configIn.configDescription
+        } else if (this.$refs.configIn.direction === Direction.IN) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+          config.doorConfigIn.description = this.$refs.configIn.configDescription
+          config.doorConfigOut.description = this.$refs.configOut.configDescription
+        } else if (this.$refs.configIn.direction === Direction.OUT) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
+          config.doorConfigIn.description = this.$refs.configOut.configDescription
+          config.doorConfigOut.description = this.$refs.configIn.configDescription
+        }
+        config.doorConfigIn?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+        config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
+        for (const door in finalArray) {
+          configlist.push({
+            doorId: door,
+            configuration: config
+          })
+          roomGroupStore.setGroupConfig(configlist)
+        }
+      }
     },
 
 
