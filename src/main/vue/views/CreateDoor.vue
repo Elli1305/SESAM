@@ -2,10 +2,10 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card style="min-width: 60em">
       <q-card-section>
-        <div class="text-h6">Tür zuweisen</div>
+        <div class="text-h6">{{ t('floorplan.addDoor') }}</div>
       </q-card-section>
       <q-card-section class="row q-px-lg justify-between no-wrap">
-        <q-input class="full-width" filled v-model="doorName" label="Türname" stack-label/>
+        <q-input class="full-width" filled v-model="doorName" :label="t('floorplan.doorName')" stack-label/>
         <q-select
             class="q-ml-md"
             style="min-width: 20em"
@@ -13,7 +13,7 @@
             v-model="room"
             use-input
             hide-selected
-            label="Raum auswählen"
+            :label="t('floorplan.pickRoom')"
             option-label="name"
             fill-input
             input-debounce="0"
@@ -59,8 +59,8 @@
                    :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.OUT : Direction.BOTH"
                    :door-config="doorConfigOut" :is-config-out="true"></door-config>
       <q-card-actions align="right">
-        <q-btn flat color="primary" label="Abbrechen" @click="onCancelClick"/>
-        <q-btn flat color="primary" label="Speichern" :disable="!doorName || (!room && !door)" @click="onOKClick"/>
+        <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('common.save')" :disable="!doorName || (!room && !door)" @click="onOKClick"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -70,6 +70,7 @@
 import {ref, watch} from "vue";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 import {Direction} from "@/main/vue/entity/doorConfiguration";
+import {useI18n} from "vue-i18n";
 import {useConfigStore} from "@/main/vue/stores/config";
 import {storeToRefs} from "pinia";
 
@@ -147,6 +148,7 @@ export default {
     },
   },
   setup(props) {
+      const {t} = useI18n()
       const room = ref(null)
       const doorName = ref('')
       const roomOptions = ref(props.rooms)
@@ -185,6 +187,7 @@ export default {
           }
       })
 
+
     if (props.door) {
       doorName.value = props.door.name
     }
@@ -197,13 +200,14 @@ export default {
     }
 
     return {
-      room,
-      filterFn,
-      doorName,
+        room,
+        filterFn,
+        doorName,
         configOptions,
         selectedConfig,
         configOut,
-        configIn
+        configIn,
+        t
     }
   }
 }
