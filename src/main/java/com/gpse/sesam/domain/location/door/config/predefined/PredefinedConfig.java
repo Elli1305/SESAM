@@ -15,11 +15,9 @@ public class PredefinedConfig {
     @Column
     private String name;
 
-    @PrimaryKeyJoinColumn
     @OneToOne(cascade = CascadeType.ALL)
     private ProofConfig doorIn;
 
-    @PrimaryKeyJoinColumn
     @OneToOne(cascade = CascadeType.ALL)
     private ProofConfig doorOut;
 
