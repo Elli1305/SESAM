@@ -20,11 +20,11 @@ export const useConfigStore = defineStore('config', () => {
         })
     }
 
-    function getConfig(id: BigInt) {
+    function getConfig(id: BigInt): Promise<PredefinedConfiguration> {
         return new Promise((resolve, reject) => {
             api.predefinedConfig.getConfig(id).then((response) => {
                 currentConfig.value = response.data
-                resolve(response)
+                resolve(response.data)
             }).catch((error) => {
                 reject(error)
             })

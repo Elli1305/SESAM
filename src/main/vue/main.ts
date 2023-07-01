@@ -85,7 +85,8 @@ const messages = {
         predefinedConfigs: {
             title: "Vordefinierte Konfigurationen",
             deleteAlert: "",
-            new: "Neue Konfiguration"
+            new: "Neue Konfiguration",
+            deleteQuestion: "Konfiguration wirklich löschen?"
         },
 
         common: {

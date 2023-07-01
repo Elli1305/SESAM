@@ -22,7 +22,8 @@
                               flat
                               color="grey"
                               icon="edit"
-                              @click="configDialog = true">
+                              @click="configDialog = true; editConfig(props.row.id); edit = true;
+                                      currentConfig = props.row.id">
                             </q-btn>
 
                             <q-btn
@@ -31,7 +32,7 @@
                                 flat
                                 icon="delete"
                                 color="grey"
-                                @click="deleteConfig(props.row.id)">
+                                @click="deleteDialog = true; currentConfig = props.row.id">
                             </q-btn>
                         </div>
                     </q-td>
@@ -64,17 +65,31 @@
                     <q-input class="full-width" filled v-model="configName" label="Konfigurationsbezeichnung" stack-label></q-input>
                 </q-card-section>
                 <DoorConfig
-                    ref="configIn" :door-config="doorConfigIn"
-                    :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.IN : Direction.BOTH"
+                    ref="configIn"
                     @changeDirection="changeDirectionOut">
                 </DoorConfig>
                 <DoorConfig v-show="$refs.configIn?.direction !== Direction.BOTH" ref="configOut"
-                            :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.OUT : Direction.BOTH"
-                            :door-config="doorConfigOut" :is-config-out="true">
+                            :is-config-out="true">
                 </DoorConfig>
                 <q-card-actions align="right">
                     <q-btn flat color="primary" label="Abbrechen" @click="onCancelClick()" v-close-popup></q-btn>
                     <q-btn flat color="primary" label="Speichern" :disable="!configName" @click="onOKClick()" v-close-popup></q-btn>
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
+
+
+        <q-dialog v-model="deleteDialog">
+            <q-card>
+                <q-card-section>
+                    <div class="text-h6">{{ t('adminEdit.attention') }}</div>
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                    {{ t('predefinedConfigs.deleteQuestion') }}
+                </q-card-section>
+                <q-card-actions align="right" class="text-primary">
+                    <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
+                    <q-btn flat :label="t('adminEdit.delete')" @click="deleteConfig(currentConfig); deleteDialog=false"/>
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -88,32 +103,23 @@ import {PredefinedConfiguration} from "@/main/vue/entity/predefinedConfiguration
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 import {Direction} from "@/main/vue/entity/doorConfiguration";
 import {useConfigStore} from "@/main/vue/stores/config";
-
+import {QTableProps} from "quasar";
 
 const direction = computed(() => {
     return Direction
 })
 
-const props = defineProps({
-    doorConfigIn: {
-        required: false
-    },
-    doorConfigOut: {
-        required: false
-    }
-})
-const emits = defineEmits({
-
-})
-
+const edit = ref(false)
+const currentConfig = ref()
 const configStore = useConfigStore()
 const configIn = ref()
 const configOut = ref()
 const configName = ref()
 const configDialog = ref(false)
+const deleteDialog = ref(false)
 const filter = ref('')
 const {t} = useI18n()
-const columns = [
+const columns: QTableProps['columns'] = [
     {
         name: 'name',
         required: true,
@@ -122,7 +128,8 @@ const columns = [
         field: 'name',
         sortable: true
     },
-    {name: 'actions', align: 'center', label: "Bearbeiten", style: 'width: 12em', headerStyle: 'width: 12em'}
+    {name: 'actions', align: 'center', label: "Bearbeiten", style: 'width: 12em', headerStyle: 'width: 12em',
+        field: row => row}
 ]
 
 const rows: Ref<PredefinedConfiguration[]> = ref([])
@@ -139,12 +146,15 @@ function changeDirectionOut(direction: Direction) {
 
 function onCancelClick() {
     configName.value = null
+    currentConfig.value = null
 }
 
 async function onOKClick() {
-  await addConfig()
-  await configStore.getAllConfigs()
-  rows.value = configStore.allPreConfigs
+    await addConfig()
+    await configStore.getAllConfigs()
+    rows.value = configStore.allPreConfigs
+    configName.value = null
+    currentConfig.value = null
 }
 
 async function addConfig() {
@@ -178,17 +188,37 @@ async function addConfig() {
     config.doorConfigIn.description = configOut.value.configDescription
     config.doorConfigOut.description = configIn.value.configDescription
   }
-  await configStore.createConfig(config)
+  if(edit.value) {
+      config.id = currentConfig.value
+      await configStore.updateConfig(config)
+      edit.value = false
+  } else {
+      await configStore.createConfig(config)
+  }
 }
 
 async function deleteConfig(config: any) {
-  await configStore.deleteConfig(config)
-  await configStore.getAllConfigs()
-  rows.value = configStore.allPreConfigs
+    console.log("delete", config)
+    await configStore.deleteConfig(config)
+    await configStore.getAllConfigs()
+    rows.value = configStore.allPreConfigs
+    currentConfig.value = null
+    configName.value = null
 }
 
-async function editConfig() {
-
+async function editConfig(config: any) {
+    await configStore.getConfig(config)
+    await configStore.getAllConfigs()
+    let editConfig = configStore.currentConfig
+    configName.value = editConfig?.name
+    configIn.value.configDescription = editConfig?.doorConfigIn.description
+    configIn.value.qSelects.configParts = editConfig?.doorConfigIn.configParts
+    configOut.value.configDescription = editConfig?.doorConfigOut.description
+    configOut.value.qSelects.configParts = editConfig?.doorConfigOut.configParts
+    if(JSON.stringify(editConfig?.doorConfigIn) !== JSON.stringify(editConfig?.doorConfigOut)) {
+        configIn.value.direction = Direction.IN
+        configOut.value.direction = Direction.OUT
+    }
 }
 
 
