@@ -605,13 +605,35 @@ export default {
 
         const roomGroupStore = useRoomGroupStore();
         const selectedGroups = ref([]);
-        roomGroupStore.getRoomGroups();
         let filteredGroups = ref([]);
         const newGroup = ref(false);
         const addRoomsToNewGroupDialog = ref(false);
         const currentGroupName = ref();
         const editGroupD = ref(false);
         const numRoomsInGroup = ref();
+        const isEditor = ref(false);
+
+        function isEditorCheck() {
+            if (userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)) {
+                isEditor.value = true;
+                console.log("Is Editor Check");
+            }
+
+            console.log("Is Editor Check");
+            return true;
+        }
+
+
+        isEditorCheck();
+        if (isEditor.value) {
+            roomGroupStore.getRoomGroups();
+            console.log("Ist eingeloggt als Editor");
+        }
+        else {
+            console.log("Ist nicht eingeloggt als Editor");
+        }
+
+
 
         async function loadRoomGroups(buildingID) {
             filteredGroups.value = [];
@@ -656,23 +678,23 @@ export default {
 
             }
         }
+
         function checkAddRoomsToNewGroup() {
-            if(selectedRooms.value.length === 0) {
+            if (selectedRooms.value.length === 0) {
                 $q.notify({
                     type: 'negative',
                     message: t('groupRooms.noRoomSelected')
                 })
-            }
-            else{
+            } else {
                 addRoomsToNewGroupDialog.value = true;
             }
         }
+
         function checkIfGroupSelected() {
             console.log("Selected Group for new Group: ", selectedGroups.value);
-            if(selectedGroups.value !==null) {
+            if (selectedGroups.value !== null) {
                 return true;
-            }
-            else {
+            } else {
                 $q.notify({
                     type: 'negative',
                     message: t('groupRooms.noGroupSelected')
@@ -686,13 +708,12 @@ export default {
             console.log("selected Groups: ", selectedGroups.value);
             console.log("selected Groups length: ", selectedRooms.value.length);
 
-            if(selectedRooms.value.length === 0) {
+            if (selectedRooms.value.length === 0) {
                 $q.notify({
                     type: 'negative',
                     message: t('groupRooms.noRoomSelected')
                 })
-            }
-            else if(selectedGroups.value !==null) {
+            } else if (selectedGroups.value !== null) {
                 const editedGroup = ref({
                     id: selectedGroups.value.id,
                     name: selectedGroups.value.name,
@@ -703,8 +724,7 @@ export default {
                 await roomGroupStore.editGroup(editedGroup.value);
                 await loadRoomGroups(buildingID.value);
                 unCheck();
-            }
-            else {
+            } else {
                 $q.notify({
                     type: 'negative',
                     message: t('groupRooms.noGroupSelected')
@@ -714,27 +734,26 @@ export default {
 
         async function deleteGroup() {
             console.log("Delete Group", selectedGroups.value);
-            if(selectedGroups.value === []) {
+            if (selectedGroups.value === []) {
                 unCheck();
             }
-            if(selectedGroups.value !==null) {
+            if (selectedGroups.value !== null) {
                 await roomGroupStore.deleteGroup(selectedGroups.value.id).then(() => {
                     loadRoomGroups(buildingID.value);
                     unCheck();
                 });
-            }
-            else {
+            } else {
                 $q.notify({
                     type: 'negative',
                     message: t('groupRooms.noGroupSelected')
                 })
             }
         }
+
         function checkGroupSelected() {
-            if(selectedGroups.value !==null){
+            if (selectedGroups.value !== null) {
                 return true;
-            }
-            else {
+            } else {
                 $q.notify({
                     type: 'negative',
                     message: t('groupRooms.noGroupSelected')
@@ -796,26 +815,31 @@ export default {
                 buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
             }
             console.log("buildingId: ", buildingID.value);
-            loadRoomGroups(buildingID.value);
+            if(isEditor.value) {
+                loadRoomGroups(buildingID.value);
+            }
         });
 
 
         const {selectedFloorId} = storeToRefs(floorPlanStore)
 
-        watch(selectedFloorId, () => {
-            locationStore.getLocations().then((locations) => {
-                if (!floorPlanStore.selectedFloorPlan) {
-                    buildingID.value = locations[0].buildings[0].id
-                } else {
-                    buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
-                }
-                console.log("buildingId: ", buildingID.value);
-                loadRoomGroups(buildingID.value);
+        if (isEditor.value) {
+            watch(selectedFloorId, () => {
+                locationStore.getLocations().then((locations) => {
+                    if (!floorPlanStore.selectedFloorPlan) {
+                        buildingID.value = locations[0].buildings[0].id
+                    } else {
+                        buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
+                    }
+                    console.log("buildingId: ", buildingID.value);
+                    loadRoomGroups(buildingID.value);
 
-            });
-            //console.log("Orte: ", locations);
-            console.log("buildingIds: ", buildingID.value);
-        })
+                });
+                //console.log("Orte: ", locations);
+                console.log("buildingIds: ", buildingID.value);
+            })
+        }
+
 
 
         filteredRooms.value = rooms.value
