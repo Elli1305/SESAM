@@ -21,7 +21,7 @@
                 </q-tabs>
                 <q-separator></q-separator>
 
-                <q-tab-panels v-model="tab" animated style="max-width: 22em">
+                <q-tab-panels v-model="tab" animated style="max-width: 24em; min-width: 24em">
                     <q-tab-panel name="rooms">
 
                         <q-input
@@ -204,6 +204,9 @@
                                 <q-icon name="search"/>
                             </template>
                         </q-input>
+                        <q-scroll-area style="height: 400px; min-width: 21em; overflow: hidden; max-width: 22em; "
+                                       :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
+                                       >
                         <q-list>
 
                             <q-item v-for="group in allGroups" style="padding-left: 0">
@@ -312,6 +315,7 @@
                             </q-item>
 
                         </q-list>
+                        </q-scroll-area>
                         <div
                             v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                             <q-separator></q-separator>
