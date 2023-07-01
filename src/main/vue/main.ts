@@ -141,6 +141,12 @@ const messages = {
             group: "Gruppe"
 
         },
+        predefinedConfigs: {
+            title: "Vordefinierte Konfigurationen",
+            deleteAlert: "",
+            new: "Neue Konfiguration",
+            deleteQuestion: "Konfiguration wirklich löschen?"
+        },
 
         common: {
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
@@ -152,6 +158,7 @@ const messages = {
             save: 'Speichern',
             category: "Kategorie",
             categories: "Kategorien",
+            search: "Suche"
         },
         credentialview :{
             credentialview: "Credentialansicht",
@@ -198,7 +205,8 @@ const messages = {
             issuerPages: "Credential ausstellen",
             imprint: "Impressum",
             logout: "Logout",
-            roomSearch: "Raumsuche"
+            roomSearch: "Raumsuche",
+            predefinedConfig: "Konfiguration erstellen"
         },
         login: {
             wrongEmailPassword: "Falsches Passwort oder Benutzername",
@@ -560,7 +568,8 @@ const messages = {
             issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout",
-            roomSearch: "Search"
+            roomSearch: "Search",
+            predefinedConfig: "Create Configuration"
         },
         login: {
             wrongEmailPassword: "Wrong Password oder Username",
