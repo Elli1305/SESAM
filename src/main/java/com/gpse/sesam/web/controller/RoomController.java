@@ -1,5 +1,7 @@
 package com.gpse.sesam.web.controller;
 
+import com.gpse.sesam.domain.location.floor.Floor;
+import com.gpse.sesam.domain.location.floor.FloorService;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +43,11 @@ public class RoomController {
 	@GetMapping("/rooms")
 	public List<Room> getRooms() {
 		return roomService.getRooms();
+	}
+
+	@Secured("EDITOR")
+	@GetMapping("/floor/{id:\\d+}")
+	public Floor getFloorToRoom(@PathVariable("id") final Long id) {
+		return roomService.getFloorToRoom(id);
 	}
 }
