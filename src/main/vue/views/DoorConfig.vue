@@ -16,9 +16,9 @@
                 color="white"
                 text-color="black"
                 :options="[
-                  {label: t('floorPlan.in'), value: Direction.IN},
-                  {label: t('floorPlan.both'), value: Direction.BOTH},
-                  {label: t('floorPlan.out'), value: Direction.OUT}
+                  {label: t('floorPlan.directions.in'), value: Direction.IN},
+                  {label: t('floorPlan.directions.both'), value: Direction.BOTH},
+                  {label: t('floorPlan.directions.out'), value: Direction.OUT}
                 ]"
                 rounded
                 size="0.5em"
@@ -29,7 +29,7 @@
         </q-field>
         <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
           <q-tooltip max-width="15em" anchor="center right" self="center left">
-            {{t('floorPlan.infoConfigGroups')}}
+            {{t('floorPlan.directions.infoConfigGroups')}}
           </q-tooltip>
         </q-icon>
       </q-toolbar>
@@ -49,14 +49,14 @@
                 multiple
                 label="Credentials"
                 option-label="name"
-                :hint="t('floorPlan.infoCredential')"
+                :hint="t('floorPlan.directions.infoCredential')"
                 :options="credentialStore.allCredentials"
                 v-model="qSelects.configParts[i].credentials"
                 use-chips>
               <template v-slot:after>
                 <q-icon class="cursor-pointer" size="0.75em" name="filter_none">
                   <q-tooltip max-width="15em" anchor="center right" self="center left">
-                    {{t('floorPlan.infoCredentialGroups')}}
+                    {{t('floorPlan.directions.infoCredentialGroups')}}
                   </q-tooltip>
                 <q-menu anchor="bottom right" self="top right" transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
                     <q-list dense>

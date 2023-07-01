@@ -44,7 +44,7 @@
 
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup>  {{ t("common.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteCategory(editedRow.id)">  {{ t("common.save")}} </q-btn>
+        <q-btn flat v-close-popup @click="deleteCategory(editedRow.id)">  {{ t("common.delete")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -99,7 +99,7 @@
         <div class="text-h6"> {{ t("admin.credentialMapping.changeCategory")}}</div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <q-input dense :label="t('admin.credentialMapping.credentialName')" v-model="catname" autofocus @keyup.enter="prompt = false" :placeholder="t('common.category')">
+        <q-input dense :label="t('admin.credentialMapping.categoryName')" v-model="catname" autofocus @keyup.enter="prompt = false" :placeholder="t('common.category')">
         <template v-slot:append>
           <q-icon name="edit" />
         </template>
@@ -159,10 +159,10 @@ export default {
     rows.value = []
 
     const columns = [
-        { name: 'category', required: true, label: t('common.category'), align: 'center', field: row => row.name, sortable: true },
+        { name: 'category', required: true, label: t('admin.credentialMapping.categoryName'), align: 'center', field: row => row.name, sortable: true },
         { name: 'credential', align: 'center', label: t('admin.credentialMapping.internal'), field: row => row.credentials,  format: (val) => val.map(c => c.name).join(', '), sortable: true},
         { name: 'externalCredential', align: 'center', label: t('admin.credentialMapping.external'), field: row => row.externalCredentials, format: (val) => val.map(e => e.name).join(', '), sortable: true},
-        { name: 'actions', align: 'center', label: t('admin.issuerManagement.edit')}
+        { name: 'actions', align: 'center', label: t('common.edit')}
     ]
 
     const credentialStore = useCredentialStore()

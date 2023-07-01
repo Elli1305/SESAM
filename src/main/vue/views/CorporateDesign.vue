@@ -150,15 +150,15 @@
                   Warning:</p>
               </div>
               <div class="column q-mx-xs">
-                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.primaryInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.secondaryInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.accentInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.darkInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.lightBlueInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.positiveInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.negativeInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.infoInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.warningInfo')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.primary')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.secondary')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.accent')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.dark')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.lightBlue')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.positive')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.negative')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.info')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.warning')}}</p>
               </div>
             </q-card>
           </q-menu>
@@ -209,15 +209,15 @@
     <q-dialog v-model="confirmReset" persistent>
       <q-card>
         <q-card-section>
-          <div class="text-h6">{{ t('admin.corporateDesign.confirm.reset.title') }}</div>
+          <div class="text-h6">{{ t('admin.corporateDesign.reset.title') }}</div>
         </q-card-section>
         <q-card-section class="row items-center">
-          <span class="q-ml-sm">{{t('admin.corporateDesign.confirm.reset.message')}}</span>
+          <span class="q-ml-sm">{{t('admin.corporateDesign.reset.message')}}</span>
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn flat :label="t('admin.corporateDesign.confirm.reset.cancel')" color="primary" v-close-popup />
-          <q-btn @click="reset" flat :label="t('admin.corporateDesign.confirm.reset.ok')" color="primary" v-close-popup />
+          <q-btn flat :label="t('common.cancel')" color="primary" v-close-popup />
+          <q-btn @click="reset" flat :label="t('admin.corporateDesign.reset.reset')" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -225,15 +225,15 @@
     <q-dialog v-model="confirmSave" persistent>
       <q-card>
         <q-card-section>
-          <div class="text-h6">{{ t('admin.corporateDesign.confirm.save.title') }}</div>
+          <div class="text-h6">{{ t('admin.corporateDesign.save.title') }}</div>
         </q-card-section>
         <q-card-section class="row items-center">
-          <span class="q-ml-sm">{{t('admin.corporateDesign.confirm.save.message')}}</span>
+          <span class="q-ml-sm">{{t('admin.corporateDesign.save.message')}}</span>
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn flat :label="t('admin.corporateDesign.confirm.save.cancel')" color="primary" v-close-popup />
-          <q-btn @click="save" flat :label="t('admin.corporateDesign.confirm.save.ok')" color="primary" v-close-popup />
+          <q-btn flat :label="t('common.cancel')" color="primary" v-close-popup />
+          <q-btn @click="save" flat :label="t('common.save')" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>

@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" v-if="user!=null">
-    <p class="row text-h3 justify-center">{{t('admin.currentUser.editUser.title') }}</p>
+    <p class="row text-h3 justify-center">{{t('admin.currentUsers.editUser.title') }}</p>
     <div class="column justify-evenly self-center no-wrap" style="width: 80vw; height: 50vh">
       <div class="column q-gutter-md self-center" style="width: 25em">
         <q-input id="prename" v-model="user.firstName" :label="t('profile.firstName')" outlined/>
@@ -13,7 +13,7 @@
             :options="options"
             use-chips
             stack-label
-            :label= "t('admin.currentUser.editUser.changeRoles')">
+            :label= "t('admin.currentUsers.editUser.changeRoles')">
           <template v-slot:selected-item="scope">
             <q-chip
                 class="q-pa-sm"
@@ -37,14 +37,14 @@
   <q-dialog v-model="deleteAlert">
       <q-card>
           <q-card-section>
-              <div class="text-h6">{{ t('admin.currentUser.editUser.attention') }}</div>
+              <div class="text-h6">{{ t('admin.currentUsers.editUser.deleteUser') }}</div>
           </q-card-section>
           <q-card-section class="q-pt-none">
-              {{ t('admin.currentUser.editUser.question') }}
+              {{ t('admin.currentUsers.editUser.question') }}
           </q-card-section>
           <q-card-actions align="right" class="bg-white text-primary">
-              <q-btn flat :label="t('admin.currentUser.editUser.back')" v-close-popup/>
-              <q-btn flat :label="t('admin.currentUser.editUser.delete')" @click="deleteUser()"/>
+              <q-btn flat :label="t('common.cancel')" v-close-popup/>
+              <q-btn flat :label="t('common.delete')" @click="deleteUser()"/>
           </q-card-actions>
       </q-card>
   </q-dialog>
@@ -130,8 +130,8 @@ export default {
       if (mail === currentUser.username) {
         $q.notify({
           type: 'negative',
-          message: t('admin.currentUser.editUser.deleteOwnAccount'),
-          caption: t('admin.currentUser.editUser.otherAdmin'),
+          message: t('admin.currentUsers.editUser.deleteOwnAccount'),
+          caption: t('admin.currentUsers.editUser.otherAdmin'),
         })
 
       } else {

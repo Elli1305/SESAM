@@ -44,11 +44,11 @@
               rounded
               icon="add"
               color="grey"
-              :label="t('editor.groupRooms.new')"
+              :label="t('editor.groupRooms.newGroup')"
               @click="newGroup = true; toDefault(); updateRoomList(currentBuilding);"
               style="margin-right: 2em"/>
           <q-input borderless dense debounce="300" v-model="filter.search"
-                   :placeholder="t('admin.currentUser.search')">
+                   :placeholder="t('common.search')">
               <template v-slot:append>
                   <q-icon name="search"/>
               </template>
@@ -58,7 +58,7 @@
 
         <template class="row no-wrap" v-slot:top-left >
           <q-select
-              :label="t( 'groupRooms.chooseLocation')"
+              :label="t('editor.groupRooms.chooseLocation')"
               behavior="menu"
               v-model="modelForLocation"
               borderless
@@ -78,7 +78,7 @@
             </template>
           </q-select>
           <q-select
-              :label="t( 'groupRooms.chooseBuilding')"
+              :label="t('editor.groupRooms.chooseBuilding')"
               behavior="menu"
               v-model="modelForBuilding"
               borderless
@@ -104,14 +104,14 @@
     <q-dialog v-model="deleteAlert">
         <q-card>
             <q-card-section>
-                <div class="text-h6">{{ t('admin.currentUser.editUser.attention') }}</div>
+                <div class="text-h6">{{ t('admin.currentUsers.editUser.deleteUser') }}</div>
             </q-card-section>
             <q-card-section class="q-pt-none">
                 {{ t('editor.groupRooms.question') }}
             </q-card-section>
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat :label="t('admin.currentUser.editUser.back')" v-close-popup/>
-                <q-btn flat :label="t('admin.currentUser.editUser.delete')" @click="deleteGroup(); deleteAlert=false"/>
+                <q-btn flat :label="t('common.cancel')" v-close-popup/>
+                <q-btn flat :label="t('common.delete')" @click="deleteGroup(); deleteAlert=false"/>
             </q-card-actions>
         </q-card>
     </q-dialog>
@@ -137,7 +137,7 @@
                   option-label="name"/>
             </q-card-section>
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat :label="t('admin.currentUser.editUser.back')" v-close-popup/>
+                <q-btn flat :label="t('common.cancel')" v-close-popup/>
                 <q-btn flat label="Speichern" @click="updateCurrentGroup(editName,modelRoomsNew);"
                 v-close-popup="closeEditAlert"/>
             </q-card-actions>
@@ -166,8 +166,8 @@
                   option-label="name"/>
             </q-card-section>
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat :label="t('admin.currentUser.editUser.back')" @click="toDefault()" v-close-popup/>
-                <q-btn flat :label="t('admin.currentUser.editUser.save')" @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
+                <q-btn flat :label="t('common.cancel')" @click="toDefault()" v-close-popup/>
+                <q-btn flat :label="t('common.save')" @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
             </q-card-actions>
         </q-card>
     </q-dialog>

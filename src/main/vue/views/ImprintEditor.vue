@@ -30,8 +30,8 @@
           <div class="q-mx-sm">{{t('admin.imprint.imprintEditorMessageSave')}}</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat :label="t('admin.imprint.cancel')" color="primary" @click="confirmDialog = false"/>
-          <q-btn flat :label="t('admin.imprint.save')" color="primary" @click="postText"/>
+          <q-btn flat :label="t('common.cancel')" color="primary" @click="confirmDialog = false"/>
+          <q-btn flat :label="t('common.save')" color="primary" @click="postText"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -45,8 +45,8 @@
           <div class="q-mx-sm">{{t('admin.imprint.imprintEditorMessageDelete')}}</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat :label="t('admin.imprint.cancel')" color="primary" @click="deleteDialog = false"/>
-          <q-btn flat :label="t('admin.imprint.delete')" color="primary" @click="deletePostedContent"/>
+          <q-btn flat :label="t('common.cancel')" color="primary" @click="deleteDialog = false"/>
+          <q-btn flat :label="t('common.delete')" color="primary" @click="deletePostedContent"/>
         </q-card-actions>
       </q-card>
     </q-dialog>

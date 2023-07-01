@@ -60,7 +60,7 @@ async function logout() {
           <div id="upper" class="row justify-between" style="height: 42px">
             <div class="row text-accent">
               <q-toolbar-title style="font-weight: 800; font-size: 3.25em; line-height: 1">
-                {{ t("home.header") }}
+                {{ t("home.applicationName") }}
               </q-toolbar-title>
             </div>
             <div class="column" style="width: 42px; height: 42px">
@@ -99,7 +99,7 @@ async function logout() {
               <router-link to="/" class="headerLink text-accent"><p class="headerText">{{ t("home.floorPlan") }}</p>
               </router-link>
               <router-link to="/credentialview" class="headerLink text-accent"><p class="headerText">
-                {{ t("home.credentials") }}</p></router-link>
+                {{ t("common.credentials") }}</p></router-link>
               <div>
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                    class="headerText foldMenu text-accent">

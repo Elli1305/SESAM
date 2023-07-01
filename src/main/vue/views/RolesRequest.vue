@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" >
-    <p class="row text-h3 justify-center">{{t("admin.requestedRoles.headline")}}</p>
+    <p class="row text-h3 justify-center">{{t("admin.requestedRoles.title")}}</p>
     <div class="row justify-center">
       <q-table
           style="width: 80vw; height: 50vh"
@@ -31,14 +31,14 @@
         <template v-slot:top-left>
           <div class="col-9">
             <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR"
-                      :label="t('admin.currentUser.showAdmin')"/>
-            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t('admin.currentUser.showEditor')"/>
-            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t('admin.currentUser.showIssuer')"/>
+                      :label="t('profile.administrators')"/>
+            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t('profile.editors')"/>
+            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t('profile.issuers')"/>
           </div>
         </template>
         <template v-slot:top-right>
           <q-input borderless dense debounce="300" v-model="filter.search"
-                   :placeholder="t('admin.currentUser.search')">
+                   :placeholder="t('common.search')">
             <template v-slot:append>
               <q-icon name="search"/>
             </template>
@@ -50,7 +50,7 @@
               <q-chip v-model:selected="role.selected" color="secondary" text-color="primary"
                       style="padding: 0.4em 0.75em 0.4em 0.75em; font-size: 1em"
                       icon="close" icon-selected="done">
-                {{ t(`adminCurrentUser.roles.${role.role}`) }}
+                {{ t('profile.' + role.role.toLowerCase()) }}
               </q-chip>
             </div>
           </q-td>
@@ -94,20 +94,19 @@ export default {
 
     const columns = [
       {
-                name: t('admin.requestedRoles.lastname'),
         required: true,
-        label: 'Name',
+        label: t('profile.lastName'),
         align: 'center',
         field: row => row.lastName,
         format: val => `${val}`,
         sortable: true
       },
-      {name: 'firstName', align: 'center', label: t('admin.requestedRoles.prename'), field: 'firstName', sortable: true},
-      {name: 'username', align: 'center', label: t('admin.requestedRoles.email'), field: 'username', sortable: true},
-      {name: 'roles', align: 'center', label: t('admin.requestedRoles.role'), field: 'roles'},
+      {name: 'firstName', align: 'center', label: t('profile.firstName'), field: 'firstName', sortable: true},
+      {name: 'username', align: 'center', label: t('profile.email'), field: 'username', sortable: true},
+      {name: 'roles', align: 'center', label: t('profile.roles'), field: 'roles'},
       {
         name: 'actions',
-        label: t('admin.requestedRoles.save'),
+        label: t('common.save'),
         style: "width: 40px",
         align: 'center',
         field: row => row.roles

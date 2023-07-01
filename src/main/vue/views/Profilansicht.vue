@@ -8,7 +8,7 @@
         <q-input id="email" v-model="user.username" :label="t('profile.email')" outlined readonly/>
       </div>
       <div class="row justify-center" >
-        <q-badge class="row justify-between" rounded color="secondary" text-color="primary" :style="{marginRight: '2em', padding: '0.4em 1em 0.4em 0.5em', fontSize: '1em', opacity: adminOpacity, display: adminDisplay}" ><q-icon name="account_circle" left/>{{t('profile.admin')}}</q-badge>
+        <q-badge class="row justify-between" rounded color="secondary" text-color="primary" :style="{marginRight: '2em', padding: '0.4em 1em 0.4em 0.5em', fontSize: '1em', opacity: adminOpacity, display: adminDisplay}" ><q-icon name="account_circle" left/>{{t('profile.administrator')}}</q-badge>
         <q-badge class="row justify-between" rounded color="secondary" text-color="primary" :style="{marginRight: '2em', padding: '0.4em 1em 0.4em 0.5em', fontSize: '1em', opacity: editorOpacity, display: editorDisplay}"  ><q-icon name="account_circle" left />{{t('profile.editor')}}</q-badge>
         <q-badge class="row justify-between" rounded color="secondary" text-color="primary" :style="{padding: '0.4em 1em 0.4em 0.5em', fontSize: '1em', opacity: issuerOpacity, display: issuerDisplay}" ><q-icon name="account_circle" left />{{t('profile.issuer')}}</q-badge>
       </div>

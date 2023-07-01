@@ -10,7 +10,7 @@
                         no-caps
                         class="bg-primary text-white shadow-2"
                 >
-                    <q-tab name="rooms" :label="t('editor.groupRooms.rooms')"/>
+                    <q-tab name="rooms" :label="t('floorPlan.rooms')"/>
                     <q-tab name="groups" :label="t('editor.groupRooms.groups')"/>
                 </q-tabs>
                 <q-separator></q-separator>
@@ -144,7 +144,7 @@
                                                                                                :label="t( 'floorplan.cancel')"
                                                                                                v-close-popup/>
                                                                                         <q-btn flat color="primary"
-                                                                                               :label="t('admin.currentUser.editUser.delete')"
+                                                                                               :label="t('common.delete')"
                                                                                                @click="deleteDoor(room, door)"
                                                                                                v-close-popup/>
                                                                                     </q-card-actions>
@@ -184,7 +184,7 @@
                     </q-tab-panel>
                     <q-tab-panel name="groups">
                         <q-input
-                                :placeholder="t('editor.groupRooms.search')"
+                                :placeholder="t('common.search')"
                                 v-model="searchGroup"
                                 @update:model-value="groupFilter"
                                 clearable
@@ -438,7 +438,7 @@
                                                                                        :label="t( 'floorplan.cancel')"
                                                                                        v-close-popup/>
                                                                                 <q-btn flat color="primary"
-                                                                                       :label="t('admin.currentUser.editUser.delete')"
+                                                                                       :label="t('common.delete')"
                                                                                        @click="deleteDoor(room, door)"
                                                                                        v-close-popup/>
                                                                             </q-card-actions>
@@ -477,8 +477,8 @@
                     </q-card-section>
 
                     <q-card-actions align="right" class="text-primary">
-                        <q-btn flat :label="t('admin.currentUser.editUser.back')" @click="" v-close-popup/>
-                        <q-btn flat :label="t('admin.currentUser.editUser.save')" @click="makeANewGroup(newGroupName);"/>
+                        <q-btn flat :label="t('common.cancel')" @click="" v-close-popup/>
+                        <q-btn flat :label="t('common.save')" @click="makeANewGroup(newGroupName);"/>
                     </q-card-actions>
                 </q-card>
             </q-dialog>
@@ -486,14 +486,14 @@
         <q-dialog v-model="deleteAlert">
             <q-card>
                 <q-card-section>
-                    <div class="text-h6">{{ t('admin.currentUser.editUser.attention') }}</div>
+                    <div class="text-h6">{{ t('admin.currentUsers.editUser.deleteUser') }}</div>
                 </q-card-section>
                 <q-card-section class="q-pt-none">
                     {{ t('editor.groupRooms.question') }}
                 </q-card-section>
                 <q-card-actions align="right" class="text-primary">
-                    <q-btn flat :label="t('admin.currentUser.editUser.back')" v-close-popup/>
-                    <q-btn flat :label="t('admin.currentUser.editUser.delete')" @click="deleteGroup(); deleteAlert=false"/>
+                    <q-btn flat :label="t('common.cancel')" v-close-popup/>
+                    <q-btn flat :label="t('common.delete')" @click="deleteGroup(); deleteAlert=false"/>
                 </q-card-actions>
             </q-card>
         </q-dialog>
