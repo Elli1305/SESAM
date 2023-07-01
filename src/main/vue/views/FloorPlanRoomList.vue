@@ -10,7 +10,7 @@
                         no-caps
                         class="bg-primary text-white shadow-2"
                 >
-                    <q-icon size="28px"  fixed-right color="grey-10"  name="info_outlined">
+                    <q-icon size="28px"  fixed-right color="pink-2"  name="info_outlined">
                         <q-tooltip class="grey" anchor="bottom right" max-width="200px"  self="top middle" :offset="[0, 0]">
                             {{t('groupRooms.info')}}
                         </q-tooltip>
@@ -37,6 +37,9 @@
                                 <q-icon name="search"/>
                             </template>
                         </q-input>
+                        <q-scroll-area style="height: 30em; min-width: 21em; overflow: hidden; max-width: 22em; "
+                                       :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
+                        >
                         <q-list>
                             <q-item v-for="room in filteredRooms" style="padding-left: 0">
                                 <q-checkbox v-model="selectedRooms" :val="room"
@@ -177,6 +180,7 @@
                                 </q-btn-dropdown>
                             </q-item>
                         </q-list>
+                        </q-scroll-area>
                         <div
                             v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                             <q-separator></q-separator>
@@ -204,7 +208,7 @@
                                 <q-icon name="search"/>
                             </template>
                         </q-input>
-                        <q-scroll-area style="height: 400px; min-width: 21em; overflow: hidden; max-width: 22em; "
+                        <q-scroll-area style="height: 30em; min-width: 21em; overflow: hidden; max-width: 22em; "
                                        :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
                                        >
                         <q-list>
@@ -355,6 +359,10 @@
                         <q-icon name="search"/>
                     </template>
                 </q-input>
+                <div>
+                <q-scroll-area style=" min-width: 21em; height: 30em; max-width: 22em; "
+                               :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
+                >
                 <q-list>
                     <q-item v-for="room in filteredRooms" style="padding-left: 0">
                         <q-checkbox v-model="selectedRooms" :val="room" color="blue"/>
@@ -492,6 +500,8 @@
                     </q-item>
 
                 </q-list>
+                </q-scroll-area>
+                </div>
 
 
             </div>
