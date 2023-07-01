@@ -285,7 +285,7 @@
                                                                                     room.name
                                                                                 }}</span>
                                                                                 </q-item-label>
-                                                                                <q-item-label caption>{{arrayFloors[i]}}</q-item-label>
+                                                                                <q-item-label caption>Etage: {{arrayFloors[i]}}</q-item-label>
 
                                                                             </q-item-section>
 
@@ -630,7 +630,6 @@ export default {
         const editGroupD = ref(false);
         const numRoomsInGroup = ref();
         const isEditor = ref(false);
-        const floorNameForRoom = ref(-3);
 
         function isEditorCheck() {
             if (userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)) {
@@ -1011,39 +1010,17 @@ export default {
 
         const arrayFloors = ref([]);
         async function allFloorsForGroup() {
-            console.log("Sel. rooms: ", selectedGroups.value.rooms);
             const rooms = selectedGroups.value.rooms;
-            console.log("Sel. Group: ", selectedGroups.value);
-            const group = selectedGroups.value;
-            console.log("rooms: ", rooms);
 
-            console.log("rooms length: ", rooms.length);
             for(let roomLength = 0; roomLength < rooms.length; roomLength++) {
-                console.log("rooms", rooms);
-                console.log("room", rooms[roomLength]);
 
-                console.log("rooms[1]", rooms[1]);
-                console.log("rooms.value", rooms.value);
-
-                //console.log("TEST: ", selectedGroups.value.rooms[intRoom]);
                 await roomStore.getFloor(rooms[roomLength].id);
                 let level = roomStore.floor.floorLevel
-                console.log("level: ", level);
                 arrayFloors.value.push(level);
             }
             console.log("arrayFloors:", arrayFloors.value);
         }
 
-        async function getFloorToRoom(room) {
-
-            await roomStore.getFloor(room.id);
-            //console.log("getFloorToRoom: ", roomStore.floor);
-            //console.log("getFloorToRoom floorLevel: ", roomStore.floor.floorLevel);
-            let level = roomStore.floor.floorLevel
-            //console.log(level)
-            //console.log(typeof level)
-            return level;
-        }
 
         return {
             floorPlanStore,
@@ -1097,8 +1074,6 @@ export default {
             },
             allFloorsForGroup,
             arrayFloors,
-            getFloorToRoom,
-            floorNameForRoom
         }
     },
 
