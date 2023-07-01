@@ -230,6 +230,7 @@
                     option-label="name"
                     options-cover
                     map-options
+                    use-chips
                 />
               </q-td>
             </template>
