@@ -10,7 +10,7 @@
                         no-caps
                         class="bg-primary text-white shadow-2"
                 >
-                    <q-icon size="28px"  fixed-right color="pink-2"  name="info_outlined">
+                    <q-icon size="1.25em"  fixed-right color="white"  name="info_outlined" class="q-pl-xs">
                         <q-tooltip class="grey" anchor="bottom right" max-width="200px"  self="top middle" :offset="[0, 0]">
                             {{t('groupRooms.info')}}
                         </q-tooltip>
@@ -290,7 +290,6 @@
 
                                                                             <q-item-section top side>
                                                                                 <div class="text-grey-8 q-gutter-xs">
-
                                                                                 </div>
                                                                             </q-item-section>
                                                                         </q-item>
@@ -301,7 +300,10 @@
                                                                 </q-list>
                                                             </div>
 
+
                                                             <q-card-actions align="right" class="text-primary">
+                                                                <q-btn style="max-width: 10em;" class="q-mr-xl text-white bg-primary" label="doorconfig" @click="" flat/>
+
                                                                 <q-btn flat :label="t( 'floorplan.cancel')" color="primary"
                                                                        v-close-popup/>
                                                                 <q-btn flat :label="t( 'floorplan.save')" color="primary"
@@ -1009,7 +1011,8 @@ export default {
 
             await roomStore.getFloor(room.id);
             console.log("getFloorToRoom: ", roomStore.floor);
-            return roomStore.floor;
+            console.log("getFloorToRoom floorLevel: ", roomStore.floor.floorLevel);
+            return roomStore.floor.floorLevel;
         }
 
         return {
