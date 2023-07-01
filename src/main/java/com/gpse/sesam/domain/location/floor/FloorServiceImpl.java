@@ -1,9 +1,13 @@
 package com.gpse.sesam.domain.location.floor;
 
 import com.gpse.sesam.domain.filestorage.FileStorageService;
+import com.gpse.sesam.domain.location.room.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FloorServiceImpl implements FloorService {
@@ -33,5 +37,12 @@ public class FloorServiceImpl implements FloorService {
 	@Override
 	public Floor save(final Floor floor) {
 		return floorRepository.save(floor);
+	}
+
+	@Override
+	public List<Floor> getAll() {
+		final List<Floor> floors = new ArrayList<>();
+		floorRepository.findAll().forEach(floors::add);
+		return floors;
 	}
 }
