@@ -49,23 +49,15 @@ public class RoomServiceImpl implements RoomService {
 
 		List<Floor> allFloors = floorService.getAll();
 
-		System.out.println("Floors in RoomService");
-
-		System.out.println(allFloors);
-
 
 		for(Floor floor : allFloors) {
 			List<Room> roomsForFloor =floor.getRooms();
-			System.out.println(floor);
 			for(Room rooms: roomsForFloor) {
 				if(rooms.getId() == roomId) {
-					System.out.println("FOUND THE FLOOR");
-					System.out.println(roomId);
 
 					theFloor.setFloorLevel(floor.getFloorLevel());
 					theFloor.setFloorPlanPath(floor.getFloorPlanPath());
 
-					System.out.println("Level: "+ theFloor.getFloorLevel());
 				}
 			}
 		}

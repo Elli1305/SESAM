@@ -50,7 +50,6 @@ export const useRoomStore = defineStore('room', () => {
             api.room.getFloor(id).then((response: { data: any; }) => {
                 floor.value = response.data
 
-                console.log("getFloorToRoom in store: ", floor.value);
                 resolve(response.data)
             }).catch((error: any) => {
                 reject(error)
