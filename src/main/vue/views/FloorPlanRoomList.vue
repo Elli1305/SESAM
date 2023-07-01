@@ -284,6 +284,7 @@
                                                                                     room.name
                                                                                 }}</span>
                                                                                 </q-item-label>
+                                                                                <q-item-label caption>Caption</q-item-label>
 
                                                                             </q-item-section>
 
