@@ -1,6 +1,5 @@
 import axios, {AxiosResponse} from "axios";
-import {Room} from "@/main/vue/entity/location";
-import Floor from "@/main/vue/api/floor";
+import {Room, Floor} from "@/main/vue/entity/location";
 
 export default {
     save(room: Room): Promise<AxiosResponse<Room>> {
@@ -14,7 +13,7 @@ export default {
     getRooms(): Promise<AxiosResponse<Room[]>> {
         return axios.get("api/room/rooms")
     },
-    getFloor(id: BigInt): Promise<AxiosResponse<typeof Floor>>{
+    getFloor(id: BigInt): Promise<AxiosResponse<Floor>>{
         return axios.get(`api/room/floor/${id}`)
     }
 }

@@ -284,7 +284,7 @@
                                                                                     room.name
                                                                                 }}</span>
                                                                                 </q-item-label>
-                                                                                <q-item-label caption>Caption</q-item-label>
+                                                                                <q-item-label caption>{{getFloorToRoom(room)}}</q-item-label>
 
                                                                             </q-item-section>
 
@@ -1005,6 +1005,13 @@ export default {
         }
         const newGroupName = ref('');
 
+        async function getFloorToRoom(room) {
+
+            await roomStore.getFloor(room.id);
+            console.log("getFloorToRoom: ", roomStore.floor);
+            return roomStore.floor;
+        }
+
         return {
             floorPlanStore,
             selectedRooms,
@@ -1055,6 +1062,7 @@ export default {
             selectGroup(group) {
                 selectedGroups.value = group;
             },
+            getFloorToRoom
         }
     },
 

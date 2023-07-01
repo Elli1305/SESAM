@@ -48,6 +48,7 @@ public class RoomController {
 	@Secured("EDITOR")
 	@GetMapping("/floor/{id:\\d+}")
 	public Floor getFloorToRoom(@PathVariable("id") final Long id) {
+		System.out.println("THE Controller Rooms");
 		return roomService.getFloorToRoom(id);
 	}
 }
