@@ -113,10 +113,10 @@
                             </q-td>
                 </div>
 
-                <door-config ref="configIn" :door-config="qSelectgeneral.qSelectsSet[k].doorConfigIn"
-                         :direction="JSON.stringify(this.qSelectgeneral.qSelectsSet[k].doorConfigIn) !== JSON.stringify(this.qSelectgeneral.qSelectsSet[k].doorConfigOut) ? Direction.IN : Direction.BOTH"
-                         @changeDirection="changeDirectionOut(k)"></door-config>
-            <door-config v-show="qSelectgeneral.qSelectsSet[k].doorConfigIn?.direction !== Direction.BOTH" ref="configOut"
+                <door-config :door-config="qSelectgeneral.qSelectsSet[k].doorConfigIn"
+                         :direction="qSelectgeneral.qSelectsSet[k].doorConfigOut?.direction"
+                         @changeDirection="(direction) => changeDirectionOut(direction, k)"></door-config>
+            <door-config v-show="qSelectgeneral.qSelectsSet[k].doorConfigOut?.direction !== Direction.BOTH"
                          :direction="JSON.stringify(this.qSelectgeneral.qSelectsSet[k].doorConfigIn) !== JSON.stringify(this.qSelectgeneral.qSelectsSet[k].doorConfigOut) ? Direction.OUT : Direction.BOTH"
                          :door-config="qSelectgeneral.qSelectsSet[k].doorConfigOut" :is-config-out="true"></door-config>
 
@@ -171,11 +171,8 @@ export default {
 
     methods: {
         changeDirectionOut(direction,k) {
-            if (direction === Direction.IN) {
-                this.qSelectgeneral.qSelectsSet[k].doorConfigOut.direction = Direction.OUT
-            } else if (direction === Direction.OUT) {
-                this.qSelectgeneral.qSelectsSet[k].doorConfigOut.direction= Direction.IN
-            }
+            this.qSelectgeneral.qSelectsSet[k].doorConfigOut.direction = direction
+            console.log(direction)
         },
         show() {
             this.$refs.dialog.show()
@@ -205,7 +202,7 @@ export default {
             this.qSelectgeneral.qSelectsSet.push( {
                 DoorConfig,
                 doorConfigIn: null,
-                doorConfigOut: null,
+                doorConfigOut: {direction: Direction.BOTH},
                 basisConf: false,
                 startTime: null,
                 endTime: null
@@ -305,8 +302,8 @@ export default {
 
             qSelectsSet: [{
                 DoorConfig,
-                doorConfigIn: null,
-                doorConfigOut: null,
+                doorConfigIn: {},
+                doorConfigOut:{direction: Direction.BOTH},
                 basisConf: false,
                 startTime: null,
                 endTime: null
