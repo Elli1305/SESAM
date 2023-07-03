@@ -6,6 +6,7 @@
           v-model="splitterModel"
           style="height: 90%"
           :limits="[5, Infinity]"
+          horizontal
       >
         <template v-slot:before style="max-width: 20px">
           <q-tabs
@@ -13,8 +14,10 @@
               vertical
               class="bg-white text-primary"
           >
+            <div class="row">
             <q-tab name="credentials" label="Credentials" />
             <q-tab name="all" label="Alle Credentials" />
+            </div>
           </q-tabs>
         </template>
         <template v-slot:after>
