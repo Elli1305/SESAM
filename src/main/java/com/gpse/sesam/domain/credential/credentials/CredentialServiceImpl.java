@@ -2,6 +2,8 @@ package com.gpse.sesam.domain.credential.credentials;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gpse.sesam.domain.credential.category.Category;
+import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
@@ -49,6 +51,8 @@ public class CredentialServiceImpl implements CredentialService {
 
 	private final ExternalCredentialRepository externalCredentialRepository;
 	private final ExternalCredentialService externalCredentialService;
+	
+	private final CategoryService categoryService;
 
 	@Autowired
 	public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
@@ -56,7 +60,7 @@ public class CredentialServiceImpl implements CredentialService {
 								 final IssuerRepository issuerRepository,
 								 final ExternalCredentialRepository externalCredentialRepository,
 								 final LocationService locationService,
-								 final ExternalCredentialService externalCredentialService) {
+								 final ExternalCredentialService externalCredentialService, CategoryService categoryService) {
 		this.client = client;
 		this.mapper = mapper;
 		this.issuerRepository = issuerRepository;
@@ -64,6 +68,7 @@ public class CredentialServiceImpl implements CredentialService {
 		this.locationService = locationService;
 		this.externalCredentialRepository = externalCredentialRepository;
 		this.externalCredentialService = externalCredentialService;
+		this.categoryService = categoryService;
 	}
 
 	@Override
@@ -300,5 +305,43 @@ public class CredentialServiceImpl implements CredentialService {
 		credential.setChecklist(checklist);
 
 		credentialRepository.save(credential);
+	}
+
+	@Override
+	public List<CredentialCmd> getAllCredentialsForView() {
+		List<InternalCredential> credentials = getCredentials();
+		List<Category> categories = categoryService.getCategory();
+		List<CredentialCmd> cmd = new ArrayList<>();
+
+		for (InternalCredential credential : credentials) {
+			String categoryName = "Keine Kategorie";
+			List<String> externalCredentials = new ArrayList<>();
+			List<String> issuers = new ArrayList<>();
+			List<String> room = new ArrayList<>();
+			for (Category category : categories) {
+				if (category.getCredentials().contains(credential)) {
+					categoryName = category.getName();
+					for (ExternalCredential external : credential.getCategory().getExternalCredentials()) {
+						externalCredentials.add(external.getName());
+					}
+				}
+			}
+
+			String credentialName = credential.getName();
+			if (!credential.getIssuer().isEmpty()) {
+				for (Issuer issuer : credential.getIssuer()) {
+					issuers.add(issuer.getFirstName() + " " + issuer.getLastName());
+					String roomName = "Kein Raum verfügbar";
+					if (!(issuer.getRoom() == null)) {
+						roomName = issuer.getRoom().getName();
+					}
+					room.add(roomName);
+				}
+			}
+			cmd.add(new CredentialCmd(categoryName, credentialName, externalCredentials, issuers, room));
+
+		}
+
+		return cmd;
 	}
 }

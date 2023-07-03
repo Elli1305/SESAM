@@ -6,6 +6,7 @@ import com.gpse.sesam.domain.credential.credentials.InternalCredential;
 import com.gpse.sesam.domain.credential.credentials.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
 import com.gpse.sesam.web.cmd.CreateCredentialCmd;
+import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 import com.gpse.sesam.web.cmd.UpdateCredentialCmd;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
@@ -100,4 +101,7 @@ public class CredentialController {
 	public void delete(@PathVariable final Long id) {
 		service.delete(id);
 	}
+
+	@GetMapping(value = "/allcredentials")
+	public List<CredentialCmd> credentials () { return service.getAllCredentialsForView();}
 }

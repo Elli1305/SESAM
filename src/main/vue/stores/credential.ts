@@ -18,11 +18,13 @@ export const useCredentialsStore = defineStore('credentials', {
 },);
 
 export const useCredentialStore = defineStore('credential', () => {
-        const credentials: Ref<CredentialCmd[] | null> = ref(null)
-        const allCredentials: Ref<ExternalCredential[] | null> = ref(null)
-        const credsByIssuer: Ref<Credential[] | null> = ref(null)
-        const categories: Ref<Category[] | null> = ref(null)
-        const external: Ref<ExternalCredential[] | null> = ref(null)
+    const credentials: Ref<CredentialCmd[] | null> = ref(null)
+    const allCredentials: Ref<ExternalCredential[] | null> = ref(null)
+    const credsByIssuer: Ref<Credential[] | null> = ref(null)
+    const categories: Ref<Category[] | null> = ref(null)
+    const external: Ref<ExternalCredential[] | null> = ref(null)
+    const credentialsForView: Ref<CredentialCmd[] | null> = ref(null)
+
 
 
         function getCredentialsByLocation(id: bigint) {
@@ -129,6 +131,18 @@ export const useCredentialStore = defineStore('credential', () => {
             })
         }
 
+        function getCredentialsForView() {
+            return new Promise((resolve, reject) => {
+                api.credential.getAllCredentialsForView().then((response) => {
+                    credentialsForView.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
+            })
+        }
+
+
 
         return {
             getCredentialsByLocation,
@@ -136,6 +150,8 @@ export const useCredentialStore = defineStore('credential', () => {
             getCredentialsByIssuer,
             credentials,
             credsByIssuer,
+            credentialsForView,
+            getCredentialsForView,
             getCategory,
             categories,
             external,

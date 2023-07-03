@@ -34,4 +34,6 @@ public interface CredentialService {
 	void delete(Long id);
 
 	void update(Long id, UpdateCredentialCmd updateCredentialCmd);
+
+	public List<CredentialCmd> getAllCredentialsForView();
 }
