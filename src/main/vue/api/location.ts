@@ -12,5 +12,9 @@ export default {
     
     getLocationByName(): Promise<AxiosResponse<Location>> {
         return axios.get("api/locations/{name}")
+    },
+
+    deleteLocation(param: String): Promise<AxiosResponse<void>> {
+        return axios.delete('api/locations/' + param);
     }
 }

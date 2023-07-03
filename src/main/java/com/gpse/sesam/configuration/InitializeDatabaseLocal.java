@@ -14,8 +14,8 @@ import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
-import com.gpse.sesam.domain.location.RoomGroupService;
-import com.gpse.sesam.domain.location.RoomGroups;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.floor.Floor;
@@ -37,7 +37,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -304,12 +303,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		issuers.add(issuer1);
 		issuers.add(issuer2);
 
-		// Safety-Credential
-		final InternalCredential safety = new InternalCredential("Sicherheitsbelehrung-Uni", "$U-MEMBER",
-				"university", form, checklist);
-		safety.addIssuer(issuer1);
-		safety.addIssuer(issuer2);
-
 		final List<ChecklistEntry> checklist3 = checklist();
 
 		final List<FormEntry> form3 = form();  //Form
@@ -319,7 +312,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		safety2.addIssuer(issuer2);
 
 
-		return Arrays.asList(safety, safety2);
+		return List.of(safety2);
 	}
 
 	private List<Category> createCredentialCategories() {
