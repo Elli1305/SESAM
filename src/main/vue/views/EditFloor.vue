@@ -66,7 +66,7 @@ export default {
       this.hide()
     },
     validate() {
-      return !this.floorLevel && (!this.$props.floor.id || !this.image)
+      return !(this.floorLevel || (this.floorLevel === 0)) && (!this.$props.floor.id || !this.image)
     }
   },
   setup(props) {

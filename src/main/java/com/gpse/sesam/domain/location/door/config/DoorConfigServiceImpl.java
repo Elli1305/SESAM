@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.configuration.DoorApiConfig;
 import com.gpse.sesam.domain.credential.credentials.CredentialService;
 import com.gpse.sesam.util.ConfigCmdMapper;
-import com.gpse.sesam.web.cmd.DoorConfigViewCmd;
+import com.gpse.sesam.web.cmd.DoorConfigCmd;
 import com.gpse.sesam.web.exception.InvalidDoorConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +32,14 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 	private final DoorApiConfig appConfig;
 	private ConfigCmdMapper configCmdMapper;
 
+	private final ConfigCmdMapper configCmdMapper;
+
 	@Autowired
 	public DoorConfigServiceImpl(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository, final ConfigCmdMapper configCmdMapper) {
 		this.appConfig = appConfig;
 		this.configCmdMapper = configCmdMapper;
 		proofConfigRepository.save(createProofConfig());
+		this.configCmdMapper = new ConfigCmdMapper(credentialService);
 	}
 
 	@Override
@@ -61,7 +64,7 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 	}
 
 	@Override
-	public DoorConfigViewCmd getDoorConfig(final String doorApiId) {
+	public DoorConfigCmd getDoorConfig(final String doorApiId) {
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setBasicAuth(appConfig.getUsername(), appConfig.getPassword());
 
@@ -76,11 +79,12 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			final ProofConfig proofConfig = objectMapper.readValue(response.getBody(), ProofConfig.class);
-			return configCmdMapper.fromEntity(proofConfig);
+			return configCmdMapper.toCmd(proofConfig);
 		} catch (final JsonProcessingException | ParseException e) {
 			throw new InvalidDoorConfiguration("could not read door configuration", e);
 		}
 	}
+
 
 	@Override
 	public void sendProofConfig(final String doorId, final ProofConfig proofConfig) {

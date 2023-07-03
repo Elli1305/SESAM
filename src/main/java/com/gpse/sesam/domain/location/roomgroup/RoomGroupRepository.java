@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.location;
+package com.gpse.sesam.domain.location.roomgroup;
 
 import org.springframework.data.repository.CrudRepository;
 

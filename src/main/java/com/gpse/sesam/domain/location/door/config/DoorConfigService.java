@@ -1,11 +1,11 @@
 package com.gpse.sesam.domain.location.door.config;
 
-import com.gpse.sesam.web.cmd.DoorConfigViewCmd;
+import com.gpse.sesam.web.cmd.DoorConfigCmd;
 
 public interface DoorConfigService {
 	void getDoorConfigurations();
 
-	DoorConfigViewCmd getDoorConfig(String doorApiId);
+	DoorConfigCmd getDoorConfig(String doorApiId);
 
 	void sendProofConfig(String doorId, ProofConfig proofConfig);
 }
