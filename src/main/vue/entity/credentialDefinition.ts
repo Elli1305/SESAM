@@ -31,14 +31,17 @@ export interface ComparisonRule {
     kind: "comparison"
     comparisonType: ComparisonType
     content: string
-
     currentDay: boolean
+    compareWithAttribute: boolean
+    attributeName: string
 }
 
 export interface RangeRule {
     kind: "range"
     valueFrom: string
     valueTo: string
+    compareWithAttribute: boolean
+    attributeName: string
 }
 
 export interface RegExRule {
@@ -51,6 +54,8 @@ export interface LengthRule {
     kind: "length"
     comparisonType: ComparisonType
     length: number
+    compareWithAttribute: boolean
+    attributeName: string
 }
 
 export interface FormEntry {

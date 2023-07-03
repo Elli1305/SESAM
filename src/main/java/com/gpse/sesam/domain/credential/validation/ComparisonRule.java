@@ -17,16 +17,31 @@ public class ComparisonRule extends ValidationRule {
 
     private boolean currentDay;
 
+    private boolean compareWithAttribute;
+
+    private String attributeName;
+
+
     public ComparisonRule(ComparisonType comparisonType, String content) {
         this.comparisonType = comparisonType;
         this.content = content;
         this.currentDay = false;
+        this.compareWithAttribute = false;
     }
 
     public ComparisonRule(ComparisonType comparisonType, boolean currentDay) {
         this.comparisonType = comparisonType;
         this.currentDay = currentDay;
         this.content = "";
+        this.compareWithAttribute = false;
+    }
+
+    public ComparisonRule(ComparisonType comparisonType, boolean compareWithAttribute, String attributeName) {
+        this.comparisonType = comparisonType;
+        this.content = "";
+        this.attributeName = attributeName;
+        this.compareWithAttribute = compareWithAttribute;
+        this.currentDay = false;
     }
 
     protected ComparisonRule() {
@@ -55,6 +70,22 @@ public class ComparisonRule extends ValidationRule {
 
     public void setCurrentDay(boolean currentDay) {
         this.currentDay = currentDay;
+    }
+
+    public boolean isCompareWithAttribute() {
+        return compareWithAttribute;
+    }
+
+    public void setCompareWithAttribute(boolean compareWithAttribute) {
+        this.compareWithAttribute = compareWithAttribute;
+    }
+
+    public String getAttributeName() {
+        return attributeName;
+    }
+
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
     }
 
     @Override

@@ -269,6 +269,7 @@ const messages = {
                 ],
                 checkConditions: "Bitte verwenden Sie die folgende Checkliste, um sicherzustellen, dass alle notwendigen Schritte ausgeführt wurden, bevor Sie das Credential ausstellen.",
                 validation: {
+                    validationRules: "Validierungsregeln",
                     ruleErrors: {
                         inputRequired: "Dieses Feld ist erforderlich.",
                         equal: "Dieses Feld muss gleich {0} sein",
@@ -284,7 +285,6 @@ const messages = {
                         greaterThanLength: "Die Länge dieses Texts muss größer als {0} sein",
                         lessEqualLength: "Die Länge dieses Texts muss kleiner gleich {0} sein",
                         greaterEqualLength: "Die Länge dieses Texts muss größer gleich {0} sein",
-                        realName: "Wähle einen realen Namen",
                     },
                     vType: {
                         comparison: "Vergleich",
@@ -295,6 +295,7 @@ const messages = {
                     addValidationRule: "Validierungsregel hinzufügen",
                     description: "Beschreibung",
                     chooseType: "Wähle einen Typ",
+                    chooseAttribute: "Wähle ein Attribut",
                 },
                 steps: {
                     form: "Formular",
@@ -610,6 +611,7 @@ const messages = {
                 ],
                 checkConditions: "Please use the following checklist to ensure that all necessary steps have been taken before issuing the credential.",
                 validation: {
+                    validationRules: "Validation Rules",
                     ruleErrors: {
                         inputRequired: "This field is required.",
                         equal: "This field should be equal to {0}",
@@ -625,17 +627,20 @@ const messages = {
                         greaterThanLength: "This text's length should be greater than to {0}",
                         lessEqualLength: "This text's length should be less than or equal to {0}",
                         greaterEqualLength: "This text's length should be greater than or equal to {0}",
-                        realName: "Choose a real name",
                     },
                     vType: {
                         comparison: "Comparison",
                         range: "Range",
                         regEx: "Regular expression",
                         length: "Length",
+                        comparisonWithAttribute: "Comparison with another attribute",
+                        rangeWithAttributes: "Range between attributes",
+                        lengthWithAttribute: "Length compared to another attribute",
                     },
                     addValidationRule: "Add validation rule",
                     description: "Description",
-                    chooseType: "Choose type",
+                    chooseType: "Choose a type",
+                    chooseAttribute: "Choose an attribute",
                 },
                 steps: {
                     form: "Form",

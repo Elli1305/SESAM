@@ -12,6 +12,7 @@ import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.credential.issuing.IssueCredential;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
+import com.gpse.sesam.domain.credential.validation.ComparisonRule;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.door.config.AttributeFilter;
@@ -133,7 +134,18 @@ public class CredentialServiceImpl implements CredentialService {
 			if (correspondingAttributeCmd == null) {
 				return null;
 			}
-			boolean isValid = entry.getValidationRules().stream().allMatch(rule -> rule.validate(correspondingAttributeCmd.value(), entry.getType()));
+			boolean isValid = entry.getValidationRules().stream().allMatch(rule -> {
+				if (rule instanceof ComparisonRule) {
+					if (((ComparisonRule) rule).isCompareWithAttribute()) {
+						Long chosenAttributeId = credential.getForm().stream().filter(a -> ((ComparisonRule) rule).getAttributeName().equals(a.getLabel())).toList().get(0).getId();
+						((ComparisonRule) rule).setContent(attributeCmdMap.get(chosenAttributeId).value());
+						return rule.validate(correspondingAttributeCmd.value(), entry.getType());
+					} else {
+						return rule.validate(correspondingAttributeCmd.value(), entry.getType());
+					}
+				}
+				return false;
+			});
 			if (!isValid) {
 				throw new IllegalArgumentException("Input " + correspondingAttributeCmd.value() + " for attribute " + entry.getAttributeName() + " is not valid");
 			}

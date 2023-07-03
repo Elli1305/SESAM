@@ -117,6 +117,7 @@ const opts: QNotifyCreateOptions = {
 };
 
 function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | LengthRule)[]): ValidationRule[] {
+  const attributes = credential.value?.form
   let rules: ValidationRule[] = []
   rules.push(required)
   validationRules.forEach((vr: ComparisonRule | RangeRule | RegExRule | LengthRule) => {
@@ -124,46 +125,82 @@ function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | Len
       case 'comparison':
         switch (vr.comparisonType) {
           case "EQUAL":
-            if (vr.currentDay) {
-              rules.push((value) => value === new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.equal', [new Date().toISOString().split('T')[0]]))
+            if (!vr.compareWithAttribute) {
+              if (vr.currentDay) {
+                rules.push((value) => value === new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.equal', [new Date().toISOString().split('T')[0]]))
+              } else {
+                rules.push((value) => value === vr.content || t('issuer.issueCredential.validation.ruleErrors.equal', [vr.content]))
+              }
             } else {
-              rules.push((value) => value === vr.content || t('issuer.issueCredential.validation.ruleErrors.equal', [vr.content]))
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)?.value
+              if (chosenAttribute)
+                rules.push((value) => value === chosenAttribute || t('issuer.issueCredential.validation.ruleErrors.equal', [chosenAttribute]))
             }
             break
           case "NOT_EQUAL":
-            if (vr.currentDay) {
-              rules.push((value) => value !== new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.notEqual', [new Date().toISOString().split('T')[0]]))
+            if (!vr.compareWithAttribute) {
+              if (vr.currentDay) {
+                rules.push((value) => value !== new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.notEqual', [new Date().toISOString().split('T')[0]]))
+              } else {
+              rules.push((value) => value !== vr.content || t('issuer.issueCredential.validation.ruleErrors.notEqual', [vr.content]))
+              }
             } else {
-            rules.push((value) => value !== vr.content || t('issuer.issueCredential.validation.ruleErrors.notEqual', [vr.content]))
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)?.value
+              if (chosenAttribute)
+                rules.push((value) => value !== chosenAttribute || t('issuer.issueCredential.validation.ruleErrors.notEqual', [chosenAttribute]))
             }
             break
           case "LESS_THAN":
+            if (!vr.compareWithAttribute) {
               if (vr.currentDay) {
                 rules.push((value) => value < new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.lessThan', [new Date().toISOString().split('T')[0]]))
               } else {
             rules.push((value) => value < vr.content || t('issuer.issueCredential.validation.ruleErrors.lessThan', [vr.content]))
               }
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)?.value
+              if (chosenAttribute)
+                rules.push((value) => value < chosenAttribute || t('issuer.issueCredential.validation.ruleErrors.lessThan', [chosenAttribute]))
+            }
             break
           case "GREATER_THAN":
-                if (vr.currentDay) {
-                  rules.push((value) => value > new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.greaterThan', [new Date().toISOString().split('T')[0]]))
-                } else {
-            rules.push((value) => value > vr.content || t('issuer.issueCredential.validation.ruleErrors.greaterThan', [vr.content]))
-                }
+            if (!vr.compareWithAttribute) {
+              if (vr.currentDay) {
+                rules.push((value) => value > new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.greaterThan', [new Date().toISOString().split('T')[0]]))
+              } else {
+                rules.push((value) => value > vr.content || t('issuer.issueCredential.validation.ruleErrors.greaterThan', [vr.content]))
+              }
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)?.value
+              if (chosenAttribute)
+                rules.push((value) => value > chosenAttribute || t('issuer.issueCredential.validation.ruleErrors.greaterThan', [chosenAttribute]))
+            }
             break
           case "LESS_EQUAL":
-                  if (vr.currentDay) {
-                    rules.push((value) => value <= new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.lessEqual', [new Date().toISOString().split('T')[0]]))
-                  } else {
-            rules.push((value) => value <= vr.content || t('issuer.issueCredential.validation.ruleErrors.lessEqual', [vr.content]))
-                  }
+            if (!vr.compareWithAttribute) {
+              if (vr.currentDay) {
+                rules.push((value) => value <= new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.lessEqual', [new Date().toISOString().split('T')[0]]))
+              } else {
+                rules.push((value) => value <= vr.content || t('issuer.issueCredential.validation.ruleErrors.lessEqual', [vr.content]))
+              }
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)?.value
+              if (chosenAttribute)
+                rules.push((value) => value <= chosenAttribute || t('issuer.issueCredential.validation.ruleErrors.lessEqual', [chosenAttribute]))
+            }
             break
           case "GREATER_EQUAL":
-                    if (vr.currentDay) {
-                      rules.push((value) => value >= new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.greaterEqual', [new Date().toISOString().split('T')[0]]))
-                    } else {
-            rules.push((value) => value >= vr.content || t('issuer.issueCredential.validation.ruleErrors.greaterEqual', [vr.content]))
-                    }
+            if (!vr.compareWithAttribute) {
+              if (vr.currentDay) {
+                rules.push((value) => value >= new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.greaterEqual', [new Date().toISOString().split('T')[0]]))
+              } else {
+                rules.push((value) => value >= vr.content || t('issuer.issueCredential.validation.ruleErrors.greaterEqual', [vr.content]))
+              }
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)?.value
+              if (chosenAttribute)
+                rules.push((value) => value >= chosenAttribute || t('issuer.issueCredential.validation.ruleErrors.greaterEqual', [chosenAttribute]))
+            }
             break
           default:
             console.error("Wrong comparison type")
@@ -173,7 +210,7 @@ function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | Len
         rules.push((value) => value >= vr.valueFrom && value <= vr.valueTo || t('issuer.issueCredential.validation.ruleErrors.range', [vr.valueFrom, vr.valueTo]))
         break
       case 'regEx':
-        rules.push((value) => new RegExp(vr.regEx).test(value) || t(vr.description))
+        rules.push((value) => new RegExp(vr.regEx).test(value) || vr.description)
         break
       case 'length':
         switch (vr.comparisonType) {

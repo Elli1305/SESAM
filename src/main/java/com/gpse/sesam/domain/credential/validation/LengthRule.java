@@ -12,6 +12,10 @@ public class LengthRule extends ValidationRule {
     @Column
     private int length;
 
+    private boolean compareWithAttribute;
+
+    private String attributeName;
+
     public LengthRule(ComparisonType comparisonType, int length) {
         this.comparisonType = comparisonType;
         this.length = length;
@@ -43,5 +47,21 @@ public class LengthRule extends ValidationRule {
 
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public boolean isCompareWithAttribute() {
+        return compareWithAttribute;
+    }
+
+    public void setCompareWithAttribute(boolean compareWithAttribute) {
+        this.compareWithAttribute = compareWithAttribute;
+    }
+
+    public String getAttributeName() {
+        return attributeName;
+    }
+
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
     }
 }

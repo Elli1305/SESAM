@@ -1,8 +1,11 @@
 <template>
   <q-dialog ref="dialog">
     <q-card style="min-width: 45em">
-      <q-card-section class="row justify-between no-wrap">
-        <div class="text-h6">{{'Validierungsregeln für ' + attribute.name}}</div>
+      <q-card-section class="row justify-between no-wrap q-pb-none">
+        <div class="column">
+          <div class="text-h6">{{t('issuer.issueCredential.validation.validationRules')}}</div>
+          <div class="text-subtitle2 text-grey">{{attribute.name}}</div>
+        </div>
         <div class="row no-wrap">
           <q-select label="Presets" dense outlined style="width: 12em"
                     v-model="test"
@@ -25,6 +28,8 @@
           <q-card-section class="column">
             <div class="row q-mt-sm"
                  v-for="(vr, index) in attribute.validationRules" style="min-width: 100%">
+
+
               <div class="row no-wrap justify-between full-width" v-if="vr.kind === 'comparison'">
                 <q-select
                     v-model="vr.comparisonType"
@@ -40,6 +45,7 @@
                   </template>
                 </q-select>
                 <q-input class="full-width"
+                         v-if="!vr.compareWithAttribute"
                          v-model="vr.content"
                          :type="attribute.type"
                          bottom-slots rounded outlined ref="input"
@@ -55,34 +61,73 @@
                     </q-checkbox>
                   </template>
                 </q-input>
+                <q-select
+                    class="full-width"
+                    v-if="vr.compareWithAttribute"
+                    :label="t('issuer.issueCredential.validation.chooseAttribute')"
+                    v-model="chosenAttribute"
+                    :options="getAttributes(attribute, attributes)"
+                    option-label="name"
+                    @select="vr.attributeName = chosenAttribute"
+                    bottom-slots rounded outlined ref="input">
+                </q-select>
+                <q-toggle
+                    class="q-ml-sm"
+                    style="height: 4em"
+                    unchecked-icon="text_fields"
+                    checked-icon="format_list_bulleted"
+                    v-model="vr.compareWithAttribute"
+                    keep-color size="2.5em"/>
                 <q-btn
-                    class="q-ml-lg"
+                    class="q-ml-sm"
                     style="min-width: 4em; height: 4em"
                     flat round icon="delete"
                     @click="deleteValRule(attribute, index)"/>
               </div>
-              <div class="row no-wrap justify-between full-width" v-if="vr.kind === 'range'">
-                  <q-input class="full-width"
-                           v-model="vr.valueFrom"
-                           :type="attribute.type"
-                           bottom-slots rounded outlined ref="input">
-                  </q-input>
-                  <div class="column justify-center q-mx-md" style="height: 4em">
-                    <span style="font-size: 2em; color: grey">&#8210</span>
-                  </div>
-                  <q-input class="full-width"
-                           v-model="vr.valueTo"
-                           :rules="[rTo => attribute.type.toLowerCase() === 'date' ? Date.parse(vr.valueFrom) < Date.parse(rTo) : vr.valueFrom < rTo || 'Second ' + attribute.type.toLowerCase() + ' must be greater than first ' + attribute.type.toLowerCase()]"
-                           :type="attribute.type"
-                           bottom-slots rounded outlined ref="input">
-                  </q-input>
 
+
+              <div class="row no-wrap justify-between full-width" v-if="vr.kind === 'range'">
+                <q-input class="full-width"
+                         v-if="!vr.compareWithAttribute"
+                         v-model="vr.valueFrom"
+                         :type="attribute.type"
+                         bottom-slots rounded outlined ref="input">
+                </q-input>
+                <div class="column justify-center q-mx-md" style="height: 4em">
+                  <span style="font-size: 2em; color: grey">&#8210</span>
+                </div>
+                <q-input class="full-width"
+                         v-if="!vr.compareWithAttribute"
+                         v-model="vr.valueTo"
+                         :rules="[rTo => attribute.type.toLowerCase() === 'date' ? Date.parse(vr.valueFrom) < Date.parse(rTo) : vr.valueFrom < rTo || 'Second ' + attribute.type.toLowerCase() + ' must be greater than first ' + attribute.type.toLowerCase()]"
+                         :type="attribute.type"
+                         bottom-slots rounded outlined ref="input">
+                </q-input>
+                <q-select
+                    class="full-width"
+                    v-if="vr.compareWithAttribute"
+                    :label="t('issuer.issueCredential.validation.chooseAttribute')"
+                    v-model="chosenAttribute"
+                    :options="getAttributes(attribute, attributes)"
+                    option-label="name"
+                    @select="vr.attributeName = chosenAttribute"
+                    bottom-slots rounded outlined ref="input">
+                </q-select>
+                <q-toggle
+                    class="q-ml-sm"
+                    style="height: 4em"
+                    unchecked-icon="text_fields"
+                    checked-icon="format_list_bulleted"
+                    v-model="vr.compareWithAttribute"
+                    keep-color size="2.5em"/>
                 <q-btn
                     class="q-ml-lg"
                     style="min-width: 4em; height: 4em"
                     flat round icon="delete"
                     @click="deleteValRule(attribute, index)"/>
               </div>
+
+
               <div class="row no-wrap justify-between full-width" v-if="vr.kind === 'regEx'">
                 <q-input class="full-width"
                          :label="t('issuer.issueCredential.validation.vType.regEx')"
@@ -105,6 +150,8 @@
                     flat round icon="delete"
                     @click="deleteValRule(attribute, index)"/>
               </div>
+
+
               <div class="row no-wrap justify-between full-width" v-if="vr.kind === 'length'">
                 <q-select
                     v-model="vr.comparisonType"
@@ -126,12 +173,31 @@
                          type="number"
                          bottom-slots rounded outlined ref="input">
                 </q-input>
+                <q-select
+                    class="full-width"
+                    v-if="vr.compareWithAttribute"
+                    :label="t('issuer.issueCredential.validation.chooseAttribute')"
+                    v-model="chosenAttribute"
+                    :options="getAttributes(attribute, attributes)"
+                    option-label="name"
+                    @select="vr.attributeName = chosenAttribute"
+                    bottom-slots rounded outlined ref="input">
+                </q-select>
+                <q-toggle
+                    class="q-ml-sm"
+                    style="height: 4em"
+                    unchecked-icon="text_fields"
+                    checked-icon="format_list_bulleted"
+                    v-model="vr.compareWithAttribute"
+                    keep-color size="2.5em"/>
                 <q-btn
                     class="q-ml-lg"
                     style="min-width: 4em; height: 4em"
                     flat round icon="delete"
                     @click="deleteValRule(attribute, index)"/>
               </div>
+
+
             </div>
           </q-card-section>
           <div class="row no-wrap q-ml-sm q-mb-sm">
@@ -141,7 +207,7 @@
                       :options="getValRuleTypes(attribute)"
                       option-label="name"/>
             <q-btn class="q-ml-sm" flat dense rounded color="primary" icon="add"
-                   @click="addValidationrule(attribute)">
+                   @click="addValidationRule(attribute)">
               {{t('issuer.issueCredential.validation.addValidationRule')}}
             </q-btn>
           </div>
@@ -165,7 +231,8 @@ import {
 export default {
   name: "ValidateCredentials",
   props: {
-    attribute: ref(null)
+    attribute: ref(null),
+    attributes: ref(null)
   },
   setup() {
     const {t} = useI18n()
@@ -177,22 +244,23 @@ export default {
     const regEx = ref('')
     const length = ref(0)
     const valRuleType: Ref<{name: string, type: string} | null> = ref(null)
+    const chosenAttribute = ref('')
     const test = ref('')
 
-    function addValidationrule(attribute: any | undefined) {
+    function addValidationRule(attribute: any | undefined) {
       if (valRuleType.value)
         switch (valRuleType.value.type) {
           case 'comparison':
-            attribute.validationRules.push({kind: 'comparison', comparisonType: 'EQUAL', content: '', currentDay: false})
+            attribute.validationRules.push({kind: 'comparison', comparisonType: 'EQUAL', content: '', currentDay: false, compareWithAttribute: false})
             break
           case 'range':
-            attribute.validationRules.push({kind: 'range', valueFrom: '', valueTo: ''})
+            attribute.validationRules.push({kind: 'range', valueFrom: '', valueTo: '', compareWithAttribute: false})
             break
           case 'regEx':
             attribute.validationRules.push({kind: 'regEx', regEx: '', description: ''})
             break
           case 'length':
-            attribute.validationRules.push({kind: 'length', comparisonType: 'EQUAL', length: 0})
+            attribute.validationRules.push({kind: 'length', comparisonType: 'EQUAL', length: 0, compareWithAttribute: false})
             break
           default:
             console.error('Wrong validation rule type')
@@ -213,6 +281,16 @@ export default {
         valRuleTypes.push({name: t('issuer.issueCredential.validation.vType.length'), type: 'length'})
       }
       return valRuleTypes
+    }
+
+    function getAttributes(attribute: any | undefined, attributes: any | undefined) {
+      let attributeList: any[] = []
+      attributes.forEach( (a: { type: string; attributeName: string; name: string }) => {
+        if (attribute.type === a.type && attribute.attributeName !== a.attributeName) {
+          attributeList.push(a.name)
+        }
+      })
+      return attributeList
     }
 
     function predicateTypeToString(predicateType: string) {
@@ -243,11 +321,13 @@ export default {
       rangeTo,
       regEx,
       length,
-      addValidationrule,
+      addValidationRule,
       predicateTypeToString,
       getValRuleTypes,
       valRuleType,
       deleteValRule,
+      chosenAttribute,
+      getAttributes,
       test
     }
   },

@@ -15,6 +15,10 @@ public class RangeRule extends ValidationRule {
     @Column
     private String valueTo;
 
+    private boolean compareWithAttribute;
+
+    private String attributeName;
+
     public RangeRule(String valueFrom, String valueTo) {
         this.valueFrom = valueFrom;
         this.valueTo = valueTo;
@@ -62,5 +66,21 @@ public class RangeRule extends ValidationRule {
 
     public void setValueTo(String valueTo) {
         this.valueTo = valueTo;
+    }
+
+    public boolean isCompareWithAttribute() {
+        return compareWithAttribute;
+    }
+
+    public void setCompareWithAttribute(boolean compareWithAttribute) {
+        this.compareWithAttribute = compareWithAttribute;
+    }
+
+    public String getAttributeName() {
+        return attributeName;
+    }
+
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
     }
 }

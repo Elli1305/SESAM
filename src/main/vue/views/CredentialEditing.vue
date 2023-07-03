@@ -24,7 +24,7 @@
                                   outlined/>
                         <div class="column justify-between items-center q-mx-sm">
                           <div class="column justify-center no-wrap" style="height: 4em">
-                            <q-btn size="0.75em" style="width: 2em" color="black" round flat icon="lock" @click="editValidation(item)"/>
+                            <q-btn size="0.75em" style="width: 2em" color="black" round flat icon="lock" @click="editValidation(item, credential.attributes)"/>
                             <q-btn size="0.75em" style="width: 2em" color="primary" v-if="index !== 0" round flat icon="remove"
                                    @click="() => credential.attributes.splice(index, 1)"/>
                           </div>
@@ -154,11 +154,12 @@ const save = async () => {
   }
 }
 
-const editValidation = (item: CreateAttribute) => {
+const editValidation = (item: CreateAttribute, items: CreateAttribute[]) => {
   $q.dialog({
     component: ValidateCredentials,
     componentProps: {
-      attribute: item
+      attribute: item,
+      attributes: items
     }
   }).onOk(() => {
   })
