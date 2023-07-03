@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class InternalCredential implements Credential {
@@ -132,5 +133,24 @@ public class InternalCredential implements Credential {
 
 	public void removeIssuer(final Issuer issuer) {
 		issuers.remove(issuer);
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		final InternalCredential that = (InternalCredential) o;
+
+		return Objects.equals(credentialDefinitionId, that.credentialDefinitionId);
+	}
+
+	@Override
+	public int hashCode() {
+		return credentialDefinitionId != null ? credentialDefinitionId.hashCode() : 0;
 	}
 }

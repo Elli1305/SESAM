@@ -69,7 +69,7 @@ export default {
     const {t} = useI18n();
     const credentialStore = useCredentialStore()
     const locationStore = useLocationStore()
-    const model = ref()
+    const model = ref(1)
     const route = useRoute()
     const queryParam = ref('')
 

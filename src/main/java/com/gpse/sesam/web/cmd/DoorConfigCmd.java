@@ -2,12 +2,14 @@ package com.gpse.sesam.web.cmd;
 
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DoorConfigCmd {
-	private String doorId;
 	private String description;
-	private List<ConfigPartsCmd> configParts;
+
+	private String doorId;
+	private List<ConfigPartsCmd> configParts = new ArrayList<>();
 
 	public List<ConfigPartsCmd> getConfigParts() {
 		return configParts;
@@ -32,8 +34,8 @@ public class DoorConfigCmd {
 		return doorId;
 	}
 
-	public void setDoorId(final String doorId) {
-		this.doorId = doorId;
+	public void addConfigPart(final ConfigPartsCmd configPartsCmd) {
+		configParts.add(configPartsCmd);
 	}
 
 

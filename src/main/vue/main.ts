@@ -50,17 +50,38 @@ const messages = {
             deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
             otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
         },
+        doorconfig:{
+            configurationGroup: "Konfigurationsgruppen",
+            direction: "Richtung:",
+            direction2: "Richtung",
+            in: "Rein",
+            out: "Raus",
+            both: "Beide",
+            hint: "Konfigurationsgruppen sind untereinander mit UND verknüpft",
+            description: "Beschreibung der Konfiguration",
+            and: "Credentials in dieser Auswahl sind ODER-Verknüpft",
+            category: "KATEGORIEN",
+            add: "Konfigurationsgruppe hinzufügen",
+            config: "Konfiguration",
+            attribute: "Attribut hinzufügen",
+            time: "Aktueller Zeitpunkt"
+        },
         floorplan: {
             locations: 'Standorte',
             doorName: 'Türname',
             editDoor: 'Tür bearbeiten',
             editRoom: 'Raum bearbeiten',
+            editGroup: 'Gruppe bearbeiten',
             save: 'speichern',
             cancel: 'abbrechen',
+            done: 'fertig',
             confirmDeletion: 'Bestätigen Sie das Löschen',
             confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
             doors: 'Türen',
+            rooms: 'Räume',
             roomName: 'Raumname',
+            roomAmount: 'Anzahl an Räumen',
+            groupName: 'Gruppenname',
             edit: 'Bearbeiten',
             newFloor: 'Etage erstellen',
             editFloor: 'Etage bearbeiten',
@@ -72,6 +93,29 @@ const messages = {
             addLocation: 'Standort hinzufügen',
             addBuilding: 'Gebäude hinzufügen',
             addFloor: 'Etage hinzufügen',
+            addDoor: 'Tür zuweisen',
+            pickRoom: 'Raum auswählen',
+            configGroup: 'Konfigurationsgruppe',
+            config: 'Konfiguration',
+            direction: 'Richtung',
+            infoConfigGroups: 'Konfigurationsgruppen sind untereinander mit UND verknüpft',
+            in: 'rein',
+            both: 'beide',
+            out: 'raus',
+            configDescription: 'Beschreibung der Konfiguration',
+            infoCredential: 'Credentials sind untereinander mit ODER verknüpft',
+            infoCredentialGroups: 'Durch Credentialgruppen werden alle Credentials der Gruppe auf einmal ausgewählt',
+            addAttribute: 'Attribut hinzufügen',
+            addConfigGroup: 'Konfigurationsgruppe hinzufügen',
+            currentTime: 'Aktueller Zeitpunkt',
+            credentialAttributes: {
+                id: 'ID',
+                firstName: 'Vorname',
+                lastName: 'Nachname',
+                birthdate: 'Geburtstagsdatum',
+                expirationDate: 'Ablaufdatum'
+            }
+
         },
         groupRooms: {
             title: "Gruppierungen von Räumen",
@@ -80,7 +124,28 @@ const messages = {
             chooseLocation: "Location wählen",
             chooseRooms: "Räume auswählen",
             editGroup:"Gruppierung bearbeiten",
-            new: "Neue Gruppe"
+            new: "Neue Gruppe",
+            search: "Gruppensuche",
+            rooms: "Räume",
+            groups: "Raumgruppen",
+            addRooms: "Räume zu ausgewählten Gruppen zufügen",
+            noGroupSelected: "Keine Gruppe ausgewählt",
+            noRoomSelected: "Keine Räume ausgewählt",
+            checkNameMessage: "Name darf nicht leer sein",
+            checkNameCaption: "Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.",
+            doorconfig: "Türkonfiguration anpassen",
+            select: "Auswählen",
+            doors: "Türen",
+            groupsConfig: "Anpassung der Türconfiguration für Raumgruppen",
+            roomSelection: "Räume auswählen",
+            group: "Gruppe"
+
+        },
+        predefinedConfigs: {
+            title: "Vordefinierte Konfigurationen",
+            deleteAlert: "",
+            new: "Neue Konfiguration",
+            deleteQuestion: "Konfiguration wirklich löschen?"
         },
 
         common: {
@@ -88,7 +153,12 @@ const messages = {
             unkownError: "Ein unbekannter Fehler ist aufgetreten",
             noData: "Keine Daten vorhanden.",
             noResults: "Kein Einträge gefunden.",
-            of: "von"
+            of: "von",
+            cancel: 'Abbrechen',
+            save: 'Speichern',
+            category: "Kategorie",
+            categories: "Kategorien",
+            search: "Suche"
         },
         credentialview :{
             credentialview: "Credentialansicht",
@@ -135,7 +205,8 @@ const messages = {
             issuerPages: "Credential ausstellen",
             imprint: "Impressum",
             logout: "Logout",
-            roomSearch: "Raumsuche"
+            roomSearch: "Raumsuche",
+            predefinedConfig: "Konfiguration erstellen"
         },
         login: {
             wrongEmailPassword: "Falsches Passwort oder Benutzername",
@@ -349,7 +420,22 @@ const messages = {
             chooseLocation: "Choose a location",
             chooseRooms: "Choose the rooms",
             editGroup:"Edit group",
-            new: "New group"
+            new: "New group",
+            search: "Search for groups",
+            rooms: "Rooms",
+            groups: "Groups of Rooms",
+            addRooms: "Add rooms to selected group",
+            noGroupSelected: "No group selected",
+            noRoomSelected: "No rooms selected",
+            checkNameMessage: "Name must not be empty",
+            checkNameCaption: "At least one letter, number or symbol.",
+            room: "Room",
+            doorconfig: "Adjust door configuration",
+            select: "Select",
+            doors: "Doors",
+            groupsConfig: "Adjustment of door configurations for groups of rooms",
+            roomSelection: "Choose Rooms",
+            group: "Group"
         },
 
         adminEdit: {
@@ -366,7 +452,11 @@ const messages = {
             unkownError: "An unknown error occured",
             noData: "No data available.",
             noResults: "No entries found.",
-            of: "of"
+            of: "of",
+            cancel: 'Cancel',
+            save: 'Save',
+            category: "Category",
+            categories: "Categories",
         },
         credentialview :{
             credentialview: "View Credentials",
@@ -393,26 +483,69 @@ const messages = {
             categorydelete: 'Delete category',
             delete: 'Are you sure you want to delete the category?'
         },
+        doorconfig:{
+            configurationGroup: "Configuration Groups",
+            direction: "Direction:",
+            direction2: "Direction",
+            in: "In",
+            out: "Out",
+            both: "Both",
+            hint: "Configuration groups are connected by AND",
+            description: "Description of the Configuration",
+            and: "Credentials in this selection are connected by OR",
+            category: "CATEGORIES",
+            add: "Add configuration group",
+            config: "Configuration",
+            attribute: "Add attribute",
+            time: "Current time point"
+        },
         floorplan: {
             locations: 'Locations',
-            doorName: 'Name of Door',
+            doorName: 'Door name',
             editDoor:'Edit Door',
             editRoom:'Edit Room',
+            editGroup: 'Edit group',
             editFloor: 'Edit Floor',
             floorlevel: 'Floor level',
             floorplanUpload: 'Upload floor plan',
             save: 'save',
             cancel: 'cancel',
+            done: 'done',
             confirmDeletion: 'Confirm deletion',
             confirmDeletionText:'Are you sure you want to delete the door?',
             doors:'Doors',
+            rooms: 'Rooms',
             roomName: 'Name of room',
+            roomAmount: 'Amount of rooms',
+            groupName: 'Name of room',
             edit: 'Edit',
             editBuilding: 'Edit building',
             editLocation: 'Edit location',
             addLocation: 'Add location',
             addBuilding: 'Add building',
             addFloor: 'Add floor',
+            addDoor: 'Assign door',
+            pickRoom: 'Choose room',
+            configGroup: 'Configuration Group',
+            config: 'Configuration',
+            direction: 'Direction',
+            infoConfigGroups: 'Configuration groups are combined with AND',
+            in: 'in',
+            both: 'both',
+            out: 'out',
+            configDescription: 'Description of the configuration',
+            infoCredential: 'Credentials are combined with OR',
+            infoCredentialGroups: 'With credential groups, all credentials of the group are being added simultaneously',
+            addAttribute: 'Add attribute',
+            addConfigGroup: 'Add configuration group',
+            currentTime: 'Current time',
+            credentialAttributes: {
+                id: 'ID',
+                firstName: 'first name',
+                lastName: 'last name',
+                birthdate: 'date of birth',
+                expirationDate: 'expiration date'
+            }
 
         },
         home: {
@@ -435,7 +568,8 @@ const messages = {
             issuerPages: "Issue Credential",
             imprint: "Imprint",
             logout: "Logout",
-            roomSearch: "Search"
+            roomSearch: "Search",
+            predefinedConfig: "Create Configuration"
         },
         login: {
             wrongEmailPassword: "Wrong Password oder Username",

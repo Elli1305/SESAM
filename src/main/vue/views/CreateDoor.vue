@@ -1,6 +1,6 @@
 <template>
     <q-dialog ref="dialog" @hide="onDialogHide">
-        <q-card style="min-width: 45em">
+        <q-card style="min-width: 60em">
             <q-card-section>
                 <div class="text-h6">{{ t('floorplan.addDoor') }}</div>
             </q-card-section>
@@ -21,6 +21,29 @@
                         v-if="!door"
                         @filter="filterFn">
                     <template v-slot:no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                No results
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+        <q-select
+             class="q-ml-md"
+             style="min-width: 20em"
+             filled
+             use-input
+             hide-selected
+             fill-input
+             input-debounce="0"
+             @filter="filterFn"
+             label="Konfiguration auswählen"
+             option-label="name"
+             v-model="selectedConfig"
+             :options="configOptions"
+             clearable
+          >
+            <template v-slot:no-option>
                         <q-item>
                             <q-item-section class="text-grey">
                                 No results
@@ -113,10 +136,12 @@
 </template>
 
 <script>
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 import {Direction} from "@/main/vue/entity/doorConfiguration";
 import {useI18n} from "vue-i18n";
+import {useConfigStore} from "@/main/vue/stores/config";
+import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
 const $q = useQuasar()
 
@@ -238,6 +263,41 @@ export default {
         const roomOptions = ref(props.rooms)
         const {t} = useI18n()
         const $q = useQuasar()
+        const configStore = useConfigStore()
+        configStore.getAllConfigs()
+        const {allPreConfigs} = storeToRefs(configStore)
+        const configOptions = ref()
+        configOptions.value = configStore.allPreConfigs
+        const selectedConfig = ref()
+
+        const configIn = ref()
+        const configOut = ref()
+
+        watch(allPreConfigs, () => {
+            configOptions.value = configStore.allPreConfigs
+        })
+
+        watch(selectedConfig, async () => {
+            if (selectedConfig.value == null) {
+                configIn.value.configDescription = null
+                configIn.value.qSelects.configParts = []
+                configOut.value.configDescription = null
+                configOut.value.qSelects.configParts = []
+                configIn.value.direction = Direction.BOTH
+            } else {
+                await configStore.getConfig(selectedConfig.value.id)
+                let chosenConfig = configStore.currentConfig
+                configIn.value.configDescription = chosenConfig?.doorConfigIn.description
+                configIn.value.qSelects.configParts = chosenConfig?.doorConfigIn.configParts
+                configOut.value.configDescription = chosenConfig?.doorConfigOut.description
+                configOut.value.qSelects.configParts = chosenConfig?.doorConfigOut.configParts
+                if (JSON.stringify(chosenConfig?.doorConfigIn) !== JSON.stringify(chosenConfig?.doorConfigOut)) {
+                    configIn.value.direction = Direction.IN
+                    configOut.value.direction = Direction.OUT
+                }
+            }
+        })
+
 
         const disableSave = ref(false);
 
@@ -294,15 +354,19 @@ export default {
             })
         }
 
-        return {
-            qSelectgeneral,
-            room,
-            filterFn,
-            doorName,
-            disableSave,
-            t,
-            check
-        }
+    return {
+        qSelectgeneral,
+      room,
+      filterFn,
+      doorName,
+        disableSave,
+        t,
+        check,
+        configOptions,
+        selectedConfig,
+        configOut,
+        configIn,
     }
+  }
 }
 </script>

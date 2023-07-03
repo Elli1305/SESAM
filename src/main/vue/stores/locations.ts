@@ -110,6 +110,16 @@ export const useLocationStore = defineStore('locations', () => {
         })
     }
 
+    function deleteLocation(id: string) {
+        return new Promise<void>((resolve, reject) => {
+            api.location.deleteLocation(id).then(() => {
+                resolve()
+            }).catch((error) => {
+                reject(error)
+            })
+        });
+    }
+
     return {
         allLocations,
         getLocations,
@@ -118,6 +128,7 @@ export const useLocationStore = defineStore('locations', () => {
         getLocationTreeStructure,
         save,
         getFloorById,
-        getRoomById
+        getRoomById,
+        deleteLocation
     }
 })

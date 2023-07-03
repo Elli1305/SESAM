@@ -27,8 +27,6 @@ public interface CredentialService {
 
 	void saveAll(Iterable<InternalCredential> credentials);
 
-	List<InternalCredential> credentialFindByLocation(Long id);
-
 	List<CredentialCmd> getCredentialByLocation(Long id);
 
 	void create(CreateCredentialCmd createCredentialCmd);
