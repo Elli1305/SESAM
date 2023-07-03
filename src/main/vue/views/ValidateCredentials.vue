@@ -85,7 +85,7 @@
               </div>
               <div class="row no-wrap justify-between full-width" v-if="vr.kind === 'regEx'">
                 <q-input class="full-width"
-                         :label="t('issuer.issueCredential.validation.regEx')"
+                         :label="t('issuer.issueCredential.validation.vType.regEx')"
                          stack-label
                          v-model="vr.regEx"
                          :type="attribute.type"
@@ -120,7 +120,7 @@
                   </template>
                 </q-select>
                 <q-input class="full-width"
-                         :label="t('issuer.issueCredential.validation.length')"
+                         :label="t('issuer.issueCredential.validation.vType.length')"
                          stack-label
                          v-model="vr.length"
                          type="number"
@@ -136,8 +136,10 @@
           </q-card-section>
           <div class="row no-wrap q-ml-sm q-mb-sm">
             <q-select dense outlined style="width: 12em"
+                      :label="t('issuer.issueCredential.validation.chooseType')"
                       v-model="valRuleType"
-                      :options="[t('')]"/>
+                      :options="getValRuleTypes(attribute)"
+                      option-label="name"/>
             <q-btn class="q-ml-sm" flat dense rounded color="primary" icon="add"
                    @click="addValidationrule(attribute)">
               {{t('issuer.issueCredential.validation.addValidationRule')}}
@@ -151,7 +153,7 @@
 
 <script lang="ts">
 import {useI18n} from "vue-i18n";
-import {ref} from "vue";
+import {Ref, ref} from "vue";
 import {
   ComparisonRule,
   CreateAttribute,
@@ -163,7 +165,7 @@ import {
 export default {
   name: "ValidateCredentials",
   props: {
-    attribute: null
+    attribute: ref(null)
   },
   setup() {
     const {t} = useI18n()
@@ -174,38 +176,42 @@ export default {
     const rangeTo = ref('')
     const regEx = ref('')
     const length = ref(0)
-    const valRuleType = ref('comparison')
+    const valRuleType: Ref<{name: string, type: string} | null> = ref(null)
     const test = ref('')
 
     function addValidationrule(attribute: any | undefined) {
-      switch (valRuleType.value) {
-        case 'comparison':
-          attribute.validationRules.push({kind: 'comparison', comparisonType: 'EQUAL', content: '', currentDay: false})
-          break
-        case 'range':
-          attribute.validationRules.push({kind: 'range', valueFrom: '', valueTo: ''})
-          break
-        case 'regEx':
-          attribute.validationRules.push({kind: 'regEx', regEx: '', description: ''})
-          break
-        case 'length':
-          attribute.validationRules.push({kind: 'length', comparisonType: 'EQUAL', length: 0})
-          break
-        default:
-          console.error('Wrong validation rule type')
-      }
+      if (valRuleType.value)
+        switch (valRuleType.value.type) {
+          case 'comparison':
+            attribute.validationRules.push({kind: 'comparison', comparisonType: 'EQUAL', content: '', currentDay: false})
+            break
+          case 'range':
+            attribute.validationRules.push({kind: 'range', valueFrom: '', valueTo: ''})
+            break
+          case 'regEx':
+            attribute.validationRules.push({kind: 'regEx', regEx: '', description: ''})
+            break
+          case 'length':
+            attribute.validationRules.push({kind: 'length', comparisonType: 'EQUAL', length: 0})
+            break
+          default:
+            console.error('Wrong validation rule type')
+        }
     }
 
     function deleteValRule(attribute: any | undefined, index: string | number) {
       attribute.validationRules.splice(index, 1)
     }
 
-    function getValRuleTypes() {
-      let valRuleTypes: string[] = []
-      valRuleTypes.push('comparison')
-      valRuleTypes.push('range')
-      valRuleTypes.push('regEx')
-      valRuleTypes.push('length')
+    function getValRuleTypes(attribute: any | undefined) {
+      let valRuleTypes = []
+      if (attribute.type === 'number' || attribute.type === 'date') {
+        valRuleTypes.push({name: t('issuer.issueCredential.validation.vType.comparison'), type: 'comparison'})
+        valRuleTypes.push({name: t('issuer.issueCredential.validation.vType.range'), type: 'range'})
+      } else if (attribute.type === 'text') {
+        valRuleTypes.push({name: t('issuer.issueCredential.validation.vType.regEx'), type: 'regEx'})
+        valRuleTypes.push({name: t('issuer.issueCredential.validation.vType.length'), type: 'length'})
+      }
       return valRuleTypes
     }
 
