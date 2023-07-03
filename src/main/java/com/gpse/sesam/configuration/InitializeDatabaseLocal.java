@@ -265,14 +265,14 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private List<ValidationRule> getFirstNameValidationRules() {
 		final List<ValidationRule> validationRules = new ArrayList<>();
-		validationRules.add(new RegExRule("/^[a-z ,.'-]+$/i", "Choose a real name"));
+		validationRules.add(new RegExRule("[a-z ,.'-]+", "Wähle eine realen Name"));
 		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
 		return validationRules;
 	}
 
 	private List<ValidationRule> getLastNameValidationRules() {
 		final List<ValidationRule> validationRules = new ArrayList<>();
-		validationRules.add(new RegExRule("/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u", "Choose a real name"));
+		validationRules.add(new RegExRule("[a-z ,.'-]+", "Wähle eine realen Name"));
 		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
 		return validationRules;
 	}

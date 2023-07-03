@@ -13,7 +13,7 @@
           </div>
           <q-form class="column no-wrap" style="width: 40%" ref="form" @submit.prevent>
             <q-input class="q-my-md no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
-                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)"/>
+                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)" no-error-icon/>
           </q-form>
         </div>
       </q-step>
@@ -22,8 +22,8 @@
               :done="step > 2">
         <div class="row justify-around no-wrap" style="height: 45vh">
           <div class="column no-wrap" style="width: 40%">
-            <q-input class="q-my-sm no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
-                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)"/>
+            <q-input class="q-my-md no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
+                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)" no-error-icon/>
           </div>
           <div class="column q-mt-sm no-wrap" style="width: 40%">
             <p>{{ t('issuer.issueCredential.checkConditions') }}</p>
@@ -124,52 +124,76 @@ function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | Len
       case 'comparison':
         switch (vr.comparisonType) {
           case "EQUAL":
-            rules.push((value) => value === vr.content || t('issuer.issueCredential.validation.equal', [vr.content]))
+            if (vr.currentDay) {
+              rules.push((value) => value === new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.equal', [new Date().toISOString().split('T')[0]]))
+            } else {
+              rules.push((value) => value === vr.content || t('issuer.issueCredential.validation.ruleErrors.equal', [vr.content]))
+            }
             break
           case "NOT_EQUAL":
-            rules.push((value) => value !== vr.content || t('issuer.issueCredential.validation.notEqual', [vr.content]))
+            if (vr.currentDay) {
+              rules.push((value) => value !== new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.notEqual', [new Date().toISOString().split('T')[0]]))
+            } else {
+            rules.push((value) => value !== vr.content || t('issuer.issueCredential.validation.ruleErrors.notEqual', [vr.content]))
+            }
             break
           case "LESS_THAN":
-            rules.push((value) => value < vr.content || t('issuer.issueCredential.validation.lessThan', [vr.content]))
+              if (vr.currentDay) {
+                rules.push((value) => value < new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.lessThan', [new Date().toISOString().split('T')[0]]))
+              } else {
+            rules.push((value) => value < vr.content || t('issuer.issueCredential.validation.ruleErrors.lessThan', [vr.content]))
+              }
             break
           case "GREATER_THAN":
-            rules.push((value) => value > vr.content || t('issuer.issueCredential.validation.greaterThan', [vr.content]))
+                if (vr.currentDay) {
+                  rules.push((value) => value > new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.greaterThan', [new Date().toISOString().split('T')[0]]))
+                } else {
+            rules.push((value) => value > vr.content || t('issuer.issueCredential.validation.ruleErrors.greaterThan', [vr.content]))
+                }
             break
           case "LESS_EQUAL":
-            rules.push((value) => value <= vr.content || t('issuer.issueCredential.validation.lessEqual', [vr.content]))
+                  if (vr.currentDay) {
+                    rules.push((value) => value <= new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.lessEqual', [new Date().toISOString().split('T')[0]]))
+                  } else {
+            rules.push((value) => value <= vr.content || t('issuer.issueCredential.validation.ruleErrors.lessEqual', [vr.content]))
+                  }
             break
           case "GREATER_EQUAL":
-            rules.push((value) => value >= vr.content || t('issuer.issueCredential.validation.greaterEqual', [vr.content]))
+                    if (vr.currentDay) {
+                      rules.push((value) => value >= new Date().toISOString().split('T')[0] || t('issuer.issueCredential.validation.ruleErrors.greaterEqual', [new Date().toISOString().split('T')[0]]))
+                    } else {
+            rules.push((value) => value >= vr.content || t('issuer.issueCredential.validation.ruleErrors.greaterEqual', [vr.content]))
+                    }
             break
           default:
             console.error("Wrong comparison type")
         }
         break
       case 'range':
-        rules.push((value) => value >= vr.valueFrom && value <= vr.valueTo || t('issuer.issueCredential.validation.range', [vr.valueFrom, vr.valueTo]))
+        rules.push((value) => value >= vr.valueFrom && value <= vr.valueTo || t('issuer.issueCredential.validation.ruleErrors.range', [vr.valueFrom, vr.valueTo]))
         break
       case 'regEx':
-        rules.push((value) => new RegExp(vr.regEx).test(value) || vr.description)
+        rules.push((value) => new RegExp(vr.regEx).test(value) || t(vr.description))
         break
       case 'length':
         switch (vr.comparisonType) {
           case "EQUAL":
-            rules.push((value) => value.length === vr.length || t('issuer.issueCredential.validation.equalLength', [vr.length]))
+            rules.push((value) => value.length === vr.length || t('issuer.issueCredential.validation.ruleErrors.equalLength', [vr.length]))
             break
           case "NOT_EQUAL":
-            rules.push((value) => value.length !== vr.length || t('issuer.issueCredential.validation.notEqualLength', [vr.length]))
+            rules.push((value) => value.length !== vr.length || t('issuer.issueCredential.validation.ruleErrors.notEqualLength', [vr.length]))
             break
           case "LESS_THAN":
-            rules.push((value) => value.length < vr.length || t('issuer.issueCredential.validation.lessThanLength', [vr.length]))
+            rules.push((value) => value.length < vr.length || t('issuer.issueCredential.validation.ruleErrors.lessThanLength', [vr.length]))
             break
           case "GREATER_THAN":
-            rules.push((value) => value.length > vr.length || t('issuer.issueCredential.validation.greaterThanLength', [vr.length]))
+            rules.push((value) => value.length > vr.length || t('issuer.issueCredential.validation.ruleErrors.greaterThanLength', [vr.length]))
             break
           case "LESS_EQUAL":
-            rules.push((value) => value.length <= vr.length || t('issuer.issueCredential.validation.lessEqualLength', [vr.length]))
+            rules.push((value) => value.length <= vr.length || t('issuer.issueCredential.validation.ruleErrors.lessEqualLength', [vr.length]))
             break
           case "GREATER_EQUAL":
-            rules.push((value) => value.length >= vr.length || t('issuer.issueCredential.validation.greaterEqualLength', [vr.length]))
+            rules.push((value) => value.length >= vr.length || t('issuer.issueCredential.validation.ruleErrors.greaterEqualLength', [vr.length]))
             break
           default:
             console.error("Wrong comparison type")
@@ -206,7 +230,7 @@ api.credential.get(props.id)
       }
     });
 
-const required: ValidationRule<string> = (value) => !!value || t('issuer.issueCredential.validation.inputRequired');
+const required: ValidationRule<string> = (value) => !!value || t('issuer.issueCredential.validation.ruleErrors.inputRequired');
 
 const next = async (refs: any) => {
   const stepper = (refs.stepper as QStepper);
@@ -222,7 +246,7 @@ const next = async (refs: any) => {
       title: t('issuer.issueCredential.confirm.title'),
       message: t('issuer.issueCredential.confirm.message', {'name': credential.value?.name}),
       ok: t('issuer.issueCredential.confirm.ok'),
-      cancel: t('issuer.issueCredential.confirm.cancel'),
+      cancel: t('common.cancel'),
     }).onOk(async () => {
       $q.loading.show({delay: 400});
 

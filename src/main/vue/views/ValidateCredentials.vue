@@ -84,13 +84,21 @@
                     @click="deleteValRule(attribute, index)"/>
               </div>
               <div class="row no-wrap justify-between full-width" v-if="vr.kind === 'regEx'">
-                  <q-input class="full-width"
-                           label="RegEx"
-                           stack-label
-                           v-model="vr.regEx"
-                           :type="attribute.type"
-                           bottom-slots rounded outlined ref="input">
-                  </q-input>
+                <q-input class="full-width"
+                         :label="t('issuer.issueCredential.validation.regEx')"
+                         stack-label
+                         v-model="vr.regEx"
+                         :type="attribute.type"
+                         bottom-slots rounded outlined ref="input">
+                </q-input>
+                <q-space class="q-mx-md"/>
+                <q-input class="full-width"
+                         :label="t('issuer.issueCredential.validation.description')"
+                         stack-label
+                         v-model="vr.description"
+                         :type="attribute.type"
+                         bottom-slots rounded outlined ref="input">
+                </q-input>
                 <q-btn
                     class="q-ml-lg"
                     style="min-width: 4em; height: 4em"
@@ -98,26 +106,26 @@
                     @click="deleteValRule(attribute, index)"/>
               </div>
               <div class="row no-wrap justify-between full-width" v-if="vr.kind === 'length'">
-                  <q-select
-                      v-model="vr.comparisonType"
-                      :display-value="predicateTypeToString(vr.comparisonType)"
-                      :options = "['EQUAL', 'NOT_EQUAL', 'LESS_THAN', 'GREATER_THAN', 'LESS_EQUAL', 'GREATER_EQUAL']"
-                      hide-dropdown-icon rounded outlined
-                      class="q-mr-lg"
-                      style="min-width: 4em; height: 4em">
-                    <template v-slot:option="scope">
-                      <q-item v-bind="scope.itemProps">
-                        {{predicateTypeToString(scope.opt)}}
-                      </q-item>
-                    </template>
-                  </q-select>
-                  <q-input class="full-width"
-                           label="Länge"
-                           stack-label
-                           v-model="vr.length"
-                           type="number"
-                           bottom-slots rounded outlined ref="input">
-                  </q-input>
+                <q-select
+                    v-model="vr.comparisonType"
+                    :display-value="predicateTypeToString(vr.comparisonType)"
+                    :options = "['EQUAL', 'NOT_EQUAL', 'LESS_THAN', 'GREATER_THAN', 'LESS_EQUAL', 'GREATER_EQUAL']"
+                    hide-dropdown-icon rounded outlined
+                    class="q-mr-lg"
+                    style="min-width: 4em; height: 4em">
+                  <template v-slot:option="scope">
+                    <q-item v-bind="scope.itemProps">
+                      {{predicateTypeToString(scope.opt)}}
+                    </q-item>
+                  </template>
+                </q-select>
+                <q-input class="full-width"
+                         :label="t('issuer.issueCredential.validation.length')"
+                         stack-label
+                         v-model="vr.length"
+                         type="number"
+                         bottom-slots rounded outlined ref="input">
+                </q-input>
                 <q-btn
                     class="q-ml-lg"
                     style="min-width: 4em; height: 4em"
@@ -129,7 +137,7 @@
           <div class="row no-wrap q-ml-sm q-mb-sm">
             <q-select dense outlined style="width: 12em"
                       v-model="valRuleType"
-                      :options="[t()]"/>
+                      :options="[t('')]"/>
             <q-btn class="q-ml-sm" flat dense rounded color="primary" icon="add"
                    @click="addValidationrule(attribute)">
               {{t('issuer.issueCredential.validation.addValidationRule')}}
@@ -169,7 +177,7 @@ export default {
     const valRuleType = ref('comparison')
     const test = ref('')
 
-    function addValidationrule(attribute: CreateAttribute) {
+    function addValidationrule(attribute: any | undefined) {
       switch (valRuleType.value) {
         case 'comparison':
           attribute.validationRules.push({kind: 'comparison', comparisonType: 'EQUAL', content: '', currentDay: false})
@@ -188,7 +196,7 @@ export default {
       }
     }
 
-    function deleteValRule(attribute: CreateAttribute, index: number) {
+    function deleteValRule(attribute: any | undefined, index: string | number) {
       attribute.validationRules.splice(index, 1)
     }
 
