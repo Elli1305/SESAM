@@ -12,7 +12,7 @@
                 >
                     <q-icon size="1.25em"  fixed-right color="white"  name="info_outlined" class="q-pl-xs">
                         <q-tooltip class="grey" anchor="bottom right" max-width="200px"  self="top middle" :offset="[0, 0]">
-                            {{t('groupRooms.info')}}
+                            {{t('editor.groupRooms.info')}}
                         </q-tooltip>
                     </q-icon>
                     <q-tab name="rooms" :label="t('floorPlan.rooms')"/>
@@ -87,7 +87,7 @@
                                                             <div class="text-h6">{{ t("floorPlan.editRoom") }}</div>
                                                             <div class="q-mt-md">
                                                                 <q-input filled v-model="currentRoomName"
-                                                                         :label="t( 'floorplan.roomName')" stack-label
+                                                                         :label="t( 'floorPlan.roomName')" stack-label
                                                                          style="width: 250px; padding-bottom: 1em"/>
                                                             </div>
                                                             <div class="q-my-xs">
@@ -165,9 +165,9 @@
                                                                 </q-list>
                                                             </div>
                                                             <q-card-actions align="right" class="text-primary">
-                                                                <q-btn flat :label="t( 'floorplan.cancel')"
+                                                                <q-btn flat :label="t( 'floorPlan.cancel')"
                                                                        color="primary" v-close-popup/>
-                                                                <q-btn flat :label="t( 'floorplan.save')"
+                                                                <q-btn flat :label="t( 'floorPlan.save')"
                                                                        color="primary" @click="save(room)"
                                                                        v-close-popup/>
                                                             </q-card-actions>
@@ -185,7 +185,7 @@
                             v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                             <q-separator></q-separator>
                             <q-item>
-                                <q-btn style="min-width: 10em" color="primary" icon="add" :label="t('groupRooms.addRoomsToNewGroup')" @click="checkAddRoomsToNewGroup();" flat/>
+                                <q-btn style="min-width: 10em" color="primary" icon="add" :label="t('editor.groupRooms.addRoomsToNewGroup')" @click="checkAddRoomsToNewGroup();" flat/>
                                 <q-btn style="min-width: 10em" color="blue" icon="add" :label="t('editor.groupRooms.addRooms')" @click="addRoomsToExistingGroupDialog=checkIfGroupSelected();" flat/>
                             </q-item>
 
@@ -258,7 +258,7 @@
                                                             <div class="text-h6">{{ t("floorPlan.editGroup") }}</div>
                                                             <div class="q-mt-md">
                                                                 <q-input filled v-model="currentGroupName"
-                                                                         :label="t( 'floorplan.groupName')" stack-label
+                                                                         :label="t( 'floorPlan.groupName')" stack-label
                                                                          style="width: 100%; padding-bottom: 1em"/>
                                                             </div>
                                                             <div class="q-my-xs">
@@ -292,7 +292,7 @@
                                                                                     flat
                                                                                     icon="delete"
                                                                                     color="grey"
-                                                                                    :label="t('adminEdit.delete')"
+                                                                                    :label="t('common.delete')"
                                                                                     @click=""/>
                                                                                 </div>
 
@@ -319,9 +319,9 @@
                                                             <q-card-actions align="right" class="text-primary">
                                                                 <q-btn style="max-width: 10em;" class="q-mr-xl text-white bg-primary" label="doorconfig" @click="" flat/>
 
-                                                                <q-btn flat :label="t( 'floorplan.cancel')" color="primary"
+                                                                <q-btn flat :label="t( 'common.cancel')" color="primary"
                                                                        v-close-popup/>
-                                                                <q-btn flat :label="t( 'floorplan.save')" color="primary"
+                                                                <q-btn flat :label="t( 'common.save')" color="primary"
                                                                        @click="editGroupName" v-close-popup/>
                                                             </q-card-actions>
                                                         </q-card-section>
@@ -339,14 +339,14 @@
                             v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                             <q-separator></q-separator>
                             <q-item>
-                                <q-btn color="primary" icon="add" :label="t('editor.groupRooms.new')" @click="delName(); newGroup = true;" flat/>
+                                <q-btn color="primary" icon="add" :label="t('editor.groupRooms.newGroup')" @click="delName(); newGroup = true;" flat/>
                                 <q-btn
                                     dense
                                     round
                                     flat
                                     icon="delete"
                                     color="grey"
-                                    :label="t('adminEdit.delete')"
+                                    :label="t('common.delete')"
                                     @click="deleteAlert = checkGroupSelected();"/>
                             </q-item>
 
@@ -423,7 +423,7 @@
                                                     <div class="text-h6">{{ t("floorPlan.editRoom") }}</div>
                                                     <div class="q-mt-md">
                                                         <q-input filled v-model="currentRoomName"
-                                                                 :label="t( 'floorplan.roomName')" stack-label
+                                                                 :label="t( 'floorPlan.roomName')" stack-label
                                                                  style="width: 250px; padding-bottom: 1em"/>
                                                     </div>
                                                     <div class="q-my-xs">
@@ -484,7 +484,7 @@
                                                                             <q-card-actions align="right"
                                                                                             class="bg-white text-teal">
                                                                                 <q-btn flat color="primary"
-                                                                                       :label="t( 'floorplan.cancel')"
+                                                                                       :label="t( 'floorPlan.cancel')"
                                                                                        v-close-popup/>
                                                                                 <q-btn flat color="primary"
                                                                                        :label="t('common.delete')"
@@ -499,9 +499,9 @@
                                                         </q-list>
                                                     </div>
                                                     <q-card-actions align="right" class="text-primary">
-                                                        <q-btn flat :label="t( 'floorplan.cancel')" color="primary"
+                                                        <q-btn flat :label="t( 'floorPlan.cancel')" color="primary"
                                                                v-close-popup/>
-                                                        <q-btn flat :label="t( 'floorplan.save')" color="primary"
+                                                        <q-btn flat :label="t( 'floorPlan.save')" color="primary"
                                                                @click="save(room)" v-close-popup/>
                                                     </q-card-actions>
                                                 </q-card-section>
@@ -541,8 +541,8 @@
                     </q-card-section>
 
                     <q-card-actions align="right" class="text-primary">
-                        <q-btn flat :label="t('adminEdit.back')" @click="" v-close-popup/>
-                        <q-btn flat :label="t('adminEdit.save')" @click="addRoomsToGroups();"  v-close-popup/>
+                        <q-btn flat :label="t('common.back')" @click="" v-close-popup/>
+                        <q-btn flat :label="t('common.save')" @click="addRoomsToGroups();"  v-close-popup/>
                     </q-card-actions>
                 </q-card>
             </q-dialog>
@@ -557,8 +557,8 @@
                     </q-card-section>
 
                     <q-card-actions align="right" class="text-primary">
-                        <q-btn flat :label="t('adminEdit.back')" @click="" v-close-popup/>
-                        <q-btn flat :label="t('adminEdit.save')" @click="addRoomsToNewGroup();"/>
+                        <q-btn flat :label="t('common.back')" @click="" v-close-popup/>
+                        <q-btn flat :label="t('common.save')" @click="addRoomsToNewGroup();"/>
                     </q-card-actions>
                 </q-card>
             </q-dialog>
