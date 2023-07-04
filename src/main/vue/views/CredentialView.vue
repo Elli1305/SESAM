@@ -293,7 +293,7 @@ export default {
     }
 
     function updateExternalCredentials() {
-      credentialStore.getCredentialsByLocation(model2.value).then((credentials) => {
+      credentialStore.getExternalByLocation(model2.value).then((credentials) => {
         rows2.value = credentials
       })
     }
@@ -313,7 +313,7 @@ export default {
     }
 
     function updateAll() {
-      credentialStore.getCredentialsByLocation(model3.value).then((credentials) => {
+      credentialStore.getAllByLocation(model3.value).then((credentials) => {
         rows3.value = credentials
       })
     }
@@ -322,7 +322,7 @@ export default {
       if (value) {
         getAll()
       } else {
-        updateExternalCredentials()
+        updateAll()
       }
     }
 

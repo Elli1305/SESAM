@@ -32,7 +32,9 @@ export const useCredentialStore = defineStore('credential', () => {
     const external: Ref<ExternalCredential[] | null> = ref(null)
     const credentialsForView: Ref<CredentialCmd[] | null> = ref(null)
     const externalForView: Ref<ExternalCredentialCmd[] | null> = ref(null)
+    const externalByLocation: Ref<ExternalCredentialCmd[] | null> = ref(null)
     const all: Ref<AllCredentialCmd[] | null> = ref(null)
+    const allByLocation: Ref<AllCredentialCmd[] | null> = ref(null)
 
 
 
@@ -173,6 +175,28 @@ export const useCredentialStore = defineStore('credential', () => {
         })
     }
 
+    function getExternalByLocation(id: bigint) {
+        return new Promise((resolve, reject) => {
+            api.credential.getExternalCredentialByLocation(id).then((response) => {
+                externalByLocation.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+    function getAllByLocation(id: bigint) {
+        return new Promise((resolve, reject) => {
+            api.credential.getAllByLocation(id).then((response) => {
+                allByLocation.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
 
 
         return {
@@ -195,7 +219,11 @@ export const useCredentialStore = defineStore('credential', () => {
             externalForView,
             getExternalsForView,
             getAllForView,
-            all
+            all,
+            externalByLocation,
+            allByLocation,
+            getExternalByLocation,
+            getAllByLocation,
         }
     }
 )

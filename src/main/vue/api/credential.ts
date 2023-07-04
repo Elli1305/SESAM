@@ -78,4 +78,12 @@ export default {
         return axios.get("api/allcredentialview")
     },
 
+    getExternalCredentialByLocation(param: bigint): Promise<AxiosResponse<ExternalCredentialCmd[]>> {
+        return axios.get("api/externalcredentialsbylocation/" + param)
+    },
+
+    getAllByLocation(param: bigint): Promise<AxiosResponse<AllCredentialCmd[]>> {
+        return axios.get("api/allbylocation/" + param)
+    },
+
 }
