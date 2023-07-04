@@ -15,8 +15,8 @@
                             {{t('groupRooms.info')}}
                         </q-tooltip>
                     </q-icon>
-                    <q-tab name="rooms" :label="t('groupRooms.rooms')"/>
-                    <q-tab name="groups" :label="t('groupRooms.groups')"/>
+                    <q-tab name="rooms" :label="t('floorPlan.rooms')"/>
+                    <q-tab name="groups" :label="t('editor.groupRooms.groups')"/>
 
                 </q-tabs>
                 <q-separator></q-separator>
@@ -25,7 +25,7 @@
                     <q-tab-panel name="rooms">
 
                         <q-input
-                                :placeholder="t('home.roomSearch')"
+                                :placeholder="t('common.search')"
                                 v-model="search"
                                 @update:model-value="roomFilter"
                                 clearable
@@ -56,8 +56,8 @@
                                         <div class="row no-wrap">
                                             <div class="column no-wrap" style="padding: 0.5em">
                                                 <q-list>
-                                                    <q-item-label>{{ t("floorplan.roomName") }}:</q-item-label>
-                                                    <q-item-label>{{ t("floorplan.doors") }}:</q-item-label>
+                                                    <q-item-label>{{ t("floorPlan.roomName") }}:</q-item-label>
+                                                    <q-item-label>{{ t("floorPlan.doors") }}:</q-item-label>
                                                     <q-item-label>Credentials:</q-item-label>
                                                 </q-list>
                                             </div>
@@ -80,11 +80,11 @@
                                             <div class="row justify-center" style="padding: 0.5em">
                                                 <p class="cursor-pointer q-mb-none"
                                                    :style="{color: getCssVar('primary')}"
-                                                   @click="setOldValueR(room)">{{ t('floorplan.edit') }}</p>
+                                                   @click="setOldValueR(room)">{{ t('common.edit') }}</p>
                                                 <q-dialog v-model="inception">
                                                     <q-card>
                                                         <q-card-section>
-                                                            <div class="text-h6">{{ t("floorplan.editRoom") }}</div>
+                                                            <div class="text-h6">{{ t("floorPlan.editRoom") }}</div>
                                                             <div class="q-mt-md">
                                                                 <q-input filled v-model="currentRoomName"
                                                                          :label="t( 'floorplan.roomName')" stack-label
@@ -96,7 +96,7 @@
                                                                     <q-item-label header>
                                                                         <div class="row items-center">
                                                                             <div class="q-mr-sm">{{
-                                                                                t("floorplan.doors")
+                                                                                t("floorPlan.doors")
                                                                                 }}
                                                                             </div>
 
@@ -138,11 +138,11 @@
                                                                                 <q-card>
                                                                                     <q-card-section class="q-pa-md">
                                                                                         <div class="text-h6">{{
-                                                                                            t("floorplan.confirmDeletion")
+                                                                                            t("floorPlan.confirmDeletion")
                                                                                             }}
                                                                                         </div>
                                                                                         <div class="q-mt-md">{{
-                                                                                            t("floorplan.confirmDeletionText")
+                                                                                            t("floorPlan.confirmDeletionText")
                                                                                             }}
                                                                                         </div>
                                                                                     </q-card-section>
@@ -153,7 +153,7 @@
                                                                                                :label="t( 'floorplan.cancel')"
                                                                                                v-close-popup/>
                                                                                         <q-btn flat color="primary"
-                                                                                               :label="t('adminEdit.delete')"
+                                                                                               :label="t('common.delete')"
                                                                                                @click="deleteDoor(room, door)"
                                                                                                v-close-popup/>
                                                                                     </q-card-actions>
@@ -186,9 +186,8 @@
                             <q-separator></q-separator>
                             <q-item>
                                 <q-btn style="min-width: 10em" color="primary" icon="add" :label="t('groupRooms.addRoomsToNewGroup')" @click="checkAddRoomsToNewGroup();" flat/>
-                                <q-btn style="min-width: 10em" color="blue" icon="add" :label="t('groupRooms.addRooms')" @click="addRoomsToExistingGroupDialog=checkIfGroupSelected();" flat/>
+                                <q-btn style="min-width: 10em" color="blue" icon="add" :label="t('editor.groupRooms.addRooms')" @click="addRoomsToExistingGroupDialog=checkIfGroupSelected();" flat/>
                             </q-item>
-
 
 
                         </div>
@@ -196,7 +195,7 @@
                     </q-tab-panel>
                     <q-tab-panel name="groups">
                         <q-input
-                                :placeholder="t('groupRooms.search')"
+                                :placeholder="t('common.search')"
                                 v-model="searchGroup"
                                 @update:model-value="groupFilter"
                                 clearable
@@ -212,7 +211,6 @@
                                        :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
                                        >
                         <q-list>
-
                             <q-item v-for="group in allGroups" style="padding-left: 0">
                                 <q-radio @click="filterRoomToGroups(); updateNumRoomsInGroup();" v-model="selectedGroups" :val="group"
                                             color="blue"/>
@@ -237,7 +235,7 @@
                                         <div class="row no-wrap" style="min-width: 18em">
                                             <div class="column no-wrap q-pl-lg" style="padding: 0.5em">
                                                 <q-list>
-                                                    <q-item-label>{{ t("floorplan.roomAmount") }}:</q-item-label>
+                                                    <q-item-label>{{ t("floorPlan.roomAmount") }}:</q-item-label>
                                                 </q-list>
                                             </div>
                                             <div class="column no-wrap" style="padding: 0.5em">
@@ -253,11 +251,11 @@
 
                                             <div class="row justify-center" style="padding: 0.5em">
                                                 <p class="cursor-pointer q-mb-none" :style="{color: getCssVar('primary')}"
-                                                   @click="setOldValueG(group); allFloorsForGroup()">{{ t('floorplan.edit') }}</p>
+                                                   @click="setOldValueG(group); allFloorsForGroup()">{{ t('common.edit') }}</p>
                                                 <q-dialog v-model="editGroupD">
                                                     <q-card>
                                                         <q-card-section>
-                                                            <div class="text-h6">{{ t("floorplan.editGroup") }}</div>
+                                                            <div class="text-h6">{{ t("floorPlan.editGroup") }}</div>
                                                             <div class="q-mt-md">
                                                                 <q-input filled v-model="currentGroupName"
                                                                          :label="t( 'floorplan.groupName')" stack-label
@@ -270,7 +268,7 @@
                                                                     <q-item-label header>
                                                                         <div class="row items-center">
                                                                             <div class="q-mr-sm">{{
-                                                                                    t("floorplan.rooms")
+                                                                                    t("floorPlan.rooms")
                                                                                 }}
                                                                             </div>
 
@@ -305,6 +303,7 @@
 
                                                                             <q-item-section top side>
                                                                                 <div class="text-grey-8 q-gutter-xs">
+
                                                                                 </div>
                                                                             </q-item-section>
                                                                         </q-item>
@@ -332,18 +331,15 @@
                                         </div>
 
                                     </div>
-
-
                                 </q-btn-dropdown>
                             </q-item>
-
                         </q-list>
                         </q-scroll-area>
                         <div
                             v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
                             <q-separator></q-separator>
                             <q-item>
-                                <q-btn color="primary" icon="add" :label="t('groupRooms.new')" @click="delName(); newGroup = true;" flat/>
+                                <q-btn color="primary" icon="add" :label="t('editor.groupRooms.new')" @click="delName(); newGroup = true;" flat/>
                                 <q-btn
                                     dense
                                     round
@@ -366,7 +362,7 @@
 
 
                 <q-input
-                        :placeholder="t('home.roomSearch')"
+                        :placeholder="t('common.search')"
                         v-model="search"
                         @update:model-value="roomFilter"
                         clearable
@@ -397,8 +393,8 @@
                                 <div class="row no-wrap">
                                     <div class="column no-wrap" style="padding: 0.5em">
                                         <q-list>
-                                            <q-item-label>{{ t("floorplan.roomName") }}:</q-item-label>
-                                            <q-item-label>{{ t("floorplan.doors") }}:</q-item-label>
+                                            <q-item-label>{{ t("floorPlan.roomName") }}:</q-item-label>
+                                            <q-item-label>{{ t("floorPlan.doors") }}:</q-item-label>
                                             <q-item-label>Credentials:</q-item-label>
                                         </q-list>
                                     </div>
@@ -420,11 +416,11 @@
                                     <q-separator></q-separator>
                                     <div class="row justify-center" style="padding: 0.5em">
                                         <p class="cursor-pointer q-mb-none" :style="{color: getCssVar('primary')}"
-                                           @click="setOldValueR(room)">{{ t('floorplan.edit') }}</p>
+                                           @click="setOldValueR(room)">{{ t('common.edit') }}</p>
                                         <q-dialog v-model="inception">
                                             <q-card>
                                                 <q-card-section>
-                                                    <div class="text-h6">{{ t("floorplan.editRoom") }}</div>
+                                                    <div class="text-h6">{{ t("floorPlan.editRoom") }}</div>
                                                     <div class="q-mt-md">
                                                         <q-input filled v-model="currentRoomName"
                                                                  :label="t( 'floorplan.roomName')" stack-label
@@ -436,7 +432,7 @@
                                                             <q-item-label header>
                                                                 <div class="row items-center">
                                                                     <div class="q-mr-sm">{{
-                                                                        t("floorplan.doors")
+                                                                        t("floorPlan.doors")
                                                                         }}
                                                                     </div>
 
@@ -477,10 +473,10 @@
                                                                         <q-card>
                                                                             <q-card-section class="q-pa-md">
                                                                                 <div class="text-h6">
-                                                                                    {{ t("floorplan.confirmDeletion") }}
+                                                                                    {{ t("floorPlan.confirmDeletion") }}
                                                                                 </div>
                                                                                 <div class="q-mt-md">{{
-                                                                                    t("floorplan.confirmDeletionText")
+                                                                                    t("floorPlan.confirmDeletionText")
                                                                                     }}
                                                                                 </div>
                                                                             </q-card-section>
@@ -491,7 +487,7 @@
                                                                                        :label="t( 'floorplan.cancel')"
                                                                                        v-close-popup/>
                                                                                 <q-btn flat color="primary"
-                                                                                       :label="t('adminEdit.delete')"
+                                                                                       :label="t('common.delete')"
                                                                                        @click="deleteDoor(room, door)"
                                                                                        v-close-popup/>
                                                                             </q-card-actions>
@@ -515,9 +511,7 @@
                                 </div>
                             </div>
                         </q-btn-dropdown>
-
                     </q-item>
-
                 </q-list>
                 </q-scroll-area>
                 </div>
@@ -535,8 +529,8 @@
                     </q-card-section>
 
                     <q-card-actions align="right" class="text-primary">
-                        <q-btn flat :label="t('adminEdit.back')" @click="" v-close-popup/>
-                        <q-btn flat :label="t('adminEdit.save')" @click="makeANewGroup(newGroupName);"/>
+                        <q-btn flat :label="t('common.cancel')" @click="" v-close-popup/>
+                        <q-btn flat :label="t('common.save')" @click="makeANewGroup(newGroupName);"/>
                     </q-card-actions>
                 </q-card>
             </q-dialog>
@@ -572,14 +566,14 @@
         <q-dialog v-model="deleteAlert">
             <q-card>
                 <q-card-section>
-                    <div class="text-h6">{{ t('adminEdit.attention') }}</div>
+                    <div class="text-h6">{{ t('admin.currentUsers.editUser.deleteUser') }}</div>
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                    {{ t('groupRooms.question') }}
+                    {{ t('editor.groupRooms.question') }}
                 </q-card-section>
                 <q-card-actions align="right" class="text-primary">
-                    <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
-                    <q-btn flat :label="t('adminEdit.delete')" @click="deleteGroup(); deleteAlert=false"/>
+                    <q-btn flat :label="t('common.cancel')" v-close-popup/>
+                    <q-btn flat :label="t('common.delete')" @click="deleteGroup(); deleteAlert=false"/>
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -741,12 +735,12 @@ export default {
             console.log("selected Groups: ", selectedGroups.value);
             console.log("selected Groups length: ", selectedRooms.value.length);
 
-            if (selectedRooms.value.length === 0) {
+            if(selectedRooms.value.length === 0) {
                 $q.notify({
                     type: 'negative',
-                    message: t('groupRooms.noRoomSelected')
+                    message: t('editor.groupRooms.noRoomSelected')
                 })
-            } else if (selectedGroups.value !== null) {
+            } else if(selectedGroups.value !== null) {
                 const editedGroup = ref({
                     id: selectedGroups.value.id,
                     name: selectedGroups.value.name,
@@ -760,17 +754,17 @@ export default {
             } else {
                 $q.notify({
                     type: 'negative',
-                    message: t('groupRooms.noGroupSelected')
+                    message: t('editor.groupRooms.noGroupSelected')
                 })
             }
         }
 
         async function deleteGroup() {
             console.log("Delete Group", selectedGroups.value);
-            if (selectedGroups.value === []) {
+            if(selectedGroups.value === []) {
                 unCheck();
             }
-            if (selectedGroups.value !== null) {
+            if(selectedGroups.value !== null) {
                 await roomGroupStore.deleteGroup(selectedGroups.value.id).then(() => {
                     loadRoomGroups(buildingID.value);
                     unCheck();
@@ -789,7 +783,7 @@ export default {
             } else {
                 $q.notify({
                     type: 'negative',
-                    message: t('groupRooms.noGroupSelected')
+                    message: t('editor.groupRooms.noGroupSelected')
                 })
                 return false;
             }
@@ -804,8 +798,8 @@ export default {
             if (newName.trim() === "") {
                 $q.notify({
                     type: 'negative',
-                    message: t('groupRooms.checkNameMessage'),
-                    caption: t('groupRooms.checkNameCaption')
+                    message: t('editor.groupRooms.checkNameMessage'),
+                    caption: t('editor.groupRooms.checkNameCaption')
                 })
             } else {
                 checkNameAllowed.value = true;

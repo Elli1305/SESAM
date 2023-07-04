@@ -8,7 +8,7 @@
       <q-item-label
           header
           class="text-grey-8">
-        {{ t('floorplan.locations') }}
+        {{ t('floorPlan.locations') }}
       </q-item-label>
       <q-expansion-item
           v-for="(location,i) in locationStore.allLocations"
@@ -25,10 +25,13 @@
               <q-menu>
                 <q-list style="min-width: 100px">
                   <q-item clickable @click.stop="editLocation(location)" v-close-popup>
-                    <q-item-section>{{t('floorplan.editLocation')}}</q-item-section>
+                    <q-item-section>{{t('floorPlan.editLocation')}}</q-item-section>
                   </q-item>
                   <q-item clickable @click.stop="addBuilding(location)" v-close-popup>
-                    <q-item-section>{{t('floorplan.addBuilding')}}</q-item-section>
+                    <q-item-section>{{t('floorPlan.addBuilding')}}</q-item-section>
+                  </q-item>
+                  <q-item clickable v-close-popup @click.stop="deleteLocation = true; setParameter(location)">
+                    <q-item-section>Delete</q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -54,10 +57,13 @@
                 <q-menu class="show-building">
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editBuilding(building)" v-close-popup>
-                      <q-item-section>{{t('floorplan.editBuilding')}}</q-item-section>
+                      <q-item-section>{{t('floorPlan.editBuilding')}}</q-item-section>
                     </q-item>
                     <q-item clickable @click.stop="addFloor(building)" v-close-popup>
-                      <q-item-section>{{t('floorplan.addFloor')}}</q-item-section>
+                      <q-item-section>{{t('floorPlan.addFloor')}}</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click.stop="deleteBuilding = true; setParameter(building)">
+                      <q-item-section>Delete</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
@@ -73,7 +79,10 @@
                 <q-menu>
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editFloor(floor)" v-close-popup>
-                      <q-item-section>{{t('floorplan.editFloor')}}</q-item-section>
+                      <q-item-section>{{t('floorPlan.editFloor')}}</q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click.stop="deleteFloor = true; setParameter(floor)">
+                      <q-item-section>Delete</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
@@ -83,7 +92,7 @@
         </q-expansion-item>
       </q-expansion-item>
       <q-item>
-        <q-btn color="primary" icon="add" :label="t('floorplan.addLocation')" @click="addLocation" flat/>
+        <q-btn color="primary" icon="add" :label="t('floorPlan.addLocation')" @click="addLocation" flat/>
       </q-item>
     </q-list>
     <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
@@ -105,6 +114,51 @@
       color="primary"
       direction="right"
   ><q-icon name="chevron_right" right/></q-btn>
+  <q-dialog v-model="deleteLocation" persistent>
+    <q-card>
+      <q-card-section>
+        <div class="text-h6"> Löschen des Standortes</div>
+      </q-card-section>
+      <q-card-section class="row items-center">
+        <span class="q-mx-sm">Sind Sie sicher, dass Sie die Location löschen wollen?</span>
+      </q-card-section>
+
+      <q-card-actions align="right" class="text-primary">
+        <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
+        <q-btn flat v-close-popup @click="deleteLocationFunction(param)">  {{ t("credentialmapping.save")}} </q-btn>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <q-dialog v-model="deleteBuilding" persistent>
+    <q-card>
+      <q-card-section>
+        <div class="text-h6"> Löschen des Gebäudes</div>
+      </q-card-section>
+      <q-card-section class="row items-center">
+        <span class="q-mx-sm">Sind Sie sicher, dass Sie das Gebäude löschen wollen?</span>
+      </q-card-section>
+
+      <q-card-actions align="right" class="text-primary">
+        <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
+        <q-btn flat v-close-popup @click="deleteBuildingFunction(param)">  {{ t("credentialmapping.save")}} </q-btn>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <q-dialog v-model="deleteFloor" persistent>
+    <q-card>
+      <q-card-section>
+        <div class="text-h6"> Löschen des Floors</div>
+      </q-card-section>
+      <q-card-section class="row items-center">
+        <span class="q-mx-sm">Sind Sie sicher, dass Sie die Floor löschen wollen?</span>
+      </q-card-section>
+
+      <q-card-actions align="right" class="text-primary">
+        <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
+        <q-btn flat v-close-popup @click="deleteFloorFunction(param)">  {{ t("credentialmapping.save")}} </q-btn>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
   <q-page class="row no-wrap">
     <FloorPlan ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
     <FloorPlanRoomList @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
@@ -119,6 +173,7 @@ import {useLocationStore} from "@/main/vue/stores/locations";
 import {ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
+import {useFloorStore} from "@/main/vue/stores/floor";
 import {useQuasar} from "quasar";
 import EditLocation from "@/main/vue/views/EditLocation.vue";
 import EditBuilding from "@/main/vue/views/EditBuilding.vue";
@@ -142,9 +197,30 @@ export default {
     const locationStore = useLocationStore()
     const floorPlanStore = useFloorPlanStore()
     const buildingStore = useBuildingStore()
+    const floorStore = useFloorStore();
     let show = ref(true)
     const $q = useQuasar()
     const {t} = useI18n()
+    const param = ref()
+
+    function setParameter(parameter) {
+     param.value = parameter.id
+    }
+
+    function deleteLocationFunction(id) {
+      locationStore.deleteLocation(id)
+      location.reload()
+    }
+
+    function deleteBuildingFunction(id) {
+      buildingStore.deleteBuilding(id)
+      location.reload()
+    }
+
+    function deleteFloorFunction(id) {
+      floorStore.deleteFloor(id)
+      location.reload()
+    }
 
     const changeFloorPlan = function (floor) {
       floorPlanStore.selectedFloorId = floor.id
@@ -261,15 +337,23 @@ export default {
     return {
       show,
       t,
+      param,
       locationStore,
       changeFloorPlan,
       editLocation,
       editBuilding,
       editFloor,
+      deleteLocationFunction,
+      deleteBuildingFunction,
+      deleteFloorFunction,
       floorPlanStore,
       addFloor,
       addBuilding,
-      addLocation
+      addLocation,
+      setParameter,
+      deleteLocation: ref(false),
+      deleteBuilding: ref(false),
+      deleteFloor: ref(false),
     }
   }
 }

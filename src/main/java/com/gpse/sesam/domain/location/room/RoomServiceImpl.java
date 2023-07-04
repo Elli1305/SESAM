@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -43,9 +44,13 @@ public class RoomServiceImpl implements RoomService {
 				.orElseThrow(() -> new IllegalArgumentException("room with id " + id + " does not exist"));
 	}
 
-    @Override
-    public Floor getFloorToRoom(Long roomId) {
-        Floor theFloor = new Floor(0,"");
+	@Override
+	public Optional<Room> getRoomById(final Long id) {
+		return roomRepository.findById(id);
+	}
+	@Override
+	public Floor getFloorToRoom(Long roomId) {
+		Floor theFloor = new Floor(0,"");
 
 		List<Floor> allFloors = floorService.getAll();
 
@@ -62,5 +67,7 @@ public class RoomServiceImpl implements RoomService {
 			}
 		}
 		return theFloor;
-    }
+	}
+
+
 }

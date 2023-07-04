@@ -60,7 +60,7 @@ async function logout() {
           <div id="upper" class="row justify-between" style="height: 42px">
             <div class="row text-accent">
               <q-toolbar-title style="font-weight: 800; font-size: 3.25em; line-height: 1">
-                {{ t("home.header") }}
+                {{ t("home.applicationName") }}
               </q-toolbar-title>
             </div>
             <div class="column" style="width: 42px; height: 42px">
@@ -96,10 +96,10 @@ async function logout() {
           </div>
           <div id="lower" class="row justify-end items-center no-wrap">
             <div class="row">
-              <router-link to="/" class="headerLink text-accent"><p class="headerText">{{ t("home.floorplan") }}</p>
+              <router-link to="/" class="headerLink text-accent"><p class="headerText">{{ t("home.floorPlan") }}</p>
               </router-link>
               <router-link to="/credentialview" class="headerLink text-accent"><p class="headerText">
-                {{ t("home.credentials") }}</p></router-link>
+                {{ t("common.credentials") }}</p></router-link>
               <div>
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                    class="headerText foldMenu text-accent">
@@ -145,10 +145,11 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/credentialmapping" class="q-ma-sm headerLink text-black">Credentialmapping
+                    <router-link to="/credentialmapping" class="q-ma-sm headerLink text-black">
+                      {{ t("home.manageCredentialCategories") }}
                     </router-link>
-                    <router-link to="/credential_administration" class="q-ma-sm headerLink text-black">Credentials
-                      verwalten
+                    <router-link to="/credential_administration" class="q-ma-sm headerLink text-black">
+                      {{ t("home.manageCredentials") }}
                     </router-link>
                   </div>
                 </q-menu>
@@ -167,6 +168,10 @@ async function logout() {
                         t("home.groupRooms")
                       }}
                     </router-link>
+                     <router-link to="/predefinedConfigs" class="q-ma-sm headerLink text-black">{{
+                        t("home.predefinedConfig")
+                      }}
+                     </router-link>
                   </div>
                 </q-menu>
               </div>

@@ -1,7 +1,8 @@
-package com.gpse.sesam.domain.credential.credentials;
+package com.gpse.sesam.domain.credential.credentials.internal;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gpse.sesam.domain.credential.category.Category;
+import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.user.issuer.Issuer;

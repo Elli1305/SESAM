@@ -1,7 +1,7 @@
 package com.gpse.sesam.domain.user.issuer;
 
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.CredentialRepository;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialRepository;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
 import com.gpse.sesam.web.cmd.IssuerResponseCmd;
@@ -62,7 +62,7 @@ public class IssuerServiceImpl implements IssuerService {
 		final Optional<Issuer> issuer = getIssuer(cmd.getIssuerId());
 		final List<InternalCredential> credentials = new ArrayList<>();
 		if (issuer.isPresent()) {
-			final Optional<Room> room = roomRepository.findById(cmd.getRoom().getId());
+			final Optional<Room> room = roomRepository.findById(cmd.getRoom());
 			room.ifPresent(value -> issuer.get().setRoom(value));
 			for (final Long cred : cmd.getCredentials()) {
 				final Optional<InternalCredential> credential = credentialRepository.findById(cred);

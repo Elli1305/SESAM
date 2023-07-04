@@ -2,9 +2,9 @@ package com.gpse.sesam.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.credential.credentials.Credential;
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.web.cmd.CreateCredentialCmd;
 import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
 import com.gpse.sesam.web.cmd.UpdateCredentialCmd;

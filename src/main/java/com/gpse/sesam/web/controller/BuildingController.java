@@ -1,5 +1,6 @@
 package com.gpse.sesam.web.controller;
 
+import com.gpse.sesam.domain.location.DeleteLocationServiceImpl;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.building.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,12 @@ public class BuildingController {
 
 	private final BuildingService buildingService;
 
+	private final DeleteLocationServiceImpl deleteLocationService;
+
 	@Autowired
-	public BuildingController(final BuildingService buildingService) {
+	public BuildingController(final BuildingService buildingService, DeleteLocationServiceImpl deleteLocationService) {
 		this.buildingService = buildingService;
+		this.deleteLocationService = deleteLocationService;
 	}
 
 	@PostMapping(path = "/save")
@@ -30,6 +34,6 @@ public class BuildingController {
 
 	@DeleteMapping(path = "/{id:\\d+}")
 	public void deleteById(@PathVariable("id") final Long id) {
-		buildingService.deleteById(id);
+		deleteLocationService.buildingDeleteById(id);
 	}
 }

@@ -1,13 +1,13 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{ t("credentialview.credentialview") }}</p>
+    <p class="row text-h3 justify-center">{{ t("credentialView.title") }}</p>
     <div class="row self-center">
       <q-table
           style="width: 80vw; height: 50vh"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
-          :title="t('credentialview.credentialview')"
+          :title="t('credentialView.title')"
           :separator="'cell'"
           :no-data-label="t('common.noData')"
           :no-results-label="t('common.noResults')"
@@ -17,7 +17,7 @@
           visible-columns="['category', 'availableCredential', 'qualification', 'issuer']">
         <template v-slot:top-right>
           <q-select
-              :label="t('credentialview.location')"
+              :label="t('credentialView.location')"
               behavior="menu"
               v-model="model"
               borderless
@@ -30,7 +30,7 @@
               option-label="name"
               style="min-width: 12em; padding-right: 2em"
               @update:model-value="updateCredentials"/>
-          <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('credentialview.search')">
+          <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('common.search')">
             <template v-slot:append>
               <q-icon name="search"/>
             </template>
@@ -42,7 +42,7 @@
               <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
               <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
                 <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
-                  {{ t("credentialview.room") }} {{ props.row.room[index] }}
+                  {{ t("credentialView.room") }} {{ props.row.room[index] }}
                 </q-tooltip>
               </q-icon>
             </div>
@@ -69,7 +69,7 @@ export default {
     const {t} = useI18n();
     const credentialStore = useCredentialStore()
     const locationStore = useLocationStore()
-    const model = ref()
+    const model = ref(1)
     const route = useRoute()
     const queryParam = ref('')
 
@@ -79,7 +79,7 @@ export default {
       {
         name: 'category',
         required: true,
-        label: t('credentialmapping.category'),
+        label: t('common.category'),
         align: 'center',
         field: row => row.categoryName,
         format: val => `${val}`,
@@ -88,14 +88,14 @@ export default {
       {
         name: 'availableCredential',
         align: 'center',
-        label: t('credentialview.availablecredentials'),
+        label: t('credentialView.availableCredentials'),
         field: row => row.credentialName,
         sortable: true
       },
       {
         name: 'qualification',
         align: 'center',
-        label: t('credentialview.qualification'),
+        label: t('credentialView.qualification'),
         field: row => row.externalCredential,
         format: (val) => val.join(', '),
         sortable: true
@@ -103,12 +103,12 @@ export default {
       {
         name: 'issuer',
         align: 'center',
-        label: t('credentialview.issuer'),
+        label: t('profile.issuer'),
         field: row => row.issuerName,
         format: (val) => val.join(', '),
         sortable: true
       },
-      {name: 'room', align: 'center', label: t('credentialview.room'), sortable: true}
+      {name: 'room', align: 'center', label: t('credentialView.room'), sortable: true}
     ]
 
     let rows = ref([])
