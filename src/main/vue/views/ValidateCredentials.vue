@@ -2,26 +2,23 @@
   <q-dialog ref="dialog">
     <q-card style="min-width: 45em">
       <q-card-section class="row justify-between no-wrap q-pb-none">
-        <div class="column">
-          <div class="text-h6">{{t('issuer.issueCredential.validation.validationRules')}}</div>
-          <div class="text-subtitle2 text-grey">{{attribute.name}}</div>
-        </div>
+        <div class="text-h6">{{t('issuer.issueCredential.validation.validationRules')}} &#8210 {{attribute.name}}</div>
         <div class="row no-wrap">
-          <q-btn-dropdown
-              flat dense rounded
-              style="height: 3em"
-              size="0.9em"
-              icon="content_copy"
-              :label="t('issuer.issueCredential.validation.presetsLabel')"
-              dropdown-icon="expand_more">
-            <q-list>
-              <q-item clickable v-close-popup v-for="preset in getPresets().entries()" @click="attribute.validationRules.push(...preset[1])">
-                <q-item-section>
-                  <q-item-label>{{preset[0]}}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
+          <q-btn
+              flat rounded
+              size="0.9em">
+            <q-icon name="content_copy" size="1em" left/>
+            {{t('issuer.issueCredential.validation.presetsLabel')}}
+            <q-menu>
+              <q-list>
+                <q-item clickable v-close-popup v-for="preset in getPresets().entries()" @click="attribute.validationRules.push(...preset[1])">
+                  <q-item-section>
+                    <q-item-label>{{preset[0]}}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
           <q-icon
               class="q-ml-md cursor-pointer"
               v-close-popup
@@ -31,7 +28,12 @@
         </div>
       </q-card-section>
       <q-card-section>
-        <q-card bordered flat>
+        <q-card class="column" bordered flat>
+          <q-icon class="cursor-pointer self-end q-mt-sm q-mr-sm" size="1em" name="info_outlined" color="info">
+            <q-tooltip max-width="15em" anchor="center right" self="center left">
+              {{t('issuer.issueCredential.validation.info')}}
+            </q-tooltip>
+          </q-icon>
           <q-card-section class="column">
             <div class="row q-mt-sm"
                  v-for="(vr, index) in attribute.validationRules" style="min-width: 100%">

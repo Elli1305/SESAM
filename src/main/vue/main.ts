@@ -320,6 +320,7 @@ const messages = {
                         uppercase: "Nur Großbuchstaben",
                         lowercase: "Nur Kleinbuchstaben",
                     },
+                    info: "Validierungsregeln können festgelegt werden, um die Eingabe beim Ausstellen eines Credentials einzuschränken. Sie können aus vordefinierten Regeln wählen oder Ihre eigene definieren.",
                 },
                 steps: {
                     form: "Formular",
@@ -689,6 +690,7 @@ const messages = {
                         uppercase: "Only uppercase",
                         lowercase: "Only lowercase",
                     },
+                    info: "You can define validation rules. These will regulate the inputs while issuing a credential. You can choose from presets or create your own custom rule.",
                 },
                 steps: {
                     form: "Form",
