@@ -2,6 +2,8 @@ package com.gpse.sesam.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.credential.credentials.*;
+import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
 import jakarta.validation.Valid;
@@ -28,11 +30,13 @@ import java.util.Optional;
 public class CredentialController {
 	private final CredentialService service;
 	private final ExternalCredentialService externalCredentialService;
+	private final LocationService locationService;
 
 	@Autowired
-	public CredentialController(final CredentialService service, ExternalCredentialService externalCredentialService) {
+	public CredentialController(final CredentialService service, ExternalCredentialService externalCredentialService, LocationService locationService) {
 		this.service = service;
 		this.externalCredentialService = externalCredentialService;
+		this.locationService = locationService;
 	}
 
 	@GetMapping("/credentials")
@@ -104,6 +108,16 @@ public class CredentialController {
 	@GetMapping(value = "/externalcredentialview")
 	public List<ExternalCredentialCmd> externalCredentials() {return externalCredentialService.getAllExternal();}
 
+	@GetMapping(value = "/externalcredentialsbylocation/{id}")
+	public List<ExternalCredentialCmd> externalCredentialsByLocation(@PathVariable final Long id) {
+		return externalCredentialService.getAllExternalByLocation(id);
+	}
+
 	@GetMapping(value="/allcredentialview")
 	public List<AllCredentialCmd> allCredentials() {return service.getAllForView();}
+
+	@GetMapping(value = "/allbylocation/{id}")
+	public List<AllCredentialCmd> allByLocation(@PathVariable final Long id) {
+		return service.getAllCredentialsByLocation(id);
+	}
 }

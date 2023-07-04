@@ -35,4 +35,6 @@ public interface CredentialService {
 	List<CredentialCmd> getAllCredentialsForView();
 
 	List<AllCredentialCmd> getAllForView();
+
+	List<AllCredentialCmd> getAllCredentialsByLocation(Long id);
 }

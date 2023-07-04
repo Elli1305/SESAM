@@ -394,4 +394,23 @@ public class CredentialServiceImpl implements CredentialService {
 		}
 		return cmd;
 	}
+
+	@Override
+	public List<AllCredentialCmd> getAllCredentialsByLocation(Long id) {
+		List<AllCredentialCmd> cmds = new ArrayList<>();
+		List<CredentialCmd> intern = getCredentialByLocation(id);
+		List<ExternalCredentialCmd> extern = externalCredentialService.getAllExternalByLocation(id);
+
+		for (CredentialCmd in : intern) {
+			cmds.add(new AllCredentialCmd(in.getCategoryName(), in.getCredentialName(), "Intern", in.getExternalCredential(),
+					in.getIssuerName(), in.getRoom()));
+		}
+
+		for (ExternalCredentialCmd ex: extern) {
+			cmds.add(new AllCredentialCmd(ex.getCategoryName(), ex.getCredentialName(), "Extern", ex.getInternalCredential(),
+					new ArrayList<>(), new ArrayList<>()));
+		}
+
+		return cmds;
+	}
 }

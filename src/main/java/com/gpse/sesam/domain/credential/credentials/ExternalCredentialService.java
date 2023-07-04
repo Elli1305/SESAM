@@ -17,4 +17,6 @@ public interface ExternalCredentialService {
     List<ExternalCredential> getExternalCredentialByCredentialDefinitionId(String id);
 
     List<ExternalCredentialCmd> getAllExternal();
+
+    List<ExternalCredentialCmd> getAllExternalByLocation(Long id);
 }

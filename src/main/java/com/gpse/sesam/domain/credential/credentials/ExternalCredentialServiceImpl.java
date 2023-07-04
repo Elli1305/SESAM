@@ -2,23 +2,35 @@ package com.gpse.sesam.domain.credential.credentials;
 
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
+import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.domain.location.LocationService;
+import com.gpse.sesam.domain.location.door.config.AttributeFilter;
+import com.gpse.sesam.domain.user.issuer.Issuer;
+import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.ExternalCredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ExternalCredentialServiceImpl implements ExternalCredentialService {
     private final ExternalCredentialRepository externalCredentialRepository;
 
+    private final LocationService locationService;
+
     private final CategoryService categoryService;
 
     @Autowired
-    public ExternalCredentialServiceImpl(ExternalCredentialRepository externalCredentialRepository, CategoryService categoryService) {
+    public ExternalCredentialServiceImpl(ExternalCredentialRepository externalCredentialRepository, LocationService locationService,
+                                         CategoryService categoryService) {
         this.externalCredentialRepository = externalCredentialRepository;
+        this.locationService = locationService;
         this.categoryService = categoryService;
     }
 
@@ -61,6 +73,62 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
 
         }
         return cmds;
+    }
+
+    private Iterable<ExternalCredential> getCredentialFromAttachedProofConfig(Location location) {
+        return location
+                .getBuildings().stream()
+                .flatMap(building -> building.getFloors().stream())
+                .flatMap(floor -> floor.getRooms().stream())
+                .flatMap(room -> room.getDoors().stream())
+                .flatMap(door -> Stream.concat(door.getProofConfigIn().stream(), door.getProofConfigOut()
+                        .stream()))
+                .flatMap(proofConfig -> {
+                    final Stream<String> attributeFilterStream = proofConfig.getRequestedPredicates().values()
+                            .stream()
+                            .flatMap(proofPredicateInfo -> proofPredicateInfo.getRestrictions().stream())
+                            .map(AttributeFilter::getCredentialDefinitionId);
+                    final Stream<String> attributeFilterStream1 = proofConfig.getRequestedAttributes().values()
+                            .stream()
+                            .flatMap(proofAttributeInfo -> proofAttributeInfo.getRestrictions().stream())
+                            .map(AttributeFilter::getCredentialDefinitionId);
+                    return Stream.concat(attributeFilterStream, attributeFilterStream1);
+                })
+                .filter(Objects::nonNull)
+                .flatMap(definitionId -> getExternalCredentialByCredentialDefinitionId(definitionId)
+                        .stream())
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<ExternalCredentialCmd> getAllExternalByLocation(Long id) {
+        List<Category> categories = categoryService.getCategory();
+        final Location location = locationService.getLocation(id)
+                .orElseThrow(() -> new IllegalArgumentException("Location with id " + id + " does not exist"));
+
+        final Iterable<ExternalCredential> credentials = getCredentialFromAttachedProofConfig(location);
+
+        final List<ExternalCredentialCmd> cmds = new ArrayList<>();
+
+        for (final ExternalCredential credential : credentials) {
+
+            final String credentialName = credential.getName();
+            final List<String> internalCredentials = new ArrayList<>();
+            String categoryName = "";
+            for (Category category : categories) {
+                if (category.getExternalCredentials().contains(credential)) {
+                    categoryName = category.getName();
+                    for (InternalCredential internal : category.getCredentials()) {
+                        internalCredentials.add(internal.getName());
+                    }
+                }
+
+            }
+            cmds.add(new ExternalCredentialCmd(categoryName, credentialName, internalCredentials));
+        }
+
+        return cmds;
+
     }
 
     @Override
