@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em" >
-    <p class="row text-h3 justify-center">{{t('corporateDesign.title')}}</p>
+    <p class="row text-h3 justify-center">{{t('admin.corporateDesign.title')}}</p>
     <div class="column justify-evenly no-wrap" style="width: 80vw; height: 50vh">
       <div class="row justify-center no-wrap">
         <div class="column q-mx-xs">
@@ -150,22 +150,22 @@
                   Warning:</p>
               </div>
               <div class="column q-mx-xs">
-                <p class="row no-wrap q-my-xs">{{t('corporateDesign.primaryInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('corporateDesign.secondaryInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('corporateDesign.accentInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('corporateDesign.darkInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('corporateDesign.lightBlueInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('corporateDesign.positiveInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('corporateDesign.negativeInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('corporateDesign.infoInfo')}}</p>
-                <p class="row no-wrap q-my-xs">{{t('corporateDesign.warningInfo')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.primary')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.secondary')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.accent')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.dark')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.lightBlue')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.positive')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.negative')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.info')}}</p>
+                <p class="row no-wrap q-my-xs">{{t('admin.corporateDesign.info.warning')}}</p>
               </div>
             </q-card>
           </q-menu>
         </q-icon>
       </div>
       <div class="row justify-center no-wrap" >
-        <q-input :label="t('corporateDesign.background')" rounded outlined v-model="bgColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
+        <q-input :label="t('admin.corporateDesign.background')" rounded outlined v-model="bgColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
           <template v-slot:prepend>
             <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: bgColor, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
@@ -177,7 +177,7 @@
             </q-icon>
           </template>
         </q-input>
-        <q-input :label="t('corporateDesign.textColor')" rounded outlined v-model="fontColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
+        <q-input :label="t('admin.corporateDesign.textColor')" rounded outlined v-model="fontColor" class="my-input q-my-xs q-mx-xs" style="width: 14em">
           <template v-slot:prepend>
             <q-badge rounded :style="{width: '3em', height: '3em', backgroundColor: fontColor, borderRadius: '100%', border: '1px solid lightgrey'}"/>
           </template>
@@ -192,12 +192,12 @@
       </div>
       <div class="row justify-evenly no-wrap" >
         <q-btn @click="confirmReset = true" round icon="restart_alt" color="negative" text-color="positive" style="width: 4em; height: 4em"/>
-        <q-file rounded outlined :label="t('corporateDesign.logo')" v-model="logo" accept=".svg" :hint="t('corporateDesign.logoHint')" bg-color="white" style="width: 14em">
+        <q-file rounded outlined :label="t('admin.corporateDesign.logo')" v-model="logo" accept=".svg" :hint="t('admin.corporateDesign.logoHint')" bg-color="white" style="width: 14em">
           <template v-slot:prepend>
             <q-icon name="attach_file" />
           </template>
         </q-file>
-        <q-file rounded outlined :label="t('corporateDesign.favicon')" v-model="favicon" accept=".ico" :hint="t('corporateDesign.faviconHint')" bg-color="white" style="width: 14em">
+        <q-file rounded outlined :label="t('admin.corporateDesign.favicon')" v-model="favicon" accept=".ico" :hint="t('admin.corporateDesign.faviconHint')" bg-color="white" style="width: 14em">
           <template v-slot:prepend>
             <q-icon name="attach_file" />
           </template>
@@ -209,15 +209,15 @@
     <q-dialog v-model="confirmReset" persistent>
       <q-card>
         <q-card-section>
-          <div class="text-h6">{{ t('corporateDesign.confirm.reset.title') }}</div>
+          <div class="text-h6">{{ t('admin.corporateDesign.reset.title') }}</div>
         </q-card-section>
         <q-card-section class="row items-center">
-          <span class="q-ml-sm">{{t('corporateDesign.confirm.reset.message')}}</span>
+          <span class="q-ml-sm">{{t('admin.corporateDesign.reset.message')}}</span>
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn flat :label="t('corporateDesign.confirm.reset.cancel')" color="primary" v-close-popup />
-          <q-btn @click="reset" flat :label="t('corporateDesign.confirm.reset.ok')" color="primary" v-close-popup />
+          <q-btn flat :label="t('common.cancel')" color="primary" v-close-popup />
+          <q-btn @click="reset" flat :label="t('admin.corporateDesign.reset.reset')" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -225,15 +225,15 @@
     <q-dialog v-model="confirmSave" persistent>
       <q-card>
         <q-card-section>
-          <div class="text-h6">{{ t('corporateDesign.confirm.save.title') }}</div>
+          <div class="text-h6">{{ t('admin.corporateDesign.save.title') }}</div>
         </q-card-section>
         <q-card-section class="row items-center">
-          <span class="q-ml-sm">{{t('corporateDesign.confirm.save.message')}}</span>
+          <span class="q-ml-sm">{{t('admin.corporateDesign.save.message')}}</span>
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn flat :label="t('corporateDesign.confirm.save.cancel')" color="primary" v-close-popup />
-          <q-btn @click="save" flat :label="t('corporateDesign.confirm.save.ok')" color="primary" v-close-popup />
+          <q-btn flat :label="t('common.cancel')" color="primary" v-close-popup />
+          <q-btn @click="save" flat :label="t('common.save')" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -296,7 +296,7 @@ export default {
         location.reload()
       }).catch( () => {
         $q.notify({
-          message: t('corporateDesign.resetFailure'),
+          message: t('admin.corporateDesign.resetFailure'),
           color: "negative",
           textColor: "positive",
           timeout: "1500"
@@ -327,7 +327,7 @@ export default {
         location.reload()
       }).catch( () => {
         $q.notify({
-          message: t('corporateDesign.saveFailure'),
+          message: t('admin.corporateDesign.saveFailure'),
           color: "negative",
           textColor: "positive",
           timeout: "1500"

@@ -2,7 +2,10 @@ package com.gpse.sesam.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.credential.credentials.*;
-import com.gpse.sesam.domain.location.Location;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;

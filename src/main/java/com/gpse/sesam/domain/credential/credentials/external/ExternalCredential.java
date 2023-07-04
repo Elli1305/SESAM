@@ -1,5 +1,6 @@
-package com.gpse.sesam.domain.credential.credentials;
+package com.gpse.sesam.domain.credential.credentials.external;
 
+import com.gpse.sesam.domain.credential.credentials.Credential;
 import jakarta.persistence.*;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 

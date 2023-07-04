@@ -1,7 +1,7 @@
 package com.gpse.sesam.domain.user.issuer;
 
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.CredentialRepository;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialRepository;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
 import com.gpse.sesam.web.cmd.IssuerResponseCmd;

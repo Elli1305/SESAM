@@ -14,224 +14,69 @@ import axios from "axios";
 
 const messages = {
     de: {
-        adminCurrentUser: {
-            headline: "Aktuelle Nutzer",
-            roles: {ADMINISTRATOR: "Administrator", EDITOR: "Bearbeiter", ISSUER: "Herausgeber"},
-            prename: "Vorname",
-            lastname: "Name",
-            email: "Email",
-            role: "Rollen",
-            edit: "Bearbeiten",
-            showAdmin: "Administratoren",
-            showEditor: "Bearbeiter",
-            showIssuer: "Herausgeber",
-            search: "Suche"
-        },
-        adminRolesRequest:{
-          headline: "Angefragte Rollen",
-            prename: "Vorname",
-            lastname: "Nachname",
-            email: "Email",
-            role: "Rollen",
-            save: "Speichern",
-            showAdmin: "Administratoren",
-            showEditor: "Bearbeiter",
-            showIssuer: "Herausgeber",
-            search: "Suche"
-        },
-        adminEdit: {
-            title: "Nutzer bearbeiten",
-            changeRoles: "Rollen vergeben/entfernen: ",
-            delete: "Löschen",
-            back: "Abbrechen",
-            save: "Speichern",
-            attention: "ACHTUNG",
-            question: "Nutzer wirklich löschen?",
-            deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
-            otherAdmin: "Bitte wenden Sie sich an einen anderen Administratoren",
-        },
-        doorconfig:{
-            configurationGroup: "Konfigurationsgruppen",
-            direction: "Richtung:",
-            direction2: "Richtung",
-            in: "Rein",
-            out: "Raus",
-            both: "Beide",
-            hint: "Konfigurationsgruppen sind untereinander mit UND verknüpft",
-            description: "Beschreibung der Konfiguration",
-            and: "Credentials in dieser Auswahl sind ODER-Verknüpft",
-            category: "KATEGORIEN",
-            add: "Konfigurationsgruppe hinzufügen",
-            config: "Konfiguration",
-            attribute: "Attribut hinzufügen",
-            time: "Aktueller Zeitpunkt"
-        },
-        floorplan: {
-            locations: 'Standorte',
-            doorName: 'Türname',
-            editDoor: 'Tür bearbeiten',
-            editRoom: 'Raum bearbeiten',
-            editGroup: 'Gruppe bearbeiten',
-            save: 'speichern',
-            cancel: 'abbrechen',
-            done: 'fertig',
-            confirmDeletion: 'Bestätigen Sie das Löschen',
-            confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
-            doors: 'Türen',
-            rooms: 'Räume',
-            roomName: 'Raumname',
-            roomAmount: 'Anzahl an Räumen',
-            groupName: 'Gruppenname',
-            edit: 'Bearbeiten',
-            newFloor: 'Etage erstellen',
-            editFloor: 'Etage bearbeiten',
-            floorlevel: 'Etagennummer',
-            floorplanUpload: 'Etagenplan hochladen',
-            newBuilding: 'Gebäude erstellen',
-            editBuilding: 'Gebäude bearbeiten',
-            editLocation: 'Standort bearbeiten',
-            addLocation: 'Standort hinzufügen',
-            addBuilding: 'Gebäude hinzufügen',
-            addFloor: 'Etage hinzufügen',
-            addDoor: 'Tür zuweisen',
-            pickRoom: 'Raum auswählen',
-            configGroup: 'Konfigurationsgruppe',
-            config: 'Konfiguration',
-            direction: 'Richtung',
-            infoConfigGroups: 'Konfigurationsgruppen sind untereinander mit UND verknüpft',
-            in: 'rein',
-            both: 'beide',
-            out: 'raus',
-            configDescription: 'Beschreibung der Konfiguration',
-            infoCredential: 'Credentials sind untereinander mit ODER verknüpft',
-            infoCredentialGroups: 'Durch Credentialgruppen werden alle Credentials der Gruppe auf einmal ausgewählt',
-            addAttribute: 'Attribut hinzufügen',
-            addConfigGroup: 'Konfigurationsgruppe hinzufügen',
-            currentTime: 'Aktueller Zeitpunkt',
-            credentialAttributes: {
-                id: 'ID',
-                firstName: 'Vorname',
-                lastName: 'Nachname',
-                birthdate: 'Geburtstagsdatum',
-                expirationDate: 'Ablaufdatum'
-            }
-
-        },
-        groupRooms: {
-            title: "Gruppierungen von Räumen",
-            question: "Gruppierung wirklich löschen?",
-            chooseBuilding: "Gebäude wählen",
-            chooseLocation: "Location wählen",
-            chooseRooms: "Räume auswählen",
-            editGroup:"Gruppierung bearbeiten",
-            new: "Neue Gruppe",
-            search: "Gruppensuche",
-            rooms: "Räume",
-            groups: "Raumgruppen",
-            addRooms: "Räume zu ausgewählten Gruppen zufügen",
-            noGroupSelected: "Keine Gruppe ausgewählt",
-            noRoomSelected: "Keine Räume ausgewählt",
-            checkNameMessage: "Name darf nicht leer sein",
-            checkNameCaption: "Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.",
-            doorconfig: "Türkonfiguration anpassen",
-            select: "Auswählen",
-            doors: "Türen",
-            groupsConfig: "Anpassung der Türconfiguration für Raumgruppen",
-            roomSelection: "Räume auswählen",
-            group: "Gruppe"
-
-        },
-        predefinedConfigs: {
-            title: "Vordefinierte Konfigurationen",
-            deleteAlert: "",
-            new: "Neue Konfiguration",
-            deleteQuestion: "Konfiguration wirklich löschen?"
-        },
-
         common: {
-            internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
-            unkownError: "Ein unbekannter Fehler ist aufgetreten",
-            noData: "Keine Daten vorhanden.",
-            noResults: "Kein Einträge gefunden.",
-            of: "von",
+            // General words
             cancel: 'Abbrechen',
             save: 'Speichern',
+            delete: "Löschen",
+            done: "Fertig",
+            edit: "Bearbeiten",
+            search: "Suche",
+            der: "der",
+            die: "die",
+            das: "das",
+            of: "von",
+
+            // Concept words
+            credential: "Credential",
+            credentials: "Credential",
             category: "Kategorie",
             categories: "Kategorien",
-            search: "Suche"
+
+            // Error messages
+            internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
+            unknownError: "Ein unbekannter Fehler ist aufgetreten",
+            noData: "Keine Daten vorhanden.",
+            noResults: "Keine Einträge gefunden.",
         },
-        credentialview :{
-            credentialview: "Credentialansicht",
-            intern: "Interne Credential",
-            extern: "Externe Credential",
-            location: "Standort",
-            search: "Suche",
-            category: "Kategorie",
-            availablecredentials: "Credential",
-            qualification: "Vergleichbare Credential",
-            issuer: "Herausgeber",
-            room: "Raum: ",
-            showcredentials: "Alle Credential anzeigen",
-            internal: "Intern",
-            external: "Extern",
-            all: "Alle",
-            allCredentials: "All Credentials",
-            type: "Typ",
-        },
-        credentialmapping: {
-            credentialmapping: 'Credentialmapping',
-            newcategory: 'Neue Kategorie',
-            category: 'Kategorie',
-            search: 'Suche',
-            name: 'Name der Kategorie',
-            save: 'Speichern',
-            cancel: 'Abbrechen',
-            internal: 'Interne Credentials',
-            external: 'Externe Credentials',
-            categorycreate: 'Neue Kategorie erstellen',
-            categorychange: 'Kategorie ändern',
-            categorydelete: 'Löschen der Kategorie',
-            delete: 'Möchten Sie die Kategorie wirklich löschen?'
-        },
+
         home: {
-            header: "SESAM",
-            signup: "Registrierung",
-            signin: "Login",
-            floorplan: "Floorplan",
-            credentials: "Credentials",
+            applicationName: "SESAM",
+            signUp: "Registrierung",
+            signIn: "Anmeldung",
+            // Floorplan
+            floorPlan: "Gebäudeplan",
+            // Profile management
             profileManagement: "Profilverwaltung",
-            currentUsers: "Aktuelle Nutzer",
-            currentRegistrations: "Aktuelle Registrierungen",
-            issuerManagement: "Herausgeberverwaltung",
+            currentUsers: "Nutzer verwalten",
+            currentRegistrations: "Angefragte Rollen",
+            issuerManagement: "Herausgeber verwalten",
+            // Corporate design
             corporateDesign: "Corporate Design",
             editCorporateDesign: "Corporate Design anpassen",
             editImprint: "Imprint bearbeiten",
+            // Credential management
             credentialManagement: "Credentialverwaltung",
+            manageCredentialCategories: "Kategorien von Credentials verwalten",
+            manageCredentials: "Credentials verwalten",
             editorPages: "Bearbeiten",
             editFloorplan: "Floorplan bearbeiten",
             groupRooms: "Räume gruppieren",
-            issuerPages: "Credential ausstellen",
+            issuerPages: "Credential Ausstellen",
             imprint: "Impressum",
             logout: "Logout",
-            roomSearch: "Raumsuche",
-            predefinedConfig: "Konfiguration erstellen"
         },
         login: {
             wrongEmailPassword: "Falsches Passwort oder Benutzername",
-            loginFailed: "Login Fehlgeschlagen",
-            forgotPassword: "Passwort vergessen:",
+            loginFailed: "Login fehlgeschlagen",
+            forgotPassword: "Passwort vergessen: ",
             resetPassword: "Passwort zurücksetzen",
-            notRegistered: "Nicht registriert:",
+            notRegistered: "Nicht registriert: ",
             toRegister: "Zur Registrierung",
-            password: "Passwort"
         },
-        signUp:{
-          prename: "Vorname",
-          name: "Nachname",
-          password: "Passwort",
-          passwordRepeat: "Passwort wiederholen",
-          signup: "Registrierung",
-          alreadySignedUp: "Bereits registriert:"
+        signUp: {
+            passwordRepeat: "Passwort wiederholen",
+            alreadySignedUp: "Bereits registriert: "
         },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
@@ -243,8 +88,7 @@ const messages = {
         },
         passwordChange: {
             changePassword: "Passwort ändern",
-            password: "Passwort",
-            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein, ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
+            passwordHint: "Das Passwort muss mind. 8 Zeichen lang sein und ein Sonderzeichen, eine Ziffer und einen Großbuchstaben beinhalten",
             repeatPassword: "Passwort wiederholen",
             failedToReset: "Password zurücksetzen fehlgeschlagen",
             passwordDoesNotConform: "Passwort erfüllt nicht die Kriterien",
@@ -253,356 +97,371 @@ const messages = {
         },
         profile: {
             title: "Profilansicht",
-            firstname: "Vorname",
-            lastname: "Name",
-            email: "E-Mail",
-            admin: "Admin",
+            firstName: "Vorname",
+            lastName: "Nachname",
+            email: "E-mail",
+            password: "Passwort",
+            role: "Rolle",
+            roles: "Rollen",
+            administrator: "Admin",
             editor: "Bearbeiter",
             issuer: "Herausgeber",
+            administrators: "Administratoren",
+            editors: "Bearbeiter",
+            issuers: "Herausgeber",
         },
-
-        issueCredential: {
-            title: "{0} Credential Ausstellung",
-            description: [
-                "Herzlich Willkommen zum Ausstellungsprozess des \"{0}\" Credentials! Hier können Sie ein offizielles Dokument erstellen, das die erfolgreiche Absolvierung eines bestimmten Kurses oder die Erlangung bestimmter Fähigkeiten oder Qualifikationen bestätigt.",
-                "Um das Credential auszustellen, füllen Sie bitte die neben stehenden Felder mit den geforderten Attributen aus. Stellen Sie sicher, dass alle Daten korrekt und aktuell sind. Sobald Sie alle erforderlichen Attribute ausgefüllt haben, klicken Sie auf die Schaltfläche \"@:{'issueCredential.next'}\"."
-            ],
-            checkConditions: "Bitte verwenden Sie die folgende Checkliste, um sicherzustellen, dass alle notwendigen Schritte ausgeführt wurden, bevor Sie das Credential ausstellen.",
-            validation: {
-                inputRequired: "Dieses Feld ist erforderlich.",
+        floorPlan: {
+            // Locations
+            locations: 'Standorte',
+            addLocation: 'Standort hinzufügen',
+            editLocation: 'Standort bearbeiten',
+            // Buildings
+            addBuilding: 'Gebäude hinzufügen',
+            editBuilding: 'Gebäude bearbeiten',
+            // Floors
+            floorLevel: 'Etagennummer',
+            addFloor: 'Etage hinzufügen',
+            editFloor: 'Etage bearbeiten',
+            // Rooms
+            room: 'Raum',
+            rooms: 'Räume',
+            roomName: 'Raumname',
+            editRoom: 'Raum bearbeiten',
+            // Doors
+            doors: 'Türen',
+            doorName: 'Türname',
+            addDoor: 'Tür zuweisen',
+            editDoor: 'Tür bearbeiten',
+            pickRoom: 'Raum auswählen',
+            confirmDeletion: 'Löschen bestätigen',
+            confirmDeletionText: 'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            // Groups
+            groupName: 'Gruppenname',
+            editGroup: 'Gruppe bearbeiten',
+            roomAmount: 'Anzahl an Räumen',
+            // Configuration
+            config: 'Konfiguration',
+            configDescription: 'Beschreibung der Konfiguration',
+            configGroup: 'Konfigurationsgruppe',
+            infoConfigGroups: 'Konfigurationsgruppen sind untereinander mit UND verknüpft',
+            addConfigGroup: 'Konfigurationsgruppe hinzufügen',
+            direction: 'Richtung',
+            directions: {
+                in: 'rein',
+                both: 'beide',
+                out: 'raus',
             },
-            steps: {
-                form: "Formular",
-                list: "Checklist",
-                qrcode: "QR-Code",
-            },
-            next: "Weiter",
-            previous: "Zurück",
-            checklistHint:
-                "Um das Credential ausstellen zu können muss jede Bedingung der Checkliste erfüllt sein.",
-            confirm: {
-                title: "Sind Sie sicher, dass Sie das Credential ausstellen möchten?",
-                message:
-                    'Bitte stellen Sie sicher, dass alle Bedingungen erfüllt sind und Sie alle erforderlichen Schritte ausgeführt haben, bevor Sie das Credential ausstellen. Sobald Sie das Credential ausgestellt haben, kann es nicht mehr rückgängig gemacht werden.',
-                ok: "Credential ausstellen",
-                cancel: "Abbrechen",
-            },
-            addCredential: {
-                title: "Ihr neues Credential wurde erfolgreich ausgestellt!",
-                howTo: "So fügen Sie ein Credential zur BC Wallet hinzu:",
-                steps: {
-                    step1:
-                        "Laden Sie die {0} aus dem App Store oder Google Play Store herunter.",
-                    step2:
-                        "Öffnen Sie die App und befolgen Sie die Anweisungen zur Einrichtung eines neuen Kontos.",
-                    step3:
-                        'Wenn Sie Ihr Konto erfolgreich eingerichtet haben, wählen Sie den Tab "Credentials" aus.',
-                    step4:
-                        "Tippen Sie auf das kleine Plus-Zeichen in der oberen rechten Ecke des Bildschirms.",
-                    step5:
-                        'Wählen Sie im daraufhin erscheinenden Menü die Option "Scan a QR code".',
-                    step6:
-                        "Richten Sie die Kamera Ihres Smartphones auf den QR-Code, den Sie scannen möchten (der QR-Code sollte sich rechts neben dieser Anleitung befinden).",
-                    step7:
-                        "Überprüfen Sie die Informationen, die auf dem Bildschirm angezeigt werden, um sicherzustellen, dass sie korrekt sind.",
-                    step8:
-                        'Wenn alle Informationen korrekt sind, tippen Sie auf "Accept", um das Credential Ihrer Wallet hinzuzufügen.',
-                },
-            },
-            errors: {
-                get: {
-                    failed: "Das Credential konnte nicht geladen werden.",
-                    unauthorized:
-                        "Ihnen fehlen die benötigten Berechtigungen um das Credential anzuzeigen.",
-                },
-                issue: {
-                    failed: "Das Credential konnte nicht ausgestellt werden.",
-                    unauthorized:
-                        "Ihnen fehlen die benötigten Berechtigungen um das Credential auszustellen.",
-                    failedDependency:
-                        "Es konnte keine Verbindung zum Credential Issuing Self-Service aufgebaut werden. Bitte stellen Sie sicher, dass sie mit dem Netzwerk der Universität verbunden sind.",
-                },
-                unknown: "Bitte versuchen Sie es später erneut.",
-            },
-        },
-        corporateDesign: {
-            title: "Corporate Design",
-            colors: "Farben",
-            logo: "Logo",
-            logoHint: "Nur SVG Dateien",
-            favicon: "Favicon",
-            faviconHint: "Nur ICO Dateien",
-            background: "Hintergrund",
-            textColor: "Schriftfarbe",
-            primaryInfo: "Banner, Buttons",
-            secondaryInfo: "Rollenschilder",
-            accentInfo: "Schriftfarbe in Banner, Footer, Buttons",
-            darkInfo: "Footer",
-            lightBlueInfo: "...",
-            positiveInfo: "Positive Nachricht, Speichern Button",
-            negativeInfo: "Negative Nachricht, Löschen/Zurücksetzen Button",
-            infoInfo: "Profilbild, Informationen",
-            warningInfo: "Warnungen",
-            confirm: {
-                reset: {
-                    title: "Sind Sie sicher, dass sie zurücksetzen wollen?",
-                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
-                    ok: "Zurücksetzen",
-                    cancel: "Abbrechen"
-                },
-                save: {
-                    title: "Sind Sie sicher, dass sie speichern wollen?",
-                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
-                    ok: "Speichern",
-                    cancel: "Abbrechen"
-                }
-            },
-            resetFailure: "Zurücksetzen fehlgeschlagen",
-            saveFailure: "Speichern fehlgeschlagen"
-        },
-        imprint:{
-            imprintTitle: "Impressum",
-            imprintEditorTitle: "Impressum bearbeiten",
-            imprintEditorMessageSave: "Sind Sie sicher, dass sie speichern wollen?",
-            imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
-            save:"Speichern",
-            cancel: "Abbrechen",
-            delete:"Löschen",
-            imprintEditorMessageSaveConfirmation:"Inhalt erfolgreich gespeichert",
-            imprintEditorMessageDeleteConfirmation:"Inhalt erfolgreich gelöscht"
-
-        },
-
-        issuermanagement: {
-            title: "Herausgeber verwalten",
-            firstname: "Vorname",
-            lastname: "Name",
-            email: "E-Mail",
-            credential:"Credential",
-            search: "Suche",
-            issuerFilter:"Herausgebern filtern",
-            edit: "Bearbeiten",
-            credentialsList:"Liste aller Credentials",
-            roomsList:"Liste aller Räume",
-            roomId: "Raum ID",
-            credentials:"Credential",
-            dialogTitle:"Credentials verwalten",
-            save:"Speichern",
-            cancel: "Abbrechen",
-            saveConfirmationTitle: "Speichern?",
-            saveConfirmationMessage: "Sind Sie sicher, dass sie speichern wollen?",
-        },
-    },
-    en: {
-        adminCurrentUser: {
-            headline: "Current Users",
-            roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
-            prename: "Firstname",
-            lastname: "Name",
-            email: "Email",
-            role: "Roles",
-            edit: "Edit",
-            showAdmin: "Show Admin",
-            showEditor: "Show Editor",
-            showIssuer: "Show Issuer",
-            search: "Search"
-        },
-        adminRolesRequest:{
-            headline: "Requested Roles",
-            roles: {ADMINISTRATOR: "Admin", EDITOR: "Editor", ISSUER: "Issuer"},
-            prename: "Prename",
-            lastname: "Name",
-            email: "Email",
-            role: "Roles",
-            showAdmin: "Show Admin",
-            showEditor: "Show Editor",
-            showIssuer: "Show Issuer",
-            search: "Search",
-            save: "Save"
-        },
-
-        groupRooms: {
-            title: "Groupings of rooms",
-            question: "Do you really want to delete this group?",
-            chooseBuilding: "Choose a building",
-            chooseLocation: "Choose a location",
-            chooseRooms: "Choose the rooms",
-            editGroup:"Edit group",
-            new: "New group",
-            search: "Search for groups",
-            rooms: "Rooms",
-            groups: "Groups of Rooms",
-            addRooms: "Add rooms to selected group",
-            noGroupSelected: "No group selected",
-            noRoomSelected: "No rooms selected",
-            checkNameMessage: "Name must not be empty",
-            checkNameCaption: "At least one letter, number or symbol.",
-            room: "Room",
-            doorconfig: "Adjust door configuration",
-            select: "Select",
-            doors: "Doors",
-            groupsConfig: "Adjustment of door configurations for groups of rooms",
-            roomSelection: "Choose Rooms",
-            group: "Group"
-        },
-
-        adminEdit: {
-            title: "Edit user",
-            changeRoles: "Give/take Roles: ",
-            delete: "Delete",
-            back: "Back",
-            save: "Save",
-            attention: "Attention",
-            question: "Do you really want to delete this user?"
-        },
-        common: {
-            internalServerError: "The server could not process the request",
-            unkownError: "An unknown error occured",
-            noData: "No data available.",
-            noResults: "No entries found.",
-            of: "of",
-            cancel: 'Cancel',
-            save: 'Save',
-            category: "Category",
-            categories: "Categories",
-        },
-        credentialview :{
-            credentialview: "View Credentials",
-            location: "Location",
-            search: "Search",
-            category: "Category",
-            availablecredentials: "Available Credentials",
-            qualification: "Comparable Credential",
-            issuer: "Issuer",
-            room: "Room: ",
-            intern: "Internal Credential",
-            extern: "External Credential",
-            showcredentials: "Show all credentials",
-            internal: "Internal",
-            external: "External",
-            all: "All",
-            type: "Type",
-            allCredentials: "Alle Credentials"
-        },
-        credentialmapping: {
-            credentialmapping: 'Credential mapping',
-            newcategory: 'New Category',
-            search: 'Search',
-            name: 'Name of the Category',
-            category: 'Category',
-            save: 'Save',
-            cancel: 'Cancel',
-            internal: 'Internal Credentials',
-            external: 'External Credentials',
-            categorycreate: 'Create new category',
-            categorychange: 'Change category',
-            categorydelete: 'Delete category',
-            delete: 'Are you sure you want to delete the category?'
-        },
-        doorconfig:{
-            configurationGroup: "Configuration Groups",
-            direction: "Direction:",
-            direction2: "Direction",
-            in: "In",
-            out: "Out",
-            both: "Both",
-            hint: "Configuration groups are connected by AND",
-            description: "Description of the Configuration",
-            and: "Credentials in this selection are connected by OR",
-            category: "CATEGORIES",
-            add: "Add configuration group",
-            config: "Configuration",
-            attribute: "Add attribute",
-            time: "Current time point"
-        },
-        floorplan: {
-            locations: 'Locations',
-            doorName: 'Door name',
-            editDoor:'Edit Door',
-            editRoom:'Edit Room',
-            editGroup: 'Edit group',
-            editFloor: 'Edit Floor',
-            floorlevel: 'Floor level',
-            floorplanUpload: 'Upload floor plan',
-            save: 'save',
-            cancel: 'cancel',
-            done: 'done',
-            confirmDeletion: 'Confirm deletion',
-            confirmDeletionText:'Are you sure you want to delete the door?',
-            doors:'Doors',
-            rooms: 'Rooms',
-            roomName: 'Name of room',
-            roomAmount: 'Amount of rooms',
-            groupName: 'Name of room',
-            edit: 'Edit',
-            editBuilding: 'Edit building',
-            editLocation: 'Edit location',
-            addLocation: 'Add location',
-            addBuilding: 'Add building',
-            addFloor: 'Add floor',
-            addDoor: 'Assign door',
-            pickRoom: 'Choose room',
-            configGroup: 'Configuration Group',
-            config: 'Configuration',
-            direction: 'Direction',
-            infoConfigGroups: 'Configuration groups are combined with AND',
-            in: 'in',
-            both: 'both',
-            out: 'out',
-            configDescription: 'Description of the configuration',
-            infoCredential: 'Credentials are combined with OR',
-            infoCredentialGroups: 'With credential groups, all credentials of the group are being added simultaneously',
-            addAttribute: 'Add attribute',
-            addConfigGroup: 'Add configuration group',
-            currentTime: 'Current time',
+            infoCredential: 'Credentials sind untereinander mit ODER verknüpft',
+            infoCredentialGroups: 'Durch Credentialgruppen werden alle Credentials der Gruppe auf einmal ausgewählt',
+            addAttribute: 'Attribut hinzufügen',
             credentialAttributes: {
                 id: 'ID',
-                firstName: 'first name',
-                lastName: 'last name',
-                birthdate: 'date of birth',
-                expirationDate: 'expiration date'
-            }
-
+                firstName: 'Vorname',
+                lastName: 'Nachname',
+                birthdate: 'Geburtstagsdatum',
+                expirationDate: 'Ablaufdatum'
+            },
+            currentTime: 'Aktueller Zeitpunkt',
+            //
+            floorPlanUpload: 'Etagenplan hochladen',
         },
-        home: {
-            header: "SESAM",
-            signup: "Sign-up",
-            signin: "Sign-in",
-            floorplan: "Floorplan",
+        credentialView: {
+            title: "Credentialansicht",
+            location: "Standort",
+            availableCredentials: "Verfügbare Credential",
+            qualification: "Vergleichbare Credential",
+            room: "Raum: ",
+            intern: "Internal",
+            extern: "External",
+            all: "All",
+            type: "Type",
+            showCredentials: "Alle Credentials anzeigen",
+            allCredentials: "Alle Credentials"
+        },
+        admin: {
+            currentUsers: {
+                title: "Nutzerverwaltung",
+                editUser: {
+                    title: "Nutzer Bearbeiten",
+                    changeRoles: "Rollen vergeben/entfernen: ",
+                    deleteUser: "Nutzer Löschen",
+                    question: "Wollen Sie diesen Nutzer wirklich löschen?",
+                    deleteOwnAccount: "Eigener Account kann nicht gelöscht werden",
+                    otherAdmin: "Bitte wenden Sie sich an einen anderen Administrator",
+                },
+            },
+            requestedRoles: {
+                title: "Angefragte Rollen",
+            },
+            issuerManagement: {
+                title: "Herausgeberverwaltung",
+                issuableCredential: "Ausstellbare Credential",
+                office: "Büro",
+                dialogTitle: "Herausgeber Verwalten",
+            },
+            corporateDesign: {
+                title: "Corporate Design",
+                logo: "Logo",
+                logoHint: "Nur SVG Dateien",
+                favicon: "Favicon",
+                faviconHint: "Nur ICO Dateien",
+                background: "Hintergrund",
+                textColor: "Schriftfarbe",
+                info: {
+                    primary: "Banner, Buttons",
+                    secondary: "Rollenschilder",
+                    accent: "Schriftfarbe in Banner, Footer, Buttons",
+                    dark: "Footer",
+                    lightBlue: "...",
+                    positive: "Positive Nachricht, Speichern Button",
+                    negative: "Negative Nachricht, Löschen/Zurücksetzen Button",
+                    info: "Profilbild, Informationen",
+                    warning: "Warnungen",
+                },
+                reset: {
+                    title: "Sind Sie sicher, dass Sie zurücksetzen wollen?",
+                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
+                    reset: "Zurücksetzen",
+                },
+                save: {
+                    title: "Sind Sie sicher, dass Sie speichern wollen?",
+                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
+                },
+                resetFailure: "Zurücksetzen fehlgeschlagen",
+                saveFailure: "Speichern fehlgeschlagen"
+            },
+            imprint: {
+                imprintTitle: "Impressum",
+                imprintEditorTitle: "Impressum Bearbeiten",
+                imprintEditorMessageSave: "Sind Sie sicher, dass Sie speichern wollen?",
+                imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
+                imprintEditorMessageSaveConfirmation: "Inhalt erfolgreich gespeichert",
+                imprintEditorMessageDeleteConfirmation: "Inhalt erfolgreich gelöscht"
+            },
+            credentialMapping: {
+                title: 'Credentialmapping',
+                newCategory: 'Neue Kategorie',
+                categoryName: 'Kategoriename',
+                internal: 'Interne Credential',
+                external: 'Externe Credential',
+                createCategory: 'Neue Kategorie erstellen',
+                changeCategory: 'Kategorie ändern',
+                deleteCategory: 'Kategorie löschen',
+                delete: 'Möchten Sie die Kategorie wirklich löschen?'
+            },
+        },
+
+        editor: {
+            groupRooms: {
+                title: "Raumgruppierungen",
+                chooseBuilding: "Gebäude wählen",
+                chooseLocation: "Location wählen",
+                newGroup: "Neue Gruppe",
+                editGroup: "Gruppierung bearbeiten",
+                chooseRooms: "Räume auswählen",
+                question: "Wollen Sie diese Gruppierung wirklich löschen?",
+                groups: "Raumgruppen",
+                addRooms: "Räume zu ausgewählten Gruppen zufügen",
+                noGroupSelected: "Keine Gruppe ausgewählt",
+                noRoomSelected: "Keine Räume ausgewählt",
+                checkNameMessage: "Name darf nicht leer sein",
+                checkNameCaption: "Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.",
+                doorconfig: "Türkonfiguration anpassen",
+                select: "Auswählen",
+                doors: "Türen",
+                groupsConfig: "Anpassung der Türconfiguration für Raumgruppen",
+                roomSelection: "Räume auswählen",
+                group: "Gruppe",
+            },
+            predefinedConfigs: {
+                title: "Vordefinierte Konfigurationen",
+                deleteAlert: "Konfiguration Löschen",
+                new: "Neue Konfiguration",
+                deleteQuestion: "Möchten Sie diese Konfiguration wirklich löschen?"
+            },
+        },
+
+        issuer: {
+            issue: "Ausstellen",
+            issueCredential: {
+                title: "{0} Credential Ausstellung",
+                description: [
+                    "Herzlich Willkommen zum Ausstellungsprozess des \"{0}\" Credentials! Hier können Sie ein offizielles Dokument erstellen, das die erfolgreiche Absolvierung eines bestimmten Kurses oder die Erlangung bestimmter Fähigkeiten oder Qualifikationen bestätigt.",
+                    "Um das Credential auszustellen, füllen Sie bitte die neben stehenden Felder mit den geforderten Attributen aus. Stellen Sie sicher, dass alle Daten korrekt und aktuell sind. Sobald Sie alle erforderlichen Attribute ausgefüllt haben, klicken Sie auf die Schaltfläche \"@:{'issueCredential.next'}\"."
+                ],
+                checkConditions: "Bitte verwenden Sie die folgende Checkliste, um sicherzustellen, dass alle notwendigen Schritte ausgeführt wurden, bevor Sie das Credential ausstellen.",
+                validation: {
+                    validationRules: "Validierungsregeln",
+                    ruleErrors: {
+                        inputRequired: "Dieses Feld ist erforderlich.",
+                        equal: "Dieses Feld muss gleich {0} sein",
+                        notEqual: "Dieses Feld darf nicht gleich {0} sein",
+                        lessThan: "Dieses Feld muss kleiner als {0} sein",
+                        greaterThan: "Dieses Feld muss größer als {0} sein",
+                        lessEqual: "Dieses Feld muss kleiner gleich {0} sein",
+                        greaterEqual: "Dieses Feld muss größer gleich {0} sein",
+                        range: "Dieses Feld muss zwischen {0} und {1} liegen",
+                        equalLength: "Die Länge dieses Texts muss gleich {0} sein",
+                        notEqualLength: "Die Länge dieses Texts darf nicht gleich {0} sein",
+                        lessThanLength: "Die Länge dieses Texts muss kleiner als {0} sein",
+                        greaterThanLength: "Die Länge dieses Texts muss größer als {0} sein",
+                        lessEqualLength: "Die Länge dieses Texts muss kleiner gleich {0} sein",
+                        greaterEqualLength: "Die Länge dieses Texts muss größer gleich {0} sein",
+                    },
+                    vType: {
+                        comparison: "Vergleich",
+                        range: "Bereich",
+                        regEx: "Regulärer Ausdruck",
+                        length: "Länge",
+                    },
+                    addValidationRule: "Validierungsregel hinzufügen",
+                    description: "Beschreibung",
+                    chooseType: "Wähle einen Typ",
+                    chooseAttribute: "Wähle ein Attribut",
+                    presetsLabel: "Vordef. Regeln",
+                    presets: {
+                        // Numbers
+                        positiveWithZero: "Positiv",
+                        positiveWithoutZero: "Positiv (exkl. 0)",
+                        negativeWithZero: "Negativ",
+                        negativeWithoutZero: "Negativ (exkl. 0)",
+                        // Dates
+                        futureWithToday: "Zukunft (inkl. today)",
+                        futureWithoutToday: "Zukunft",
+                        pastWithToday: "Vergangenheit (inkl. today)",
+                        pastWithoutToday: "Vergangenheit",
+                        today: "Heute",
+                        // Strings
+                        names: "Namen",
+                        noSpecialCharacter: "Keine Sonderzeichen",
+                        email: "E-mail",
+                        phoneNumbers: "Telefonnummern",
+                        uppercase: "Nur Großbuchstaben",
+                        lowercase: "Nur Kleinbuchstaben",
+                    },
+                    info: "Validierungsregeln können festgelegt werden, um die Eingabe beim Ausstellen eines Credentials einzuschränken. Sie können aus vordefinierten Regeln wählen oder Ihre eigene definieren.",
+                },
+                steps: {
+                    form: "Formular",
+                    list: "Checkliste",
+                    qrcode: "QR-Code",
+                },
+                next: "Weiter",
+                previous: "Zurück",
+                checklistHint:
+                    "Um das Credential ausstellen zu können muss jede Bedingung der Checkliste erfüllt sein.",
+                confirm: {
+                    title: "Sind Sie sicher, dass Sie das Credential ausstellen möchten?",
+                    message:
+                        'Bitte stellen Sie sicher, dass alle Bedingungen erfüllt sind und Sie alle erforderlichen Schritte ausgeführt haben, bevor Sie das Credential ausstellen. Sobald Sie das Credential ausgestellt haben, kann es nicht mehr rückgängig gemacht werden.',
+                    ok: "Credential ausstellen",
+                },
+                addCredential: {
+                    title: "Ihr neues Credential wurde erfolgreich ausgestellt!",
+                    howTo: "So fügen Sie ein Credential zur BC Wallet hinzu: ",
+                    steps: {
+                        step1:
+                            "Laden Sie die {0} aus dem App Store oder Google Play Store herunter.",
+                        step2:
+                            "Öffnen Sie die App und befolgen Sie die Anweisungen zur Einrichtung eines neuen Kontos.",
+                        step3:
+                            'Wenn Sie Ihr Konto erfolgreich eingerichtet haben, wählen Sie den Tab "Credentials" aus.',
+                        step4:
+                            "Tippen Sie auf das kleine Plus-Zeichen in der oberen rechten Ecke des Bildschirms.",
+                        step5:
+                            'Wählen Sie im daraufhin erscheinenden Menü die Option "Scan a QR code".',
+                        step6:
+                            "Richten Sie die Kamera Ihres Smartphones auf den QR-Code, den Sie scannen möchten (der QR-Code sollte sich rechts neben dieser Anleitung befinden).",
+                        step7:
+                            "Überprüfen Sie die Informationen, die auf dem Bildschirm angezeigt werden, um sicherzustellen, dass sie korrekt sind.",
+                        step8:
+                            'Wenn alle Informationen korrekt sind, tippen Sie auf "Accept", um das Credential Ihrer Wallet hinzuzufügen.',
+                    },
+                },
+                errors: {
+                    get: {
+                        failed: "Das Credential konnte nicht geladen werden.",
+                        unauthorized:
+                            "Ihnen fehlen die benötigten Berechtigungen um das Credential anzuzeigen.",
+                    },
+                    issue: {
+                        failed: "Das Credential konnte nicht ausgestellt werden.",
+                        unauthorized:
+                            "Ihnen fehlen die benötigten Berechtigungen um das Credential auszustellen.",
+                        failedDependency:
+                            "Es konnte keine Verbindung zum Credential Issuing Self-Service aufgebaut werden. Bitte stellen Sie sicher, dass sie mit dem Netzwerk der Universität verbunden sind.",
+                    },
+                    unknown: "Bitte versuchen Sie es später erneut.",
+                },
+            },
+        },
+
+    },
+    en: {
+        common: {
+            // General words
+            cancel: 'Cancel',
+            save: 'Save',
+            delete: "Delete",
+            done: "Done",
+            edit: "Edit",
+            search: "Search",
+            der: "the",
+            die: "the",
+            das: "the",
+            of: "of",
+
+            // Concept words
+            credential: "Credential",
             credentials: "Credentials",
+            category: "Category",
+            categories: "Categories",
+
+            // Error messages
+            internalServerError: "The server could not process the request",
+            unknownError: "An unknown error occurred",
+            noData: "No data available.",
+            noResults: "No entries found.",
+        },
+
+        home: {
+            applicationName: "SESAM",
+            signUp: "Registration",
+            signIn: "Login",
+            // Floorplan
+            floorPlan: "Floorplan",
+            // Profile management
             profileManagement: "Profile Management",
-            currentUsers: "Current Users",
-            currentRegistrations: "Current Registrations",
-            issuerManagement: "Issuer Management",
+            currentUsers: "Manage users",
+            currentRegistrations: "Requested roles",
+            issuerManagement: "Manage issuer",
+            // Corporate design
             corporateDesign: "Corporate Design",
             editCorporateDesign: "Edit Corporate Design",
             editImprint: "Edit Imprint",
+            // Credential management
             credentialManagement: "Credential Management",
-            editorPages: "Bearbeiten",
-            editFloorplan: "Floorplan bearbeiten",
-            groupRooms: "Räume gruppieren",
-            issuerPages: "Issue Credential",
+            manageCredentialCategories: "Manage credential categories",
+            manageCredentials: "Manage credentials",
+            editorPages: "Edit",
+            editFloorplan: "Edit floor plan",
+            groupRooms: "Group rooms",
+            issuerPages: "Issue Credentials",
             imprint: "Imprint",
             logout: "Logout",
-            roomSearch: "Search",
             predefinedConfig: "Create Configuration"
         },
         login: {
-            wrongEmailPassword: "Wrong Password oder Username",
-            loginFailed: "Login Failed",
-            forgotPassword: "Forgot Password:",
-            resetPassword: "Reset Password",
-            notRegistered: "Not registered",
-            toRegister: "Go to Register",
-            password: "Password"
+            wrongEmailPassword: "Wrong password oder username",
+            loginFailed: "Login failed",
+            forgotPassword: "Forgot password: ",
+            resetPassword: "Reset password",
+            notRegistered: "Not registered: ",
+            toRegister: "Register",
         },
-        signUp:{
-            prename: "Prename",
-            name: "Name",
-            password: "Password",
+        signUp: {
             passwordRepeat: "Repeat password",
-            signup: "Sign up",
-            alreadySignedUp: "Already signed up:"
+            alreadySignedUp: "Already signed up: "
         },
         passwordReset: {
             resetPassword: "Reset Password",
@@ -614,9 +473,8 @@ const messages = {
         },
         passwordChange: {
             changePassword: "Change Password",
-            password: "Password",
             passwordHint:
-                "The password must include min. 8 characters, a special character, a number, and a capital letter",
+                "The password must include a min. of 8 characters, 1 special character, 1 number, and 1 capital letter",
             repeatPassword: "Repeat password",
             failedToReset: "Failed to reset password",
             passwordDoesNotConform: "Password does not match the required criteria",
@@ -625,13 +483,194 @@ const messages = {
         },
         profile: {
             title: "Profile View",
-            firstname: "First name",
-            lastname: "Name",
-            email: "E-mail",
-            admin: "Admin",
+            firstName: "First name",
+            lastName: "Last name",
+            email: "Email",
+            password: "Password",
+            role: "Role",
+            roles: "Roles",
+            administrator: "Admin",
             editor: "Editor",
-            issuer: "Issuer"
+            issuer: "Issuer",
+            administrators: "Administrators",
+            editors: "Editors",
+            issuers: "Issuers",
         },
+        floorPlan: {
+            // Locations
+            locations: 'Locations',
+            addLocation: 'Add location',
+            editLocation: 'Edit location',
+            // Buildings
+            addBuilding: 'Add building',
+            editBuilding: 'Edit building',
+            // Floors
+            floorLevel: 'Floor level',
+            addFloor: 'Add floor',
+            editFloor: 'Edit Floor',
+            // Rooms
+            room: 'Room',
+            rooms: 'Rooms',
+            roomName: 'Room name',
+            editRoom: 'Edit Room',
+            // Doors
+            doors: 'Doors',
+            doorName: 'Door name',
+            addDoor: 'Assign door',
+            editDoor: 'Edit Door',
+            pickRoom: 'Choose room',
+            confirmDeletion: 'Confirm deletion',
+            confirmDeletionText: 'Are you sure you want to delete the door?',
+            // Groups
+            groupName: 'Group name',
+            editGroup: 'Edit group',
+            roomAmount: 'Amount of rooms',
+            // Configuration
+            config: 'Configuration',
+            configDescription: 'Description of the configuration',
+            configGroup: 'Configuration Group',
+            infoConfigGroups: 'Configuration groups are combined with AND',
+            addConfigGroup: 'Add configuration group',
+            direction: 'Direction',
+            directions: {
+                in: 'in',
+                both: 'both',
+                out: 'out',
+            },
+            infoCredential: 'Credentials are combined with OR',
+            infoCredentialGroups: 'With credential groups, all credentials of the group are being added simultaneously',
+            addAttribute: 'Add attribute',
+            credentialAttributes: {
+                id: 'ID',
+                firstName: 'first name',
+                lastName: 'last name',
+                birthdate: 'date of birth',
+                expirationDate: 'expiration date'
+            },
+            currentTime: 'Current time',
+            //
+            floorPlanUpload: 'Upload floor plan',
+        },
+        credentialView: {
+            title: "Credentials",
+            location: "Location",
+            availableCredentials: "Available Credentials",
+            qualification: "Comparable Credentials",
+            room: "Room: ",
+            intern: "Intern",
+            extern: "Extern",
+            all: "Alle",
+            type: "Typ",
+            showCredentials: "Show all Credentials",
+            allCredentials: "All Credentials"
+        },
+
+        admin: {
+            currentUsers: {
+                title: "User Management",
+                editUser: {
+                    title: "Edit User",
+                    changeRoles: "Give/take roles: ",
+                    deleteUser: "Delete User",
+                    question: "Do you really want to delete this user?",
+                    deleteOwnAccount: "You can not delete your own account",
+                    otherAdmin: "Please ask another administrator for help",
+                },
+            },
+            requestedRoles: {
+                title: "Requested Roles",
+            },
+            issuerManagement: {
+                title: "Issuer Management",
+                issuableCredential: "Issuable credentials",
+                office: "Office",
+                dialogTitle: "Manage Issuer",
+            },
+            corporateDesign: {
+                title: "Corporate Design",
+                logo: "Logo",
+                logoHint: "Only SVG files",
+                favicon: "Favicon",
+                faviconHint: "Only ICO files",
+                background: "Background",
+                textColor: "Text-Color",
+                info: {
+                    primary: "banner, buttons",
+                    secondary: "role badges",
+                    accent: "text-color in banner, footer, buttons",
+                    dark: "footer",
+                    lightBlue: "...",
+                    positive: "positive notifications, save buttons",
+                    negative: "negative notifications, delete/reset buttons",
+                    info: "profile button, informational content",
+                    warning: "warnings",
+                },
+                reset: {
+                    title: "Are you sure you want to reset?",
+                    message: "You will not be able to retrieve your current settings.",
+                    reset: "Reset",
+                },
+                save: {
+                    title: "Are you sure you want to save?",
+                    message: "You will not be able to retrieve your current settings.",
+                },
+                resetFailure: "Reset failed",
+                saveFailure: "Saving failed"
+            },
+            imprint: {
+                imprintTitle: "Imprint",
+                imprintEditorTitle: "Imprint Editor",
+                imprintEditorMessageSave: "Are you sure you want to save?",
+                imprintEditorMessageDelete: "Are you sure you want to delete?",
+                imprintEditorMessageSaveConfirmation: "Content saved successfully",
+                imprintEditorMessageDeleteConfirmation: "Content successfully deleted"
+            },
+            credentialMapping: {
+                title: 'Credential mapping',
+                newCategory: 'New category',
+                categoryName: 'Category name',
+                internal: 'Internal credentials',
+                external: 'External credentials',
+                createCategory: 'Create new category',
+                changeCategory: 'Change category',
+                deleteCategory: 'Delete category',
+                delete: 'Are you sure you want to delete the category?'
+            },
+        },
+
+        editor: {
+            groupRooms: {
+                title: "Room Groupings",
+                chooseBuilding: "Choose a building",
+                chooseLocation: "Choose a location",
+                newGroup: "New group",
+                editGroup: "Edit group",
+                chooseRooms: "Choose the rooms",
+                question: "Do you really want to delete this group?",
+                groups: "Room Groups",
+                addRooms: "Add rooms to selected group",
+                noGroupSelected: "No group selected",
+                noRoomSelected: "No rooms selected",
+                checkNameMessage: "Name must not be empty",
+                checkNameCaption: "At least one letter, number or symbol.",
+                doorconfig: "Adjust door configuration",
+                select: "Select",
+                doors: "Doors",
+                groupsConfig: "Adjustment of door configurations for groups of rooms",
+                roomSelection: "Choose Rooms",
+                group: "Group",
+            },
+            predefinedConfigs: {
+                title: "Predefined configurations",
+                deleteAlert: "Delete configuration",
+                new: "New configuration",
+                deleteQuestion: "Are you sure you want to delete this configuration?"
+            },
+        },
+    },
+
+    issuer: {
+        issue: "Issue",
         issueCredential: {
             title: "{0} Credential Issuance",
             description: [
@@ -640,7 +679,58 @@ const messages = {
             ],
             checkConditions: "Please use the following checklist to ensure that all necessary steps have been taken before issuing the credential.",
             validation: {
-                inputRequired: "This field is required.",
+                validationRules: "Validation Rules",
+                ruleErrors: {
+                    inputRequired: "This field is required.",
+                    equal: "This field should be equal to {0}",
+                    notEqual: "This field should not be equal to {0}",
+                    lessThan: "This field should be less than {0}",
+                    greaterThan: "This field should be greater than {0}",
+                    lessEqual: "This field should be less than or equal to {0}",
+                    greaterEqual: "This field should be greater than or equal to {0}",
+                    range: "This field should be between {0} and {1}",
+                    equalLength: "This text's length should be equal to {0}",
+                    notEqualLength: "This text's length should not be equal to {0}",
+                    lessThanLength: "This text's length should be less than to {0}",
+                    greaterThanLength: "This text's length should be greater than to {0}",
+                    lessEqualLength: "This text's length should be less than or equal to {0}",
+                    greaterEqualLength: "This text's length should be greater than or equal to {0}",
+                },
+                vType: {
+                    comparison: "Comparison",
+                    range: "Range",
+                    regEx: "Regular expression",
+                    length: "Length",
+                    comparisonWithAttribute: "Comparison with another attribute",
+                    rangeWithAttributes: "Range between attributes",
+                    lengthWithAttribute: "Length compared to another attribute",
+                },
+                addValidationRule: "Add validation rule",
+                description: "Description",
+                chooseType: "Choose a type",
+                chooseAttribute: "Choose an attribute",
+                presetsLabel: "Presets",
+                presets: {
+                    // Numbers
+                    positiveWithZero: "Positive",
+                    positiveWithoutZero: "Positive (excl. 0)",
+                    negativeWithZero: "Negative",
+                    negativeWithoutZero: "Negative (excl. 0)",
+                    // Dates
+                    futureWithToday: "Future (incl. today)",
+                    futureWithoutToday: "Future",
+                    pastWithToday: "Past (incl. today)",
+                    pastWithoutToday: "Past",
+                    today: "Today",
+                    // Strings
+                    names: "Names",
+                    noSpecialCharacter: "No special characters",
+                    email: "Email",
+                    phoneNumbers: "Phone numbers",
+                    uppercase: "Only uppercase",
+                    lowercase: "Only lowercase",
+                },
+                info: "You can define validation rules. These will regulate the inputs while issuing a credential. You can choose from presets or create your own custom rule.",
             },
             steps: {
                 form: "Form",
@@ -656,11 +746,10 @@ const messages = {
                 message:
                     'Please ensure that all conditions have been met and all necessary steps have been taken before issuing the credential. Once issued, it cannot be undone.',
                 ok: "Issue Credential",
-                cancel: "Cancel",
             },
             addCredential: {
                 title: "Your new credential has been successfully issued!",
-                howTo: "How to add a credential to the BC Wallet:",
+                howTo: "How to add a credential to the BC Wallet: ",
                 steps: {
                     step1:
                         "Download the {0} from the App Store or Google Play Store.",
@@ -696,81 +785,12 @@ const messages = {
                 unknown: "Please try again later.",
             },
         },
-        corporateDesign: {
-            title: "Corporate Design",
-            colors: "Colors",
-            logo: "Logo",
-            logoHint: "Only SVG files",
-            favicon: "Favicon",
-            faviconHint: "Only ICO files",
-            background: "Background",
-            textColor: "Text-Color",
-            primaryInfo: "banner, buttons",
-            secondaryInfo: "role badges",
-            accentInfo: "text-color in banner, footer, buttons",
-            darkInfo: "footer",
-            lightBlueInfo: "...",
-            positiveInfo: "positive notifications, save buttons",
-            negativeInfo: "negative notifications, delete/reset buttons",
-            infoInfo: "profile button, informational content",
-            warningInfo: "warnings",
-            confirm: {
-                reset: {
-                    title: "Are you sure you want to reset?",
-                    message: "You will not be able to retrieve your current settings.",
-                    ok: "Reset",
-                    cancel: "Cancel"
-                },
-                save: {
-                    title: "Are you sure you want to save?",
-                    message: "You will not be able to retrieve your current settings.",
-                    ok: "Save",
-                    cancel: "Cancel"
-                }
-            },
-            resetFailure: "Reset failed",
-            saveFailure: "Saving failed"
-        },
-        imprint:{
-            imprintTitle: "Imprint",
-            imprintEditorTitle: "Imprint Editor",
-            imprintEditorMessageSave: "Are you sure you want to save?",
-            imprintEditorMessageDelete: "Are you sure you want to delete?",
-            save:"Save",
-            cancel: "Cancel",
-            delete:"Delete",
-            imprintEditorMessageSaveConfirmation:"Content saved successfully",
-            imprintEditorMessageDeleteConfirmation:"Content successfully deleted"
+    },
 
-        },
-
-        issuermanagement: {
-            title: "Issuer Management",
-            firstname: "Prename",
-            lastname: "Name",
-            email: "E-Mail",
-            credential:"Credential",
-            search: "Search",
-            issuerFilter:"Issuer filter",
-            edit: "Edit",
-            credentialsList:"List of all credentials",
-            roomsList:"List of all rooms",
-            roomId:"Room ID",
-            credentials:"Credential",
-            dialogTitle:"Credentials Management",
-            save:"Save",
-            cancel: "Cancel",
-            saveConfirmationTitle: "Save?",
-            saveConfirmationMessage: "Are you sure you want to save?",
-
-
-
-        },
-    }
 }
 
 let currentLanguage = sessionStorage.getItem("locale");
-if(currentLanguage==null){
+if (currentLanguage == null) {
     currentLanguage = 'de'
 }
 const i18n = createI18n({

@@ -8,7 +8,7 @@
       <q-item-label
           header
           class="text-grey-8">
-        {{ t('floorplan.locations') }}
+        {{ t('floorPlan.locations') }}
       </q-item-label>
       <q-expansion-item
           v-for="(location,i) in locationStore.allLocations"
@@ -25,10 +25,10 @@
               <q-menu>
                 <q-list style="min-width: 100px">
                   <q-item clickable @click.stop="editLocation(location)" v-close-popup>
-                    <q-item-section>{{t('floorplan.editLocation')}}</q-item-section>
+                    <q-item-section>{{t('floorPlan.editLocation')}}</q-item-section>
                   </q-item>
                   <q-item clickable @click.stop="addBuilding(location)" v-close-popup>
-                    <q-item-section>{{t('floorplan.addBuilding')}}</q-item-section>
+                    <q-item-section>{{t('floorPlan.addBuilding')}}</q-item-section>
                   </q-item>
                   <q-item clickable v-close-popup @click.stop="deleteLocation = true; setParameter(location)">
                     <q-item-section>Delete</q-item-section>
@@ -57,10 +57,10 @@
                 <q-menu class="show-building">
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editBuilding(building)" v-close-popup>
-                      <q-item-section>{{t('floorplan.editBuilding')}}</q-item-section>
+                      <q-item-section>{{t('floorPlan.editBuilding')}}</q-item-section>
                     </q-item>
                     <q-item clickable @click.stop="addFloor(building)" v-close-popup>
-                      <q-item-section>{{t('floorplan.addFloor')}}</q-item-section>
+                      <q-item-section>{{t('floorPlan.addFloor')}}</q-item-section>
                     </q-item>
                     <q-item clickable v-close-popup @click.stop="deleteBuilding = true; setParameter(building)">
                       <q-item-section>Delete</q-item-section>
@@ -79,7 +79,7 @@
                 <q-menu>
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editFloor(floor)" v-close-popup>
-                      <q-item-section>{{t('floorplan.editFloor')}}</q-item-section>
+                      <q-item-section>{{t('floorPlan.editFloor')}}</q-item-section>
                     </q-item>
                     <q-item clickable v-close-popup @click.stop="deleteFloor = true; setParameter(floor)">
                       <q-item-section>Delete</q-item-section>
@@ -92,7 +92,7 @@
         </q-expansion-item>
       </q-expansion-item>
       <q-item>
-        <q-btn color="primary" icon="add" :label="t('floorplan.addLocation')" @click="addLocation" flat/>
+        <q-btn color="primary" icon="add" :label="t('floorPlan.addLocation')" @click="addLocation" flat/>
       </q-item>
     </q-list>
     <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">

@@ -5,12 +5,13 @@ import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.validation.*;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
@@ -36,9 +37,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Profile("test")
@@ -244,17 +243,59 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private List<FormEntry> form() {
 		final List<FormEntry> form = new ArrayList<>();
-		final FormEntry id = new FormEntry("ID", FormEntryType.NUMBER, "id");
-		final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name");
-		final FormEntry lastName = new FormEntry("Nachname", FormEntryType.TEXT, "last_name");
-		final FormEntry birthDate = new FormEntry("Geburtstagsdatum", FormEntryType.DATE, "birth_date");
-		final FormEntry date = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
+		final FormEntry id = new FormEntry("ID", FormEntryType.NUMBER, "id", getIdValidationRules());
+		final FormEntry firstName = new FormEntry(
+				"Vorname", FormEntryType.TEXT, "first_name", getFirstNameValidationRules());
+		final FormEntry lastName = new FormEntry(
+				"Nachname", FormEntryType.TEXT, "last_name", getLastNameValidationRules());
+		final FormEntry birthDate = new FormEntry(
+				"Geburtstagsdatum", FormEntryType.DATE, "birth_date", getBirthDateValidationRules());
+		final FormEntry date = new FormEntry(
+				"Ablaufdatum", FormEntryType.DATE, "expiration_date", getDateValidationRules());
 		form.add(id);
 		form.add(firstName);
 		form.add(lastName);
 		form.add(birthDate);
 		form.add(date);
 		return form;
+	}
+
+	private List<AbstractValidationRule> getIdValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new ComparisonRule(ComparisonType.GREATER_EQUAL, "0"));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getFirstNameValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new RegExRule(
+				"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅ"
+						+ "ĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$",
+				"Wähle eine realen Name / Choose a real name"));
+		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getLastNameValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new RegExRule(
+				"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅ"
+						+ "ĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$",
+				"Wähle eine realen Name / Choose a real name"));
+		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getBirthDateValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new ComparisonRule(ComparisonType.LESS_THAN, true, "Ablaufdatum"));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getDateValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new ComparisonRule(ComparisonType.GREATER_THAN, true, "Geburtstagsdatum"));
+		return validationRules;
 	}
 
 	private List<ChecklistEntry> checklist() {

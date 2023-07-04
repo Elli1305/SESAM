@@ -4,7 +4,6 @@ import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorRepository;
 import com.gpse.sesam.domain.location.door.config.*;
 import com.gpse.sesam.domain.location.room.Room;
-import com.gpse.sesam.domain.location.room.RoomRepository;
 import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.ConflictException;
@@ -26,7 +25,9 @@ public class RoomGroupServiceImpl implements RoomGroupService {
 
 
     @Autowired
-    public RoomGroupServiceImpl(final RoomGroupRepository roomGroupRepository, DoorConfigService doorConfigurationService, DoorRepository doorRepository) {
+    public RoomGroupServiceImpl(final RoomGroupRepository roomGroupRepository,
+                                DoorConfigService doorConfigurationService,
+                                DoorRepository doorRepository) {
         this.roomGroupRepository = roomGroupRepository;
         this.doorConfigurationService = doorConfigurationService;
         this.doorRepository = doorRepository;
