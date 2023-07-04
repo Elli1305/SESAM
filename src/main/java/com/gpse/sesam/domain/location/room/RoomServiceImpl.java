@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -38,4 +39,11 @@ public class RoomServiceImpl implements RoomService {
 		return roomRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("room with id " + id + " does not exist"));
 	}
+
+	@Override
+	public Optional<Room> getRoomById(final Long id) {
+		return roomRepository.findById(id);
+	}
+
+
 }

@@ -168,6 +168,10 @@ async function logout() {
                         t("home.groupRooms")
                       }}
                     </router-link>
+                     <router-link to="/predefinedConfigs" class="q-ma-sm headerLink text-black">{{
+                        t("home.predefinedConfig")
+                      }}
+                     </router-link>
                   </div>
                 </q-menu>
               </div>

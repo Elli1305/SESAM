@@ -259,6 +259,12 @@ const messages = {
                 noRoomSelected: "Keine Räume ausgewählt",
                 checkNameMessage: "Name darf nicht leer sein",
                 checkNameCaption: "Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.",
+                doorconfig: "Türkonfiguration anpassen",
+                select: "Auswählen",
+                doors: "Türen",
+                groupsConfig: "Anpassung der Türconfiguration für Raumgruppen",
+                roomSelection: "Räume auswählen",
+                group: "Gruppe",
             },
         },
 
@@ -430,6 +436,7 @@ const messages = {
             issuerPages: "Issue Credentials",
             imprint: "Imprint",
             logout: "Logout",
+            predefinedConfig: "Create Configuration"
         },
         login: {
             wrongEmailPassword: "Wrong password oder username",
@@ -535,7 +542,7 @@ const messages = {
             location: "Location",
             availableCredentials: "Available Credentials",
             qualification: "Comparable Credentials",
-            room: "Room: "
+            room: "Room: ",
         },
 
         admin:{
@@ -626,6 +633,19 @@ const messages = {
                 noRoomSelected: "No rooms selected",
                 checkNameMessage: "Name must not be empty",
                 checkNameCaption: "At least one letter, number or symbol.",
+                doorconfig: "Adjust door configuration",
+                select: "Select",
+                doors: "Doors",
+                groupsConfig: "Adjustment of door configurations for groups of rooms",
+                roomSelection: "Choose Rooms",
+                group: "Group",
+            },
+            predefinedConfigs: {
+                title: "Vordefinierte Konfigurationen",
+                deleteAlert: "",
+                new: "Neue Konfiguration",
+                deleteQuestion: "Konfiguration wirklich löschen?"
+            },
             },
         },
 

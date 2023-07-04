@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -68,6 +69,7 @@ public class SesamUser implements UserDetails {
 	}
 
 	@Override
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return AuthorityUtils.createAuthorityList(
 				roles.stream()

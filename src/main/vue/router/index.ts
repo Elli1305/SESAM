@@ -24,6 +24,7 @@ import IssueCredential from "@/main/vue/views/IssueCredential.vue";
 import IssuerManagement from "@/main/vue/views/IssuerManagement.vue";
 import CredentialAdministration from "@/main/vue/views/CredentialAdministration.vue";
 import CredentialEditing from "@/main/vue/views/CredentialEditing.vue";
+import PredefinedConfigEditor from "@/main/vue/views/PredefinedConfigEditor.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -65,6 +66,14 @@ const router = createRouter({
             name: 'currentuserlist',
             component: CurrentUserList,
             meta: {requiresAdmin: true}
+        },
+        {
+            path: '/predefinedConfigs',
+            name: 'PredefinedConfigs',
+            component: PredefinedConfigEditor,
+            meta: {
+                authorize: AttainableRole.EDITOR
+            }
         },
         {
             path: '/grouprooms',

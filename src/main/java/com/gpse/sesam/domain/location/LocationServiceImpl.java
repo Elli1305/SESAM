@@ -1,5 +1,9 @@
 package com.gpse.sesam.domain.location;
 
+import com.gpse.sesam.domain.location.building.Building;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupRepository;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupServiceImpl;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
 import com.gpse.sesam.web.exception.LocationNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
