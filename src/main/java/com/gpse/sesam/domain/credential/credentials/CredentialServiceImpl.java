@@ -314,7 +314,7 @@ public class CredentialServiceImpl implements CredentialService {
 		List<CredentialCmd> cmd = new ArrayList<>();
 
 		for (InternalCredential credential : credentials) {
-			String categoryName = "Keine Kategorie";
+			String categoryName = "-";
 			List<String> externalCredentials = new ArrayList<>();
 			List<String> issuers = new ArrayList<>();
 			List<String> room = new ArrayList<>();
@@ -331,7 +331,7 @@ public class CredentialServiceImpl implements CredentialService {
 			if (!credential.getIssuer().isEmpty()) {
 				for (Issuer issuer : credential.getIssuer()) {
 					issuers.add(issuer.getFirstName() + " " + issuer.getLastName());
-					String roomName = "Kein Raum verfügbar";
+					String roomName = "-";
 					if (!(issuer.getRoom() == null)) {
 						roomName = issuer.getRoom().getName();
 					}
