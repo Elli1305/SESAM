@@ -209,7 +209,7 @@
               <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
                 <q-toggle v-model="visibleColumns" val="doorNames" :label="t('editor.groupRooms.doors')" ></q-toggle>
               </div>
-              <q-input class="q-ml-xs" borderless dense debounce="250" v-model="searchinput" :placeholder="t('credentialview.search')">
+              <q-input class="q-ml-xs" borderless dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
                 <template v-slot:append>
                   <q-icon name="search" />
                 </template>
@@ -321,10 +321,10 @@ export default {
     let finalArray = []
 
     const columns = [
-      { name: 'name', required: true, label: t('groupRooms.group'), align: 'center', field: row => row.name, sortable: true },
-      { name: 'rooms', align: 'center', label: t('groupRooms.rooms'), field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
-      { name: 'actions', label: t('issuermanagement.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
-      { name: 'doorconfig', label: t('groupRooms.doorconfig'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
+      { name: 'name', required: true, label: t('editor.groupRooms.group'), align: 'center', field: row => row.name, sortable: true },
+      { name: 'rooms', align: 'center', label: t('floorPlan.rooms'), field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
+      { name: 'actions', label: t('common.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
+      { name: 'doorconfig', label: t('editor.groupRooms.doorconfig'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
     ]
 
     const rows = ref([]);
@@ -333,11 +333,11 @@ export default {
     rows.value = []
 
     const columns2 = [
-      { name: 'name', required: true, label: t('groupRooms.room'), align: 'left', field: row => row.roomName, sortable: true },
-      { name: 'room', label: t('groupRooms.room'), align: 'left', field: row => row.room, sortable: true },
-      { name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-      { name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-      { name: 'doors', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'}
+      { name: 'name', required: true, label: t('floorPlan.room'), align: 'left', field: row => row.roomName, sortable: true },
+      { name: 'room', label: t('floorPlan.room'), align: 'left', field: row => row.room, sortable: true },
+      { name: 'actions', label: t('editor.groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+      { name: 'doorNames', label: t('editor.groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+      { name: 'doors', label: t('editor.groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'}
     ]
 
     const rows2 =  ref([]);

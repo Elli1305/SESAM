@@ -238,7 +238,6 @@ import {useI18n} from "vue-i18n";
 import {Ref, ref} from "vue";
 import {
   ComparisonRule,
-  CreateAttribute,
   LengthRule,
   RangeRule,
   RegExRule
@@ -260,7 +259,6 @@ export default {
     const regEx = ref('')
     const length = ref(0)
     const valRuleType: Ref<{name: string, type: string} | null> = ref(null)
-    const test = ref('')
 
     function addValidationRule(attribute: any | undefined) {
       if (valRuleType.value)
@@ -375,11 +373,6 @@ export default {
       getPresets,
     }
   },
-  methods: {
-    onOK() {
-
-    }
-  }
 }
 </script>
 

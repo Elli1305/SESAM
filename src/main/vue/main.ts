@@ -74,7 +74,7 @@ const messages = {
             notRegistered: "Nicht registriert: ",
             toRegister: "Zur Registrierung",
         },
-        signUp:{
+        signUp: {
             passwordRepeat: "Passwort wiederholen",
             alreadySignedUp: "Bereits registriert: "
         },
@@ -123,6 +123,7 @@ const messages = {
             addFloor: 'Etage hinzufügen',
             editFloor: 'Etage bearbeiten',
             // Rooms
+            room: 'Raum',
             rooms: 'Räume',
             roomName: 'Raumname',
             editRoom: 'Raum bearbeiten',
@@ -133,7 +134,7 @@ const messages = {
             editDoor: 'Tür bearbeiten',
             pickRoom: 'Raum auswählen',
             confirmDeletion: 'Löschen bestätigen',
-            confirmDeletionText:'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            confirmDeletionText: 'Sind Sie sicher, dass Sie die Tür löschen möchten?',
             // Groups
             groupName: 'Gruppenname',
             editGroup: 'Gruppe bearbeiten',
@@ -164,7 +165,7 @@ const messages = {
             //
             floorPlanUpload: 'Etagenplan hochladen',
         },
-        credentialView :{
+        credentialView: {
             title: "Credentialansicht",
             location: "Standort",
             availableCredentials: "Verfügbare Credential",
@@ -183,14 +184,14 @@ const messages = {
                     otherAdmin: "Bitte wenden Sie sich an einen anderen Administrator",
                 },
             },
-            requestedRoles:{
+            requestedRoles: {
                 title: "Angefragte Rollen",
             },
             issuerManagement: {
                 title: "Herausgeberverwaltung",
-                issuableCredential:"Ausstellbare Credential",
-                office:"Büro",
-                dialogTitle:"Herausgeber Verwalten",
+                issuableCredential: "Ausstellbare Credential",
+                office: "Büro",
+                dialogTitle: "Herausgeber Verwalten",
             },
             corporateDesign: {
                 title: "Corporate Design",
@@ -223,13 +224,13 @@ const messages = {
                 resetFailure: "Zurücksetzen fehlgeschlagen",
                 saveFailure: "Speichern fehlgeschlagen"
             },
-            imprint:{
+            imprint: {
                 imprintTitle: "Impressum",
                 imprintEditorTitle: "Impressum Bearbeiten",
                 imprintEditorMessageSave: "Sind Sie sicher, dass Sie speichern wollen?",
                 imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
-                imprintEditorMessageSaveConfirmation:"Inhalt erfolgreich gespeichert",
-                imprintEditorMessageDeleteConfirmation:"Inhalt erfolgreich gelöscht"
+                imprintEditorMessageSaveConfirmation: "Inhalt erfolgreich gespeichert",
+                imprintEditorMessageDeleteConfirmation: "Inhalt erfolgreich gelöscht"
             },
             credentialMapping: {
                 title: 'Credentialmapping',
@@ -250,7 +251,7 @@ const messages = {
                 chooseBuilding: "Gebäude wählen",
                 chooseLocation: "Location wählen",
                 newGroup: "Neue Gruppe",
-                editGroup:"Gruppierung bearbeiten",
+                editGroup: "Gruppierung bearbeiten",
                 chooseRooms: "Räume auswählen",
                 question: "Wollen Sie diese Gruppierung wirklich löschen?",
                 groups: "Raumgruppen",
@@ -265,6 +266,12 @@ const messages = {
                 groupsConfig: "Anpassung der Türconfiguration für Raumgruppen",
                 roomSelection: "Räume auswählen",
                 group: "Gruppe",
+            },
+            predefinedConfigs: {
+                title: "Vordefinierte Konfigurationen",
+                deleteAlert: "Konfiguration Löschen",
+                new: "Neue Konfiguration",
+                deleteQuestion: "Möchten Sie diese Konfiguration wirklich löschen?"
             },
         },
 
@@ -446,7 +453,7 @@ const messages = {
             notRegistered: "Not registered: ",
             toRegister: "Register",
         },
-        signUp:{
+        signUp: {
             passwordRepeat: "Repeat password",
             alreadySignedUp: "Already signed up: "
         },
@@ -496,17 +503,18 @@ const messages = {
             addFloor: 'Add floor',
             editFloor: 'Edit Floor',
             // Rooms
+            room: 'Room',
             rooms: 'Rooms',
             roomName: 'Room name',
-            editRoom:'Edit Room',
+            editRoom: 'Edit Room',
             // Doors
-            doors:'Doors',
+            doors: 'Doors',
             doorName: 'Door name',
             addDoor: 'Assign door',
-            editDoor:'Edit Door',
+            editDoor: 'Edit Door',
             pickRoom: 'Choose room',
             confirmDeletion: 'Confirm deletion',
-            confirmDeletionText:'Are you sure you want to delete the door?',
+            confirmDeletionText: 'Are you sure you want to delete the door?',
             // Groups
             groupName: 'Group name',
             editGroup: 'Edit group',
@@ -537,7 +545,7 @@ const messages = {
             //
             floorPlanUpload: 'Upload floor plan',
         },
-        credentialView :{
+        credentialView: {
             title: "Credentials",
             location: "Location",
             availableCredentials: "Available Credentials",
@@ -545,7 +553,7 @@ const messages = {
             room: "Room: ",
         },
 
-        admin:{
+        admin: {
             currentUsers: {
                 title: "User Management",
                 editUser: {
@@ -557,14 +565,14 @@ const messages = {
                     otherAdmin: "Please ask another administrator for help",
                 },
             },
-            requestedRoles:{
+            requestedRoles: {
                 title: "Requested Roles",
             },
             issuerManagement: {
                 title: "Issuer Management",
-                issuableCredential:"Issuable credentials",
-                office:"Office",
-                dialogTitle:"Manage Issuer",
+                issuableCredential: "Issuable credentials",
+                office: "Office",
+                dialogTitle: "Manage Issuer",
             },
             corporateDesign: {
                 title: "Corporate Design",
@@ -597,13 +605,13 @@ const messages = {
                 resetFailure: "Reset failed",
                 saveFailure: "Saving failed"
             },
-            imprint:{
+            imprint: {
                 imprintTitle: "Imprint",
                 imprintEditorTitle: "Imprint Editor",
                 imprintEditorMessageSave: "Are you sure you want to save?",
                 imprintEditorMessageDelete: "Are you sure you want to delete?",
-                imprintEditorMessageSaveConfirmation:"Content saved successfully",
-                imprintEditorMessageDeleteConfirmation:"Content successfully deleted"
+                imprintEditorMessageSaveConfirmation: "Content saved successfully",
+                imprintEditorMessageDeleteConfirmation: "Content successfully deleted"
             },
             credentialMapping: {
                 title: 'Credential mapping',
@@ -624,7 +632,7 @@ const messages = {
                 chooseBuilding: "Choose a building",
                 chooseLocation: "Choose a location",
                 newGroup: "New group",
-                editGroup:"Edit group",
+                editGroup: "Edit group",
                 chooseRooms: "Choose the rooms",
                 question: "Do you really want to delete this group?",
                 groups: "Room Groups",
@@ -641,137 +649,136 @@ const messages = {
                 group: "Group",
             },
             predefinedConfigs: {
-                title: "Vordefinierte Konfigurationen",
-                deleteAlert: "",
-                new: "Neue Konfiguration",
-                deleteQuestion: "Konfiguration wirklich löschen?"
-            },
+                title: "Predefined configurations",
+                deleteAlert: "Delete configuration",
+                new: "New configuration",
+                deleteQuestion: "Are you sure you want to delete this configuration?"
             },
         },
+    },
 
-        issuer: {
-            issue: "Issue",
-            issueCredential: {
-                title: "{0} Credential Issuance",
-                description: [
-                    "Welcome to the issuance process of the \"{0}\" Credential! Here you can create an official document that confirms the successful completion of a specific course or the attainment of certain skills or qualifications.",
-                    "To issue the credential, please fill out the fields on the right with the required attributes. Make sure that all data is correct and up-to-date. Once you have filled out all the necessary attributes, click the \"@:{'issueCredential.next'}\" button."
-                ],
-                checkConditions: "Please use the following checklist to ensure that all necessary steps have been taken before issuing the credential.",
-                validation: {
-                    validationRules: "Validation Rules",
-                    ruleErrors: {
-                        inputRequired: "This field is required.",
-                        equal: "This field should be equal to {0}",
-                        notEqual: "This field should not be equal to {0}",
-                        lessThan: "This field should be less than {0}",
-                        greaterThan: "This field should be greater than {0}",
-                        lessEqual: "This field should be less than or equal to {0}",
-                        greaterEqual: "This field should be greater than or equal to {0}",
-                        range: "This field should be between {0} and {1}",
-                        equalLength: "This text's length should be equal to {0}",
-                        notEqualLength: "This text's length should not be equal to {0}",
-                        lessThanLength: "This text's length should be less than to {0}",
-                        greaterThanLength: "This text's length should be greater than to {0}",
-                        lessEqualLength: "This text's length should be less than or equal to {0}",
-                        greaterEqualLength: "This text's length should be greater than or equal to {0}",
-                    },
-                    vType: {
-                        comparison: "Comparison",
-                        range: "Range",
-                        regEx: "Regular expression",
-                        length: "Length",
-                        comparisonWithAttribute: "Comparison with another attribute",
-                        rangeWithAttributes: "Range between attributes",
-                        lengthWithAttribute: "Length compared to another attribute",
-                    },
-                    addValidationRule: "Add validation rule",
-                    description: "Description",
-                    chooseType: "Choose a type",
-                    chooseAttribute: "Choose an attribute",
-                    presetsLabel: "Presets",
-                    presets: {
-                        // Numbers
-                        positiveWithZero: "Positive",
-                        positiveWithoutZero: "Positive (excl. 0)",
-                        negativeWithZero: "Negative",
-                        negativeWithoutZero: "Negative (excl. 0)",
-                        // Dates
-                        futureWithToday: "Future (incl. today)",
-                        futureWithoutToday: "Future",
-                        pastWithToday: "Past (incl. today)",
-                        pastWithoutToday: "Past",
-                        today: "Today",
-                        // Strings
-                        names: "Names",
-                        noSpecialCharacter: "No special characters",
-                        email: "Email",
-                        phoneNumbers: "Phone numbers",
-                        uppercase: "Only uppercase",
-                        lowercase: "Only lowercase",
-                    },
-                    info: "You can define validation rules. These will regulate the inputs while issuing a credential. You can choose from presets or create your own custom rule.",
+    issuer: {
+        issue: "Issue",
+        issueCredential: {
+            title: "{0} Credential Issuance",
+            description: [
+                "Welcome to the issuance process of the \"{0}\" Credential! Here you can create an official document that confirms the successful completion of a specific course or the attainment of certain skills or qualifications.",
+                "To issue the credential, please fill out the fields on the right with the required attributes. Make sure that all data is correct and up-to-date. Once you have filled out all the necessary attributes, click the \"@:{'issueCredential.next'}\" button."
+            ],
+            checkConditions: "Please use the following checklist to ensure that all necessary steps have been taken before issuing the credential.",
+            validation: {
+                validationRules: "Validation Rules",
+                ruleErrors: {
+                    inputRequired: "This field is required.",
+                    equal: "This field should be equal to {0}",
+                    notEqual: "This field should not be equal to {0}",
+                    lessThan: "This field should be less than {0}",
+                    greaterThan: "This field should be greater than {0}",
+                    lessEqual: "This field should be less than or equal to {0}",
+                    greaterEqual: "This field should be greater than or equal to {0}",
+                    range: "This field should be between {0} and {1}",
+                    equalLength: "This text's length should be equal to {0}",
+                    notEqualLength: "This text's length should not be equal to {0}",
+                    lessThanLength: "This text's length should be less than to {0}",
+                    greaterThanLength: "This text's length should be greater than to {0}",
+                    lessEqualLength: "This text's length should be less than or equal to {0}",
+                    greaterEqualLength: "This text's length should be greater than or equal to {0}",
                 },
+                vType: {
+                    comparison: "Comparison",
+                    range: "Range",
+                    regEx: "Regular expression",
+                    length: "Length",
+                    comparisonWithAttribute: "Comparison with another attribute",
+                    rangeWithAttributes: "Range between attributes",
+                    lengthWithAttribute: "Length compared to another attribute",
+                },
+                addValidationRule: "Add validation rule",
+                description: "Description",
+                chooseType: "Choose a type",
+                chooseAttribute: "Choose an attribute",
+                presetsLabel: "Presets",
+                presets: {
+                    // Numbers
+                    positiveWithZero: "Positive",
+                    positiveWithoutZero: "Positive (excl. 0)",
+                    negativeWithZero: "Negative",
+                    negativeWithoutZero: "Negative (excl. 0)",
+                    // Dates
+                    futureWithToday: "Future (incl. today)",
+                    futureWithoutToday: "Future",
+                    pastWithToday: "Past (incl. today)",
+                    pastWithoutToday: "Past",
+                    today: "Today",
+                    // Strings
+                    names: "Names",
+                    noSpecialCharacter: "No special characters",
+                    email: "Email",
+                    phoneNumbers: "Phone numbers",
+                    uppercase: "Only uppercase",
+                    lowercase: "Only lowercase",
+                },
+                info: "You can define validation rules. These will regulate the inputs while issuing a credential. You can choose from presets or create your own custom rule.",
+            },
+            steps: {
+                form: "Form",
+                list: "Checklist",
+                qrcode: "QR Code",
+            },
+            next: "Next",
+            previous: "Previous",
+            checklistHint:
+                "To issue the credential, all conditions on the checklist must be met.",
+            confirm: {
+                title: "Are you sure you want to issue the credential?",
+                message:
+                    'Please ensure that all conditions have been met and all necessary steps have been taken before issuing the credential. Once issued, it cannot be undone.',
+                ok: "Issue Credential",
+            },
+            addCredential: {
+                title: "Your new credential has been successfully issued!",
+                howTo: "How to add a credential to the BC Wallet: ",
                 steps: {
-                    form: "Form",
-                    list: "Checklist",
-                    qrcode: "QR Code",
-                },
-                next: "Next",
-                previous: "Previous",
-                checklistHint:
-                    "To issue the credential, all conditions on the checklist must be met.",
-                confirm: {
-                    title: "Are you sure you want to issue the credential?",
-                    message:
-                        'Please ensure that all conditions have been met and all necessary steps have been taken before issuing the credential. Once issued, it cannot be undone.',
-                    ok: "Issue Credential",
-                },
-                addCredential: {
-                    title: "Your new credential has been successfully issued!",
-                    howTo: "How to add a credential to the BC Wallet: ",
-                    steps: {
-                        step1:
-                            "Download the {0} from the App Store or Google Play Store.",
-                        step2:
-                            "Open the app and follow the instructions to set up a new account.",
-                        step3:
-                            'Once you have successfully set up your account, select the "Credentials" tab.',
-                        step4:
-                            "Tap the small plus sign in the upper right corner of the screen.",
-                        step5:
-                            'In the menu that appears, select the option "Scan a QR code".',
-                        step6:
-                            "Point the camera of your smartphone at the QR code you want to scan (the QR code should be located to the right of these instructions).",
-                        step7:
-                            "Review the information displayed on the screen to ensure that it is correct.",
-                        step8:
-                            'If all information is correct, tap "Accept" to add the credential to your wallet.',
-                    },
-                },
-                errors: {
-                    get: {
-                        failed: "The credential could not be loaded.",
-                        unauthorized:
-                            "You do not have the necessary permissions to view the credential.",
-                    },
-                    issue: {
-                        failed: "The credential could not be issued.",
-                        unauthorized:
-                            "You do not have the necessary permissions to issue the credential.",
-                        failedDependency:
-                            "Could not connect to the Credential Issuing Self-Service. Please ensure that you are connected to the university network.",
-                    },
-                    unknown: "Please try again later.",
+                    step1:
+                        "Download the {0} from the App Store or Google Play Store.",
+                    step2:
+                        "Open the app and follow the instructions to set up a new account.",
+                    step3:
+                        'Once you have successfully set up your account, select the "Credentials" tab.',
+                    step4:
+                        "Tap the small plus sign in the upper right corner of the screen.",
+                    step5:
+                        'In the menu that appears, select the option "Scan a QR code".',
+                    step6:
+                        "Point the camera of your smartphone at the QR code you want to scan (the QR code should be located to the right of these instructions).",
+                    step7:
+                        "Review the information displayed on the screen to ensure that it is correct.",
+                    step8:
+                        'If all information is correct, tap "Accept" to add the credential to your wallet.',
                 },
             },
+            errors: {
+                get: {
+                    failed: "The credential could not be loaded.",
+                    unauthorized:
+                        "You do not have the necessary permissions to view the credential.",
+                },
+                issue: {
+                    failed: "The credential could not be issued.",
+                    unauthorized:
+                        "You do not have the necessary permissions to issue the credential.",
+                    failedDependency:
+                        "Could not connect to the Credential Issuing Self-Service. Please ensure that you are connected to the university network.",
+                },
+                unknown: "Please try again later.",
+            },
         },
+    },
 
-    }
 }
 
 let currentLanguage = sessionStorage.getItem("locale");
-if(currentLanguage==null){
+if (currentLanguage == null) {
     currentLanguage = 'de'
 }
 const i18n = createI18n({
