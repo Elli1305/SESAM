@@ -13,6 +13,8 @@ import com.gpse.sesam.domain.credential.issuing.IssueCredential;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
 import com.gpse.sesam.domain.credential.validation.ComparisonRule;
+import com.gpse.sesam.domain.credential.validation.LengthRule;
+import com.gpse.sesam.domain.credential.validation.RangeRule;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.door.config.AttributeFilter;
@@ -139,12 +141,21 @@ public class CredentialServiceImpl implements CredentialService {
 					if (((ComparisonRule) rule).isCompareWithAttribute()) {
 						Long chosenAttributeId = credential.getForm().stream().filter(a -> ((ComparisonRule) rule).getAttributeName().equals(a.getLabel())).toList().get(0).getId();
 						((ComparisonRule) rule).setContent(attributeCmdMap.get(chosenAttributeId).value());
-						return rule.validate(correspondingAttributeCmd.value(), entry.getType());
-					} else {
-						return rule.validate(correspondingAttributeCmd.value(), entry.getType());
+					}
+				} else if (rule instanceof RangeRule) {
+					if (((RangeRule) rule).isCompareWithAttribute()) {
+						Long chosenAttributeFromId = credential.getForm().stream().filter(a -> ((RangeRule) rule).getAttributeNameFrom().equals(a.getLabel())).toList().get(0).getId();
+						Long chosenAttributeToId = credential.getForm().stream().filter(a -> ((RangeRule) rule).getAttributeNameTo().equals(a.getLabel())).toList().get(0).getId();
+						((RangeRule) rule).setValueFrom(attributeCmdMap.get(chosenAttributeFromId).value());
+						((RangeRule) rule).setValueTo(attributeCmdMap.get(chosenAttributeToId).value());
+					}
+				} else if (rule instanceof LengthRule) {
+					if (((LengthRule) rule).isCompareWithAttribute()) {
+						Long chosenAttributeId = credential.getForm().stream().filter(a -> ((LengthRule) rule).getAttributeName().equals(a.getLabel())).toList().get(0).getId();
+						((LengthRule) rule).setLength(attributeCmdMap.get(chosenAttributeId).value().length());
 					}
 				}
-				return false;
+				return rule.validate(correspondingAttributeCmd.value(), entry.getType());
 			});
 			if (!isValid) {
 				throw new IllegalArgumentException("Input " + correspondingAttributeCmd.value() + " for attribute " + entry.getAttributeName() + " is not valid");

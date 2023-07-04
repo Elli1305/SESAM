@@ -27,10 +27,10 @@ public class LengthRule extends ValidationRule {
 
     @Override
     public boolean validate(String input, FormEntryType type) {
-        if (type == FormEntryType.NUMBER) {
+        if (type == FormEntryType.TEXT) {
             return comparisonType.validate(input.length(), length);
         }
-        throw new IllegalArgumentException("RegEx validation is not possible for type " + type);
+        throw new IllegalArgumentException("Length validation is not possible for type " + type);
     }
 
     public ComparisonType getComparisonType() {

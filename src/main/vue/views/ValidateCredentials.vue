@@ -7,14 +7,21 @@
           <div class="text-subtitle2 text-grey">{{attribute.name}}</div>
         </div>
         <div class="row no-wrap">
-          <q-select label="Presets" dense outlined style="width: 12em"
-                    v-model="test"
-                    :options="[
-                        'in der Zukunft',
-                        'in der Vergangenheit',
-                        'in der Zukunft (inkl. heute)',
-                        'in der Vergangenheit (inkl. heute)'
-                        ]"/>
+          <q-btn-dropdown
+              flat dense rounded
+              style="height: 3em"
+              size="0.9em"
+              icon="content_copy"
+              :label="t('issuer.issueCredential.validation.presetsLabel')"
+              dropdown-icon="expand_more">
+            <q-list>
+              <q-item clickable v-close-popup v-for="preset in getPresets().entries()" @click="attribute.validationRules.push(...preset[1])">
+                <q-item-section>
+                  <q-item-label>{{preset[0]}}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
           <q-icon
               class="q-ml-md cursor-pointer"
               v-close-popup
@@ -241,7 +248,7 @@ export default {
     attribute: ref(null),
     attributes: ref(null)
   },
-  setup() {
+  setup(props: any) {
     const {t} = useI18n()
     const predicateType = ref('<')
     const predicateTypes = ['<', '>', '<=', '>=', '==', '!=']
@@ -299,6 +306,36 @@ export default {
       return attributeList
     }
 
+    function getPresets() {
+      let presets = new Map<string, (ComparisonRule | RangeRule | RegExRule | LengthRule)[]>()
+      switch (props.attribute.type) {
+        case 'number':
+          presets.set(t('issuer.issueCredential.validation.presets.positiveWithZero'), [{kind: "comparison", comparisonType: "GREATER_EQUAL", content: "0", currentDay: false, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.positiveWithoutZero'), [{kind: "comparison", comparisonType: "GREATER_THAN", content: "0", currentDay: false, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.negativeWithZero'), [{kind: "comparison", comparisonType: "LESS_EQUAL", content: "0", currentDay: false, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.negativeWithoutZero'), [{kind: "comparison", comparisonType: "LESS_THAN", content: "0", currentDay: false, compareWithAttribute: false, attributeName: ""}])
+          break
+        case 'date':
+          presets.set(t('issuer.issueCredential.validation.presets.futureWithToday'), [{kind: "comparison", comparisonType: "GREATER_EQUAL", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.futureWithoutToday'), [{kind: "comparison", comparisonType: "GREATER_THAN", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.pastWithToday'), [{kind: "comparison", comparisonType: "LESS_EQUAL", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.pastWithoutToday'), [{kind: "comparison", comparisonType: "LESS_THAN", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.today'), [{kind: "comparison", comparisonType: "EQUAL", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          break
+        case 'text':
+          presets.set(t('issuer.issueCredential.validation.presets.names'), [{kind: "regEx", regEx: "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$", description: "Wähle eine realen Name / Choose a real name"}, {kind: "length", comparisonType: "LESS_THAN", length: 50, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.noSpecialCharacter'), [{kind: "regEx", regEx: "^[a-zA-Z0-9]{4,10}$", description: "Darf nur Buchstaben und Nummern enthalten / Should only contain letters and numbers"}])
+          presets.set(t('issuer.issueCredential.validation.presets.email'), [{kind: "regEx", regEx: "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\\])", description: "Wähle eine valide E-Mail / Choose a valid email"}])
+          presets.set(t('issuer.issueCredential.validation.presets.phoneNumbers'), [{kind: "regEx", regEx: "^\\+?[1-9][0-9]{7,14}$", description: "Wählen Sie eine valide Telefonnummer / Choose a valid phone number"}])
+          presets.set(t('issuer.issueCredential.validation.presets.uppercase'), [{kind: "regEx", regEx: "^[A-Z]*$", description: "Darf nur Großbuchstaben enthalten / Should only contain uppercase letters"}])
+          presets.set(t('issuer.issueCredential.validation.presets.lowercase'), [{kind: "regEx", regEx: "^[a-z]*$", description: "Darf nur Kleinbuchstaben enthalten / Should only contain lowercase letters"}])
+          break
+        default:
+          console.error('No presets exist for type ' + props.attribute.type)
+      }
+      return presets
+    }
+
     function predicateTypeToString(predicateType: string) {
       switch (predicateType) {
         case 'EQUAL':
@@ -333,7 +370,7 @@ export default {
       valRuleType,
       deleteValRule,
       getAttributes,
-      test
+      getPresets,
     }
   },
   methods: {

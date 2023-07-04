@@ -4,6 +4,8 @@ import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
+import java.util.regex.Pattern;
+
 @Entity
 public class RegExRule extends ValidationRule {
 
@@ -24,7 +26,7 @@ public class RegExRule extends ValidationRule {
     @Override
     public boolean validate(String input, FormEntryType type) {
         if (type == FormEntryType.TEXT) {
-            return input.matches(regEx);
+            return Pattern.compile(regEx).matcher(input).matches();
         }
         throw new IllegalArgumentException("RegEx validation is not possible for type " + type);
     }

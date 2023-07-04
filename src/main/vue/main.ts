@@ -299,6 +299,27 @@ const messages = {
                     description: "Beschreibung",
                     chooseType: "Wähle einen Typ",
                     chooseAttribute: "Wähle ein Attribut",
+                    presetsLabel: "Vordef. Regeln",
+                    presets: {
+                        // Numbers
+                        positiveWithZero: "Positiv",
+                        positiveWithoutZero: "Positiv (exkl. 0)",
+                        negativeWithZero: "Negativ",
+                        negativeWithoutZero: "Negativ (exkl. 0)",
+                        // Dates
+                        futureWithToday: "Zukunft (inkl. today)",
+                        futureWithoutToday: "Zukunft",
+                        pastWithToday: "Vergangenheit (inkl. today)",
+                        pastWithoutToday: "Vergangenheit",
+                        today: "Heute",
+                        // Strings
+                        names: "Namen",
+                        noSpecialCharacter: "Keine Sonderzeichen",
+                        email: "E-mail",
+                        phoneNumbers: "Telefonnummern",
+                        uppercase: "Nur Großbuchstaben",
+                        lowercase: "Nur Kleinbuchstaben",
+                    },
                 },
                 steps: {
                     form: "Formular",
@@ -647,6 +668,27 @@ const messages = {
                     description: "Description",
                     chooseType: "Choose a type",
                     chooseAttribute: "Choose an attribute",
+                    presetsLabel: "Presets",
+                    presets: {
+                        // Numbers
+                        positiveWithZero: "Positive",
+                        positiveWithoutZero: "Positive (excl. 0)",
+                        negativeWithZero: "Negative",
+                        negativeWithoutZero: "Negative (excl. 0)",
+                        // Dates
+                        futureWithToday: "Future (incl. today)",
+                        futureWithoutToday: "Future",
+                        pastWithToday: "Past (incl. today)",
+                        pastWithoutToday: "Past",
+                        today: "Today",
+                        // Strings
+                        names: "Names",
+                        noSpecialCharacter: "No special characters",
+                        email: "Email",
+                        phoneNumbers: "Phone numbers",
+                        uppercase: "Only uppercase",
+                        lowercase: "Only lowercase",
+                    },
                 },
                 steps: {
                     form: "Form",
