@@ -208,7 +208,7 @@
                                 <q-icon name="search"/>
                             </template>
                         </q-input>
-                        <q-scroll-area style="height: 30em; min-width: 21em; overflow: hidden; max-width: 22em; "
+                        <q-scroll-area style="height: 50vh; min-width: 21em; overflow: hidden; max-width: 22em;"
                                        :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
                                        >
                         <q-list>
@@ -1011,12 +1011,14 @@ export default {
         const arrayFloors = ref([]);
         async function allFloorsForGroup() {
             const rooms = selectedGroups.value.rooms;
+            arrayFloors.value = [];
 
             for(let roomLength = 0; roomLength < rooms.length; roomLength++) {
 
                 await roomStore.getFloor(rooms[roomLength].id);
                 let level = roomStore.floor.floorLevel
                 arrayFloors.value.push(level);
+                console.log("Room:", rooms[roomLength], "Floor", level);
             }
             console.log("arrayFloors:", arrayFloors.value);
         }
