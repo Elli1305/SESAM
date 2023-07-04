@@ -1,22 +1,25 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
     <p class="row text-h3 justify-center">{{ t("credentialview.credentialview") }}</p>
-    <div class="row self-center">
       <q-splitter
+          class="row self-center"
           v-model="splitterModel"
-          style="height: 90%"
+          style="width: 80vw; height: 50vh"
+          disable
           :limits="[5, Infinity]"
       >
-        <template v-slot:before style="max-width: 20px">
+        <template v-slot:before style="width: fit-content">
           <q-tabs
               v-model="tab"
               vertical
               class="bg-white text-primary"
+              style="max-width: 10vw"
           >
-            <q-tab name="credentials" label="Credentials" />
-            <q-tab name="all" label="Alle Credentials" />
+            <q-tab name="credentials" label="Interne"/>
+            <q-tab name="all" label="Externe"/>
           </q-tabs>
         </template>
+
         <template v-slot:after>
           <q-tab-panels
               v-model="tab"
@@ -27,58 +30,59 @@
               transition-next="jump-up"
               color="primary"
           >
-              <q-tab-panel name="credentials">
-      <q-table
-          style="width: 80vw; height: 50vh"
-          :rows-per-page-options="[0]"
-          :rows="rows"
-          :columns="columns"
-          :title="t('credentialview.credentialview')"
-          :separator="'cell'"
-          :no-data-label="t('common.noData')"
-          :no-results-label="t('common.noResults')"
-          :pagination-label="getPaginationLabel"
-          :filter="filter"
-          row-key="name"
-          visible-columns="['category', 'availableCredential', 'qualification', 'issuer']">
-        <template v-slot:top-right>
-          <q-select
-              :label="t('credentialview.location')"
-              behavior="menu"
-              v-model="model"
-              borderless
-              dense
-              options-dense
-              emit-value
-              map-options
-              :options="locationStore.allLocations"
-              option-value="id"
-              option-label="name"
-              style="min-width: 12em; padding-right: 2em"
-              @update:model-value="updateCredentials"/>
-          <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('credentialview.search')">
-            <template v-slot:append>
-              <q-icon name="search"/>
-            </template>
-          </q-input>
-        </template>
-        <template v-slot:body-cell-issuer="props">
-          <q-td style="" class="column no-wrap" :props="props">
-            <div class="row q-my-xs justify-between items-center no-wrap" v-for="(elem, index) in props.row.issuerName">
-              <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
-              <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
-                <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
-                  {{ t("credentialview.room") }} {{ props.row.room[index] }}
-                </q-tooltip>
-              </q-icon>
-            </div>
-          </q-td>
-        </template>
-      </q-table>
-              </q-tab-panel>
+            <q-tab-panel name="credentials">
+              <q-table
+                  style="height: 45vh"
+                  :rows-per-page-options="[0]"
+                  :rows="rows"
+                  :columns="columns"
+                  :title="t('credentialview.credentialview')"
+                  :separator="'cell'"
+                  :no-data-label="t('common.noData')"
+                  :no-results-label="t('common.noResults')"
+                  :pagination-label="getPaginationLabel"
+                  :filter="filter"
+                  row-key="name"
+                  visible-columns="['category', 'availableCredential', 'qualification', 'issuer']">
+                <template v-slot:top-right>
+                  <q-select
+                      :label="t('credentialview.location')"
+                      behavior="menu"
+                      v-model="model"
+                      borderless
+                      dense
+                      options-dense
+                      emit-value
+                      map-options
+                      :options="locationStore.allLocations"
+                      option-value="id"
+                      option-label="name"
+                      style="min-width: 12em; padding-right: 2em"
+                      @update:model-value="updateCredentials"/>
+                  <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('credentialview.search')">
+                    <template v-slot:append>
+                      <q-icon name="search"/>
+                    </template>
+                  </q-input>
+                </template>
+                <template v-slot:body-cell-issuer="props">
+                  <q-td style="" class="column no-wrap" :props="props">
+                    <div class="row q-my-xs justify-between items-center no-wrap"
+                         v-for="(elem, index) in props.row.issuerName">
+                      <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
+                      <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
+                        <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
+                          {{ t("credentialview.room") }} {{ props.row.room[index] }}
+                        </q-tooltip>
+                      </q-icon>
+                    </div>
+                  </q-td>
+                </template>
+              </q-table>
+            </q-tab-panel>
             <q-tab-panel name="all">
               <q-table
-                  style="width: 80vw; height: 50vh"
+                  style="height: 45vh"
                   :rows-per-page-options="[0]"
                   :rows="rows2"
                   :columns="columns"
@@ -99,7 +103,8 @@
                 </template>
                 <template v-slot:body-cell-issuer="props">
                   <q-td style="" class="column no-wrap" :props="props">
-                    <div class="row q-my-xs justify-between items-center no-wrap" v-for="(elem, index) in props.row.issuerName">
+                    <div class="row q-my-xs justify-between items-center no-wrap"
+                         v-for="(elem, index) in props.row.issuerName">
                       <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
                       <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
                         <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
@@ -111,10 +116,9 @@
                 </template>
               </q-table>
             </q-tab-panel>
-            </q-tab-panels>
+          </q-tab-panels>
         </template>
       </q-splitter>
-    </div>
 
   </q-page>
 </template>
@@ -238,7 +242,7 @@ export default {
       model,
       t,
       rows2,
-      filter2:ref(''),
+      filter2: ref(''),
       tab: ref('credentials'),
       splitterModel: ref(20),
       updateCredentials,
