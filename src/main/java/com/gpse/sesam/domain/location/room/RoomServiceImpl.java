@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -50,15 +51,15 @@ public class RoomServiceImpl implements RoomService {
 	}
 	@Override
 	public Floor getFloorToRoom(Long roomId) {
-		Floor theFloor = new Floor(0,"");
+		Floor theFloor = new Floor(0, "");
 
 		List<Floor> allFloors = floorService.getAll();
 
 
 		for(Floor floor : allFloors) {
-			List<Room> roomsForFloor =floor.getRooms();
-			for(Room rooms: roomsForFloor) {
-				if(rooms.getId() == roomId) {
+			List<Room> roomsForFloor = floor.getRooms();
+			for (Room rooms : roomsForFloor) {
+				if (Objects.equals(rooms.getId(), roomId)) {
 
 					theFloor.setFloorLevel(floor.getFloorLevel());
 					theFloor.setFloorPlanPath(floor.getFloorPlanPath());
