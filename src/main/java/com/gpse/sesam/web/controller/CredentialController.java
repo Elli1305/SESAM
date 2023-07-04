@@ -103,4 +103,7 @@ public class CredentialController {
 
 	@GetMapping(value = "/externalcredentialview")
 	public List<ExternalCredentialCmd> externalCredentials() {return externalCredentialService.getAllExternal();}
+
+	@GetMapping(value="/allcredentialview")
+	public List<AllCredentialCmd> allCredentials() {return service.getAllForView();}
 }

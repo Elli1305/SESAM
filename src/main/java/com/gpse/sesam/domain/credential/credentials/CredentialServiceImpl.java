@@ -15,12 +15,7 @@ import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
-import com.gpse.sesam.web.cmd.CreateCredentialCmd;
-import com.gpse.sesam.web.cmd.CredentialCmd;
-import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
-import com.gpse.sesam.web.cmd.UpdateAttributeCmd;
-import com.gpse.sesam.web.cmd.UpdateConditionCmd;
-import com.gpse.sesam.web.cmd.UpdateCredentialCmd;
+import com.gpse.sesam.web.cmd.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -342,6 +337,61 @@ public class CredentialServiceImpl implements CredentialService {
 
 		}
 
+		return cmd;
+	}
+
+	@Override
+	public List<AllCredentialCmd> getAllForView() {
+		List<InternalCredential> credentials = getCredentials();
+		List<Category> categories = categoryService.getCategory();
+		List<AllCredentialCmd> cmd = new ArrayList<>();
+
+		for (InternalCredential credential : credentials) {
+			String categoryName = "-";
+			List<String> externalCredentials = new ArrayList<>();
+			List<String> issuers = new ArrayList<>();
+			List<String> room = new ArrayList<>();
+			for (Category category : categories) {
+				if (category.getCredentials().contains(credential)) {
+					categoryName = category.getName();
+					for (ExternalCredential external : credential.getCategory().getExternalCredentials()) {
+						externalCredentials.add(external.getName());
+					}
+				}
+			}
+
+			String credentialName = credential.getName();
+			if (!credential.getIssuer().isEmpty()) {
+				for (Issuer issuer : credential.getIssuer()) {
+					issuers.add(issuer.getFirstName() + " " + issuer.getLastName());
+					String roomName = "-";
+					if (!(issuer.getRoom() == null)) {
+						roomName = issuer.getRoom().getName();
+					}
+					room.add(roomName);
+				}
+			}
+			cmd.add(new AllCredentialCmd(categoryName, credentialName, "Intern", externalCredentials, issuers, room));
+		}
+		List<ExternalCredential> externalCredentials = getExternalCredentials();
+		for (ExternalCredential extern : externalCredentials) {
+			List<String> intern = new ArrayList<>();
+			String categoryName = "-";
+			String name = extern.getName();
+			for (Category category : categories) {
+				if (category.getExternalCredentials().contains(extern)) {
+					categoryName = category.getName();
+					for (InternalCredential internal : category.getCredentials()) {
+						intern.add(internal.getName());
+					}
+				}
+
+			}
+			List<String> room = new ArrayList<>();
+			List<String> issuer = new ArrayList<>();
+			cmd.add(new AllCredentialCmd(categoryName, name, "Extern", intern, issuer, room));
+
+		}
 		return cmd;
 	}
 }

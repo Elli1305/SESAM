@@ -1,10 +1,7 @@
 package com.gpse.sesam.domain.credential.credentials;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gpse.sesam.web.cmd.CreateCredentialCmd;
-import com.gpse.sesam.web.cmd.CredentialCmd;
-import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
-import com.gpse.sesam.web.cmd.UpdateCredentialCmd;
+import com.gpse.sesam.web.cmd.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,5 +32,7 @@ public interface CredentialService {
 
 	void update(Long id, UpdateCredentialCmd updateCredentialCmd);
 
-	public List<CredentialCmd> getAllCredentialsForView();
+	List<CredentialCmd> getAllCredentialsForView();
+
+	List<AllCredentialCmd> getAllForView();
 }
