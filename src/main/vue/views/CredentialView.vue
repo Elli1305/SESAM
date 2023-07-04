@@ -81,6 +81,7 @@
                       </q-icon>
                     </div>
                   </q-td>
+                  <br>
                 </template>
               </q-table>
             </q-tab-panel>
@@ -128,14 +129,16 @@
                   style="height: 45vh"
                   :rows-per-page-options="[0]"
                   :rows="rows3"
-                  :columns="columns"
-                  :title="t('credentialview.extern')"
+                  :columns="columns3"
+                  :title="t('credentialview.allCredentials')"
                   :separator="'cell'"
                   :no-data-label="t('common.noData')"
                   :no-results-label="t('common.noResults')"
                   :pagination-label="getPaginationLabel"
                   :filter="filter3"
-                  row-key="name">
+                  row-key="name"
+                  visible-columns="['category', 'type', 'availableCredential', 'qualification', 'issuer']"
+              >
                 <template v-slot:top-right>
                   <q-toggle v-model="value3" left-label :label="t('credentialview.showcredentials')" @update:model-value="all(value3)"/>
                   <div v-if="!value3">
@@ -159,6 +162,19 @@
                       <q-icon name="search"/>
                     </template>
                   </q-input>
+                </template>
+                <template v-slot:body-cell-issuer="props">
+                  <q-td style="" class="column no-wrap" :props="props">
+                    <div class="row q-my-xs justify-between items-center no-wrap"
+                         v-for="(elem, index) in props.row.issuerName">
+                      <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
+                      <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
+                        <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
+                          {{ t("credentialview.room") }} {{ props.row.room[index] }}
+                        </q-tooltip>
+                      </q-icon>
+                    </div>
+                  </q-td>
                 </template>
               </q-table>
             </q-tab-panel>
@@ -207,6 +223,14 @@ export default {
       { name: 'qualification', align: 'center', label: t('credentialview.intern'), field: row => row.internalCredential, format: (val) => val.join(', '), sortable: true },
     ]
 
+    const columns3 = [
+      { name: 'availableCredential', align: 'center', label: t('credentialview.availablecredentials'), field: row => row.credentialName, sortable: true},
+      { name: 'category', required: true, label: t('credentialview.type'), align: 'center', field: row => row.type, sortable: true },
+      { name: 'category', required: true, label: t('credentialmapping.category'), align: 'center', field: row => row.categoryName, format: val => `${val}`, sortable: true },
+      { name: 'issuer', align: 'center', label: t('credentialview.issuer'), field: row => row.issuerName, format: (val) => val.join(', '), sortable: true },
+      { name: 'room', align: 'center', label: t('credentialview.room'), sortable: true}
+    ]
+
     let rows = ref([])
 
     const rows2 = ref([])
@@ -239,6 +263,7 @@ export default {
       queryParam.value = route.query.q
       setLocation(queryParam.value)
       externalCredential(true)
+      all(true)
     })
 
     function internalCredential(value) {
@@ -282,7 +307,7 @@ export default {
     }
 
     function getAll() {
-      credentialStore.getExternalsForView().then((credentials) => {
+      credentialStore.getAllForView().then((credentials) => {
         rows3.value = credentials
       })
     }
@@ -305,8 +330,10 @@ export default {
     return {
       columns,
       columns2,
+      columns3,
       rows,
       rows2,
+      rows3,
       filter,
       filter2: ref(''),
       filter3: ref(''),
@@ -317,7 +344,7 @@ export default {
       model2,
       model3,
       t,
-      tab: ref('credentials'),
+      tab: ref('all'),
       splitterModel: ref(20),
       updateCredentials,
       queryParam,

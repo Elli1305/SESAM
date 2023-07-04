@@ -100,3 +100,12 @@ export interface ExternalCredentialCmd {
     credentialName: string;
     internalCredential: string[];
 }
+
+export interface AllCredentialCmd {
+    categoryName: string;
+    credentialName: string;
+    type: string;
+    externalCredential: string[];
+    issuerName: string[];
+    issuerRoom: string[];
+}

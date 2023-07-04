@@ -1,5 +1,6 @@
 import axios, {AxiosResponse,} from "axios";
 import {
+    AllCredentialCmd,
     Category,
     CategoryResponse,
     CreateCredential,
@@ -71,6 +72,10 @@ export default {
 
     getAllExternalCredentialsForView(): Promise<AxiosResponse<ExternalCredentialCmd[]>> {
         return axios.get("api/externalcredentialview")
-    }
+    },
+
+    getAllForView(): Promise<AxiosResponse<AllCredentialCmd[]>> {
+        return axios.get("api/allcredentialview")
+    },
 
 }

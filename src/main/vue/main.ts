@@ -174,7 +174,9 @@ const messages = {
             showcredentials: "Alle Credential anzeigen",
             internal: "Intern",
             external: "Extern",
-            all: "Alle"
+            all: "Alle",
+            allCredentials: "All Credentials",
+            type: "Typ",
         },
         credentialmapping: {
             credentialmapping: 'Credentialmapping',
@@ -478,7 +480,9 @@ const messages = {
             showcredentials: "Show all credentials",
             internal: "Internal",
             external: "External",
-            all: "All"
+            all: "All",
+            type: "Type",
+            allCredentials: "Alle Credentials"
         },
         credentialmapping: {
             credentialmapping: 'Credential mapping',
