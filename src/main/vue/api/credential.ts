@@ -5,7 +5,7 @@ import {
     CreateCredential,
     Credential,
     CredentialCmd,
-    ExternalCredential,
+    ExternalCredential, ExternalCredentialCmd,
     IssueCredentialAttribute
 } from "@/main/vue/entity/credentialDefinition";
 
@@ -67,6 +67,10 @@ export default {
 
     getAllCredentialsForView():Promise<AxiosResponse<CredentialCmd[]>> {
         return axios.get("api/allcredentials")
+    },
+
+    getAllExternalCredentialsForView(): Promise<AxiosResponse<ExternalCredentialCmd[]>> {
+        return axios.get("api/externalcredentialview")
     }
 
 }

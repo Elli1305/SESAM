@@ -1,7 +1,13 @@
 import {defineStore} from "pinia";
 import {Ref, ref} from "vue";
 import api from "@/main/vue/api";
-import {Category, Credential, CredentialCmd, ExternalCredential} from "@/main/vue/entity/credentialDefinition";
+import {
+    Category,
+    Credential,
+    CredentialCmd,
+    ExternalCredential,
+    ExternalCredentialCmd
+} from "@/main/vue/entity/credentialDefinition";
 
 export const useCredentialsStore = defineStore('credentials', {
     state: () => {
@@ -24,6 +30,7 @@ export const useCredentialStore = defineStore('credential', () => {
     const categories: Ref<Category[] | null> = ref(null)
     const external: Ref<ExternalCredential[] | null> = ref(null)
     const credentialsForView: Ref<CredentialCmd[] | null> = ref(null)
+    const externalForView: Ref<ExternalCredentialCmd[] | null> = ref(null)
 
 
 
@@ -142,6 +149,17 @@ export const useCredentialStore = defineStore('credential', () => {
             })
         }
 
+    function getExternalsForView() {
+        return new Promise((resolve, reject) => {
+            api.credential.getAllExternalCredentialsForView().then((response) => {
+                externalForView.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
 
 
         return {
@@ -160,7 +178,9 @@ export const useCredentialStore = defineStore('credential', () => {
             allCredentials,
             getCredentials,
             createCategory,
-            updateCredentials
+            updateCredentials,
+            externalForView,
+            getExternalsForView
         }
     }
 )

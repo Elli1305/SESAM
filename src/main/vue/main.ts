@@ -162,13 +162,19 @@ const messages = {
         },
         credentialview :{
             credentialview: "Credentialansicht",
+            intern: "Interne Credential",
+            extern: "Externe Credential",
             location: "Standort",
             search: "Suche",
             category: "Kategorie",
-            availablecredentials: "Verfügbbare Credential",
+            availablecredentials: "Credential",
             qualification: "Vergleichbare Credential",
             issuer: "Herausgeber",
-            room: "Raum: "
+            room: "Raum: ",
+            showcredentials: "Alle Credential anzeigen",
+            internal: "Intern",
+            external: "Extern",
+            all: "Alle"
         },
         credentialmapping: {
             credentialmapping: 'Credentialmapping',
@@ -466,7 +472,13 @@ const messages = {
             availablecredentials: "Available Credentials",
             qualification: "Comparable Credential",
             issuer: "Issuer",
-            room: "Room: "
+            room: "Room: ",
+            intern: "Internal Credential",
+            extern: "External Credential",
+            showcredentials: "Show all credentials",
+            internal: "Internal",
+            external: "External",
+            all: "All"
         },
         credentialmapping: {
             credentialmapping: 'Credential mapping',
