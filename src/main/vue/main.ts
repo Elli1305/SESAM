@@ -326,9 +326,9 @@ const messages = {
                         negativeWithZero: "Negativ",
                         negativeWithoutZero: "Negativ (exkl. 0)",
                         // Dates
-                        futureWithToday: "Zukunft (inkl. today)",
+                        futureWithToday: "Zukunft (inkl. heute)",
                         futureWithoutToday: "Zukunft",
-                        pastWithToday: "Vergangenheit (inkl. today)",
+                        pastWithToday: "Vergangenheit (inkl. heute)",
                         pastWithoutToday: "Vergangenheit",
                         today: "Heute",
                         // Strings
