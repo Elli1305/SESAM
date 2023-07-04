@@ -56,7 +56,7 @@ public class RoomServiceImpl implements RoomService {
 		List<Floor> allFloors = floorService.getAll();
 
 
-		for(Floor floor : allFloors) {
+		for (Floor floor : allFloors) {
 			List<Room> roomsForFloor = floor.getRooms();
 			for (Room rooms : roomsForFloor) {
 				if (Objects.equals(rooms.getId(), roomId)) {
