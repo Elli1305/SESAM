@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import java.time.LocalDate;
 
 @Entity
-public class ComparisonRule extends ValidationRule {
+public class ComparisonRule extends AbstractValidationRule {
 
     @Column
     private ComparisonType comparisonType;
@@ -98,18 +98,19 @@ public class ComparisonRule extends ValidationRule {
             }
             case DATE -> {
                 String[] inputString = input.split("-");
-                LocalDate dateInput = LocalDate.of(Integer.parseInt(inputString[0]), Integer.parseInt(inputString[1]), Integer.parseInt(inputString[2]));
+                LocalDate dateInput = LocalDate.of(Integer.parseInt(inputString[0]), Integer.parseInt(inputString[1]),
+                        Integer.parseInt(inputString[2]));
                 LocalDate dateContent;
                 if (currentDay) {
                     dateContent = LocalDate.now();
-                }
-                else {
+                } else {
                     String[] contentString = content.split("-");
-                    dateContent = LocalDate.of(Integer.parseInt(contentString[0]), Integer.parseInt(contentString[1]), Integer.parseInt(contentString[2]));
+                    dateContent = LocalDate.of(Integer.parseInt(contentString[0]), Integer.parseInt(contentString[1]),
+                            Integer.parseInt(contentString[2]));
                 }
                 return comparisonType.validate(dateInput, dateContent);
             }
-            default ->  {
+            default -> {
                 throw new IllegalArgumentException("Comparison is not possible for given type " + type);
             }
         }

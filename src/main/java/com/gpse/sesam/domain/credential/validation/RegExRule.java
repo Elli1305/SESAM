@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import java.util.regex.Pattern;
 
 @Entity
-public class RegExRule extends ValidationRule {
+public class RegExRule extends AbstractValidationRule {
 
     @Column
     private String regEx;

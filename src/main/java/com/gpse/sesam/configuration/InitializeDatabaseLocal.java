@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -245,10 +244,14 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private List<FormEntry> form() {
 		final List<FormEntry> form = new ArrayList<>();
 		final FormEntry id = new FormEntry("ID", FormEntryType.NUMBER, "id", getIdValidationRules());
-		final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name", getFirstNameValidationRules());
-		final FormEntry lastName = new FormEntry("Nachname", FormEntryType.TEXT, "last_name", getLastNameValidationRules());
-		final FormEntry birthDate = new FormEntry("Geburtstagsdatum", FormEntryType.DATE, "birth_date", getBirthDateValidationRules());
-		final FormEntry date = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date", getDateValidationRules());
+		final FormEntry firstName = new FormEntry(
+				"Vorname", FormEntryType.TEXT, "first_name", getFirstNameValidationRules());
+		final FormEntry lastName = new FormEntry(
+				"Nachname", FormEntryType.TEXT, "last_name", getLastNameValidationRules());
+		final FormEntry birthDate = new FormEntry(
+				"Geburtstagsdatum", FormEntryType.DATE, "birth_date", getBirthDateValidationRules());
+		final FormEntry date = new FormEntry(
+				"Ablaufdatum", FormEntryType.DATE, "expiration_date", getDateValidationRules());
 		form.add(id);
 		form.add(firstName);
 		form.add(lastName);
@@ -257,34 +260,40 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		return form;
 	}
 
-	private List<ValidationRule> getIdValidationRules() {
-		final List<ValidationRule> validationRules = new ArrayList<>();
+	private List<AbstractValidationRule> getIdValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
 		validationRules.add(new ComparisonRule(ComparisonType.GREATER_EQUAL, "0"));
 		return validationRules;
 	}
 
-	private List<ValidationRule> getFirstNameValidationRules() {
-		final List<ValidationRule> validationRules = new ArrayList<>();
-		validationRules.add(new RegExRule("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$", "Wähle eine realen Name / Choose a real name"));
+	private List<AbstractValidationRule> getFirstNameValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new RegExRule(
+				"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅ"
+						+ "ĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$",
+				"Wähle eine realen Name / Choose a real name"));
 		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
 		return validationRules;
 	}
 
-	private List<ValidationRule> getLastNameValidationRules() {
-		final List<ValidationRule> validationRules = new ArrayList<>();
-		validationRules.add(new RegExRule("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$", "Wähle eine realen Name / Choose a real name"));
+	private List<AbstractValidationRule> getLastNameValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new RegExRule(
+				"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅ"
+						+ "ĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$",
+				"Wähle eine realen Name / Choose a real name"));
 		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
 		return validationRules;
 	}
 
-	private List<ValidationRule> getBirthDateValidationRules() {
-		final List<ValidationRule> validationRules = new ArrayList<>();
+	private List<AbstractValidationRule> getBirthDateValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
 		validationRules.add(new ComparisonRule(ComparisonType.LESS_THAN, true, "Ablaufdatum"));
 		return validationRules;
 	}
 
-	private List<ValidationRule> getDateValidationRules() {
-		final List<ValidationRule> validationRules = new ArrayList<>();
+	private List<AbstractValidationRule> getDateValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
 		validationRules.add(new ComparisonRule(ComparisonType.GREATER_THAN, true, "Geburtstagsdatum"));
 		return validationRules;
 	}

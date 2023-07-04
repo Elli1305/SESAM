@@ -5,7 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 @Entity
-public class LengthRule extends ValidationRule {
+public class LengthRule extends AbstractValidationRule {
 
     @Column
     private ComparisonType comparisonType;

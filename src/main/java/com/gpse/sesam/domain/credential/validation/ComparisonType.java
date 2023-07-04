@@ -2,43 +2,43 @@ package com.gpse.sesam.domain.credential.validation;
 
 public enum ComparisonType {
 
-    EQUAL{
+    EQUAL {
         @Override
-        public <T>boolean validate(Comparable<T> value1, T value2) {
+        public <T> boolean validate(Comparable<T> value1, T value2) {
             return value1.compareTo(value2) == 0;
         }
     },
-    NOT_EQUAL{
+    NOT_EQUAL {
         @Override
-        public <T>boolean validate(Comparable<T> value1, T value2) {
+        public <T> boolean validate(Comparable<T> value1, T value2) {
             return value1.compareTo(value2) != 0;
         }
     },
-    LESS_THAN{
+    LESS_THAN {
         @Override
-        public <T>boolean validate(Comparable<T> value1, T value2) {
+        public <T> boolean validate(Comparable<T> value1, T value2) {
             return value1.compareTo(value2) < 0;
         }
     },
-    GREATER_THAN{
+    GREATER_THAN {
         @Override
-        public <T>boolean validate(Comparable<T> value1, T value2) {
+        public <T> boolean validate(Comparable<T> value1, T value2) {
             return value1.compareTo(value2) > 0;
         }
     },
-    LESS_EQUAL{
+    LESS_EQUAL {
         @Override
-        public <T>boolean validate(Comparable<T> value1, T value2) {
+        public <T> boolean validate(Comparable<T> value1, T value2) {
             return value1.compareTo(value2) <= 0;
         }
     },
-    GREATER_EQUAL{
+    GREATER_EQUAL {
         @Override
-        public <T>boolean validate(Comparable<T> value1, T value2) {
+        public <T> boolean validate(Comparable<T> value1, T value2) {
             return value1.compareTo(value2) >= 0;
         }
     };
 
-    public abstract <T>boolean validate(Comparable<T> value1, T value2);
+    public abstract <T> boolean validate(Comparable<T> value1, T value2);
 
 }

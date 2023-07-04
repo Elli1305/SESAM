@@ -9,14 +9,14 @@ import jakarta.persistence.*;
         use = JsonTypeInfo.Id.NAME,
         property = "kind")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ComparisonRule.class, name="comparison"),
-        @JsonSubTypes.Type(value = RangeRule.class, name="range"),
-        @JsonSubTypes.Type(value = RegExRule.class, name="regEx"),
-        @JsonSubTypes.Type(value = LengthRule.class, name="length")
-        })
+        @JsonSubTypes.Type(value = ComparisonRule.class, name = "comparison"),
+        @JsonSubTypes.Type(value = RangeRule.class, name = "range"),
+        @JsonSubTypes.Type(value = RegExRule.class, name = "regEx"),
+        @JsonSubTypes.Type(value = LengthRule.class, name = "length")
+})
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ValidationRule {
+public abstract class AbstractValidationRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)

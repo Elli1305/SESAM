@@ -1,6 +1,6 @@
 package com.gpse.sesam.domain.credential.issuing;
 
-import com.gpse.sesam.domain.credential.validation.ValidationRule;
+import com.gpse.sesam.domain.credential.validation.AbstractValidationRule;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class FormEntry {
 	private String attributeName;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<ValidationRule> validationRules;
+	private List<AbstractValidationRule> validationRules;
 
 	protected FormEntry() {
 	}
@@ -32,7 +32,9 @@ public class FormEntry {
 		this(label, type, attributeName, new ArrayList<>());
 	}
 
-	public FormEntry(final String label, final FormEntryType type, final String attributeName, final List<ValidationRule> validationRules) {
+	public FormEntry(final String label, final FormEntryType type,
+					 final String attributeName,
+					 final List<AbstractValidationRule> validationRules) {
 		this.label = label;
 		this.type = type;
 		this.attributeName = attributeName;
@@ -67,11 +69,11 @@ public class FormEntry {
 		return attributeName;
 	}
 
-	public List<ValidationRule> getValidationRules() {
+	public List<AbstractValidationRule> getValidationRules() {
 		return validationRules;
 	}
 
-	public void setValidationRules(List<ValidationRule> validationRules) {
+	public void setValidationRules(List<AbstractValidationRule> validationRules) {
 		this.validationRules = validationRules;
 	}
 }

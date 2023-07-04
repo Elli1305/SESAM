@@ -5,6 +5,7 @@ import com.gpse.sesam.domain.location.door.config.ProofConfig;
 import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.web.cmd.DoorConfigCmd;
 import com.gpse.sesam.web.cmd.PredefinedConfigCmd;
+import com.gpse.sesam.web.exception.InvalidDoorConfiguration;
 import com.gpse.sesam.web.exception.PredefinedConfigNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,7 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
                     predefinedConfig.getName(), in, out);
             return predefinedConfigCmd;
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new InvalidDoorConfiguration("door config could not be parsed", e);
         }
     }
 
