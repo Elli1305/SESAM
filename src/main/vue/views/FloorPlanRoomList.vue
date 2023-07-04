@@ -261,9 +261,10 @@
                                                             <div class="q-mt-md">
                                                                 <q-input filled v-model="currentGroupName"
                                                                          :label="t( 'floorplan.groupName')" stack-label
-                                                                         style="width: 250px; padding-bottom: 1em"/>
+                                                                         style="width: 100%; padding-bottom: 1em"/>
                                                             </div>
                                                             <div class="q-my-xs">
+                                                                <q-scroll-area style="height: 25em; max-width: 3000px;">
                                                                 <q-list bordered class="rounded-borders"
                                                                         style="max-width: 600px">
                                                                     <q-item-label header>
@@ -280,12 +281,25 @@
                                                                         <q-item class="q-mb-sm">
 
                                                                             <q-item-section>
+                                                                                <div class="row">
                                                                                 <q-item-label lines="1">
                                                                             <span class="text-weight-medium">{{
                                                                                     room.name
                                                                                 }}</span>
                                                                                 </q-item-label>
+
+                                                                                <q-btn
+                                                                                    dense
+                                                                                    style="padding-left: 10em;"
+                                                                                    flat
+                                                                                    icon="delete"
+                                                                                    color="grey"
+                                                                                    :label="t('adminEdit.delete')"
+                                                                                    @click=""/>
+                                                                                </div>
+
                                                                                 <q-item-label caption>Etage: {{arrayFloors[i]}}</q-item-label>
+
 
                                                                             </q-item-section>
 
@@ -299,6 +313,7 @@
                                                                         </div>
                                                                     </template>
                                                                 </q-list>
+                                                                </q-scroll-area>
                                                             </div>
 
 
