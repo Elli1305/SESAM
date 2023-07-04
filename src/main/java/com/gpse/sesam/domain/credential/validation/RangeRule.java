@@ -17,7 +17,9 @@ public class RangeRule extends ValidationRule {
 
     private boolean compareWithAttribute;
 
-    private String attributeName;
+    private String attributeNameFrom;
+
+    private String attributeNameTo;
 
     public RangeRule(String valueFrom, String valueTo) {
         this.valueFrom = valueFrom;
@@ -76,11 +78,19 @@ public class RangeRule extends ValidationRule {
         this.compareWithAttribute = compareWithAttribute;
     }
 
-    public String getAttributeName() {
-        return attributeName;
+    public String getAttributeNameFrom() {
+        return attributeNameFrom;
     }
 
-    public void setAttributeName(String attributeName) {
-        this.attributeName = attributeName;
+    public void setAttributeNameFrom(String attributeName) {
+        this.attributeNameFrom = attributeName;
+    }
+
+    public String getAttributeNameTo() {
+        return attributeNameTo;
+    }
+
+    public void setAttributeNameTo(String attributeNameTo) {
+        this.attributeNameTo = attributeNameTo;
     }
 }

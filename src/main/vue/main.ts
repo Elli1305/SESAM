@@ -22,6 +22,9 @@ const messages = {
             done: "Fertig",
             edit: "Bearbeiten",
             search: "Suche",
+            der: "der",
+            die: "die",
+            das: "das",
             of: "von",
 
             // Concept words
@@ -362,6 +365,9 @@ const messages = {
             done: "Done",
             edit: "Edit",
             search: "Search",
+            der: "the",
+            die: "the",
+            das: "the",
             of: "of",
 
             // Concept words

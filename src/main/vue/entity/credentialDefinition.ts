@@ -41,7 +41,8 @@ export interface RangeRule {
     valueFrom: string
     valueTo: string
     compareWithAttribute: boolean
-    attributeName: string
+    attributeNameFrom: string,
+    attributeNameTo: string
 }
 
 export interface RegExRule {

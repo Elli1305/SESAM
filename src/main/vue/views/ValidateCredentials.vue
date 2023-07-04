@@ -65,10 +65,9 @@
                     class="full-width"
                     v-if="vr.compareWithAttribute"
                     :label="t('issuer.issueCredential.validation.chooseAttribute')"
-                    v-model="chosenAttribute"
+                    v-model="vr.attributeName"
                     :options="getAttributes(attribute, attributes)"
                     option-label="name"
-                    @select="vr.attributeName = chosenAttribute"
                     bottom-slots rounded outlined ref="input">
                 </q-select>
                 <q-toggle
@@ -93,6 +92,15 @@
                          :type="attribute.type"
                          bottom-slots rounded outlined ref="input">
                 </q-input>
+                <q-select
+                    class="full-width"
+                    v-if="vr.compareWithAttribute"
+                    :label="t('issuer.issueCredential.validation.chooseAttribute')"
+                    v-model="vr.attributeNameFrom"
+                    :options="getAttributes(attribute, attributes)"
+                    option-label="name"
+                    bottom-slots rounded outlined ref="input">
+                </q-select>
                 <div class="column justify-center q-mx-md" style="height: 4em">
                   <span style="font-size: 2em; color: grey">&#8210</span>
                 </div>
@@ -107,10 +115,9 @@
                     class="full-width"
                     v-if="vr.compareWithAttribute"
                     :label="t('issuer.issueCredential.validation.chooseAttribute')"
-                    v-model="chosenAttribute"
+                    v-model="vr.attributeNameTo"
                     :options="getAttributes(attribute, attributes)"
                     option-label="name"
-                    @select="vr.attributeName = chosenAttribute"
                     bottom-slots rounded outlined ref="input">
                 </q-select>
                 <q-toggle
@@ -167,6 +174,7 @@
                   </template>
                 </q-select>
                 <q-input class="full-width"
+                         v-if="!vr.compareWithAttribute"
                          :label="t('issuer.issueCredential.validation.vType.length')"
                          stack-label
                          v-model="vr.length"
@@ -177,10 +185,9 @@
                     class="full-width"
                     v-if="vr.compareWithAttribute"
                     :label="t('issuer.issueCredential.validation.chooseAttribute')"
-                    v-model="chosenAttribute"
+                    v-model="vr.attributeName"
                     :options="getAttributes(attribute, attributes)"
                     option-label="name"
-                    @select="vr.attributeName = chosenAttribute"
                     bottom-slots rounded outlined ref="input">
                 </q-select>
                 <q-toggle
@@ -244,7 +251,6 @@ export default {
     const regEx = ref('')
     const length = ref(0)
     const valRuleType: Ref<{name: string, type: string} | null> = ref(null)
-    const chosenAttribute = ref('')
     const test = ref('')
 
     function addValidationRule(attribute: any | undefined) {
@@ -326,7 +332,6 @@ export default {
       getValRuleTypes,
       valRuleType,
       deleteValRule,
-      chosenAttribute,
       getAttributes,
       test
     }

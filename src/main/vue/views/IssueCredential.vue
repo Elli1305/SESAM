@@ -13,7 +13,7 @@
           </div>
           <q-form class="column no-wrap" style="width: 40%" ref="form" @submit.prevent>
             <q-input class="q-my-md no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
-                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)" no-error-icon/>
+                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)" reactive-rules no-error-icon/>
           </q-form>
         </div>
       </q-step>
@@ -23,7 +23,7 @@
         <div class="row justify-around no-wrap" style="height: 45vh">
           <div class="column no-wrap" style="width: 40%">
             <q-input class="q-my-md no-padding" outlined v-for="attribute in credential?.form" v-model="attribute.value"
-                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)" no-error-icon/>
+                     :label="attribute.label" :type="attribute.type" :rules="getRules(attribute.validationRules)" reactive-rules no-error-icon/>
           </div>
           <div class="column q-mt-sm no-wrap" style="width: 40%">
             <p>{{ t('issuer.issueCredential.checkConditions') }}</p>
@@ -207,7 +207,14 @@ function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | Len
         }
         break
       case 'range':
-        rules.push((value) => value >= vr.valueFrom && value <= vr.valueTo || t('issuer.issueCredential.validation.ruleErrors.range', [vr.valueFrom, vr.valueTo]))
+        if (!vr.compareWithAttribute) {
+          rules.push((value) => value >= vr.valueFrom && value <= vr.valueTo || t('issuer.issueCredential.validation.ruleErrors.range', [vr.valueFrom, vr.valueTo]))
+        } else {
+          const chosenAttributeFrom = attributes?.find( a => a.label === vr.attributeNameFrom)?.value
+          const chosenAttributeTo = attributes?.find( a => a.label === vr.attributeNameTo)?.value
+          if (chosenAttributeFrom && chosenAttributeTo)
+            rules.push((value) => value >= chosenAttributeFrom && value <= chosenAttributeTo || t('issuer.issueCredential.validation.ruleErrors.range', [chosenAttributeFrom, chosenAttributeTo]))
+        }
         break
       case 'regEx':
         rules.push((value) => new RegExp(vr.regEx).test(value) || vr.description)
@@ -215,22 +222,62 @@ function getRules(validationRules: (ComparisonRule | RangeRule | RegExRule | Len
       case 'length':
         switch (vr.comparisonType) {
           case "EQUAL":
-            rules.push((value) => value.length === vr.length || t('issuer.issueCredential.validation.ruleErrors.equalLength', [vr.length]))
+            if (!vr.compareWithAttribute) {
+              rules.push((value) => value.length === vr.length || t('issuer.issueCredential.validation.ruleErrors.equalLength', [vr.length]))
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)
+              if (chosenAttribute)
+                rules.push((value) => value.length === chosenAttribute?.value?.length || t('issuer.issueCredential.validation.ruleErrors.equalLength', [t('common.der') + ' ' + t('issuer.issueCredential.validation.vType.length') + ' ' + t('common.of') + ' ' + chosenAttribute.label]))
+            }
             break
           case "NOT_EQUAL":
-            rules.push((value) => value.length !== vr.length || t('issuer.issueCredential.validation.ruleErrors.notEqualLength', [vr.length]))
+            if (!vr.compareWithAttribute) {
+              rules.push((value) => value.length !== vr.length || t('issuer.issueCredential.validation.ruleErrors.notEqualLength', [vr.length]))
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)
+              if (chosenAttribute)
+                rules.push((value) => value !== chosenAttribute?.value?.length || t('issuer.issueCredential.validation.ruleErrors.notEqualLength', [t('common.der') + ' ' + t('issuer.issueCredential.validation.vType.length') + ' ' + t('common.of') + ' ' + chosenAttribute.label]))
+            }
             break
           case "LESS_THAN":
-            rules.push((value) => value.length < vr.length || t('issuer.issueCredential.validation.ruleErrors.lessThanLength', [vr.length]))
+            if (!vr.compareWithAttribute) {
+              rules.push((value) => value.length < vr.length || t('issuer.issueCredential.validation.ruleErrors.lessThanLength', [vr.length]))
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)
+              const chosenValue = chosenAttribute?.value?.length
+              if (chosenValue)
+                rules.push((value) => value.length < chosenValue || t('issuer.issueCredential.validation.ruleErrors.lessThanLength', [t('common.der') + ' ' + t('issuer.issueCredential.validation.vType.length') + ' ' + t('common.of') + ' ' + chosenAttribute.label]))
+            }
             break
           case "GREATER_THAN":
-            rules.push((value) => value.length > vr.length || t('issuer.issueCredential.validation.ruleErrors.greaterThanLength', [vr.length]))
+            if (!vr.compareWithAttribute) {
+              rules.push((value) => value.length > vr.length || t('issuer.issueCredential.validation.ruleErrors.greaterThanLength', [vr.length]))
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)
+              const chosenValue = chosenAttribute?.value?.length
+              if (chosenValue)
+                rules.push((value) => value.length > chosenValue || t('issuer.issueCredential.validation.ruleErrors.greaterThanLength', [t('common.der') + ' ' + t('issuer.issueCredential.validation.vType.length') + ' ' + t('common.of') + ' ' + chosenAttribute.label]))
+            }
             break
           case "LESS_EQUAL":
-            rules.push((value) => value.length <= vr.length || t('issuer.issueCredential.validation.ruleErrors.lessEqualLength', [vr.length]))
+            if (!vr.compareWithAttribute) {
+              rules.push((value) => value.length <= vr.length || t('issuer.issueCredential.validation.ruleErrors.lessEqualLength', [vr.length]))
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)
+              const chosenValue = chosenAttribute?.value?.length
+              if (chosenValue)
+                rules.push((value) => value.length <= chosenValue || t('issuer.issueCredential.validation.ruleErrors.lessEqualLength', [t('common.der') + ' ' + t('issuer.issueCredential.validation.vType.length') + ' ' + t('common.of') + ' ' + chosenAttribute.label]))
+            }
             break
           case "GREATER_EQUAL":
-            rules.push((value) => value.length >= vr.length || t('issuer.issueCredential.validation.ruleErrors.greaterEqualLength', [vr.length]))
+            if (!vr.compareWithAttribute) {
+              rules.push((value) => value.length >= vr.length || t('issuer.issueCredential.validation.ruleErrors.greaterEqualLength', [vr.length]))
+            } else {
+              const chosenAttribute = attributes?.find( a => a.label === vr.attributeName)
+              const chosenValue = chosenAttribute?.value?.length
+              if (chosenValue)
+                rules.push((value) => value.length >= chosenValue || t('issuer.issueCredential.validation.ruleErrors.greaterEqualLength', [t('common.der') + ' ' + t('issuer.issueCredential.validation.vType.length') + ' ' + t('common.of') + ' ' + chosenAttribute.label]))
+            }
             break
           default:
             console.error("Wrong comparison type")
