@@ -9,7 +9,7 @@ public class ExternalCredentialCmd {
 
     private List<String> internalCredential;
 
-    public ExternalCredentialCmd (String categoryName, String credentialName, List<String> internalCredential) {
+    public ExternalCredentialCmd(String categoryName, String credentialName, List<String> internalCredential) {
         this.categoryName = categoryName;
         this.credentialName = credentialName;
         this.internalCredential = internalCredential;

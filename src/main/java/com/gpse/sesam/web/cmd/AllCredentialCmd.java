@@ -15,7 +15,8 @@ public class AllCredentialCmd {
 
     private List<String> room;
 
-    public AllCredentialCmd (String categoryName, String credentialName, String type, List<String> otherCredentials, List<String> issuerName, List<String> room) {
+    public AllCredentialCmd(String categoryName, String credentialName, String type, List<String> otherCredentials,
+                             List<String> issuerName, List<String> room) {
         this.credentialName = credentialName;
         this.categoryName = categoryName;
         this.otherCredentials = otherCredentials;

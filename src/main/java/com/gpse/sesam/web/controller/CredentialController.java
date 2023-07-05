@@ -36,7 +36,8 @@ public class CredentialController {
 	private final LocationService locationService;
 
 	@Autowired
-	public CredentialController(final CredentialService service, ExternalCredentialService externalCredentialService, LocationService locationService) {
+	public CredentialController(final CredentialService service, ExternalCredentialService externalCredentialService,
+								LocationService locationService) {
 		this.service = service;
 		this.externalCredentialService = externalCredentialService;
 		this.locationService = locationService;
@@ -49,7 +50,7 @@ public class CredentialController {
 
 	@GetMapping("/external_credentials")
 	public List<ExternalCredential> getExternalCredential() {
-		return service.getExternalCredentials();
+		return externalCredentialService.getExternalCredentials();
 	}
 
 	@GetMapping("/credentials/getAll")
@@ -106,18 +107,24 @@ public class CredentialController {
 	}
 
 	@GetMapping(value = "/allcredentials")
-	public List<CredentialCmd> credentials () { return service.getAllCredentialsForView();}
+	public List<CredentialCmd> credentials() {
+		return service.getAllCredentialsForView();
+	}
 
 	@GetMapping(value = "/externalcredentialview")
-	public List<ExternalCredentialCmd> externalCredentials() {return externalCredentialService.getAllExternal();}
+	public List<ExternalCredentialCmd> externalCredentials() {
+		return externalCredentialService.getAllExternal();
+	}
 
 	@GetMapping(value = "/externalcredentialsbylocation/{id}")
 	public List<ExternalCredentialCmd> externalCredentialsByLocation(@PathVariable final Long id) {
 		return externalCredentialService.getAllExternalByLocation(id);
 	}
 
-	@GetMapping(value="/allcredentialview")
-	public List<AllCredentialCmd> allCredentials() {return service.getAllForView();}
+	@GetMapping(value = "/allcredentialview")
+	public List<AllCredentialCmd> allCredentials() {
+		return service.getAllForView();
+	}
 
 	@GetMapping(value = "/allbylocation/{id}")
 	public List<AllCredentialCmd> allByLocation(@PathVariable final Long id) {

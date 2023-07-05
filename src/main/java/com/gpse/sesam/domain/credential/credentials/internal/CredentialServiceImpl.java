@@ -6,7 +6,6 @@ import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
-import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialRepository;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
@@ -51,7 +50,6 @@ public class CredentialServiceImpl implements CredentialService {
 
     private final LocationService locationService;
 
-    private final ExternalCredentialRepository externalCredentialRepository;
     private final ExternalCredentialService externalCredentialService;
 
     private final CategoryService categoryService;
@@ -60,19 +58,18 @@ public class CredentialServiceImpl implements CredentialService {
     public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
                                  final CredentialRepository credentialRepository,
                                  final IssuerRepository issuerRepository,
-                                 final ExternalCredentialRepository externalCredentialRepository,
                                  final LocationService locationService,
-                                 final ExternalCredentialService externalCredentialService, CategoryService categoryService) {
+                                 final ExternalCredentialService externalCredentialService,
+                                 CategoryService categoryService) {
         this.client = client;
         this.mapper = mapper;
         this.issuerRepository = issuerRepository;
         this.credentialRepository = credentialRepository;
         this.locationService = locationService;
-        this.externalCredentialRepository = externalCredentialRepository;
         this.externalCredentialService = externalCredentialService;
         this.categoryService = categoryService;
     }
-
+    @SuppressWarnings("CPD-START")
     @Override
     public List<InternalCredential> getCredentials() {
         final List<InternalCredential> credentials = new ArrayList<>();
@@ -92,13 +89,6 @@ public class CredentialServiceImpl implements CredentialService {
     public List<InternalCredential> getCredentialsByIssuerId(final Long id) {
         final Issuer issuer = issuerRepository.findById(String.valueOf(id)).orElseThrow();
         return issuer.getCredentials();
-    }
-
-    @Override
-    public List<ExternalCredential> getExternalCredentials() {
-        final List<ExternalCredential> credentials = new ArrayList<>();
-        externalCredentialRepository.findAll().forEach(credentials::add);
-        return credentials;
     }
 
     @Override
@@ -412,9 +402,10 @@ public class CredentialServiceImpl implements CredentialService {
                     room.add(roomName);
                 }
             }
-            cmd.add(new AllCredentialCmd(categoryName, credentialName, "Intern", externalCredentials, issuers, room));
+            cmd.add(new AllCredentialCmd(categoryName, credentialName, "Intern", externalCredentials, issuers,
+                    room));
         }
-        List<ExternalCredential> externalCredentials = getExternalCredentials();
+        List<ExternalCredential> externalCredentials = externalCredentialService.getExternalCredentials();
         for (ExternalCredential extern : externalCredentials) {
             List<String> intern = new ArrayList<>();
             String categoryName = "-";
@@ -443,13 +434,13 @@ public class CredentialServiceImpl implements CredentialService {
         List<ExternalCredentialCmd> extern = externalCredentialService.getAllExternalByLocation(id);
 
         for (CredentialCmd in : intern) {
-            cmds.add(new AllCredentialCmd(in.getCategoryName(), in.getCredentialName(), "Intern", in.getExternalCredential(),
-                    in.getIssuerName(), in.getRoom()));
+            cmds.add(new AllCredentialCmd(in.getCategoryName(), in.getCredentialName(), "Intern",
+                    in.getExternalCredential(), in.getIssuerName(), in.getRoom()));
         }
 
         for (ExternalCredentialCmd ex: extern) {
-            cmds.add(new AllCredentialCmd(ex.getCategoryName(), ex.getCredentialName(), "Extern", ex.getInternalCredential(),
-                    new ArrayList<>(), new ArrayList<>()));
+            cmds.add(new AllCredentialCmd(ex.getCategoryName(), ex.getCredentialName(), "Extern",
+                    ex.getInternalCredential(), new ArrayList<>(), new ArrayList<>()));
         }
 
         return cmds;

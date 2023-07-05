@@ -2,7 +2,6 @@ package com.gpse.sesam.domain.credential.credentials.internal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.credential.credentials.Credential;
-import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.web.cmd.*;
 
 import java.util.List;
@@ -14,7 +13,6 @@ public interface CredentialService {
 	List<Credential> getAllCredentials();
 
 	List<InternalCredential> getCredentialsByIssuerId(Long di);
-	List<ExternalCredential> getExternalCredentials();
 
 	List<Credential> getCredentialByCredentialDefinitionId(String id);
 

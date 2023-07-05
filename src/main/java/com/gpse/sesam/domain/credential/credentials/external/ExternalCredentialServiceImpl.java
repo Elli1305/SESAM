@@ -6,8 +6,6 @@ import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.door.config.AttributeFilter;
-import com.gpse.sesam.domain.user.issuer.Issuer;
-import com.gpse.sesam.web.cmd.CredentialCmd;
 import com.gpse.sesam.web.cmd.ExternalCredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,13 +26,13 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
     private final CategoryService categoryService;
 
     @Autowired
-    public ExternalCredentialServiceImpl(ExternalCredentialRepository externalCredentialRepository, LocationService locationService,
-                                         CategoryService categoryService) {
+    public ExternalCredentialServiceImpl(ExternalCredentialRepository externalCredentialRepository,
+                                         LocationService locationService, CategoryService categoryService) {
         this.externalCredentialRepository = externalCredentialRepository;
         this.locationService = locationService;
         this.categoryService = categoryService;
     }
-
+    @SuppressWarnings("CPD-START")
     @Override
     public List<ExternalCredential> getExternalCredentials() {
         List<ExternalCredential> externalCredentials = new ArrayList<>();
