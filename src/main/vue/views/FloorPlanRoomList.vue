@@ -346,7 +346,7 @@
                                                                            v-close-popup/>
                                                                     <q-btn flat :label="t( 'common.save')"
                                                                            color="primary"
-                                                                           @click="editGroupName" v-close-popup/>
+                                                                           @click="editGroupName;  deleteRoomsOfGroup();updateNumRoomsInGroup();" v-close-popup/>
                                                                 </q-card-actions>
                                                             </q-card-section>
                                                         </q-card>
@@ -1089,6 +1089,9 @@ export default {
             console.log("entire delete-list:", roomDeleteList.value);
             console.log("selected Group rooms:", selectedGroups.value.rooms);
         }
+        async function deleteRoomsOfGroup() {
+            await roomGroupStore.editGroup(selectedGroups.value);
+        }
 
         return {
             floorPlanStore,
@@ -1128,6 +1131,7 @@ export default {
             addRoomsToNewGroup,
             unCheck,
             deleteGroup,
+            deleteRoomsOfGroup,
             checkGroupSelected,
             editGroupD,
             deleteAlert: ref(false),
