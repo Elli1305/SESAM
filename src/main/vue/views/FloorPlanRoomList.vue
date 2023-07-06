@@ -52,7 +52,7 @@
                                             :label="room.name"
                                             dropdown-icon="expand_more"
                                             color="var(--text-color)"
-                                            @click="toggleRoomCheckbox(room)">
+                                            @click="toggleRoomCheckbox(room);">
                                         <div class="column no-wrap" style="background-color: var(--bg-color)">
                                             <div class="row no-wrap">
                                                 <div class="column no-wrap" style="padding: 0.5em">
@@ -215,10 +215,11 @@
                                 <q-icon name="search"/>
                             </template>
                         </q-input>
-                        <q-scroll-area style="height: 50vh; min-width: 21em; overflow: hidden; max-width: 22em;"
+                        <q-scroll-area style="height: 50vh; min-width: 21em; overflow: hidden; max-width: 22em;" @scroll="giveLog();dropdown = false"
                                        :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
                         >
                             <q-list>
+
                                 <q-item v-for="group in allGroups" style="padding-left: 0">
                                     <q-radio @click="filterRoomToGroups(); updateNumRoomsInGroup();"
                                              v-model="selectedGroups" :val="group"
@@ -233,6 +234,7 @@
                                             @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
                                     </q-btn-dropdown>
                                     <q-btn-dropdown
+
                                             flat
                                             menu-anchor="bottom right"
                                             style="max-width: 0"
@@ -1095,6 +1097,7 @@ export default {
         async function deleteRoomsOfGroup() {
             await roomGroupStore.editGroup(selectedGroups.value);
         }
+        const dropdown = ref(false);
 
         return {
             floorPlanStore,
@@ -1147,7 +1150,13 @@ export default {
             selectGroup(group) {
                 selectedGroups.value = group;
             },
+            giveLog(){
+                dropdown.value = false;
+              console.log("hiwerhoiehfowgiohowhoifwohfoweihfiosiohfi");
+              console.log(dropdown.value);
+            },
             allFloorsForGroup,
+            dropdown,
             arrayFloors,
             addToDeleteList,
             async reloadRoomsBE() {
