@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.location.roomgroup;
 
 import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.web.cmd.RoomCmd;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
 import com.gpse.sesam.web.cmd.RoomGroupDoorConfigCmd;
 import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
@@ -32,5 +33,6 @@ public interface RoomGroupService {
     void setGroupConfig(List<TwoWayDoorConfigCmd> cmds);
 
     List<RoomGroupDoorConfigCmd> getRoomsAndDoorsByGroupId(Long id);
+    List<Room> getRoomsByGroupId(Long id);
 
 }
