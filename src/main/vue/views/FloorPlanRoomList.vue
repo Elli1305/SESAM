@@ -296,27 +296,30 @@
                                                                                 <q-item class="q-mb-sm">
 
                                                                                     <q-item-section>
-                                                                                        <div class="row">
-                                                                                            <q-item-label lines="1">
-                                                                            <span class="text-weight-medium">{{
-                                                                                room.name
-                                                                                }}</span>
-                                                                                            </q-item-label>
-
+                                                                                        <div class="col">
+                                                                                            <div class="row">
+                                                                                                <div class="col">
+                                                                                                    <q-item-label lines="1" class="row">
+                                                                                                        <span style="padding-right: 10em" class="text-weight-medium">{{room.name }}</span>
+                                                                                                    </q-item-label>
+                                                                                                    <q-item-label caption class="row">
+                                                                                                        {{ t('editor.groupRooms.floor') }}
+                                                                                                        {{ arrayFloors[i] }}
+                                                                                                    </q-item-label>
+                                                                                                </div>
                                                                                             <q-btn
                                                                                                     dense
-                                                                                                    style="padding-left: 10em;"
+                                                                                                    style="padding-left: 1em;"
                                                                                                     flat
                                                                                                     icon="delete"
+                                                                                                    class="col"
                                                                                                     color="grey"
                                                                                                     :label="t('common.delete')"
                                                                                                     @click="addToDeleteList(room);"/>
                                                                                         </div>
+                                                                                        </div>
 
-                                                                                        <q-item-label caption>
-                                                                                            {{ t('editor.groupRooms.floor') }}
-                                                                                            {{ arrayFloors[i] }}
-                                                                                        </q-item-label>
+
 
 
                                                                                     </q-item-section>
