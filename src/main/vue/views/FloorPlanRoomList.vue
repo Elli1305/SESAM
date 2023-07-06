@@ -293,7 +293,7 @@
                                                                                     icon="delete"
                                                                                     color="grey"
                                                                                     :label="t('common.delete')"
-                                                                                    @click=""/>
+                                                                                    @click="addToDeleteList(room);"/>
                                                                                 </div>
 
                                                                                 <q-item-label caption>{{t('editor.groupRooms.floor')}} {{arrayFloors[i]}}</q-item-label>
@@ -639,6 +639,7 @@ export default {
         const editGroupD = ref(false);
         const numRoomsInGroup = ref();
         const isEditor = ref(false);
+        const roomDeleteList = ref([]);
 
         function isEditorCheck() {
             if (userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)) {
@@ -1032,6 +1033,25 @@ export default {
             console.log("arrayFloors:", arrayFloors.value);
         }
 
+        function addToDeleteList(room) {
+            roomDeleteList.value.push(room);
+            console.log("add to delete list: room:", room);
+            let i = 0;
+            for(const roomFromGroup of selectedGroups.value.rooms) {
+                console.log("For");
+                if(i===0) {
+                    selectedGroups.value.rooms.shift();
+                }
+                else if(room.id === roomFromGroup.id) {
+                    //selectedGroups.value.rooms.pop(roomFromGroup);
+                    selectedGroups.value.rooms.splice(i,i);
+                    console.log("ohne ", selectedGroups.value.rooms);
+                }
+                i++;
+            }
+            console.log("entire delete-list:", roomDeleteList.value);
+            console.log("selected Group rooms:", selectedGroups.value.rooms);
+        }
 
         return {
             floorPlanStore,
@@ -1085,6 +1105,7 @@ export default {
             },
             allFloorsForGroup,
             arrayFloors,
+            addToDeleteList,
         }
     },
 
