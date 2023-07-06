@@ -45,7 +45,7 @@
                        icon="add"
                        color="grey"
                        :label="t('editor.predefinedConfigs.new')"
-                       @click="configDialog = true"
+                       @click="configDialog = true; edit = false"
                        style="margin-right: 2em">
                     </q-btn>
                     <q-input
@@ -59,7 +59,7 @@
             </q-table>
         </div>
 
-        <q-dialog v-model="configDialog">
+        <q-dialog v-model="configDialog" persistent>
             <q-card>
                 <q-card-section>
                     <q-input class="full-width" filled v-model="configName" label="Konfigurationsbezeichnung" stack-label></q-input>
@@ -72,7 +72,7 @@
                             :is-config-out="true">
                 </DoorConfig>
                 <q-card-actions align="right">
-                    <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick()" v-close-popup></q-btn>
+                    <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick(); edit = false" v-close-popup></q-btn>
                     <q-btn flat color="primary" :label="t('common.save')" :disable="!configName" @click="onOKClick()" v-close-popup></q-btn>
                 </q-card-actions>
             </q-card>
