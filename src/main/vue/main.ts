@@ -249,6 +249,7 @@ const messages = {
             groupRooms: {
                 title: "Raumgruppierungen",
                 chooseBuilding: "Gebäude wählen",
+                floor: "Etage: ",
                 chooseLocation: "Location wählen",
                 newGroup: "Neue Gruppe",
                 editGroup: "Gruppierung bearbeiten",
@@ -633,6 +634,7 @@ const messages = {
                 title: "Room Groupings",
                 chooseBuilding: "Choose a building",
                 chooseLocation: "Choose a location",
+                floor: "Floor: ",
                 newGroup: "New group",
                 editGroup: "Edit group",
                 chooseRooms: "Choose the rooms",

@@ -296,7 +296,7 @@
                                                                                     @click=""/>
                                                                                 </div>
 
-                                                                                <q-item-label caption>Etage: {{arrayFloors[i]}}</q-item-label>
+                                                                                <q-item-label caption>{{t('editor.groupRooms.floor')}} {{arrayFloors[i]}}</q-item-label>
 
 
                                                                             </q-item-section>
