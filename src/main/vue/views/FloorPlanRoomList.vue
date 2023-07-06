@@ -1076,11 +1076,12 @@ export default {
             let i = 0;
             for (const roomFromGroup of selectedGroups.value.rooms) {
                 console.log("For");
-                if (i === 0) {
+                if ((i === 0) && (room.id === roomFromGroup.id) ) {
                     selectedGroups.value.rooms.shift();
                 } else if (room.id === roomFromGroup.id) {
+                    console.log("i: ", i);
                     //selectedGroups.value.rooms.pop(roomFromGroup);
-                    selectedGroups.value.rooms.splice(i, i);
+                    selectedGroups.value.rooms.splice(i, 1);
                     console.log("ohne ", selectedGroups.value.rooms);
                 }
                 i++;
