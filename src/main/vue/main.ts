@@ -3,15 +3,12 @@ import {createPinia} from 'pinia'
 import {Quasar} from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 import {createI18n} from 'vue-i18n'
-
 import App from './App.vue'
 import router from './router'
-
 import 'quasar/src/css/index.sass'
 import '@quasar/extras/material-icons/material-icons.css'
 import '@/main/vue/styles/notify.scss'
 import axios from "axios";
-
 const messages = {
     de: {
         common: {
@@ -26,20 +23,17 @@ const messages = {
             die: "die",
             das: "das",
             of: "von",
-
             // Concept words
             credential: "Credential",
             credentials: "Credential",
             category: "Kategorie",
             categories: "Kategorien",
-
             // Error messages
             internalServerError: "Der Server konnte die Anfrage nicht verarbeiten",
             unknownError: "Ein unbekannter Fehler ist aufgetreten",
             noData: "Keine Daten vorhanden.",
             noResults: "Keine Einträge gefunden.",
         },
-
         home: {
             applicationName: "SESAM",
             signUp: "Registrierung",
@@ -54,7 +48,7 @@ const messages = {
             // Corporate design
             corporateDesign: "Corporate Design",
             editCorporateDesign: "Corporate Design anpassen",
-            editImprint: "Imprint bearbeiten",
+            editImprint: "Impressum bearbeiten",
             // Credential management
             credentialManagement: "Credentialverwaltung",
             manageCredentialCategories: "Kategorien von Credentials verwalten",
@@ -74,9 +68,18 @@ const messages = {
             notRegistered: "Nicht registriert: ",
             toRegister: "Zur Registrierung",
         },
+        logout: {
+            title: "Logout erfolgreich",
+            success: "Sie haben sich erfolgreich abgemeldet"
+        },
         signUp: {
+            title: "Registrierung",
             passwordRepeat: "Passwort wiederholen",
-            alreadySignedUp: "Bereits registriert: "
+            alreadySignedUp: "Bereits registriert: ",
+            error: "Registrierung fehlgeschlagen",
+            errorCaption : "Nutzer (E-Mail) ist bereits vergeben",
+            success: "Registrierung war erfolgreich"
+
         },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
@@ -115,13 +118,25 @@ const messages = {
             locations: 'Standorte',
             addLocation: 'Standort hinzufügen',
             editLocation: 'Standort bearbeiten',
+            deleteLocation: "Standort löschen",
+            deleteLocationQuestion: "Sind Sie sicher, dass Sie den Standort löschen wollen?",
+            locationEditSuccess: "Standort wurde erfolgreich gespeichert",
+            locationSaveSuccess: "Standort wurde erfolgreich hinzugefügt",
             // Buildings
             addBuilding: 'Gebäude hinzufügen',
             editBuilding: 'Gebäude bearbeiten',
+            deleteBuilding: 'Gebäude löschen',
+            deleteBuildingQuestion: "Sind Sie sicher, dass Sie das Gebäude löschen wollen?",
+            buildingEditSuccess: "Gebäude wurde erfolgreich gespeichert",
+            buildingSaveSuccess: "Gebäude wurde erfolgreich hinzugefügt",
             // Floors
             floorLevel: 'Etagennummer',
             addFloor: 'Etage hinzufügen',
             editFloor: 'Etage bearbeiten',
+            deleteFloor: "Etage löschen",
+            deleteFloorQuestion: "Sind Sie sicher, dass Sie die Etage löschen wollen?",
+            floorEditSuccess: "Etage wurde erfolgreich gespeichert",
+            floorSaveSuccess: "Etage wurde erfolgreich hinzugefügt",
             // Rooms
             room: 'Raum',
             rooms: 'Räume',
@@ -144,6 +159,7 @@ const messages = {
             configDescription: 'Beschreibung der Konfiguration',
             configGroup: 'Konfigurationsgruppe',
             infoConfigGroups: 'Konfigurationsgruppen sind untereinander mit UND verknüpft',
+            chooseConfig: "Konfiguration auswählen",
             addConfigGroup: 'Konfigurationsgruppe hinzufügen',
             direction: 'Richtung',
             directions: {
@@ -171,12 +187,13 @@ const messages = {
             availableCredentials: "Verfügbare Credential",
             qualification: "Vergleichbare Credential",
             room: "Raum: ",
-            intern: "Internal",
-            extern: "External",
-            all: "All",
-            type: "Type",
-            showCredentials: "Alle Credentials anzeigen",
-            allCredentials: "Alle Credentials"
+            allCredentials: "Alle Credentials",
+            type: "Typ",
+            showCredentials: "Alle Credential anzeigen",
+            all: "Alle",
+            intern: "Intern",
+            extern: "Extern"
+
         },
         admin: {
             currentUsers: {
@@ -197,7 +214,7 @@ const messages = {
                 title: "Herausgeberverwaltung",
                 issuableCredential: "Ausstellbare Credential",
                 office: "Büro",
-                dialogTitle: "Herausgeber Verwalten",
+                dialogTitle: "Herausgeber verwalten",
             },
             corporateDesign: {
                 title: "Corporate Design",
@@ -242,26 +259,41 @@ const messages = {
                 title: 'Credentialmapping',
                 newCategory: 'Neue Kategorie',
                 categoryName: 'Kategoriename',
-                internal: 'Interne Credential',
-                external: 'Externe Credential',
+                internal: 'Interne Credentials',
+                external: 'Externe Credentials',
                 createCategory: 'Neue Kategorie erstellen',
                 changeCategory: 'Kategorie ändern',
                 deleteCategory: 'Kategorie löschen',
                 delete: 'Möchten Sie die Kategorie wirklich löschen?'
             },
+            credentialAdministration: {
+                title: "Credentials verwalten",
+                type: "Art",
+                new: "Neues Credential",
+                attribute: "Name des Attributes",
+                edit: "Credential bearbeiten",
+                checklist: "Checkliste",
+                credentialAttribute: "Credentialattribute"
+            }
         },
-
         editor: {
             groupRooms: {
                 title: "Raumgruppierungen",
                 chooseBuilding: "Gebäude wählen",
+                floor: "Etage: ",
                 chooseLocation: "Location wählen",
                 newGroup: "Neue Gruppe",
                 editGroup: "Gruppierung bearbeiten",
                 chooseRooms: "Räume auswählen",
                 question: "Wollen Sie diese Gruppierung wirklich löschen?",
+                deleteGroup: "Gruppe löschen",
+                addRoomsToSelected: "Ausgewählte Räume wirklich der folgenden Gruppe zufügen :",
+                doorconfiguration: "Türkonfigurationen",
+                nameOfGroup: "Name der neuen Gruppe",
                 groups: "Raumgruppen",
+                info: "Räume einer neuen Gruppe zufügen oder eine bereits bestehende Gruppe auswählen und 'Räume zu ausgewählter Gruppe hinzufügen' drücken",
                 addRooms: "Räume zu ausgewählten Gruppen zufügen",
+                addRoomsToNewGroup:"Räume zu neuer Gruppe zufügen",
                 noGroupSelected: "Keine Gruppe ausgewählt",
                 noRoomSelected: "Keine Räume ausgewählt",
                 checkNameMessage: "Name darf nicht leer sein",
@@ -277,10 +309,11 @@ const messages = {
                 title: "Vordefinierte Konfigurationen",
                 deleteAlert: "Konfiguration Löschen",
                 new: "Neue Konfiguration",
-                deleteQuestion: "Möchten Sie diese Konfiguration wirklich löschen?"
+                deleteQuestion: "Möchten Sie diese Konfiguration wirklich löschen?",
+                name: "Konfigurationsbezeichnung",
+                nameConfig: "Bezeichnung"
             },
         },
-
         issuer: {
             issue: "Ausstellen",
             issueCredential: {
@@ -334,7 +367,7 @@ const messages = {
                         // Strings
                         names: "Namen",
                         noSpecialCharacter: "Keine Sonderzeichen",
-                        email: "E-mail",
+                        email: "Email",
                         phoneNumbers: "Telefonnummern",
                         uppercase: "Nur Großbuchstaben",
                         lowercase: "Nur Kleinbuchstaben",
@@ -395,7 +428,6 @@ const messages = {
                 },
             },
         },
-
     },
     en: {
         common: {
@@ -410,20 +442,17 @@ const messages = {
             die: "the",
             das: "the",
             of: "of",
-
             // Concept words
             credential: "Credential",
             credentials: "Credentials",
             category: "Category",
             categories: "Categories",
-
             // Error messages
             internalServerError: "The server could not process the request",
             unknownError: "An unknown error occurred",
             noData: "No data available.",
             noResults: "No entries found.",
         },
-
         home: {
             applicationName: "SESAM",
             signUp: "Registration",
@@ -434,7 +463,7 @@ const messages = {
             profileManagement: "Profile Management",
             currentUsers: "Manage users",
             currentRegistrations: "Requested roles",
-            issuerManagement: "Manage issuer",
+            issuerManagement: "Manage issuers",
             // Corporate design
             corporateDesign: "Corporate Design",
             editCorporateDesign: "Edit Corporate Design",
@@ -459,9 +488,17 @@ const messages = {
             notRegistered: "Not registered: ",
             toRegister: "Register",
         },
+        logout: {
+            title: "Logout was successful",
+            success: "You logged out successfully"
+        },
         signUp: {
+            title: "Registration",
             passwordRepeat: "Repeat password",
-            alreadySignedUp: "Already signed up: "
+            alreadySignedUp: "Already signed up: ",
+            error: "Registration was not successful",
+            errorCaption : "User (Email) is already registered",
+            success: "Registration was successful"
         },
         passwordReset: {
             resetPassword: "Reset Password",
@@ -501,13 +538,25 @@ const messages = {
             locations: 'Locations',
             addLocation: 'Add location',
             editLocation: 'Edit location',
+            deleteLocation: "Delete location",
+            deleteLocationQuestion: "Are you sure you want to delete this location?",
+            locationEditSuccess: "Location was saved successfully",
+            locationSaveSuccess: "Location was added successfully",
             // Buildings
             addBuilding: 'Add building',
             editBuilding: 'Edit building',
+            deleteBuilding: 'Delete building',
+            deleteBuildingQuestion: "Are you sure you want to delete this building?",
+            buildingEditSuccess: "Building was saved successfully",
+            buildingSaveSuccess: "Building was added successfullyt",
             // Floors
             floorLevel: 'Floor level',
             addFloor: 'Add floor',
-            editFloor: 'Edit Floor',
+            editFloor: 'Edit floor',
+            deleteFloor: "Delete floor",
+            deleteFloorQuestion: "Are you sure you want to delete this floor?",
+            floorEditSuccess: "Floor was saved successfully",
+            floorSaveSuccess: "Floor was added successfully",
             // Rooms
             room: 'Room',
             rooms: 'Rooms',
@@ -530,6 +579,7 @@ const messages = {
             configDescription: 'Description of the configuration',
             configGroup: 'Configuration Group',
             infoConfigGroups: 'Configuration groups are combined with AND',
+            chooseConfig: "Choose Predefined Config",
             addConfigGroup: 'Add configuration group',
             direction: 'Direction',
             directions: {
@@ -557,14 +607,13 @@ const messages = {
             availableCredentials: "Available Credentials",
             qualification: "Comparable Credentials",
             room: "Room: ",
-            intern: "Intern",
-            extern: "Extern",
-            all: "Alle",
-            type: "Typ",
+            allCredentials: "All Credentials",
+            type: "Type",
             showCredentials: "Show all Credentials",
-            allCredentials: "All Credentials"
+            all: "All",
+            intern: "Internal",
+            extern: "External"
         },
-
         admin: {
             currentUsers: {
                 title: "User Management",
@@ -636,19 +685,34 @@ const messages = {
                 deleteCategory: 'Delete category',
                 delete: 'Are you sure you want to delete the category?'
             },
+            credentialAdministration: {
+                title: "Manage Credentials",
+                type: "Type",
+                new: "New Credential",
+                attribute: "Name of the attribute",
+                edit: "Edit Credential",
+                checklist: "Checklist",
+                credentialAttribute: "Credential attributes"
+            }
         },
-
         editor: {
             groupRooms: {
-                title: "Room Groupings",
+                title: "Room Groups",
                 chooseBuilding: "Choose a building",
                 chooseLocation: "Choose a location",
+                floor: "Floor: ",
                 newGroup: "New group",
                 editGroup: "Edit group",
                 chooseRooms: "Choose the rooms",
                 question: "Do you really want to delete this group?",
+                deleteGroup: "Delete group",
+                addRoomsToSelected: "Add selected rooms to the following group :",
+                nameOfGroup: "Name of the new group",
+                doorconfiguration: "Doorconfigurations",
                 groups: "Room Groups",
+                info: "Add rooms either to a new group or choose an existing group",
                 addRooms: "Add rooms to selected group",
+                addRoomsToNewGroup:"Add rooms to a new group",
                 noGroupSelected: "No group selected",
                 noRoomSelected: "No rooms selected",
                 checkNameMessage: "Name must not be empty",
@@ -664,11 +728,12 @@ const messages = {
                 title: "Predefined configurations",
                 deleteAlert: "Delete configuration",
                 new: "New configuration",
-                deleteQuestion: "Are you sure you want to delete this configuration?"
+                deleteQuestion: "Are you sure you want to delete this configuration?",
+                name: "Configuration Name",
+                nameConfig: "Name"
             },
         },
     },
-
     issuer: {
         issue: "Issue",
         issueCredential: {
@@ -786,9 +851,7 @@ const messages = {
             },
         },
     },
-
 }
-
 let currentLanguage = sessionStorage.getItem("locale");
 if (currentLanguage == null) {
     currentLanguage = 'de'
@@ -801,20 +864,14 @@ const i18n = createI18n({
     globalInjection: true,
     messages
 })
-
 const app = createApp(App)
-
 const pinia = createPinia();
-
 app.use(pinia);
 app.use(router);
 app.use(Quasar, quasarUserOptions);
 app.use(i18n);
-
 app.mount('#app')
-
 axios.defaults.headers.post['Content-Type'] = 'application/json'
-
 watch(
     pinia.state,
     (state) => {
@@ -823,3 +880,4 @@ watch(
     },
     {deep: true}
 );
+
