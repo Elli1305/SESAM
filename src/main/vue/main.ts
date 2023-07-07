@@ -314,6 +314,14 @@ const messages = {
                 name: "Konfigurationsbezeichnung",
                 nameConfig: "Bezeichnung"
             },
+            credentialEditing: {
+                credentialSchemaLoadFailed: 'Das Credential Schema konnte nicht vom Ledger geladen werden.',
+                errors: {
+                    'ERR_LEDGER_COMMUNICATION_FAILED': 'Die Kommunikation mit dem Ledger ist fehlgeschlagen.',
+                    'ERR_INVALID_STRUCTURE': 'Die Credential Definition ID ist fehlerhaft.',
+                    'ERR_CREDENTIAL_DEFINITION_NOT_FOUND': 'Die angegebene Credential Definition ID konnte nicht auf dem Ledger gefunden werden.'
+                }
+            }
         },
         issuer: {
             issue: "Ausstellen",

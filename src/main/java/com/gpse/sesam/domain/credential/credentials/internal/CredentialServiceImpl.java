@@ -1,18 +1,16 @@
 package com.gpse.sesam.domain.credential.credentials.internal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
-import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
-import com.gpse.sesam.domain.credential.issuing.FormEntry;
-import com.gpse.sesam.domain.credential.issuing.FormEntryType;
-import com.gpse.sesam.domain.credential.issuing.IssueCredential;
-import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
-import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
+import com.gpse.sesam.domain.credential.issuing.*;
 import com.gpse.sesam.domain.credential.validation.ComparisonRule;
 import com.gpse.sesam.domain.credential.validation.LengthRule;
 import com.gpse.sesam.domain.credential.validation.RangeRule;
@@ -23,17 +21,18 @@ import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.*;
 import jakarta.validation.Valid;
+import org.hyperledger.indy.sdk.IndyException;
+import org.hyperledger.indy.sdk.ledger.Ledger;
+import org.hyperledger.indy.sdk.ledger.LedgerResults;
+import org.hyperledger.indy.sdk.pool.Pool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,6 +44,18 @@ public class CredentialServiceImpl implements CredentialService {
 
     private final ObjectMapper mapper;
 
+    private static final Map<String, String> agentForDid = Map.of(
+            "XgpWt5zepWmbpuRUT82js9", "tlabs",
+            "9yGivzVEatBj7o9pNjoFbi", "university"
+    );
+
+    private static final Map<String, String> magicCredentialDefinitionIds = Map.of(
+            "$T-MEMBER", "XgpWt5zepWmbpuRUT82js9:3:CL:694410:T-MEMBER",
+            "$T-TRAINING", "XgpWt5zepWmbpuRUT82js9:3:CL:694412:T-TRAINING",
+            "$U-MEMBER", "9yGivzVEatBj7o9pNjoFbi:3:CL:694437:U-MEMBER",
+            "$U-TRAINING", "9yGivzVEatBj7o9pNjoFbi:3:CL:694444:U-TRAINING"
+    );
+
     private final IssuerRepository issuerRepository;
     private final CredentialRepository credentialRepository;
 
@@ -53,9 +64,10 @@ public class CredentialServiceImpl implements CredentialService {
     private final ExternalCredentialService externalCredentialService;
 
     private final CategoryService categoryService;
+    private final Pool pool;
 
     @Autowired
-    public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
+    public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper, final Pool pool,
                                  final CredentialRepository credentialRepository,
                                  final IssuerRepository issuerRepository,
                                  final LocationService locationService,
@@ -63,12 +75,18 @@ public class CredentialServiceImpl implements CredentialService {
                                  CategoryService categoryService) {
         this.client = client;
         this.mapper = mapper;
+        this.pool = pool;
         this.issuerRepository = issuerRepository;
         this.credentialRepository = credentialRepository;
         this.locationService = locationService;
         this.externalCredentialService = externalCredentialService;
         this.categoryService = categoryService;
     }
+
+    private String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
+        return magicCredentialDefinitionIds.getOrDefault(credentialDefinitionId, credentialDefinitionId);
+    }
+
     @SuppressWarnings("CPD-START")
     @Override
     public List<InternalCredential> getCredentials() {
@@ -243,7 +261,7 @@ public class CredentialServiceImpl implements CredentialService {
     public void create(final CreateCredentialCmd createCredentialCmd) {
         final InternalCredential credential = new InternalCredential(
                 createCredentialCmd.getName(),
-                createCredentialCmd.getCredentialDefinitionId(),
+                replaceMagicCredentialDefinitionIds(createCredentialCmd.getCredentialDefinitionId()),
                 createCredentialCmd.getAgent(),
                 createCredentialCmd.getAttributes().stream()
                         .map(createAttributeCmd ->
@@ -301,7 +319,11 @@ public class CredentialServiceImpl implements CredentialService {
 
         credential.setName(updateCredentialCmd.getName());
         credential.setAgent(updateCredentialCmd.getAgent());
-        credential.setCredentialDefinitionId(updateCredentialCmd.getCredentialDefinitionId());
+        credential.setCredentialDefinitionId(
+                replaceMagicCredentialDefinitionIds(
+                        updateCredentialCmd.getCredentialDefinitionId()
+                )
+        );
 
         final List<FormEntry> formEntries = new ArrayList<>();
 
@@ -438,11 +460,48 @@ public class CredentialServiceImpl implements CredentialService {
                     in.getExternalCredential(), in.getIssuerName(), in.getRoom()));
         }
 
-        for (ExternalCredentialCmd ex: extern) {
+        for (ExternalCredentialCmd ex : extern) {
             cmds.add(new AllCredentialCmd(ex.getCategoryName(), ex.getCredentialName(), "Extern",
                     ex.getInternalCredential(), new ArrayList<>(), new ArrayList<>()));
         }
 
         return cmds;
+    }
+
+    @Override
+    public CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws IndyException, ExecutionException, InterruptedException, JsonProcessingException {
+        String normalizedCredentialDefinitionId = replaceMagicCredentialDefinitionIds(credentialDefinitionId);
+        String getCredDefRequest = Ledger.buildGetCredDefRequest(null, normalizedCredentialDefinitionId).get();
+        String getCredDefResponse = Ledger.submitRequest(pool, getCredDefRequest).get();
+
+        JsonNode getCredDefResponseNode = mapper.readTree(getCredDefResponse);
+
+        LedgerResults.ParseResponseResult getCredDefResponseResult = Ledger.parseGetCredDefResponse(getCredDefResponse).get();
+
+        JsonNode getCredDefResponseResultNode = mapper.readTree(getCredDefResponseResult.getObjectJson());
+
+        String getTxnRequest = Ledger.buildGetTxnRequest(null, "DOMAIN", getCredDefResponseResultNode.get("schemaId").asInt()).get();
+        String getTxnResponse = Ledger.submitRequest(pool, getTxnRequest).get();
+
+        JsonNode getTxnResponseNode = mapper.readTree(getTxnResponse);
+
+        ArrayNode attrNamesNode = (ArrayNode) getTxnResponseNode.get("result")
+                .get("data")
+                .get("txn")
+                .get("data")
+                .get("data")
+                .get("attr_names");
+
+        List<String> attrNames = mapper.convertValue(attrNamesNode, new TypeReference<>() {
+        });
+
+        return new CredentialSchemaCmd(
+                getCredDefResponseResultNode.get("tag").asText(),
+                normalizedCredentialDefinitionId,
+                agentForDid.get(getCredDefResponseNode.get("result").get("origin").asText()),
+                getCredDefResponseResultNode.get("ver").asText(),
+                attrNames
+        );
+
     }
 }

@@ -4,11 +4,13 @@
       <q-form class="column justify-between self-center no-wrap full-width" ref="form" @submit.prevent style="height: 50vh">
         <div class="row no-wrap full-width">
           <div class="column justify-evenly" style="width: 15vw; height: 40vh; margin-right: 3vw">
-            <q-input style="width: 15vw; margin-bottom: -1em" v-model="credential.name" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
-            <q-input style="width: 15vw; margin-bottom: -1em" v-if="props.type !== 'external'" v-model="credential.agent" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Agent" outlined type="text"/>
             <q-input style="width: 15vw; margin-bottom: -1em" v-model="credential.credentialDefinitionId" :rules="[required]" lazy-rules error-message=" " no-error-icon class="q-mb-md"
                      label="Credential Definition ID"
                      outlined type="text"/>
+
+            <q-btn flat label="Load Credential Schema" @click="getCredentialSchema"/>
+            <q-input style="width: 15vw; margin-bottom: -1em" v-model="credential.name" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
+            <q-select style="width: 15vw; margin-bottom: -1em" v-if="props.type !== 'external'" v-model="credential.agent" :options="['university', 'tlabs']" label="Agent" outlined/>
           </div>
           <q-virtual-scroll class="column full-width" style="height: 40vh" :items="[0]">
             <div class="row no-wrap full-width">
@@ -62,16 +64,15 @@
 
 <script lang="ts" setup>
 import {QForm, QSelectOption, useQuasar, ValidationRule} from "quasar";
-import {onMounted, ref, Ref} from "vue";
-import {CreateCredential} from "@/main/vue/entity/credentialDefinition";
-import {CreateAttribute} from "@/main/vue/entity/credentialDefinition";
+import {onBeforeMount, ref, Ref} from "vue";
+import {CreateAttribute, CreateCredential} from "@/main/vue/entity/credentialDefinition";
 import api from "@/main/vue/api";
 import {useI18n} from "vue-i18n";
 import router from "@/main/vue/router";
 import ValidateCredentials from "@/main/vue/views/ValidateCredentials.vue";
+import {AxiosError} from "axios";
 
 const props = defineProps<{ id?: string, type?: 'internal' | 'external' }>();
-
 
 const {t} = useI18n();
 const $q = useQuasar()
@@ -99,9 +100,9 @@ const credential: Ref<CreateCredential> = ref({
   conditions: [{label: ''}],
 });
 
-onMounted(() => {
+onBeforeMount(async () => {
   if (props.id !== undefined) {
-    api.credential.get(props.id.toString()).then(response => {
+    await api.credential.get(props.id.toString()).then(response => {
       credential.value = {
         name: response.data.name,
         agent: response.data.agent,
@@ -152,6 +153,41 @@ const save = async () => {
           console.log(reason);
         });
   }
+}
+
+const getCredentialSchema = async () => {
+  if (credential.value.credentialDefinitionId.length == 0) {
+    return;
+  }
+
+  $q.loading.show({delay: 400});
+
+  await api.credential.getCredentialSchema(credential.value.credentialDefinitionId)
+      .then(response => {
+        credential.value.name = response.data.name;
+        credential.value.credentialDefinitionId = response.data.credentialDefinitionId;
+
+        if (response.data.agent) {
+          credential.value.agent = response.data.agent;
+        }
+
+        credential.value.attributes = response.data.attrs.map(v => ({
+          type: 'text',
+          name: '',
+          attributeName: v,
+          validationRules: [],
+        }));
+      })
+      .catch((e: AxiosError<{ code: string; }>) => {
+        $q.notify({
+          type: 'negative',
+          position: 'bottom',
+          timeout: 6000,
+          message: t('admin.credentialEditing.credentialSchemaLoadFailed'),
+          caption: t(`admin.credentialEditing.errors.${e.response?.data.code ?? 'ERR_LEDGER_COMMUNICATION_FAILED'}`),
+        });
+      })
+      .finally($q.loading.hide);
 }
 
 const editValidation = (item: CreateAttribute, items: CreateAttribute[]) => {

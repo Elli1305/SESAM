@@ -1,7 +1,7 @@
 package com.gpse.sesam.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gpse.sesam.domain.credential.credentials.*;
+import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
@@ -10,22 +10,17 @@ import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
 import jakarta.validation.Valid;
+import org.hyperledger.indy.sdk.IndyException;
+import org.hyperledger.indy.sdk.InvalidStructureException;
+import org.hyperledger.indy.sdk.pool.LedgerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @CrossOrigin
@@ -129,5 +124,31 @@ public class CredentialController {
 	@GetMapping(value = "/allbylocation/{id}")
 	public List<AllCredentialCmd> allByLocation(@PathVariable final Long id) {
 		return service.getAllCredentialsByLocation(id);
+	}
+
+	@GetMapping(value = "/credential_schema/{credentialDefinitionId}")
+	@ResponseStatus(HttpStatus.OK)
+	public CredentialSchemaCmd getCredentialSchema(@PathVariable final String credentialDefinitionId) throws IndyException, ExecutionException, InterruptedException, JsonProcessingException {
+		return service.getCredentialSchema(credentialDefinitionId);
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(IndyException.class)
+	public CredentialSchemaErrorCmd indyException() {
+		return new CredentialSchemaErrorCmd("ERR_LEDGER_COMMUNICATION_FAILED");
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler({ExecutionException.class, InterruptedException.class})
+	public CredentialSchemaErrorCmd ledgerException(Exception exception) {
+		final Throwable cause = exception.getCause();
+
+		if (cause instanceof InvalidStructureException) {
+			return new CredentialSchemaErrorCmd("ERR_INVALID_STRUCTURE");
+		} else if (cause instanceof LedgerNotFoundException) {
+			return new CredentialSchemaErrorCmd("ERR_CREDENTIAL_DEFINITION_NOT_FOUND");
+		}
+
+		return new CredentialSchemaErrorCmd("ERR_LEDGER_COMMUNICATION_FAILED");
 	}
 }

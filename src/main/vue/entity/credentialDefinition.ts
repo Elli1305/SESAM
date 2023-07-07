@@ -146,3 +146,11 @@ export interface AllCredentialCmd {
     issuerName: string[];
     issuerRoom: string[];
 }
+
+export interface CredentialSchema {
+    name: string;
+    credentialDefinitionId: string;
+    agent?: string;
+    ver: string;
+    attrs: string[];
+}

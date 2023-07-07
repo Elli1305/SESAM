@@ -3,9 +3,11 @@ package com.gpse.sesam.domain.credential.credentials.internal;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.web.cmd.*;
+import org.hyperledger.indy.sdk.IndyException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 public interface CredentialService {
 	List<InternalCredential> getCredentials();
@@ -37,4 +39,6 @@ public interface CredentialService {
 	List<AllCredentialCmd> getAllForView();
 
 	List<AllCredentialCmd> getAllCredentialsByLocation(Long id);
+
+	CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws IndyException, ExecutionException, InterruptedException, JsonProcessingException;
 }
