@@ -261,9 +261,10 @@ const messages = {
                 editGroup: "Gruppierung bearbeiten",
                 chooseRooms: "Räume auswählen",
                 question: "Wollen Sie diese Gruppierung wirklich löschen?",
+                deleteGroup: "Gruppe löschen",
                 addRoomsToSelected: "Ausgewählte Räume wirklich der folgenden Gruppe zufügen :",
                 doorconfiguration: "Türkonfigurationen",
-                nameOfGroup: "Name der neuen Gruppe",
+                nameOfGroup: "Name der Gruppe",
                 groups: "Raumgruppen",
                 info: "Räume einer neuen Gruppe zufügen oder eine bereits bestehende Gruppe auswählen und 'Räume zu ausgewählter Gruppe hinzufügen' drücken",
                 addRooms: "Räume zu ausgewählten Gruppen zufügen",
@@ -646,7 +647,7 @@ const messages = {
 
         editor: {
             groupRooms: {
-                title: "Room Groupings",
+                title: "Room Groups",
                 chooseBuilding: "Choose a building",
                 chooseLocation: "Choose a location",
                 floor: "Floor: ",
@@ -654,8 +655,9 @@ const messages = {
                 editGroup: "Edit group",
                 chooseRooms: "Choose the rooms",
                 question: "Do you really want to delete this group?",
+                deleteGroup: "Delete group",
                 addRoomsToSelected: "Add selected rooms to the following group :",
-                nameOfGroup: "Name of the new group",
+                nameOfGroup: "Name of the group",
                 doorconfiguration: "Doorconfigurations",
                 groups: "Room Groups",
                 info: "Add rooms either to a new group or choose an existing group",
