@@ -131,3 +131,18 @@ export interface CategoryResponse {
     credentials: bigint[];
     externalCredentials: bigint[];
 }
+
+export interface ExternalCredentialCmd {
+    categoryName: string;
+    credentialName: string;
+    internalCredential: string[];
+}
+
+export interface AllCredentialCmd {
+    categoryName: string;
+    credentialName: string;
+    type: string;
+    externalCredential: string[];
+    issuerName: string[];
+    issuerRoom: string[];
+}

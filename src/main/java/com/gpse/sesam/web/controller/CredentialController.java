@@ -1,13 +1,13 @@
 package com.gpse.sesam.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gpse.sesam.domain.credential.credentials.Credential;
-import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.*;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
-import com.gpse.sesam.web.cmd.CreateCredentialCmd;
-import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
-import com.gpse.sesam.web.cmd.UpdateCredentialCmd;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.location.LocationService;
+import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +32,15 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class CredentialController {
 	private final CredentialService service;
+	private final ExternalCredentialService externalCredentialService;
+	private final LocationService locationService;
 
 	@Autowired
-	public CredentialController(final CredentialService service) {
+	public CredentialController(final CredentialService service, ExternalCredentialService externalCredentialService,
+								LocationService locationService) {
 		this.service = service;
+		this.externalCredentialService = externalCredentialService;
+		this.locationService = locationService;
 	}
 
 	@GetMapping("/credentials")
@@ -45,7 +50,7 @@ public class CredentialController {
 
 	@GetMapping("/external_credentials")
 	public List<ExternalCredential> getExternalCredential() {
-		return service.getExternalCredentials();
+		return externalCredentialService.getExternalCredentials();
 	}
 
 	@GetMapping("/credentials/getAll")
@@ -99,5 +104,30 @@ public class CredentialController {
 	@Secured("ADMINISTRATOR")
 	public void delete(@PathVariable final Long id) {
 		service.delete(id);
+	}
+
+	@GetMapping(value = "/allcredentials")
+	public List<CredentialCmd> credentials() {
+		return service.getAllCredentialsForView();
+	}
+
+	@GetMapping(value = "/externalcredentialview")
+	public List<ExternalCredentialCmd> externalCredentials() {
+		return externalCredentialService.getAllExternal();
+	}
+
+	@GetMapping(value = "/externalcredentialsbylocation/{id}")
+	public List<ExternalCredentialCmd> externalCredentialsByLocation(@PathVariable final Long id) {
+		return externalCredentialService.getAllExternalByLocation(id);
+	}
+
+	@GetMapping(value = "/allcredentialview")
+	public List<AllCredentialCmd> allCredentials() {
+		return service.getAllForView();
+	}
+
+	@GetMapping(value = "/allbylocation/{id}")
+	public List<AllCredentialCmd> allByLocation(@PathVariable final Long id) {
+		return service.getAllCredentialsByLocation(id);
 	}
 }

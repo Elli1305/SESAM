@@ -170,7 +170,13 @@ const messages = {
             location: "Standort",
             availableCredentials: "Verfügbare Credential",
             qualification: "Vergleichbare Credential",
-            room: "Raum: "
+            room: "Raum: ",
+            intern: "Internal",
+            extern: "External",
+            all: "All",
+            type: "Type",
+            showCredentials: "Alle Credentials anzeigen",
+            allCredentials: "Alle Credentials"
         },
         admin: {
             currentUsers: {
@@ -326,9 +332,9 @@ const messages = {
                         negativeWithZero: "Negativ",
                         negativeWithoutZero: "Negativ (exkl. 0)",
                         // Dates
-                        futureWithToday: "Zukunft (inkl. today)",
+                        futureWithToday: "Zukunft (inkl. heute)",
                         futureWithoutToday: "Zukunft",
-                        pastWithToday: "Vergangenheit (inkl. today)",
+                        pastWithToday: "Vergangenheit (inkl. heute)",
                         pastWithoutToday: "Vergangenheit",
                         today: "Heute",
                         // Strings
@@ -557,6 +563,12 @@ const messages = {
             availableCredentials: "Available Credentials",
             qualification: "Comparable Credentials",
             room: "Room: ",
+            intern: "Intern",
+            extern: "Extern",
+            all: "Alle",
+            type: "Typ",
+            showCredentials: "Show all Credentials",
+            allCredentials: "All Credentials"
         },
 
         admin: {
