@@ -9,8 +9,8 @@
         </div>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat color="primary" :label="t('admin.corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>
-        <q-btn flat color="primary" :label="t('admin.corporateDesign.confirm.save.ok')" @click="onOKClick"/>
+        <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('common.save')" @click="onOKClick"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
