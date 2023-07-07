@@ -3,6 +3,7 @@ package com.gpse.sesam.domain.location.door.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.configuration.DoorApiConfig;
+import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.web.cmd.DoorConfigCmd;
@@ -32,12 +33,10 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 	private final DoorApiConfig appConfig;
 	private ConfigCmdMapper configCmdMapper;
 
-	private final ConfigCmdMapper configCmdMapper;
-
 	@Autowired
-	public DoorConfigServiceImpl(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository, final ConfigCmdMapper configCmdMapper) {
+	public DoorConfigServiceImpl(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository,
+								 final CredentialService credentialService) {
 		this.appConfig = appConfig;
-		this.configCmdMapper = configCmdMapper;
 		proofConfigRepository.save(createProofConfig());
 		this.configCmdMapper = new ConfigCmdMapper(credentialService);
 	}
