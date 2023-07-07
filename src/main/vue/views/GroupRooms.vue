@@ -117,7 +117,7 @@
     <q-dialog v-model="deleteAlert">
         <q-card>
             <q-card-section>
-                <div class="text-h6">{{ t('admin.currentUsers.editUser.deleteUser') }}</div>
+                <div class="text-h6">{{ t('editor.groupRooms.deleteGroup') }}</div>
             </q-card-section>
             <q-card-section class="q-pt-none">
                 {{ t('editor.groupRooms.question') }}
@@ -132,7 +132,7 @@
     <q-dialog v-model="editAlert">
       <q-card>
         <q-card-section>
-          <div class="text-h6">Name der Gruppe</div>
+          <div class="text-h6">{{t('editor.groupRooms.nameOfGroup')}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-input dense v-model="editName" autofocus @keyup.enter="prompt = false"/>
@@ -151,7 +151,7 @@
             </q-card-section>
             <q-card-actions align="right" class="text-primary">
                 <q-btn flat :label="t('common.cancel')" v-close-popup/>
-                <q-btn flat label="Speichern" @click="updateCurrentGroup(editName,modelRoomsNew);"
+                <q-btn flat :label="t('common.save')" @click="updateCurrentGroup(editName,modelRoomsNew);"
                 v-close-popup="closeEditAlert"/>
             </q-card-actions>
         </q-card>
@@ -444,8 +444,8 @@ export default {
       if(newName.trim() === ""){
         $q.notify({
           type:'negative',
-          message: 'Name darf nicht leer sein',
-          caption: 'Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.'
+          message: t('editor.groupRooms.checkNameMessage'),
+          caption: t('editor.groupRooms.checkNameCaption')
         })
       }
 
@@ -688,7 +688,7 @@ export default {
       const roomGroupStore = useRoomGroupStore()
       const res = []
         for (const val in model) {
-          if (val && val !=0) {
+          if (val && val !==0) {
             res.push(model[val])
           }
         }
