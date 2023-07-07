@@ -761,7 +761,7 @@ export default {
             if (selectedRooms.value.length === 0) {
                 $q.notify({
                     type: 'negative',
-                    message: t('groupRooms.noRoomSelected')
+                    message: t('editor.groupRooms.noRoomSelected')
                 })
             } else {
                 addRoomsToNewGroupDialog.value = true;
@@ -775,7 +775,7 @@ export default {
             } else {
                 $q.notify({
                     type: 'negative',
-                    message: t('groupRooms.noGroupSelected')
+                    message: t('editor.groupRooms.noGroupSelected')
                 })
                 return false;
             }
