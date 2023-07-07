@@ -49,7 +49,7 @@
                 multiple
                 label="Credentials"
                 option-label="name"
-                :hint="t('floorPlan.directions.infoCredential')"
+                :hint="t('floorPlan.infoCredential')"
                 :options="credentialStore.allCredentials"
                 v-model="qSelects.configParts[i].credentials"
                 use-chips>
