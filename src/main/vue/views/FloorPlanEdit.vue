@@ -208,15 +208,15 @@ export default {
     }
 
     function deleteLocationFunction(id) {
-      locationStore.deleteLocation(id)
+      locationStore.deleteLocation(id).then(() => floorPlanStore.selectedFloorPlan = null)
     }
 
     function deleteBuildingFunction(id) {
-      buildingStore.deleteBuilding(id)
+      buildingStore.deleteBuilding(id).then(() => floorPlanStore.selectedFloorPlan = null)
     }
 
     function deleteFloorFunction(id) {
-      floorStore.deleteFloor(id)
+      floorStore.deleteFloor(id).then(() => floorPlanStore.selectedFloorPlan = null)
     }
 
     const changeFloorPlan = function (floor) {
