@@ -106,7 +106,6 @@ public final class ConfigCmdMapper {
 				proofConfig.addRequestedAttributes(attributeInfo.getName() + (index++), attributeInfo);
 			}
 		}
-
 		return proofConfig;
 	}
 	public DoorConfigCmd toCmd(ProofConfig proofConfig) throws ParseException {

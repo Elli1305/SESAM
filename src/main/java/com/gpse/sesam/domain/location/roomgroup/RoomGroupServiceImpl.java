@@ -114,15 +114,16 @@ public class RoomGroupServiceImpl implements RoomGroupService {
 	public void setGroupConfig(List<TwoWayDoorConfigCmd> cmds) {
 		for (TwoWayDoorConfigCmd cmd : cmds) {
 			Optional<Door> door = doorRepository.findById(Long.valueOf(cmd.getDoorConfigIn().getDoorId()));
-			if (door.isPresent()) {
-				doorConfigurationService.sendProofConfig(cmd.getDoorConfigIn()
-						.getDoorId(), ConfigCmdMapper.fromCmd(cmd.getDoorConfigIn()));
-				doorConfigurationService.sendProofConfig(cmd.getDoorConfigOut()
-						.getDoorId(), ConfigCmdMapper.fromCmd(cmd.getDoorConfigOut()));
-				door.get().setProofConfigIn(List.of(ConfigCmdMapper.fromCmd(cmd.getDoorConfigIn())));
-				door.get().setProofConfigOut(List.of(ConfigCmdMapper.fromCmd(cmd.getDoorConfigOut())));
-				doorRepository.save(door.get());
-			}
+            // TODO change when merged with master
+//            if (door.isPresent()) {
+//                doorConfigurationService.sendProofConfig(cmd.getDoorConfigIn()
+//                        .getDoorId(), ConfigCmdMapper.fromCmd(cmd.getDoorConfigIn()));
+//                doorConfigurationService.sendProofConfig(cmd.getDoorConfigOut()
+//                        .getDoorId(), ConfigCmdMapper.fromCmd(cmd.getDoorConfigOut()));
+//                door.get().setProofConfigIn(List.of(ConfigCmdMapper.fromCmd(cmd.getDoorConfigIn())));
+//                door.get().setProofConfigOut(List.of(ConfigCmdMapper.fromCmd(cmd.getDoorConfigOut())));
+//                doorRepository.save(door.get());
+//            }
 		}
 	}
 
