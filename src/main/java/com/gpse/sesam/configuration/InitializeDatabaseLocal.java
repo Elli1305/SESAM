@@ -122,6 +122,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	}
 
 	private void setLightColors(final Colors defaultColors) {
+		defaultColors.setLogoPath("/Logo.svg");
 		defaultColors.setBgC("#ffffff");
 		defaultColors.setTextC("#000000");
 		defaultColors.setPrimaryColor("#e20074");
@@ -136,16 +137,17 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	}
 
 	private void setDarkColors(final Colors defaultColors) {
-		defaultColors.setBgC("#ffffff");
-		defaultColors.setTextC("#000000");
-		defaultColors.setPrimaryColor("#fec705");
-		defaultColors.setSecondary("#fec705");
-		defaultColors.setAccent("#ffffff");
-		defaultColors.setDark("#fec705");
-		defaultColors.setLightBlue("#fec705");
-		defaultColors.setPositive("#fec705");
-		defaultColors.setNegative("#fec705");
-		defaultColors.setInfo("#fec705");
+		defaultColors.setLogoPath("/Logo-Dark.svg");
+		defaultColors.setBgC("#000000");
+		defaultColors.setTextC("#ffffff");
+		defaultColors.setPrimaryColor("#e20074");
+		defaultColors.setSecondary("#f6b2d5");
+		defaultColors.setAccent("#000000");
+		defaultColors.setDark("#808080");
+		defaultColors.setLightBlue("#7d99a7");
+		defaultColors.setPositive("#dcdcdc");
+		defaultColors.setNegative("#505050");
+		defaultColors.setInfo("#0074E2");
 		defaultColors.setWarning("#fec705");
 	}
 

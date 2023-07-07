@@ -567,7 +567,7 @@ export default {
 
     function reset() {
       corpdesign.reset().then(colors => {
-        corpdesign.setColors()
+        corpdesign.setColors(localStorage.getItem('colorTheme'))
         r.style.setProperty('--bg-color', colors.data.bgC)
         r.style.setProperty('--text-color', colors.data.textC)
         location.reload()
@@ -583,12 +583,17 @@ export default {
 
     function save() {
       if (logo.value != null)
-        corpdesign.saveLogo(logo.value)
+        if (tab.value.toUpperCase() === 'LIGHT')
+          corpdesign.saveLogoLight(logo.value)
+        else
+          corpdesign.saveLogoDark(logo.value)
       if (favicon.value != null)
         corpdesign.saveFavicon(favicon.value)
-      const colorTheme = localStorage.getItem('colorTheme')
+      const colorTheme = tab.value.toUpperCase()
       if (colorTheme === 'LIGHT') {
         corpdesign.saveColors(colorTheme, {
+          theme: colorTheme,
+          logoPath: '/Logo.svg',
           bgC: bgColorLight.value,
           textC: fontColorLight.value,
           primaryColor: primaryLight.value,
@@ -616,6 +621,7 @@ export default {
       } else if (colorTheme === 'DARK') {
         corpdesign.saveColors(colorTheme, {
           theme: colorTheme,
+          logoPath: '/Logo-Dark.svg',
           bgC: bgColorDark.value,
           textC: fontColorDark.value,
           primaryColor: primaryDark.value,

@@ -8,6 +8,8 @@ export interface Colors {
 
     theme: ColorTheme,
 
+    logoPath: string,
+
     bgC: string,
     textC: string,
 

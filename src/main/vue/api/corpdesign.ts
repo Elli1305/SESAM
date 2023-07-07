@@ -1,13 +1,23 @@
-import axios, {AxiosRequestConfig, AxiosResponse} from "axios"
-import {Colors, ColorTheme} from "@/main/vue/entity/colors"
+import axios, {AxiosResponse} from "axios"
+import {Colors} from "@/main/vue/entity/colors"
 import {setCssVar} from "quasar"
 
 export default {
 
-    saveLogo(file: File): Promise<AxiosResponse<void>> {
+    saveLogoLight(file: File): Promise<AxiosResponse<void>> {
         let formData = new FormData()
         formData.append("file", file)
-        return axios.post('/api/corpdesign/save/logo', formData, {
+        return axios.post(`/api/corpdesign/save/logo-light`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        })
+    },
+
+    saveLogoDark(file: File): Promise<AxiosResponse<void>> {
+        let formData = new FormData()
+        formData.append("file", file)
+        return axios.post(`/api/corpdesign/save/logo-dark`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
@@ -38,6 +48,7 @@ export default {
 
     setColors(colorTheme: string): void {
         this.getColors(colorTheme).then(colors => {
+            console.log(colors)
             setCssVar('primary', colors.data.primaryColor)
             setCssVar('secondary', colors.data.secondary)
             setCssVar('accent', colors.data.accent)

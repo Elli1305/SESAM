@@ -23,12 +23,21 @@ public class CorporateDesignController {
         this.colorsService = colorsService;
     }
 
-    @PostMapping(path = "/save/logo")
+    @PostMapping(path = "/save/logo-light")
     @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveLogo(@RequestPart("file") MultipartFile file) {
+    public void saveLogoLight(@RequestPart("file") MultipartFile file) {
 
-        fileStorageService.storeLogo(file);
+        fileStorageService.storeLogo(file, "LIGHT");
+
+    }
+
+    @PostMapping(path = "/save/logo-dark")
+    @Secured("ADMINISTRATOR")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void saveLogoDark(@RequestPart("file") MultipartFile file) {
+
+        fileStorageService.storeLogo(file, "DARK");
 
     }
 

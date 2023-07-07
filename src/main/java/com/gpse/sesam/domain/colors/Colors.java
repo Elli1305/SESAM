@@ -16,6 +16,9 @@ public class Colors {
     @Column
     private ColorTheme theme;
 
+    @Column
+    private String logoPath;
+
     @Column(nullable = false)
     private String bgC;
     @Column(nullable = false)
@@ -154,5 +157,13 @@ public class Colors {
 
     public void setWarning(String warning) {
         this.warning = warning;
+    }
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
     }
 }

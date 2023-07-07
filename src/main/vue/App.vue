@@ -15,14 +15,28 @@ const router = useRouter()
 const i18nLocale = useI18n()
 const r = document.querySelector(':root')
 
-const themeIcon = ref('light_mode')
-localStorage.setItem('colorTheme', 'LIGHT')
-$q.dark.set(false)
-updateColors()
+const themeIcon = ref('')
+const logoPath = ref('')
+if (!localStorage.getItem('colorTheme')) {
+  console.log('no theme selected')
+  localStorage.setItem('colorTheme', 'LIGHT')
+  themeIcon.value = 'light_mode'
+  logoPath.value = "/Logo.svg"
+  $q.dark.set(false)
+} else if (localStorage.getItem('colorTheme') === 'LIGHT') {
+    $q.dark.set(false)
+    themeIcon.value = 'light_mode'
+    updateColors('LIGHT')
+  } else {
+    $q.dark.set(true)
+    themeIcon.value = 'dark_mode'
+    updateColors('DARK')
+}
 
-function updateColors() {
-  corpdesign.setColors(localStorage.getItem('colorTheme'))
-  corpdesign.getColors(localStorage.getItem('colorTheme')).then(c => {
+function updateColors(colorTheme) {
+  corpdesign.setColors(colorTheme)
+  corpdesign.getColors(colorTheme).then(c => {
+    logoPath.value = c.data.logoPath
     r.style.setProperty('--bg-color', c.data.bgC)
     r.style.setProperty('--text-color', c.data.textC)
   })
@@ -41,12 +55,12 @@ function changeLanguage(language) {
 function changeTheme() {
   if (localStorage.getItem('colorTheme') === 'LIGHT') {
     localStorage.setItem('colorTheme', 'DARK')
-    updateColors()
+    updateColors('DARK')
     $q.dark.set(true)
     themeIcon.value = 'dark_mode'
   } else {
     localStorage.setItem('colorTheme', 'LIGHT')
-    updateColors()
+    updateColors('LIGHT')
     $q.dark.set(false)
     themeIcon.value = 'light_mode'
   }
@@ -75,7 +89,7 @@ async function logout() {
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="row" style="margin: 0; padding: 24px">
         <div class="column">
-          <q-img src="/Logo.svg" @click="router.push('/')" class="foldMenu"
+          <q-img :src="logoPath" @click="router.push('/')" class="foldMenu"
                  style="height: 95px; width: 80px; margin-right: 24px"/>
         </div>
         <div class="column full-width justify-between no-wrap" style="height: 95px">
