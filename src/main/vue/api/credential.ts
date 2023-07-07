@@ -1,11 +1,12 @@
 import axios, {AxiosResponse,} from "axios";
 import {
+    AllCredentialCmd,
     Category,
     CategoryResponse,
     CreateCredential,
     Credential,
     CredentialCmd,
-    ExternalCredential,
+    ExternalCredential, ExternalCredentialCmd,
     IssueCredentialAttribute
 } from "@/main/vue/entity/credentialDefinition";
 
@@ -30,7 +31,7 @@ export default {
     delete(id: number): Promise<AxiosResponse<void>> {
         return axios.delete(`/api/credentials/${id}`);
     },
-    update(id: number, credential: CreateCredential): Promise<AxiosResponse<void>> {
+    update(id: string, credential: CreateCredential): Promise<AxiosResponse<void>> {
         return axios.put(`/api/credentials/${id}`, credential);
     },
 
@@ -63,5 +64,26 @@ export default {
 
     updateCategory(param: String, category: CategoryResponse): Promise<AxiosResponse<CategoryResponse>> {
         return axios.put('api/credentialmapping/edit/' + param, category)
-    }
+    },
+
+    getAllCredentialsForView():Promise<AxiosResponse<CredentialCmd[]>> {
+        return axios.get("api/allcredentials")
+    },
+
+    getAllExternalCredentialsForView(): Promise<AxiosResponse<ExternalCredentialCmd[]>> {
+        return axios.get("api/externalcredentialview")
+    },
+
+    getAllForView(): Promise<AxiosResponse<AllCredentialCmd[]>> {
+        return axios.get("api/allcredentialview")
+    },
+
+    getExternalCredentialByLocation(param: bigint): Promise<AxiosResponse<ExternalCredentialCmd[]>> {
+        return axios.get("api/externalcredentialsbylocation/" + param)
+    },
+
+    getAllByLocation(param: bigint): Promise<AxiosResponse<AllCredentialCmd[]>> {
+        return axios.get("api/allbylocation/" + param)
+    },
+
 }

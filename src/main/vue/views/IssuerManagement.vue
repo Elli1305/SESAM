@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{ t('issuermanagement.title') }}</p>
+    <p class="row text-h3 justify-center">{{ t('admin.issuerManagement.title') }}</p>
     <div class="row self-center" style="display: flex">
       <q-table
           style="width: 80vw; height: 50vh"
@@ -15,7 +15,7 @@
           :filter="filter"
           row-key="username">
         <template v-slot:top-right>
-            <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('issuermanagement.search')">
+            <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('common.search')">
               <template v-slot:append>
                 <q-icon name="search"/>
               </template>
@@ -37,7 +37,7 @@
 
         <template v-slot:body-cell-roomId="props">
           <q-td :props="props">
-            <div>{{ props.row.room.name }}</div>
+            <div>{{ props.row.room?.name }}</div>
           </q-td>
         </template>
 
@@ -51,38 +51,40 @@
     <q-dialog v-model="prompt" persistent>
       <q-card>
         <q-card-section>
-          <div class="text-h6">{{ t('issuermanagement.dialogTitle') }}</div>
+          <div class="text-h6">{{ t('admin.issuerManagement.dialogTitle') }}</div>
         </q-card-section>
         <q-card-section>
           <q-form style="width: 20em" @submit="saveChanges">
-            <q-input class="q-my-sm" v-model="model1" label="Last Name" outlined readonly></q-input>
-            <q-input class="q-my-sm" v-model="model2" label="First Name" outlined readonly></q-input>
-            <q-select class="q-my-sm"
-                      filled
-                      v-model="model4"
-                      multiple
-                      :label="t('issuermanagement.credentialsList')"
-                      emit-value
-                      :options="credentialStore.allCredentials"
-                      option-label="name"
-                      option-value="id"
-                      map-options
-                      options-cover/>
-            <q-select class="q-my-sm"
-                      filled
-                      v-model="model3"
-                      :label="t('issuermanagement.roomsList')"
-                      emit-value
-                      :options="roomStore.rooms"
-                      option-label="name"
-                      option-value="id"
-                      map-options
-                      options-cover/>
+            <q-input class="q-my-sm" v-model="model1" :label="t('profile.lastName')" outlined readonly></q-input>
+            <q-input class="q-my-sm" v-model="model2" :label="t('profile.firstName')" outlined readonly></q-input>
+            <q-select
+                class="q-my-sm"
+                filled
+                v-model="model4"
+                multiple
+                :label="t('admin.issuerManagement.issuableCredential')"
+                emit-value
+                :options="credentialStore.allCredentials"
+                option-label="name"
+                option-value="id"
+                map-options
+                options-cover/>
+            <q-select
+                class="q-my-sm"
+                filled
+                v-model="model3"
+                :label="t('admin.issuerManagement.office')"
+                emit-value
+                :options="roomStore.rooms"
+                option-label="name"
+                option-value="id"
+                map-options
+                options-cover/>
           </q-form>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat v-close-popup :label="t('issuermanagement.cancel')" color="primary"/>
-          <q-btn flat v-close-popup :label="t('issuermanagement.save')" color="primary" class="q-ml-md"
+          <q-btn flat v-close-popup :label="t('common.cancel')" color="primary"/>
+          <q-btn flat v-close-popup :label="t('common.save')" color="primary" class="q-ml-md"
                  @click="editIssuers(id)"/>
         </q-card-actions>
       </q-card>
@@ -123,14 +125,14 @@ export default {
       {
         name: 'firstName',
         align: 'center',
-        label: t('issuermanagement.firstname'),
+        label: t('profile.firstName'),
         field: 'firstName',
         sortable: true,
       },
       {
         name: 'lastName',
         required: true,
-        label: t('issuermanagement.lastname'),
+        label: t('profile.lastName'),
         align: 'center',
         field: (row) => row.lastName,
         format: (val) => `${val}`,
@@ -139,7 +141,7 @@ export default {
       {
         name: 'credentials',
         align: 'center',
-        label: t('issuermanagement.credentials'),
+        label: t('common.credentials'),
         field: 'credentials',
         format: (val) => val.map((credential) => credential.name).join(', '),
         sortable: true,
@@ -148,11 +150,11 @@ export default {
       {
         name: 'roomId',
         align: 'center',
-        label: t('issuermanagement.roomId'),
+        label: t('admin.issuerManagement.office'),
         field: 'room.name',
         sortable: true,
       },
-      {name: 'actions', label: t('issuermanagement.edit'), style: 'width: 40px', align: 'center'},
+      {name: 'actions', label: t('common.edit'), style: 'width: 40px', align: 'center'},
     ];
 
     const openForm = (row) => {

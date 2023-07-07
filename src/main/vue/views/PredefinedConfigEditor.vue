@@ -1,6 +1,6 @@
 <template>
     <q-page class="column justify-evenly" style="padding: 2em 5em">
-        <p class="row text-h3 justify-center">{{ t("predefinedConfigs.title") }}</p>
+        <p class="row text-h3 justify-center">{{ t("editor.predefinedConfigs.title") }}</p>
         <div class="row self-center">
             <q-table
                     style="width: 80vw; height: 50vh"
@@ -44,8 +44,8 @@
                        rounded
                        icon="add"
                        color="grey"
-                       :label="t('predefinedConfigs.new')"
-                       @click="configDialog = true"
+                       :label="t('editor.predefinedConfigs.new')"
+                       @click="configDialog = true; edit = false"
                        style="margin-right: 2em">
                     </q-btn>
                     <q-input
@@ -59,10 +59,10 @@
             </q-table>
         </div>
 
-        <q-dialog v-model="configDialog">
+        <q-dialog v-model="configDialog" persistent>
             <q-card>
                 <q-card-section>
-                    <q-input class="full-width" filled v-model="configName" label="Konfigurationsbezeichnung" stack-label></q-input>
+                    <q-input class="full-width" filled v-model="configName" :label="t('editor.predefinedConfigs.name')" stack-label></q-input>
                 </q-card-section>
                 <DoorConfig
                     ref="configIn"
@@ -72,8 +72,8 @@
                             :is-config-out="true">
                 </DoorConfig>
                 <q-card-actions align="right">
-                    <q-btn flat color="primary" label="Abbrechen" @click="onCancelClick()" v-close-popup></q-btn>
-                    <q-btn flat color="primary" label="Speichern" :disable="!configName" @click="onOKClick()" v-close-popup></q-btn>
+                    <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick(); edit = false" v-close-popup></q-btn>
+                    <q-btn flat color="primary" :label="t('common.save')" :disable="!configName" @click="onOKClick()" v-close-popup></q-btn>
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -82,14 +82,14 @@
         <q-dialog v-model="deleteDialog">
             <q-card>
                 <q-card-section>
-                    <div class="text-h6">{{ t('adminEdit.attention') }}</div>
+                    <div class="text-h6">{{ t('editor.predefinedConfigs.deleteAlert') }}</div>
                 </q-card-section>
                 <q-card-section class="q-pt-none">
-                    {{ t('predefinedConfigs.deleteQuestion') }}
+                    {{ t('editor.predefinedConfigs.deleteQuestion') }}
                 </q-card-section>
                 <q-card-actions align="right" class="text-primary">
-                    <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
-                    <q-btn flat :label="t('adminEdit.delete')" @click="deleteConfig(currentConfig); deleteDialog=false"/>
+                    <q-btn flat :label="t('common.cancel')" v-close-popup/>
+                    <q-btn flat :label="t('common.delete')" @click="deleteConfig(currentConfig); deleteDialog=false"/>
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -123,12 +123,12 @@ const columns: QTableProps['columns'] = [
     {
         name: 'name',
         required: true,
-        label: "Bezeichung",
+        label: t('editor.predefinedConfigs.nameConfig'),
         align: 'center',
         field: 'name',
         sortable: true
     },
-    {name: 'actions', align: 'center', label: "Bearbeiten", style: 'width: 12em', headerStyle: 'width: 12em',
+    {name: 'actions', align: 'center', label: t('common.edit'), style: 'width: 12em', headerStyle: 'width: 12em',
         field: row => row}
 ]
 

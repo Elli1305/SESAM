@@ -32,5 +32,6 @@ public interface RoomGroupService {
     void setGroupConfig(List<TwoWayDoorConfigCmd> cmds);
 
     List<RoomGroupDoorConfigCmd> getRoomsAndDoorsByGroupId(Long id);
+    List<Room> getRoomsByGroupId(Long id);
 
 }

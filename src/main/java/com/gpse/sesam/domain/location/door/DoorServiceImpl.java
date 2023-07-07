@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,10 +69,10 @@ public class DoorServiceImpl implements DoorService {
 
 	@Override
 	public List<Door> getDoorsByRoomId(Long id) {
-		Optional <Room> room = roomRepository.findById(id);
+		Optional<Room> room = roomRepository.findById(id);
 		if (room.isPresent()) {
 			return room.get().getDoors();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 }

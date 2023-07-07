@@ -1,12 +1,14 @@
 package com.gpse.sesam.domain.user.issuer;
 
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.CredentialRepository;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialRepository;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
+import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.web.cmd.IssuerResponseCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,7 +35,15 @@ public class IssuerServiceImpl implements IssuerService {
 	public List<Issuer> getIssuers() {
 		final List<Issuer> issuers = new ArrayList<>();
 		issuerRepository.findAll().forEach(issuers::add);
-		return issuers;
+		return issuers
+				.stream()
+				.filter(issuer ->
+						issuer
+								.getAuthorities()
+								.contains(AuthorityUtils.createAuthorityList(
+										SesamUserRole.AttainableRole.ISSUER.toString())
+										.get(0)))
+				.toList();
 	}
 
 	@Override
@@ -71,5 +81,10 @@ public class IssuerServiceImpl implements IssuerService {
 			issuer.get().setCredentials(credentials);
 			issuerRepository.save(issuer.get());
 		}
+	}
+
+	@Override
+	public void save(Issuer issuer) {
+		issuerRepository.save(issuer);
 	}
 }

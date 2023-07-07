@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" >
-    <p class="row text-h3 justify-center">{{t("groupRooms.title")}}</p>
+    <p class="row text-h3 justify-center">{{t("editor.groupRooms.title")}}</p>
     <div class="row self-center">
       <q-table
           style="width: 80vw; height: 50vh"
@@ -24,9 +24,8 @@
                   flat
                   color="grey"
                   @click="getInfosForEditGroup(Object.values(props)); getOldName(); updateRoomList(currentBuilding); editAlert = true"
-                  test="props.value"
-                  icon="edit">
-                <span class="material-icons-outlined"></span>
+                  test="props.value">
+                <q-icon name="edit"/>
               </q-btn>
               <q-btn
                   dense
@@ -58,21 +57,21 @@
               rounded
               icon="add"
               color="grey"
-              :label="t('groupRooms.new')"
+              :label="t('editor.groupRooms.newGroup')"
               @click="newGroup = true; toDefault(); updateRoomList(currentBuilding);"
               style="margin-right: 2em"/>
           <q-input borderless dense debounce="300" v-model="filter.search"
-                   :placeholder="t( 'adminCurrentUser.search')">
-            <template v-slot:append>
-              <q-icon name="search"/>
-            </template>
+                   :placeholder="t('common.search')">
+              <template v-slot:append>
+                  <q-icon name="search"/>
+              </template>
           </q-input>
         </template>
 
 
         <template class="row no-wrap" v-slot:top-left >
           <q-select
-              :label="t( 'groupRooms.chooseLocation')"
+              :label="t('editor.groupRooms.chooseLocation')"
               behavior="menu"
               v-model="modelForLocation"
               borderless
@@ -92,7 +91,7 @@
             </template>
           </q-select>
           <q-select
-              :label="t( 'groupRooms.chooseBuilding')"
+              :label="t('editor.groupRooms.chooseBuilding')"
               behavior="menu"
               v-model="modelForBuilding"
               borderless
@@ -116,86 +115,86 @@
     </div>
 
     <q-dialog v-model="deleteAlert">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">{{ t('adminEdit.attention') }}</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          {{ t('groupRooms.question') }}
-        </q-card-section>
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
-          <q-btn flat :label="t('adminEdit.delete')" @click="deleteGroup(); deleteAlert=false"/>
-        </q-card-actions>
-      </q-card>
+        <q-card>
+            <q-card-section>
+                <div class="text-h6">{{ t('editor.groupRooms.deleteGroup') }}</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+                {{ t('editor.groupRooms.question') }}
+            </q-card-section>
+            <q-card-actions align="right" class="text-primary">
+                <q-btn flat :label="t('common.cancel')" v-close-popup/>
+                <q-btn flat :label="t('common.delete')" @click="deleteGroup(); deleteAlert=false"/>
+            </q-card-actions>
+        </q-card>
     </q-dialog>
 
     <q-dialog v-model="editAlert">
       <q-card>
         <q-card-section>
-          <div class="text-h6">Name der Gruppe</div>
+          <div class="text-h6">{{t('editor.groupRooms.nameOfGroup')}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-input dense v-model="editName" autofocus @keyup.enter="prompt = false"/>
         </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          <div class="text-h6">{{t('groupRooms.chooseRooms')}}</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          <q-select
-              filled
-              v-model="modelRoomsNew"
-              multiple
-              :options="listOfAllRoomsViaBuilding"
-              option-label="name"/>
-        </q-card-section>
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat :label="t('adminEdit.back')" v-close-popup/>
-          <q-btn flat label="Speichern" @click="updateCurrentGroup(editName,modelRoomsNew);"
-                 v-close-popup="closeEditAlert"/>
-        </q-card-actions>
-      </q-card>
+            <q-card-section class="q-pt-none">
+                <div class="text-h6">{{t('editor.groupRooms.chooseRooms')}}</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+              <q-select
+                  filled
+                  v-model="modelRoomsNew"
+                  multiple
+                  :options="listOfAllRoomsViaBuilding"
+                  option-label="name"/>
+            </q-card-section>
+            <q-card-actions align="right" class="text-primary">
+                <q-btn flat :label="t('common.cancel')" v-close-popup/>
+                <q-btn flat :label="t('common.save')" @click="updateCurrentGroup(editName,modelRoomsNew);"
+                v-close-popup="closeEditAlert"/>
+            </q-card-actions>
+        </q-card>
 
 
     </q-dialog>
 
     <q-dialog v-model="newGroup">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Name der Gruppe</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
-        </q-card-section>
-        <q-card-section>
-          <div class="text-h6">Räume auswählen</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          <q-select
-              filled
-              v-model="modelRooms"
-              multiple
-              :options="listOfAllRoomsViaBuilding"
-              option-label="name"/>
-        </q-card-section>
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat :label="t('adminEdit.back')" @click="toDefault()" v-close-popup/>
-          <q-btn flat :label="t('adminEdit.save')" @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
-        </q-card-actions>
-      </q-card>
+        <q-card>
+            <q-card-section>
+                <div class="text-h6">Name der Gruppe</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+                <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
+            </q-card-section>
+            <q-card-section>
+                <div class="text-h6">Räume auswählen</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+              <q-select
+                  filled
+                  v-model="modelRooms"
+                  multiple
+                  :options="listOfAllRoomsViaBuilding"
+                  option-label="name"/>
+            </q-card-section>
+            <q-card-actions align="right" class="text-primary">
+                <q-btn flat :label="t('common.cancel')" @click="toDefault()" v-close-popup/>
+                <q-btn flat :label="t('common.save')" @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
+            </q-card-actions>
+        </q-card>
     </q-dialog>
 
     <q-dialog v-model="prompt" persistent>
       <q-card style="width: 90%">
         <q-toolbar class="bg-primary text-accent">
-          <q-toolbar-title>{{t("groupRooms.groupsConfig")}}</q-toolbar-title>
+          <q-toolbar-title>{{t("editor.groupRooms.groupsConfig")}}</q-toolbar-title>
         </q-toolbar>
         <q-card-section>
           <q-table
               flat bordered
               :rows-per-page-options="[0]"
-              :title="t('groupRooms.roomSelection')"
+              :title="t('editor.groupRooms.roomSelection')"
               :rows="rows2"
               :columns="columns2"
               :filter="searchinput"
@@ -208,9 +207,9 @@
           >
             <template v-slot:top-right>
               <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
-                <q-toggle v-model="visibleColumns" val="doorNames" :label="t('groupRooms.doors')" ></q-toggle>
+                <q-toggle v-model="visibleColumns" val="doorNames" :label="t('editor.groupRooms.doors')" ></q-toggle>
               </div>
-              <q-input class="q-ml-xs" borderless dense debounce="250" v-model="searchinput" :placeholder="t('credentialview.search')">
+              <q-input class="q-ml-xs" borderless dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
                 <template v-slot:append>
                   <q-icon name="search" />
                 </template>
@@ -248,8 +247,8 @@
                      :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.OUT : Direction.BOTH"
                      :door-config="doorConfigOut" :is-config-out="true"></door-config>
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat v-close-popup> {{ t("credentialmapping.cancel")}}</q-btn>
-          <q-btn flat v-close-popup @click="saveConfig(model)"> {{ t("credentialmapping.save")}}</q-btn>
+          <q-btn flat v-close-popup> {{ t("common.cancel")}}</q-btn>
+          <q-btn flat v-close-popup @click="saveConfig(model)"> {{ t("common.save")}}</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -322,10 +321,10 @@ export default {
     let finalArray = []
 
     const columns = [
-      { name: 'name', required: true, label: t('groupRooms.group'), align: 'center', field: row => row.name, sortable: true },
-      { name: 'rooms', align: 'center', label: t('groupRooms.rooms'), field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
-      { name: 'actions', label: t('issuermanagement.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
-      { name: 'doorconfig', label: t('groupRooms.doorconfig'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
+      { name: 'name', required: true, label: t('editor.groupRooms.group'), align: 'center', field: row => row.name, sortable: true },
+      { name: 'rooms', align: 'center', label: t('floorPlan.rooms'), field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
+      { name: 'actions', label: t('common.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
+      { name: 'doorconfig', label: t('editor.groupRooms.doorconfig'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
     ]
 
     const rows = ref([]);
@@ -334,11 +333,11 @@ export default {
     rows.value = []
 
     const columns2 = [
-      { name: 'name', required: true, label: t('groupRooms.room'), align: 'left', field: row => row.roomName, sortable: true },
-      { name: 'room', label: t('groupRooms.room'), align: 'left', field: row => row.room, sortable: true },
-      { name: 'actions', label: t('groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-      { name: 'doorNames', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-      { name: 'doors', label: t('groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'}
+      { name: 'name', required: true, label: t('floorPlan.room'), align: 'left', field: row => row.roomName, sortable: true },
+      { name: 'room', label: t('floorPlan.room'), align: 'left', field: row => row.room, sortable: true },
+      { name: 'actions', label: t('editor.groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+      { name: 'doorNames', label: t('editor.groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
+      { name: 'doors', label: t('editor.groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'}
     ]
 
     const rows2 =  ref([]);
@@ -445,8 +444,8 @@ export default {
       if(newName.trim() === ""){
         $q.notify({
           type:'negative',
-          message: 'Name darf nicht leer sein',
-          caption: 'Mindestens ein Buchstabe, eine Ziffer oder ein Zeichen.'
+          message: t('editor.groupRooms.checkNameMessage'),
+          caption: t('editor.groupRooms.checkNameCaption')
         })
       }
 
@@ -689,7 +688,7 @@ export default {
       const roomGroupStore = useRoomGroupStore()
       const res = []
         for (const val in model) {
-          if (val && val !=0) {
+          if (val && val !==0) {
             res.push(model[val])
           }
         }

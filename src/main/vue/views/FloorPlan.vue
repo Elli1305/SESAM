@@ -24,6 +24,7 @@ import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
 import GroupRooms from "@/main/vue/views/GroupRooms.vue";
+import api from "@/main/vue/api";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -128,8 +129,8 @@ export default {
             weight: 2,
             fillOpacity: 0.1
           });
-          selectedRooms.value.forEach(room => {
-            if (room.id === layer.id) {
+          selectedRooms.value.forEach(roomID => {
+            if (roomID === layer.id) {
               layer.setStyle({
                 color: 'red',
                 fillColor: 'red',
@@ -328,6 +329,14 @@ export default {
           width: 5,
           fillOpacity: 0.1
         })
+          if(this.floorPlanStore.selectedRooms.includes(room.id)) {
+              polygon.setStyle({
+                  color: 'red',
+                  fillColor: 'red',
+                  weight: 2,
+                  fillOpacity: 0.1
+              })
+          }
 
         polygons.push(polygon);
        const popup = L.popup();

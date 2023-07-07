@@ -1,7 +1,7 @@
 package com.gpse.sesam.util;
 
 import com.gpse.sesam.domain.credential.credentials.Credential;
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.location.door.config.AttributeFilter;
@@ -28,7 +28,7 @@ import java.util.Optional;
 @Component
 public final class ConfigCmdMapper {
 
-	CredentialService credentialService;
+	private CredentialService credentialService;
 
 	private CredentialService credentialService;
 
@@ -364,7 +364,7 @@ public final class ConfigCmdMapper {
 						} else {
 							final SimpleDateFormat parser = new SimpleDateFormat("yyyyMMdd");
 							attributeFilterCmd.setValue(
-									simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue()))
+									simpleDateFormat.format(parser.parse(attributeValue.getValue()))
 							);
 						}
 					} else {
@@ -421,7 +421,7 @@ public final class ConfigCmdMapper {
 					} else {
 						final SimpleDateFormat parser = new SimpleDateFormat("yyyyMMdd");
 						attributeFilterCmd.setValue(
-								simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue()))
+								simpleDateFormat.format(parser.parse(proofPredicateInfo.getPredicateValue()))
 						);
 					}
 				} else {

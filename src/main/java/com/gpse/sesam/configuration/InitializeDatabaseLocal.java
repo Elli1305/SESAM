@@ -1,16 +1,18 @@
 package com.gpse.sesam.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.validation.*;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
@@ -36,9 +38,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Profile("test")
@@ -92,27 +92,57 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	}
 
 	private List<Colors> createColors() {
-		final Colors defaultColors = new Colors();
-		defaultColors.setDefaultColors(true);
-		setColors(defaultColors);
+		final Colors defaultLight = new Colors();
+		defaultLight.setDefaultColors(true);
+		defaultLight.setTheme(ColorTheme.LIGHT);
+		setLightColors(defaultLight);
 
-		final Colors currentColors = new Colors();
-		currentColors.setDefaultColors(false);
-		setColors(currentColors);
+		final Colors defaultDark = new Colors();
+		defaultDark.setDefaultColors(true);
+		defaultDark.setTheme(ColorTheme.DARK);
+		setDarkColors(defaultDark);
+
+		final Colors currentLight = new Colors();
+		currentLight.setDefaultColors(false);
+		currentLight.setTheme(ColorTheme.LIGHT);
+		setLightColors(currentLight);
+
+		final Colors currentDark = new Colors();
+		currentDark.setDefaultColors(false);
+		currentDark.setTheme(ColorTheme.DARK);
+		setDarkColors(currentDark);
 
 		final List<Colors> colors = new ArrayList<>();
-		colors.add(defaultColors);
-		colors.add(currentColors);
+		colors.add(defaultLight);
+		colors.add(defaultDark);
+		colors.add(currentLight);
+		colors.add(currentDark);
 
 		return colors;
 	}
 
-	private void setColors(final Colors defaultColors) {
+	private void setLightColors(final Colors defaultColors) {
+		defaultColors.setLogoPath("/Logo.svg");
 		defaultColors.setBgC("#ffffff");
 		defaultColors.setTextC("#000000");
 		defaultColors.setPrimaryColor("#e20074");
 		defaultColors.setSecondary("#f6b2d5");
 		defaultColors.setAccent("#ffffff");
+		defaultColors.setDark("#808080");
+		defaultColors.setLightBlue("#7d99a7");
+		defaultColors.setPositive("#dcdcdc");
+		defaultColors.setNegative("#505050");
+		defaultColors.setInfo("#0074E2");
+		defaultColors.setWarning("#fec705");
+	}
+
+	private void setDarkColors(final Colors defaultColors) {
+		defaultColors.setLogoPath("/Logo-Dark.svg");
+		defaultColors.setBgC("#000000");
+		defaultColors.setTextC("#ffffff");
+		defaultColors.setPrimaryColor("#e20074");
+		defaultColors.setSecondary("#f6b2d5");
+		defaultColors.setAccent("#000000");
 		defaultColors.setDark("#808080");
 		defaultColors.setLightBlue("#7d99a7");
 		defaultColors.setPositive("#dcdcdc");
@@ -148,8 +178,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final SesamUserRole editorRole21 = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
 		editorRole21.setGranted(true);
 
-		final SesamUser jana = new SesamUser("jana@test.de", defaultPassword, "Jana", "Editor-Issuer",
-				List.of(editorRole21, issuerRole20));
+		final SesamUser jana = new Issuer("jana@test.de", defaultPassword, "Jana", "Editor-Issuer",
+				List.of(editorRole21, issuerRole20), null);
 
 
 		return List.of(admin, issuer, editor, user, jana);
@@ -244,17 +274,59 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private List<FormEntry> form() {
 		final List<FormEntry> form = new ArrayList<>();
-		final FormEntry id = new FormEntry("ID", FormEntryType.NUMBER, "id");
-		final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name");
-		final FormEntry lastName = new FormEntry("Nachname", FormEntryType.TEXT, "last_name");
-		final FormEntry birthDate = new FormEntry("Geburtstagsdatum", FormEntryType.DATE, "birth_date");
-		final FormEntry date = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
+		final FormEntry id = new FormEntry("ID", FormEntryType.NUMBER, "id", getIdValidationRules());
+		final FormEntry firstName = new FormEntry(
+				"Vorname", FormEntryType.TEXT, "first_name", getFirstNameValidationRules());
+		final FormEntry lastName = new FormEntry(
+				"Nachname", FormEntryType.TEXT, "last_name", getLastNameValidationRules());
+		final FormEntry birthDate = new FormEntry(
+				"Geburtstagsdatum", FormEntryType.DATE, "birth_date", getBirthDateValidationRules());
+		final FormEntry date = new FormEntry(
+				"Ablaufdatum", FormEntryType.DATE, "expiration_date", getDateValidationRules());
 		form.add(id);
 		form.add(firstName);
 		form.add(lastName);
 		form.add(birthDate);
 		form.add(date);
 		return form;
+	}
+
+	private List<AbstractValidationRule> getIdValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new ComparisonRule(ComparisonType.GREATER_EQUAL, "0"));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getFirstNameValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new RegExRule(
+				"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅ"
+						+ "ĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$",
+				"Wähle eine realen Name / Choose a real name"));
+		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getLastNameValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new RegExRule(
+				"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅ"
+						+ "ĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$",
+				"Wähle eine realen Name / Choose a real name"));
+		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getBirthDateValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new ComparisonRule(ComparisonType.LESS_THAN, true, "Ablaufdatum"));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getDateValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new ComparisonRule(ComparisonType.GREATER_THAN, true, "Geburtstagsdatum"));
+		return validationRules;
 	}
 
 	private List<ChecklistEntry> checklist() {

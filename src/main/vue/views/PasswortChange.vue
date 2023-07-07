@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t("passwordChange.changePassword")}}</p>
     <div class="column self-center items-center justify-evenly no-wrap" style="width: 22.5em; height: 25em">
       <div class="full-width">
-        <q-input class="q-my-md" v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('passwordChange.password')">
+        <q-input class="q-my-md" v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('profile.password')">
           <template v-slot:append>
             <q-icon class="q-mr-xs" color="grey" size="16px" name="info" />
             <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
