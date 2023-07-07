@@ -348,10 +348,11 @@
 
                                                                     <q-btn flat :label="t( 'common.cancel')"
                                                                            color="primary"
+                                                                           @click="unCheck();"
                                                                            v-close-popup/>
                                                                     <q-btn flat :label="t( 'common.save')"
                                                                            color="primary"
-                                                                           @click="editGroupName;  deleteRoomsOfGroup();updateNumRoomsInGroup();" v-close-popup/>
+                                                                           @click="editGroupName;  deleteRoomsOfGroup();updateNumRoomsInGroup(); unCheck();" v-close-popup/>
                                                                 </q-card-actions>
                                                             </q-card-section>
                                                         </q-card>
@@ -730,11 +731,15 @@ export default {
         }
 
         const selectedRoomsForGroup = ref([]);
-        function makeIdsToRooms(roomsIds) {
+        function makeIdsToRooms() {
+            selectedRoomsForGroup.value = [];
+            roomStore.getRooms();
+            console.log(roomStore.rooms);
 
-            selectedRoomsForGroup.value = floorPlanStore.rooms.filter((room) =>
-                roomsIds.includes(room.id)
+            selectedRoomsForGroup.value = roomStore.rooms?.filter((room) =>
+                selectedRooms.value.includes(room.id)
             )
+            console.log("selectedRoomsForGroup: ", selectedRoomsForGroup.value);
 
         }
 
@@ -744,7 +749,7 @@ export default {
             if (checkNameAllowed.value) {
 
 
-                makeIdsToRooms(selectedRooms.value);
+                makeIdsToRooms();
 
                 await roomGroupStore.makeNewGroup(newGroupName.value, currentBuilding.value, selectedRoomsForGroup.value);
                 await loadRoomGroups(buildingID.value);
@@ -782,7 +787,7 @@ export default {
         }
 
         async function addRoomsToGroups() {
-            //console.log("selected Rooms: ", selectedRooms.value);
+            console.log("selected Rooms: ", selectedRooms.value);
             console.log("selected Groups: ", selectedGroups.value);
             //console.log("selected Groups length: ", selectedRooms.value.length);
 
@@ -793,14 +798,14 @@ export default {
                 })
             } else if (selectedGroups.value !== null) {
 
-                makeIdsToRooms(selectedRooms);
+                makeIdsToRooms();
                 const editedGroup = ref({
                     id: selectedGroups.value.id,
                     name: selectedGroups.value.name,
                     building: selectedGroups.value.building,
                     rooms: selectedRoomsForGroup.value
                 });
-                console.log(editedGroup.value);
+                console.log("edited Group:", editedGroup.value);
                 await roomGroupStore.editGroup(editedGroup.value);
                 await loadRoomGroups(buildingID.value);
                 unCheck();
@@ -1053,7 +1058,7 @@ export default {
 
         function unCheck() {
             selectedGroups.value = null
-            console.log("halalalalallalalallalallall");
+            selectedRooms.value = [];
         }
 
         const prevSelectedGroup = ref();
@@ -1172,6 +1177,7 @@ export default {
                 newGroupName.value = "";
             },
             selectGroup(group) {
+                selectedRooms.value = [];
                 selectedGroups.value = group;
             },
             giveLog(){
@@ -1184,10 +1190,12 @@ export default {
             arrayFloors,
             addToDeleteList,
             async reloadRoomsBE() {
-                console.log("sel. Id", selectedGroups.value.id);
-                await roomGroupStore.getRoomsByGroupId(selectedGroups.value.id);
-                console.log("hier", roomGroupStore.rooms);
-                selectedGroups.value.rooms = roomGroupStore.rooms;
+                if(selectedGroups.value !== null) {
+                    console.log("sel. Id", selectedGroups.value.id);
+                    await roomGroupStore.getRoomsByGroupId(selectedGroups.value.id);
+                    console.log("hier", roomGroupStore.rooms);
+                    selectedGroups.value.rooms = roomGroupStore.rooms;
+                }
             }
         }
     },
