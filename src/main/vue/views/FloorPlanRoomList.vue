@@ -33,7 +33,7 @@
                         </q-input>
                         <q-list>
                             <q-item v-for="room in filteredRooms" style="padding-left: 0">
-                                <q-checkbox v-model="selectedRooms" :val="room"
+                                <q-checkbox v-model="selectedRooms" :val="room.id"
                                             color="blue"/>
                                 <q-btn-dropdown
                                         split
@@ -331,7 +331,7 @@
                 </q-input>
                 <q-list>
                     <q-item v-for="room in filteredRooms" style="padding-left: 0">
-                        <q-checkbox v-model="selectedRooms" :val="room" color="blue"/>
+                        <q-checkbox v-model="selectedRooms" :val="room.id" color="blue"/>
                         <q-btn-dropdown
                                 split
                                 flat
@@ -793,7 +793,7 @@ export default {
 
         function deleteRoom(element) {
             selectedRooms.value.forEach((item, index) => {
-                if (item.id === element.id) selectedRooms.value.splice(index, 1);
+                if (item === element) selectedRooms.value.splice(index, 1);
             });
         }
         function updateNumRoomsInGroup() {
@@ -805,10 +805,10 @@ export default {
 
         function toggleRoomCheckbox(element) {
             console.log(element)
-            if (selectedRooms.value.some(e => e.id === element.id)) {
-                deleteRoom(element)
+            if (selectedRooms.value.some(e => e === element.id)) {
+                deleteRoom(element.id)
             } else {
-                addRoom(element)
+                addRoom(element.id)
             }
             console.log("selected Rooms toggle:", selectedRooms.value);
         }
