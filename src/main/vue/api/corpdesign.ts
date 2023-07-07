@@ -1,5 +1,5 @@
-import axios, {AxiosResponse} from "axios"
-import {Colors} from "@/main/vue/entity/colors"
+import axios, {AxiosRequestConfig, AxiosResponse} from "axios"
+import {Colors, ColorTheme} from "@/main/vue/entity/colors"
 import {setCssVar} from "quasar"
 
 export default {
@@ -24,20 +24,20 @@ export default {
         })
     },
 
-    saveColors(colors: Colors): Promise<AxiosResponse<Colors>> {
-        return axios.post('/api/corpdesign/save/colors', colors)
+    saveColors(colorTheme: string, colors: Colors): Promise<AxiosResponse<Colors>> {
+        return axios.post(`/api/corpdesign/save/colors/${colorTheme}`, colors)
     },
 
-    getColors(): Promise<AxiosResponse<Colors>> {
-        return axios.get('/api/corpdesign/get/colors')
+    getColors(colorTheme: string): Promise<AxiosResponse<Colors>> {
+        return axios.get(`/api/corpdesign/get/colors/${colorTheme}`, )
     },
 
-    reset(): Promise<AxiosResponse<Colors>> {
-        return axios.post('/api/corpdesign/reset')
+    reset(colorTheme: string): Promise<AxiosResponse<Colors>> {
+        return axios.post(`/api/corpdesign/reset/${colorTheme}`)
     },
 
-    setColors(): void {
-        this.getColors().then(colors => {
+    setColors(colorTheme: string): void {
+        this.getColors(colorTheme).then(colors => {
             setCssVar('primary', colors.data.primaryColor)
             setCssVar('secondary', colors.data.secondary)
             setCssVar('accent', colors.data.accent)

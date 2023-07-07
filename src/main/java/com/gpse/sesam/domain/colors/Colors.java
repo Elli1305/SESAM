@@ -13,6 +13,9 @@ public class Colors {
     @Column(nullable = false)
     private boolean defaultColors;
 
+    @Column
+    private ColorTheme theme;
+
     @Column(nullable = false)
     private String bgC;
     @Column(nullable = false)
@@ -45,103 +48,111 @@ public class Colors {
         return id;
     }
 
-    public boolean isDefaultColors() {
-        return defaultColors;
-    }
-
-    public String getPrimaryColor() {
-        return primaryColor;
-    }
-
-    public String getSecondary() {
-        return secondary;
-    }
-
-    public String getAccent() {
-        return accent;
-    }
-
-    public String getDark() {
-        return dark;
-    }
-
-    public String getLightBlue() {
-        return lightBlue;
-    }
-
-    public String getPositive() {
-        return positive;
-    }
-
-    public String getNegative() {
-        return negative;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public String getWarning() {
-        return warning;
-    }
-
-    public String getBgC() {
-        return bgC;
-    }
-
-    public String getTextC() {
-        return textC;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean isDefaultColors() {
+        return defaultColors;
     }
 
     public void setDefaultColors(boolean defaultColors) {
         this.defaultColors = defaultColors;
     }
 
-    public void setPrimaryColor(String primary) {
-        this.primaryColor = primary;
+    public ColorTheme getTheme() {
+        return theme;
     }
 
-    public void setSecondary(String secondary) {
-        this.secondary = secondary;
+    public void setTheme(ColorTheme theme) {
+        this.theme = theme;
     }
 
-    public void setAccent(String accent) {
-        this.accent = accent;
-    }
-
-    public void setDark(String dark) {
-        this.dark = dark;
-    }
-
-    public void setLightBlue(String lightBlue) {
-        this.lightBlue = lightBlue;
-    }
-
-    public void setPositive(String positive) {
-        this.positive = positive;
-    }
-
-    public void setNegative(String negative) {
-        this.negative = negative;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    public void setWarning(String warning) {
-        this.warning = warning;
+    public String getBgC() {
+        return bgC;
     }
 
     public void setBgC(String bgC) {
         this.bgC = bgC;
     }
 
+    public String getTextC() {
+        return textC;
+    }
+
     public void setTextC(String textC) {
         this.textC = textC;
+    }
+
+    public String getPrimaryColor() {
+        return primaryColor;
+    }
+
+    public void setPrimaryColor(String primaryColor) {
+        this.primaryColor = primaryColor;
+    }
+
+    public String getSecondary() {
+        return secondary;
+    }
+
+    public void setSecondary(String secondary) {
+        this.secondary = secondary;
+    }
+
+    public String getAccent() {
+        return accent;
+    }
+
+    public void setAccent(String accent) {
+        this.accent = accent;
+    }
+
+    public String getDark() {
+        return dark;
+    }
+
+    public void setDark(String dark) {
+        this.dark = dark;
+    }
+
+    public String getLightBlue() {
+        return lightBlue;
+    }
+
+    public void setLightBlue(String lightBlue) {
+        this.lightBlue = lightBlue;
+    }
+
+    public String getPositive() {
+        return positive;
+    }
+
+    public void setPositive(String positive) {
+        this.positive = positive;
+    }
+
+    public String getNegative() {
+        return negative;
+    }
+
+    public void setNegative(String negative) {
+        this.negative = negative;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getWarning() {
+        return warning;
+    }
+
+    public void setWarning(String warning) {
+        this.warning = warning;
     }
 }

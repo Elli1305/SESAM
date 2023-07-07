@@ -1,8 +1,12 @@
+export enum ColorTheme {'LIGHT', 'DARK'}
+
 export interface Colors {
 
     id: number,
 
     defaultColors: boolean,
+
+    theme: ColorTheme,
 
     bgC: string,
     textC: string,
