@@ -153,7 +153,7 @@ public final class ConfigCmdMapper {
 						} else {
 							final SimpleDateFormat parser = new SimpleDateFormat("yyyyMMdd");
 							attributeFilterCmd.setValue(
-									simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue()))
+									simpleDateFormat.format(parser.parse(attributeValue.getValue()))
 							);
 						}
 					} else {
@@ -210,7 +210,7 @@ public final class ConfigCmdMapper {
 					} else {
 						final SimpleDateFormat parser = new SimpleDateFormat("yyyyMMdd");
 						attributeFilterCmd.setValue(
-								simpleDateFormat.format(parser.parse(attributeFilterCmd.getValue()))
+								simpleDateFormat.format(parser.parse(proofPredicateInfo.getPredicateValue()))
 						);
 					}
 				} else {
