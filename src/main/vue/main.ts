@@ -59,6 +59,7 @@ const messages = {
             issuerPages: "Credential Ausstellen",
             imprint: "Impressum",
             logout: "Logout",
+            predefinedConfig: "Konfiguration erstellen"
         },
         login: {
             wrongEmailPassword: "Falsches Passwort oder Benutzername",
