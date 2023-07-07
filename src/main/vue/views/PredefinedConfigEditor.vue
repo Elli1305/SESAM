@@ -62,7 +62,7 @@
         <q-dialog v-model="configDialog" persistent>
             <q-card>
                 <q-card-section>
-                    <q-input class="full-width" filled v-model="configName" label="Konfigurationsbezeichnung" stack-label></q-input>
+                    <q-input class="full-width" filled v-model="configName" :label="t('editor.predefinedConfigs.name')" stack-label></q-input>
                 </q-card-section>
                 <DoorConfig
                     ref="configIn"
@@ -123,12 +123,12 @@ const columns: QTableProps['columns'] = [
     {
         name: 'name',
         required: true,
-        label: "Bezeichung",
+        label: t('editor.predefinedConfigs.nameConfig'),
         align: 'center',
         field: 'name',
         sortable: true
     },
-    {name: 'actions', align: 'center', label: "Bearbeiten", style: 'width: 12em', headerStyle: 'width: 12em',
+    {name: 'actions', align: 'center', label: t('common.edit'), style: 'width: 12em', headerStyle: 'width: 12em',
         field: row => row}
 ]
 
