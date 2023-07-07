@@ -720,9 +720,9 @@ export default {
             await checkName(newGroupName);
             //selectedGroups.value = [];
             if (checkNameAllowed.value) {
+
                 await roomGroupStore.makeNewGroup(newGroupName, currentBuilding.value, []);
                 await loadRoomGroups(buildingID.value);
-
                 newGroup.value = false;
                 console.log("done makeANewGroup");
 
@@ -751,6 +751,7 @@ export default {
 
                 addRoomsToNewGroupDialog.value = false;
                 newGroupName.value = "";
+                selectedRooms.value = [];
                 console.log("done makeANewGroup for selected rooms");
 
             }
