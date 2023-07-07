@@ -22,6 +22,7 @@ export const useBuildingStore = defineStore('building', () => {
     function deleteBuilding(id: string) {
         return new Promise<void>((resolve, reject) => {
             api.building.deleteBuilding(id).then(() => {
+                locationStore.getLocations();
                 resolve()
             }).catch((error) => {
                 reject(error)

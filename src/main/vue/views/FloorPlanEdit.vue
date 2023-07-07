@@ -209,17 +209,14 @@ export default {
 
     function deleteLocationFunction(id) {
       locationStore.deleteLocation(id)
-      location.reload()
     }
 
     function deleteBuildingFunction(id) {
       buildingStore.deleteBuilding(id)
-      location.reload()
     }
 
     function deleteFloorFunction(id) {
       floorStore.deleteFloor(id)
-      location.reload()
     }
 
     const changeFloorPlan = function (floor) {
