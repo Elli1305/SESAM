@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.location.door;
 
+import com.gpse.sesam.domain.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
@@ -11,6 +12,7 @@ import com.gpse.sesam.domain.location.room.RoomRepository;
 import com.gpse.sesam.domain.location.room.RoomService;
 import jakarta.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +20,7 @@ import java.util.Optional;
 public class DoorServiceImpl implements DoorService {
 
 	private final DoorRepository doorRepository;
-	private  final DoorConfigService doorConfigService;
 
-	private final SchedulerService schedulerService;
 
 	private final RoomService roomService;
 
@@ -28,11 +28,9 @@ public class DoorServiceImpl implements DoorService {
 
 
 	@Autowired
-	public DoorServiceImpl(final DoorRepository doorRepository, DoorConfigService doorConfigService, SchedulerService schedulerService, final RoomService roomService,
+	public DoorServiceImpl(final DoorRepository doorRepository, final RoomService roomService,
 						   RoomRepository roomRepository) {
 		this.doorRepository = doorRepository;
-		this.doorConfigService = doorConfigService;
-		this.schedulerService = schedulerService;
 		this.roomService = roomService;
 		this.roomRepository = roomRepository;
 	}
@@ -43,25 +41,17 @@ public class DoorServiceImpl implements DoorService {
 	}
 
 	@Override
+	public List<Door> getDoors() {
+		final List<Door> doors = new ArrayList<>();
+
+		doorRepository.findAll().forEach(doors::add);
+
+		return doors;
+	}
+
+	@Override
 	public Door save(final Door door) {
-		for(ProofConfig proofConfig: door.getProofConfigs()){
-			schedulerService.scheduling(()->doorConfigService.sendProofConfig(door.getName()+"_"+door.getId(), proofConfig), proofConfig.getStartTime());
-			for(ProofConfig proofConfig2: door.getProofConfigs()){
-				if(proofConfig.getEndTime()== proofConfig2.getStartTime()){
-					schedulerService.scheduling(()->doorConfigService.sendProofConfig(door.getName()+"_"+door.getId(), proofConfig2), proofConfig.getStartTime());
-				} else{
-					for(ProofConfig proofConfigbase: door.getProofConfigs()){
-						if(proofConfigbase.isBaseConfig()){
-							schedulerService.scheduling(()->doorConfigService.sendProofConfig(door.getName()+"_"+door.getId(), proofConfigbase), proofConfig.getStartTime());
-						}
-					}
 
-				}
-			}
-			schedulerService.scheduling(()->doorConfigService.sendProofConfig(door.getName()+"_"+door.getId(), proofConfig), proofConfig.getEndTime());
-
-			// startTime = endTime?
-		}
 		return doorRepository.save(door);
 	}
 
@@ -80,13 +70,13 @@ public class DoorServiceImpl implements DoorService {
 		room.addDoor(savedDoor);
 
 		roomService.save(room);
-
-		doorConfigService.sendProofConfig(savedDoor.getName() + "_" + savedDoor.getId() + "_in",
-				door.getProofConfigIn()
-						.get(0));
-		doorConfigService.sendProofConfig(savedDoor.getName() + "_" + savedDoor.getId() + "_out",
-				door.getProofConfigOut()
-						.get(0));
+// TODO get current door config
+//		doorConfigService.sendProofConfig(savedDoor.getName() + "_" + savedDoor.getId() + "_in",
+//				door.getProofConfigIn()
+//						.get(0));
+//		doorConfigService.sendProofConfig(savedDoor.getName() + "_" + savedDoor.getId() + "_out",
+//				door.getProofConfigOut()
+//						.get(0));
 		return savedDoor;
 	}
 
@@ -98,4 +88,6 @@ public class DoorServiceImpl implements DoorService {
 		}
 		return null;
 	}
+
+
 }

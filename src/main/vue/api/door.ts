@@ -10,6 +10,10 @@ export default {
         return axios.post("api/door/create", door)
     },
 
+    getById(id: BigInt): Promise<AxiosResponse<Door>> {
+        return axios.get(`api/door/${id}`)
+    },
+
     deleteById(id: BigInt): Promise<AxiosResponse<void>> {
         return axios.delete(`api/door/${id}`)
     },

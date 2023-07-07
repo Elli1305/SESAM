@@ -10,6 +10,7 @@ import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
 import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
+import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
 import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
@@ -191,8 +192,8 @@ public class CredentialServiceImpl implements CredentialService {
 				.flatMap(building -> building.getFloors().stream())
 				.flatMap(floor -> floor.getRooms().stream())
 				.flatMap(room -> room.getDoors().stream())
-				.flatMap(door -> Stream.concat(door.getProofConfigIn().stream(), door.getProofConfigOut()
-						.stream()))
+				.flatMap(door -> door.getDoorConfigs().stream())
+				.flatMap(twoWayDoorConfig -> Stream.of(twoWayDoorConfig.getProofConfigIn(), twoWayDoorConfig.getProofConfigOut()))
 				.flatMap(proofConfig -> {
 					final Stream<String> attributeFilterStream = proofConfig.getRequestedPredicates().values()
 							.stream()

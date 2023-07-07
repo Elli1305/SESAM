@@ -36,14 +36,6 @@ public class ProofConfig {
 	@Column
 	private Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
 
-	@Column
-	private LocalTime startTime;
-
-	@Column
-	private LocalTime endTime;
-
-	@Column
-	private boolean baseConfig;
 
 	public ProofConfig() {
 
@@ -79,29 +71,5 @@ public class ProofConfig {
 
 	public void addRequestedAttributes(final String name, final ProofAttributeInfo proofAttributeInfo) {
 		requestedAttributes.put(name, proofAttributeInfo);
-	}
-
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
-	}
-
-	public boolean isBaseConfig() {
-		return baseConfig;
-	}
-
-	public void setBaseConfig(boolean baseConfig) {
-		this.baseConfig = baseConfig;
 	}
 }

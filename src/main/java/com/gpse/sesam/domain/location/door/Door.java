@@ -33,20 +33,12 @@ public class Door {
 	private List<Coordinate> coordinates = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<ProofConfig> proofConfigIn = new ArrayList<>();
+	private List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<ProofConfig> proofConfigOut = new ArrayList<>();
 
 	public Door() {
 
 	}
-	@OneToMany(cascade =  CascadeType.ALL, fetch = FetchType.EAGER)
-	private final List<ProofConfig> proofConfigs = new ArrayList<>();
-
-	//protected Door() {
-
-	//}
 
 	public Door(final String name, final List<Coordinate> coordinates) {
 		this.name = name;
@@ -65,22 +57,6 @@ public class Door {
 		return name;
 	}
 
-	public List<ProofConfig> getProofConfigIn() {
-		return proofConfigIn;
-	}
-
-	public void setProofConfigIn(final List<ProofConfig> proofConfigIn) {
-		this.proofConfigIn = proofConfigIn;
-	}
-
-	public List<ProofConfig> getProofConfigOut() {
-		return proofConfigOut;
-	}
-
-	public void setProofConfigOut(final List<ProofConfig> proofConfigOut) {
-		this.proofConfigOut = proofConfigOut;
-	}
-
 	public void setName(final String name) {
 		this.name = name;
 	}
@@ -91,16 +67,6 @@ public class Door {
 
 	public void setCoordinates(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
-	}
-
-
-	public void addProofConfigIn(final ProofConfig proofConfig) {
-		proofConfigIn.add(proofConfig);
-	}
-
-	public void addProofConfigOut(final ProofConfig proofConfig) {
-
-		proofConfigOut.add(proofConfig);
 	}
 
 	@Override
@@ -127,7 +93,12 @@ public class Door {
 		return result;
 	}
 
-	public List<ProofConfig> getProofConfigs() {
-		return proofConfigs;
+
+	public List<TwoWayDoorConfig> getDoorConfigs() {
+		return doorConfigs;
+	}
+
+	public void setDoorConfigs(List<TwoWayDoorConfig> doorConfigs) {
+		this.doorConfigs = doorConfigs;
 	}
 }

@@ -1,10 +1,13 @@
 package com.gpse.sesam.web.cmd;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DoorConfigCmd {
 	private String description;
 
@@ -14,9 +17,6 @@ public class DoorConfigCmd {
 	public List<ConfigPartsCmd> getConfigParts() {
 		return configParts;
 	}
-
-	private LocalTime startTime;
-	private LocalTime endTime;
 
 	public void setConfigParts(final List<ConfigPartsCmd> configParts) {
 		this.configParts = configParts;
@@ -38,20 +38,4 @@ public class DoorConfigCmd {
 		configParts.add(configPartsCmd);
 	}
 
-
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
-	}
 }

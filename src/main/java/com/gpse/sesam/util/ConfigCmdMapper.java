@@ -99,10 +99,6 @@ public final class ConfigCmdMapper {
 				proofConfig.addRequestedAttributes(attributeInfo.getName() + (index++), attributeInfo);
 			}
 		}
-
-		proofConfig.setEndTime(doorConfigCmd.getEndTime());
-		proofConfig.setStartTime(doorConfigCmd.getStartTime());
-
 		return proofConfig;
 	}
 
