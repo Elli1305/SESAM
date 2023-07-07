@@ -154,7 +154,7 @@
                                                                                         <q-card-actions align="right"
                                                                                                         class="bg-white text-teal">
                                                                                             <q-btn flat color="primary"
-                                                                                                   :label="t( 'floorplan.cancel')"
+                                                                                                   :label="t( 'common.cancel')"
                                                                                                    v-close-popup/>
                                                                                             <q-btn flat color="primary"
                                                                                                    :label="t('common.delete')"
@@ -169,9 +169,9 @@
                                                                     </q-list>
                                                                 </div>
                                                                 <q-card-actions align="right" class="text-primary">
-                                                                    <q-btn flat :label="t( 'floorPlan.cancel')"
+                                                                    <q-btn flat :label="t( 'common.cancel')"
                                                                            color="primary" v-close-popup/>
-                                                                    <q-btn flat :label="t( 'floorPlan.save')"
+                                                                    <q-btn flat :label="t( 'common.save')"
                                                                            color="primary" @click="save(room)"
                                                                            v-close-popup/>
                                                                 </q-card-actions>
@@ -520,7 +520,7 @@
                                                                                     <q-card-actions align="right"
                                                                                                     class="bg-white text-teal">
                                                                                         <q-btn flat color="primary"
-                                                                                               :label="t( 'floorPlan.cancel')"
+                                                                                               :label="t( 'common.cancel')"
                                                                                                v-close-popup/>
                                                                                         <q-btn flat color="primary"
                                                                                                :label="t('common.delete')"
@@ -535,10 +535,10 @@
                                                                 </q-list>
                                                             </div>
                                                             <q-card-actions align="right" class="text-primary">
-                                                                <q-btn flat :label="t( 'floorPlan.cancel')"
+                                                                <q-btn flat :label="t( 'common.cancel')"
                                                                        color="primary"
                                                                        v-close-popup/>
-                                                                <q-btn flat :label="t( 'floorPlan.save')"
+                                                                <q-btn flat :label="t( 'common.save')"
                                                                        color="primary"
                                                                        @click="save(room)" v-close-popup/>
                                                             </q-card-actions>
