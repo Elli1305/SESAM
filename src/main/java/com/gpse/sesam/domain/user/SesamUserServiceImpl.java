@@ -8,7 +8,6 @@ import com.gpse.sesam.web.cmd.SesamUserCmd;
 import com.gpse.sesam.web.exception.ConflictException;
 import com.gpse.sesam.web.exception.InvalidTokenException;
 import com.gpse.sesam.web.exception.UnprocessableEntityException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -175,9 +174,10 @@ public class SesamUserServiceImpl implements SesamUserService {
 	@Override
 	public void makeUserEdit(final SesamUser user, final String prename, final String lastname, final String username,
 							 final List<SesamUserRole.AttainableRole> roles) {
-		if(roles.contains(SesamUserRole.AttainableRole.ISSUER)) {
+		if (roles.contains(SesamUserRole.AttainableRole.ISSUER)) {
 			userRepository.delete(user);
-			Issuer issuer = new Issuer(user.getUsername(), username, prename, lastname, roles.stream().distinct().map(role -> new SesamUserRole(role, true))
+			Issuer issuer = new Issuer(user.getUsername(), username, prename, lastname, roles.stream()
+					.distinct().map(role -> new SesamUserRole(role, true))
 					.collect(Collectors.toList()), null);
 			issuerService.save(issuer);
 		} else {

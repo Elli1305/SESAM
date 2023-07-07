@@ -1,6 +1,7 @@
 package com.gpse.sesam.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.credential.category.Category;
@@ -91,27 +92,57 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	}
 
 	private List<Colors> createColors() {
-		final Colors defaultColors = new Colors();
-		defaultColors.setDefaultColors(true);
-		setColors(defaultColors);
+		final Colors defaultLight = new Colors();
+		defaultLight.setDefaultColors(true);
+		defaultLight.setTheme(ColorTheme.LIGHT);
+		setLightColors(defaultLight);
 
-		final Colors currentColors = new Colors();
-		currentColors.setDefaultColors(false);
-		setColors(currentColors);
+		final Colors defaultDark = new Colors();
+		defaultDark.setDefaultColors(true);
+		defaultDark.setTheme(ColorTheme.DARK);
+		setDarkColors(defaultDark);
+
+		final Colors currentLight = new Colors();
+		currentLight.setDefaultColors(false);
+		currentLight.setTheme(ColorTheme.LIGHT);
+		setLightColors(currentLight);
+
+		final Colors currentDark = new Colors();
+		currentDark.setDefaultColors(false);
+		currentDark.setTheme(ColorTheme.DARK);
+		setDarkColors(currentDark);
 
 		final List<Colors> colors = new ArrayList<>();
-		colors.add(defaultColors);
-		colors.add(currentColors);
+		colors.add(defaultLight);
+		colors.add(defaultDark);
+		colors.add(currentLight);
+		colors.add(currentDark);
 
 		return colors;
 	}
 
-	private void setColors(final Colors defaultColors) {
+	private void setLightColors(final Colors defaultColors) {
+		defaultColors.setLogoPath("/Logo.svg");
 		defaultColors.setBgC("#ffffff");
 		defaultColors.setTextC("#000000");
 		defaultColors.setPrimaryColor("#e20074");
 		defaultColors.setSecondary("#f6b2d5");
 		defaultColors.setAccent("#ffffff");
+		defaultColors.setDark("#808080");
+		defaultColors.setLightBlue("#7d99a7");
+		defaultColors.setPositive("#dcdcdc");
+		defaultColors.setNegative("#505050");
+		defaultColors.setInfo("#0074E2");
+		defaultColors.setWarning("#fec705");
+	}
+
+	private void setDarkColors(final Colors defaultColors) {
+		defaultColors.setLogoPath("/Logo-Dark.svg");
+		defaultColors.setBgC("#000000");
+		defaultColors.setTextC("#ffffff");
+		defaultColors.setPrimaryColor("#e20074");
+		defaultColors.setSecondary("#f6b2d5");
+		defaultColors.setAccent("#000000");
 		defaultColors.setDark("#808080");
 		defaultColors.setLightBlue("#7d99a7");
 		defaultColors.setPositive("#dcdcdc");
