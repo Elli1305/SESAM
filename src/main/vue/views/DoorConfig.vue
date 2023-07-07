@@ -29,7 +29,7 @@
         </q-field>
         <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
           <q-tooltip max-width="15em" anchor="center right" self="center left">
-            {{t('floorPlan.directions.infoConfigGroups')}}
+            {{t('floorPlan.infoConfigGroups')}}
           </q-tooltip>
         </q-icon>
       </q-toolbar>

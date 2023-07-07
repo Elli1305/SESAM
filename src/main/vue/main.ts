@@ -159,6 +159,7 @@ const messages = {
             configDescription: 'Beschreibung der Konfiguration',
             configGroup: 'Konfigurationsgruppe',
             infoConfigGroups: 'Konfigurationsgruppen sind untereinander mit UND verknüpft',
+            chooseConfig: "Konfiguration auswählen",
             addConfigGroup: 'Konfigurationsgruppe hinzufügen',
             direction: 'Richtung',
             directions: {
@@ -213,7 +214,7 @@ const messages = {
                 title: "Herausgeberverwaltung",
                 issuableCredential: "Ausstellbare Credential",
                 office: "Büro",
-                dialogTitle: "Herausgeber Verwalten",
+                dialogTitle: "Herausgeber verwalten",
             },
             corporateDesign: {
                 title: "Corporate Design",
@@ -359,7 +360,7 @@ const messages = {
                         // Strings
                         names: "Namen",
                         noSpecialCharacter: "Keine Sonderzeichen",
-                        email: "E-mail",
+                        email: "Email",
                         phoneNumbers: "Telefonnummern",
                         uppercase: "Nur Großbuchstaben",
                         lowercase: "Nur Kleinbuchstaben",
@@ -571,6 +572,7 @@ const messages = {
             configDescription: 'Description of the configuration',
             configGroup: 'Configuration Group',
             infoConfigGroups: 'Configuration groups are combined with AND',
+            chooseConfig: "Choose Predefined Config",
             addConfigGroup: 'Add configuration group',
             direction: 'Direction',
             directions: {
