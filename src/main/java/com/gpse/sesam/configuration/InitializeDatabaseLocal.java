@@ -178,8 +178,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final SesamUserRole editorRole21 = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
 		editorRole21.setGranted(true);
 
-		final SesamUser jana = new SesamUser("jana@test.de", defaultPassword, "Jana", "Editor-Issuer",
-				List.of(editorRole21, issuerRole20));
+		final SesamUser jana = new Issuer("jana@test.de", defaultPassword, "Jana", "Editor-Issuer",
+				List.of(editorRole21, issuerRole20), null);
 
 
 		return List.of(admin, issuer, editor, user, jana);

@@ -37,7 +37,7 @@
              fill-input
              input-debounce="0"
              @filter="filterFn"
-             label="Konfiguration auswählen"
+             :label="t('floorPlan.chooseConfig')"
              option-label="name"
              v-model="selectedConfig"
              :options="configOptions"

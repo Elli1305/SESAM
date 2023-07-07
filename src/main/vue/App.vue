@@ -71,8 +71,8 @@ async function logout() {
   if (!userStore.authenticated) {
     $q.notify({
       type: 'positive',
-      message: 'Sie haben sich erfolgreich abgemeldet',
-      caption: 'Logout erfolgreich',
+      message: t('logout.title'),
+      caption: t('logout.success'),
       position: "top",
       timeout: 3000,
       classes: "loginNotify"
@@ -80,6 +80,7 @@ async function logout() {
     await router.push('/')
   }
 }
+
 
 
 </script>

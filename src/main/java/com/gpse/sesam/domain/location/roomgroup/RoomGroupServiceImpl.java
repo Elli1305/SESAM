@@ -138,4 +138,15 @@ public class RoomGroupServiceImpl implements RoomGroupService {
         }
         return cmds;
     }
+    @Override
+    public List<Room> getRoomsByGroupId(Long id) {
+        Optional<RoomGroups> roomGroup = roomGroupRepository.findById(id);
+        List<Room> rooms = new ArrayList<>();
+        if (roomGroup.isPresent()) {
+            for (Room room: roomGroup.get().getRooms()) {
+                rooms.add(room);
+            }
+        }
+        return rooms;
+    }
 }

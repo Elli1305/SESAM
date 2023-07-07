@@ -2,10 +2,13 @@ package com.gpse.sesam.domain.user;
 
 import com.gpse.sesam.domain.mail.MailInformation;
 import com.gpse.sesam.domain.mail.MailService;
+import com.gpse.sesam.domain.user.issuer.Issuer;
+import com.gpse.sesam.domain.user.issuer.IssuerService;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import com.gpse.sesam.web.exception.ConflictException;
 import com.gpse.sesam.web.exception.InvalidTokenException;
 import com.gpse.sesam.web.exception.UnprocessableEntityException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -33,17 +36,19 @@ public class SesamUserServiceImpl implements SesamUserService {
 	private final MailService mailService;
 
 	private final MessageSource messageSource;
+	private IssuerService issuerService;
 
 	@Autowired
 	public SesamUserServiceImpl(final SesamUserRepository userRepository,
 								final PasswordResetTokenRepository passwordResetTokenRepository,
 								final PasswordEncoder passwordEncoder, final MailService mailService,
-								final MessageSource messageSource) {
+								final MessageSource messageSource, final IssuerService issuerService) {
 		this.userRepository = userRepository;
 		this.passwordResetTokenRepository = passwordResetTokenRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.mailService = mailService;
 		this.messageSource = messageSource;
+		this.issuerService = issuerService;
 	}
 
 	private static void validateRoles(final List<SesamUserRole.AttainableRole> roles) {
@@ -170,11 +175,18 @@ public class SesamUserServiceImpl implements SesamUserService {
 	@Override
 	public void makeUserEdit(final SesamUser user, final String prename, final String lastname, final String username,
 							 final List<SesamUserRole.AttainableRole> roles) {
-		user.setFirstName(prename);
-		user.setLastName(lastname);
-		user.setRoles(roles.stream().distinct().map(role -> new SesamUserRole(role, true))
+		if(roles.contains(SesamUserRole.AttainableRole.ISSUER)) {
+			userRepository.delete(user);
+			Issuer issuer = new Issuer(user.getUsername(), username, prename, lastname, roles.stream().distinct().map(role -> new SesamUserRole(role, true))
+					.collect(Collectors.toList()), null);
+			issuerService.save(issuer);
+		} else {
+			user.setLastName(lastname);
+			user.setFirstName(prename);
+			user.setRoles(roles.stream().distinct().map(role -> new SesamUserRole(role, true))
 				.collect(Collectors.toList()));
+			userRepository.save(user);
+		}
 
-		userRepository.save(user);
 	}
 }

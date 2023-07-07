@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">Credential bearbeiten</p>
+    <p class="row text-h3 justify-center">{{t('admin.credentialAdministration.edit')}}</p>
       <q-form class="column justify-between self-center no-wrap full-width" ref="form" @submit.prevent style="height: 50vh">
         <div class="row no-wrap full-width">
           <div class="column justify-evenly" style="width: 15vw; height: 40vh; margin-right: 3vw">
@@ -13,11 +13,11 @@
           <q-virtual-scroll class="column full-width" style="height: 40vh" :items="[0]">
             <div class="row no-wrap full-width">
               <div class="column full-width">
-                <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">Credentialattribute</h6>
+                <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">{{t('admin.credentialAdministration.credentialAttribute')}}</h6>
                   <div class="full-width" v-for="(item, index) in credential.attributes">
                     <q-item class="row justify-between q-px-sm" style="margin-bottom: -1em">
                       <q-input style="width: 15vw" v-model="item.name" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
-                      <q-input style="width: 15vw" v-model="item.attributeName" :rules="[required]" lazy-rules error-message=" " label="Name des Attributes"
+                      <q-input style="width: 15vw" v-model="item.attributeName" :rules="[required]" lazy-rules error-message=" " :label="t('admin.credentialAdministration.attribute')"
                                outlined type="text"/>
                       <div class="row no-wrap">
                         <q-select style="width: 10vw" v-model="item.type" :options="types" emit-value label="Type" map-options
@@ -35,7 +35,7 @@
                   </div>
               </div>
               <div class="column" style="width: 20vw; margin-left: 2vw">
-                <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">Checkliste</h6>
+                <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">{{t('admin.credentialAdministration.checklist')}}</h6>
                 <div class="full-width" v-for="(item, index) in credential.conditions">
                   <q-item class="row q-px-sm" style="margin-bottom: -1em">
                     <q-input style="width: 15vw" v-model="item.label" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
