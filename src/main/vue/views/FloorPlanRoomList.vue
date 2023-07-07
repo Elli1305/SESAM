@@ -344,7 +344,7 @@
                                                                 <q-card-actions align="right" class="text-primary">
                                                                     <q-btn style="max-width: 10em;"
                                                                            class="q-mr-xl text-white bg-primary"
-                                                                           label="doorconfig" @click="" flat/>
+                                                                           :label="t('editor.groupRooms.doorconfiguration')" @click="" flat/>
 
                                                                     <q-btn flat :label="t( 'common.cancel')"
                                                                            color="primary"
@@ -560,7 +560,7 @@
             <q-dialog v-model="newGroup">
                 <q-card>
                     <q-card-section>
-                        <div class="text-h6">Name der Gruppe</div>
+                        <div class="text-h6">{{t('editor.groupRooms.nameOfGroup')}} </div>
                     </q-card-section>
                     <q-card-section class="q-pt-none">
                         <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
@@ -575,11 +575,11 @@
             <q-dialog v-model="addRoomsToExistingGroupDialog">
                 <q-card>
                     <q-card-section>
-                        <div class="text-h6">Ausgewählte Räume wirklich Gruppe {{ selectedGroups.name }} zufügen?</div>
+                        <div class="text-h6">{{t('editor.groupRooms.addRoomsToSelected')}} {{ selectedGroups.name }} ?</div>
                     </q-card-section>
 
                     <q-card-actions align="right" class="text-primary">
-                        <q-btn flat :label="t('common.back')" @click="" v-close-popup/>
+                        <q-btn flat :label="t('common.cancel')" @click="" v-close-popup/>
                         <q-btn flat :label="t('common.save')" @click="addRoomsToGroups();" v-close-popup/>
                     </q-card-actions>
                 </q-card>
@@ -595,7 +595,7 @@
                     </q-card-section>
 
                     <q-card-actions align="right" class="text-primary">
-                        <q-btn flat :label="t('common.back')" @click="" v-close-popup/>
+                        <q-btn flat :label="t('common.cancel')" @click="" v-close-popup/>
                         <q-btn flat :label="t('common.save')" @click="addRoomsToNewGroup();"/>
                     </q-card-actions>
                 </q-card>
