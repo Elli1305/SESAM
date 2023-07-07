@@ -709,7 +709,7 @@ export default {
                     console.log("hier");
                 }
                 console.log("Groups of rooms (loadRoomGroups)", filteredGroups.value);
-                console.log("sel. Rooms", selectedRooms.value);
+                //console.log("sel. Rooms", selectedRooms.value);
 
 
             })
@@ -729,11 +729,24 @@ export default {
             }
         }
 
+        const selectedRoomsForGroup = ref([]);
+        function makeIdsToRooms(roomsIds) {
+
+            selectedRoomsForGroup.value = floorPlanStore.rooms.filter((room) =>
+                roomsIds.includes(room.id)
+            )
+
+        }
+
         async function addRoomsToNewGroup() {
-            console.log(selectedRooms.value);
+            //console.log(selectedRooms.value);
             await checkName(newGroupName.value);
             if (checkNameAllowed.value) {
-                await roomGroupStore.makeNewGroup(newGroupName.value, currentBuilding.value, selectedRooms.value);
+
+
+                makeIdsToRooms(selectedRooms.value);
+
+                await roomGroupStore.makeNewGroup(newGroupName.value, currentBuilding.value, selectedRoomsForGroup.value);
                 await loadRoomGroups(buildingID.value);
 
                 addRoomsToNewGroupDialog.value = false;
@@ -768,9 +781,9 @@ export default {
         }
 
         async function addRoomsToGroups() {
-            console.log("selected Rooms: ", selectedRooms.value);
+            //console.log("selected Rooms: ", selectedRooms.value);
             console.log("selected Groups: ", selectedGroups.value);
-            console.log("selected Groups length: ", selectedRooms.value.length);
+            //console.log("selected Groups length: ", selectedRooms.value.length);
 
             if (selectedRooms.value.length === 0) {
                 $q.notify({
@@ -778,11 +791,13 @@ export default {
                     message: t('editor.groupRooms.noRoomSelected')
                 })
             } else if (selectedGroups.value !== null) {
+
+                makeIdsToRooms(selectedRooms);
                 const editedGroup = ref({
                     id: selectedGroups.value.id,
                     name: selectedGroups.value.name,
                     building: selectedGroups.value.building,
-                    rooms: selectedRooms.value
+                    rooms: selectedRoomsForGroup.value
                 });
                 console.log(editedGroup.value);
                 await roomGroupStore.editGroup(editedGroup.value);
@@ -886,6 +901,7 @@ export default {
 
 
         const {selectedFloorId} = storeToRefs(floorPlanStore)
+        let prevBuildingid = null;
 
         if (isEditor.value) {
             watch(selectedFloorId, () => {
@@ -894,9 +910,15 @@ export default {
                         buildingID.value = locations[0].buildings[0].id
                     } else {
                         buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
+                        if(prevBuildingid !== buildingID.value){
+                            console.log("prev B und current b: ", prevBuildingid, buildingID.value);
+                            loadRoomGroups(buildingID.value);
+                            selectedRooms.value = [];
+                        }
                     }
                     console.log("buildingId: ", buildingID.value);
-                    loadRoomGroups(buildingID.value);
+                    prevBuildingid = buildingID.value;
+
 
                 });
                 //console.log("Orte: ", locations);
@@ -1003,7 +1025,7 @@ export default {
             } else {
                 addRoom(element.id)
             }
-            console.log("selected Rooms toggle:", selectedRooms.value);
+            //console.log("selected Rooms toggle:", selectedRooms.value);
         }
 
         async function roomFilter() {
@@ -1030,6 +1052,7 @@ export default {
 
         function unCheck() {
             selectedGroups.value = null
+            console.log("halalalalallalalallalallall");
         }
 
         const prevSelectedGroup = ref();
@@ -1038,16 +1061,16 @@ export default {
             if (prevSelectedGroup.value === null || prevSelectedGroup.value === undefined
                 || (prevSelectedGroup.value !== selectedGroups.value)) {
                 console.log("prevSelectedGroup.value === null");
-                selectedGroups.value.rooms.filter((room) => {
-                    //console.log("Raum: ", room);
+                selectedGroups.value.rooms.forEach((room) => {
+                    console.log("Raum: ", room);
                     toggleRoomCheckbox(room);
                 })
                 //console.log("selected Rooms after selecting Group:", selectedRooms.value);
             } else {
                 console.log("else", prevSelectedGroup.value);
                 // to un-toggle the selected rooms
-                selectedGroups.value.rooms.filter((room) => {
-                    //console.log("Raum: ", room);
+                selectedGroups.value.rooms.forEach((room) => {
+                    console.log("Raum (untoggle): ", room);
                     toggleRoomCheckbox(room);
                 })
                 //console.log("sel. rooms after un-toggle", selectedRooms.value);
