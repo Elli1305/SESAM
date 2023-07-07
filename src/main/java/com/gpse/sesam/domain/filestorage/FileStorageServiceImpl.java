@@ -33,9 +33,10 @@ public class FileStorageServiceImpl implements FileStorageService {
 	public String storeFile(final MultipartFile file) {
 		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
-
+			String[] fileNameArray = fileName.split("\\.");
 			final String randomFileName = String.format("%s.%s",
-					UUID.randomUUID().toString().replace("-", ""), fileName.split("\\.")[1]);
+					UUID.randomUUID().toString().replace("-", ""),
+					fileNameArray[fileNameArray.length - 1]);
 			final Path targetLocation = fileStorageLocation.resolve(randomFileName);
 			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 			return randomFileName;
