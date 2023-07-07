@@ -348,11 +348,11 @@
 
                                                                     <q-btn flat :label="t( 'common.cancel')"
                                                                            color="primary"
-                                                                           @click="unCheck();"
+                                                                           @click="unCheck();cancelEdit();"
                                                                            v-close-popup/>
                                                                     <q-btn flat :label="t( 'common.save')"
                                                                            color="primary"
-                                                                           @click="editGroupName;  deleteRoomsOfGroup();updateNumRoomsInGroup(); unCheck();" v-close-popup/>
+                                                                           @click="editGroupName();  deleteRoomsOfGroup();updateNumRoomsInGroup();" v-close-popup/>
                                                                 </q-card-actions>
                                                             </q-card-section>
                                                         </q-card>
@@ -823,8 +823,8 @@ export default {
                 unCheck();
             }
             if (selectedGroups.value !== null) {
-                await roomGroupStore.deleteGroup(selectedGroups.value.id).then(() => {
-                    loadRoomGroups(buildingID.value);
+                await roomGroupStore.deleteGroup(selectedGroups.value.id).then(async () => {
+                    await loadRoomGroups(buildingID.value);
                     unCheck();
                 });
             } else {
@@ -893,7 +893,7 @@ export default {
         }
 
         let buildingID = ref();
-        locationStore.getLocations().then((locations) => {
+        locationStore.getLocations().then(async (locations) => {
             if (!floorPlanStore.selectedFloorPlan) {
                 buildingID.value = locations[0].buildings[0].id
             } else {
@@ -901,7 +901,7 @@ export default {
             }
             console.log("buildingId: ", buildingID.value);
             if (isEditor.value) {
-                loadRoomGroups(buildingID.value);
+                await loadRoomGroups(buildingID.value);
             }
         });
 
@@ -911,14 +911,14 @@ export default {
 
         if (isEditor.value) {
             watch(selectedFloorId, () => {
-                locationStore.getLocations().then((locations) => {
+                locationStore.getLocations().then(async (locations) => {
                     if (!floorPlanStore.selectedFloorPlan) {
                         buildingID.value = locations[0].buildings[0].id
                     } else {
                         buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
-                        if(prevBuildingid !== buildingID.value){
+                        if (prevBuildingid !== buildingID.value) {
                             console.log("prev B und current b: ", prevBuildingid, buildingID.value);
-                            loadRoomGroups(buildingID.value);
+                            await loadRoomGroups(buildingID.value);
                             selectedRooms.value = [];
                         }
                     }
@@ -988,8 +988,13 @@ export default {
             context.emit('editRoom', room)
         }
 
+
         async function editGroupName() {
-            await checkName(currentGroupName.value);
+            console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDd")
+            let prevName = selectedGroups.value.name;
+            if(prevName !== currentGroupName.value) {
+                await checkName(currentGroupName.value);
+            }
             //selectedGroups.value = [];
             if (checkNameAllowed.value) {
 
@@ -999,12 +1004,13 @@ export default {
                     building: selectedGroups.value.building,
                     rooms: selectedGroups.value.rooms
                 });
-                console.log(editedGroup.value);
-                await roomGroupStore.editGroup(editedGroup.value).then(() => {
-                    loadRoomGroups(buildingID.value);
+                console.log("edited Group", editedGroup.value);
+                await roomGroupStore.editGroup(editedGroup.value).then(async () => {
+                    await loadRoomGroups(buildingID.value);
                     unCheck();
                 });
             }
+
         }
 
         function addRoom(element) {
@@ -1125,6 +1131,7 @@ export default {
         }
         async function deleteRoomsOfGroup() {
             await roomGroupStore.editGroup(selectedGroups.value);
+            unCheck();
         }
         const dropdown = ref(false);
 
@@ -1182,8 +1189,8 @@ export default {
             },
             giveLog(){
                 dropdown.value = false;
-              console.log("hiwerhoiehfowgiohowhoifwohfoweihfiosiohfi");
-              console.log(dropdown.value);
+              //console.log("hiwerhoiehfowgiohowhoifwohfoweihfiosiohfi");
+              //console.log(dropdown.value);
             },
             allFloorsForGroup,
             dropdown,
@@ -1196,6 +1203,9 @@ export default {
                     console.log("hier", roomGroupStore.rooms);
                     selectedGroups.value.rooms = roomGroupStore.rooms;
                 }
+            },
+            async cancelEdit(){
+                await loadRoomGroups(buildingID.value);
             }
         }
     },
