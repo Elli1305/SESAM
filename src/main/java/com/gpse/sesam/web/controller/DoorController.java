@@ -1,6 +1,7 @@
 package com.gpse.sesam.web.controller;
 
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
+
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorService;
 import com.gpse.sesam.util.DoorCmdMapper;

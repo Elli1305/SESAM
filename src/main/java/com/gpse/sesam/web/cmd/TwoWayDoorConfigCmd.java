@@ -1,7 +1,5 @@
 package com.gpse.sesam.web.cmd;
 
-import jakarta.persistence.Column;
-
 import java.time.LocalTime;
 
 public class TwoWayDoorConfigCmd {
@@ -9,9 +7,9 @@ public class TwoWayDoorConfigCmd {
 	private Long id;
 	private DoorConfigCmd doorConfigIn;
 	private DoorConfigCmd doorConfigOut;
-	private LocalTime startTime;
+	private String startTime;
 
-	private LocalTime endTime;
+	private String endTime;
 
 	private boolean baseConfig;
 
@@ -40,19 +38,19 @@ public class TwoWayDoorConfigCmd {
 		this.doorConfigOut = doorConfigOut;
 	}
 
-	public LocalTime getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(LocalTime startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public LocalTime getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(LocalTime endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 

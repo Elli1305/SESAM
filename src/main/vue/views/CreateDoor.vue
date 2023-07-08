@@ -95,6 +95,8 @@
                             </q-input>
                         </div>
                         <div class="q-gutter-sm row">
+                            {{qSelectgeneral.qSelectsSet[k].startTime}}
+                            {{qSelectgeneral.qSelectsSet[k].endTime}}
                             <q-input filled v-model="qSelectgeneral.qSelectsSet[k].endTime" mask="time" :rules="['time']" :disabled="qSelectgeneral.qSelectsSet[k].baseConfig">
                                 <template v-slot:append>
                                     <q-icon name="access_time" class="cursor-pointer">
@@ -242,18 +244,27 @@ export default {
                 let config = {}
                 console.log(this.$refs.doorIn[index].configDescription)
                 config.baseConfig = this.qSelectgeneral.qSelectsSet[index].baseConfig
+             //if(!config.baseConfig){
+                 config.startTime = this.qSelectgeneral.qSelectsSet[index].startTime
+                 config.endTime = this.qSelectgeneral.qSelectsSet[index].endTime
+             //}
+
 
                 //console.log('qselects', this.$refs.configIn.qSelects)
                 if (this.$refs.doorIn[index].direction  === Direction.BOTH) {
                     config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
                     config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
+                    console.log(config.doorConfigIn)
+                    console.log(config.doorConfigOut)
                     config.doorConfigIn.description = this.$refs.doorIn[index].configDescription
                     config.doorConfigIn.direction = this.$refs.doorIn[index].direction
-                    config.doorConfigIn.direction = this.$refs.doorIn[index].direction
+                    config.doorConfigOut.direction = this.$refs.doorIn[index].direction
                     config.doorConfigOut.description = this.$refs.doorOut[index].configDescription
                 } else if (this.$refs.doorIn[index].direction  === Direction.IN) {
                     config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
                     config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigOut))
+                    console.log(config.doorConfigIn)
+                    console.log(config.doorConfigOut)
                     config.doorConfigIn.description = this.$refs.doorIn[index].configDescription
                     config.doorConfigOut.description = this.$refs.doorOut[index].configDescription
                     config.doorConfigIn.direction = this.$refs.doorIn[index].direction
@@ -261,6 +272,8 @@ export default {
                 } else if (this.$refs.doorIn[index].direction  === Direction.OUT) {
                     config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigOut))
                     config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
+                    console.log(config.doorConfigIn)
+                    console.log(config.doorConfigOut)
                     config.doorConfigIn.description =this.$refs.doorOut[index].configDescription
                     config.doorConfigOut.description = this.$refs.doorIn[index].configDescription
                     config.doorConfigIn.direction = this.$refs.doorOut[index].direction

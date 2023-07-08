@@ -322,14 +322,6 @@ export default {
           width: 5,
           fillOpacity: 0.1
         })
-          if(this.floorPlanStore.selectedRooms.includes(room.id)) {
-              polygon.setStyle({
-                  color: 'red',
-                  fillColor: 'red',
-                  weight: 2,
-                  fillOpacity: 0.1
-              })
-          }
 
         polygons.push(polygon);
         let doorsname = room.doors.map(door => door.name).join(", ");

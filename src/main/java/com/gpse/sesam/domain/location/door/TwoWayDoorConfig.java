@@ -22,10 +22,10 @@ public class TwoWayDoorConfig {
     private ProofConfig proofConfigOut;
 
     @Column
-    private LocalTime startTime;
+    private String startTime;
 
     @Column
-    private LocalTime endTime;
+    private String endTime;
 
     @Column
     private boolean baseConfig;
@@ -54,19 +54,19 @@ public class TwoWayDoorConfig {
         this.proofConfigOut = proofConfigOut;
     }
 
-    public LocalTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
