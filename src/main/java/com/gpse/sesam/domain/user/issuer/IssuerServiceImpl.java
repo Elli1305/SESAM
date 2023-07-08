@@ -40,7 +40,8 @@ public class IssuerServiceImpl implements IssuerService {
 				.filter(issuer ->
 						issuer
 								.getAuthorities()
-								.contains(AuthorityUtils.createAuthorityList(SesamUserRole.AttainableRole.ISSUER.toString())
+								.contains(AuthorityUtils.createAuthorityList(
+										SesamUserRole.AttainableRole.ISSUER.toString())
 										.get(0)))
 				.toList();
 	}

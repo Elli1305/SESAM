@@ -13,23 +13,22 @@ public class ColorsServiceImpl implements ColorsService {
         this.colorsRepository = colorsRepository;
     }
 
-    @Override
-    public Colors getColors() {
-        return colorsRepository.findByDefaultColorsIsFalse();
+    public Colors getColors(ColorTheme colorTheme) {
+        return colorsRepository.findByDefaultColorsIsFalseAndTheme(colorTheme);
     }
 
     @Override
-    public Colors changeColors(Colors colors) {
-        Long currentColorsId = colorsRepository.findByDefaultColorsIsFalse().getId();
+    public Colors changeColors(ColorTheme colorTheme, Colors colors) {
+        Long currentColorsId = colorsRepository.findByDefaultColorsIsFalseAndTheme(colorTheme).getId();
         colors.setId(currentColorsId);
         colorsRepository.save(colors);
         return colors;
     }
 
     @Override
-    public void resetColors() {
-        Long currentColorsId = colorsRepository.findByDefaultColorsIsFalse().getId();
-        Colors defaultColors = colorsRepository.findByDefaultColorsIsTrue();
+    public void resetColors(ColorTheme colorTheme) {
+        Long currentColorsId = colorsRepository.findByDefaultColorsIsFalseAndTheme(colorTheme).getId();
+        Colors defaultColors = colorsRepository.findByDefaultColorsIsTrueAndTheme(colorTheme);
         Colors colors = new Colors();
         colors.setId(currentColorsId);
         colors.setDefaultColors(false);
