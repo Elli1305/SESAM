@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: Sesam 3.1
+  description: |-
+    Api documentation for the implementation of SESAM application of Team 3.1
+  contact:
+    email: lhabich@techfak.uni-bielefeld.de
+  license:
+    name: MIT
+    url: https://se.techfak.de/projects/gp-se-ss-2023-team3-1/wiki/OpenSource_Lizenz
+  version: 1.0.0
+servers:
+  - url: localhost:8088
+tags:
+  - name: location
+    description: Everything about the Locations
+  - name: building
+    description: Everything about the Building
+  - name: floor
+    description: Everything about the Floor
+  - name: room
+    description: Everything about the room
+  - name: room
+    description: Everything about the door
+  - name: credentials
+    description: Everything about the credentials
+  - name: user
+    description: Operations about user
+paths:
