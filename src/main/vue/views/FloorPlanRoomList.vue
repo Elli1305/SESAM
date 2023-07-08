@@ -352,7 +352,7 @@
                                                                            v-close-popup/>
                                                                     <q-btn flat :label="t( 'common.save')"
                                                                            color="primary"
-                                                                           @click="editGroupName();  deleteRoomsOfGroup();updateNumRoomsInGroup();" v-close-popup/>
+                                                                           @click="editGroupName(); updateNumRoomsInGroup();" v-close-popup/>
                                                                 </q-card-actions>
                                                             </q-card-section>
                                                         </q-card>
@@ -705,17 +705,17 @@ export default {
 
 
         async function loadRoomGroups(buildingID) {
-            filteredGroups.value = [];
+            //filteredGroups.value = [];
             unCheck();
-            await roomGroupStore.getGroupByBuilding(buildingID).then(() => {
+            console.log("loadRoomGroups(): roomGroupStore.filteredGroups", roomGroupStore.filteredGroups);
+            roomGroupStore.getGroupByBuilding(buildingID).then(() => {
                 filteredGroups.value = [];
                 for (const roomG of roomGroupStore.filteredGroups) {
                     filteredGroups.value.push(roomG);
-                    console.log("hier");
+                    console.log("loadRoomGroups() hier");
                 }
                 console.log("Groups of rooms (loadRoomGroups)", filteredGroups.value);
                 //console.log("sel. Rooms", selectedRooms.value);
-
 
             })
         }
@@ -811,8 +811,12 @@ export default {
                 });
                 console.log("edited Group:", editedGroup.value);
                 await roomGroupStore.editGroup(editedGroup.value);
+                console.log("makeIsToRooms before loadRoomGroups: selectedGroups.value", selectedGroups.value)
                 await loadRoomGroups(buildingID.value);
+                console.log("makeIsToRooms after loadRoomGroups: selectedGroups.value", selectedGroups.value)
                 unCheck();
+                console.log("makeIsToRooms after unCheck: selectedGroups.value", selectedGroups.value)
+
             } else {
                 $q.notify({
                     type: 'negative',
@@ -827,7 +831,7 @@ export default {
                 unCheck();
             }
             if (selectedGroups.value !== null) {
-                await roomGroupStore.deleteGroup(selectedGroups.value.id).then(async () => {
+                roomGroupStore.deleteGroup(selectedGroups.value.id).then(async () => {
                     await loadRoomGroups(buildingID.value);
                     unCheck();
                 });
@@ -915,7 +919,7 @@ export default {
 
         if (isEditor.value) {
             watch(selectedFloorId, async () => {
-                await locationStore.getLocations().then(async (locations) => {
+                locationStore.getLocations().then(async (locations) => {
                     if (!floorPlanStore.selectedFloorPlan) {
                         buildingID.value = locations[0].buildings[0].id
                     } else {
@@ -1009,9 +1013,13 @@ export default {
                     rooms: selectedGroups.value.rooms
                 });
                 console.log("edited Group", editedGroup.value);
-                await roomGroupStore.editGroup(editedGroup.value).then(async () => {
+                roomGroupStore.editGroup(editedGroup.value).then(async () => {
+                    console.log("editGroupName(); selectedGroup.value vor loadRoomGroups", selectedGroups.value); //richtig
                     await loadRoomGroups(buildingID.value);
+                    console.log("editGroupName(); selectedGroup.value nach loadRoomGroups", selectedGroups.value);
                     unCheck();
+                    console.log("editGroupName(); selectedGroup.value nach unCheck", selectedGroups.value);
+                    //await deleteRoomsOfGroup();
                 });
             }
 
@@ -1101,7 +1109,7 @@ export default {
 
         const arrayFloors = ref([]);
 
-        async function allFloorsForGroup() {
+        async function allFloorsForGroup() { //ab hier schon zu viele Räume drin (Bugfixing)
             const rooms = selectedGroups.value.rooms;
             arrayFloors.value = [];
 
@@ -1110,9 +1118,10 @@ export default {
                 await roomStore.getFloor(rooms[roomLength].id);
                 let level = roomStore.floor.floorLevel
                 arrayFloors.value.push(level);
-                console.log("Room:", rooms[roomLength], "Floor", level);
+                //console.log("Room:", rooms[roomLength], "Floor", level);
             }
             console.log("arrayFloors:", arrayFloors.value);
+            console.log("function: allFloorsForGroup()");
         }
 
         function addToDeleteList(room) {
@@ -1133,10 +1142,6 @@ export default {
             }
             console.log("entire delete-list:", roomDeleteList.value);
             console.log("selected Group rooms:", selectedGroups.value.rooms);
-        }
-        async function deleteRoomsOfGroup() {
-            await roomGroupStore.editGroup(selectedGroups.value);
-            unCheck();
         }
         const dropdown = ref(false);
 
@@ -1178,7 +1183,6 @@ export default {
             addRoomsToNewGroup,
             unCheck,
             deleteGroup,
-            deleteRoomsOfGroup,
             checkGroupSelected,
             editGroupD,
             deleteAlert: ref(false),
@@ -1207,6 +1211,7 @@ export default {
                     await roomGroupStore.getRoomsByGroupId(selectedGroups.value.id);
                     console.log("hier", roomGroupStore.rooms);
                     selectedGroups.value.rooms = roomGroupStore.rooms;
+                    console.log("reloadRoomsBE(), selectedGroups", selectedGroups.value);
                 }
             },
             async cancelEdit(){
