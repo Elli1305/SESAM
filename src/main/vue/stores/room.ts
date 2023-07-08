@@ -33,7 +33,7 @@ export const useRoomStore = defineStore('room', () => {
         })
     }
 
-    function getRooms(id: string) {
+    function getRooms() {
         return new Promise((resolve, reject) => {
             api.room.getRooms().then((response) => {
                 rooms.value = response.data
