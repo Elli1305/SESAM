@@ -734,7 +734,7 @@ export default {
         function makeIdsToRooms() {
             selectedRoomsForGroup.value = [];
             roomStore.getRooms();
-            console.log(roomStore.rooms);
+            //console.log(roomStore.rooms);
 
             selectedRoomsForGroup.value = roomStore.rooms?.filter((room) =>
                 selectedRooms.value.includes(room.id)
@@ -1031,7 +1031,7 @@ export default {
         }
 
         function toggleRoomCheckbox(element) {
-            console.log(element)
+            //console.log(element)
             if (selectedRooms.value.some(e => e === element.id)) {
                 deleteRoom(element.id)
             } else {
@@ -1074,7 +1074,7 @@ export default {
                 || (prevSelectedGroup.value !== selectedGroups.value)) {
                 console.log("prevSelectedGroup.value === null");
                 selectedGroups.value.rooms.forEach((room) => {
-                    console.log("Raum: ", room);
+                    //console.log("Raum: ", room);
                     toggleRoomCheckbox(room);
                 })
                 //console.log("selected Rooms after selecting Group:", selectedRooms.value);
@@ -1082,13 +1082,14 @@ export default {
                 console.log("else", prevSelectedGroup.value);
                 // to un-toggle the selected rooms
                 selectedGroups.value.rooms.forEach((room) => {
-                    console.log("Raum (untoggle): ", room);
+                    //console.log("Raum (untoggle): ", room);
                     toggleRoomCheckbox(room);
                 })
                 //console.log("sel. rooms after un-toggle", selectedRooms.value);
                 unCheck();
             }
 
+            console.log("Function: filterRoomsToGroups()");
             prevSelectedGroup.value = selectedGroups.value;
         }
 
