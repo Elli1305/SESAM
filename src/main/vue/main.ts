@@ -270,7 +270,8 @@ const messages = {
                 createCategory: 'Neue Kategorie erstellen',
                 changeCategory: 'Kategorie ändern',
                 deleteCategory: 'Kategorie löschen',
-                delete: 'Möchten Sie die Kategorie wirklich löschen?'
+                delete: 'Möchten Sie die Kategorie wirklich löschen?',
+                info: "Jedes Credential darf nur in einer Gruppe sein. Es wird bei Auswahl möglicherweise aus einer anderen Kategorie entfernt."
             },
             credentialAdministration: {
                 title: "Credentials verwalten",
@@ -695,7 +696,8 @@ const messages = {
                 createCategory: 'Create new category',
                 changeCategory: 'Change category',
                 deleteCategory: 'Delete category',
-                delete: 'Are you sure you want to delete the category?'
+                delete: 'Are you sure you want to delete the category?',
+                info: "Each credential is only allowed in one group. If you select the credential, it might be removed from another category"
             },
             credentialAdministration: {
                 title: "Manage Credentials",
