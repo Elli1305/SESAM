@@ -692,12 +692,16 @@ export default {
 
 
         isEditorCheck();
-        if (isEditor.value) {
-            roomGroupStore.getRoomGroups();
-            console.log("Ist eingeloggt als Editor");
-        } else {
-            console.log("Ist nicht eingeloggt als Editor");
+        async function start() {
+            if (isEditor.value) {
+                await roomGroupStore.getRoomGroups();
+                console.log("Ist eingeloggt als Editor");
+            } else {
+                console.log("Ist nicht eingeloggt als Editor");
+            }
         }
+        start();
+
 
 
         async function loadRoomGroups(buildingID) {
@@ -731,9 +735,9 @@ export default {
         }
 
         const selectedRoomsForGroup = ref([]);
-        function makeIdsToRooms() {
+        async function makeIdsToRooms() {
             selectedRoomsForGroup.value = [];
-            roomStore.getRooms();
+            await roomStore.getRooms();
             //console.log(roomStore.rooms);
 
             selectedRoomsForGroup.value = roomStore.rooms?.filter((room) =>
@@ -749,7 +753,7 @@ export default {
             if (checkNameAllowed.value) {
 
 
-                makeIdsToRooms();
+                await makeIdsToRooms();
 
                 await roomGroupStore.makeNewGroup(newGroupName.value, currentBuilding.value, selectedRoomsForGroup.value);
                 await loadRoomGroups(buildingID.value);
@@ -798,7 +802,7 @@ export default {
                 })
             } else if (selectedGroups.value !== null) {
 
-                makeIdsToRooms();
+                await makeIdsToRooms();
                 const editedGroup = ref({
                     id: selectedGroups.value.id,
                     name: selectedGroups.value.name,
@@ -910,8 +914,8 @@ export default {
         let prevBuildingid = null;
 
         if (isEditor.value) {
-            watch(selectedFloorId, () => {
-                locationStore.getLocations().then(async (locations) => {
+            watch(selectedFloorId, async () => {
+                await locationStore.getLocations().then(async (locations) => {
                     if (!floorPlanStore.selectedFloorPlan) {
                         buildingID.value = locations[0].buildings[0].id
                     } else {
@@ -982,9 +986,9 @@ export default {
             console.log("selected Groups in setOldValue: ", selectedGroups.value);
         }
 
-        function save(room) {
+        async function save(room) {
             room.name = currentRoomName.value;
-            roomStore.save(room)
+            await roomStore.save(room)
             context.emit('editRoom', room)
         }
 
