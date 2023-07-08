@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 
 @RestController
+@Secured("EDITOR")
 @RequestMapping("/api/door")
 public class DoorController {
 

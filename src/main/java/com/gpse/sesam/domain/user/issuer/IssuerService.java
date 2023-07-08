@@ -19,4 +19,6 @@ public interface IssuerService {
 	void saveAll(Iterable<Issuer> issuer);
 
 	public void updateIssuer(IssuerResponseCmd cmd);
+
+	void save(Issuer issuer);
 }

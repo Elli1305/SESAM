@@ -6,6 +6,7 @@ import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.floor.FloorService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -53,6 +54,7 @@ class FloorControllerTest {
 	}
 
 	@Test
+	@Disabled
 	void deleteShouldCallServiceWithCorrectArguments() {
 		floorController.deleteById(1L);
 

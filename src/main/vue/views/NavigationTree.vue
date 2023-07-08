@@ -7,7 +7,7 @@
       <q-item-label
           header
           class="text-grey-8">
-        {{ t('floorplan.locations') }}
+        {{ t('floorPlan.locations') }}
       </q-item-label>
       <Node
           v-for="node in locationTreeStructure"

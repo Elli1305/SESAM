@@ -8,7 +8,7 @@
       <q-item-label
           header
           class="text-grey-8">
-        {{ t('floorplan.locations') }}
+        {{ t('floorPlan.locations') }}
       </q-item-label>
       <q-expansion-item
           v-for="(location,i) in locationStore.allLocations"
@@ -25,13 +25,13 @@
               <q-menu>
                 <q-list style="min-width: 100px">
                   <q-item clickable @click.stop="editLocation(location)" v-close-popup>
-                    <q-item-section>{{t('floorplan.editLocation')}}</q-item-section>
+                    <q-item-section>{{t('floorPlan.editLocation')}}</q-item-section>
                   </q-item>
                   <q-item clickable @click.stop="addBuilding(location)" v-close-popup>
-                    <q-item-section>{{t('floorplan.addBuilding')}}</q-item-section>
+                    <q-item-section>{{t('floorPlan.addBuilding')}}</q-item-section>
                   </q-item>
                   <q-item clickable v-close-popup @click.stop="deleteLocation = true; setParameter(location)">
-                    <q-item-section>Delete</q-item-section>
+                    <q-item-section>{{t('floorPlan.deleteLocation')}}</q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -57,13 +57,13 @@
                 <q-menu class="show-building">
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editBuilding(building)" v-close-popup>
-                      <q-item-section>{{t('floorplan.editBuilding')}}</q-item-section>
+                      <q-item-section>{{t('floorPlan.editBuilding')}}</q-item-section>
                     </q-item>
                     <q-item clickable @click.stop="addFloor(building)" v-close-popup>
-                      <q-item-section>{{t('floorplan.addFloor')}}</q-item-section>
+                      <q-item-section>{{t('floorPlan.addFloor')}}</q-item-section>
                     </q-item>
                     <q-item clickable v-close-popup @click.stop="deleteBuilding = true; setParameter(building)">
-                      <q-item-section>Delete</q-item-section>
+                      <q-item-section>{{t('floorPlan.deleteBuilding')}}</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
@@ -79,10 +79,10 @@
                 <q-menu>
                   <q-list style="min-width: 100px">
                     <q-item clickable @click.stop="editFloor(floor)" v-close-popup>
-                      <q-item-section>{{t('floorplan.editFloor')}}</q-item-section>
+                      <q-item-section>{{t('floorPlan.editFloor')}}</q-item-section>
                     </q-item>
                     <q-item clickable v-close-popup @click.stop="deleteFloor = true; setParameter(floor)">
-                      <q-item-section>Delete</q-item-section>
+                      <q-item-section>{{t('floorPlan.deleteFloor')}}</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
@@ -92,7 +92,7 @@
         </q-expansion-item>
       </q-expansion-item>
       <q-item>
-        <q-btn color="primary" icon="add" :label="t('floorplan.addLocation')" @click="addLocation" flat/>
+        <q-btn color="primary" icon="add" :label="t('floorPlan.addLocation')" @click="addLocation" flat/>
       </q-item>
     </q-list>
     <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
@@ -117,45 +117,45 @@
   <q-dialog v-model="deleteLocation" persistent>
     <q-card>
       <q-card-section>
-        <div class="text-h6"> Löschen des Standortes</div>
+        <div class="text-h6"> {{t('floorPlan.deleteLocation')}}</div>
       </q-card-section>
       <q-card-section class="row items-center">
-        <span class="q-mx-sm">Sind Sie sicher, dass Sie die Location löschen wollen?</span>
+        <span class="q-mx-sm">{{t('floorPlan.deleteLocationQuestion')}}</span>
       </q-card-section>
 
       <q-card-actions align="right" class="text-primary">
-        <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteLocationFunction(param)">  {{ t("credentialmapping.save")}} </q-btn>
+        <q-btn flat v-close-popup>  {{ t("common.cancel")}}</q-btn>
+        <q-btn flat v-close-popup @click="deleteLocationFunction(param)">  {{ t("common.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-dialog v-model="deleteBuilding" persistent>
     <q-card>
       <q-card-section>
-        <div class="text-h6"> Löschen des Gebäudes</div>
+        <div class="text-h6"> {{t('floorPlan.deleteBuilding')}}</div>
       </q-card-section>
       <q-card-section class="row items-center">
-        <span class="q-mx-sm">Sind Sie sicher, dass Sie das Gebäude löschen wollen?</span>
+        <span class="q-mx-sm">{{t('floorPlan.deleteBuildingQuestion')}}</span>
       </q-card-section>
 
       <q-card-actions align="right" class="text-primary">
-        <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteBuildingFunction(param)">  {{ t("credentialmapping.save")}} </q-btn>
+        <q-btn flat v-close-popup>  {{ t("common.cancel")}}</q-btn>
+        <q-btn flat v-close-popup @click="deleteBuildingFunction(param)">  {{ t("common.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-dialog v-model="deleteFloor" persistent>
     <q-card>
       <q-card-section>
-        <div class="text-h6"> Löschen des Floors</div>
+        <div class="text-h6"> {{t('floorPlan.deleteFloor')}}</div>
       </q-card-section>
       <q-card-section class="row items-center">
-        <span class="q-mx-sm">Sind Sie sicher, dass Sie die Floor löschen wollen?</span>
+        <span class="q-mx-sm">{{t('floorPlan.deleteFloorQuestion')}}</span>
       </q-card-section>
 
       <q-card-actions align="right" class="text-primary">
-        <q-btn flat v-close-popup>  {{ t("credentialmapping.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteFloorFunction(param)">  {{ t("credentialmapping.save")}} </q-btn>
+        <q-btn flat v-close-popup>  {{ t("common.cancel")}}</q-btn>
+        <q-btn flat v-close-popup @click="deleteFloorFunction(param)">  {{ t("common.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -208,18 +208,15 @@ export default {
     }
 
     function deleteLocationFunction(id) {
-      locationStore.deleteLocation(id)
-      location.reload()
+      locationStore.deleteLocation(id).then(() => floorPlanStore.selectedFloorPlan = null)
     }
 
     function deleteBuildingFunction(id) {
-      buildingStore.deleteBuilding(id)
-      location.reload()
+      buildingStore.deleteBuilding(id).then(() => floorPlanStore.selectedFloorPlan = null)
     }
 
     function deleteFloorFunction(id) {
-      floorStore.deleteFloor(id)
-      location.reload()
+      floorStore.deleteFloor(id).then(() => floorPlanStore.selectedFloorPlan = null)
     }
 
     const changeFloorPlan = function (floor) {
@@ -236,7 +233,7 @@ export default {
       }).onOk(() => {
         $q.notify({
           type: 'positive',
-          message: 'Standort wurde erfolgreich gespeichert',
+          message: t('floorPlan.locationEditSuccess'),
           position: 'bottom',
           timeout: 3000,
         });
@@ -252,7 +249,7 @@ export default {
       }).onOk(() => {
         $q.notify({
           type: 'positive',
-          message: 'Standort wurde erfolgreich hizugefügt',
+          message: t('floorPlan.locationSaveSuccess'),
           position: 'bottom',
           timeout: 3000,
         });
@@ -268,7 +265,7 @@ export default {
       }).onOk(() => {
         $q.notify({
           type: 'positive',
-          message: 'Gebäude wurde erfolgreich hizugefügt',
+          message: t('floorPlan.buildingEditSuccess'),
           position: 'bottom',
           timeout: 3000,
         });
@@ -286,7 +283,7 @@ export default {
         locationStore.save(location).then(() => {
           $q.notify({
             type: 'positive',
-            message: 'Gebäude wurde erfolgreich gespeichert',
+            message: t('floorPlan.buildingSaveSuccess'),
             position: 'bottom',
             timeout: 3000,
           });
@@ -303,7 +300,7 @@ export default {
       }).onOk(() => {
         $q.notify({
           type: 'positive',
-          message: 'Etage wurde erfolgreich gespeichert',
+          message: t('floorPlan.floorEditSuccess'),
           position: 'bottom',
           timeout: 3000,
         });
@@ -321,7 +318,7 @@ export default {
         buildingStore.save(building).then(_ => {
           $q.notify({
             type: 'positive',
-            message: 'Etage wurde erfolgreich hizugefügt',
+            message: t('floorPlan.floorSaveSuccess'),
             position: 'bottom',
             timeout: 3000,
           });

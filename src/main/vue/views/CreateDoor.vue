@@ -1,26 +1,26 @@
 <template>
-    <q-dialog ref="dialog" @hide="onDialogHide">
-        <q-card style="min-width: 60em">
-            <q-card-section>
-                <div class="text-h6">{{ t('floorplan.addDoor') }}</div>
-            </q-card-section>
-            <q-card-section class="row q-px-lg justify-between no-wrap">
-                <q-input class="full-width" filled v-model="doorName" :label="t('floorplan.doorName')" stack-label/>
-                <q-select
-                        class="q-ml-md"
-                        style="min-width: 20em"
-                        filled
-                        v-model="room"
-                        use-input
-                        hide-selected
-                        :label="t('floorplan.pickRoom')"
-                        option-label="name"
-                        fill-input
-                        input-debounce="0"
-                        :options="rooms"
-                        v-if="!door"
-                        @filter="filterFn">
-                    <template v-slot:no-option>
+  <q-dialog ref="dialog" @hide="onDialogHide">
+    <q-card style="min-width: 60em">
+      <q-card-section>
+        <div class="text-h6">{{ t('floorPlan.addDoor') }}</div>
+      </q-card-section>
+      <q-card-section class="row q-px-lg justify-between no-wrap">
+        <q-input class="full-width" filled v-model="doorName" :label="t('floorPlan.doorName')" stack-label/>
+        <q-select
+            class="q-ml-md"
+            style="min-width: 20em"
+            filled
+            v-model="room"
+            use-input
+            hide-selected
+            :label="t('floorPlan.pickRoom')"
+            option-label="name"
+            fill-input
+            input-debounce="0"
+            :options="rooms"
+            v-if="!door"
+            @filter="filterFn">
+          <template v-slot:no-option>
             <q-item>
               <q-item-section class="text-grey">
                 No results
@@ -37,7 +37,7 @@
              fill-input
              input-debounce="0"
              @filter="filterFn"
-             label="Konfiguration auswählen"
+             :label="t('floorPlan.chooseConfig')"
              option-label="name"
              v-model="selectedConfig"
              :options="configOptions"
@@ -171,10 +171,6 @@ export default {
     ],
 
     methods: {
-        //changeDirectionOut(direction,k) {
-        //    this.qSelectgeneral.qSelectsSet[k].doorConfigOut.direction = direction
-        //    console.log(direction)
-        //},
         changeDirectionOut(direction, k) {
             console.log(direction);
             console.log(k);
@@ -255,9 +251,6 @@ export default {
                     config.doorConfigIn.direction = this.$refs.doorIn[index].direction
                     config.doorConfigIn.direction = this.$refs.doorIn[index].direction
                     config.doorConfigOut.description = this.$refs.doorOut[index].configDescription
-                    //config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-                    //config.doorConfigIn.description = this.$refs.configIn.configDescription
-                    //config.doorConfigOut.description = this.$refs.configIn.configDescription
                 } else if (this.$refs.doorIn[index].direction  === Direction.IN) {
                     config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
                     config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigOut))
@@ -307,33 +300,6 @@ export default {
         watch(allPreConfigs, () => {
             configOptions.value = configStore.allPreConfigs
         })
-
-
-       /* this.qSelectgeneral.qSelectsSet.forEach((elemnt, index) => {
-
-            watch(selectedConfig, async () => {
-                if (selectedConfig.value == null) {
-                    this.qSelectgeneral.qSelectsSet[index].doorConfigIn.description = null
-                    this.qSelectgeneral.qSelectsSet[index].doorConfigIn.configParts = []
-                    this.qSelectgeneral.qSelectsSet[index].doorConfigOut.description= null
-                    this.qSelectgeneral.qSelectsSet[index].doorConfigOut.configParts = []
-                    this.qSelectgeneral.qSelectsSet[index].doorConfigIn.direction = Direction.BOTH
-                } else {
-                    await configStore.getConfig(selectedConfig.value.id)
-                    let chosenConfig = configStore.currentConfig
-                    this.qSelectgeneral.qSelectsSet[index].doorConfigIn.description= chosenConfig?.doorConfigIn.description
-                    this.qSelectgeneral.qSelectsSet[index].doorConfigIn.configParts = chosenConfig?.doorConfigIn.configParts
-                    this.qSelectgeneral.qSelectsSet[index].doorConfigOut.description = chosenConfig?.doorConfigOut.description
-                    this.qSelectgeneral.qSelectsSet[index].doorConfigOut.configParts = chosenConfig?.doorConfigOut.configParts
-                    if (JSON.stringify(chosenConfig?.doorConfigIn) !== JSON.stringify(chosenConfig?.doorConfigOut)) {
-                        configIn.value.direction = Direction.IN
-                        configOut.value.direction = Direction.OUT
-                    }
-                }
-            })
-
-        })
-*/
 
 
         const disableSave = ref(false);

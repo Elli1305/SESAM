@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.filestorage;
 
 import com.gpse.sesam.configuration.FileStorageConfiguration;
+import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.web.exception.FileStorageException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.stereotype.Service;
@@ -33,9 +34,10 @@ public class FileStorageServiceImpl implements FileStorageService {
 	public String storeFile(final MultipartFile file) {
 		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
-
+			String[] fileNameArray = fileName.split("\\.");
 			final String randomFileName = String.format("%s.%s",
-					UUID.randomUUID().toString().replace("-", ""), fileName.split("\\.")[1]);
+					UUID.randomUUID().toString().replace("-", ""),
+					fileNameArray[fileNameArray.length - 1]);
 			final Path targetLocation = fileStorageLocation.resolve(randomFileName);
 			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 			return randomFileName;
@@ -45,10 +47,15 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	@Override
-	public String storeLogo(final MultipartFile file) {
+	public String storeLogo(final MultipartFile file, String colorTheme) {
 		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
-			final Path targetLocation = fileStorageLocation.resolve("Logo.svg");
+			final Path targetLocation;
+			if (colorTheme.equals(ColorTheme.LIGHT.toString())) {
+				targetLocation = fileStorageLocation.resolve("Logo.svg");
+			} else {
+				targetLocation = fileStorageLocation.resolve("Logo-Dark.svg");
+			}
 			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 			return fileName;
 		} catch (final IOException e) {

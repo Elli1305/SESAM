@@ -6,7 +6,7 @@ public interface FileStorageService {
 
     String storeFile(MultipartFile file);
 
-    String storeLogo(MultipartFile file);
+    String storeLogo(MultipartFile file, String colorTheme);
 
     String storeFavicon(MultipartFile file);
 

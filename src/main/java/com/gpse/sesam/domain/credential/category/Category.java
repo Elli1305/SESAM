@@ -1,8 +1,8 @@
 package com.gpse.sesam.domain.credential.category;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

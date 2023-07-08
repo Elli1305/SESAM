@@ -1,5 +1,6 @@
 package com.gpse.sesam.web.controller;
 
+import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.filestorage.FileStorageService;
@@ -22,12 +23,21 @@ public class CorporateDesignController {
         this.colorsService = colorsService;
     }
 
-    @PostMapping(path = "/save/logo")
+    @PostMapping(path = "/save/logo-light")
     @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveLogo(@RequestPart("file") MultipartFile file) {
+    public void saveLogoLight(@RequestPart("file") MultipartFile file) {
 
-        fileStorageService.storeLogo(file);
+        fileStorageService.storeLogo(file, "LIGHT");
+
+    }
+
+    @PostMapping(path = "/save/logo-dark")
+    @Secured("ADMINISTRATOR")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void saveLogoDark(@RequestPart("file") MultipartFile file) {
+
+        fileStorageService.storeLogo(file, "DARK");
 
     }
 
@@ -40,32 +50,32 @@ public class CorporateDesignController {
 
     }
 
-    @PostMapping(path = "/save/colors")
+    @PostMapping(path = "/save/colors/{colorTheme}")
     @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.CREATED)
-    public Colors changeColors(@RequestBody Colors colors) {
+    public Colors changeColors(@PathVariable String colorTheme, @RequestBody Colors colors) {
 
-        return colorsService.changeColors(colors);
+        return colorsService.changeColors(colorTheme.equals("LIGHT") ? ColorTheme.LIGHT : ColorTheme.DARK, colors);
 
     }
 
-    @GetMapping(path = "/get/colors")
+    @GetMapping(path = "/get/colors/{colorTheme}")
     @ResponseStatus(HttpStatus.OK)
-    public Colors getColors() {
+    public Colors getColors(@PathVariable String colorTheme) {
 
-        return colorsService.getColors();
+        return colorsService.getColors(colorTheme.equals("LIGHT") ? ColorTheme.LIGHT : ColorTheme.DARK);
 
     }
 
-    @PostMapping(path = "/reset")
+    @PostMapping(path = "/reset/{colorTheme}")
     @Secured("ADMINISTRATOR")
     @ResponseStatus(HttpStatus.CREATED)
-    public Colors reset() {
+    public Colors reset(@PathVariable String colorTheme) {
 
         fileStorageService.reset();
-        colorsService.resetColors();
+        colorsService.resetColors(colorTheme.equals("LIGHT") ? ColorTheme.LIGHT : ColorTheme.DARK);
 
-        return getColors();
+        return getColors(colorTheme);
     }
 
 }
