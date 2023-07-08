@@ -1003,6 +1003,9 @@ export default {
             if(prevName !== currentGroupName.value) {
                 await checkName(currentGroupName.value);
             }
+            else {
+                checkNameAllowed.value = true;
+            }
             //selectedGroups.value = [];
             if (checkNameAllowed.value) {
 
