@@ -265,7 +265,7 @@
                                                        :style="{color: getCssVar('primary')}"
                                                        @click="reloadRoomsBE(); setOldValueG(group); allFloorsForGroup()">
                                                         {{ t('common.edit') }}</p>
-                                                    <q-dialog v-model="editGroupD">
+                                                    <q-dialog v-model="editGroupD" persistent>
                                                         <q-card>
                                                             <q-card-section>
                                                                 <div class="text-h6">{{
