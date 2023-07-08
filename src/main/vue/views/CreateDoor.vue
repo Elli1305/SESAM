@@ -118,7 +118,7 @@
                          :direction="qSelectgeneral.qSelectsSet[k].doorConfigOut?.direction"
                          @changeDirection="changeDirectionOut($event, k)" ref="doorIn"></door-config>
             <door-config v-show="qSelectgeneral.qSelectsSet[k].doorConfigIn?.direction !== Direction.BOTH"
-                         :direction="JSON.stringify(this.qSelectgeneral.qSelectsSet[k].doorConfigIn.direction) !== JSON.stringify(this.qSelectgeneral.qSelectsSet[k].doorConfigOut.directionconfigIn) ? qSelectgeneral.qSelectsSet[k].doorConfigIn.direction : Direction.BOTH"
+                         :direction="JSON.stringify(this.qSelectgeneral.qSelectsSet[k].doorConfigIn) !== JSON.stringify(this.qSelectgeneral.qSelectsSet[k].doorConfigOut) ? qSelectgeneral.qSelectsSet[k].doorConfigIn.direction : Direction.BOTH"
                          :door-config="qSelectgeneral.qSelectsSet[k].doorConfigOut" :is-config-out="true" ref="doorOut"></door-config>
 
                 <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfiguration">
@@ -244,27 +244,36 @@ export default {
             const allConfig = []
             this.qSelectgeneral.qSelectsSet.forEach((elemnt, index) => {
                 let config = {}
+                console.log(this.$refs.doorIn[index].configDescription)
+                config.baseConfig = this.qSelectgeneral.qSelectsSet[index].baseConfig
 
                 //console.log('qselects', this.$refs.configIn.qSelects)
                 if (this.$refs.doorIn[index].direction  === Direction.BOTH) {
                     config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
                     config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
-                    config.doorConfigIn.description = this.qSelectgeneral.qSelectsSet[index].doorConfigIn.description
-                    config.doorConfigOut.description = this.qSelectgeneral.qSelectsSet[index].doorConfigIn.description
+                    config.doorConfigIn.description = this.$refs.doorIn[index].configDescription
+                    config.doorConfigIn.direction = this.$refs.doorIn[index].direction
+                    config.doorConfigIn.direction = this.$refs.doorIn[index].direction
+                    config.doorConfigOut.description = this.$refs.doorOut[index].configDescription
                     //config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
                     //config.doorConfigIn.description = this.$refs.configIn.configDescription
                     //config.doorConfigOut.description = this.$refs.configIn.configDescription
                 } else if (this.$refs.doorIn[index].direction  === Direction.IN) {
                     config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
                     config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigOut))
-                    config.doorConfigIn.description = this.qSelectgeneral.qSelectsSet[index].doorConfigIn.description
-                    config.doorConfigOut.description = this.qSelectgeneral.qSelectsSet[index].doorConfigOut.description
+                    config.doorConfigIn.description = this.$refs.doorIn[index].configDescription
+                    config.doorConfigOut.description = this.$refs.doorOut[index].configDescription
+                    config.doorConfigIn.direction = this.$refs.doorIn[index].direction
+                    config.doorConfigOut.direction = this.$refs.doorOut[index].direction
                 } else if (this.$refs.doorIn[index].direction  === Direction.OUT) {
                     config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigOut))
                     config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
-                    config.doorConfigIn.description = this.qSelectgeneral.qSelectsSet[index].doorConfigIn.description
-                    config.doorConfigOut.description = this.qSelectgeneral.qSelectsSet[index].doorConfigIn.description
+                    config.doorConfigIn.description =this.$refs.doorOut[index].configDescription
+                    config.doorConfigOut.description = this.$refs.doorIn[index].configDescription
+                    config.doorConfigIn.direction = this.$refs.doorOut[index].direction
+                    config.doorConfigOut.direction = this.$refs.doorIn[index].direction
                 }
+                console.log(config)
                 allConfig.push(config)
             })
             this.$emit('ok', {
@@ -293,6 +302,7 @@ export default {
 
         const configIn = ref()
         const configOut = ref()
+        const base = ref()
 
         watch(allPreConfigs, () => {
             configOptions.value = configStore.allPreConfigs

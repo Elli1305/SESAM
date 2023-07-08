@@ -252,6 +252,7 @@ export default {
         })
 
         if (props.doorConfig) {
+            console.log(props.doorConfig)
             configDescription.value = props.doorConfig.description
             qSelects.value = props.doorConfig
         }
