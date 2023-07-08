@@ -79,8 +79,13 @@ const messages = {
             alreadySignedUp: "Bereits registriert: ",
             error: "Registrierung fehlgeschlagen",
             errorCaption : "Nutzer (E-Mail) ist bereits vergeben",
-            success: "Registrierung war erfolgreich"
-
+            success: "Registrierung war erfolgreich",
+            nameError: "Name erfüllt nicht die Kriterien",
+            emailError: "Keine gültige E-Mail-Adresse",
+            passwordError: "Passwort erfüllt nicht die Kriterien",
+            passwordDuplicateError: "Passwörter stimmen nicht überein",
+            warning: "Nutzer konnte nicht registriert werden",
+            later: "Bitte versuchen Sie es später erneut"
         },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
@@ -499,7 +504,13 @@ const messages = {
             alreadySignedUp: "Already signed up: ",
             error: "Registration was not successful",
             errorCaption : "User (Email) is already registered",
-            success: "Registration was successful"
+            success: "Registration was successful",
+            nameError: "Name does not fullfill the requirements",
+            emailError: "Not a valid Email adress",
+            passwordError: "Password does not fullfill the requirements",
+            passwordDuplicateError: "Passwords are different from each ther",
+            warning: "Registration of the user was not successful",
+            later: "Try again later"
         },
         passwordReset: {
             resetPassword: "Reset Password",
