@@ -207,7 +207,8 @@ public class CredentialServiceImpl implements CredentialService {
      * Ruft die interne Credential anhand der angegebenen ID ab.
      *
      * @param id Die ID der internen Credential.
-     * @return Die gefundene interne Credential oder Optional.empty(), wenn keine interne Credential mit der ID vorhanden ist.
+     * @return Die gefundene interne Credential oder Optional.empty(), wenn keine interne Credential mit der ID
+     * vorhanden ist.
      */
     @Override
     public Optional<InternalCredential> getCredential(final Long id) {
@@ -228,7 +229,7 @@ public class CredentialServiceImpl implements CredentialService {
      * @param id                Die ID der internen Credential.
      * @param attributeCmds     Die Liste der Attribut-Commands für die Ausstellung der Credential.
      * @return Die Antwort auf die Ausstellungsanfrage.
-     * @throws JsonProcessingException Wenn ein Fehler bei der JSON-Verarbeitung auftritt.
+     * @throws JsonProcessingException Falls ein Fehler bei der JSON-Verarbeitung auftritt.
      */
     @Override
     public String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds)
@@ -375,7 +376,8 @@ public class CredentialServiceImpl implements CredentialService {
     /**
      * Erstellt eine neue Credential.
      *
-     * @param createCredentialCmd Das CreateCredentialCmd-Objekt, das die Informationen für die Erstellung der Credential enthält.
+     * @param createCredentialCmd Das CreateCredentialCmd-Objekt, das die Informationen für die Erstellung der
+     *                            Credential enthält.
      */
     @Override
     public void create(final CreateCredentialCmd createCredentialCmd) {
@@ -436,7 +438,8 @@ public class CredentialServiceImpl implements CredentialService {
      * Aktualisiert die Credential mit der angegebenen ID.
      *
      * @param id                   Die ID der Credential, die aktualisiert werden soll.
-     * @param updateCredentialCmd  Das UpdateCredentialCmd-Objekt, das die neuen Informationen für die Aktualisierung der Credential enthält.
+     * @param updateCredentialCmd  Das UpdateCredentialCmd-Objekt, das die neuen Informationen für die Aktualisierung
+     *                             der Credential enthält.
      */
     @Override
     public void update(final Long id, final UpdateCredentialCmd updateCredentialCmd) {

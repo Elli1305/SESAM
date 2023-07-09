@@ -81,14 +81,14 @@ const router = createRouter({
         },
         {
             path: "/passwordchange",
-            component: () => import("@/main/vue/views/PasswortChange.vue"),
+            component: () => import("@/main/vue/views/PasswordChange.vue"),
             props: (to) => ({
                 token: to.query.token,
             }),
         },
         {
             path: "/passwordreset",
-            component: () => import("@/main/vue/views/PasswortReset.vue"),
+            component: () => import("@/main/vue/views/PasswordReset.vue"),
         },
         {
             path: "/imprint",

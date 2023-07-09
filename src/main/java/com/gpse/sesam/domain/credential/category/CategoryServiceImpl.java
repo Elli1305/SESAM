@@ -4,7 +4,6 @@ import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialRepository;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialRepository;
-import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.web.cmd.CategoryResponseCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

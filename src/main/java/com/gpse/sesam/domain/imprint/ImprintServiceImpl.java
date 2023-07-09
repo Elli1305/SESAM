@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * Diese Klasse implementiert den ImprintService, der für das Erstellen, Abrufen und Löschen von Imprint-Einträgen verantwortlich ist.
+ * Diese Klasse implementiert den ImprintService, der für das Erstellen, Abrufen und Löschen von Imprint-Einträgen
+ * verantwortlich ist.
  */
 @Service
 public class ImprintServiceImpl implements ImprintService {
