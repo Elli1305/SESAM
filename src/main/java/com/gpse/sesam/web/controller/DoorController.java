@@ -1,6 +1,5 @@
 package com.gpse.sesam.web.controller;
 
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorService;
 import com.gpse.sesam.util.ConfigCmdMapper;
@@ -21,7 +20,6 @@ public class DoorController {
 	private final DoorService doorService;
 	private final DoorCmdMapper doorCmdMapper;
 
-	private DoorCmdMapper doorCmdMapper;
 	@Autowired
 	public DoorController(final DoorService doorService, final ConfigCmdMapper configCmdMapper) {
 		this.doorService = doorService;

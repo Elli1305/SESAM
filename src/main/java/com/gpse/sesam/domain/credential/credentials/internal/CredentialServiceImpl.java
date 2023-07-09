@@ -220,8 +220,8 @@ public class CredentialServiceImpl implements CredentialService {
                 .flatMap(building -> building.getFloors().stream())
                 .flatMap(floor -> floor.getRooms().stream())
                 .flatMap(room -> room.getDoors().stream())
-                .flatMap(door -> Stream.concat(door.getProofConfigIn().stream(), door.getProofConfigOut()
-                        .stream()))
+                .flatMap(door -> door.getDoorConfigs().stream())
+                .flatMap(twoWayDoorConfig -> Stream.of(twoWayDoorConfig.getProofConfigIn(), twoWayDoorConfig.getProofConfigOut()))
                 .flatMap(proofConfig -> {
                     final Stream<String> attributeFilterStream = proofConfig.getRequestedPredicates().values()
                             .stream()

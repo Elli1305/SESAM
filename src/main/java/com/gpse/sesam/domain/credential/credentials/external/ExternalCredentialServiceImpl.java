@@ -80,8 +80,8 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
                 .flatMap(building -> building.getFloors().stream())
                 .flatMap(floor -> floor.getRooms().stream())
                 .flatMap(room -> room.getDoors().stream())
-                .flatMap(door -> Stream.concat(door.getProofConfigIn().stream(), door.getProofConfigOut()
-                        .stream()))
+                .flatMap(door -> door.getDoorConfigs().stream())
+                .flatMap(twoWayDoorConfig -> Stream.of(twoWayDoorConfig.getProofConfigIn(), twoWayDoorConfig.getProofConfigOut()))
                 .flatMap(proofConfig -> {
                     final Stream<String> attributeFilterStream = proofConfig.getRequestedPredicates().values()
                             .stream()
@@ -94,7 +94,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
                     return Stream.concat(attributeFilterStream, attributeFilterStream1);
                 })
                 .filter(Objects::nonNull)
-                .flatMap(definitionId -> getExternalCredentialByCredentialDefinitionId(definitionId)
+                .flatMap(definitionId -> externalCredentialRepository.findAllByCredentialDefinitionId(definitionId)
                         .stream())
                 .collect(Collectors.toSet());
     }
