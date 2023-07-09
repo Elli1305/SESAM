@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="inception">
+  <q-dialog ref="dialog" persistent>
     <q-card>
       <q-card-section>
         <div class="text-h6">{{ t("floorPlan.editRoom") }}</div>
@@ -89,7 +89,7 @@
           <q-btn flat :label="t( 'common.cancel')"
                  color="primary" v-close-popup/>
           <q-btn flat :label="t( 'common.save')"
-                 color="primary" @click="save(room)"
+                 color="primary" @click="onOkClick(room)"
                  v-close-popup/>
         </q-card-actions>
       </q-card-section>
@@ -98,8 +98,74 @@
 </template>
 
 <script>
+import {useI18n} from "vue-i18n";
+import {ref} from "vue";
+import api from "@/main/vue/api";
+import CreateDoor from "@/main/vue/views/CreateDoor.vue";
+import {useDoorStore} from "@/main/vue/stores/door";
+import {useQuasar} from "quasar";
+import {useRoomStore} from "@/main/vue/stores/room";
+
 export default {
-  name: "EditRoom"
+  name: "EditRoom",
+  props: {
+    room: {
+      required: true
+    }
+  },
+  methods: {
+    deleteDoor(room, door) {
+      const doors = room.doors;
+      const index = doors.indexOf(door);
+      doors.splice(index, 1);
+      room.doors = doors;
+      this.deleteDoorDialog = false
+    },
+    onOkClick(room) {
+      room.name = this.currentRoomName;
+      this.roomStore.save(room).then((room) =>
+          this.$emit('ok', room)
+      )
+    },
+    show() {
+      console.log(this.$refs)
+      this.$refs.dialog.show()
+    },
+    hide() {
+      this.$refs.dialog.hide()
+    },
+    onDialogHide() {
+      this.$emit('hide')
+    }
+  },
+  setup(props) {
+    const {t} = useI18n()
+    const currentRoomName = ref(props.room.name)
+    const deleteDoorDialog = ref();
+    const doorStore = useDoorStore();
+    const roomStore = useRoomStore();
+    const $q = useQuasar()
+
+    const openDialog = (door) => {
+      api.door.getById(door.id).then((door) => {
+        $q.dialog({
+          component: CreateDoor,
+          componentProps: {
+            door: door.data
+          }
+        }).onOk(({doorName, configuration}) => {
+          console.log(doorName)
+          door.data.name = doorName
+          door.data.doorConfigCmds = configuration
+          api.door.update(door.data).then(() => {
+            console.log("success")
+          })
+        })
+      })
+    }
+
+    return {t, currentRoomName, deleteDoorDialog, doorStore, roomStore, openDialog}
+  }
 }
 </script>
 

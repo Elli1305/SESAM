@@ -1,15 +1,19 @@
 <template>
   <div>
-    <div class="row">
+    <div class="row justify-between">
       <q-btn flat icon="arrow_back" size="sm" @click="$emit('backClicked')"></q-btn>
       <p class="text-h6" style="margin-left: 1em; text-align: center">{{ room?.name }}</p>
+      <q-btn flat icon="edit"
+             v-show="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
+             size="sm" @click="openDialog(room)" color="primary"></q-btn>
     </div>
     <q-scroll-area style="height: 30em; min-width: 21em; overflow: hidden; max-width: 22em; "
                    :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
     >
       <p class="text-subtitle1">Aktive Tür-Konfigurationen:</p>
       <q-list flat bordered v-for="door in activeConfigs">
-        <q-expansion-item expanded :label="door?.doorName" :caption="door.baseConfig? 'Basiskonfiguration' : (door.startTime && door.endTime) ? door.startTime + '-' + door.endTime : ''">
+        <q-expansion-item expanded :label="door?.doorName"
+                          :caption="door.baseConfig? 'Basiskonfiguration' : (door.startTime && door.endTime) ? door.startTime + '-' + door.endTime : ''">
           <q-card>
             <q-separator/>
             <q-card-section v-if="JSON.stringify(door.doorConfigIn) === JSON.stringify(door.doorConfigOut)">
@@ -91,7 +95,8 @@
       </q-list>
       <p class="text-subtitle1" v-if="inactiveConfigs.length > 0">Inaktive Tür-Konfigurationen:</p>
       <q-list flat bordered v-for="door in inactiveConfigs">
-        <q-expansion-item expanded :label="door.doorName" :caption="door.baseConfig? 'Basiskonfiguration' : door.startTime + '-' + door.endTime">
+        <q-expansion-item expanded :label="door.doorName"
+                          :caption="door.baseConfig? 'Basiskonfiguration' : door.startTime + '-' + door.endTime">
           <q-card>
             <q-separator/>
             <q-card-section v-if="JSON.stringify(door.doorConfigIn) === JSON.stringify(door.doorConfigOut)">
@@ -181,6 +186,11 @@ import {ref} from "vue";
 import api from "@/main/vue/api";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 import {Direction} from "@/main/vue/entity/doorConfiguration";
+import {useQuasar} from "quasar";
+import EditBuilding from "@/main/vue/views/EditBuilding.vue";
+import EditRoom from "@/main/vue/views/EditRoom.vue";
+import {useI18n} from "vue-i18n";
+import {useUserStore} from "@/main/vue/stores/users";
 
 export default {
   name: "RoomDetailView",
@@ -198,10 +208,31 @@ export default {
   emits: [
     'backClicked'
   ],
-  methods: {},
+  methods: {
+    openDialog(room) {
+      this.$q.dialog({
+        component: EditRoom,
+        componentProps: {
+          room: room
+        }
+      }).onOk(() => {
+        api.room.getRoomDetails(this.room.id)
+            .then(room => {
+              this.config = room.data
+              this.loading = false
+              this.activeConfigs = room.data.doors.map(door => ({
+                ...this.getActiveConfig(door), doorName: door.name
+              }))
+            })
+            .catch(() => this.loading = false)
+      })
+    }
+  },
   setup(props) {
+    const $q = useQuasar();
     const loading = ref(true)
     const config = ref();
+    const userStore = useUserStore()
     const activeConfigs = ref([]);
 
     // TODO get inactive configs
@@ -229,14 +260,13 @@ export default {
     api.room.getRoomDetails(props.room.id)
         .then(room => {
           config.value = room.data
-          console.log(config.value)
           loading.value = false
           activeConfigs.value = room.data.doors.map(door => ({
             ...getActiveConfig(door), doorName: door.name
           }))
         })
         .catch(() => loading.value = false)
-    return {config, activeConfigs, inactiveConfigs}
+    return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig}
   }
 }
 </script>

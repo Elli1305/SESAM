@@ -425,7 +425,6 @@ export default {
     const search = ref()
     const searchGroup = ref()
     const inception = ref();
-    const deleteDoorDialog = ref();
     const editDoorDialog = ref();
     const editedDoorName = ref();
     const currentRoomName = ref();
@@ -694,31 +693,6 @@ export default {
       filteredRooms.value = rooms.value
     })
 
-    function deleteDoor(room, door) {
-      const doors = room.doors;
-      const index = doors.indexOf(door);
-      doors.splice(index, 1);
-      room.doors = doors;
-      deleteDoorDialog.value = false;
-    }
-
-    function openDialog(door) {
-      api.door.getById(door.id).then((door) => {
-        $q.dialog({
-          component: CreateDoor,
-          componentProps: {
-            door: door.data
-          }
-        }).onOk(({doorName, configuration}) => {
-          door.data.name = doorName
-          door.data.doorConfigCmds = configuration
-          doorStore.save(door.data).then(() => {
-            console.log("success")
-          })
-        })
-      })
-    }
-
     function setOldValueR(room) {
       inception.value = true;
       currentRoomName.value = room.name;
@@ -892,12 +866,9 @@ export default {
       groupFilter,
       t,
       inception,
-      deleteDoorDialog,
       editedDoorName,
       editDoorDialog,
-      openDialog,
       roomStore,
-      deleteDoor,
       save,
       editGroupName,
       currentRoomName,

@@ -38,6 +38,13 @@ public class DoorController {
 	public Door create(@RequestBody final DoorCmd doorCmd) {
 		return doorService.create(doorCmd.getRoomId(), DoorCmdMapper.toEntity(doorCmd));
 	}
+
+
+	@PostMapping("/update")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Door update(@RequestBody final DoorCmd doorCmd) {
+		return doorService.save(DoorCmdMapper.toEntity(doorCmd));
+	}
 	@DeleteMapping("/{id:\\d+}")
 	public void deleteById(@PathVariable("id") final Long id) {
 		doorService.deleteById(id);
