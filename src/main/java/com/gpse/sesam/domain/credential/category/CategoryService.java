@@ -13,9 +13,6 @@ public interface CategoryService {
 
     void deleteById(Long id);
 
-
-    Optional<Category> getCategory(List<Location> locations);
-
     void deleteAll();
 
     void saveAll(Iterable<Category> category);
