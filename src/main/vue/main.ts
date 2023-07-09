@@ -79,8 +79,13 @@ const messages = {
             alreadySignedUp: "Bereits registriert: ",
             error: "Registrierung fehlgeschlagen",
             errorCaption : "Nutzer (E-Mail) ist bereits vergeben",
-            success: "Registrierung war erfolgreich"
-
+            success: "Registrierung war erfolgreich",
+            nameError: "Name erfüllt nicht die Kriterien",
+            emailError: "Keine gültige E-Mail-Adresse",
+            passwordError: "Passwort erfüllt nicht die Kriterien",
+            passwordDuplicateError: "Passwörter stimmen nicht überein",
+            warning: "Nutzer konnte nicht registriert werden",
+            later: "Bitte versuchen Sie es später erneut"
         },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
@@ -265,7 +270,8 @@ const messages = {
                 createCategory: 'Neue Kategorie erstellen',
                 changeCategory: 'Kategorie ändern',
                 deleteCategory: 'Kategorie löschen',
-                delete: 'Möchten Sie die Kategorie wirklich löschen?'
+                delete: 'Möchten Sie die Kategorie wirklich löschen?',
+                info: "Jedes Credential darf nur in einer Gruppe sein. Es wird bei Auswahl möglicherweise aus einer anderen Kategorie entfernt."
             },
             credentialAdministration: {
                 title: "Credentials verwalten",
@@ -507,7 +513,13 @@ const messages = {
             alreadySignedUp: "Already signed up: ",
             error: "Registration was not successful",
             errorCaption : "User (Email) is already registered",
-            success: "Registration was successful"
+            success: "Registration was successful",
+            nameError: "Name does not fullfill the requirements",
+            emailError: "Not a valid Email adress",
+            passwordError: "Password does not fullfill the requirements",
+            passwordDuplicateError: "Passwords are different from each ther",
+            warning: "Registration of the user was not successful",
+            later: "Try again later"
         },
         passwordReset: {
             resetPassword: "Reset Password",
@@ -692,7 +704,8 @@ const messages = {
                 createCategory: 'Create new category',
                 changeCategory: 'Change category',
                 deleteCategory: 'Delete category',
-                delete: 'Are you sure you want to delete the category?'
+                delete: 'Are you sure you want to delete the category?',
+                info: "Each credential is only allowed in one group. If you select the credential, it might be removed from another category"
             },
             credentialAdministration: {
                 title: "Manage Credentials",

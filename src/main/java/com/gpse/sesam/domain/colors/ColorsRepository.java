@@ -10,4 +10,8 @@ public interface ColorsRepository extends CrudRepository<Colors, Long> {
 
     Colors findByDefaultColorsIsFalse();
 
+    Colors findByDefaultColorsIsFalseAndTheme(ColorTheme theme);
+
+    Colors findByDefaultColorsIsTrueAndTheme(ColorTheme theme);
+
 }

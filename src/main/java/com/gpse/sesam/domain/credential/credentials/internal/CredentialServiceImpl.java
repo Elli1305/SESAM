@@ -43,6 +43,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Implementierung des CredentialService, der Operationen zur Verwaltung von internen Credentials durchführt.
+ */
 @Service
 public class CredentialServiceImpl implements CredentialService {
     private static final Map<String, String> AGENT_FOR_DID = Map.of(
@@ -70,8 +73,21 @@ public class CredentialServiceImpl implements CredentialService {
     private final ExternalCredentialService externalCredentialService;
 
     private final CategoryService categoryService;
+
     private Pool pool = null;
 
+
+    /**
+     * Konstruktor für die CredentialServiceImpl-Klasse.
+     *
+     * @param client                     Der WebClient für HTTP-Anfragen.
+     * @param mapper                     Der ObjectMapper für JSON-Serialisierung und -Deserialisierung.
+     * @param credentialRepository       Das CredentialRepository.
+     * @param issuerRepository           Das IssuerRepository.
+     * @param locationService            Der LocationService.
+     * @param externalCredentialService  Der ExternalCredentialService.
+     * @param categoryService            Der CategoryService.
+     */
     @Autowired
     public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
                                  final CredentialRepository credentialRepository,
@@ -130,6 +146,12 @@ public class CredentialServiceImpl implements CredentialService {
         return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
     }
 
+
+    /**
+     * Ruft alle internen Credentials ab.
+     *
+     * @return Eine Liste aller vorhandenen internen Credentials.
+     */
     @SuppressWarnings("CPD-START")
     @Override
     public List<InternalCredential> getCredentials() {
@@ -138,6 +160,11 @@ public class CredentialServiceImpl implements CredentialService {
         return credentials;
     }
 
+    /**
+     * Ruft alle Credentials (interne und externe) ab.
+     *
+     * @return Eine Liste aller vorhandenen Credentials.
+     */
     @Override
     public List<Credential> getAllCredentials() {
         final List<Credential> credentials = new ArrayList<>();
@@ -146,12 +173,26 @@ public class CredentialServiceImpl implements CredentialService {
         return credentials;
     }
 
+    /**
+     * Ruft die internen Credentials anhand der Issuer-ID ab.
+     *
+     * @param id Die ID des Issuers.
+     * @return Eine Liste der gefundenen internen Credentials für den Issuer.
+     */
+
     @Override
     public List<InternalCredential> getCredentialsByIssuerId(final Long id) {
         final Issuer issuer = issuerRepository.findById(String.valueOf(id)).orElseThrow();
         return issuer.getCredentials();
     }
 
+
+    /**
+     * Ruft die Credentials anhand der Credential-Definition-ID ab.
+     *
+     * @param id Die Credential-Definition-ID.
+     * @return Eine Liste der gefundenen Credentials.
+     */
     @Override
     public List<Credential> getCredentialByCredentialDefinitionId(final String id) {
         List<Credential> credential = new ArrayList<>(credentialRepository.findAllByCredentialDefinitionId(id));
@@ -162,10 +203,17 @@ public class CredentialServiceImpl implements CredentialService {
     }
 
 
+    /**
+     * Ruft die interne Credential anhand der angegebenen ID ab.
+     *
+     * @param id Die ID der internen Credential.
+     * @return Die gefundene interne Credential oder Optional.empty(), wenn keine interne Credential mit der ID vorhanden ist.
+     */
     @Override
     public Optional<InternalCredential> getCredential(final Long id) {
         return credentialRepository.findById(id);
     }
+
 
     private String sendCredentialIssueRequest(@Valid final IssueCredentialRequest issueCredentialRequest)
             throws JsonProcessingException {
@@ -174,6 +222,14 @@ public class CredentialServiceImpl implements CredentialService {
                 .retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(5000)).block();
     }
 
+    /**
+     * Sendet eine Anfrage zum Ausstellen einer Credential.
+     *
+     * @param id                Die ID der internen Credential.
+     * @param attributeCmds     Die Liste der Attribut-Commands für die Ausstellung der Credential.
+     * @return Die Antwort auf die Ausstellungsanfrage.
+     * @throws JsonProcessingException Wenn ein Fehler bei der JSON-Verarbeitung auftritt.
+     */
     @Override
     public String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds)
             throws JsonProcessingException {
@@ -234,11 +290,22 @@ public class CredentialServiceImpl implements CredentialService {
                 new IssueCredential(credential.getCredentialDefinitionId(), attributes)));
     }
 
+    /**
+     * Speichert eine Liste von internen Credentials.
+     *
+     * @param credentials Eine Iterable-Liste von internen Credentials.
+     */
     @Override
     public void saveAll(final Iterable<InternalCredential> credentials) {
         credentialRepository.saveAll(credentials);
     }
 
+    /**
+     * Ruft die Credentials anhand des Standorts ab.
+     *
+     * @param id Die ID des Standorts.
+     * @return Eine Liste der gefundenen Credentials für den Standort.
+     */
     @Override
     public List<CredentialCmd> getCredentialByLocation(Long id) {
 
@@ -275,6 +342,11 @@ public class CredentialServiceImpl implements CredentialService {
         return cmds;
     }
 
+    /**
+     * Ruft alle intern Credentials anhand der Proof-Configs an einem Standort ab
+     *
+     * @param location Standort zum Abrufen der ProofConfigs zum Erhalten der internen Credentials
+     */
     private Iterable<InternalCredential> getCredentialFromAttachedProofConfig(Location location) {
         return location
                 .getBuildings().stream()
@@ -300,6 +372,11 @@ public class CredentialServiceImpl implements CredentialService {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Erstellt eine neue Credential.
+     *
+     * @param createCredentialCmd Das CreateCredentialCmd-Objekt, das die Informationen für die Erstellung der Credential enthält.
+     */
     @Override
     public void create(final CreateCredentialCmd createCredentialCmd) {
         final InternalCredential credential = new InternalCredential(
@@ -324,6 +401,11 @@ public class CredentialServiceImpl implements CredentialService {
         credentialRepository.save(credential);
     }
 
+    /**
+     * Löscht die Credential mit der angegebenen ID.
+     *
+     * @param id Die ID der Credential, die gelöscht werden soll.
+     */
     @Override
     public void delete(final Long id) {
         final Optional<InternalCredential> optionalCredential = credentialRepository.findById(id);
@@ -350,6 +432,12 @@ public class CredentialServiceImpl implements CredentialService {
         credentialRepository.deleteById(id);
     }
 
+    /**
+     * Aktualisiert die Credential mit der angegebenen ID.
+     *
+     * @param id                   Die ID der Credential, die aktualisiert werden soll.
+     * @param updateCredentialCmd  Das UpdateCredentialCmd-Objekt, das die neuen Informationen für die Aktualisierung der Credential enthält.
+     */
     @Override
     public void update(final Long id, final UpdateCredentialCmd updateCredentialCmd) {
         final Optional<InternalCredential> optionalCredential = credentialRepository.findById(id);
@@ -398,6 +486,11 @@ public class CredentialServiceImpl implements CredentialService {
         credentialRepository.save(credential);
     }
 
+    /**
+     * Ruft alle Credentials für die Credentialansicht ab.
+     *
+     * @return Eine Liste von CredentialCmd-Objekten, die alle Credentials für die Credentialansicht repräsentieren.
+     */
     @Override
     public List<CredentialCmd> getAllCredentialsForView() {
         List<InternalCredential> credentials = getCredentials();
@@ -436,6 +529,11 @@ public class CredentialServiceImpl implements CredentialService {
         return cmd;
     }
 
+    /**
+     * Ruft alle Credentials für die Credentialansicht ab.
+     *
+     * @return Eine Liste von AllCredentialCmd-Objekten, die alle Credentials für die Credentialansicht repräsentieren.
+     */
     @Override
     public List<AllCredentialCmd> getAllForView() {
         List<InternalCredential> credentials = getCredentials();
@@ -492,6 +590,12 @@ public class CredentialServiceImpl implements CredentialService {
         return cmd;
     }
 
+    /**
+     * Ruft alle Credentials für den angegebenen Standort ab.
+     *
+     * @param id Die ID des Standorts.
+     * @return Eine Liste von AllCredentialCmd-Objekten, die alle Credentials für den Standort repräsentieren.
+     */
     @Override
     public List<AllCredentialCmd> getAllCredentialsByLocation(Long id) {
         List<AllCredentialCmd> cmds = new ArrayList<>();
@@ -556,6 +660,5 @@ public class CredentialServiceImpl implements CredentialService {
                 getCredDefResponseResultNode.get("ver").asText(),
                 attrNames
         );
-
     }
 }
