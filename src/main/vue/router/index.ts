@@ -1,219 +1,175 @@
-import {createRouter, createWebHistory} from 'vue-router'
-import StartView from '../views/Start.vue'
-import SignUp from "@/main/vue/views/SignUp.vue";
-import PasswordChange from "../views/PasswortChange.vue";
-import PasswordReset from "../views/PasswordReset.vue";
-import Profilansicht from '@/main/vue/views/Profilansicht.vue'
-import LoginView from '../views/Login.vue'
-import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
-import FloorPlan from "@/main/vue/views/FloorPlan.vue";
-import Imprint from "../views/Imprint.vue";
-import ImprintEditor from "@/main/vue/views/ImprintEditor.vue";
-import {AttainableRole} from "@/main/vue/entity/createUser";
+import {createRouter, createWebHistory} from "vue-router";
 
-import FloorPlanEdit from "@/main/vue/views/FloorPlanEdit.vue";
+import StartView from "@/main/vue/views/Start.vue";
+import FloorPlan from "@/main/vue/views/FloorPlan.vue";
+
+import {AttainableRole} from "@/main/vue/entity/createUser";
 import {useUserStore} from "@/main/vue/stores/users";
-import CredentialMapping from "@/main/vue/views/CredentialMappingList.vue";
-import EditUser from "@/main/vue/views/EditUser.vue";
-import GroupRooms from "@/main/vue/views/GroupRooms.vue";
-import CredentialView from "@/main/vue/views/CredentialView.vue";
-import RolesRequest from "@/main/vue/views/RolesRequest.vue";
-import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
-import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
-import IssueCredential from "@/main/vue/views/IssueCredential.vue";
-import IssuerManagement from "@/main/vue/views/IssuerManagement.vue";
-import CredentialAdministration from "@/main/vue/views/CredentialAdministration.vue";
-import CredentialEditing from "@/main/vue/views/CredentialEditing.vue";
-import PredefinedConfigEditor from "@/main/vue/views/PredefinedConfigEditor.vue";
 
 const router = createRouter({
     history: createWebHistory(),
 
     routes: [
         {
-            path: '/',
-            name: 'home',
+            path: "/",
+            name: "home",
             component: StartView,
             children: [
                 {
                     path: "",
                     component: FloorPlan,
-                    name: "floorPlan"
-                }
-            ]
+                    name: "floorPlan",
+                },
+            ],
         },
         {
-            path: '/login',
-            name: 'login',
-            component: LoginView
+            path: "/login",
+            name: "login",
+            component: () => import("@/main/vue/views/Login.vue"),
         },
         {
-            path: '/currentuserlist/edit/:email',
-            name: 'edit',
-            component: EditUser,
+            path: "/currentuserlist/edit/:email",
+            name: "edit",
+            component: () => import("@/main/vue/views/EditUser.vue"),
             props: true,
         },
 
         {
-            path: '/rolesRequest',
-            name: 'rolesRequest',
-            component: RolesRequest,
+            path: "/rolesRequest",
+            name: "rolesRequest",
+            component: () => import("@/main/vue/views/RolesRequest.vue"),
             props: true,
         },
 
         {
-            path: '/currentuserlist',
-            name: 'currentuserlist',
-            component: CurrentUserList,
-            meta: {requiresAdmin: true}
+            path: "/currentuserlist",
+            name: "currentuserlist",
+            component: () => import("@/main/vue/views/CurrentUserList.vue"),
+            meta: {requiresAdmin: true},
         },
         {
-            path: '/predefinedConfigs',
-            name: 'PredefinedConfigs',
-            component: PredefinedConfigEditor,
+            path: "/predefinedConfigs",
+            name: "PredefinedConfigs",
+            component: () => import("@/main/vue/views/PredefinedConfigEditor.vue"),
             meta: {
-                authorize: AttainableRole.EDITOR
-            }
+                authorize: AttainableRole.EDITOR,
+            },
         },
         {
-            path: '/grouprooms',
-            name: 'GroupRooms',
-            component: GroupRooms,
+            path: "/grouprooms",
+            name: "GroupRooms",
+            component: () => import("@/main/vue/views/GroupRooms.vue"),
             meta: {
-                authorize: AttainableRole.EDITOR
-            }
+                authorize: AttainableRole.EDITOR,
+            },
         },
         {
-            path: '/editFloorPlan',
-            component: FloorPlanEdit,
+            path: "/editFloorPlan",
+            component: () => import("@/main/vue/views/FloorPlanEdit.vue"),
             meta: {
-                authorize: AttainableRole.EDITOR
-            }
+                authorize: AttainableRole.EDITOR,
+            },
         },
         {
-            path: '/signup',
-            component: SignUp
+            path: "/signup",
+            component: () => import("@/main/vue/views/SignUp.vue"),
         },
         {
-            path: '/profile',
-            name: 'profile',
-            component: Profilansicht
+            path: "/profile",
+            name: "profile",
+            component: () => import("@/main/vue/views/Profilansicht.vue"),
         },
         {
-            path: '/passwordchange',
-            component: PasswordChange,
+            path: "/passwordchange",
+            component: () => import("@/main/vue/views/PasswortChange.vue"),
             props: (to) => ({
                 token: to.query.token,
             }),
         },
         {
-            path: '/passwordreset',
-            component: PasswordReset,
-
+            path: "/passwordreset",
+            component: () => import("@/main/vue/views/PasswortReset.vue"),
         },
         {
             path: "/imprint",
-            component: Imprint,
+            component: () => import("@/main/vue/views/Imprint.vue"),
         },
         {
             path: "/imprinteditor",
-            component: ImprintEditor,
+            component: () => import("@/main/vue/views/ImprintEditor.vue"),
             meta: {requiresAdmin: true},
         },
         {
-            path: '/credentialview',
-            component: CredentialView
+            path: "/credentialview",
+            component: () => import("@/main/vue/views/CredentialView.vue"),
         },
         {
-            path: '/rolesRequest',
-            component: RolesRequest,
-            meta: {requiresAdmin: true}
-        },
-        {
-            path: '/credentials',
-            component: IssueCredentials
-        },
-        {
-            path: '/credentials/:id/issue',
-            component: IssueCredential,
-            props: true
-        },
-        {
-            path: '/corporatedesign',
-            component: CorporateDesign
-        },
-        {path: "/:pathMatch(.*)*", component: StartView},
-        {
-            path: '/issuermanagement',
-            component: IssuerManagement,
-            meta: {requiresAdmin: true},
-        },
-
-
-        {
-            path: "/credentialmapping",
-            component: CredentialMapping,
-            meta: {requiresAdmin: true},
-        },
-        {
-            path: "/corporatedesign",
-            component: CorporateDesign,
+            path: "/rolesRequest",
+            component: () => import("@/main/vue/views/RolesRequest.vue"),
             meta: {requiresAdmin: true},
         },
         {
             path: "/credentials",
-            component: IssueCredentials,
+            component: () => import("@/main/vue/views/IssueCredentials.vue"),
             meta: {requiresAdmin: true},
         },
         {
             path: "/credentials/:id/issue",
-            component: IssueCredential,
+            component: () => import("@/main/vue/views/IssueCredential.vue"),
             props: true,
             meta: {requiresAuth: true},
+        },
+        {
+            path: "/issuermanagement",
+            component: () => import("@/main/vue/views/IssuerManagement.vue"),
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/credentialmapping",
+            component: () => import("@/main/vue/views/CredentialMappingList.vue"),
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/corporatedesign",
+            component: () => import("@/main/vue/views/CorporateDesign.vue"),
+            meta: {requiresAdmin: true},
         },
         {
             path: "/credential_administration",
-            component: CredentialAdministration,
-            meta: {requiresAuth: true},
+            component: () => import("@/main/vue/views/CredentialAdministration.vue"),
+            meta: {requiresAdmin: true},
         },
         {
             path: "/credential_administration/:type(internal|external)/:id(\\d+)",
-            component: CredentialEditing,
+            component: () => import("@/main/vue/views/CredentialEditing.vue"),
             props: true,
-            meta: {
-                requiresRoles: [
-                    'ADMINISTRATOR',
-                ]
-            }
+            meta: {requiresAdmin: true},
         },
         {
             path: "/add_credential",
-            component: CredentialEditing,
-            meta: {
-                requiresRoles: [
-                    'ADMINISTRATOR',
-                ]
-            }
-        }
+            component: () => import("@/main/vue/views/CredentialEditing.vue"),
+            meta: {requiresAdmin: true},
+        },
+        {path: "/:pathMatch(.*)*", component: StartView},
     ],
 });
 
 router.beforeEach((to, from, next) => {
     const {authenticated, user} = useUserStore();
     const {authorize} = to.meta;
-    if ((to.meta.requiresAuth || authorize || to.meta.requiresAdmin) && !authenticated) {
-        return next({path: '/login', query: {returnUrl: to.path}});
-    } else if (authorize && !user?.roles.some(role => role.role === authorize && role.granted)) {
-        return next({path: '/'});
-    }
-    if (to.fullPath.toLowerCase().endsWith("/imprinteditor")) {
-        if (!authenticated) {
-            return next("/");
-        }
+    if (
+        (to.meta.requiresAuth || authorize || to.meta.requiresAdmin) &&
+        !authenticated
+    ) {
+        return next({path: "/login", query: {returnUrl: to.path}});
+    } else if (
+        authorize &&
+        !user?.roles.some((role) => role.role === authorize && role.granted)
+    ) {
+        return next({path: "/"});
     }
 
     next();
 });
 
-
-export default router
+export default router;
