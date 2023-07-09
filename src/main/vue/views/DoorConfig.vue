@@ -34,7 +34,7 @@
         </q-icon>
       </q-toolbar>
       <q-card-section>
-        <q-input filled v-model="configDescription" :label="t('floorPlan.configDescription')" stack-label/>
+        <q-input filled v-model="qSelects.description" :label="t('floorPlan.configDescription')" stack-label/>
       </q-card-section>
       <q-card-section v-for="(select,i) in qSelects.configParts">
         <q-card bordered flat>
@@ -139,7 +139,7 @@
 
 <script>
 import {Direction, PredicateType} from "@/main/vue/entity/doorConfiguration";
-import {ref, watch} from "vue";
+import {ref} from "vue";
 import {useCredentialStore} from "@/main/vue/stores/credential";
 import {useI18n} from "vue-i18n";
 
@@ -240,6 +240,7 @@ export default {
 
 
     const qSelects = ref({
+      description: '',
       configParts: [{
         credentials: [],
         attributeFilter: [{
