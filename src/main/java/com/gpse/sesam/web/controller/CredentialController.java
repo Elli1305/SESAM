@@ -83,8 +83,9 @@ public class CredentialController {
 	@PostMapping(value = "/credentials")
 	@ResponseStatus(HttpStatus.CREATED)
 	@Secured("ADMINISTRATOR")
-	public void create(@Valid @RequestBody final CreateCredentialCmd credential) {
-		service.create(credential);
+	public void create(@RequestParam(defaultValue = "false") boolean createOnLedger,
+					   @Valid @RequestBody CreateCredentialCmd credential) throws JsonProcessingException {
+		service.create(createOnLedger, credential);
 	}
 
 	@PutMapping(value = "/credentials/{id}")
@@ -185,5 +186,10 @@ public class CredentialController {
 		}
 
 		return new CredentialSchemaErrorCmd("ERR_LEDGER_COMMUNICATION_FAILED");
+	}
+
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(JsonProcessingException.class)
+	public void jsonException() {
 	}
 }

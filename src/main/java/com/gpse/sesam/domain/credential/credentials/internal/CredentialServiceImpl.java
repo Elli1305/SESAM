@@ -218,7 +218,7 @@ public class CredentialServiceImpl implements CredentialService {
 
     private String sendCredentialIssueRequest(@Valid final IssueCredentialRequest issueCredentialRequest)
             throws JsonProcessingException {
-        return client.post().uri("credential/issue").contentType(MediaType.TEXT_PLAIN)
+        return client.post().uri("credential/issue").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).bodyValue(mapper.writeValueAsString(issueCredentialRequest))
                 .retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(5000)).block();
     }
@@ -380,10 +380,34 @@ public class CredentialServiceImpl implements CredentialService {
      *                            Credential enthält.
      */
     @Override
-    public void create(final CreateCredentialCmd createCredentialCmd) {
+    public void create(boolean createOnLedger, CreateCredentialCmd createCredentialCmd) throws JsonProcessingException {
+        String credentialDefinitionId =
+                replaceMagicCredentialDefinitionIds(createCredentialCmd.getCredentialDefinitionId());
+
+        if (createOnLedger) {
+            final DeployCredentialCmd deployCredentialCmd = new DeployCredentialCmd(
+                    createCredentialCmd.getAgent(),
+                    createCredentialCmd.getName(),
+                    new DeployCredentialTemplateCmd(
+                            createCredentialCmd.getName(),
+                            createCredentialCmd.getVersion(),
+                            createCredentialCmd
+                                    .getAttributes()
+                                    .stream()
+                                    .map(CreateAttributeCmd::getAttributeName)
+                                    .collect(Collectors.toList())
+                    )
+            );
+
+            credentialDefinitionId = client.post().uri("credential/deploy").contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.TEXT_PLAIN).bodyValue(mapper.writeValueAsString(deployCredentialCmd))
+                    .retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(30000)).block();
+        }
+
         final InternalCredential credential = new InternalCredential(
                 createCredentialCmd.getName(),
-                replaceMagicCredentialDefinitionIds(createCredentialCmd.getCredentialDefinitionId()),
+                createCredentialCmd.getVersion(),
+                credentialDefinitionId,
                 createCredentialCmd.getAgent(),
                 createCredentialCmd.getAttributes().stream()
                         .map(createAttributeCmd ->

@@ -11,6 +11,9 @@ public class CreateExternalCredentialCmd {
     private String name;
 
     @NotBlank
+    private String version;
+
+    @NotBlank
     private String credentialDefinitionId;
 
     @Valid
@@ -39,5 +42,13 @@ public class CreateExternalCredentialCmd {
 
     public void setAttributes(List<CreateAttributeCmd> attributes) {
         this.attributes = attributes;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

@@ -25,8 +25,8 @@ export default {
     externalCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
         return axios.get("/api/external_credentials")
     },
-    create(credential: CreateCredential): Promise<AxiosResponse<CreateCredential>> {
-        return axios.post(`/api/credentials`, credential);
+    create(createOnLedger: boolean, credential: CreateCredential): Promise<AxiosResponse<CreateCredential>> {
+        return axios.post(`/api/credentials?createOnLedger=${createOnLedger}`, credential);
     },
     delete(id: string): Promise<AxiosResponse<void>> {
         return axios.delete(`/api/credentials/${id}`);

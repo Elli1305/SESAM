@@ -18,11 +18,11 @@ public class ExternalCredential implements Credential {
 	@Column(nullable = false)
 	private String name;
 
-	@Column(nullable = false)
-	private String version;
-
 	@Column(nullable = false, unique = true)
 	private String credentialDefinitionId;
+
+	@Column(nullable = false)
+	private String version;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<FormEntry> form;
@@ -58,6 +58,14 @@ public class ExternalCredential implements Credential {
 		this.name = name;
 	}
 
+	public String getCredentialDefinitionId() {
+		return credentialDefinitionId;
+	}
+
+	public void setCredentialDefinitionId(final String credentialDefinitionId) {
+		this.credentialDefinitionId = credentialDefinitionId;
+	}
+
 	@Override
 	public String getVersion() {
 		return version;
@@ -66,14 +74,6 @@ public class ExternalCredential implements Credential {
 	@Override
 	public void setVersion(String version) {
 		this.version = version;
-	}
-
-	public String getCredentialDefinitionId() {
-		return credentialDefinitionId;
-	}
-
-	public void setCredentialDefinitionId(final String credentialDefinitionId) {
-		this.credentialDefinitionId = credentialDefinitionId;
 	}
 
 	public List<FormEntry> getForm() {

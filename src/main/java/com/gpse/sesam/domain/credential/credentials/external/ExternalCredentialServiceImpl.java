@@ -75,6 +75,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
     public void createExternalCredential(CreateExternalCredentialCmd createExternalCredentialCmd) {
         final ExternalCredential credential = new ExternalCredential(
                 createExternalCredentialCmd.getName(),
+                createExternalCredentialCmd.getVersion(),
                 createExternalCredentialCmd.getCredentialDefinitionId(),
                 createExternalCredentialCmd.getAttributes().stream()
                         .map(createAttributeCmd ->
