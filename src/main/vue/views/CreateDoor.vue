@@ -63,7 +63,7 @@
                             </q-tooltip>
                         </q-icon>
                         <q-td v-if= !(checkLength())>
-                        <q-btn flat round icon="delete" size="0.75em" @click="removeConfig(i)"/>
+                        <q-btn flat round icon="delete" size="0.75em" @click="removeConfig(k)"/>
                         </q-td>
                     </q-toolbar>
 
@@ -222,7 +222,6 @@ export default {
 
         addConfiguration() {
             this.qSelectgeneral.qSelectsSet.push( {
-                DoorConfig,
                 doorConfigIn: {direction: Direction.BOTH, configParts: [{credentials:[], attributeFilter: [{ attribute: null, predicateType: null, value: null, currentDate: false } ]}], description: ""},
                 doorConfigOut: {direction: Direction.BOTH, configParts: [{credentials:[], attributeFilter: [{ attribute: null, predicateType: null, value: null, currentDate: false } ]}], description: ""},
                 basisConf: false,
@@ -240,7 +239,7 @@ export default {
 
         onOKClick() {
             const allConfig = []
-            this.qSelectgeneral.qSelectsSet.forEach((elemnt, index) => {
+            this.qSelectgeneral.qSelectsSet.forEach((element, index) => {
                 let config = {}
                 console.log(this.$refs.doorIn[index].configDescription)
                 config.baseConfig = this.qSelectgeneral.qSelectsSet[index].baseConfig
@@ -314,13 +313,34 @@ export default {
             configOptions.value = configStore.allPreConfigs
         })
 
+     /* watch(selectedConfig, async () => {
+        if (selectedConfig.value == null) {
+          configIn.value.configDescription = null
+          configIn.value.qSelects.configParts = []
+          configOut.value.configDescription = null
+          configOut.value.qSelects.configParts = []
+          configIn.value.direction = Direction.BOTH
+        } else {
+          await configStore.getConfig(selectedConfig.value.id)
+          let chosenConfig = configStore.currentConfig
+          configIn.value.configDescription = chosenConfig?.doorConfigIn.description
+          configIn.value.qSelects.configParts = chosenConfig?.doorConfigIn.configParts
+          configOut.value.configDescription = chosenConfig?.doorConfigOut.description
+          configOut.value.qSelects.configParts = chosenConfig?.doorConfigOut.configParts
+          if (JSON.stringify(chosenConfig?.doorConfigIn) !== JSON.stringify(chosenConfig?.doorConfigOut)) {
+            configIn.value.direction = Direction.IN
+            configOut.value.direction = Direction.OUT
+          }
+        }
+      })*/
 
-        const disableSave = ref(false);
+
+
+      const disableSave = ref(false);
 
         const qSelectgeneral = ref({
 
             qSelectsSet: [{
-                DoorConfig,
                 doorConfigIn: {direction: Direction.BOTH, configParts: [{credentials:[], attributeFilter: [{ attribute: null, predicateType: null, value: null, currentDate: false } ]}], description: ""},
                 doorConfigOut:{direction: Direction.BOTH, configParts: [{credentials:[], attributeFilter: [{ attribute: null, predicateType: null, value: null, currentDate: false } ]}], description: ""},
                 baseConfig: false,
