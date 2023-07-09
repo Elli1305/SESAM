@@ -10,7 +10,7 @@
                         no-caps
                         class="bg-primary text-white shadow-2"
                 >
-                    <q-icon size="1.25em" fixed-right color="white" name="info_outlined" class="q-pl-xs">
+                    <q-icon v-if="edit" size="1.25em" fixed-right color="white" name="info_outlined" class="q-pl-xs">
                         <q-tooltip class="grey" anchor="bottom right" max-width="200px" self="top middle"
                                    :offset="[0, 0]">
                             {{ t('editor.groupRooms.info') }}
