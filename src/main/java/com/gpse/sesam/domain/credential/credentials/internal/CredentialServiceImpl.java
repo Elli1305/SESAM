@@ -20,16 +20,22 @@ import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.*;
+import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
 import org.hyperledger.indy.sdk.IndyException;
+import org.hyperledger.indy.sdk.LibIndy;
 import org.hyperledger.indy.sdk.ledger.Ledger;
 import org.hyperledger.indy.sdk.ledger.LedgerResults;
 import org.hyperledger.indy.sdk.pool.Pool;
+import org.hyperledger.indy.sdk.pool.PoolJSONParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -39,22 +45,22 @@ import java.util.stream.Stream;
 
 @Service
 public class CredentialServiceImpl implements CredentialService {
-
-    private final WebClient client;
-
-    private final ObjectMapper mapper;
-
-    private static final Map<String, String> agentForDid = Map.of(
+    private static final Map<String, String> AGENT_FOR_DID = Map.of(
             "XgpWt5zepWmbpuRUT82js9", "tlabs",
             "9yGivzVEatBj7o9pNjoFbi", "university"
     );
 
-    private static final Map<String, String> magicCredentialDefinitionIds = Map.of(
+    private static final Map<String, String> MAGIC_CREDENTIAL_DEFINITION_IDS = Map.of(
             "$T-MEMBER", "XgpWt5zepWmbpuRUT82js9:3:CL:694410:T-MEMBER",
             "$T-TRAINING", "XgpWt5zepWmbpuRUT82js9:3:CL:694412:T-TRAINING",
             "$U-MEMBER", "9yGivzVEatBj7o9pNjoFbi:3:CL:694437:U-MEMBER",
             "$U-TRAINING", "9yGivzVEatBj7o9pNjoFbi:3:CL:694444:U-TRAINING"
     );
+    private static final String DEFAULT_POOL_NAME = "default_pool";
+
+    private final WebClient client;
+
+    private final ObjectMapper mapper;
 
     private final IssuerRepository issuerRepository;
     private final CredentialRepository credentialRepository;
@@ -64,18 +70,17 @@ public class CredentialServiceImpl implements CredentialService {
     private final ExternalCredentialService externalCredentialService;
 
     private final CategoryService categoryService;
-    private final Pool pool;
+    private Pool pool = null;
 
     @Autowired
-    public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper, final Pool pool,
+    public CredentialServiceImpl(final WebClient client, final ObjectMapper mapper,
                                  final CredentialRepository credentialRepository,
                                  final IssuerRepository issuerRepository,
                                  final LocationService locationService,
                                  final ExternalCredentialService externalCredentialService,
-                                 CategoryService categoryService) {
+                                 final CategoryService categoryService) {
         this.client = client;
         this.mapper = mapper;
-        this.pool = pool;
         this.issuerRepository = issuerRepository;
         this.credentialRepository = credentialRepository;
         this.locationService = locationService;
@@ -83,8 +88,46 @@ public class CredentialServiceImpl implements CredentialService {
         this.categoryService = categoryService;
     }
 
+    @PreDestroy
+    private void destroy() throws IndyException, ExecutionException, InterruptedException {
+        if (pool == null) {
+            return;
+        }
+
+        pool.closePoolLedger().get();
+        pool.close();
+
+        pool = null;
+    }
+
+    private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException {
+        if (!LibIndy.isInitialized()) {
+            LibIndy.init();
+        }
+
+        if (LibIndy.api == null) {
+            return null;
+        }
+
+        File genesisTxnFile = ResourceUtils.getFile("classpath:test.bcovrin.vonx.io.jsonl");
+
+        PoolJSONParameters.CreatePoolLedgerConfigJSONParameter createPoolLedgerConfigJSONParameter =
+                new PoolJSONParameters.CreatePoolLedgerConfigJSONParameter(genesisTxnFile.getAbsolutePath());
+
+        Pool.setProtocolVersion(2).get();
+
+        try {
+            Pool.createPoolLedgerConfig(DEFAULT_POOL_NAME, createPoolLedgerConfigJSONParameter.toJson()).get();
+        } catch (ExecutionException | IndyException | InterruptedException ignored) {
+            // Intentionally ignored.
+        }
+
+
+        return Pool.openPoolLedger(DEFAULT_POOL_NAME, "{}").get();
+    }
+
     private String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
-        return magicCredentialDefinitionIds.getOrDefault(credentialDefinitionId, credentialDefinitionId);
+        return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
     }
 
     @SuppressWarnings("CPD-START")
@@ -469,18 +512,29 @@ public class CredentialServiceImpl implements CredentialService {
     }
 
     @Override
-    public CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws IndyException, ExecutionException, InterruptedException, JsonProcessingException {
+    public CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws IndyException,
+            ExecutionException, InterruptedException, JsonProcessingException, FileNotFoundException {
+        if (pool == null) {
+            pool = createPool();
+        }
+
         String normalizedCredentialDefinitionId = replaceMagicCredentialDefinitionIds(credentialDefinitionId);
-        String getCredDefRequest = Ledger.buildGetCredDefRequest(null, normalizedCredentialDefinitionId).get();
+        String getCredDefRequest = Ledger.buildGetCredDefRequest(null, normalizedCredentialDefinitionId)
+                .get();
         String getCredDefResponse = Ledger.submitRequest(pool, getCredDefRequest).get();
 
         JsonNode getCredDefResponseNode = mapper.readTree(getCredDefResponse);
 
-        LedgerResults.ParseResponseResult getCredDefResponseResult = Ledger.parseGetCredDefResponse(getCredDefResponse).get();
+        LedgerResults.ParseResponseResult getCredDefResponseResult = Ledger.parseGetCredDefResponse(getCredDefResponse)
+                .get();
 
         JsonNode getCredDefResponseResultNode = mapper.readTree(getCredDefResponseResult.getObjectJson());
 
-        String getTxnRequest = Ledger.buildGetTxnRequest(null, "DOMAIN", getCredDefResponseResultNode.get("schemaId").asInt()).get();
+        String getTxnRequest = Ledger.buildGetTxnRequest(
+                null,
+                "DOMAIN",
+                getCredDefResponseResultNode.get("schemaId").asInt()
+        ).get();
         String getTxnResponse = Ledger.submitRequest(pool, getTxnRequest).get();
 
         JsonNode getTxnResponseNode = mapper.readTree(getTxnResponse);
@@ -498,7 +552,7 @@ public class CredentialServiceImpl implements CredentialService {
         return new CredentialSchemaCmd(
                 getCredDefResponseResultNode.get("tag").asText(),
                 normalizedCredentialDefinitionId,
-                agentForDid.get(getCredDefResponseNode.get("result").get("origin").asText()),
+                AGENT_FOR_DID.get(getCredDefResponseNode.get("result").get("origin").asText()),
                 getCredDefResponseResultNode.get("ver").asText(),
                 attrNames
         );

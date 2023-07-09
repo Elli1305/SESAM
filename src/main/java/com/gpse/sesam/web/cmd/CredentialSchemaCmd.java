@@ -13,7 +13,8 @@ public class CredentialSchemaCmd {
 
     private List<String> attrs;
 
-    public CredentialSchemaCmd(final String name, final String credentialDefinitionId, final String agent, final String ver, final List<String> attrs) {
+    public CredentialSchemaCmd(final String name, final String credentialDefinitionId, final String agent,
+                               final String ver, final List<String> attrs) {
         this.name = name;
         this.credentialDefinitionId = credentialDefinitionId;
         this.agent = agent;

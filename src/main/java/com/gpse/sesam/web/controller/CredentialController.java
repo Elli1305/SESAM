@@ -128,7 +128,8 @@ public class CredentialController {
 
 	@GetMapping(value = "/credential_schema/{credentialDefinitionId}")
 	@ResponseStatus(HttpStatus.OK)
-	public CredentialSchemaCmd getCredentialSchema(@PathVariable final String credentialDefinitionId) throws IndyException, ExecutionException, InterruptedException, JsonProcessingException {
+	public CredentialSchemaCmd getCredentialSchema(@PathVariable final String credentialDefinitionId) throws
+			Exception {
 		return service.getCredentialSchema(credentialDefinitionId);
 	}
 

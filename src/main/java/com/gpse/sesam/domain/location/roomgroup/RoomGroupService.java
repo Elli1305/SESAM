@@ -1,7 +1,6 @@
 package com.gpse.sesam.domain.location.roomgroup;
 
 import com.gpse.sesam.domain.location.room.Room;
-import com.gpse.sesam.web.cmd.RoomCmd;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
 import com.gpse.sesam.web.cmd.RoomGroupDoorConfigCmd;
 import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
