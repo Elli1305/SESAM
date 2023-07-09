@@ -3,9 +3,11 @@ package com.gpse.sesam.domain.credential.credentials.external;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.door.config.AttributeFilter;
+import com.gpse.sesam.web.cmd.CreateExternalCredentialCmd;
 import com.gpse.sesam.web.cmd.ExternalCredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,6 +69,61 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
     @Override
     public Optional<ExternalCredential> getExternalCredential(Long id) {
         return externalCredentialRepository.findById(id);
+    }
+
+    @Override
+    public void createExternalCredential(CreateExternalCredentialCmd createExternalCredentialCmd) {
+        final ExternalCredential credential = new ExternalCredential(
+                createExternalCredentialCmd.getName(),
+                createExternalCredentialCmd.getCredentialDefinitionId(),
+                createExternalCredentialCmd.getAttributes().stream()
+                        .map(createAttributeCmd ->
+                                new FormEntry(
+                                        createAttributeCmd.getName(),
+                                        createAttributeCmd.getType(),
+                                        createAttributeCmd.getAttributeName(),
+                                        createAttributeCmd.getValidationRules()
+                                )
+                        )
+                        .toList()
+        );
+
+        externalCredentialRepository.save(credential);
+    }
+
+    @Override
+    public void deleteExternalCredential(Long id) {
+        final Optional<ExternalCredential> optionalCredential = externalCredentialRepository.findById(id);
+
+        if (optionalCredential.isEmpty()) {
+            return;
+        }
+
+        final ExternalCredential credential = optionalCredential.get();
+        final Category category = credential.getCategory();
+
+        if (category != null) {
+            category.removeExternalCredential(credential);
+            credential.setCategory(null);
+        }
+
+        externalCredentialRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateExternalCredential(Long id, CreateExternalCredentialCmd createExternalCredentialCmd) {
+        final Optional<ExternalCredential> optionalCredential = externalCredentialRepository.findById(id);
+
+        if (optionalCredential.isEmpty()) {
+            return;
+        }
+
+        final ExternalCredential credential = optionalCredential.get();
+
+        credential.setName(createExternalCredentialCmd.getName());
+        credential.setCredentialDefinitionId(createExternalCredentialCmd.getCredentialDefinitionId());
+
+        externalCredentialRepository.save(credential);
     }
 
     /**

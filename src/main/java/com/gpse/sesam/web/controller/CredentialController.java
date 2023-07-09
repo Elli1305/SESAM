@@ -126,6 +126,40 @@ public class CredentialController {
 		return service.getAllCredentialsByLocation(id);
 	}
 
+	@PostMapping(value = "/external_credentials")
+	@ResponseStatus(HttpStatus.CREATED)
+	@Secured("ADMINISTRATOR")
+	public void createExternalCredential(@Valid @RequestBody CreateExternalCredentialCmd credential) {
+		externalCredentialService.createExternalCredential(credential);
+	}
+
+	@GetMapping(value = "/external_credentials/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public ExternalCredential externalCredential(@PathVariable Long id) {
+		final Optional<ExternalCredential> credential = externalCredentialService.getExternalCredential(id);
+
+		if (credential.isPresent()) {
+			return credential.get();
+		}
+
+		throw new CredentialNotFoundException();
+	}
+
+	@PutMapping(value = "/external_credentials/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Secured("ADMINISTRATOR")
+	public void updateExternalCredential(@PathVariable Long id,
+										 @Valid @RequestBody CreateExternalCredentialCmd credential) {
+		externalCredentialService.updateExternalCredential(id, credential);
+	}
+
+	@DeleteMapping(value = "/external_credentials/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Secured("ADMINISTRATOR")
+	public void deleteExternalCredential(@PathVariable Long id) {
+		externalCredentialService.deleteExternalCredential(id);
+	}
+
 	@GetMapping(value = "/credential_schema/{credentialDefinitionId}")
 	@ResponseStatus(HttpStatus.OK)
 	public CredentialSchemaCmd getCredentialSchema(@PathVariable final String credentialDefinitionId) throws

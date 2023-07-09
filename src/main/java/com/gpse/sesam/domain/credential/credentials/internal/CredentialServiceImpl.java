@@ -66,6 +66,7 @@ public class CredentialServiceImpl implements CredentialService {
     private final ObjectMapper mapper;
 
     private final IssuerRepository issuerRepository;
+
     private final CredentialRepository credentialRepository;
 
     private final LocationService locationService;
@@ -214,7 +215,6 @@ public class CredentialServiceImpl implements CredentialService {
     public Optional<InternalCredential> getCredential(final Long id) {
         return credentialRepository.findById(id);
     }
-
 
     private String sendCredentialIssueRequest(@Valid final IssueCredentialRequest issueCredentialRequest)
             throws JsonProcessingException {
