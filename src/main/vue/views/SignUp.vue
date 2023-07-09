@@ -69,20 +69,33 @@ export default {
     async function signUp() {
       userStore.validateEmail(email.value);
       userStore.validatePassword(password.value, passwordRepeat.value);
-      if(!userStore.validEmail){
+      const name = prename.value.concat(' ', lastname.value)
+
+      userStore.validateName(name);
+      if (!userStore.validName) {
         $q.notify({
           type: 'negative',
-          message: 'Registrierung fehlgeschlagen',
-          caption: 'E-Mail erfüllt nicht die Kriterien',
+          message: t('signUp.error'),
+          caption: t('signUp.nameError'),
           color: 'negative',
           textColor: 'positive',
         })
       }
+
+        if(!userStore.validEmail){
+          $q.notify({
+            type: 'negative',
+            message: t('signUp.error'),
+            caption: t('signUp.emailError'),
+            color: 'negative',
+            textColor: 'positive',
+          })
+        }
       if(!userStore.validPassword){
         $q.notify({
           type: 'negative',
-          message: 'Registrierung fehlgeschlagen',
-          caption: 'Passwort erfüllt nicht die Kriterien',
+          message: t('signUp.error'),
+          caption: t('signUp.passwordError'),
           color: 'negative',
           textColor: 'positive',
         })
@@ -90,8 +103,8 @@ export default {
       if(!userStore.comparePassword){
         $q.notify({
           type: 'negative',
-          message: 'Registrierung fehlgeschlagen',
-          caption: 'Die Passworte stimmen nicht überein',
+          message: t('signUp.error'),
+          caption: t('signUp.passwordDuplicateError'),
           color: 'negative',
           textColor: 'positive',
         })
@@ -107,8 +120,8 @@ export default {
 
         $q.notify({
           type: 'negative',
-          message: 'Nutzer konnte nicht registriert werden.',
-          caption: 'Bitte versuchen Sie es später erneut.',
+          message: t('signUp.warning'),
+          caption: t('signUp.later'),
           color: 'negative',
           textColor: 'positive',
         });
