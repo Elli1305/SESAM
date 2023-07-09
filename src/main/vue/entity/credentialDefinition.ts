@@ -7,6 +7,7 @@ export type ComparisonType = "EQUAL" | "NOT_EQUAL" | "LESS_THAN" | "GREATER_THAN
 export interface Credential {
     id: bigint;
     name: string;
+    version: string;
     agent: string;
     credentialDefinitionId: string;
     form: FormEntry[];
@@ -75,7 +76,9 @@ export interface ChecklistEntry {
 export interface ExternalCredential {
     id: bigint;
     name: string;
+    version: string;
     credentialDefinitionId: string;
+    form: FormEntry[];
 }
 
 export interface Category {
@@ -113,6 +116,7 @@ interface CreateCondition {
 
 export interface CreateCredential {
     name: string;
+    version: string;
     agent: string;
     credentialDefinitionId: string;
 

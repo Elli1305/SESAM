@@ -3,8 +3,8 @@ package com.gpse.sesam.domain.credential.credentials.external;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.credentials.Credential;
-import jakarta.persistence.*;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -18,11 +18,14 @@ public class ExternalCredential implements Credential {
 	@Column(nullable = false)
 	private String name;
 
+	@Column(nullable = false)
+	private String version;
+
 	@Column(nullable = false, unique = true)
 	private String credentialDefinitionId;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<FormEntry> form;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<FormEntry> form;
 
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -31,11 +34,13 @@ public class ExternalCredential implements Credential {
 	protected ExternalCredential() {
 	}
 
-    public ExternalCredential(final String name, final String credentialDefinitionId, final List<FormEntry> form) {
-        this.name = name;
-        this.credentialDefinitionId = credentialDefinitionId;
-        this.form = form;
-    }
+	public ExternalCredential(final String name, final String version, final String credentialDefinitionId,
+							  final List<FormEntry> form) {
+		this.name = name;
+		this.version = version;
+		this.credentialDefinitionId = credentialDefinitionId;
+		this.form = form;
+	}
 
 	public Long getId() {
 		return id;
@@ -53,15 +58,25 @@ public class ExternalCredential implements Credential {
 		this.name = name;
 	}
 
+	@Override
+	public String getVersion() {
+		return version;
+	}
+
+	@Override
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	public String getCredentialDefinitionId() {
 		return credentialDefinitionId;
 	}
 
-    public void setCredentialDefinitionId(final String credentialDefinitionId) {
-        this.credentialDefinitionId = credentialDefinitionId;
-    }
+	public void setCredentialDefinitionId(final String credentialDefinitionId) {
+		this.credentialDefinitionId = credentialDefinitionId;
+	}
 
-    public List<FormEntry> getForm() {
+	public List<FormEntry> getForm() {
         return form;
     }
 

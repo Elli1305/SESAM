@@ -26,6 +26,10 @@ public interface Credential {
 
     void setName(String name);
 
+    String getVersion();
+
+    void setVersion(String version);
+
     String getCredentialDefinitionId();
 
     void setCredentialDefinitionId(String credentialDefinitionId);

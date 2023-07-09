@@ -12,6 +12,8 @@ public class CreateCredentialCmd {
     private String name;
 
     @NotBlank
+    private String version;
+
     private String credentialDefinitionId;
 
     @NotBlank
@@ -64,5 +66,13 @@ public class CreateCredentialCmd {
 
     public void setConditions(List<CreateConditionCmd> conditions) {
         this.conditions = conditions;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }
