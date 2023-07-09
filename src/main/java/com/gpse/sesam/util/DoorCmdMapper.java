@@ -1,7 +1,7 @@
 package com.gpse.sesam.util;
 
 import com.gpse.sesam.domain.location.door.Door;
-import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import com.gpse.sesam.web.cmd.DoorCmd;
 import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
 
@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DoorCmdMapper {
+
 	private ConfigCmdMapper configCmdMapper;
 
 	public DoorCmdMapper(ConfigCmdMapper configCmdMapper) {
-
 		this.configCmdMapper = configCmdMapper;
 	}
 
-	public Door toEntity(final DoorCmd doorCmd) {
+	public static Door toEntity(final DoorCmd doorCmd) {
 		final Door door = new Door();
 
 		door.setId(doorCmd.getId());

@@ -11,8 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import jakarta.persistence.OneToMany;
-import com.gpse.sesam.domain.location.door.config.ProofConfig;
-
 
 
 import java.util.ArrayList;
@@ -32,10 +30,6 @@ public class Door {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
-
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<TwoWayDoorConfig> configs = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();

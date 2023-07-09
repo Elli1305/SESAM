@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DoorConfigController {
 
 	private final DoorConfigService doorConfigurationService;
-	public DoorConfigController(final DoorConfigService doorConfigurationService,final ConfigCmdMapper configCmdMapper) {
+	public DoorConfigController(final DoorConfigService doorConfigurationService) {
 		this.doorConfigurationService = doorConfigurationService;
 	}
 

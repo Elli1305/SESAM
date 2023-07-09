@@ -1,47 +1,80 @@
 package com.gpse.sesam.domain.location.door.config;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import com.gpse.sesam.domain.location.door.config.ProofConfig;
+import jakarta.persistence.*;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class TwoWayDoorConfig {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private Long id;
 
-	@OneToOne
-	private ProofConfig proofConfigIn;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private ProofConfig proofConfigIn;
 
-	@OneToOne
-	private ProofConfig proofConfigOut;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private ProofConfig proofConfigOut;
 
-	public Long getId() {
-		return id;
-	}
+    @Column
+    private LocalTime startTime;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column
+    private LocalTime endTime;
 
-	public ProofConfig getProofConfigIn() {
-		return proofConfigIn;
-	}
+    @Column
+    private boolean baseConfig;
 
-	public void setProofConfigIn(ProofConfig proofConfigIn) {
-		this.proofConfigIn = proofConfigIn;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public ProofConfig getProofConfigOut() {
-		return proofConfigOut;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setProofConfigOut(ProofConfig proofConfigOut) {
-		this.proofConfigOut = proofConfigOut;
-	}
+    public ProofConfig getProofConfigIn() {
+        return proofConfigIn;
+    }
+
+    public void setProofConfigIn(ProofConfig proofConfigIn) {
+        this.proofConfigIn = proofConfigIn;
+    }
+
+    public ProofConfig getProofConfigOut() {
+        return proofConfigOut;
+    }
+
+    public void setProofConfigOut(ProofConfig proofConfigOut) {
+        this.proofConfigOut = proofConfigOut;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public boolean isBaseConfig() {
+        return baseConfig;
+    }
+
+    public void setBaseConfig(boolean baseConfig) {
+        this.baseConfig = baseConfig;
+    }
 }

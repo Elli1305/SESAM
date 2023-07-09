@@ -1,7 +1,6 @@
 package com.gpse.sesam.web.cmd;
 
 import com.gpse.sesam.domain.location.Coordinate;
-import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
 
 import java.util.ArrayList;
 import java.util.List;

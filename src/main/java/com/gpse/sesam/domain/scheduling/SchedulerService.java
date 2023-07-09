@@ -1,17 +1,13 @@
 package com.gpse.sesam.domain.scheduling;
 
-import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorService;
-import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
-import org.springframework.scheduling.TaskScheduler;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
-import java.sql.Time;
+
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 

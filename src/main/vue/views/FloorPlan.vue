@@ -23,9 +23,7 @@ import {useRoomStore} from "@/main/vue/stores/room";
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
-import GroupRooms from "@/main/vue/views/GroupRooms.vue";
-import api from "@/main/vue/api";
-import {useCredentialsStore, useCredentialStore} from "@/main/vue/stores/credential";
+import {useCredentialsStore} from "@/main/vue/stores/credential";
 import {useI18n} from "vue-i18n";
 
 const mapConfig = {
@@ -68,7 +66,6 @@ function getImageDimensions(imageURL) {
 let floorPlanMap;
 export default {
   name: "FloorPlan",
-  components: {GroupRooms},
   props: {
     editView: {
       type: Boolean,
@@ -191,13 +188,12 @@ export default {
           this.addCallbacksPolygon(e.layer)
         })
       } else if (e.shape === 'Line' || e.shape === 'Polyline') {
-        const dialog = $q.dialog({
+        $q.dialog({
           component: CreateDoor,
           componentProps: {
             rooms: this.floorPlanStore.rooms
           }
-        })
-        dialog.onOk(({room, doorName, configuration}) => {
+        }).onOk(({room, doorName, configuration}) => {
           let door = {
             name: doorName,
             doorConfigCmds: configuration,
@@ -214,9 +210,6 @@ export default {
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
           })
-        })
-        dialog.onCancel(() => {
-          floorPlanMap.removeLayer(e.layer)
         })
       }
     })
@@ -345,10 +338,6 @@ export default {
         }
 
         polygons.push(polygon);
-        const popup = L.popup();
-        let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
-
-        popup.setContent(url);
 
         polygon.on('click', function () {
           for (const p of polygons) {
@@ -373,7 +362,6 @@ export default {
         let roomPopup = "<b>" + room.name + "</b><br>";
 
         for (const door of room.doors) {
-
           const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
             color: '#b0b0b0',
             weight: 3
@@ -432,9 +420,7 @@ export default {
           this.addCallbacksLine(line);
           roomPopup += configurationString
         }
-
         polygon.bindTooltip(roomPopup);
-        polygon.bindPopup(popup);
         polygon.addTo(floorPlanMap);
         this.addCallbacksPolygon(polygon);
       }

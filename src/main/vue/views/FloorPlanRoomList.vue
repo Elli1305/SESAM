@@ -24,10 +24,10 @@
         </q-tabs>
         <q-separator></q-separator>
 
-        <q-tab-panels v-model="tab" animated style="max-width: 24em; min-width: 24em">
+        <q-tab-panels v-model="tab" animated style="width: 26em">
           <q-tab-panel name="rooms">
-            <q-tab-panels v-model="roomTab">
-              <q-tab-panel name="list">
+            <q-tab-panels v-model="roomTab" animated>
+              <q-tab-panel name="list" style="padding: 0; max-width: 100%">
 
                 <q-input
                     :placeholder="t('common.search')"
@@ -121,7 +121,7 @@
                 </div>
               </q-tab-panel>
               <q-tab-panel name="info">
-                <room-detail-view room="room"/>
+                <room-detail-view  :room="room" @back-clicked="back()"/>
               </q-tab-panel>
             </q-tab-panels>
           </q-tab-panel>
@@ -405,8 +405,8 @@ export default {
     },
     getCssVar,
     roomClick(room) {
-      this.room = room
       this.roomTab = 'info';
+      this.room = room
     },
     back() {
       this.roomTab = 'list';
@@ -500,7 +500,6 @@ export default {
     async function makeIdsToRooms() {
       selectedRoomsForGroup.value = [];
       await roomStore.getRooms();
-      //console.log(roomStore.rooms);
 
       selectedRoomsForGroup.value = roomStore.rooms?.filter((room) =>
           selectedRooms.value.includes(room.id)
