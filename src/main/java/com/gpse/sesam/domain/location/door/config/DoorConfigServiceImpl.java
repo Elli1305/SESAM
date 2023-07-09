@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,9 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 
 
 	@Override
-	public void sendProofConfig(final String doorId, final ProofConfig proofConfig) {
+	public void sendProofConfig(String doorId, ProofConfig proofConfig) {
+		proofConfig.setCreatedAt(new Date());
+
 		final String url = appConfig.getUrl() + "/api/proof/config/" + doorId;
 
 		final HttpHeaders headers = new HttpHeaders();
@@ -79,14 +82,16 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 				LOGGER.error("POST Request fehlgeschlagen. Statuscode: {} ", response.getStatusCode());
 				throw new InvalidDoorConfiguration("Could not configure door. Reason: " + response.getBody());
 			}
-		} catch (final JsonProcessingException e) {
+		} catch (JsonProcessingException e) {
 			LOGGER.error("Fehler beim Erstellen des Request-Bodies.", e);
 		}
 	}
 
+
 	private ProofConfig createProofConfig() {
 		final ProofConfig proofConfig = new ProofConfig();
 		proofConfig.setDescription("Bitte präsentieren Sie ein T-Mitglieds-Credential mit dem Vornamen David.");
+		proofConfig.setCreatedAt(new Date());
 
 		final Map<String, ProofAttributeInfo> requestedAttributes = new HashMap<>();
 		final ProofAttributeInfo attributeInfo = new ProofAttributeInfo();

@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class Door {
 	@Column
 	private String name;
 
+	@Column
+	private Date createdAt;
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
@@ -39,6 +43,7 @@ public class Door {
 	public Door(final String name, final List<Coordinate> coordinates) {
 		this.name = name;
 		this.coordinates = coordinates;
+		this.createdAt = new Date(System.currentTimeMillis());
 	}
 
 	public Long getId() {
@@ -75,5 +80,13 @@ public class Door {
 
 	public void addCredential(final Credential credential) {
 		credentials.add(credential);
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 }
