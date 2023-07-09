@@ -22,6 +22,9 @@ import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 import IssueCredential from "@/main/vue/views/IssueCredential.vue";
 import IssuerManagement from "@/main/vue/views/IssuerManagement.vue";
+import DoorHistory from "@/main/vue/views/DoorHistory.vue";
+import DoorConfig from "@/main/vue/views/DoorConfig.vue";
+import CreateDoor from "@/main/vue/views/CreateDoor.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -159,6 +162,21 @@ const router = createRouter({
             component: IssueCredential,
             props: true,
             meta: {requiresAuth: true},
+        },
+        {
+            path: "/doorhistory",
+            component: DoorHistory,
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/doorconfig",
+            component: DoorConfig,
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/createdoor",
+            component: CreateDoor,
+            meta: {requiresAdmin: true},
         },
     ],
 });
