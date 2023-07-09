@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.location.door;
 
 import com.gpse.sesam.domain.location.Coordinate;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,6 +32,10 @@ public class Door {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
+
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<TwoWayDoorConfig> configs = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();

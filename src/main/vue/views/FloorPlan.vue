@@ -26,6 +26,7 @@ import {useDoorStore} from "@/main/vue/stores/door";
 import GroupRooms from "@/main/vue/views/GroupRooms.vue";
 import api from "@/main/vue/api";
 import {useCredentialsStore, useCredentialStore} from "@/main/vue/stores/credential";
+import {useI18n} from "vue-i18n";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -82,15 +83,15 @@ export default {
     const locationStore = useLocationStore();
     const roomStore = useRoomStore();
     const credentialsStore = useCredentialsStore();
+    const i18nLocale = useI18n()
 
-    credentialsStore.fetch();
-
-    return {floorStore, floorPlanStore, locationStore, roomStore, doorStore, credentialsStore}
+    return {floorStore, floorPlanStore, locationStore, roomStore, doorStore, credentialsStore, i18nLocale}
   },
   mounted: function () {
     floorPlanMap = L.map("floor-plan-map", mapConfig);
 
     const $q = useQuasar();
+
 
     const {rooms} = storeToRefs(this.floorPlanStore)
     watch(rooms, () => {
@@ -325,8 +326,9 @@ export default {
           }
         })
       });
-    }, drawRooms(rooms) {
+    }, async drawRooms(rooms) {
       let polygons = [];
+      await this.credentialsStore.fetch()
       for (const room of rooms) {
         const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
           color: 'black',
@@ -402,31 +404,61 @@ export default {
           }
 
           if (activeConfig) {
+            configurationString += "<br>"
             if (JSON.stringify(activeConfig.proofConfigIn) === JSON.stringify(activeConfig.proofConfigOut)) {
-              const activeCredentials = [];
-              for (const attribute in activeConfig.proofConfigIn.requestedAttributes) {
-                activeCredentials.push(activeConfig
-                    .proofConfigIn
-                    .requestedAttributes[attribute]
-                    .restrictions
-                    .filter(rest => rest.credentialDefinitionId)
-                    .map(rest => this.credentialsStore.getByDefinitionId(rest.credentialDefinitionId))
-                    .join(" ODER "))
-              }
-            }
-          }
+              configurationString += "<div style='margin-left: 1em'>"
+              let activeCredentials = this.getConfigString(activeConfig.proofConfigIn);
+              activeCredentials = [...new Set(activeCredentials)]
+              configurationString += activeCredentials.join("<br> <b>UND</b> <br>")
+              configurationString += "</div>"
+            } else {
+              configurationString += "<b>Rein:</b><br><div style='margin-left: 1em'>"
+              let activeCredentialsIn = this.getConfigString(activeConfig.proofConfigIn);
+              activeCredentialsIn = [...new Set(activeCredentialsIn)]
+              configurationString += activeCredentialsIn.join("<br> <b>UND</b> <br>")
+              configurationString += "</div>"
 
-          line.bindTooltip(configurationString).openTooltip();
+              configurationString += "<b>Raus:</b><br><div style='margin-left: 1em'>"
+              let activeCredentialsOut = this.getConfigString(activeConfig.proofConfigOut);
+              activeCredentialsOut = [...new Set(activeCredentialsOut)]
+              configurationString += activeCredentialsOut.join("<br> <b>UND</b> <br>")
+              configurationString += "</div>"
+            }
+          } else {
+            configurationString += ` <i>${this.i18nLocale.t('editor.config.noConfig')}</i><br>`
+          }
+          configurationString += "</div>"
+          line.bindTooltip(configurationString);
           this.addCallbacksLine(line);
           roomPopup += configurationString
         }
 
-        polygon.bindTooltip(roomPopup).openTooltip();
+        polygon.bindTooltip(roomPopup);
         polygon.bindPopup(popup);
         polygon.addTo(floorPlanMap);
         this.addCallbacksPolygon(polygon);
       }
 
+    },
+    getConfigString(config) {
+      const activeCredentials = []
+      for (const attribute in config.requestedAttributes) {
+        activeCredentials.push(config
+            .requestedAttributes[attribute]
+            .restrictions
+            .filter(rest => rest.credentialDefinitionId)
+            .map(rest => this.credentialsStore.getByDefinitionId(rest.credentialDefinitionId)?.name || "")
+            .join(" <b>ODER</b> "))
+      }
+      for (const attribute in config.requestedPredicates) {
+        activeCredentials.push(config
+            .requestedPredicates[attribute]
+            .restrictions
+            .filter(rest => rest.credentialDefinitionId)
+            .map(rest => this.credentialsStore.getByDefinitionId(rest.credentialDefinitionId)?.name || "")
+            .join(" <b>ODER</b> "))
+      }
+      return activeCredentials
     }
   },
 };
