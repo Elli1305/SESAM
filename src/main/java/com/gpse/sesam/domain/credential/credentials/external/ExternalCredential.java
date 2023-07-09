@@ -1,5 +1,7 @@
 package com.gpse.sesam.domain.credential.credentials.external;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import jakarta.persistence.*;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
@@ -21,6 +23,10 @@ public class ExternalCredential implements Credential {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<FormEntry> form;
+
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Category category;
 
 	protected ExternalCredential() {
 	}
@@ -62,4 +68,12 @@ public class ExternalCredential implements Credential {
     public void setForm(List<FormEntry> form) {
         this.form = form;
     }
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 }
