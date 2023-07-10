@@ -82,9 +82,15 @@ const router = createRouter({
         {
             path: "/passwordchange",
             component: () => import("@/main/vue/views/PasswordChange.vue"),
-            props: (to) => ({
-                token: to.query.token,
-            }),
+            props: (to) => ({token: to.query.token}),
+            beforeEnter: (to, from, next) => {
+                if (!to.query.token) {
+                    next({path: "/"});
+                    return;
+                }
+
+                next();
+            }
         },
         {
             path: "/passwordreset",
