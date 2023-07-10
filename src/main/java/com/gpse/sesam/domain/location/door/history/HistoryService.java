@@ -1,6 +1,8 @@
 package com.gpse.sesam.domain.location.door.history;
 
 import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.web.cmd.DoorHistoryDetailsCmd;
+import com.gpse.sesam.web.cmd.DoorHistoryTableCmd;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +19,15 @@ public interface HistoryService {
     void saveAll(Iterable<History> histories);
 
     public List<History> historiesByDoor(Long id);
+
+    public List<DoorHistoryTableCmd> getHistoryForTable();
+
+
+    List<DoorHistoryTableCmd> getHistoryForTableByDoorId(Long id);
+
+    public List<DoorHistoryDetailsCmd> getHistoryDetails();
+
+
+    List<DoorHistoryDetailsCmd> getHistoryDetailsByDoorId(Long id);
+
 }

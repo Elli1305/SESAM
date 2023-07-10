@@ -1,5 +1,7 @@
 package com.gpse.sesam.domain.location.door;
 
+import com.gpse.sesam.domain.location.room.Room;
+
 import java.util.List;
 
 import java.util.Optional;
@@ -19,4 +21,6 @@ public interface DoorService {
 	Door create(Long roomId, Door door);
 
 	java.util.List<Door> getDoorsByRoomId(Long id);
+
+	Room getRoomByDoorId(Long id);
 }

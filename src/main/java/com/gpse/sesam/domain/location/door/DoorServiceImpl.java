@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.location.door;
 
 import com.gpse.sesam.domain.location.Location;
+import jakarta.validation.OverridesAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
@@ -94,6 +95,20 @@ public class DoorServiceImpl implements DoorService {
 			return room.get().getDoors();
 		}
 		return Collections.emptyList();
+	}
+
+	@Override
+	public Room getRoomByDoorId(Long id) {
+		Optional<Door> door = doorRepository.findById(id);
+		List<Room> rooms = roomService.getRooms();
+		if (door.isPresent()) {
+			for (Room room : rooms) {
+				if (room.getDoors().contains(door)) {
+					return room;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
