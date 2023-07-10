@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.credential.category;
 
-import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.web.cmd.CategoryResponseCmd;
 
 import java.util.List;
@@ -12,9 +11,6 @@ public interface CategoryService {
     Optional<Category> getCategory(Long id);
 
     void deleteById(Long id);
-
-
-    Optional<Category> getCategory(List<Location> locations);
 
     void deleteAll();
 

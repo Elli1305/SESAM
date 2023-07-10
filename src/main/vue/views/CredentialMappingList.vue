@@ -89,7 +89,7 @@
       </q-card-section>
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup> {{ t("common.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="createCategory"> {{ t("common.save")}}</q-btn>
+        <q-btn flat v-close-popup @click="createCategory" :disable="!address"> {{ t("common.save")}}</q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -105,6 +105,11 @@
         </template>
         </q-input>
       </q-card-section>
+      <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
+        <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
+          {{ t("admin.credentialMapping.info")}}
+        </q-tooltip>
+      </q-icon>
       <q-card-section class="column q-py-none">
           <q-select
               class="q-my-sm"
@@ -133,7 +138,7 @@
       </q-card-section>
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup> {{ t("common.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="updateCategory(editedRow.id)"> {{ t("common.save")}} </q-btn>
+        <q-btn flat v-close-popup @click="updateCategory(editedRow.id)" :disable="!catname"> {{ t("common.save")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -216,6 +221,7 @@ export default {
       model3.value = row.credentials.map(c =>c.id)
       model4.value = row.externalCredentials.map(e =>e.id)
     }
+
 
     return {
       catname,

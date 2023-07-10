@@ -1,77 +1,94 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{t('admin.credentialAdministration.edit')}}</p>
-      <q-form class="column justify-between self-center no-wrap full-width" ref="form" @submit.prevent style="height: 50vh">
-        <div class="row no-wrap full-width">
-          <div class="column justify-evenly" style="width: 15vw; height: 40vh; margin-right: 3vw">
-            <q-input style="width: 15vw; margin-bottom: -1em" v-model="credential.name" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
-            <q-input style="width: 15vw; margin-bottom: -1em" v-if="props.type !== 'external'" v-model="credential.agent" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Agent" outlined type="text"/>
-            <q-input style="width: 15vw; margin-bottom: -1em" v-model="credential.credentialDefinitionId" :rules="[required]" lazy-rules error-message=" " no-error-icon class="q-mb-md"
-                     label="Credential Definition ID"
-                     outlined type="text"/>
-          </div>
-          <q-virtual-scroll class="column full-width" style="height: 40vh" :items="[0]">
-            <div class="row no-wrap full-width">
-              <div class="column full-width">
-                <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">{{t('admin.credentialAdministration.credentialAttribute')}}</h6>
-                  <div class="full-width" v-for="(item, index) in credential.attributes">
-                    <q-item class="row justify-between q-px-sm" style="margin-bottom: -1em">
-                      <q-input style="width: 15vw" v-model="item.name" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
-                      <q-input style="width: 15vw" v-model="item.attributeName" :rules="[required]" lazy-rules error-message=" " :label="t('admin.credentialAdministration.attribute')"
-                               outlined type="text"/>
-                      <div class="row no-wrap">
-                        <q-select style="width: 10vw" v-model="item.type" :options="types" emit-value label="Type" map-options
-                                  outlined/>
-                        <div class="column justify-between items-center q-mx-sm">
-                          <div class="column justify-center no-wrap rounded-borders" style="height: 4em">
-                            <q-btn size="0.70em" style="width: 2em; height: 2em; color: var(--text-color)" round flat icon="lock" @click="editValidation(item, credential.attributes)"/>
-                            <q-btn size="0.70em" style="width: 2em; height: 2em; color: var(--text-color)" v-if="index !== 0" round flat icon="remove"
-                                   @click="() => credential.attributes.splice(index, 1)"/>
-                          </div>
-                          <q-btn size="0.80em" color="primary" style="width: 2em; margin-left: -4em" round flat icon="add" @click="addAttribute(index)"/>
-                        </div>
-                        </div>
-                      </q-item>
-                  </div>
-              </div>
-              <div class="column" style="width: 20vw; margin-left: 2vw">
-                <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">{{t('admin.credentialAdministration.checklist')}}</h6>
-                <div class="full-width" v-for="(item, index) in credential.conditions">
-                  <q-item class="row q-px-sm" style="margin-bottom: -1em">
-                    <q-input style="width: 15vw" v-model="item.label" :rules="[required]" lazy-rules error-message=" " no-error-icon label="Name" outlined type="text"/>
-                    <q-btn-group class="column justify-between items-center q-mx-sm" flat>
-                      <div class="column justify-center" style="height: 4em">
-                        <q-btn size="0.75em" style="width: 2em" v-if="index !== 0" flat icon="remove"
-                               @click="() => credential.conditions.splice(index, 1)"/>
+    <p class="row text-h3 justify-center">{{ t('admin.credentialAdministration.edit') }}</p>
+    <q-form ref="form" class="column justify-between self-center no-wrap full-width" style="height: 50vh"
+            @submit.prevent>
+      <div class="row no-wrap full-width">
+        <div class="column justify-evenly" style="width: 15vw; height: 40vh; margin-right: 3vw">
+          <q-input v-model="credential.credentialDefinitionId" :rules="[required]"
+                   class="q-mb-md" error-message=" " label="Credential Definition ID" lazy-rules no-error-icon
+                   outlined
+                   style="width: 15vw; margin-bottom: -1em" type="text"/>
+
+          <q-btn flat label="Load Credential Schema" @click="getCredentialSchema"/>
+          <q-input v-model="credential.name" :rules="[required]" error-message=" " label="Name"
+                   lazy-rules no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
+          <q-select v-if="props.type !== 'external'" v-model="credential.agent" :options="['university', 'tlabs']"
+                    label="Agent" outlined style="width: 15vw; margin-bottom: -1em"/>
+        </div>
+        <q-virtual-scroll :items="[0]" class="column full-width" style="height: 40vh">
+          <div class="row no-wrap full-width">
+            <div class="column full-width">
+              <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">
+                {{ t('admin.credentialAdministration.credentialAttribute') }}</h6>
+              <div v-for="(item, index) in credential.attributes" class="full-width">
+                <q-item class="row justify-between q-px-sm" style="margin-bottom: -1em">
+                  <q-input v-model="item.name" :rules="[required]" error-message=" " label="Name" lazy-rules
+                           no-error-icon outlined style="width: 15vw" type="text"/>
+                  <q-input v-model="item.attributeName" :label="t('admin.credentialAdministration.attribute')" :rules="[required]" error-message=" "
+                           lazy-rules outlined
+                           style="width: 15vw" type="text"/>
+                  <div class="row no-wrap">
+                    <q-select v-model="item.type" :options="types" emit-value label="Type" map-options
+                              outlined
+                              style="width: 10vw"/>
+                    <div class="column justify-between items-center q-mx-sm">
+                      <div class="column justify-center no-wrap" style="height: 4em">
+                        <q-btn color="black" flat icon="lock" round size="0.75em" style="width: 2em"
+                               @click="editValidation(item, credential.attributes)"/>
+                        <q-btn v-if="index !== 0" color="primary" flat icon="remove" round size="0.75em"
+                               style="width: 2em"
+                               @click="() => credential.attributes.splice(index, 1)"/>
                       </div>
-                      <q-btn size="0.75em" style="width: 2em" color="primary" flat icon="add" @click="addCondition(index)"/>
-                    </q-btn-group>
-                  </q-item>
-                </div>
+                      <q-btn color="primary" flat icon="add" round size="0.75em" style="width: 2em"
+                             @click="addAttribute(index)"/>
+                    </div>
+                  </div>
+                </q-item>
               </div>
             </div>
-          </q-virtual-scroll>
-        </div>
-        <div class="row justify-around q-mt-md">
-          <q-btn style="width: 4em; height: 4em" color="negative" text-color="positive" fab icon="delete" unelevated @click="deleteCredential"/>
-          <q-btn style="width: 4em; height: 4em" color="positive" text-color="negative" fab icon="save" unelevated @click="save"/>
+            <div class="column" style="width: 20vw; margin-left: 2vw">
+              <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">
+                {{ t('admin.credentialAdministration.checklist') }}</h6>
+              <div v-for="(item, index) in credential.conditions" class="full-width">
+                <q-item class="row q-px-sm" style="margin-bottom: -1em">
+                  <q-input v-model="item.label" :rules="[required]" error-message=" " label="Name" lazy-rules
+                           no-error-icon outlined style="width: 15vw" type="text"/>
+                  <q-btn-group class="column justify-between items-center q-mx-sm" flat>
+                    <div class="column justify-center" style="height: 4em">
+                      <q-btn v-if="index !== 0" flat icon="remove" size="0.75em" style="width: 2em"
+                             @click="() => credential.conditions.splice(index, 1)"/>
+                    </div>
+                    <q-btn color="primary" flat icon="add" size="0.75em" style="width: 2em"
+                           @click="addCondition(index)"/>
+                  </q-btn-group>
+                </q-item>
+              </div>
+            </div>
           </div>
-      </q-form>
+        </q-virtual-scroll>
+      </div>
+      <div class="row justify-around q-mt-md">
+        <q-btn color="negative" fab icon="delete" style="width: 4em; height: 4em" text-color="positive" unelevated
+               @click="deleteCredential"/>
+        <q-btn color="positive" fab icon="save" style="width: 4em; height: 4em" text-color="negative" unelevated
+               @click="save"/>
+      </div>
+    </q-form>
   </q-page>
 </template>
 
 <script lang="ts" setup>
 import {QForm, QSelectOption, useQuasar, ValidationRule} from "quasar";
-import {onMounted, ref, Ref} from "vue";
-import {CreateCredential} from "@/main/vue/entity/credentialDefinition";
-import {CreateAttribute} from "@/main/vue/entity/credentialDefinition";
+import {onBeforeMount, ref, Ref} from "vue";
+import {CreateAttribute, CreateCredential} from "@/main/vue/entity/credentialDefinition";
 import api from "@/main/vue/api";
 import {useI18n} from "vue-i18n";
 import router from "@/main/vue/router";
 import ValidateCredentials from "@/main/vue/views/ValidateCredentials.vue";
+import {AxiosError} from "axios";
 
 const props = defineProps<{ id?: string, type?: 'internal' | 'external' }>();
-
 
 const {t} = useI18n();
 const $q = useQuasar()
@@ -99,9 +116,9 @@ const credential: Ref<CreateCredential> = ref({
   conditions: [{label: ''}],
 });
 
-onMounted(() => {
+onBeforeMount(async () => {
   if (props.id !== undefined) {
-    api.credential.get(props.id.toString()).then(response => {
+    await api.credential.get(props.id.toString()).then(response => {
       credential.value = {
         name: response.data.name,
         agent: response.data.agent,
@@ -152,6 +169,41 @@ const save = async () => {
           console.log(reason);
         });
   }
+}
+
+const getCredentialSchema = async () => {
+  if (credential.value.credentialDefinitionId.length == 0) {
+    return;
+  }
+
+  $q.loading.show({delay: 400});
+
+  await api.credential.getCredentialSchema(credential.value.credentialDefinitionId)
+      .then(response => {
+        credential.value.name = response.data.name;
+        credential.value.credentialDefinitionId = response.data.credentialDefinitionId;
+
+        if (response.data.agent) {
+          credential.value.agent = response.data.agent;
+        }
+
+        credential.value.attributes = response.data.attrs.map(v => ({
+          type: 'text',
+          name: '',
+          attributeName: v,
+          validationRules: [],
+        }));
+      })
+      .catch((e: AxiosError<{ code: string; }>) => {
+        $q.notify({
+          type: 'negative',
+          position: 'bottom',
+          timeout: 6000,
+          message: t('admin.credentialEditing.credentialSchemaLoadFailed'),
+          caption: t(`admin.credentialEditing.errors.${e.response?.data.code ?? 'ERR_LEDGER_COMMUNICATION_FAILED'}`),
+        });
+      })
+      .finally($q.loading.hide);
 }
 
 const editValidation = (item: CreateAttribute, items: CreateAttribute[]) => {

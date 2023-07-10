@@ -19,11 +19,20 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+/**
+ * Der Service zum Speichern von Dateien in einem Dateispeicher.
+ */
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
 	private final Path fileStorageLocation;
 	private final ColorsService colorsService;
+
+	/**
+	 * Konstruktor für den FileStorageServiceImpl.
+	 *
+	 * @param fileStorageConfiguration die Konfiguration für den Dateispeicher
+	 */
 
 	public FileStorageServiceImpl(final FileStorageConfiguration fileStorageConfiguration, final ColorsService colorsService) {
 		fileStorageLocation = Paths.get(fileStorageConfiguration.getBaseDir()).normalize();
@@ -34,6 +43,15 @@ public class FileStorageServiceImpl implements FileStorageService {
 			throw new BeanCreationException("Could not initialize file storage", e);
 		}
 	}
+
+
+	/**
+	 * Speichert die angegebene Datei im Dateispeicher.
+	 *
+	 * @param file die hochgeladene Datei
+	 * @return der generierte Dateiname
+	 * @throws FileStorageException wenn ein Fehler beim Speichern der Datei auftritt
+	 */
 
 	@Override
 	public String storeFile(final MultipartFile file) {
@@ -51,6 +69,14 @@ public class FileStorageServiceImpl implements FileStorageService {
 		}
 	}
 
+	/**
+	 * Speichert das angegebene Logo im Dateispeicher, abhängig vom Farbthema.
+	 *
+	 * @param file        das hochgeladene Logo
+	 * @param colorTheme  das Farbthema
+	 * @return der Dateiname des Logos
+	 * @throws FileStorageException wenn ein Fehler beim Speichern des Logos auftritt
+	 */
 	@Override
 	public String storeLogo(final MultipartFile file, String colorTheme) {
 		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -68,6 +94,13 @@ public class FileStorageServiceImpl implements FileStorageService {
 		}
 	}
 
+	/**
+	 * Speichert die angegebene Favicon-Datei im Dateispeicher.
+	 *
+	 * @param file die hochgeladene Favicon-Datei
+	 * @return der Dateiname des Favicon
+	 * @throws FileStorageException wenn ein Fehler beim Speichern der Favicon-Datei auftritt
+	 */
 	@Override
 	public String storeFavicon(final MultipartFile file) {
 		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -80,6 +113,11 @@ public class FileStorageServiceImpl implements FileStorageService {
 		}
 	}
 
+	/**
+	 * Setzt die Ressourcen des Dateispeichers auf die Standardwerte zurück.
+	 *
+	 * @throws FileStorageException wenn ein Fehler beim Zurücksetzen der Ressourcen auftritt
+	 */
 	@Override
 	public void reset(ColorTheme colorTheme) {
 		try (final InputStream logoFile = Files.newInputStream(fileStorageLocation.resolve(colorsService.getDefaultColors(colorTheme).getLogoPath()));

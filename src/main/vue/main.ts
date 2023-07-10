@@ -79,8 +79,13 @@ const messages = {
             alreadySignedUp: "Bereits registriert: ",
             error: "Registrierung fehlgeschlagen",
             errorCaption : "Nutzer (E-Mail) ist bereits vergeben",
-            success: "Registrierung war erfolgreich"
-
+            success: "Registrierung war erfolgreich",
+            nameError: "Name erfüllt nicht die Kriterien",
+            emailError: "Keine gültige E-Mail-Adresse",
+            passwordError: "Passwort erfüllt nicht die Kriterien",
+            passwordDuplicateError: "Passwörter stimmen nicht überein",
+            warning: "Nutzer konnte nicht registriert werden",
+            later: "Bitte versuchen Sie es später erneut"
         },
         passwordReset: {
             resetPassword: "Passwort zurücksetzen",
@@ -151,6 +156,7 @@ const messages = {
             pickRoom: 'Raum auswählen',
             confirmDeletion: 'Löschen bestätigen',
             confirmDeletionText: 'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            doorCreateFailed: 'Tür konnte nicht erstellt werden',
             // Groups
             groupName: 'Gruppenname',
             editGroup: 'Gruppe bearbeiten',
@@ -265,7 +271,8 @@ const messages = {
                 createCategory: 'Neue Kategorie erstellen',
                 changeCategory: 'Kategorie ändern',
                 deleteCategory: 'Kategorie löschen',
-                delete: 'Möchten Sie die Kategorie wirklich löschen?'
+                delete: 'Möchten Sie die Kategorie wirklich löschen?',
+                info: "Jedes Credential darf nur in einer Gruppe sein. Es wird bei Auswahl möglicherweise aus einer anderen Kategorie entfernt."
             },
             credentialAdministration: {
                 title: "Credentials verwalten",
@@ -314,6 +321,14 @@ const messages = {
                 name: "Konfigurationsbezeichnung",
                 nameConfig: "Bezeichnung"
             },
+            credentialEditing: {
+                credentialSchemaLoadFailed: 'Das Credential Schema konnte nicht vom Ledger geladen werden.',
+                errors: {
+                    'ERR_LEDGER_COMMUNICATION_FAILED': 'Die Kommunikation mit dem Ledger ist fehlgeschlagen.',
+                    'ERR_INVALID_STRUCTURE': 'Die Credential Definition ID ist fehlerhaft.',
+                    'ERR_CREDENTIAL_DEFINITION_NOT_FOUND': 'Die angegebene Credential Definition ID konnte nicht auf dem Ledger gefunden werden.'
+                }
+            }
         },
         issuer: {
             issue: "Ausstellen",
@@ -499,7 +514,13 @@ const messages = {
             alreadySignedUp: "Already signed up: ",
             error: "Registration was not successful",
             errorCaption : "User (Email) is already registered",
-            success: "Registration was successful"
+            success: "Registration was successful",
+            nameError: "Name does not fullfill the requirements",
+            emailError: "Not a valid Email adress",
+            passwordError: "Password does not fullfill the requirements",
+            passwordDuplicateError: "Passwords are different from each ther",
+            warning: "Registration of the user was not successful",
+            later: "Try again later"
         },
         passwordReset: {
             resetPassword: "Reset Password",
@@ -571,6 +592,7 @@ const messages = {
             pickRoom: 'Choose room',
             confirmDeletion: 'Confirm deletion',
             confirmDeletionText: 'Are you sure you want to delete the door?',
+            doorCreateFailed: 'Door could not be created',
             // Groups
             groupName: 'Group name',
             editGroup: 'Edit group',
@@ -684,7 +706,8 @@ const messages = {
                 createCategory: 'Create new category',
                 changeCategory: 'Change category',
                 deleteCategory: 'Delete category',
-                delete: 'Are you sure you want to delete the category?'
+                delete: 'Are you sure you want to delete the category?',
+                info: "Each credential is only allowed in one group. If you select the credential, it might be removed from another category"
             },
             credentialAdministration: {
                 title: "Manage Credentials",

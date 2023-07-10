@@ -17,6 +17,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Implementierung des ExternalCredentialService, der Operationen zur Verwaltung von externen Credentials durchführt.
+ */
 @Service
 public class ExternalCredentialServiceImpl implements ExternalCredentialService {
     private final ExternalCredentialRepository externalCredentialRepository;
@@ -25,6 +28,14 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
 
     private final CategoryService categoryService;
 
+    /**
+     * Konstruktor für die ExternalCredentialServiceImpl-Klasse.
+     *
+     * @param externalCredentialRepository Das ExternalCredentialRepository.
+     * @param locationService              Der LocationService.
+     * @param categoryService              Der CategoryService.
+     */
+
     @Autowired
     public ExternalCredentialServiceImpl(ExternalCredentialRepository externalCredentialRepository,
                                          LocationService locationService, CategoryService categoryService) {
@@ -32,6 +43,12 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
         this.locationService = locationService;
         this.categoryService = categoryService;
     }
+
+    /**
+     * Ruft alle externen Credentials ab.
+     *
+     * @return Eine Liste aller vorhandenen externen Credentials.
+     */
     @SuppressWarnings("CPD-START")
     @Override
     public List<ExternalCredential> getExternalCredentials() {
@@ -40,16 +57,34 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
         return externalCredentials;
     }
 
+    /**
+     * Ruft externe Credentials anhand der angegebenen ID ab.
+     *
+     * @param id Die ID der externen Credentials.
+     * @return Die gefundenen externen Credentials oder Optional.empty(), wenn keine externen Credentials mit der ID
+     * vorhanden sind.
+     */
     @Override
     public Optional<ExternalCredential> getExternalCredential(Long id) {
         return externalCredentialRepository.findById(id);
     }
 
+    /**
+     * Ruft externe Credentials anhand der angegebenen Credential-Definition-ID ab.
+     *
+     * @param id Die Credential-Definition-ID.
+     * @return Eine Liste der gefundenen externen Credentials.
+     */
     @Override
     public List<ExternalCredential> getExternalCredentialByCredentialDefinitionId(String id) {
         return externalCredentialRepository.findAllByCredentialDefinitionId(id);
     }
 
+    /**
+     * Ruft alle externen Credentials als ExternalCredentialCmd-Objekte ab.
+     *
+     * @return Eine Liste von ExternalCredentialCmd-Objekten, die alle externen Credentials repräsentieren.
+     */
     @Override
     public List<ExternalCredentialCmd> getAllExternal() {
         List<ExternalCredential> externalCredentials = getExternalCredentials();
@@ -73,6 +108,12 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
         }
         return cmds;
     }
+
+    /**
+     * Ruft alle externen Credentials anhand der Proof-Configs an einem Standort ab
+     *
+     * @param location Standort zum Abrufen der ProofConfigs zum Erhalten der externen Credentials
+     */
 
     private Iterable<ExternalCredential> getCredentialFromAttachedProofConfig(Location location) {
         return location
@@ -99,6 +140,13 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Ruft alle externen Credentials anhand der Standort-ID als ExternalCredentialCmd-Objekte ab.
+     *
+     * @param id Die ID des Standorts.
+     * @return Eine Liste von ExternalCredentialCmd-Objekten, die alle externen Credentials für den Standort
+     * repräsentieren.
+     */
     @Override
     public List<ExternalCredentialCmd> getAllExternalByLocation(Long id) {
         List<Category> categories = categoryService.getCategory();
@@ -130,11 +178,19 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
 
     }
 
+    /**
+     * Löscht alle externen Credentials.
+     */
     @Override
     public void deleteAll() {
         externalCredentialRepository.deleteAll();
     }
 
+    /**
+     * Speichert eine Liste von externen Credentials.
+     *
+     * @param externalCredentials Eine Iterable-Liste von externen Credentials.
+     */
     @Override
     public void saveAll(Iterable<ExternalCredential> externalCredentials) {
         externalCredentialRepository.saveAll(externalCredentials);

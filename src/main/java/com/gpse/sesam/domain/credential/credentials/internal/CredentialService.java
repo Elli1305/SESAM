@@ -37,4 +37,6 @@ public interface CredentialService {
 	List<AllCredentialCmd> getAllForView();
 
 	List<AllCredentialCmd> getAllCredentialsByLocation(Long id);
+
+	CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws Exception;
 }

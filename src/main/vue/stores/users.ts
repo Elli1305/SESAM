@@ -11,6 +11,7 @@ export const useUserStore = defineStore('users', () => {
     const authenticated: Ref<boolean> = ref(false)
     const validPassword: Ref<RegExpMatchArray | null> = ref(null)
     const validEmail: Ref<RegExpMatchArray | null> = ref(null)
+    const validName: Ref<RegExpMatchArray | null> = ref(null)
     const user: Ref<User | null> = ref(null)
     const comparePassword: Ref<boolean> = ref(false)
     const editUser: Ref<User | null> = ref(null)
@@ -56,8 +57,13 @@ export const useUserStore = defineStore('users', () => {
         }
     }
 
+    function validateName(name: string) {
+        const nameRegex = /^[a-zA-ZÆÐƎƏƐƔĲŊŒẞÞǷȜæðǝəɛɣĳŋœĸſßþƿȝĄƁÇĐƊĘĦĮƘŁØƠŞȘŢȚŦŲƯY̨Ƴąɓçđɗęħįƙłøơşșţțŧųưy̨ƴÁÀÂÄǍĂĀÃÅǺĄÆǼǢƁĆĊĈČÇĎḌĐƊÐÉÈĖÊËĚĔĒĘẸƎƏƐĠĜǦĞĢƔáàâäǎăāãåǻąæǽǣɓćċĉčçďḍđɗðéèėêëěĕēęẹǝəɛġĝǧğģɣĤḤĦIÍÌİÎÏǏĬĪĨĮỊĲĴĶƘĹĻŁĽĿʼNŃN̈ŇÑŅŊÓÒÔÖǑŎŌÕŐỌØǾƠŒĥḥħıíìiîïǐĭīĩįịĳĵķƙĸĺļłľŀŉńn̈ňñņŋóòôöǒŏōõőọøǿơœŔŘŖŚŜŠŞȘṢẞŤŢṬŦÞÚÙÛÜǓŬŪŨŰŮŲỤƯẂẀŴẄǷÝỲŶŸȲỸƳŹŻŽẒŕřŗſśŝšşșṣßťţṭŧþúùûüǔŭūũűůųụưẃẁŵẅƿýỳŷÿȳỹƴźżžẓ\s-,.\']+$/
+        validName.value = name.match(nameRegex)
+    }
+
     function validateEmail(email: string) {
-        const emailRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+        const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         validEmail.value = email.match(emailRegex)
     }
 
@@ -172,6 +178,8 @@ export const useUserStore = defineStore('users', () => {
         comparePassword,
         validateEmail,
         validEmail,
+        validName,
+        validateName,
         logout,
         requestToken,
         resetPassword,

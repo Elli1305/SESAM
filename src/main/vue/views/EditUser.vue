@@ -59,6 +59,7 @@ import {useI18n} from "vue-i18n";
 import {useUserStore} from "@/main/vue/stores/users";
 import router from "@/main/vue/router";
 import {useQuasar} from "quasar";
+import axios from "axios";
 
 
 let test = ref('')
@@ -136,7 +137,8 @@ export default {
 
       } else {
         userStore.deleteUser(mail);
-        router.push('/currentuserlist');
+        axios.get('/api/user')
+        router.push('/currentuserlist')
       }
     }
 

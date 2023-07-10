@@ -1,0 +1,1225 @@
+openapi: 3.0.3
+info:
+  title: Sesam 3.1
+  description: |-
+    Api documentation for the implementation of SESAM application of Team 3.1
+  contact:
+    email: lhabich@techfak.uni-bielefeld.de
+  license:
+    name: MIT
+    url: https://se.techfak.de/projects/gp-se-ss-2023-team3-1/wiki/OpenSource_Lizenz
+  version: 1.0.0
+servers:
+  - url: https://localhost:8088
+tags:
+  - name: location
+    description: Everything about the Locations
+  - name: building
+    description: Everything about the Building
+  - name: floor
+    description: Everything about the Floor
+  - name: room
+    description: Everything about the room
+  - name: door
+    description: Everything about the door
+  - name: doorconfig
+    description: Everything about the doorconfig
+  - name: credentials
+    description: Everything about the credentials
+  - name: category
+    description: Everything about the categories
+  - name: user
+    description: Operations about user
+  - name: issuer
+    description: Operations about issuer
+  - name: colors
+    description: Everything about the colors
+  - name: imprint
+    description: Everything about the imprint
+paths:
+  /building/save:
+    post:
+      tags:
+        - building
+      summary: Save building
+      description: Save building
+      operationId: save
+      requestBody:
+        description: Save a building
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Building'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Building'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:buildings
+            - read:buildings
+  /building/delete/{id}:
+    delete:
+      tags:
+        - building
+      summary: Deletes a building
+      description: Deletes a building by its id
+      operationId: deleteById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the building that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Building not found
+      security:
+        - editor_auth:
+            - write:buildings
+            - read:buildings
+  /credentialmapping:
+    get:
+      tags:
+        - category
+      summary: Returns all categories
+      description: Returns a list of categories
+      operationId: getCategoriesInfo
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - editor_auth:
+            - read:category
+        - admin_auth:
+            - write:category
+            - read:category
+  /externalcredentials:
+    get:
+      tags:
+        - credential
+      summary: Returns all external credentials
+      description: List of all external credentials
+      operationId: getExternalInfos
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /credentialview/{id}:
+    get:
+      tags:
+        - credential
+      summary: Find credentials by Location Id
+      description: Find credentials by the id of an existing location
+      operationId: getCredentialInfos
+      parameters:
+        - name: id
+          in: path
+          description: Id of the location
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/InternalCredential'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: location not found
+  /credentialmapping/delete/{id}:
+    delete:
+      tags:
+        - category
+      summary: Deletes a category
+      description: Deletes a category by its id
+      operationId: deleteCategory
+      parameters:
+        - name: id
+          in: path
+          description: The id of the category that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Category not found
+      security:
+        - admin_auth:
+            - write:category
+            - read:category
+  /credentialmapping/edit/{id}:
+    put:
+      tags:
+        - category
+      summary: Update a category
+      description: Update a category by its id
+      operationId: updateCategory
+      parameters:
+        - name: id
+          in: path
+          description: id of the category that needs to be updated
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: Update an existent category
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        default:
+          description: successful operation
+      security:
+        - admin_auth:
+            - write:category
+            - read:category
+  /category:
+    post:
+      tags:
+        - category
+      summary: Save category
+      description: Save category
+      operationId: createCategory
+      requestBody:
+        description: Save a category
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '405':
+          description: Invalid input
+      security:
+          - admin_auth:
+              - write:category
+              - read:category
+  /category/{id}:
+    get:
+      tags:
+        - category
+      summary: Find category by id
+      description: Find category by the id
+      operationId: getCategoryById
+      parameters:
+        - name: id
+          in: path
+          description: Id of the category
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Category'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Category not found
+  /corpdesign/save/logo-light:
+    post:
+      tags:
+        - color
+      summary: Save a logo for the corporate design
+      description: Save logo for the light mode
+      operationId: saveLogoLight
+      requestBody:
+        description: Save a logo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '405':
+          description: Invalid input
+      security:
+        - admin_auth:
+            - write:file
+            - read:file
+  /corpdesign/save/logo-dark:
+    post:
+      tags:
+        - color
+      summary: Save a logo for the corporate design
+      description: Save logo for the dark mode
+      operationId: saveLogoDark
+      requestBody:
+        description: Save a logo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '405':
+          description: Invalid input
+      security:
+        - admin_auth:
+            - write:file
+            - read:file
+  /corpdesign/save/favicon:
+    post:
+      tags:
+        - color
+      summary: Save a favicon for the corporate design
+      description: Save favicon
+      operationId: saveFavicon
+      requestBody:
+        description: Save a favicon
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '405':
+          description: Invalid input
+      security:
+        - admin_auth:
+            - write:file
+            - read:file
+  /corpdesign/save/colors/{colortheme}:
+    post:
+      tags:
+        - color
+      summary: Save a colors for the corporate design
+      description: Save colors for a theme
+      operationId: changeColors
+      parameters:
+        - name: colortheme
+          in: path
+          description: Colortheme to change
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Save a colors for a theme
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/colors'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/colors'
+        '405':
+          description: Invalid input
+      security:
+        - admin_auth:
+            - write:colors
+            - read:colors
+  /corpdesign/get/colors/{colortheme}:
+    get:
+      tags:
+        - category
+      summary: Get colors by their theme
+      description: Get colors by their theme
+      operationId: getColors
+      parameters:
+        - name: colortheme
+          in: path
+          description: Color theme to get
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Colors'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Colors not found
+  /corpdesign/reset/colors/{colortheme}:
+    post:
+      tags:
+        - color
+      summary: Reset colors for the corporate design
+      description: Reset colors for a theme
+      operationId: resetColors
+      parameters:
+        - name: colortheme
+          in: path
+          description: Colortheme to reset
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Reset colors for a theme
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/colors'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/colors'
+        '405':
+          description: Invalid input
+      security:
+        - admin_auth:
+            - write:colors
+            - read:colors
+  /credentials:
+    get:
+      tags:
+        - credential
+      summary: Returns all internal credentials
+      description: List of all internal credentials
+      operationId: getCredential
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      tags:
+        - credentials
+      summary: Create a Credential
+      description: Create a credential
+      operationId: create
+      requestBody:
+        description: Create a credentials
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalCredentials'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalCredentials'
+        '405':
+          description: Invalid input
+      security:
+        - admin_auth:
+            - write:credential
+            - read:credential
+  /external_credentials:
+    get:
+      tags:
+        - credential
+      summary: Returns all external credentials
+      description: List of all external credentials
+      operationId: getExternalCredential
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /credentials/getAll:
+    get:
+      tags:
+        - credential
+      summary: Returns all credentials
+      description: List of all credentials
+      operationId: getAllCredentials
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /credentials/{id}:
+      get:
+        tags:
+          - credential
+        summary: Find credential by id
+        description: Find credential by the id
+        operationId: getCategoryById
+        parameters:
+          - name: id
+            in: path
+            description: Id of the credential
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schema/InternalCredential'
+          '400':
+            description: Invalid id supplied
+          '404':
+            description: Credential not found
+      delete:
+        tags:
+          - credential
+        summary: Deletes a credential
+        description: Deletes a credential by its id
+        operationId: delete
+        parameters:
+          - name: id
+            in: path
+            description: The id of the credential that needs to be deleted
+            required: true
+            schema:
+              type: integer
+        responses:
+          '400':
+            description: Invalid id supplied
+          '404':
+            description: Credential not found
+        security:
+          - admin_auth:
+              - write:credential
+              - read:credential
+  /credentials/getByIssuer/{id}:
+    get:
+      tags:
+        - credential
+      summary: Find credentials by issuer-id
+      description: Find credentials by the issuer-id
+      operationId: getByIssuerId
+      parameters:
+        - name: id
+          in: path
+          description: Id of the issuer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/InternalCredential'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Credential not found
+  /credentials/{id}/issue:
+    post:
+      tags:
+        - credential
+      summary: Issue a credential
+      description: Issue a credential
+      operationId: issueCredential
+      parameters:
+        - name: id
+          in: path
+          description: id for issuing
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Issue a credential
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueCredentialAttributeCmd'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalCredential'
+        '405':
+          description: Invalid input
+      security:
+        - issuer_auth:
+            - write:colors
+            - read:colors
+  /allcredentials:
+    get:
+      tags:
+        - credential
+      summary: Returns all credentials for the view
+      description: List of all credentials
+      operationId: credentials
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /allcredentialview:
+    get:
+      tags:
+        - credential
+      summary: Returns all credentials for the view
+      description: List of all credentials
+      operationId: credentials
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /externalcredentialview:
+    get:
+      tags:
+        - credential
+      summary: Returns all external credentials for the view
+      description: List of all external credentials
+      operationId: externalCredentials
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /externalcredentialsbylocation/{id}:
+    get:
+      tags:
+        - credential
+      summary: Find external credentials by Location Id
+      description: Find external credentials by the id of an existing location
+      operationId: externalCredentialsByLocation
+      parameters:
+        - name: id
+          in: path
+          description: Id of the location
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/ExternalCredential'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: location not found
+  /allbylocation/{id}:
+    get:
+      tags:
+        - credential
+      summary: Find all credentials by Location Id
+      description: Find all credentials by the id of an existing location
+      operationId: allByLocation
+      parameters:
+        - name: id
+          in: path
+          description: Id of the location
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Credential'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: location not found
+  /doorconfig/save:
+    post:
+      tags:
+        - doorconfig
+      summary: Save a doorconfig
+      description: Save doorconfig
+      operationId: save
+      requestBody:
+        description: Save a doorconfig
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TwoWayDoorConfig'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoWayDoorConfig'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:doorconfig
+            - read:doorconfig
+  /doorconfig/{id}:
+      get:
+        tags:
+          - doorconfig
+        summary: Find doorconfig by id
+        description: Find doorconfig by id
+        operationId: getDoorConfigForBothDirections
+        parameters:
+          - name: id
+            in: path
+            description: Id of the doorconfig
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schema/TwoWayDoorConfigCmd'
+          '400':
+            description: Invalid id supplied
+          '404':
+            description: location not found
+  /door/save:
+    post:
+      tags:
+        - door
+      summary: Save a door
+      description: Save door
+      operationId: save
+      requestBody:
+        description: Save a door
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Door'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Door'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:door
+            - read:door
+  /door/create:
+    post:
+      tags:
+        - door
+      summary: Create a door
+      description: Create door
+      operationId: create
+      requestBody:
+        description: Create a door
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Door'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Door'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:door
+            - read:door
+  /door/delete/{id}:
+    delete:
+      tags:
+        - door
+      summary: Deletes a door
+      description: Deletes a door by its id
+      operationId: deleteById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the door that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Door not found
+      security:
+        - editor_auth:
+            - write:door
+            - read:door
+  /door/doorsbyroom/{id}:
+    get:
+      tags:
+        - door
+      summary: Find doors by roomid
+      description: Find doors by a existing room
+      operationId: getDoorsByRoomId
+      parameters:
+        - name: id
+          in: path
+          description: Id of the room
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Door'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: room not found
+  /floor/uploadImage:
+    post:
+      tags:
+        - floor
+      summary: Upload a floorplan
+      description: Upload a floorplan
+      operationId: save
+      requestBody:
+        description: Save a floorplan
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:file
+            - read:file
+  /floor/save:
+    post:
+      tags:
+        - floor
+      summary: Save a floor
+      description: Save a floor
+      operationId: save
+      requestBody:
+        description: Save a floor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Floor'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Floor'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:floor
+            - read:floor
+  /floor/delete/{id}:
+    delete:
+      tags:
+        - floor
+      summary: Deletes a floor
+      description: Deletes a floor by its id
+      operationId: deleteById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the floor that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Floor not found
+      security:
+        - editor_auth:
+            - write:floor
+            - read:floor
+  /imprint:
+    get:
+      tags:
+        - imprint
+      summary: Returns the imprint
+      description: Returns the imprint
+      operationId: getImprintContent
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - admin_auth:
+            - write:imprint
+            - read:imprint
+    post:
+      tags:
+        - imprint
+      summary: Save the imprint
+      description: Save the imprint
+      operationId: saveImprintContent
+      requestBody:
+        description: Save the imprint
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Imprint'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Imprint'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:imprint
+            - read:imprint
+    delete:
+      tags:
+        - imprint
+      summary: Deletes the imprint
+      description: Deletes the imprint
+      operationId: deleteImprintContent
+      responses:
+        '200':
+          description: deleted
+      security:
+        - editor_auth:
+            - write:imprint
+            - read:imprint
+  /imprint/latest:
+    get:
+      tags:
+        - imprint
+      summary: Returns the imprint
+      description: Returns the imprint
+      operationId: getLatestImprint
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - admin_auth:
+            - write:imprint
+            - read:imprint
+  /issuers:
+    get:
+      tags:
+        - imprint
+      summary: Returns the issuers
+      description: Returns the issuers
+      operationId: getIssuers
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - admin_auth:
+            - write:issuer
+            - read:issuer
+  /issuer:
+    put:
+      tags:
+        - issuer
+      summary: Update an issuer
+      description: Update an issuer
+      operationId: updateIssuer
+      requestBody:
+        description: Update an issuer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Issuer'
+      responses:
+        default:
+          description: successful operation
+      security:
+        - admin_auth:
+            - write:issuer
+            - read:issuer
+  /locations:
+    get:
+      tags:
+        - locations
+      summary: Returns all locations
+      description: List of all location
+      operationId: getNavigationTreeInfo
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /locations/{id}:
+    get:
+      tags:
+        - locations
+      summary: Find a location by its id
+      description: Find a location
+      operationId: getLocationInfo
+      parameters:
+        - name: id
+          in: path
+          description: Id of the location
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/InternalCredential'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: location not found
+    delete:
+      tags:
+        - location
+      summary: Deletes a location
+      description: Deletes a location by its id
+      operationId: deleteById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the location that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Location not found
+      security:
+        - editor_auth:
+            - write:location
+            - read:location
+  /location/save:
+    post:
+      tags:
+        - location
+      summary: Save location
+      description: Save location
+      operationId: save
+      requestBody:
+        description: Save a location
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:location
+            - read:location
+  /preConfig/create:
+    post:
+      tags:
+        - doorconfig
+      summary: Create a doorconfig
+      description: Create a doorconfig
+      operationId: create
+      requestBody:
+        description: Create a doorconfig
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Doorconfig'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doorconfig'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:doorconfig
+            - read:doorconfig
+  /preconfig/update:
+    post:
+      tags:
+        - doorconfig
+      summary: Update a doorconfig
+      description: Update a doorconfig
+      operationId: update
+      requestBody:
+        description: Update a doorconfig
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Doorconfig'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Doorconfig'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:doorconfig
+            - read:doorconfig
+  /allconfigs:
+    get:
+      tags:
+        - doorconfig
+      summary: Get all doorconfigs
+      description: Get all doorconfigs
+      operationId: getAllConfigs
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Doorconfig'
+  /preconfig/{id}:
+    get:
+      tags:
+        - doorconfig
+      summary: Find a doorconfig by its id
+      description: Find a doorconfig
+      operationId: getConfig
+      parameters:
+        - name: id
+          in: path
+          description: Id of the doorconfig
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Doorconfig'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: config not found
