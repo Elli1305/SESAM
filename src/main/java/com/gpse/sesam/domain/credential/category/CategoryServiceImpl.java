@@ -4,7 +4,6 @@ import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialRepository;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialRepository;
-import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.web.cmd.CategoryResponseCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementierung des CategoryService, der Operationen zur Verwaltung von Kategorien durchführt.
+ */
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -21,6 +23,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final ExternalCredentialRepository externalCredentialRepository;
 
+    /**
+     * Konstruktor für die CategoryServiceImpl-Klasse.
+     *
+     * @param categoryRepository           Das CategoryRepository.
+     * @param credentialRepository         Das CredentialRepository.
+     * @param externalCredentialRepository Das ExternalCredentialRepository.
+     */
     @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository, CredentialRepository credentialRepository,
                                ExternalCredentialRepository externalCredentialRepository) {
@@ -29,6 +38,11 @@ public class CategoryServiceImpl implements CategoryService {
         this.externalCredentialRepository = externalCredentialRepository;
     }
 
+    /**
+     * Ruft alle Kategorien ab.
+     *
+     * @return Eine Liste aller vorhandenen Kategorien.
+     */
     @Override
     public List<Category> getCategory() {
         final List<Category> categories = new ArrayList<>();
@@ -36,11 +50,23 @@ public class CategoryServiceImpl implements CategoryService {
         return categories;
     }
 
+    /**
+     * Ruft eine Kategorie anhand der angegebenen ID ab.
+     *
+     * @param id Die ID der Kategorie.
+     * @return Die gefundene Kategorie oder Optional.empty(), wenn keine Kategorie mit der ID vorhanden ist.
+     */
     @Override
     public Optional<Category> getCategory(Long id) {
         return categoryRepository.findById(id);
     }
 
+
+    /**
+     * Löscht eine Kategorie anhand der angegebenen ID.
+     *
+     * @param id Die ID der zu löschenden Kategorie.
+     */
     @Override
     public void deleteById(Long id) {
         Optional<Category> category = getCategory(id);
@@ -53,22 +79,30 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-
-    @Override
-    public Optional<Category> getCategory(List<Location> locations) {
-        return Optional.empty();
-    }
-
-
+    /**
+     * Löscht alle Kategorien.
+     */
     @Override
     public void deleteAll() {
         categoryRepository.deleteAll();
     }
 
+    /**
+     * Speichert eine Liste von Kategorien.
+     *
+     * @param category Eine Iterable-Liste von Kategorien.
+     */
     @Override
     public void saveAll(Iterable<Category> category) {
         categoryRepository.saveAll(category);
     }
+
+    /**
+     * Aktualisiert eine Kategorie basierend auf der angegebenen ID und den Daten im CategoryResponseCmd-Objekt.
+     *
+     * @param id  Die ID der zu aktualisierenden Kategorie.
+     * @param cmd Das CategoryResponseCmd-Objekt mit den aktualisierten Daten.
+     */
 
     @Override
     public void updateCategory(Long id, CategoryResponseCmd cmd) {
@@ -104,18 +138,29 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    /**
+     * Löscht eine Kategorie.
+     *
+     * @param category Die zu löschende Kategorie.
+     */
+
     @Override
     public void deleteCategory(Category category) {
         categoryRepository.delete(category);
     }
 
 
+    /**
+     * Erstellt eine neue Kategorie basierend auf den Daten im CategoryResponseCmd-Objekt.
+     *
+     * @param categoryCmd Das CategoryResponseCmd-Objekt mit den Daten für die neue Kategorie.
+     */
     @Override
     public void createCategory(CategoryResponseCmd categoryCmd) {
         final Category category = new Category(categoryCmd.getName());
         List<InternalCredential> internal = new ArrayList<>();
         for (Long cred: categoryCmd.getCredentials()) {
-        Optional<InternalCredential> credential = credentialRepository.findById(cred);
+            Optional<InternalCredential> credential = credentialRepository.findById(cred);
             if (credential.isPresent()) {
                 internal.add(credential.get());
                 credential.get().setCategory(category);

@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Diese Klasse implementiert die Funktionen zum Löschen von Standorten, Gebäuden und Etagen.
+ */
 @Service
 public class DeleteLocationServiceImpl {
     private final LocationRepository locationRepository;
@@ -25,6 +28,17 @@ public class DeleteLocationServiceImpl {
     private final FloorRepository floorRepository;
 
     private final RoomRepository roomRepository;
+
+    /**
+     * Konstruktor für DeleteLocationServiceImpl.
+     *
+     * @param locationRepository   das LocationRepository zur Datenbankabfrage von Standorten
+     * @param roomGroupRepository  das RoomGroupRepository zur Datenbankabfrage von Raumgruppen
+     * @param roomGroupService     der RoomGroupServiceImpl zur Verwaltung von Raumgruppen
+     * @param buildingRepository   das BuildingRepository zur Datenbankabfrage von Gebäuden
+     * @param floorRepository      das FloorRepository zur Datenbankabfrage von Etagen
+     * @param roomRepository       das RoomRepository zur Datenbankabfrage von Räumen
+     */
 
     public DeleteLocationServiceImpl(LocationRepository locationRepository,
                                      RoomGroupRepository roomGroupRepository,
@@ -40,6 +54,11 @@ public class DeleteLocationServiceImpl {
         this.roomRepository = roomRepository;
     }
 
+    /**
+     * Löscht einen Standort anhand der angegebenen ID.
+     *
+     * @param id die ID des zu löschenden Standorts
+     */
     public void deleteById(Long id) {
         Optional<Location> location = locationRepository.findById(id);
         if (location.isPresent()) {
@@ -54,6 +73,11 @@ public class DeleteLocationServiceImpl {
         locationRepository.deleteById(id);
     }
 
+    /**
+     * Löscht ein Gebäude anhand der angegebenen ID.
+     *
+     * @param id die ID des zu löschenden Gebäudes
+     */
     public void buildingDeleteById(Long id) {
         Optional<Building> building = buildingRepository.findById(id);
         if (building.isPresent()) {
@@ -65,6 +89,11 @@ public class DeleteLocationServiceImpl {
         buildingRepository.deleteById(id);
     }
 
+    /**
+     * Löscht eine Etage anhand der angegebenen ID.
+     *
+     * @param id die ID der zu löschenden Etage
+     */
     public void floorDeleteById(Long id) {
         Optional<Floor> floor = floorRepository.findById(id);
         if (floor.isPresent()) {

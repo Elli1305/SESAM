@@ -156,6 +156,7 @@ const messages = {
             pickRoom: 'Raum auswählen',
             confirmDeletion: 'Löschen bestätigen',
             confirmDeletionText: 'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            doorCreateFailed: 'Tür konnte nicht erstellt werden',
             // Groups
             groupName: 'Gruppenname',
             editGroup: 'Gruppe bearbeiten',
@@ -298,8 +299,8 @@ const messages = {
                 doorconfiguration: "Türkonfigurationen",
                 nameOfGroup: "Name der neuen Gruppe",
                 groups: "Raumgruppen",
-                info: "Räume einer neuen Gruppe zufügen oder eine bereits bestehende Gruppe auswählen und 'Räume zu ausgewählter Gruppe hinzufügen' drücken",
-                addRooms: "Räume zu ausgewählten Gruppen zufügen",
+                info: "Räume einer neuen Gruppe zufügen oder eine bereits bestehende Gruppe auswählen und 'Räume in ausgewählter Gruppe speichern' drücken",
+                addRooms: "Räume in ausgewählter Gruppe speichern",
                 addRoomsToNewGroup:"Räume zu neuer Gruppe zufügen",
                 noGroupSelected: "Keine Gruppe ausgewählt",
                 noRoomSelected: "Keine Räume ausgewählt",
@@ -320,6 +321,14 @@ const messages = {
                 name: "Konfigurationsbezeichnung",
                 nameConfig: "Bezeichnung"
             },
+            credentialEditing: {
+                credentialSchemaLoadFailed: 'Das Credential Schema konnte nicht vom Ledger geladen werden.',
+                errors: {
+                    'ERR_LEDGER_COMMUNICATION_FAILED': 'Die Kommunikation mit dem Ledger ist fehlgeschlagen.',
+                    'ERR_INVALID_STRUCTURE': 'Die Credential Definition ID ist fehlerhaft.',
+                    'ERR_CREDENTIAL_DEFINITION_NOT_FOUND': 'Die angegebene Credential Definition ID konnte nicht auf dem Ledger gefunden werden.'
+                }
+            }
         },
         issuer: {
             issue: "Ausstellen",
@@ -583,6 +592,7 @@ const messages = {
             pickRoom: 'Choose room',
             confirmDeletion: 'Confirm deletion',
             confirmDeletionText: 'Are you sure you want to delete the door?',
+            doorCreateFailed: 'Door could not be created',
             // Groups
             groupName: 'Group name',
             editGroup: 'Edit group',

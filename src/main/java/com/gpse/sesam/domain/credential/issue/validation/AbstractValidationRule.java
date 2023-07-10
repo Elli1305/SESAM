@@ -1,8 +1,8 @@
-package com.gpse.sesam.domain.credential.validation;
+package com.gpse.sesam.domain.credential.issue.validation;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
 import jakarta.persistence.*;
 
 @JsonTypeInfo(

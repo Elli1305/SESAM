@@ -23,7 +23,7 @@ import {useRoomStore} from "@/main/vue/stores/room";
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
-import api from "@/main/vue/api";
+import {useI18n} from "vue-i18n";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -82,7 +82,7 @@ export default {
   },
   mounted: function () {
     floorPlanMap = L.map("floor-plan-map", mapConfig);
-
+    const {t} = useI18n()
     const $q = useQuasar();
 
     const {rooms} = storeToRefs(this.floorPlanStore)
@@ -204,6 +204,14 @@ export default {
             room.doors.push(savedDoor)
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
+          }).catch(() => {
+            $q.notify({
+              type: 'negative',
+              message: t('floorPlan.doorCreateFailed'),
+              position: 'bottom',
+              timeout: 3000,
+            });
+            floorPlanMap.removeLayer(e.layer)
           })
         })
       }
@@ -322,6 +330,14 @@ export default {
           width: 5,
           fillOpacity: 0.1
         })
+          if(this.floorPlanStore.selectedRooms.includes(room.id)) {
+              polygon.setStyle({
+                  color: 'red',
+                  fillColor: 'red',
+                  weight: 2,
+                  fillOpacity: 0.1
+              })
+          }
 
         polygons.push(polygon);
         let doorsname = room.doors.map(door => door.name).join(", ");
