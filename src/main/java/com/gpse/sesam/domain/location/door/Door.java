@@ -1,18 +1,7 @@
 package com.gpse.sesam.domain.location.door;
 
 import com.gpse.sesam.domain.location.Coordinate;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-import jakarta.persistence.OneToMany;
-import com.gpse.sesam.domain.location.door.config.ProofConfig;
-
-
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +21,7 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();
 
 
