@@ -9,6 +9,7 @@ import door from "@/main/vue/api/door";
 import doorConfig from "@/main/vue/api/doorConfig";
 import roomGroups from "@/main/vue/api/roomGroups";
 import predefinedConfig from "@/main/vue/api/predefinedConfig";
+import history from "@/main/vue/api/history";
 
 export default {
     auth,
@@ -21,5 +22,6 @@ export default {
     door,
     roomGroups,
     doorConfig,
-    predefinedConfig
+    predefinedConfig,
+    history,
 };
