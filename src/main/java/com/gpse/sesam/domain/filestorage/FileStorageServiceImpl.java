@@ -2,6 +2,9 @@ package com.gpse.sesam.domain.filestorage;
 
 import com.gpse.sesam.configuration.FileStorageConfiguration;
 import com.gpse.sesam.domain.colors.ColorTheme;
+import com.gpse.sesam.domain.colors.Colors;
+import com.gpse.sesam.domain.colors.ColorsService;
+import com.gpse.sesam.domain.colors.ColorsServiceImpl;
 import com.gpse.sesam.web.exception.FileStorageException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.stereotype.Service;
@@ -20,9 +23,11 @@ import java.util.UUID;
 public class FileStorageServiceImpl implements FileStorageService {
 
 	private final Path fileStorageLocation;
+	private final ColorsService colorsService;
 
-	public FileStorageServiceImpl(final FileStorageConfiguration fileStorageConfiguration) {
+	public FileStorageServiceImpl(final FileStorageConfiguration fileStorageConfiguration, final ColorsService colorsService) {
 		fileStorageLocation = Paths.get(fileStorageConfiguration.getBaseDir()).normalize();
+		this.colorsService = colorsService;
 		try {
 			Files.createDirectories(fileStorageLocation);
 		} catch (final IOException e) {
@@ -76,10 +81,15 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	@Override
-	public void reset() {
-		try (final InputStream logoFile = Files.newInputStream(fileStorageLocation.resolve("T_logo_white.svg"));
+	public void reset(ColorTheme colorTheme) {
+		try (final InputStream logoFile = Files.newInputStream(fileStorageLocation.resolve(colorsService.getDefaultColors(colorTheme).getLogoPath()));
 			 final InputStream faviconFile = Files.newInputStream(fileStorageLocation.resolve("T_favicon.ico"))) {
-			final Path logoLocation = fileStorageLocation.resolve("Logo.svg");
+			final Path logoLocation;
+			if (colorTheme.equals(ColorTheme.LIGHT)) {
+				logoLocation = fileStorageLocation.resolve("Logo.svg");
+			} else {
+				logoLocation = fileStorageLocation.resolve("Logo-Dark.svg");
+			}
 			final Path faviconLocation = fileStorageLocation.resolve("Favicon.ico");
 			Files.copy(logoFile, logoLocation, StandardCopyOption.REPLACE_EXISTING);
 			Files.copy(faviconFile, faviconLocation, StandardCopyOption.REPLACE_EXISTING);

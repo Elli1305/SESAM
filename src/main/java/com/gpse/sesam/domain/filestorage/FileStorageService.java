@@ -1,5 +1,7 @@
 package com.gpse.sesam.domain.filestorage;
 
+import com.gpse.sesam.domain.colors.ColorTheme;
+import com.gpse.sesam.domain.colors.Colors;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileStorageService {
@@ -10,6 +12,6 @@ public interface FileStorageService {
 
     String storeFavicon(MultipartFile file);
 
-    void reset();
+    void reset(ColorTheme colorTheme);
 
 }

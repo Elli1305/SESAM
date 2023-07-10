@@ -96,11 +96,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		defaultLight.setDefaultColors(true);
 		defaultLight.setTheme(ColorTheme.LIGHT);
 		setLightColors(defaultLight);
+		defaultLight.setLogoPath("T_logo_white.svg");
 
 		final Colors defaultDark = new Colors();
 		defaultDark.setDefaultColors(true);
 		defaultDark.setTheme(ColorTheme.DARK);
 		setDarkColors(defaultDark);
+		defaultDark.setLogoPath("T_logo_black.svg");
 
 		final Colors currentLight = new Colors();
 		currentLight.setDefaultColors(false);
@@ -129,7 +131,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		defaultColors.setSecondary("#f6b2d5");
 		defaultColors.setAccent("#ffffff");
 		defaultColors.setDark("#808080");
-		defaultColors.setLightBlue("#7d99a7");
+		defaultColors.setLight("#9e9e9e");
 		defaultColors.setPositive("#dcdcdc");
 		defaultColors.setNegative("#505050");
 		defaultColors.setInfo("#0074E2");
@@ -138,13 +140,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private void setDarkColors(final Colors defaultColors) {
 		defaultColors.setLogoPath("/Logo-Dark.svg");
-		defaultColors.setBgC("#000000");
+		defaultColors.setBgC("#303030");
 		defaultColors.setTextC("#ffffff");
 		defaultColors.setPrimaryColor("#e20074");
 		defaultColors.setSecondary("#f6b2d5");
 		defaultColors.setAccent("#000000");
 		defaultColors.setDark("#808080");
-		defaultColors.setLightBlue("#7d99a7");
+		defaultColors.setLight("#9e9e9e");
 		defaultColors.setPositive("#dcdcdc");
 		defaultColors.setNegative("#505050");
 		defaultColors.setInfo("#0074E2");

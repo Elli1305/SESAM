@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.colors;
 
+import jakarta.persistence.Access;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,14 @@ public class ColorsServiceImpl implements ColorsService {
         this.colorsRepository = colorsRepository;
     }
 
+    @Override
     public Colors getColors(ColorTheme colorTheme) {
         return colorsRepository.findByDefaultColorsIsFalseAndTheme(colorTheme);
+    }
+
+    @Override
+    public Colors getDefaultColors(ColorTheme colorTheme) {
+        return colorsRepository.findByDefaultColorsIsTrueAndTheme(colorTheme);
     }
 
     @Override
@@ -32,13 +39,15 @@ public class ColorsServiceImpl implements ColorsService {
         Colors colors = new Colors();
         colors.setId(currentColorsId);
         colors.setDefaultColors(false);
+        colors.setTheme(defaultColors.getTheme());
+        colors.setLogoPath(defaultColors.getLogoPath());
         colors.setBgC(defaultColors.getBgC());
         colors.setTextC(defaultColors.getTextC());
         colors.setPrimaryColor(defaultColors.getPrimaryColor());
         colors.setSecondary(defaultColors.getSecondary());
         colors.setAccent(defaultColors.getAccent());
         colors.setDark(defaultColors.getDark());
-        colors.setLightBlue(defaultColors.getLightBlue());
+        colors.setLight(defaultColors.getLight());
         colors.setPositive(defaultColors.getPositive());
         colors.setNegative(defaultColors.getNegative());
         colors.setInfo(defaultColors.getInfo());
