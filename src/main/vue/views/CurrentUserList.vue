@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t("admin.currentUsers.title")}}</p>
     <div class="row justify-center">
       <q-table
-          style="width: 80vw; height: 50vh"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
@@ -27,7 +27,7 @@
             </div>
         </template>
         <template v-slot:top-right>
-            <q-input borderless dense debounce="250" v-model="filter.search" :placeholder="t('common.search')" >
+            <q-input outlined rounded dense debounce="250" v-model="filter.search" :placeholder="t('common.search')" >
                 <template v-slot:append>
                     <q-icon name="search" />
                 </template>

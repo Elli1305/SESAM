@@ -23,12 +23,12 @@
                         <q-select style="width: 10vw" v-model="item.type" :options="types" emit-value label="Type" map-options
                                   outlined/>
                         <div class="column justify-between items-center q-mx-sm">
-                          <div class="column justify-center no-wrap" style="height: 4em">
-                            <q-btn size="0.75em" style="width: 2em" color="black" round flat icon="lock" @click="editValidation(item, credential.attributes)"/>
-                            <q-btn size="0.75em" style="width: 2em" color="primary" v-if="index !== 0" round flat icon="remove"
+                          <div class="column justify-center no-wrap rounded-borders" style="height: 4em">
+                            <q-btn size="0.70em" style="width: 2em; height: 2em; color: var(--text-color)" round flat icon="lock" @click="editValidation(item, credential.attributes)"/>
+                            <q-btn size="0.70em" style="width: 2em; height: 2em; color: var(--text-color)" v-if="index !== 0" round flat icon="remove"
                                    @click="() => credential.attributes.splice(index, 1)"/>
                           </div>
-                          <q-btn size="0.75em" color="primary" style="width: 2em" round flat icon="add" @click="addAttribute(index)"/>
+                          <q-btn size="0.80em" color="primary" style="width: 2em; margin-left: -4em" round flat icon="add" @click="addAttribute(index)"/>
                         </div>
                         </div>
                       </q-item>

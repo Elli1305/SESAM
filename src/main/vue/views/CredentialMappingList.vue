@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t("admin.credentialMapping.title")}}</p>
     <div class="row self-center">
       <q-table
-          style="width: 80vw; height: 50vh"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
@@ -18,7 +18,7 @@
           :row-key="row => row.id">
         <template v-slot:top-right>
           <q-btn class="q-mr-xs" flat color="grey" :label="t('admin.credentialMapping.newCategory')" icon="add" rounded @click="prompt=true"/>
-          <q-input class="q-ml-xs" borderless dense debounce="250" v-model="filter" :placeholder="t('common.search')">
+          <q-input class="q-ml-xs" outlined rounded dense debounce="250" v-model="filter" :placeholder="t('common.search')">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -34,7 +34,7 @@
     </div>
   </q-page>
   <q-dialog v-model="alert" persistent>
-    <q-card>
+    <q-card style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section>
         <div class="text-h6"> {{ t("admin.credentialMapping.deleteCategory")}}</div>
       </q-card-section>
@@ -49,13 +49,13 @@
     </q-card>
   </q-dialog>
   <q-dialog v-model="prompt" persistent>
-    <q-card>
+    <q-card style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section>
         <div class="text-h6"> {{ t("admin.credentialMapping.createCategory")}}</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <q-input dense :label="t('admin.credentialMapping.credentialName')" v-model="address" autofocus @keyup.enter="prompt = false" :placeholder="t('common.category')">
+        <q-input dense :label="t('admin.credentialMapping.categoryName')" v-model="address" autofocus @keyup.enter="prompt = false" :placeholder="t('common.category')">
           <template v-slot:append>
             <q-icon name="edit" />
           </template>
@@ -94,7 +94,7 @@
     </q-card>
   </q-dialog>
   <q-dialog v-model="changeCategory" persistent>
-    <q-card>
+    <q-card style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section>
         <div class="text-h6"> {{ t("admin.credentialMapping.changeCategory")}}</div>
       </q-card-section>

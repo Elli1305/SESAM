@@ -18,7 +18,7 @@
               undo: {icon: 'undo', tip: ''},
               redo: {icon: 'redo', tip: ''}}"
             v-model="editorContent"
-            style="width: 50vw"/>
+            style="width: 50vw; background-color: var(--bg-color); color: var(--text-color)"/>
         <q-btn class="self-end q-ml-lg" round icon="save" color="positive" text-color="negative" @click="showConfirmDialog" style="width: 4em; height: 4em"/>
       </div>
     <q-dialog v-model="confirmDialog">

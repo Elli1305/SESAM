@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{ t('admin.issuerManagement.title') }}</p>
     <div class="row self-center" style="display: flex">
       <q-table
-          style="width: 80vw; height: 50vh"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
@@ -23,7 +23,7 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn dense round flat color="grey" @click="prompt=true; openForm(props.row)" icon="edit"></q-btn>
+            <q-btn dense round flat style="color: var(--light)" @click="prompt=true; openForm(props.row)" icon="edit"></q-btn>
           </q-td>
         </template>
 
@@ -49,7 +49,7 @@
       </q-table>
     </div>
     <q-dialog v-model="prompt" persistent>
-      <q-card>
+      <q-card style="background-color: var(--bg-color); color: var(--text-color)">
         <q-card-section>
           <div class="text-h6">{{ t('admin.issuerManagement.dialogTitle') }}</div>
         </q-card-section>
@@ -68,7 +68,19 @@
                 option-label="name"
                 option-value="id"
                 map-options
-                options-cover/>
+                use-chips>
+              <template v-slot:selected-item="scope">
+                <q-chip
+                    class="q-pa-sm"
+                    style="line-height: 1"
+                    :label="scope.opt.name"
+                    :tabindex="scope.tabindex"
+                    dense
+                    removable
+                    icon-remove="clear"
+                    @remove="scope.removeAtIndex(scope.index)"/>
+              </template>
+            </q-select>
             <q-select
                 class="q-my-sm"
                 filled

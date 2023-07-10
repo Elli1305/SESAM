@@ -3,7 +3,7 @@ import StartView from '../views/Start.vue'
 import SignUp from "@/main/vue/views/SignUp.vue";
 import PasswordChange from "../views/PasswortChange.vue";
 import PasswordReset from "../views/PasswordReset.vue";
-import Profilansicht from '@/main/vue/views/Profilansicht.vue'
+import ProfileView from '@/main/vue/views/ProfileView.vue'
 import LoginView from '../views/Login.vue'
 import CurrentUserList from "@/main/vue/views/CurrentUserList.vue";
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
@@ -97,7 +97,7 @@ const router = createRouter({
         {
             path: '/profile',
             name: 'profile',
-            component: Profilansicht
+            component: ProfileView
         },
         {
             path: '/passwordchange',

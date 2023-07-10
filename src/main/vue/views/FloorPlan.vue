@@ -391,5 +391,6 @@ export default {
 #floor-plan-map {
   height: 70vh;
   position: relative;
+  background: var(--bg-color);
 }
 </style>
