@@ -98,6 +98,7 @@ export default {
 
     const columns = [
       { name: 'datum', required: true, label: t('doorHistory.date'), align: 'center', field: 'createdAt', headerAlign: 'center', sortable: true },
+      { name: 'name', required: true, label: t('doorHistory.name'), align: 'center', field: 'name', headerAlign: 'center', sortable: true },
       { name: 'credentials', required: true, label: t('doorHistory.credentials'), align: 'center', field: 'credentials', headerAlign: 'center', sortable: true },
       { name: 'actions', align: 'center', label: t('doorHistory.edit') },
     ]

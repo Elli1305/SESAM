@@ -22,10 +22,11 @@ import IssueCredentials from "@/main/vue/views/IssueCredentials.vue";
 import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 import IssueCredential from "@/main/vue/views/IssueCredential.vue";
 import IssuerManagement from "@/main/vue/views/IssuerManagement.vue";
-import DoorHistory from "@/main/vue/views/DoorHistory.vue";
+import DoorHistory from "@/main/vue/views/DoorHistoryOverview.vue";
 import CredentialAdministration from "@/main/vue/views/CredentialAdministration.vue";
 import CredentialEditing from "@/main/vue/views/CredentialEditing.vue";
 import PredefinedConfigEditor from "@/main/vue/views/PredefinedConfigEditor.vue";
+import DoorHistoryPerDoor from "@/main/vue/views/DoorHistory.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -175,6 +176,11 @@ const router = createRouter({
         {
             path: "/doorhistory",
             component: DoorHistory,
+            meta: {requiresAdmin: true},
+        },
+        {
+            path: "/doorhistory/:id(\\d+)",
+            component: DoorHistoryPerDoor,
             meta: {requiresAdmin: true},
         },
 
