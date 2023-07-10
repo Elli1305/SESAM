@@ -1,5 +1,5 @@
 import {Coordinates, Door, Floor} from "@/main/vue/entity/location";
-import {DoorConfiguration, TwoWayDoorConfiguration} from "@/main/vue/entity/doorConfiguration";
+import {TwoWayDoorConfiguration} from "@/main/vue/entity/doorConfiguration";
 
 export interface Room {
     id: bigint
@@ -34,4 +34,9 @@ export interface RoomsAndDoors {
 export interface GroupConfigResponse {
     doorId: string
     twowaydoorconfig: TwoWayDoorConfiguration
+}
+
+export interface GroupConfig {
+    doorIds: number[]
+    doorConfig: TwoWayDoorConfiguration[]
 }

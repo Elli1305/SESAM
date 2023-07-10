@@ -186,9 +186,6 @@ export default {
 
   methods: {
     changeDirectionOut(direction, k) {
-      console.log(direction);
-      console.log(k);
-      console.log()
 
       if (direction === Direction.IN) {
         this.$refs.doorOut[k].direction = Direction.OUT
@@ -204,7 +201,6 @@ export default {
         this.$refs.doorOut[k].direction = Direction.BOTH
         this.qSelectgeneral.qSelectsSet[k].doorConfigOut.direction = Direction.BOTH
         this.qSelectgeneral.qSelectsSet[k].doorConfigIn.direction = Direction.BOTH
-
       }
 
     },
