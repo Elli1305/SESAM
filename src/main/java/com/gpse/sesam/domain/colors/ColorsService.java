@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface ColorsService {
 
-    Colors getColors();
+    Colors getColors(ColorTheme colorTheme);
 
-    Colors changeColors(Colors colors);
+    Colors changeColors(ColorTheme colorTheme, Colors colors);
 
-    void resetColors();
+    void resetColors(ColorTheme colorTheme);
 
     void saveAll(List<Colors> defaultColors);
 

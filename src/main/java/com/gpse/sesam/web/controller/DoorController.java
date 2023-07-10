@@ -1,53 +1,45 @@
 package com.gpse.sesam.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.location.door.Door;
-
 import com.gpse.sesam.domain.location.door.DoorService;
-
+import com.gpse.sesam.util.DoorCmdMapper;
+import com.gpse.sesam.web.cmd.DoorCmd;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.context.annotation.Bean;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.text.ParseException;
 
 @RestController
-
 @RequestMapping("/api/door")
-
 public class DoorController {
 
 	private final DoorService doorService;
+	private final DoorCmdMapper doorCmdMapper;
 
 	@Autowired
-
-	public DoorController(final DoorService doorService) {
-
+	public DoorController(final DoorService doorService, CredentialService credentialService) {
 		this.doorService = doorService;
-
+		doorCmdMapper = new DoorCmdMapper(credentialService);
 	}
 
 	@PostMapping("/save")
+	public Door save(@RequestBody final DoorCmd door) {
+		return doorService.save(DoorCmdMapper.toEntity(door));
+	}
 
-	public Door save(@RequestBody final Door door) {
-
-		return doorService.save(door);
-
+	@PostMapping("/create")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Door create(@RequestBody final DoorCmd doorCmd) {
+		return doorService.create(doorCmd.getRoomId(), DoorCmdMapper.toEntity(doorCmd));
 	}
 
 	@DeleteMapping("/{id:\\d+}")
-
 	public void deleteById(@PathVariable("id") final Long id) {
-
 		doorService.deleteById(id);
-
 	}
 
 	@GetMapping("/doors")
@@ -56,4 +48,14 @@ public class DoorController {
 
 	}
 
+
+	@GetMapping("doorsbyroom/{id:\\d+}")
+	public java.util.List<Door> getDoorsByRoomId(@PathVariable("id") final Long id) {
+		return doorService.getDoorsByRoomId(id);
+	}
+
+	@GetMapping("/{id:\\d+}")
+	public DoorCmd getDoorById(@PathVariable("id") final Long id) throws ParseException {
+		return doorCmdMapper.toCmd(doorService.findDoorById(id).orElseThrow(IllegalArgumentException::new));
+	}
 }

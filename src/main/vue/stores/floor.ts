@@ -31,7 +31,19 @@ export const useFloorStore = defineStore('floor', () => {
         }
     }
 
+    function deleteFloor(id: string) {
+        return new Promise<void>((resolve, reject) => {
+            api.floor.deleteFloor(id).then(() => {
+                locationStore.getLocations();
+                resolve()
+            }).catch((error) => {
+                reject(error)
+            })
+        });
+    }
+
     return {
         save,
+        deleteFloor
     }
 })

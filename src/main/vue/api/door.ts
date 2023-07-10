@@ -6,7 +6,19 @@ export default {
         return axios.post("api/door/save", door)
     },
 
+    create(door: Door): Promise<AxiosResponse<Door>> {
+        return axios.post("api/door/create", door)
+    },
+
+    getById(id: BigInt): Promise<AxiosResponse<Door>> {
+        return axios.get(`api/door/${id}`)
+    },
+
     deleteById(id: BigInt): Promise<AxiosResponse<void>> {
         return axios.delete(`api/door/${id}`)
+    },
+
+    getDoorsByRoomId(param: BigInt):Promise<AxiosResponse<Door[]>> {
+        return axios.get("api/door/doorsbyroom/" + param)
     }
 }

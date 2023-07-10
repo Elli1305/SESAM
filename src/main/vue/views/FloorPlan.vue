@@ -127,8 +127,8 @@ export default {
             weight: 2,
             fillOpacity: 0.1
           });
-          selectedRooms.value.forEach(room => {
-            if (room.id === layer.id) {
+          selectedRooms.value.forEach(roomID => {
+            if (roomID === layer.id) {
               layer.setStyle({
                 color: 'red',
                 fillColor: 'red',
@@ -176,34 +176,34 @@ export default {
         }
         floor.rooms.push(room)
 
-        this.floorStore.save(floor).then((savedFloor) => {
-          const savedRoom = savedFloor.rooms.reduce((prev, current) => (prev.id > current.id) ? prev : current)
-          e.layer.id = savedRoom.id
-          this.addCallbacksPolygon(e.layer)
-        })
-      } else if (e.shape === 'Line' || e.shape === 'Polyline') {
-        $q.dialog({
-          component: CreateDoor,
-          componentProps: {
-            rooms: this.floorPlanStore.rooms
-          }
-        }).onOk(({room, doorName, configuration, configDescription}) => {
-          room.doors.push({
-            name: doorName,
-            coordinates: e.layer._latlngs.map((latLng) => ({
-                  lat: latLng.lat,
-                  lng: latLng.lng
-                }
-            )),
-          })
-          this.roomStore.save(room).then((savedRoom) => {
-            const savedDoor = savedRoom.doors.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+                this.floorStore.save(floor).then((savedFloor) => {
+                    const savedRoom = savedFloor.rooms.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+                    this.floorPlanStore.rooms = savedFloor.rooms
+                    e.layer.id = savedRoom.id
+                    this.addCallbacksPolygon(e.layer)
+                })
+            } else if (e.shape === 'Line' || e.shape === 'Polyline') {
+                $q.dialog({
+                    component: CreateDoor,
+                    componentProps: {
+                        rooms: this.floorPlanStore.rooms
+                    }
+                }).onOk(({room, doorName, configuration}) => {
+                    let door = {
+                        name: doorName,
+                        doorConfigCmds: configuration,
+                        roomId: room.id,
+                        coordinates: e.layer._latlngs.map((latLng) => ({
+                                lat: latLng.lat,
+                                lng: latLng.lng
+                            }
+                        )),
+                    };
+
+          this.doorStore.create(door).then((savedDoor) => {
+            room.doors.push(savedDoor)
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
-            configuration.description = configDescription
-            configuration.doorId = savedDoor.name + '_' + savedDoor.id
-            configuration.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-            api.doorConfig.save(configuration).then(() => console.log("success"))
           })
         })
       }
@@ -305,7 +305,9 @@ export default {
         const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
         const index = floor.rooms.findIndex(room => e.layer.id === room.id)
         floor.rooms.splice(index, 1)
-        this.floorStore.save(floor)
+        this.floorStore.save(floor).then((savedFloor) => {
+          this.floorPlanStore.rooms = savedFloor.rooms
+        })
         floorPlanMap.eachLayer(layer => {
           if (layer.roomId === e.layer.id) {
             floorPlanMap.removeLayer(layer)
@@ -323,10 +325,10 @@ export default {
 
         polygons.push(polygon);
         let doorsname = room.doors.map(door => door.name).join(", ");
-        let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential.name).join(", ");
-        let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstname + " " + issuer.lastname).join(", ");
+        let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential?.name).join(", ");
+        let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred?.issuer).map(issuer => issuer?.firstName + " " + issuer?.lastName).join(", ");
         const popup = L.popup();
-        let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
+        let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: U-MEMBER" + "<br>Issuer: Jana Editor-Issuer";
         let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
 
         popup.setContent(url);

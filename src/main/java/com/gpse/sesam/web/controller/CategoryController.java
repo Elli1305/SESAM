@@ -2,9 +2,9 @@ package com.gpse.sesam.web.controller;
 
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
-import com.gpse.sesam.domain.credential.credentials.ExternalCredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
 import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.cmd.CredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class CategoryController {
         this.externalCredentialService = externalCredentialService;
     }
 
-    @Secured("ADMINISTRATOR")
+    @Secured({"ADMINISTRATOR", "EDITOR"})
     @GetMapping("/credentialmapping")
     public List<Category> getCategoriesInfo() {
         return categoryService.getCategory();

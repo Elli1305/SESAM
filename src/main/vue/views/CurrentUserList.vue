@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" >
-    <p class="row text-h3 justify-center">{{t("adminCurrentUser.headline")}}</p>
+    <p class="row text-h3 justify-center">{{t("admin.currentUsers.title")}}</p>
     <div class="row justify-center">
       <q-table
           style="width: 80vw; height: 50vh"
@@ -21,13 +21,13 @@
         </template>
         <template v-slot:top-left>
             <div class="col-9">
-                <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR" :label="t( 'adminCurrentUser.showAdmin')"/>
-                <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t( 'adminCurrentUser.showEditor')" />
-                <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t( 'adminCurrentUser.showIssuer')" />
+                <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR" :label="t('profile.administrators')"/>
+                <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t('profile.editors')" />
+                <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t('profile.issuers')" />
             </div>
         </template>
         <template v-slot:top-right>
-            <q-input borderless dense debounce="250" v-model="filter.search" :placeholder="t( 'adminCurrentUser.search')" >
+            <q-input borderless dense debounce="250" v-model="filter.search" :placeholder="t('common.search')" >
                 <template v-slot:append>
                     <q-icon name="search" />
                 </template>
@@ -36,7 +36,7 @@
         <template v-slot:body-cell-roles="props">
             <q-td :props="props">
                 <div v-for="role in props.value">
-                    {{t( `adminCurrentUser.roles.${role.role}` )}}
+                    {{t('profile.' + role.role.toLowerCase())}}
                 </div>
             </q-td>
         </template>
@@ -73,16 +73,16 @@ export default {
             {
                 name: 'lastName',
                 required: true,
-                label: t('adminCurrentUser.lastname'),
+                label: t('profile.lastName'),
                 align: 'center',
                 field: row => row.lastName,
                 format: val => `${val}`,
                 sortable: true
             },
-            { name: 'firstName', align: 'center', label : t('adminCurrentUser.prename') , field: 'firstName', sortable: true },
-            { name: 'username', align: 'center',label: t('adminCurrentUser.email') , field: 'username', sortable: true },
-            { name: 'roles', align: 'center',label: t('adminCurrentUser.role'), field: 'roles' },
-            { name: 'actions', label: t('adminCurrentUser.edit'), style: "width: 40px", align: 'center' }
+            { name: 'firstName', align: 'center', label : t('profile.firstName') , field: 'firstName', sortable: true },
+            { name: 'username', align: 'center',label: t('profile.email') , field: 'username', sortable: true },
+            { name: 'roles', align: 'center',label: t('profile.roles'), field: 'roles' },
+            { name: 'actions', label: t('common.edit'), style: "width: 40px", align: 'center' }
         ]
 
         return {

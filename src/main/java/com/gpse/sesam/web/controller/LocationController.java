@@ -1,5 +1,6 @@
 package com.gpse.sesam.web.controller;
 
+import com.gpse.sesam.domain.location.DeleteLocationServiceImpl;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.exception.LocationNotFoundException;
@@ -23,10 +24,12 @@ import java.util.Optional;
 public class LocationController {
 
 	private final LocationService locationService;
+	private final DeleteLocationServiceImpl deleteLocationService;
 
 	@Autowired
-	public LocationController(final LocationService locationService) {
+	public LocationController(final LocationService locationService, DeleteLocationServiceImpl deleteLocationService) {
 		this.locationService = locationService;
+		this.deleteLocationService = deleteLocationService;
 	}
 
 	@GetMapping
@@ -54,6 +57,6 @@ public class LocationController {
 	@DeleteMapping("/{id:\\d+}")
 	@Secured("EDITOR")
 	public void deleteById(@PathVariable("id") final Long id) {
-		locationService.deleteById(id);
+		deleteLocationService.deleteById(id);
 	}
 }

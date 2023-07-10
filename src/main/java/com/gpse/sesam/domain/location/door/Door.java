@@ -3,133 +3,125 @@ package com.gpse.sesam.domain.location.door;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 
 import com.gpse.sesam.domain.location.Coordinate;
-
 import jakarta.persistence.CascadeType;
-
 import jakarta.persistence.Column;
-
 import jakarta.persistence.Entity;
-
 import jakarta.persistence.FetchType;
-
 import jakarta.persistence.GeneratedValue;
-
 import jakarta.persistence.GenerationType;
-
 import jakarta.persistence.Id;
-
 import jakarta.persistence.ManyToMany;
-
 import jakarta.persistence.OneToMany;
+import com.gpse.sesam.domain.location.door.config.ProofConfig;
+
+
 
 import java.sql.Date;
 
 import java.util.ArrayList;
-
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-
 public class Door {
 
-    @Id
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private String name;
 
-    @Column
+	@Column
+	private Date createdAt;
 
-    private Long id;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Coordinate> coordinates = new ArrayList<>();
 
-    @Column
-    private String name;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();
 
-    @Column
-    private Date createdAt;
+	//@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	//private List<Credential> credentials = new ArrayList<>();
 
-    private List<Coordinate> coordinates = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	public Door() {
 
-    private List<Credential> credentials = new ArrayList<>();
+	}
 
-    protected Door() {
+	public Door(final String name, final List<Coordinate> coordinates) {
+		this.name = name;
+		this.coordinates = coordinates;
+		this.createdAt = new Date(System.currentTimeMillis());
+	}
 
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Door(final String name, final List<Coordinate> coordinates) {
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
-        this.name = name;
+	public String getName() {
+		return name;
+	}
 
-        this.coordinates = coordinates;
+	public void setName(final String name) {
+		this.name = name;
+	}
 
-        this.createdAt = new Date(System.currentTimeMillis());
+	public List<Coordinate> getCoordinates() {
+		return coordinates;
+	}
 
-    }
+	public void setCoordinates(final List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
+	}
 
-    public Long getId() {
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        return id;
+		Door door = (Door) o;
 
-    }
+		if (!Objects.equals(name, door.name)) {
+			return false;
+		}
+		return Objects.equals(coordinates, door.coordinates);
+	}
 
-    public void setId(final Long id) {
+	@Override
+	public int hashCode() {
+		int result = name != null ? name.hashCode() : 0;
+		result = 31 * result + (coordinates != null ? coordinates.hashCode() : 0);
+		return result;
+	}
 
-        this.id = id;
 
-    }
+	public List<TwoWayDoorConfig> getDoorConfigs() {
+		return doorConfigs;
+	}
 
-    public String getName() {
+	public void setDoorConfigs(List<TwoWayDoorConfig> doorConfigs) {
+		this.doorConfigs = doorConfigs;
+	}
 
-        return name;
+	public Date getCreatedAt() {
 
-    }
+		return createdAt;
 
-    public void setName(final String name) {
+	}
 
-        this.name = name;
+	public void setCreatedAt(Date createdAt) {
 
-    }
-
-    public List<Credential> getCredentials() {
-
-        return credentials;
-
-    }
-
-    public void setCredentials(final List<Credential> credentials) {
-
-        this.credentials = credentials;
-
-    }
-
-    public List<Coordinate> getCoordinates() {
-
-        return coordinates;
-
-    }
-
-    public void setCoordinates(final List<Coordinate> coordinates) {
-
-        this.coordinates = coordinates;
-
-    }
-
-    public void addCredential(final Credential credential) {
-
-        credentials.add(credential);
-
-    }
-
-    public Date getCreatedAt() {
-
-        return createdAt;
-
-    }
-
-    public void setCreatedAt(Date createdAt) {
-
-        this.createdAt = createdAt;
-    }
+		this.createdAt = createdAt;
+	}
 }

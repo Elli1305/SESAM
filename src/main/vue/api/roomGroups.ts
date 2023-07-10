@@ -1,9 +1,13 @@
 import axios, {AxiosResponse} from "axios";
-import {RoomGroup} from "@/main/vue/entity/roomGroup"
+import {GroupConfigResponse, RoomGroup, RoomsAndDoors} from "@/main/vue/entity/roomGroup"
+import {Room} from "@/main/vue/entity/location";
 
 export default {
     getRoomGroups(): Promise<AxiosResponse<RoomGroup[]>> {
         return axios.get("api/roomGroups");
+    },
+    getGroupByBuilding(param: bigint): Promise<AxiosResponse<RoomGroup[]>> {
+        return axios.get("api/roomGroups/filter/" + param);
     },
     save(roomGroup: RoomGroup): Promise<AxiosResponse<RoomGroup>> {
         return axios.post('api/roomGroups/save', roomGroup);
@@ -20,5 +24,15 @@ export default {
     },
     deleteGroup(param: bigint): Promise<void> {
         return axios.delete('/api/roomGroups/' + param);
+    },
+    getDoorsAndRooms(param: bigint): Promise<AxiosResponse<RoomsAndDoors[]>> {
+        return axios.get("/api/roomGroups/doorsandrooms/" + param)
+    },
+    getRooms(param: bigint): Promise<AxiosResponse<Room[]>> {
+        return axios.get("/api/roomGroups/rooms/" + param)
+    },
+
+    setGroupConfig(config: GroupConfigResponse[]): Promise<AxiosResponse<GroupConfigResponse[]>> {
+        return axios.post("/api/roomGroups/saveconfigs", config)
     }
 }

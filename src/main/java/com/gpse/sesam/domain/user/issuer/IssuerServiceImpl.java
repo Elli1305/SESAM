@@ -1,12 +1,14 @@
 package com.gpse.sesam.domain.user.issuer;
 
-import com.gpse.sesam.domain.credential.credentials.Credential;
-import com.gpse.sesam.domain.credential.credentials.CredentialRepository;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialRepository;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
+import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.web.cmd.IssuerResponseCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,7 +35,15 @@ public class IssuerServiceImpl implements IssuerService {
 	public List<Issuer> getIssuers() {
 		final List<Issuer> issuers = new ArrayList<>();
 		issuerRepository.findAll().forEach(issuers::add);
-		return issuers;
+		return issuers
+				.stream()
+				.filter(issuer ->
+						issuer
+								.getAuthorities()
+								.contains(AuthorityUtils.createAuthorityList(
+										SesamUserRole.AttainableRole.ISSUER.toString())
+										.get(0)))
+				.toList();
 	}
 
 	@Override
@@ -60,16 +70,21 @@ public class IssuerServiceImpl implements IssuerService {
 	@Override
 	public void updateIssuer(final IssuerResponseCmd cmd) {
 		final Optional<Issuer> issuer = getIssuer(cmd.getIssuerId());
-		final List<Credential> credentials = new ArrayList<>();
+		final List<InternalCredential> credentials = new ArrayList<>();
 		if (issuer.isPresent()) {
-			final Optional<Room> room = roomRepository.findById(cmd.getRoom().getId());
+			final Optional<Room> room = roomRepository.findById(cmd.getRoom());
 			room.ifPresent(value -> issuer.get().setRoom(value));
 			for (final Long cred : cmd.getCredentials()) {
-				final Optional<Credential> credential = credentialRepository.findById(cred);
+				final Optional<InternalCredential> credential = credentialRepository.findById(cred);
 				credential.ifPresent(credentials::add);
 			}
 			issuer.get().setCredentials(credentials);
 			issuerRepository.save(issuer.get());
 		}
+	}
+
+	@Override
+	public void save(Issuer issuer) {
+		issuerRepository.save(issuer);
 	}
 }
