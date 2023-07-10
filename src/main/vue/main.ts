@@ -281,7 +281,8 @@ const messages = {
                 attribute: "Name des Attributes",
                 edit: "Credential bearbeiten",
                 checklist: "Checkliste",
-                credentialAttribute: "Credentialattribute"
+                credentialAttribute: "Credentialattribute",
+                loadCredentialSchema: "Credential-Schema laden"
             }
         },
         editor: {
@@ -716,7 +717,8 @@ const messages = {
                 attribute: "Name of the attribute",
                 edit: "Edit Credential",
                 checklist: "Checklist",
-                credentialAttribute: "Credential attributes"
+                credentialAttribute: "Credential attributes",
+                loadCredentialSchema: "Load credential schema"
             }
         },
         editor: {
@@ -732,7 +734,7 @@ const messages = {
                 deleteGroup: "Delete group",
                 addRoomsToSelected: "Add selected rooms to the following group :",
                 nameOfGroup: "Name of the new group",
-                doorconfiguration: "Doorconfigurations",
+                doorconfiguration: "Door configurations",
                 groups: "Room Groups",
                 info: "Add rooms either to a new group or choose an existing group",
                 addRooms: "Add rooms to selected group",
@@ -757,121 +759,121 @@ const messages = {
                 nameConfig: "Name"
             },
         },
-    },
-    issuer: {
-        issue: "Issue",
-        issueCredential: {
-            title: "{0} Credential Issuance",
-            description: [
-                "Welcome to the issuance process of the \"{0}\" Credential! Here you can create an official document that confirms the successful completion of a specific course or the attainment of certain skills or qualifications.",
-                "To issue the credential, please fill out the fields on the right with the required attributes. Make sure that all data is correct and up-to-date. Once you have filled out all the necessary attributes, click the \"@:{'issueCredential.next'}\" button."
-            ],
-            checkConditions: "Please use the following checklist to ensure that all necessary steps have been taken before issuing the credential.",
-            validation: {
-                validationRules: "Validation Rules",
-                ruleErrors: {
-                    inputRequired: "This field is required.",
-                    equal: "This field should be equal to {0}",
-                    notEqual: "This field should not be equal to {0}",
-                    lessThan: "This field should be less than {0}",
-                    greaterThan: "This field should be greater than {0}",
-                    lessEqual: "This field should be less than or equal to {0}",
-                    greaterEqual: "This field should be greater than or equal to {0}",
-                    range: "This field should be between {0} and {1}",
-                    equalLength: "This text's length should be equal to {0}",
-                    notEqualLength: "This text's length should not be equal to {0}",
-                    lessThanLength: "This text's length should be less than to {0}",
-                    greaterThanLength: "This text's length should be greater than to {0}",
-                    lessEqualLength: "This text's length should be less than or equal to {0}",
-                    greaterEqualLength: "This text's length should be greater than or equal to {0}",
+        issuer: {
+            issue: "Issue",
+            issueCredential: {
+                title: "{0} Credential Issuance",
+                description: [
+                    "Welcome to the issuance process of the \"{0}\" Credential! Here you can create an official document that confirms the successful completion of a specific course or the attainment of certain skills or qualifications.",
+                    "To issue the credential, please fill out the fields on the right with the required attributes. Make sure that all data is correct and up-to-date. Once you have filled out all the necessary attributes, click the \"@:{'issueCredential.next'}\" button."
+                ],
+                checkConditions: "Please use the following checklist to ensure that all necessary steps have been taken before issuing the credential.",
+                validation: {
+                    validationRules: "Validation Rules",
+                    ruleErrors: {
+                        inputRequired: "This field is required.",
+                        equal: "This field should be equal to {0}",
+                        notEqual: "This field should not be equal to {0}",
+                        lessThan: "This field should be less than {0}",
+                        greaterThan: "This field should be greater than {0}",
+                        lessEqual: "This field should be less than or equal to {0}",
+                        greaterEqual: "This field should be greater than or equal to {0}",
+                        range: "This field should be between {0} and {1}",
+                        equalLength: "This text's length should be equal to {0}",
+                        notEqualLength: "This text's length should not be equal to {0}",
+                        lessThanLength: "This text's length should be less than to {0}",
+                        greaterThanLength: "This text's length should be greater than to {0}",
+                        lessEqualLength: "This text's length should be less than or equal to {0}",
+                        greaterEqualLength: "This text's length should be greater than or equal to {0}",
+                    },
+                    vType: {
+                        comparison: "Comparison",
+                        range: "Range",
+                        regEx: "Regular expression",
+                        length: "Length",
+                        comparisonWithAttribute: "Comparison with another attribute",
+                        rangeWithAttributes: "Range between attributes",
+                        lengthWithAttribute: "Length compared to another attribute",
+                    },
+                    addValidationRule: "Add validation rule",
+                    description: "Description",
+                    chooseType: "Choose a type",
+                    chooseAttribute: "Choose an attribute",
+                    presetsLabel: "Presets",
+                    presets: {
+                        // Numbers
+                        positiveWithZero: "Positive",
+                        positiveWithoutZero: "Positive (excl. 0)",
+                        negativeWithZero: "Negative",
+                        negativeWithoutZero: "Negative (excl. 0)",
+                        // Dates
+                        futureWithToday: "Future (incl. today)",
+                        futureWithoutToday: "Future",
+                        pastWithToday: "Past (incl. today)",
+                        pastWithoutToday: "Past",
+                        today: "Today",
+                        // Strings
+                        names: "Names",
+                        noSpecialCharacter: "No special characters",
+                        email: "Email",
+                        phoneNumbers: "Phone numbers",
+                        uppercase: "Only uppercase",
+                        lowercase: "Only lowercase",
+                    },
+                    info: "You can define validation rules. These will regulate the inputs while issuing a credential. You can choose from presets or create your own custom rule.",
                 },
-                vType: {
-                    comparison: "Comparison",
-                    range: "Range",
-                    regEx: "Regular expression",
-                    length: "Length",
-                    comparisonWithAttribute: "Comparison with another attribute",
-                    rangeWithAttributes: "Range between attributes",
-                    lengthWithAttribute: "Length compared to another attribute",
-                },
-                addValidationRule: "Add validation rule",
-                description: "Description",
-                chooseType: "Choose a type",
-                chooseAttribute: "Choose an attribute",
-                presetsLabel: "Presets",
-                presets: {
-                    // Numbers
-                    positiveWithZero: "Positive",
-                    positiveWithoutZero: "Positive (excl. 0)",
-                    negativeWithZero: "Negative",
-                    negativeWithoutZero: "Negative (excl. 0)",
-                    // Dates
-                    futureWithToday: "Future (incl. today)",
-                    futureWithoutToday: "Future",
-                    pastWithToday: "Past (incl. today)",
-                    pastWithoutToday: "Past",
-                    today: "Today",
-                    // Strings
-                    names: "Names",
-                    noSpecialCharacter: "No special characters",
-                    email: "Email",
-                    phoneNumbers: "Phone numbers",
-                    uppercase: "Only uppercase",
-                    lowercase: "Only lowercase",
-                },
-                info: "You can define validation rules. These will regulate the inputs while issuing a credential. You can choose from presets or create your own custom rule.",
-            },
-            steps: {
-                form: "Form",
-                list: "Checklist",
-                qrcode: "QR Code",
-            },
-            next: "Next",
-            previous: "Previous",
-            checklistHint:
-                "To issue the credential, all conditions on the checklist must be met.",
-            confirm: {
-                title: "Are you sure you want to issue the credential?",
-                message:
-                    'Please ensure that all conditions have been met and all necessary steps have been taken before issuing the credential. Once issued, it cannot be undone.',
-                ok: "Issue Credential",
-            },
-            addCredential: {
-                title: "Your new credential has been successfully issued!",
-                howTo: "How to add a credential to the BC Wallet: ",
                 steps: {
-                    step1:
-                        "Download the {0} from the App Store or Google Play Store.",
-                    step2:
-                        "Open the app and follow the instructions to set up a new account.",
-                    step3:
-                        'Once you have successfully set up your account, select the "Credentials" tab.',
-                    step4:
-                        "Tap the small plus sign in the upper right corner of the screen.",
-                    step5:
-                        'In the menu that appears, select the option "Scan a QR code".',
-                    step6:
-                        "Point the camera of your smartphone at the QR code you want to scan (the QR code should be located to the right of these instructions).",
-                    step7:
-                        "Review the information displayed on the screen to ensure that it is correct.",
-                    step8:
-                        'If all information is correct, tap "Accept" to add the credential to your wallet.',
+                    form: "Form",
+                    list: "Checklist",
+                    qrcode: "QR Code",
                 },
-            },
-            errors: {
-                get: {
-                    failed: "The credential could not be loaded.",
-                    unauthorized:
-                        "You do not have the necessary permissions to view the credential.",
+                next: "Next",
+                previous: "Previous",
+                checklistHint:
+                    "To issue the credential, all conditions on the checklist must be met.",
+                confirm: {
+                    title: "Are you sure you want to issue the credential?",
+                    message:
+                        'Please ensure that all conditions have been met and all necessary steps have been taken before issuing the credential. Once issued, it cannot be undone.',
+                    ok: "Issue Credential",
                 },
-                issue: {
-                    failed: "The credential could not be issued.",
-                    unauthorized:
-                        "You do not have the necessary permissions to issue the credential.",
-                    failedDependency:
-                        "Could not connect to the Credential Issuing Self-Service. Please ensure that you are connected to the university network.",
+                addCredential: {
+                    title: "Your new credential has been successfully issued!",
+                    howTo: "How to add a credential to the BC Wallet: ",
+                    steps: {
+                        step1:
+                            "Download the {0} from the App Store or Google Play Store.",
+                        step2:
+                            "Open the app and follow the instructions to set up a new account.",
+                        step3:
+                            'Once you have successfully set up your account, select the "Credentials" tab.',
+                        step4:
+                            "Tap the small plus sign in the upper right corner of the screen.",
+                        step5:
+                            'In the menu that appears, select the option "Scan a QR code".',
+                        step6:
+                            "Point the camera of your smartphone at the QR code you want to scan (the QR code should be located to the right of these instructions).",
+                        step7:
+                            "Review the information displayed on the screen to ensure that it is correct.",
+                        step8:
+                            'If all information is correct, tap "Accept" to add the credential to your wallet.',
+                    },
                 },
-                unknown: "Please try again later.",
+                errors: {
+                    get: {
+                        failed: "The credential could not be loaded.",
+                        unauthorized:
+                            "You do not have the necessary permissions to view the credential.",
+                    },
+                    issue: {
+                        failed: "The credential could not be issued.",
+                        unauthorized:
+                            "You do not have the necessary permissions to issue the credential.",
+                        failedDependency:
+                            "Could not connect to the Credential Issuing Self-Service. Please ensure that you are connected to the university network.",
+                    },
+                    unknown: "Please try again later.",
+                },
             },
         },
     },

@@ -5,24 +5,34 @@
       <div class="full-width">
         <q-input class="q-my-md" v-model="password" outlined :type="isPwd ? 'password' : 'text'" :label="t('profile.password')">
           <template v-slot:append>
-            <q-icon class="q-mr-xs" color="grey" size="16px" name="info" />
-            <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
-              <div style="max-width: 20em">
-                {{ t('passwordChange.passwordHint') }}
-              </div>
-            </q-tooltip>
-            <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+            <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                style="color: var(--light)"
+                size="0.75em"
+                @click="isPwd = !isPwd" />
+            <q-icon class="self-start" style="position: absolute; margin-left: 1.15em; margin-top: 0.35em" color="info" size="0.5em" name="info_outlined">
+              <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" anchor="bottom right" self="top middle" :offset="[0, 0]">
+                <div style="max-width: 20em">
+                  {{ t('passwordChange.passwordHint') }}
+                </div>
+              </q-tooltip>
+            </q-icon>
           </template>
         </q-input>
         <q-input class="q-my-md" v-model="passwordRepeat" outlined :type="isPwdRepeat ? 'password' : 'text'"
           :label="t('passwordChange.repeatPassword')">
           <template v-slot:append>
-            <q-icon :name="isPwdRepeat ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-              @click="isPwdRepeat = !isPwdRepeat" />
+            <q-icon
+                :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                style="color: var(--light)"
+                size="0.75em"
+                @click="isPwdRepeat = !isPwdRepeat" />
           </template>
         </q-input>
       </div>
-      <q-btn class="full-width" @click="passwordChange" color="primary" :label="t('passwordChange.changePassword')" />
+      <q-btn class="full-width" @click="passwordChange" color="primary" text-color="accent" :label="t('passwordChange.changePassword')" />
     </div>
   </q-page>
 </template>
@@ -63,7 +73,9 @@ async function passwordChange() {
     $q.notify({
       type: 'negative',
       message: t('passwordChange.failedToReset'),
-      caption: t('passwordChange.passwordDoesNotConform')
+      caption: t('passwordChange.passwordDoesNotConform'),
+      color: 'negative',
+      textColor: 'positive'
     });
 
     return;
@@ -73,7 +85,9 @@ async function passwordChange() {
     $q.notify({
       type: 'negative',
       message: t('passwordChange.failedToReset'),
-      caption: t('passwordChange.passwordsDontMatch')
+      caption: t('passwordChange.passwordsDontMatch'),
+      color: 'negative',
+      textColor: 'positive'
     })
 
     return;
@@ -90,27 +104,30 @@ async function passwordChange() {
         type: 'negative',
         message: t('passwordChange.failedToReset'),
         caption: t('passwordChange.passwordDoesNotConform'),
-        position: "top",
         timeout: 3000,
-        classes: "loginNotify"
+        classes: "loginNotify",
+        color: 'negative',
+        textColor: 'positive'
       })
     } else if (error.response.status === 500) {
       $q.notify({
         type: 'negative',
         message: t('passwordChange.failedToReset'),
         caption: t('common.internalServerError'),
-        position: "top",
         timeout: 3000,
-        classes: "loginNotify"
+        classes: "loginNotify",
+        color: 'negative',
+        textColor: 'positive'
       })
     } else {
       $q.notify({
         type: 'negative',
         message: t('passwordChange.failedToReset'),
         caption: t('common.unknownError'),
-        position: "top",
         timeout: 3000,
-        classes: "loginNotify"
+        classes: "loginNotify",
+        color: 'negative',
+        textColor: 'positive'
       })
     }
 
@@ -121,9 +138,10 @@ async function passwordChange() {
   $q.notify({
     type: 'positive',
     message: t('passwordChange.successfulReset'),
-    position: "top",
     timeout: 3000,
-    classes: "loginNotify"
+    classes: "loginNotify",
+    color: 'positive',
+    textColor: 'negative'
   });
 }
 </script>

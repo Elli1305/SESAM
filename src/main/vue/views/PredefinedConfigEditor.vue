@@ -3,7 +3,7 @@
         <p class="row text-h3 justify-center">{{ t("editor.predefinedConfigs.title") }}</p>
         <div class="row self-center">
             <q-table
-                    style="width: 80vw; height: 50vh"
+                    style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
                     :rows-per-page-options="[0]"
                     :rows="rows"
                     :columns="columns"
@@ -20,7 +20,7 @@
                               dense
                               round
                               flat
-                              color="grey"
+                              style="color: var(--light)"
                               icon="edit"
                               @click="configDialog = true; editConfig(props.row.id); edit = true;
                                       currentConfig = props.row.id">
@@ -31,7 +31,7 @@
                                 round
                                 flat
                                 icon="delete"
-                                color="grey"
+                                style="color: var(--light)"
                                 @click="deleteDialog = true; currentConfig = props.row.id">
                             </q-btn>
                         </div>
@@ -43,13 +43,12 @@
                        flat
                        rounded
                        icon="add"
-                       color="grey"
                        :label="t('editor.predefinedConfigs.new')"
                        @click="configDialog = true; edit = false"
-                       style="margin-right: 2em">
+                       style="margin-right: 2em; color: var(--light)">
                     </q-btn>
                     <q-input
-                       borderless dense debounce="300" v-model="filter"
+                       outlined rounded dense debounce="300" v-model="filter"
                        :placeholder="t( 'common.search')">
                         <template v-slot:append>
                             <q-icon name="search"/>
@@ -60,7 +59,7 @@
         </div>
 
         <q-dialog v-model="configDialog" persistent>
-            <q-card>
+            <q-card style="background-color: var(--bg-color); color: var(--text-color)">
                 <q-card-section>
                     <q-input class="full-width" filled v-model="configName" :label="t('editor.predefinedConfigs.name')" stack-label></q-input>
                 </q-card-section>
@@ -80,7 +79,7 @@
 
 
         <q-dialog v-model="deleteDialog">
-            <q-card>
+            <q-card style="background-color: var(--bg-color); color: var(--text-color)">
                 <q-card-section>
                     <div class="text-h6">{{ t('editor.predefinedConfigs.deleteAlert') }}</div>
                 </q-card-section>

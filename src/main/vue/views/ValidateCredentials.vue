@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog">
-    <q-card style="min-width: 45em">
+    <q-card style="min-width: 45em; background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section class="row justify-between no-wrap q-pb-none">
         <div class="text-h6">{{t('issuer.issueCredential.validation.validationRules')}} &#8210 {{attribute.name}}</div>
         <div class="row no-wrap">
@@ -9,7 +9,7 @@
               size="0.9em">
             <q-icon name="content_copy" size="1em" left/>
             {{t('issuer.issueCredential.validation.presetsLabel')}}
-            <q-menu>
+            <q-menu style="background-color: var(--bg-color); color: var(--text-color)">
               <q-list>
                 <q-item clickable v-close-popup v-for="preset in getPresets().entries()" @click="attribute.validationRules.push(...preset[1])">
                   <q-item-section>
@@ -28,9 +28,9 @@
         </div>
       </q-card-section>
       <q-card-section>
-        <q-card class="column" bordered flat>
+        <q-card class="column" style="background-color: var(--bg-color); color: var(--text-color)" bordered flat>
           <q-icon class="cursor-pointer self-end q-mt-sm q-mr-sm" size="1em" name="info_outlined" color="info">
-            <q-tooltip max-width="15em" anchor="center right" self="center left">
+            <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" max-width="15em" anchor="center right" self="center left">
               {{t('issuer.issueCredential.validation.info')}}
             </q-tooltip>
           </q-icon>
@@ -83,9 +83,9 @@
                     class="q-ml-sm"
                     style="height: 4em"
                     unchecked-icon="text_fields"
-                    checked-icon="format_list_bulleted"
+                    checked-icon="grid_view"
                     v-model="vr.compareWithAttribute"
-                    keep-color size="2.5em"/>
+                    keep-color size="3em"/>
                 <q-btn
                     class="q-ml-sm"
                     style="min-width: 4em; height: 4em"

@@ -17,11 +17,11 @@
         </q-input>
       </div>
       <p class="full-width" style="font-size: 1em">{{ t("login.forgotPassword") }}
-        <router-link to="./passwordreset">{{t('login.resetPassword')}}</router-link>
+        <router-link class="text-info" to="./passwordreset">{{t('login.resetPassword')}}</router-link>
       </p>
       <q-btn class="full-width" color="primary" text-color="accent" label="Login" type="submit"/>
       <p class="full-width" style="font-size: 1em">{{ t("login.notRegistered") }}
-        <router-link to="./signup">{{ t("login.toRegister") }}</router-link>
+        <router-link class="text-info" to="./signup">{{ t("login.toRegister") }}</router-link>
       </p>
     </q-form>
   </q-page>
@@ -56,9 +56,8 @@ export default {
                 type: 'negative',
                 message: t('login.loginFailed'),
                 caption: t('login.wrongEmailPassword'),
-                position: "top",
                 color: 'negative',
-                textColor: 'postitive',
+                textColor: 'positive',
                 timeout: 3000,
                 classes: "loginNotify"
               })
@@ -67,9 +66,8 @@ export default {
                 type: 'negative',
                 message: t('login.loginFailed'),
                 caption: t('common.internalServerError'),
-                position: "top",
                 color: 'negative',
-                textColor: 'postitive',
+                textColor: 'positive',
                 timeout: 3000,
                 classes: "loginNotify"
               })
@@ -78,9 +76,8 @@ export default {
                 type: 'negative',
                 message: t('login.loginFailed'),
                 caption: t('common.unknownError'),
-                position: "top",
                 color: 'negative',
-                textColor: 'postitive',
+                textColor: 'positive',
                 timeout: 3000,
                 classes: "loginNotify"
               })

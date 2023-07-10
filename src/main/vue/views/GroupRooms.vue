@@ -22,7 +22,7 @@
                   dense
                   round
                   flat
-                  color="grey"
+                  style="color: var(--light)"
                   @click="getInfosForEditGroup(Object.values(props)); getOldName(); updateRoomList(currentBuilding); editAlert = true"
                   test="props.value">
                 <q-icon name="edit"/>
@@ -31,7 +31,7 @@
                   dense
                   round
                   flat
-                  color="grey"
+                  style="color: var(--light)"
                   @click="prompt=true; openForm(props.row); getRoomsAndDoors(editedRow.id)"
                   test="props.value"
                   icon="meeting_room"/>
@@ -40,7 +40,7 @@
                   round
                   flat
                   icon="delete"
-                  color="grey"
+                  style="color: var(--light)"
                   @click="deleteAlert = true; delGroup(Object.values(props));"/>
             </div>
           </q-td>
@@ -51,11 +51,10 @@
               flat
               rounded
               icon="add"
-              color="grey"
               :label="t('editor.groupRooms.newGroup')"
               @click="newGroup = true; toDefault(); updateRoomList(currentBuilding);"
-              style="margin-right: 2em"/>
-          <q-input borderless dense debounce="300" v-model="filter.search"
+              style="margin-right: 2em; color: var(--light)"/>
+          <q-input outlined rounded dense debounce="300" v-model="filter.search"
                    :placeholder="t('common.search')">
               <template v-slot:append>
                   <q-icon name="search"/>
@@ -204,7 +203,7 @@
           >
             <template v-slot:top-right>
               <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
-                <q-toggle v-model="visibleColumns" val="doorNames" :label="t('editor.groupRooms.doors')" ></q-toggle>
+                <q-toggle v-model="visibleColumns" val="doorNames" :label="t('editor.groupRooms.doors')" size="2.5em"/>
               </div>
               <q-input class="q-ml-xs" outlined rounded dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
                 <template v-slot:append>

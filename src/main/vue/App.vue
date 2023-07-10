@@ -74,9 +74,10 @@ async function logout() {
       type: 'positive',
       message: t('logout.title'),
       caption: t('logout.success'),
-      position: "top",
       timeout: 3000,
-      classes: "loginNotify"
+      classes: "loginNotify",
+      color: 'positive',
+      textColor: 'negative'
     })
     await router.push('/')
   }
@@ -249,7 +250,7 @@ async function logout() {
                 </q-menu>
               </q-btn>
               <q-btn v-if="!userStore.authenticated" to="/login" style="height: 3em; width: 3em" unelevated>
-                <q-icon name="login" size="2em"/>
+                <q-icon name="login" size="2em" color="accent"/>
               </q-btn>
             </div>
           </div>

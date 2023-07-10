@@ -332,6 +332,7 @@ const next = async (refs: any) => {
       ok: t('issuer.issueCredential.confirm.ok'),
       cancel: t('common.cancel'),
       color: 'primary',
+      style: 'background-color: var(--bg-color); color: var(--text-color)'
     }).onOk(async () => {
       $q.loading.show({delay: 400});
 

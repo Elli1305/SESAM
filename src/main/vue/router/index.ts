@@ -118,7 +118,7 @@ const router = createRouter({
             path: "/credentials",
             component: () => import("@/main/vue/views/IssueCredentials.vue"),
             meta: {
-                authorize: AttainableRole.ADMINISTRATOR,
+                authorize: AttainableRole.ISSUER,
             },
         },
         {

@@ -28,13 +28,19 @@
       </template>
       <template v-slot:body-cell-type="props">
         <q-td :props="props">
-          <q-chip v-if="props.value" color="primary" icon="business" label="Internal" text-color="secondary"/>
-          <q-chip v-else color="secondary" icon="public" label="External" text-color="primary"/>
+          <q-chip v-if="props.value" color="primary" text-color="secondary" style="font-size: 1em">
+            <q-icon name="business" left/>
+            Internal
+          </q-chip>
+          <q-chip v-else color="secondary" text-color="primary" style="font-size: 1em">
+            <q-icon name="public" left/>
+            External
+          </q-chip>
         </q-td>
       </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
-          <q-btn :to="`/credential_administration/${'issuer' in props.row ? 'internal' : 'external'}/${props.row.id}`" dense round flat color="grey" icon="edit"></q-btn>
+          <q-btn :to="`/credential_administration/${'issuer' in props.row ? 'internal' : 'external'}/${props.row.id}`" dense round flat style="color: var(--light)" icon="edit"></q-btn>
           </q-td>
       </template>
     </q-table>
