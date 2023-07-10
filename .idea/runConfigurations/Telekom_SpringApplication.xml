@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Telekom SpringApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="telekom" />
-    <module name="basis" />
+    <module name="team-3-1" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.gpse.sesam.SesamApplication" />
     <method v="2">
       <option name="Make" enabled="true" />
