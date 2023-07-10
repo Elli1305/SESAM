@@ -52,7 +52,9 @@
                      :door-config="doorConfigOut" :is-config-out="true"></door-config>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat v-close-popup> {{ t("common.cancel")}}</q-btn>
+          <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)">
           <q-btn flat v-close-popup> {{ t("common.save")}}</q-btn>
+          </p>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -69,6 +71,7 @@ import { Door } from '../entity/location';
 import {Direction} from "@/main/vue/entity/doorConfiguration";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {prop} from "vue-class-component";
+import {useUserStore} from "@/main/vue/stores/users";
 
 
 
@@ -95,6 +98,7 @@ export default {
     const selectedDoor = ref<Door | null>(null);
     const doors = ref<Door[]>([]);
     const dialogVisible = ref(false);
+    const userStore = useUserStore()
 
     const columns = [
       { name: 'datum', required: true, label: t('doorHistory.date'), align: 'center', field: 'createdAt', headerAlign: 'center', sortable: true },
@@ -148,7 +152,8 @@ export default {
       doorName: ref(''),
       roomName: ref(''),
       prompt: ref(false),
-      filter: ref('')
+      filter: ref(''),
+      userStore
     };
   },
   methods: {
