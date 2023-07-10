@@ -86,7 +86,7 @@ export default {
   },
   mounted: function () {
     floorPlanMap = L.map("floor-plan-map", mapConfig);
-
+    const {t} = useI18n()
     const $q = useQuasar();
 
 
@@ -209,6 +209,14 @@ export default {
             room.doors.push(savedDoor)
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
+          }).catch(() => {
+            $q.notify({
+              type: 'negative',
+              message: t('floorPlan.doorCreateFailed'),
+              position: 'bottom',
+              timeout: 3000,
+            });
+            floorPlanMap.removeLayer(e.layer)
           })
         }).onCancel(() => floorPlanMap.removeLayer(e.layer))
       }

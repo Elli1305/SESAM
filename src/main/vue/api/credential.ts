@@ -5,7 +5,7 @@ import {
     CategoryResponse,
     CreateCredential,
     Credential,
-    CredentialCmd,
+    CredentialCmd, CredentialSchema,
     ExternalCredential, ExternalCredentialCmd,
     IssueCredentialAttribute
 } from "@/main/vue/entity/credentialDefinition";
@@ -28,7 +28,7 @@ export default {
     create(credential: CreateCredential): Promise<AxiosResponse<CreateCredential>> {
         return axios.post(`/api/credentials`, credential);
     },
-    delete(id: number): Promise<AxiosResponse<void>> {
+    delete(id: string): Promise<AxiosResponse<void>> {
         return axios.delete(`/api/credentials/${id}`);
     },
     update(id: string, credential: CreateCredential): Promise<AxiosResponse<void>> {
@@ -86,4 +86,7 @@ export default {
         return axios.get("api/allbylocation/" + param)
     },
 
+    getCredentialSchema(credentialDefinitionId: string): Promise<AxiosResponse<CredentialSchema>> {
+        return axios.get(`/api/credential_schema/${credentialDefinitionId}`);
+    }
 }

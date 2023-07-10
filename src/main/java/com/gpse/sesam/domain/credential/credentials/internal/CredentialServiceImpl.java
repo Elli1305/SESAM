@@ -1,18 +1,16 @@
 package com.gpse.sesam.domain.credential.credentials.internal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
-import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
-import com.gpse.sesam.domain.credential.issuing.FormEntry;
-import com.gpse.sesam.domain.credential.issuing.FormEntryType;
-import com.gpse.sesam.domain.credential.issuing.IssueCredential;
-import com.gpse.sesam.domain.credential.issuing.IssueCredentialAttribute;
-import com.gpse.sesam.domain.credential.issuing.IssueCredentialRequest;
+import com.gpse.sesam.domain.credential.issuing.*;
 import com.gpse.sesam.domain.credential.validation.ComparisonRule;
 import com.gpse.sesam.domain.credential.validation.LengthRule;
 import com.gpse.sesam.domain.credential.validation.RangeRule;
@@ -22,18 +20,25 @@ import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.*;
+import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
+import org.hyperledger.indy.sdk.IndyException;
+import org.hyperledger.indy.sdk.LibIndy;
+import org.hyperledger.indy.sdk.ledger.Ledger;
+import org.hyperledger.indy.sdk.ledger.LedgerResults;
+import org.hyperledger.indy.sdk.pool.Pool;
+import org.hyperledger.indy.sdk.pool.PoolJSONParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,6 +48,18 @@ import java.util.stream.Stream;
  */
 @Service
 public class CredentialServiceImpl implements CredentialService {
+    private static final Map<String, String> AGENT_FOR_DID = Map.of(
+            "XgpWt5zepWmbpuRUT82js9", "tlabs",
+            "9yGivzVEatBj7o9pNjoFbi", "university"
+    );
+
+    private static final Map<String, String> MAGIC_CREDENTIAL_DEFINITION_IDS = Map.of(
+            "$T-MEMBER", "XgpWt5zepWmbpuRUT82js9:3:CL:694410:T-MEMBER",
+            "$T-TRAINING", "XgpWt5zepWmbpuRUT82js9:3:CL:694412:T-TRAINING",
+            "$U-MEMBER", "9yGivzVEatBj7o9pNjoFbi:3:CL:694437:U-MEMBER",
+            "$U-TRAINING", "9yGivzVEatBj7o9pNjoFbi:3:CL:694444:U-TRAINING"
+    );
+    private static final String DEFAULT_POOL_NAME = "default_pool";
 
     private final WebClient client;
 
@@ -56,6 +73,8 @@ public class CredentialServiceImpl implements CredentialService {
     private final ExternalCredentialService externalCredentialService;
 
     private final CategoryService categoryService;
+
+    private Pool pool = null;
 
 
     /**
@@ -75,7 +94,7 @@ public class CredentialServiceImpl implements CredentialService {
                                  final IssuerRepository issuerRepository,
                                  final LocationService locationService,
                                  final ExternalCredentialService externalCredentialService,
-                                 CategoryService categoryService) {
+                                 final CategoryService categoryService) {
         this.client = client;
         this.mapper = mapper;
         this.issuerRepository = issuerRepository;
@@ -84,6 +103,49 @@ public class CredentialServiceImpl implements CredentialService {
         this.externalCredentialService = externalCredentialService;
         this.categoryService = categoryService;
     }
+
+    @PreDestroy
+    private void destroy() throws IndyException, ExecutionException, InterruptedException {
+        if (pool == null) {
+            return;
+        }
+
+        pool.closePoolLedger().get();
+        pool.close();
+
+        pool = null;
+    }
+
+    private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException {
+        if (!LibIndy.isInitialized()) {
+            LibIndy.init();
+        }
+
+        if (LibIndy.api == null) {
+            return null;
+        }
+
+        File genesisTxnFile = ResourceUtils.getFile("classpath:test.bcovrin.vonx.io.jsonl");
+
+        PoolJSONParameters.CreatePoolLedgerConfigJSONParameter createPoolLedgerConfigJSONParameter =
+                new PoolJSONParameters.CreatePoolLedgerConfigJSONParameter(genesisTxnFile.getAbsolutePath());
+
+        Pool.setProtocolVersion(2).get();
+
+        try {
+            Pool.createPoolLedgerConfig(DEFAULT_POOL_NAME, createPoolLedgerConfigJSONParameter.toJson()).get();
+        } catch (ExecutionException | IndyException | InterruptedException ignored) {
+            // Intentionally ignored.
+        }
+
+
+        return Pool.openPoolLedger(DEFAULT_POOL_NAME, "{}").get();
+    }
+
+    private String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
+        return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
+    }
+
 
     /**
      * Ruft alle internen Credentials ab.
@@ -145,7 +207,8 @@ public class CredentialServiceImpl implements CredentialService {
      * Ruft die interne Credential anhand der angegebenen ID ab.
      *
      * @param id Die ID der internen Credential.
-     * @return Die gefundene interne Credential oder Optional.empty(), wenn keine interne Credential mit der ID vorhanden ist.
+     * @return Die gefundene interne Credential oder Optional.empty(), wenn keine interne Credential mit der ID
+     * vorhanden ist.
      */
     @Override
     public Optional<InternalCredential> getCredential(final Long id) {
@@ -166,7 +229,7 @@ public class CredentialServiceImpl implements CredentialService {
      * @param id                Die ID der internen Credential.
      * @param attributeCmds     Die Liste der Attribut-Commands für die Ausstellung der Credential.
      * @return Die Antwort auf die Ausstellungsanfrage.
-     * @throws JsonProcessingException Wenn ein Fehler bei der JSON-Verarbeitung auftritt.
+     * @throws JsonProcessingException Falls ein Fehler bei der JSON-Verarbeitung auftritt.
      */
     @Override
     public String issueCredential(final Long id, final List<IssueCredentialAttributeCmd> attributeCmds)
@@ -310,17 +373,17 @@ public class CredentialServiceImpl implements CredentialService {
                 .collect(Collectors.toSet());
     }
 
-
     /**
      * Erstellt eine neue Credential.
      *
-     * @param createCredentialCmd Das CreateCredentialCmd-Objekt, das die Informationen für die Erstellung der Credential enthält.
+     * @param createCredentialCmd Das CreateCredentialCmd-Objekt, das die Informationen für die Erstellung der
+     *                            Credential enthält.
      */
     @Override
     public void create(final CreateCredentialCmd createCredentialCmd) {
         final InternalCredential credential = new InternalCredential(
                 createCredentialCmd.getName(),
-                createCredentialCmd.getCredentialDefinitionId(),
+                replaceMagicCredentialDefinitionIds(createCredentialCmd.getCredentialDefinitionId()),
                 createCredentialCmd.getAgent(),
                 createCredentialCmd.getAttributes().stream()
                         .map(createAttributeCmd ->
@@ -375,9 +438,9 @@ public class CredentialServiceImpl implements CredentialService {
      * Aktualisiert die Credential mit der angegebenen ID.
      *
      * @param id                   Die ID der Credential, die aktualisiert werden soll.
-     * @param updateCredentialCmd  Das UpdateCredentialCmd-Objekt, das die neuen Informationen für die Aktualisierung der Credential enthält.
+     * @param updateCredentialCmd  Das UpdateCredentialCmd-Objekt, das die neuen Informationen für die Aktualisierung
+     *                             der Credential enthält.
      */
-
     @Override
     public void update(final Long id, final UpdateCredentialCmd updateCredentialCmd) {
         final Optional<InternalCredential> optionalCredential = credentialRepository.findById(id);
@@ -390,7 +453,11 @@ public class CredentialServiceImpl implements CredentialService {
 
         credential.setName(updateCredentialCmd.getName());
         credential.setAgent(updateCredentialCmd.getAgent());
-        credential.setCredentialDefinitionId(updateCredentialCmd.getCredentialDefinitionId());
+        credential.setCredentialDefinitionId(
+                replaceMagicCredentialDefinitionIds(
+                        updateCredentialCmd.getCredentialDefinitionId()
+                )
+        );
 
         final List<FormEntry> formEntries = new ArrayList<>();
 
@@ -543,11 +610,58 @@ public class CredentialServiceImpl implements CredentialService {
                     in.getExternalCredential(), in.getIssuerName(), in.getRoom()));
         }
 
-        for (ExternalCredentialCmd ex: extern) {
+        for (ExternalCredentialCmd ex : extern) {
             cmds.add(new AllCredentialCmd(ex.getCategoryName(), ex.getCredentialName(), "Extern",
                     ex.getInternalCredential(), new ArrayList<>(), new ArrayList<>()));
         }
 
         return cmds;
+    }
+
+    @Override
+    public CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws IndyException,
+            ExecutionException, InterruptedException, JsonProcessingException, FileNotFoundException {
+        if (pool == null) {
+            pool = createPool();
+        }
+
+        String normalizedCredentialDefinitionId = replaceMagicCredentialDefinitionIds(credentialDefinitionId);
+        String getCredDefRequest = Ledger.buildGetCredDefRequest(null, normalizedCredentialDefinitionId)
+                .get();
+        String getCredDefResponse = Ledger.submitRequest(pool, getCredDefRequest).get();
+
+        JsonNode getCredDefResponseNode = mapper.readTree(getCredDefResponse);
+
+        LedgerResults.ParseResponseResult getCredDefResponseResult = Ledger.parseGetCredDefResponse(getCredDefResponse)
+                .get();
+
+        JsonNode getCredDefResponseResultNode = mapper.readTree(getCredDefResponseResult.getObjectJson());
+
+        String getTxnRequest = Ledger.buildGetTxnRequest(
+                null,
+                "DOMAIN",
+                getCredDefResponseResultNode.get("schemaId").asInt()
+        ).get();
+        String getTxnResponse = Ledger.submitRequest(pool, getTxnRequest).get();
+
+        JsonNode getTxnResponseNode = mapper.readTree(getTxnResponse);
+
+        ArrayNode attrNamesNode = (ArrayNode) getTxnResponseNode.get("result")
+                .get("data")
+                .get("txn")
+                .get("data")
+                .get("data")
+                .get("attr_names");
+
+        List<String> attrNames = mapper.convertValue(attrNamesNode, new TypeReference<>() {
+        });
+
+        return new CredentialSchemaCmd(
+                getCredDefResponseResultNode.get("tag").asText(),
+                normalizedCredentialDefinitionId,
+                AGENT_FOR_DID.get(getCredDefResponseNode.get("result").get("origin").asText()),
+                getCredDefResponseResultNode.get("ver").asText(),
+                attrNames
+        );
     }
 }

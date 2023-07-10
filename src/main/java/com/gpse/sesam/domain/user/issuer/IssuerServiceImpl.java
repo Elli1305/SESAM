@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  * Implementierung des IssuerService-Interfaces.
  * Diese Klasse verwaltet Issuer-Objekte und bietet Methoden zur Abfrage, Aktualisierung und Löschung von Issuern.

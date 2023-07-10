@@ -1,5 +1,8 @@
 package com.gpse.sesam.domain.user;
 
+import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.mail.MailInformation;
 import com.gpse.sesam.domain.mail.MailService;
 import com.gpse.sesam.domain.user.issuer.Issuer;
@@ -8,6 +11,7 @@ import com.gpse.sesam.web.cmd.SesamUserCmd;
 import com.gpse.sesam.web.exception.ConflictException;
 import com.gpse.sesam.web.exception.InvalidTokenException;
 import com.gpse.sesam.web.exception.UnprocessableEntityException;
+import io.swagger.v3.oas.models.info.License;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -40,31 +44,34 @@ public class SesamUserServiceImpl implements SesamUserService {
 
 	private final MessageSource messageSource;
 	private IssuerService issuerService;
+	private CredentialService credentialService;
 
 	/**
 	 * Erstellt eine neue Instanz des SesamUserServiceImpl und initialisiert die Repositories, den PasswordEncoder,
 	 * den MailService, die MessageSource und den IssuerService.
 	 *
-	 * @param userRepository              das Repository für die Benutzer
-	 * @param passwordResetTokenRepository das Repository für die Passwort-Zurücksetzungstoken
-	 * @param passwordEncoder             der PasswordEncoder zum Verschlüsseln der Passwörter
-	 * @param mailService                 der MailService zum Versenden von E-Mails
-	 * @param messageSource               die MessageSource für die internationalisierten Nachrichten
-	 * @param issuerService               der IssuerService für die Verwaltung von Ausstellern
+	 * @param userRepository               	das Repository für die Benutzer
+	 * @param passwordResetTokenRepository 	das Repository für die Passwort-Zurücksetzungstoken
+	 * @param passwordEncoder              	der PasswordEncoder zum Verschlüsseln der Passwörter
+	 * @param mailService                  	der MailService zum Versenden von E-Mails
+	 * @param messageSource               	die MessageSource für die internationalisierten Nachrichten
+	 * @param issuerService                	der IssuerService für die Verwaltung von Ausstellern
+	 * @param credentialService				der CredentialService zum Verwalten der Abhängigkeiten von Credentials
 	 */
 	@Autowired
 	public SesamUserServiceImpl(final SesamUserRepository userRepository,
 								final PasswordResetTokenRepository passwordResetTokenRepository,
 								final PasswordEncoder passwordEncoder, final MailService mailService,
-								final MessageSource messageSource, final IssuerService issuerService) {
+								final MessageSource messageSource, final IssuerService issuerService,
+								final CredentialService credentialService) {
 		this.userRepository = userRepository;
 		this.passwordResetTokenRepository = passwordResetTokenRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.mailService = mailService;
 		this.messageSource = messageSource;
 		this.issuerService = issuerService;
+		this.credentialService = credentialService;
 	}
-
 
 	private static void validateRoles(final List<SesamUserRole.AttainableRole> roles) {
 		if (roles == null) {
@@ -139,7 +146,6 @@ public class SesamUserServiceImpl implements SesamUserService {
 	 * @param user  der Benutzer
 	 * @param token das PasswordResetToken
 	 */
-
 	@Override
 	public void createPasswordResetToken(final SesamUser user, final String token) {
 		final PasswordResetToken resetToken = new PasswordResetToken(user, token);
@@ -154,7 +160,6 @@ public class SesamUserServiceImpl implements SesamUserService {
 						new String[]{user.getFirstName(), user.getLastName(), token}, locale)));
 	}
 
-
 	/**
 	 * Aktualisiert das Passwort des Benutzers mit dem angegebenen Token.
 	 * Wirft eine InvalidTokenException, wenn das Token ungültig oder abgelaufen ist.
@@ -163,7 +168,6 @@ public class SesamUserServiceImpl implements SesamUserService {
 	 * @param password das neue Passwort
 	 * @throws InvalidTokenException wenn das Token ungültig oder abgelaufen ist
 	 */
-
 	@Override
 	public void updatePasswordWithToken(final String token, final String password) {
 		final PasswordResetToken passwordResetToken = passwordResetTokenRepository
@@ -201,7 +205,6 @@ public class SesamUserServiceImpl implements SesamUserService {
 	 * @param password das zu überprüfende Passwort
 	 * @throws UnprocessableEntityException wenn das Passwort nicht den Anforderungen entspricht
 	 */
-
 	private void validatePassword(final String password) {
 		if (password == null || !password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])"
 				+ "[a-zA-Z0-9!@#$%^&*]{8,120}$")) {
@@ -216,6 +219,13 @@ public class SesamUserServiceImpl implements SesamUserService {
 	 */
 	@Override
 	public void deleteUser(final SesamUser sesamUser) {
+		if (sesamUser instanceof Issuer) {
+			List<InternalCredential> credentials = credentialService.getCredentialsByIssuerId(sesamUser.getId());
+			for (InternalCredential credential : credentials) {
+				credential.removeIssuer((Issuer) sesamUser);
+			}
+			credentialService.saveAll(credentials);
+		}
 		userRepository.delete(sesamUser);
 	}
 
@@ -257,17 +267,17 @@ public class SesamUserServiceImpl implements SesamUserService {
 	/**
 	 * Aktualisiert die Informationen eines Benutzers.
 	 *
-	 * @param user      der zu aktualisierende Benutzer
-	 * @param prename   der neue Vorname
-	 * @param lastname  der neue Nachname
-	 * @param username  der neue Benutzername
-	 * @param roles     die neuen Rollen
+	 * @param user     der zu aktualisierende Benutzer
+	 * @param prename  der neue Vorname
+	 * @param lastname der neue Nachname
+	 * @param username der neue Benutzername
+	 * @param roles    die neuen Rollen
 	 */
 	@Override
 	public void makeUserEdit(final SesamUser user, final String prename, final String lastname, final String username,
 							 final List<SesamUserRole.AttainableRole> roles) {
-		if (roles.contains(SesamUserRole.AttainableRole.ISSUER)) {
-			userRepository.delete(user);
+		if (roles.contains(SesamUserRole.AttainableRole.ISSUER) && !(user instanceof Issuer)) {
+			deleteUser(user);
 			Issuer issuer = new Issuer(user.getUsername(), username, prename, lastname, roles.stream()
 					.distinct().map(role -> new SesamUserRole(role, true))
 					.collect(Collectors.toList()), null);
@@ -276,7 +286,7 @@ public class SesamUserServiceImpl implements SesamUserService {
 			user.setLastName(lastname);
 			user.setFirstName(prename);
 			user.setRoles(roles.stream().distinct().map(role -> new SesamUserRole(role, true))
-				.collect(Collectors.toList()));
+					.collect(Collectors.toList()));
 			userRepository.save(user);
 		}
 

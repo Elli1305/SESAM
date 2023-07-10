@@ -61,7 +61,8 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
      * Ruft externe Credentials anhand der angegebenen ID ab.
      *
      * @param id Die ID der externen Credentials.
-     * @return Die gefundenen externen Credentials oder Optional.empty(), wenn keine externen Credentials mit der ID vorhanden sind.
+     * @return Die gefundenen externen Credentials oder Optional.empty(), wenn keine externen Credentials mit der ID
+     * vorhanden sind.
      */
     @Override
     public Optional<ExternalCredential> getExternalCredential(Long id) {
@@ -143,7 +144,8 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
      * Ruft alle externen Credentials anhand der Standort-ID als ExternalCredentialCmd-Objekte ab.
      *
      * @param id Die ID des Standorts.
-     * @return Eine Liste von ExternalCredentialCmd-Objekten, die alle externen Credentials für den Standort repräsentieren.
+     * @return Eine Liste von ExternalCredentialCmd-Objekten, die alle externen Credentials für den Standort
+     * repräsentieren.
      */
     @Override
     public List<ExternalCredentialCmd> getAllExternalByLocation(Long id) {
