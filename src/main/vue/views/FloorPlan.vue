@@ -176,29 +176,29 @@ export default {
         }
         floor.rooms.push(room)
 
-                this.floorStore.save(floor).then((savedFloor) => {
-                    const savedRoom = savedFloor.rooms.reduce((prev, current) => (prev.id > current.id) ? prev : current)
-                    this.floorPlanStore.rooms = savedFloor.rooms
-                    e.layer.id = savedRoom.id
-                    this.addCallbacksPolygon(e.layer)
-                })
-            } else if (e.shape === 'Line' || e.shape === 'Polyline') {
-                $q.dialog({
-                    component: CreateDoor,
-                    componentProps: {
-                        rooms: this.floorPlanStore.rooms
-                    }
-                }).onOk(({room, doorName, configuration}) => {
-                    let door = {
-                        name: doorName,
-                        doorConfigCmds: configuration,
-                        roomId: room.id,
-                        coordinates: e.layer._latlngs.map((latLng) => ({
-                                lat: latLng.lat,
-                                lng: latLng.lng
-                            }
-                        )),
-                    };
+        this.floorStore.save(floor).then((savedFloor) => {
+          const savedRoom = savedFloor.rooms.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+          this.floorPlanStore.rooms = savedFloor.rooms
+          e.layer.id = savedRoom.id
+          this.addCallbacksPolygon(e.layer)
+        })
+      } else if (e.shape === 'Line' || e.shape === 'Polyline') {
+        $q.dialog({
+          component: CreateDoor,
+          componentProps: {
+            rooms: this.floorPlanStore.rooms
+          }
+        }).onOk(({room, doorName, configuration}) => {
+          let door = {
+            name: doorName,
+            doorConfigCmds: configuration,
+            roomId: room.id,
+            coordinates: e.layer._latlngs.map((latLng) => ({
+                  lat: latLng.lat,
+                  lng: latLng.lng
+                }
+            )),
+          };
 
           this.doorStore.create(door).then((savedDoor) => {
             room.doors.push(savedDoor)
