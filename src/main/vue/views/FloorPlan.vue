@@ -210,7 +210,7 @@ export default {
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
           })
-        })
+        }).onCancel(() => floorPlanMap.removeLayer(e.layer))
       }
     })
 
