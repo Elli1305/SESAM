@@ -1,10 +1,8 @@
-package com.gpse.sesam.domain.credential.credentials;
+package com.gpse.sesam.domain.credential.credentials.internal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gpse.sesam.web.cmd.CreateCredentialCmd;
-import com.gpse.sesam.web.cmd.CredentialCmd;
-import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
-import com.gpse.sesam.web.cmd.UpdateCredentialCmd;
+import com.gpse.sesam.domain.credential.credentials.Credential;
+import com.gpse.sesam.web.cmd.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +13,6 @@ public interface CredentialService {
 	List<Credential> getAllCredentials();
 
 	List<InternalCredential> getCredentialsByIssuerId(Long di);
-	List<ExternalCredential> getExternalCredentials();
 
 	List<Credential> getCredentialByCredentialDefinitionId(String id);
 
@@ -34,4 +31,12 @@ public interface CredentialService {
 	void delete(Long id);
 
 	void update(Long id, UpdateCredentialCmd updateCredentialCmd);
+
+	List<CredentialCmd> getAllCredentialsForView();
+
+	List<AllCredentialCmd> getAllForView();
+
+	List<AllCredentialCmd> getAllCredentialsByLocation(Long id);
+
+	CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws Exception;
 }

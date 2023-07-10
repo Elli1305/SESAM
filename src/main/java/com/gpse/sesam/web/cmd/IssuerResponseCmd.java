@@ -1,7 +1,5 @@
 package com.gpse.sesam.web.cmd;
 
-import com.gpse.sesam.domain.location.room.Room;
-
 import java.util.List;
 
 public class IssuerResponseCmd {

@@ -1,7 +1,7 @@
 package com.gpse.sesam.domain.user.issuer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;

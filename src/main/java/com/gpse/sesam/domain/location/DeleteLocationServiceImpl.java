@@ -26,7 +26,12 @@ public class DeleteLocationServiceImpl {
 
     private final RoomRepository roomRepository;
 
-    public DeleteLocationServiceImpl(LocationRepository locationRepository, RoomGroupRepository roomGroupRepository, RoomGroupServiceImpl roomGroupService, BuildingRepository buildingRepository, FloorRepository floorRepository, RoomRepository roomRepository) {
+    public DeleteLocationServiceImpl(LocationRepository locationRepository,
+                                     RoomGroupRepository roomGroupRepository,
+                                     RoomGroupServiceImpl roomGroupService,
+                                     BuildingRepository buildingRepository,
+                                     FloorRepository floorRepository,
+                                     RoomRepository roomRepository) {
         this.locationRepository = locationRepository;
         this.roomGroupRepository = roomGroupRepository;
         this.roomGroupService = roomGroupService;

@@ -2,10 +2,10 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card style="min-width: 60em">
       <q-card-section>
-        <div class="text-h6">{{ t('floorplan.addDoor') }}</div>
+        <div class="text-h6">{{ t('floorPlan.addDoor') }}</div>
       </q-card-section>
       <q-card-section class="row q-px-lg justify-between no-wrap">
-        <q-input class="full-width" filled v-model="doorName" :label="t('floorplan.doorName')" stack-label/>
+        <q-input class="full-width" filled v-model="doorName" :label="t('floorPlan.doorName')" stack-label/>
         <q-select
             class="q-ml-md"
             style="min-width: 20em"
@@ -13,7 +13,7 @@
             v-model="room"
             use-input
             hide-selected
-            :label="t('floorplan.pickRoom')"
+            :label="t('floorPlan.pickRoom')"
             option-label="name"
             fill-input
             input-debounce="0"
@@ -37,7 +37,7 @@
              fill-input
              input-debounce="0"
              @filter="filterFn"
-             label="Konfiguration auswählen"
+             :label="t('floorPlan.chooseConfig')"
              option-label="name"
              v-model="selectedConfig"
              :options="configOptions"

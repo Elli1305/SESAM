@@ -10,6 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Secured("EDITOR")
 @RequestMapping("/api/door")
 public class DoorController {
 

@@ -1,10 +1,10 @@
 package com.gpse.sesam.domain.credential.issuing;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.gpse.sesam.domain.credential.validation.AbstractValidationRule;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class FormEntry {
@@ -22,13 +22,23 @@ public class FormEntry {
 	@Column(nullable = false)
 	private String attributeName;
 
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<AbstractValidationRule> validationRules;
+
 	protected FormEntry() {
 	}
 
 	public FormEntry(final String label, final FormEntryType type, final String attributeName) {
+		this(label, type, attributeName, new ArrayList<>());
+	}
+
+	public FormEntry(final String label, final FormEntryType type,
+					 final String attributeName,
+					 final List<AbstractValidationRule> validationRules) {
 		this.label = label;
 		this.type = type;
 		this.attributeName = attributeName;
+		this.validationRules = validationRules;
 	}
 
 	public Long getId() {
@@ -57,5 +67,13 @@ public class FormEntry {
 
 	public String getAttributeName() {
 		return attributeName;
+	}
+
+	public List<AbstractValidationRule> getValidationRules() {
+		return validationRules;
+	}
+
+	public void setValidationRules(List<AbstractValidationRule> validationRules) {
+		this.validationRules = validationRules;
 	}
 }

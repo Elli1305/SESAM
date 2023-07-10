@@ -2,23 +2,23 @@
   <q-card-section>
     <q-card bordered flat>
       <q-toolbar class="bg-primary text-accent">
-        <q-toolbar-title>{{ t('floorplan.config') }}</q-toolbar-title>
+        <q-toolbar-title>{{ t('floorPlan.config') }}</q-toolbar-title>
         <q-field dark borderless>
           <template v-slot:control>
-            <div class="no-outline text-subtitle2">{{t('floorplan.direction')}}</div>
+            <div class="no-outline text-subtitle2">{{t('floorPlan.direction')}}</div>
           </template>
           <template v-slot:append>
             <q-btn-toggle
                 toggle-indeterminate
                 v-model="direction"
                 style="margin: 1em 1em 1em 0"
-                :label="t('floorplan.direction')"
+                :label="t('floorPlan.direction')"
                 color="white"
                 text-color="black"
                 :options="[
-                  {label: t('floorplan.in'), value: Direction.IN},
-                  {label: t('floorplan.both'), value: Direction.BOTH},
-                  {label: t('floorplan.out'), value: Direction.OUT}
+                  {label: t('floorPlan.directions.in'), value: Direction.IN},
+                  {label: t('floorPlan.directions.both'), value: Direction.BOTH},
+                  {label: t('floorPlan.directions.out'), value: Direction.OUT}
                 ]"
                 rounded
                 size="0.5em"
@@ -29,17 +29,17 @@
         </q-field>
         <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
           <q-tooltip max-width="15em" anchor="center right" self="center left">
-            {{t('floorplan.infoConfigGroups')}}
+            {{t('floorPlan.infoConfigGroups')}}
           </q-tooltip>
         </q-icon>
       </q-toolbar>
       <q-card-section>
-        <q-input filled v-model="configDescription" :label="t('floorplan.configDescription')" stack-label/>
+        <q-input filled v-model="configDescription" :label="t('floorPlan.configDescription')" stack-label/>
       </q-card-section>
       <q-card-section v-for="(select,i) in qSelects.configParts">
         <q-card bordered flat>
           <q-toolbar class="bg-primary text-white shadow-2">
-            <q-toolbar-title>{{ t('floorplan.configGroup') }}</q-toolbar-title>
+            <q-toolbar-title>{{ t('floorPlan.configGroup') }}</q-toolbar-title>
             <q-btn flat round icon="delete" size="0.75em" @click="removeConfigGroup(i)"/>
           </q-toolbar>
           <q-card-section class="column">
@@ -49,14 +49,14 @@
                 multiple
                 label="Credentials"
                 option-label="name"
-                :hint="t('floorplan.infoCredential')"
+                :hint="t('floorPlan.infoCredential')"
                 :options="credentialStore.allCredentials"
                 v-model="qSelects.configParts[i].credentials"
                 use-chips>
               <template v-slot:after>
                 <q-icon class="cursor-pointer" size="0.75em" name="filter_none">
                   <q-tooltip max-width="15em" anchor="center right" self="center left">
-                    {{t('floorplan.infoCredentialGroups')}}
+                    {{t('floorPlan.directions.infoCredentialGroups')}}
                   </q-tooltip>
                 <q-menu anchor="bottom right" self="top right" transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
                     <q-list dense>
@@ -111,7 +111,7 @@
                        :disable="qSelects.configParts[i].attributeFilter[j].currentDate" ref="input">
                 <template v-slot:hint>
                   <q-checkbox
-                      :label="t('floorplan.currentTime')"
+                      :label="t('floorPlan.currentTime')"
                       dense
                       size="2em"
                       v-model="qSelects.configParts[i].attributeFilter[j].currentDate"
@@ -126,12 +126,12 @@
           </q-card-section>
           <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add"
                  @click="addAttributeFilter(i)">
-            {{t('floorplan.addAttribute')}}
+            {{t('floorPlan.addAttribute')}}
           </q-btn>
         </q-card>
       </q-card-section>
       <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfigurationGroup">
-        {{t('floorplan.addConfigGroup')}}
+        {{t('floorPlan.addConfigGroup')}}
       </q-btn>
     </q-card>
   </q-card-section>

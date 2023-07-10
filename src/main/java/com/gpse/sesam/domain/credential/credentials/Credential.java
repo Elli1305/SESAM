@@ -2,6 +2,8 @@ package com.gpse.sesam.domain.credential.credentials;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.credential.issuing.FormEntry;
 
 import java.util.List;

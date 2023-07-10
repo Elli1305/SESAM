@@ -1,5 +1,6 @@
 package com.gpse.sesam.web.controller;
 
+import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
 import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
@@ -70,6 +71,11 @@ public class RoomGroupController {
     @Secured("EDITOR")
     public List<RoomGroupDoorConfigCmd> getRoomsAndDoorsByGroupId(@PathVariable("id") final Long id) {
         return roomGroupService.getRoomsAndDoorsByGroupId(id);
+    }
+    @GetMapping("/rooms/{id}")
+    @Secured("EDITOR")
+    public List<Room> getRoomsByGroupId(@PathVariable("id") final Long id) {
+        return roomGroupService.getRoomsByGroupId(id);
     }
 
     @PostMapping("/saveconfigs")

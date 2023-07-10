@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">Credentialverwaltung</p>
+    <p class="row text-h3 justify-center">{{t('admin.credentialAdministration.title')}}</p>
     <div class="row self-center">
       <q-table
           style="width: 80vw; height: 50vh"
@@ -11,11 +11,11 @@
           :filter="search"
           row-key="name">
       <template v-slot:top-left>
-        <q-select style="width: 12em" dense v-model="selectedTypes" :options="options" borderless emit-value label="Art" map-options multiple/>
+        <q-select style="width: 12em" dense v-model="selectedTypes" :options="options" borderless emit-value :label="t('admin.credentialAdministration.type')" map-options multiple/>
         </template>
       <template v-slot:top-right>
-        <q-btn rounded borderless color="grey-6" flat icon="add" label="Neues Credential" to="/add_credential"/>
-        <q-input v-model="filter" borderless class="q-ml-lg" debounce="300" dense placeholder="Suche">
+        <q-btn rounded borderless color="grey-6" flat icon="add" :label="t('admin.credentialAdministration.new')" to="/add_credential"/>
+        <q-input v-model="filter" borderless class="q-ml-lg" debounce="300" dense :placeholder="t('common.search')">
           <template v-slot:append>
             <q-icon name="search"/>
           </template>
@@ -47,7 +47,9 @@ import {QSelectOption, QTableColumn} from "quasar";
 import {useCredentialsStore} from "@/main/vue/stores/credential";
 import {computed, Ref, ref} from "vue";
 import {Credential, ExternalCredential} from "@/main/vue/entity/credentialDefinition";
+import {useI18n} from "vue-i18n";
 
+const {t} = useI18n();
 const columns: QTableColumn<Credential | ExternalCredential>[] = [
   {
     name: 'name',
@@ -85,7 +87,7 @@ const columns: QTableColumn<Credential | ExternalCredential>[] = [
   {
     name: 'actions',
     align: 'center',
-    label: 'Bearbeiten',
+    label: t('common.edit'),
     field: row => ''
   }
 

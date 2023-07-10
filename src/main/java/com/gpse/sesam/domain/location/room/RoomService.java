@@ -1,5 +1,6 @@
 package com.gpse.sesam.domain.location.room;
 
+import com.gpse.sesam.domain.location.floor.Floor;
 import java.util.Optional;
 
 public interface RoomService {
@@ -12,4 +13,6 @@ public interface RoomService {
     Optional<Room> getRoomById(Long id);
 
 	Room getById(Long roomId);
+
+	Floor getFloorToRoom(Long roomId);
 }
