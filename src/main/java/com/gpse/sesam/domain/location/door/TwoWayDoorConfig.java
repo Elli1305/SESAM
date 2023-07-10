@@ -3,10 +3,6 @@ package com.gpse.sesam.domain.location.door;
 import com.gpse.sesam.domain.location.door.config.ProofConfig;
 import jakarta.persistence.*;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 public class TwoWayDoorConfig {
 

@@ -1,18 +1,12 @@
 package com.gpse.sesam.domain.location.door;
 
-import com.gpse.sesam.domain.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.gpse.sesam.domain.location.door.config.DoorConfigService;
-import com.gpse.sesam.domain.location.door.config.ProofConfig;
-import com.gpse.sesam.domain.scheduling.SchedulerService;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
 import com.gpse.sesam.domain.location.room.RoomService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;

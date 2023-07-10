@@ -2,9 +2,7 @@ package com.gpse.sesam.domain.filestorage;
 
 import com.gpse.sesam.configuration.FileStorageConfiguration;
 import com.gpse.sesam.domain.colors.ColorTheme;
-import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
-import com.gpse.sesam.domain.colors.ColorsServiceImpl;
 import com.gpse.sesam.web.exception.FileStorageException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.stereotype.Service;
@@ -34,7 +32,8 @@ public class FileStorageServiceImpl implements FileStorageService {
 	 * @param fileStorageConfiguration die Konfiguration für den Dateispeicher
 	 */
 
-	public FileStorageServiceImpl(final FileStorageConfiguration fileStorageConfiguration, final ColorsService colorsService) {
+	public FileStorageServiceImpl(final FileStorageConfiguration fileStorageConfiguration,
+								  final ColorsService colorsService) {
 		fileStorageLocation = Paths.get(fileStorageConfiguration.getBaseDir()).normalize();
 		this.colorsService = colorsService;
 		try {
@@ -120,7 +119,8 @@ public class FileStorageServiceImpl implements FileStorageService {
 	 */
 	@Override
 	public void reset(ColorTheme colorTheme) {
-		try (final InputStream logoFile = Files.newInputStream(fileStorageLocation.resolve(colorsService.getDefaultColors(colorTheme).getLogoPath()));
+		try (final InputStream logoFile = Files.newInputStream(fileStorageLocation
+				.resolve(colorsService.getDefaultColors(colorTheme).getLogoPath()));
 			 final InputStream faviconFile = Files.newInputStream(fileStorageLocation.resolve("T_favicon.ico"))) {
 			final Path logoLocation;
 			if (colorTheme.equals(ColorTheme.LIGHT)) {

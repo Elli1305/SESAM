@@ -4,7 +4,6 @@ import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
 import com.gpse.sesam.web.cmd.DoorCmd;
-import com.gpse.sesam.web.cmd.DoorConfigCmd;
 import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
 
 import java.text.ParseException;

@@ -212,7 +212,8 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     }
 
     /**
-     * Gibt eine Liste von RoomGroupDoorConfigCmd-Objekten zurück, die die Räume und Türen für die angegebene Raumgruppen-ID enthalten.
+     * Gibt eine Liste von RoomGroupDoorConfigCmd-Objekten zurück,
+     * die die Räume und Türen für die angegebene Raumgruppen-ID enthalten.
      *
      * @param id die ID der Raumgruppe
      * @return eine Liste von RoomGroupDoorConfigCmd-Objekten mit den Räumen und Türen der Raumgruppe

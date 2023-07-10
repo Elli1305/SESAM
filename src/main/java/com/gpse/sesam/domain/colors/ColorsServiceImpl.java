@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.colors;
 
-import jakarta.persistence.Access;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
