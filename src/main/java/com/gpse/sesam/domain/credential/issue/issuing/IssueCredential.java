@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.credential.issuing;
+package com.gpse.sesam.domain.credential.issue.issuing;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

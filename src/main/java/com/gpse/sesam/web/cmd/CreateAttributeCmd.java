@@ -1,7 +1,7 @@
 package com.gpse.sesam.web.cmd;
 
-import com.gpse.sesam.domain.credential.issuing.FormEntryType;
-import com.gpse.sesam.domain.credential.validation.AbstractValidationRule;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.issue.validation.AbstractValidationRule;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

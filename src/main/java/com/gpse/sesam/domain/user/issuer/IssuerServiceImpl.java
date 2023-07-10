@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementierung des IssuerService-Interfaces.
+ * Diese Klasse verwaltet Issuer-Objekte und bietet Methoden zur Abfrage, Aktualisierung und Löschung von Issuern.
+ */
 @Service
 @Primary
 public class IssuerServiceImpl implements IssuerService {
@@ -22,6 +26,13 @@ public class IssuerServiceImpl implements IssuerService {
 	private final RoomRepository roomRepository;
 	private final CredentialRepository credentialRepository;
 
+	/**
+	 * Konstruktor für die IssuerServiceImpl-Klasse.
+	 *
+	 * @param issuerRepository        das IssuerRepository für den Datenbankzugriff
+	 * @param roomRepository          das RoomRepository für den Datenbankzugriff
+	 * @param credentialRepository    das CredentialRepository für den Datenbankzugriff
+	 */
 	@Autowired
 	public IssuerServiceImpl(final IssuerRepository issuerRepository,
 							 final RoomRepository roomRepository, final CredentialRepository credentialRepository) {
@@ -30,7 +41,11 @@ public class IssuerServiceImpl implements IssuerService {
 		this.credentialRepository = credentialRepository;
 	}
 
-
+	/**
+	 * Gibt eine Liste aller Issuer zurück.
+	 *
+	 * @return die Liste der Issuer
+	 */
 	@Override
 	public List<Issuer> getIssuers() {
 		final List<Issuer> issuers = new ArrayList<>();
@@ -46,27 +61,53 @@ public class IssuerServiceImpl implements IssuerService {
 				.toList();
 	}
 
+	/**
+	 * Gibt einen Issuer anhand seiner E-Mail-Adresse zurück.
+	 *
+	 * @param email die E-Mail-Adresse des Issuer
+	 * @return der gefundene Issuer oder null, wenn keiner gefunden wurde
+	 */
 	@Override
 	public Issuer getIssuerByMail(final String email) {
 		return issuerRepository.findByEmail(email).orElse(null);
 	}
 
+	/**
+	 * Gibt einen Issuer anhand seiner ID zurück.
+	 *
+	 * @param id die ID des Issuer
+	 * @return der gefundene Issuer oder Optional.empty(), wenn keiner gefunden wurde
+	 */
 	@Override
 	public Optional<Issuer> getIssuer(final Long id) {
 		return issuerRepository.findById(String.valueOf(id));
 	}
 
-
+	/**
+	 * Löscht einen Issuer.
+	 *
+	 * @param issuer der zu löschende Issuer
+	 */
 	@Override
 	public void deleteIssuer(final Issuer issuer) {
 		issuerRepository.delete(issuer);
 	}
 
+	/**
+	 * Speichert eine Liste von Issuer.
+	 *
+	 * @param issuers die zu speichernden Issuer
+	 */
 	@Override
 	public void saveAll(final Iterable<Issuer> issuers) {
 		issuerRepository.saveAll(issuers);
 	}
 
+	/**
+	 * Aktualisiert die Informationen eines Issuer.
+	 *
+	 * @param cmd die Informationen zur Aktualisierung
+	 */
 	@Override
 	public void updateIssuer(final IssuerResponseCmd cmd) {
 		final Optional<Issuer> issuer = getIssuer(cmd.getIssuerId());
@@ -83,6 +124,11 @@ public class IssuerServiceImpl implements IssuerService {
 		}
 	}
 
+	/**
+	 * Speichert einen Issuer.
+	 *
+	 * @param issuer der zu speichernde Issuer
+	 */
 	@Override
 	public void save(Issuer issuer) {
 		issuerRepository.save(issuer);
