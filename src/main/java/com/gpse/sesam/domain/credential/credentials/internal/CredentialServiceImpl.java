@@ -105,6 +105,10 @@ public class CredentialServiceImpl implements CredentialService {
         this.categoryService = categoryService;
     }
 
+    public static String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
+        return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
+    }
+
     @PreDestroy
     private void destroy() throws IndyException, ExecutionException, InterruptedException {
         if (pool == null) {
@@ -141,10 +145,6 @@ public class CredentialServiceImpl implements CredentialService {
 
 
         return Pool.openPoolLedger(DEFAULT_POOL_NAME, "{}").get();
-    }
-
-    private String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
-        return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
     }
 
 
@@ -477,6 +477,7 @@ public class CredentialServiceImpl implements CredentialService {
 
         credential.setName(updateCredentialCmd.getName());
         credential.setAgent(updateCredentialCmd.getAgent());
+        credential.setVersion(updateCredentialCmd.getVersion());
         credential.setCredentialDefinitionId(
                 replaceMagicCredentialDefinitionIds(
                         updateCredentialCmd.getCredentialDefinitionId()

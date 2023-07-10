@@ -1,5 +1,6 @@
 package com.gpse.sesam.web.cmd;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gpse.sesam.domain.credential.issuing.FormEntryType;
 import com.gpse.sesam.domain.credential.validation.AbstractValidationRule;
 import jakarta.validation.constraints.NotBlank;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateAttributeCmd {
 	@NotBlank
 	private String name;

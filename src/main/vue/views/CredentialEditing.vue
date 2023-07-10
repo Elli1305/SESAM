@@ -5,16 +5,24 @@
             @submit.prevent>
       <div class="row no-wrap full-width">
         <div class="column justify-evenly" style="width: 15vw; height: 40vh; margin-right: 3vw">
-          <q-input v-model="credential.credentialDefinitionId" :rules="[required]"
-                   class="q-mb-md" error-message=" " label="Credential Definition ID" lazy-rules no-error-icon
-                   outlined
-                   style="width: 15vw; margin-bottom: -1em" type="text"/>
+          <q-select v-if="!props.type && !props.id" v-model="createType" :options="createOptions" emit-value
+                    label="Credential Type" map-options outlined></q-select>
 
-          <q-btn flat label="Load Credential Schema" @click="getCredentialSchema"/>
-          <q-input v-model="credential.name" :rules="[required]" error-message=" " label="Name"
-                   lazy-rules no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
-          <q-select v-if="props.type !== 'external'" v-model="credential.agent" :options="['university', 'tlabs']"
-                    label="Agent" outlined style="width: 15vw; margin-bottom: -1em"/>
+          <q-input v-model="credential.credentialDefinitionId" :disable="createType === 'internal' && createOnLedger"
+                   :rules="[required]" class="q-mb-md" error-message=" " label="Credential Definition ID" lazy-rules
+                   no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
+
+          <q-btn :disable="createType === 'internal' && createOnLedger" flat label="Load Credential Schema"
+                 @click="getCredentialSchema"/>
+          <q-checkbox v-show="createType === 'internal'" v-model="createOnLedger" label="Create on ledger"/>
+
+          <q-input v-model="credential.name" :rules="[required]" error-message=" " label="Name" lazy-rules no-error-icon
+                   outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
+          <q-select v-if="props.type !== 'external'" v-model="credential.agent" :options="agents" emit-value
+                    label="Agent"
+                    map-options outlined style="width: 15vw; margin-bottom: -1em"/>
+          <q-input v-model="credential.version" :rules="[required]" error-message=" " label="Version" lazy-rules
+                   no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
         </div>
         <q-virtual-scroll :items="[0]" class="column full-width" style="height: 40vh">
           <div class="row no-wrap full-width">
@@ -24,21 +32,19 @@
               <div v-for="(item, index) in credential.attributes" class="full-width">
                 <q-item class="row justify-between q-px-sm" style="margin-bottom: -1em">
                   <q-input v-model="item.name" :rules="[required]" error-message=" " label="Name" lazy-rules
-                           no-error-icon outlined style="width: 15vw" type="text"/>
-                  <q-input v-model="item.attributeName" :label="t('admin.credentialAdministration.attribute')" :rules="[required]" error-message=" "
-                           lazy-rules outlined
-                           style="width: 15vw" type="text"/>
+                           no-error-icon
+                           outlined style="width: 15vw" type="text"/>
+                  <q-input v-model="item.attributeName" :label="t('admin.credentialAdministration.attribute')"
+                           :rules="[required]" error-message=" " lazy-rules outlined style="width: 15vw" type="text"/>
                   <div class="row no-wrap">
-                    <q-select v-model="item.type" :options="types" emit-value label="Type" map-options
-                              outlined
+                    <q-select v-model="item.type" :options="types" emit-value label="Type" map-options outlined
                               style="width: 10vw"/>
                     <div class="column justify-between items-center q-mx-sm">
                       <div class="column justify-center no-wrap" style="height: 4em">
                         <q-btn color="black" flat icon="lock" round size="0.75em" style="width: 2em"
                                @click="editValidation(item, credential.attributes)"/>
                         <q-btn v-if="index !== 0" color="primary" flat icon="remove" round size="0.75em"
-                               style="width: 2em"
-                               @click="() => credential.attributes.splice(index, 1)"/>
+                               style="width: 2em" @click="() => credential.attributes.splice(index, 1)"/>
                       </div>
                       <q-btn color="primary" flat icon="add" round size="0.75em" style="width: 2em"
                              @click="addAttribute(index)"/>
@@ -47,7 +53,7 @@
                 </q-item>
               </div>
             </div>
-            <div class="column" style="width: 20vw; margin-left: 2vw">
+            <div v-if="createType === 'internal'" class="column" style="width: 20vw; margin-left: 2vw">
               <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">
                 {{ t('admin.credentialAdministration.checklist') }}</h6>
               <div v-for="(item, index) in credential.conditions" class="full-width">
@@ -70,7 +76,7 @@
       </div>
       <div class="row justify-around q-mt-md">
         <q-btn color="negative" fab icon="delete" style="width: 4em; height: 4em" text-color="positive" unelevated
-               @click="deleteCredential"/>
+               v-if="props.id && props.type" @click="deleteCredential"/>
         <q-btn color="positive" fab icon="save" style="width: 4em; height: 4em" text-color="negative" unelevated
                @click="save"/>
       </div>
@@ -81,17 +87,48 @@
 <script lang="ts" setup>
 import {QForm, QSelectOption, useQuasar, ValidationRule} from "quasar";
 import {onBeforeMount, ref, Ref} from "vue";
-import {CreateAttribute, CreateCredential} from "@/main/vue/entity/credentialDefinition";
+import {
+  CreateAttribute,
+  CreateCredential,
+  ExternalCredential,
+  InternalCredential
+} from "@/main/vue/entity/credentialDefinition";
 import api from "@/main/vue/api";
 import {useI18n} from "vue-i18n";
 import router from "@/main/vue/router";
 import ValidateCredentials from "@/main/vue/views/ValidateCredentials.vue";
-import {AxiosError} from "axios";
+import {AxiosError, AxiosResponse} from "axios";
 
 const props = defineProps<{ id?: string, type?: 'internal' | 'external' }>();
 
 const {t} = useI18n();
-const $q = useQuasar()
+const $q = useQuasar();
+
+const createOnLedger: Ref<boolean> = ref(false);
+
+const createOptions: QSelectOption[] = [
+  {
+    label: 'Internal',
+    value: 'internal'
+  },
+  {
+    label: 'External',
+    value: 'external'
+  },
+];
+
+const createType: Ref<string> = ref(createOptions[0].value);
+
+const agents: QSelectOption[] = [
+  {
+    label: 'University',
+    value: 'university'
+  },
+  {
+    label: 'T-Labs',
+    value: 'tlabs'
+  },
+];
 
 const types: QSelectOption[] = [
   {
@@ -111,29 +148,34 @@ const types: QSelectOption[] = [
 const credential: Ref<CreateCredential> = ref({
   name: '',
   agent: '',
+  version: '',
   credentialDefinitionId: '',
   attributes: [{type: types[0].value, name: '', attributeName: '', validationRules: []}],
   conditions: [{label: ''}],
 });
 
 onBeforeMount(async () => {
-  if (props.id !== undefined) {
-    await api.credential.get(props.id.toString()).then(response => {
-      credential.value = {
-        name: response.data.name,
-        agent: response.data.agent,
-        credentialDefinitionId: response.data.credentialDefinitionId,
-        attributes: response.data.form.map(f => ({
-          id: f.id,
-          attributeName: f.attributeName,
-          type: f.type,
-          name: f.label,
-          validationRules: f.validationRules
-        })),
-        conditions: response.data.checklist,
-      }
-    })
+  if (!props.id || !props.type) {
+    return;
   }
+
+  api.credential[(props.type === 'internal' ? 'get' : 'getExternalCredential')](props.id)
+      .then((response: AxiosResponse<InternalCredential | ExternalCredential>) => {
+        credential.value = {
+          name: response.data.name,
+          agent: "agent" in response.data ? response.data.agent : '',
+          version: response.data.version,
+          credentialDefinitionId: response.data.credentialDefinitionId,
+          attributes: response.data.form.map(f => ({
+            id: f.id,
+            attributeName: f.attributeName,
+            type: f.type,
+            name: f.label,
+            validationRules: f.validationRules
+          })),
+          conditions: "checklist" in response.data ? response.data.checklist : [],
+        }
+      });
 });
 
 const required: ValidationRule<string> = (value) => !!value || t('issuer.issueCredential.validation.inputRequired');
@@ -152,22 +194,40 @@ const save = async () => {
     return;
   }
 
+  $q.loading.show({delay: 400});
+
   if (!props.id) {
-    api.credential.create(credential.value)
+    (createType.value === 'internal' ? api.credential.create(createOnLedger.value, credential.value) : api.credential.createExternalCredential(credential.value))
         .then(() => {
           router.push("/credential_administration");
         })
         .catch(reason => {
           console.log(reason);
-        });
+
+          $q.notify({
+            type: 'negative',
+            position: 'bottom',
+            timeout: 6000,
+            message: 'Beim erstellen des Credential ist ein Fehler aufgetreten.',
+          });
+        })
+        .finally($q.loading.hide);
   } else {
-    api.credential.update(props.id, credential.value)
+    api.credential[(props.type === 'internal' ? 'update' : 'updateExternalCredential')](props.id, credential.value)
         .then(() => {
           router.push("/credential_administration");
         })
         .catch(reason => {
           console.log(reason);
-        });
+
+          $q.notify({
+            type: 'negative',
+            position: 'bottom',
+            timeout: 6000,
+            message: 'Beim updaten des Credential ist ein Fehler aufgetreten.',
+          });
+        })
+        .finally($q.loading.hide);
   }
 }
 
@@ -182,6 +242,7 @@ const getCredentialSchema = async () => {
       .then(response => {
         credential.value.name = response.data.name;
         credential.value.credentialDefinitionId = response.data.credentialDefinitionId;
+        credential.value.version = response.data.ver;
 
         if (response.data.agent) {
           credential.value.agent = response.data.agent;
@@ -218,17 +279,27 @@ const editValidation = (item: CreateAttribute, items: CreateAttribute[]) => {
 }
 
 const deleteCredential = async () => {
-  if (!props.id) {
+  if (!props.id || !props.type) {
     return;
   }
 
-  api.credential.delete(props.id)
+  $q.loading.show({delay: 400});
+
+  api.credential[(props.type === 'internal' ? 'delete' : 'deleteExternalCredential')](props.id)
       .then(() => {
         router.push("/credential_administration");
       })
       .catch(reason => {
         console.log(reason);
-      });
+
+        $q.notify({
+          type: 'negative',
+          position: 'bottom',
+          timeout: 6000,
+          message: 'Beim löschen des Credential ist ein Fehler aufgetreten.',
+        });
+      })
+      .finally($q.loading.hide);
 }
 </script>
 

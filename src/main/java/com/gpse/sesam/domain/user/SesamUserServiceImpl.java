@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.user;
 
-import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.mail.MailInformation;
@@ -11,7 +10,6 @@ import com.gpse.sesam.web.cmd.SesamUserCmd;
 import com.gpse.sesam.web.exception.ConflictException;
 import com.gpse.sesam.web.exception.InvalidTokenException;
 import com.gpse.sesam.web.exception.UnprocessableEntityException;
-import io.swagger.v3.oas.models.info.License;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;

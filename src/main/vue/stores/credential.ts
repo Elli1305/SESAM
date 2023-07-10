@@ -4,16 +4,16 @@ import api from "@/main/vue/api";
 import {
     AllCredentialCmd,
     Category,
-    Credential,
     CredentialCmd,
     ExternalCredential,
-    ExternalCredentialCmd
+    ExternalCredentialCmd,
+    InternalCredential
 } from "@/main/vue/entity/credentialDefinition";
 
 export const useCredentialsStore = defineStore('credentials', {
     state: () => {
         return {
-            credentials: new Array<Credential>(),
+            credentials: new Array<InternalCredential>(),
             externalCredentials: new Array<ExternalCredential>(),
         };
     }, actions: {
@@ -27,7 +27,7 @@ export const useCredentialsStore = defineStore('credentials', {
 export const useCredentialStore = defineStore('credential', () => {
     const credentials: Ref<CredentialCmd[] | null> = ref(null)
     const allCredentials: Ref<ExternalCredential[] | null> = ref(null)
-    const credsByIssuer: Ref<Credential[] | null> = ref(null)
+    const credsByIssuer: Ref<InternalCredential[] | null> = ref(null)
     const categories: Ref<Category[] | null> = ref(null)
     const external: Ref<ExternalCredential[] | null> = ref(null)
     const credentialsForView: Ref<CredentialCmd[] | null> = ref(null)
@@ -71,17 +71,17 @@ export const useCredentialStore = defineStore('credential', () => {
             })
         }
 
-        function getCredentialsByIssuer(id: number | undefined): Promise<Credential[]> {
-            return new Promise((resolve, reject) => {
-                api.credential.getCredentialsByIssuer(id).then((response) => {
-                    credsByIssuer.value = response.data
-                    resolve(response.data)
-                }).catch((error) => {
-                    reject(error)
-                })
-
+    function getCredentialsByIssuer(id: number | undefined): Promise<InternalCredential[]> {
+        return new Promise((resolve, reject) => {
+            api.credential.getCredentialsByIssuer(id).then((response) => {
+                credsByIssuer.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
             })
-        }
+
+        })
+    }
 
         function getExternalCredentials() {
             return new Promise((resolve, reject) => {

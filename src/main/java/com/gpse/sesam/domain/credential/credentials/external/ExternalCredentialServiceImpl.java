@@ -7,6 +7,7 @@ import com.gpse.sesam.domain.credential.issuing.FormEntry;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.door.config.AttributeFilter;
+import com.gpse.sesam.web.cmd.CreateAttributeCmd;
 import com.gpse.sesam.web.cmd.CreateExternalCredentialCmd;
 import com.gpse.sesam.web.cmd.ExternalCredentialCmd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.gpse.sesam.domain.credential.credentials.internal.CredentialServiceImpl.replaceMagicCredentialDefinitionIds;
 
 /**
  * Implementierung des ExternalCredentialService, der Operationen zur Verwaltung von externen Credentials durchführt.
@@ -76,7 +79,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
         final ExternalCredential credential = new ExternalCredential(
                 createExternalCredentialCmd.getName(),
                 createExternalCredentialCmd.getVersion(),
-                createExternalCredentialCmd.getCredentialDefinitionId(),
+                replaceMagicCredentialDefinitionIds(createExternalCredentialCmd.getCredentialDefinitionId()),
                 createExternalCredentialCmd.getAttributes().stream()
                         .map(createAttributeCmd ->
                                 new FormEntry(
@@ -122,7 +125,27 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
         final ExternalCredential credential = optionalCredential.get();
 
         credential.setName(createExternalCredentialCmd.getName());
-        credential.setCredentialDefinitionId(createExternalCredentialCmd.getCredentialDefinitionId());
+        credential.setVersion(createExternalCredentialCmd.getVersion());
+        credential.setCredentialDefinitionId(
+                replaceMagicCredentialDefinitionIds(
+                        createExternalCredentialCmd.getCredentialDefinitionId()
+                )
+        );
+
+        final List<FormEntry> formEntries = new ArrayList<>();
+
+        for (final CreateAttributeCmd attribute : createExternalCredentialCmd.getAttributes()) {
+            formEntries.add(
+                    new FormEntry(
+                            attribute.getName(),
+                            attribute.getType(),
+                            attribute.getAttributeName(),
+                            attribute.getValidationRules()
+                    )
+            );
+        }
+
+        credential.setForm(formEntries);
 
         externalCredentialRepository.save(credential);
     }

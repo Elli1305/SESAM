@@ -4,22 +4,29 @@ import {
     Category,
     CategoryResponse,
     CreateCredential,
-    Credential,
-    CredentialCmd, CredentialSchema,
-    ExternalCredential, ExternalCredentialCmd,
+    CreateExternalCredential,
+    CredentialCmd,
+    CredentialSchema,
+    ExternalCredential,
+    ExternalCredentialCmd,
+    InternalCredential,
     IssueCredentialAttribute
 } from "@/main/vue/entity/credentialDefinition";
 
 export default {
-    get(id: string): Promise<AxiosResponse<Credential>> {
-        return axios.get<Credential>(`/api/credentials/${id}`);
+    get(id: string): Promise<AxiosResponse<InternalCredential>> {
+        return axios.get<InternalCredential>(`/api/credentials/${id}`);
+    },
+
+    getExternalCredential(id: string): Promise<AxiosResponse<ExternalCredential>> {
+        return axios.get<ExternalCredential>(`/api/external_credentials/${id}`);
     },
 
     issue(id: string, attributes: IssueCredentialAttribute[]): Promise<AxiosResponse<string>> {
         return axios.post<string>(`/api/credentials/${id}/issue`, attributes);
     },
 
-    all(): Promise<AxiosResponse<Credential[]>> {
+    all(): Promise<AxiosResponse<InternalCredential[]>> {
         return axios.get("/api/credentials")
     },
     externalCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
@@ -28,11 +35,20 @@ export default {
     create(createOnLedger: boolean, credential: CreateCredential): Promise<AxiosResponse<CreateCredential>> {
         return axios.post(`/api/credentials?createOnLedger=${createOnLedger}`, credential);
     },
+    createExternalCredential(credential: CreateExternalCredential): Promise<AxiosResponse<CreateCredential>> {
+        return axios.post(`/api/external_credentials`, credential);
+    },
     delete(id: string): Promise<AxiosResponse<void>> {
         return axios.delete(`/api/credentials/${id}`);
     },
+    deleteExternalCredential(id: string): Promise<AxiosResponse<void>> {
+        return axios.delete(`/api/external_credentials/${id}`);
+    },
     update(id: string, credential: CreateCredential): Promise<AxiosResponse<void>> {
         return axios.put(`/api/credentials/${id}`, credential);
+    },
+    updateExternalCredential(id: string, credential: CreateExternalCredential): Promise<AxiosResponse<void>> {
+        return axios.put(`/api/external_credentials/${id}`, credential);
     },
 
     getAllCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
@@ -47,7 +63,7 @@ export default {
         return axios.get("api/credentialview/" + param)
     },
 
-    getCredentialsByIssuer(id: number | undefined): Promise<AxiosResponse<Credential[]>> {
+    getCredentialsByIssuer(id: number | undefined): Promise<AxiosResponse<InternalCredential[]>> {
         return axios.get(`api/credentials/getByIssuer/${id}`)
     },
     getExternalCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
