@@ -1,6 +1,6 @@
-package com.gpse.sesam.domain.credential.validation;
+package com.gpse.sesam.domain.credential.issue.validation;
 
-import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
@@ -30,6 +30,14 @@ public class RangeRule extends AbstractValidationRule {
 
     }
 
+    /**
+     * Validiert die Eingabe basierend auf dem angegebenen FormEntryType.
+     *
+     * @param input für die zu validierende Eingabe
+     * @param type  der FormEntryType, der die Validierungskriterien festlegt
+     * @return boolean, wenn die Eingabe gemäß dem angegebenen Typ gültig ist, andernfalls false
+     * @throws IllegalArgumentException wenn der angegebene Typ nicht für die Bereichsvalidierung unterstützt wird
+     */
     @Override
     public boolean validate(String input, FormEntryType type) {
         switch (type) {

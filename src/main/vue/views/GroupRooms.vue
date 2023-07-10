@@ -1,6 +1,6 @@
 <template>
-  <q-page class="column justify-evenly" style="padding: 2em 5em" >
-    <p class="row text-h3 justify-center">{{t("editor.groupRooms.title")}}</p>
+  <q-page class="column justify-evenly" style="padding: 2em 5em">
+    <p class="row text-h3 justify-center">{{ t("editor.groupRooms.title") }}</p>
     <div class="row self-center">
       <q-table
           style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
@@ -56,14 +56,14 @@
               style="margin-right: 2em; color: var(--light)"/>
           <q-input outlined rounded dense debounce="300" v-model="filter.search"
                    :placeholder="t('common.search')">
-              <template v-slot:append>
-                  <q-icon name="search"/>
-              </template>
+            <template v-slot:append>
+              <q-icon name="search"/>
+            </template>
           </q-input>
         </template>
 
 
-        <template class="row no-wrap" v-slot:top-left >
+        <template class="row no-wrap" v-slot:top-left>
           <q-select
               :label="t('editor.groupRooms.chooseLocation')"
               behavior="menu"
@@ -109,46 +109,46 @@
     </div>
 
     <q-dialog v-model="deleteAlert">
-        <q-card style="background-color: var(--bg-color); color: var(--text-color)">
-            <q-card-section>
-                <div class="text-h6">{{ t('editor.groupRooms.deleteGroup') }}</div>
-            </q-card-section>
-            <q-card-section class="q-pt-none">
-                {{ t('editor.groupRooms.question') }}
-            </q-card-section>
-            <q-card-actions align="right" class="text-primary">
-                <q-btn flat :label="t('common.cancel')" v-close-popup/>
-                <q-btn flat :label="t('common.delete')" @click="deleteGroup(); deleteAlert=false"/>
-            </q-card-actions>
-        </q-card>
+      <q-card style="background-color: var(--bg-color); color: var(--text-color)">
+        <q-card-section>
+          <div class="text-h6">{{ t('editor.groupRooms.deleteGroup') }}</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          {{ t('editor.groupRooms.question') }}
+        </q-card-section>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat :label="t('common.cancel')" v-close-popup/>
+          <q-btn flat :label="t('common.delete')" @click="deleteGroup(); deleteAlert=false"/>
+        </q-card-actions>
+      </q-card>
     </q-dialog>
 
     <q-dialog v-model="editAlert">
       <q-card style="background-color: var(--bg-color); color: var(--text-color)">
         <q-card-section>
-          <div class="text-h6">{{t('editor.groupRooms.nameOfGroup')}}</div>
+          <div class="text-h6">{{ t('editor.groupRooms.nameOfGroup') }}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-input dense v-model="editName" autofocus @keyup.enter="prompt = false"/>
         </q-card-section>
 
-            <q-card-section class="q-pt-none">
-                <div class="text-h6">{{t('editor.groupRooms.chooseRooms')}}</div>
-            </q-card-section>
-            <q-card-section class="q-pt-none">
-              <q-select
-                  filled
-                  v-model="modelRoomsNew"
-                  multiple
-                  :options="listOfAllRoomsViaBuilding"
-                  option-label="name"/>
-            </q-card-section>
-            <q-card-actions align="right" class="text-primary">
-                <q-btn flat :label="t('common.cancel')" v-close-popup/>
-                <q-btn flat :label="t('common.save')" @click="updateCurrentGroup(editName,modelRoomsNew);"
-                v-close-popup="closeEditAlert"/>
-            </q-card-actions>
-        </q-card>
+        <q-card-section class="q-pt-none">
+          <div class="text-h6">{{ t('editor.groupRooms.chooseRooms') }}</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-select
+              filled
+              v-model="modelRoomsNew"
+              multiple
+              :options="listOfAllRoomsViaBuilding"
+              option-label="name"/>
+        </q-card-section>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat :label="t('common.cancel')" v-close-popup/>
+          <q-btn flat :label="t('common.save')" @click="updateCurrentGroup(editName,modelRoomsNew);"
+                 v-close-popup="closeEditAlert"/>
+        </q-card-actions>
+      </q-card>
 
 
     </q-dialog>
@@ -207,7 +207,7 @@
               </div>
               <q-input class="q-ml-xs" outlined rounded dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
                 <template v-slot:append>
-                  <q-icon name="search" />
+                  <q-icon name="search"/>
                 </template>
               </q-input>
             </template>
@@ -236,16 +236,114 @@
             </template>
           </q-table>
         </q-card-section>
-        <door-config ref="configIn" :door-config="doorConfigIn"
-                     :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.IN : Direction.BOTH"
-                     @changeDirection="changeDirectionOut"></door-config>
-        <door-config v-show="$refs.configIn?.direction !== Direction.BOTH" ref="configOut"
-                     :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.OUT : Direction.BOTH"
-                     :door-config="doorConfigOut" :is-config-out="true"></door-config>
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat v-close-popup> {{ t("common.cancel")}}</q-btn>
-          <q-btn flat v-close-popup @click="saveConfig(model)"> {{ t("common.save")}}</q-btn>
-        </q-card-actions>
+        <q-select
+            class="q-ml-md"
+            style="min-width: 20em"
+            filled
+            use-input
+            hide-selected
+            fill-input
+            input-debounce="0"
+            @filter="filterConfigOptions"
+            :label="t('floorPlan.chooseConfig')"
+            option-label="name"
+            v-model="selectedConfig"
+            :options="configOptions"
+            clearable
+        >
+          <template v-slot:no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                No results
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+        <q-card-section v-for="(selectConf,k) in qSelectGeneral.qSelectsSet">
+          <q-card bordered flat>
+            <q-toolbar class="bg-primary text-accent">
+
+              <q-toolbar-title>Konfiguration</q-toolbar-title>
+              <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
+                <q-tooltip max-width="15em" anchor="center right" self="center left">
+                  You can only choose one base configuration.
+                </q-tooltip>
+              </q-icon>
+              <q-td v-if=!(checkLength())>
+                <q-btn flat round icon="delete" size="0.75em" @click="removeConfig(k)"/>
+              </q-td>
+            </q-toolbar>
+
+
+            <div class="colomn q-mt-sm justify-around items-center no-wrap">
+
+              <div class="q-pa-md">
+                <div class="q-gutter-sm">
+
+                  <q-checkbox dense v-model="qSelectGeneral.qSelectsSet[k].baseConfig" label="Basis Konfiguration"
+                              color="primary" @click="check(k)"/>
+
+                </div>
+              </div>
+              <q-td class="q-pl-md v-if=" v-if="!qSelectGeneral.qSelectsSet[k].baseConfig">
+                <div class="q-gutter-sm row">
+                  <div class="q-gutter-sm row">
+                    <q-input filled v-model="qSelectGeneral.qSelectsSet[k].startTime" mask="time" :rules="['time']">
+                      <template v-slot:append>
+                        <q-icon name="access_time" class="cursor-pointer">
+                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-time v-model="qSelectGeneral.qSelectsSet[k].startTime">
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat/>
+                              </div>
+                            </q-time>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                  </div>
+                  <div class="q-gutter-sm row">
+                    <q-input filled v-model="qSelectGeneral.qSelectsSet[k].endTime" mask="time" :rules="['time']"
+                             :disabled="qSelectGeneral.qSelectsSet[k].baseConfig">
+                      <template v-slot:append>
+                        <q-icon name="access_time" class="cursor-pointer">
+                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-time v-model="qSelectGeneral.qSelectsSet[k].endTime">
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat/>
+                              </div>
+                            </q-time>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                  </div>
+                </div>
+              </q-td>
+            </div>
+            <door-config :door-config="qSelectGeneral.qSelectsSet[k].doorConfigIn"
+                         :direction="JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigIn) !==
+                        JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigOut) ? Direction.IN : Direction.BOTH"
+                         @changeDirection="changeDirectionOut($event, k)" ref="doorIn">
+            </door-config>
+            <door-config v-show="JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigIn) !==
+                        JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigOut)"
+                         :direction="Direction.OUT"
+                         :door-config="qSelectGeneral.qSelectsSet[k].doorConfigOut" :is-config-out="true"
+                         ref="doorOut">
+            </door-config>
+
+            <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfiguration">
+              Konfiguration hinzufügen
+            </q-btn>
+          </q-card>
+        </q-card-section>
+        <q-card>
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat v-close-popup> {{ t("common.cancel") }}</q-btn>
+            <q-btn flat v-close-popup @click="saveConfig(model)"> {{ t("common.save") }}</q-btn>
+          </q-card-actions>
+        </q-card>
       </q-card>
     </q-dialog>
   </q-page>
@@ -253,7 +351,7 @@
 
 <script>
 
-import {ref} from 'vue'
+import {reactive, ref, watch} from 'vue'
 
 import {useI18n} from "vue-i18n";
 import {useQuasar} from "quasar";
@@ -263,8 +361,8 @@ import {prop} from "vue-class-component";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {Direction} from "@/main/vue/entity/doorConfiguration";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
-
-
+import {useConfigStore} from "@/main/vue/stores/config";
+import {storeToRefs} from "pinia";
 
 
 export default {
@@ -302,11 +400,11 @@ export default {
     let locationList = [];
     let locationListNames = [];
     let roomGroupList = [];
-    const options =ref([]);
+    const options = ref([]);
     let buildingList = ref([]);
     const currentBuilding = ref(null);
     let buildingListNames = ref([]);
-    let buildingListForFilter=ref([]);
+    let buildingListForFilter = ref([]);
     let listOfAllRoomsViaBuilding = ref([]);
     const checkNameAllowed = ref(false);
     const closeNow = ref(false);
@@ -315,6 +413,136 @@ export default {
     const model = ref([[]])
     const res = []
     let finalArray = []
+
+    const configStore = useConfigStore()
+    configStore.getAllConfigs()
+    const {allPreConfigs} = storeToRefs(configStore)
+    const configOptions = ref()
+    configOptions.value = configStore.allPreConfigs
+    const selectedConfig = ref()
+
+    const qSelectGeneral = reactive({
+      qSelectSet: [{
+        doorConfigIn: {
+          configParts: [{
+            credentials: [],
+            attributeFilter: [{
+              attribute: null,
+              predicateType: null,
+              value: null,
+              currentDate: false
+            }]
+          }],
+          description: ""
+        },
+        doorConfigOut: {
+          configParts: [{
+            credentials: [],
+            attributeFilter: [{
+              attribute: null,
+              predicateType: null,
+              value: null,
+              currentDate: false
+            }]
+          }],
+          description: ""
+        },
+        baseConfig: false,
+        startTime: null,
+        endTime: null
+      }]
+    })
+    console.log(qSelectGeneral.qSelectSet)
+
+    const filterConfigOptions = function (val, update) {
+      update(() => {
+        const needle = val.toLowerCase()
+        configOptions.value = allPreConfigs.value.filter(config => config.name.toLowerCase().indexOf(needle) > -1)
+      })
+    }
+
+    watch(allPreConfigs, () => {
+      configOptions.value = configStore.allPreConfigs
+    })
+
+    watch(selectedConfig, async () => {
+      if (selectedConfig.value == null) {
+        qSelectGeneral.qSelectsSet.splice(0)
+        qSelectGeneral.qSelectsSet.push({
+          doorConfigIn: {
+            configParts: [{
+              credentials: [], attributeFilter: [{
+                attribute: null,
+                predicateType: null, value: null, currentDate: false
+              }]
+            }], description: ""
+          },
+          doorConfigOut: {
+            configParts: [{
+              credentials: [], attributeFilter: [{
+                attribute: null,
+                predicateType: null, value: null, currentDate: false
+              }]
+            }], description: ""
+          },
+          baseConfig: false,
+          startTime: null,
+          endTime: null
+        })
+      } else {
+        await configStore.getConfig(selectedConfig.value.id)
+        let chosenConfig = configStore.currentConfig
+        let tempConfig = []
+        chosenConfig?.doorConfig.forEach((element) => {
+          console.log(element)
+          let object = {
+            doorConfigIn: {
+              description: element.doorConfigIn.description,
+              configParts: element.doorConfigIn.configParts
+            },
+            doorConfigOut: {
+              description: element.doorConfigOut.description,
+              configParts: element.doorConfigOut.configParts
+            },
+            startTime: element.startTime || '',
+            endTime: element.endTime || '',
+            baseConfig: element.baseConfig || false
+          }
+          tempConfig.push(object)
+        })
+        qSelectGeneral.qSelectsSet = tempConfig
+        console.log("temp: ", tempConfig)
+        console.log("qselect: ", qSelectGeneral.qSelectsSet)
+      }
+    })
+
+    const check = (k) => {
+
+      const baseConfCount = qSelectGeneral.qSelectsSet.filter(
+          (config) => config.baseConfig
+      ).length;
+      if (baseConfCount > 1) {
+        // Display warning or prevent saving
+        console.log('Warning: You can only select one base configuration.');
+        $q.notify({
+          type: 'negative',
+          message: "You can only choose one base configuration.",
+          caption: "Error",
+          position: "top",
+          color: 'negative',
+          textColor: 'postitive',
+          timeout: 3000,
+          classes: "loginNotify"
+        })
+        qSelectGeneral.qSelectsSet.forEach((element, index) => {
+          if (!(index === k)) {
+            element.baseConfig = false;
+          }
+        })
+        return false; // Prevent saving
+      }
+      return true; // Allow saving
+    }
 
     const columns = [
       { name: 'name', required: true, label: t('editor.groupRooms.group'), align: 'center', field: row => row.name, sortable: true },
@@ -328,17 +556,46 @@ export default {
     rows.value = []
 
     const columns2 = [
-      { name: 'name', required: true, label: t('floorPlan.room'), align: 'left', field: row => row.roomName, sortable: true },
-      { name: 'room', label: t('floorPlan.room'), align: 'left', field: row => row.room, sortable: true },
-      { name: 'actions', label: t('editor.groupRooms.select'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-      { name: 'doorNames', label: t('editor.groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'},
-      { name: 'doors', label: t('editor.groupRooms.doors'), field: row => row.doors, format: (val) => val.map(e => e.id).join(', '), style: 'width: 8em', headerStyle: 'width: 8em', align: 'left'}
+      {
+        name: 'name',
+        required: true,
+        label: t('floorPlan.room'),
+        align: 'left',
+        field: row => row.roomName,
+        sortable: true
+      },
+      {name: 'room', label: t('floorPlan.room'), align: 'left', field: row => row.room, sortable: true},
+      {
+        name: 'actions',
+        label: t('editor.groupRooms.select'),
+        style: 'width: 8em',
+        headerStyle: 'width: 8em',
+        align: 'left'
+      },
+      {
+        name: 'doorNames',
+        label: t('editor.groupRooms.doors'),
+        field: row => row.doors,
+        format: (val) => val.map(e => e.id).join(', '),
+        style: 'width: 8em',
+        headerStyle: 'width: 8em',
+        align: 'left'
+      },
+      {
+        name: 'doors',
+        label: t('editor.groupRooms.doors'),
+        field: row => row.doors,
+        format: (val) => val.map(e => e.id).join(', '),
+        style: 'width: 8em',
+        headerStyle: 'width: 8em',
+        align: 'left'
+      }
     ]
 
-    const rows2 =  ref([]);
+    const rows2 = ref([]);
     rows2.value = []
 
-    let currentGroup=ref({
+    let currentGroup = ref({
       id: null,
       name: null,
       building: null,
@@ -346,7 +603,7 @@ export default {
     });
 
     function getRoomsAndDoors(id) {
-      roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => rows2.value= rooms)
+      roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => rows2.value = rooms)
     }
 
     const editedRow = ref({})
@@ -355,7 +612,7 @@ export default {
     }
 
     function getDoors(id) {
-      doorStore.getByRoomId(id).then((doors) =>{
+      doorStore.getByRoomId(id).then((doors) => {
         options.value = doors;
         model.value[id] = options.value.map(obj => (obj['id']))
       })
@@ -369,9 +626,9 @@ export default {
     }
 
 
-
     let modelForBuilding = ref(null);
     let modelForLocation = ref(null);
+
     async function loadLocations() {
       await locationStore.getLocations().then((locations) => {
         for (const loc of locations) {
@@ -387,6 +644,7 @@ export default {
         adjustBuildingList(modelForLocation.value);
       }
     }
+
     async function loadRoomGroups() {
       roomGroupList = [];
       await roomGroupStore.getRoomGroups().then(() => {
@@ -412,21 +670,21 @@ export default {
       }
     }
 
-    loadLocations().then(()=>loadRoomGroups());
+    loadLocations().then(() => loadRoomGroups());
 
 
     function adjustBuildingList(nameLoc) {
-      buildingList.value=[];
-      for(const loc of locationList){
-        if(loc.name===nameLoc) {
+      buildingList.value = [];
+      for (const loc of locationList) {
+        if (loc.name === nameLoc) {
           buildingList.value.push(loc.buildings);
         }
       }
-      for(const building of buildingList.value) {
+      for (const building of buildingList.value) {
         buildingListNames.value = building;
-        buildingListForFilter.value=building;
+        buildingListForFilter.value = building;
       }
-      if(buildingListNames.value !==null) {
+      if (buildingListNames.value !== null) {
         modelForBuilding.value = buildingListNames.value[0];
         currentBuilding.value = buildingListNames.value[0];
         updateRoomList(currentBuilding.value);
@@ -436,21 +694,19 @@ export default {
 
     async function checkName(newName) {
       checkNameAllowed.value = false;
-      if(newName.trim() === ""){
+      if (newName.trim() === "") {
         $q.notify({
-          type:'negative',
+          type: 'negative',
           message: t('editor.groupRooms.checkNameMessage'),
           caption: t('editor.groupRooms.checkNameCaption')
         })
-      }
-
-      else {
+      } else {
         checkNameAllowed.value = true;
       }
-      for(const theGroup of rows.value) {
+      for (const theGroup of rows.value) {
         if (theGroup.name === newName) {
           $q.notify({
-            type:'negative',
+            type: 'negative',
             message: 'Name für dieses Gebäude bereits vergeben',
             caption: 'Bitte wählen Sie einen neuen Namen.'
           })
@@ -459,15 +715,15 @@ export default {
       }
     }
 
-    function toDefault(){
-      this.newGroupName=ref('');
-      this.modelRooms=ref(null);
+    function toDefault() {
+      this.newGroupName = ref('');
+      this.modelRooms = ref(null);
     }
 
-    function updateRoomList(building){
-      listOfAllRoomsViaBuilding.value=[];
-      for(const floor of building.floors) {
-        for(const rooms of floor.rooms) {
+    function updateRoomList(building) {
+      listOfAllRoomsViaBuilding.value = [];
+      for (const floor of building.floors) {
+        for (const rooms of floor.rooms) {
           listOfAllRoomsViaBuilding.value.push(rooms)
         }
       }
@@ -479,11 +735,13 @@ export default {
       currentGroup.value.building = groupBuilding
       currentGroup.value.rooms = groupRooms;
     }
+
     function updateCurrentGroup(groupName, groupRooms) {
       currentGroup.value.name = groupName;
       currentGroup.value.rooms = groupRooms;
       editGroup();
     }
+
     async function makeNewGroup(newGroupName, newGroupRooms) {
       if (checkNameAllowed.value) {
         await roomGroupStore.makeNewGroup(newGroupName, currentBuilding.value, newGroupRooms);
@@ -492,21 +750,22 @@ export default {
 
       }
     }
+
     async function editGroup() {
-      if(!(currentGroup.value.name === editGroupName.value)) {
+      if (!(currentGroup.value.name === editGroupName.value)) {
         await checkName(currentGroup.value.name);
-      }
-      else {
+      } else {
         checkNameAllowed.value = true;
       }
-      if(checkNameAllowed.value) {
+      if (checkNameAllowed.value) {
         await roomGroupStore.editGroup(currentGroup.value);
         await loadRoomGroups();
         editAlert.value = false;
       }
     }
+
     async function deleteGroup() {
-      if(currentGroup.value !==null) {
+      if (currentGroup.value !== null) {
         await roomGroupStore.deleteGroup(currentGroup.value.id).then(() => {
           loadRoomGroups();
         });
@@ -515,6 +774,11 @@ export default {
     }
 
     return {
+      check,
+      qSelectGeneral,
+      filterConfigOptions,
+      configOptions,
+      selectedConfig,
       editedRow,
       openForm,
       getRoomsAndDoors,
@@ -529,7 +793,7 @@ export default {
       getDoors,
       res,
       newGroupName: ref(''),
-      editName:ref(''),
+      editName: ref(''),
       modelRooms: ref(null),
       modelRoomsNew: ref(editGroupRooms.value),
       updateRoomList,
@@ -557,15 +821,14 @@ export default {
       getPaginationLabel,
       getOldName() {
         this.editName = editGroupName.value;
-        this.modelRoomsNew= editGroupRooms.value;
+        this.modelRoomsNew = editGroupRooms.value;
       },
-      changed(val){
-        if(val !==null) {
+      changed(val) {
+        if (val !== null) {
           adjustBuildingList(val.name);
           adaptRoomGroupsToBuilding();
-        }
-        else {
-          buildingListNames.value=[];
+        } else {
+          buildingListNames.value = [];
         }
       },
       getBuilding(building) {
@@ -607,7 +870,7 @@ export default {
       filterLocations(val, update) {
         if (val === '') {
           update(() => {
-            optionsLocations.value=locationList
+            optionsLocations.value = locationList
           })
           return
         }
@@ -621,13 +884,56 @@ export default {
 
   methods: {
     useRoomGroupStore,
+    checkBaseConf() {
+      let x = 0;
+      let y = false;
+      this.qSelectGeneral.qSelectsSet.forEach((element, index) => {
+        if (this.qSelectGeneral.qSelectsSet[index].baseConfig === true) {
+          x = x + 1;
+        }
+      })
+      if (x === 1) {
+        y = true
+      }
+      return y
+    },
+
+    addConfiguration() {
+      this.qSelectGeneral.qSelectsSet.push( {
+        doorConfigIn: {configParts: [{credentials: [], attributeFilter: [{ attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: ""},
+        doorConfigOut: {configParts: [{credentials: [], attributeFilter: [{attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: ""},
+        baseConfig: false,
+        startTime: null,
+        endTime: null
+      })
+    },
+    removeConfig(i) {
+      this.qSelectGeneral.qSelectsSet.splice(i, 1)
+    },
+    checkLength() {
+      return (this.qSelectGeneral.qSelectsSet.length === 1);
+    },
 
 
-    changeDirectionOut(direction) {
+    changeDirectionOut(direction, k) {
+
       if (direction === Direction.IN) {
-        this.$refs.configOut.direction = Direction.OUT
+        this.$refs.doorOut[k].direction = Direction.OUT
+        this.qSelectGeneral.qSelectsSet[k].doorConfigOut.direction = Direction.IN
+        this.qSelectGeneral.qSelectsSet[k].doorConfigIn.direction = Direction.OUT
+
       } else if (direction === Direction.OUT) {
-        this.$refs.configOut.direction = Direction.IN
+        this.$refs.doorOut[k].direction = Direction.IN
+        this.qSelectGeneral.qSelectsSet[k].doorConfigOut.direction = Direction.OUT
+        this.qSelectGeneral.qSelectsSet[k].doorConfigIn.direction = Direction.IN
+
+      } else if (direction === Direction.BOTH) {
+        this.$refs.doorOut[k].direction = Direction.BOTH
+        this.qSelectGeneral.qSelectsSet[k].doorConfigOut.direction = Direction.BOTH
+        this.qSelectGeneral.qSelectsSet[k].doorConfigIn.direction = Direction.BOTH
+
       }
     },
     prop,
@@ -672,7 +978,7 @@ export default {
             //assume row doesn't match
             ans = false
             //check if any of the conditions match
-            if ((s1)|| s2) {
+            if ((s1) || s2) {
               ans = true
             }
             return ans
@@ -680,43 +986,45 @@ export default {
       return filteredRows
     },
     saveConfig(model) {
+      console.log("model", model)
       const roomGroupStore = useRoomGroupStore()
       const res = []
-        for (const val in model) {
-          if (val && val !==0) {
-            res.push(model[val])
-          }
+      for (const val in model) {
+        if (val && val !== 0) {
+          res.push(model[val])
         }
+      }
       const finalArray = res.flat(1)
-      let config = {}
-      console.log('qselects', this.$refs.configIn.qSelects)
-      const configlist = []
-      if (this.$refs.configIn.direction === Direction.BOTH) {
-        config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-        config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-        config.doorConfigIn.description = this.$refs.configIn.configDescription
-        config.doorConfigOut.description = this.$refs.configIn.configDescription
-      } else if (this.$refs.configIn.direction === Direction.IN) {
-        config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-        config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
-        config.doorConfigIn.description = this.$refs.configIn.configDescription
-        config.doorConfigOut.description = this.$refs.configOut.configDescription
-      } else if (this.$refs.configIn.direction === Direction.OUT) {
-        config.doorConfigIn = JSON.parse(JSON.stringify(this.$refs.configOut.qSelects))
-        config.doorConfigOut = JSON.parse(JSON.stringify(this.$refs.configIn.qSelects))
-        config.doorConfigIn.description = this.$refs.configOut.configDescription
-        config.doorConfigOut.description = this.$refs.configIn.configDescription
+      const allConfig = []
+      this.qSelectGeneral.qSelectsSet.forEach((element, index) => {
+        let config = {}
+        config.baseConfig = this.qSelectGeneral.qSelectsSet[index].baseConfig
+        config.startTime = this.qSelectGeneral.qSelectsSet[index].startTime
+        config.endTime = this.qSelectGeneral.qSelectsSet[index].endTime
+        if (this.$refs.doorIn[index].direction === Direction.BOTH) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
+          config.doorConfigIn.description = this.$refs.doorIn[index].configDescription
+          config.doorConfigOut.description = this.$refs.doorOut[index].configDescription
+        } else if (this.$refs.doorIn[index].direction === Direction.IN) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigOut))
+          config.doorConfigIn.description = this.$refs.doorIn[index].configDescription
+          config.doorConfigOut.description = this.$refs.doorOut[index].configDescription
+        } else if (this.$refs.doorIn[index].direction === Direction.OUT) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigOut))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
+          config.doorConfigIn.description = this.$refs.doorOut[index].configDescription
+          config.doorConfigOut.description = this.$refs.doorIn[index].configDescription
+        }
+        allConfig.push(config)
+      })
+      console.log("finalArray", finalArray)
+      let configList = {
+        doorIds: finalArray,
+        doorConfig: allConfig
       }
-      config.doorConfigIn?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-      config.doorConfigOut?.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-      for (const door in finalArray) {
-        configlist.push({
-          doorId: finalArray[door],
-          configuration: config
-        })
-        console.log(configlist)
-        roomGroupStore.setGroupConfig(configlist)
-      }
+      roomGroupStore.setGroupConfig(configList)
     }
   },
 

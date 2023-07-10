@@ -956,22 +956,17 @@ export default {
         }
 
         function openDialog(door) {
-            api.doorConfig.get(door.name + '_' + door.id).then((config) => {
+            api.door.getById(door.id).then((door) => {
                 $q.dialog({
                     component: CreateDoor,
                     componentProps: {
-                        door: door,
-                        doorConfigIn: config.data.doorConfigIn,
-                        doorConfigOut: config.data.doorConfigOut
+                        door: door.data
                     }
                 }).onOk(({doorName, configuration}) => {
-                    door.name = doorName
-                    door.proofConfigIn = [configuration.doorConfigIn]
-                    door.proofConfigOut = [configuration.doorConfigOut]
-                    doorStore.save(door).then((savedDoor) => {
-                        configuration.doorConfigIn.doorId = savedDoor.name + '_' + savedDoor.id + '_in'
-                        configuration.doorConfigOut.doorId = savedDoor.name + '_' + savedDoor.id + '_out'
-                        api.doorConfig.save(configuration).then(() => console.log("success"))
+                    door.data.name = doorName
+                    door.data.doorConfigCmds = configuration
+                    doorStore.save(door.data).then(() => {
+                        console.log("success")
                     })
                 })
             })

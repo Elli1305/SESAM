@@ -1,4 +1,4 @@
-import {DoorConfiguration} from "@/main/vue/entity/doorConfiguration";
+import {TwoWayDoorConfiguration} from "@/main/vue/entity/doorConfiguration";
 
 
 export interface PredefinedConfiguration {
@@ -7,7 +7,5 @@ export interface PredefinedConfiguration {
 
     name: string,
 
-    doorConfigIn: DoorConfiguration,
-
-    doorConfigOut: DoorConfiguration
+    doorConfig: TwoWayDoorConfiguration[]
 }

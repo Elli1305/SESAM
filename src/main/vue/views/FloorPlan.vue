@@ -191,8 +191,7 @@ export default {
         }).onOk(({room, doorName, configuration}) => {
           let door = {
             name: doorName,
-            proofConfigIn: [configuration.doorConfigIn],
-            proofConfigOut: [configuration.doorConfigOut],
+            doorConfigCmds: configuration,
             roomId: room.id,
             coordinates: e.layer._latlngs.map((latLng) => ({
                   lat: latLng.lat,

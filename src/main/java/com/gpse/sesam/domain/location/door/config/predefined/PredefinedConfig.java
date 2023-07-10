@@ -1,8 +1,10 @@
 package com.gpse.sesam.domain.location.door.config.predefined;
 
 
-import com.gpse.sesam.domain.location.door.config.ProofConfig;
+import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class PredefinedConfig {
@@ -15,16 +17,12 @@ public class PredefinedConfig {
     @Column
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private ProofConfig doorIn;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<TwoWayDoorConfig> doorConfig;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private ProofConfig doorOut;
-
-    public PredefinedConfig(String name, ProofConfig in, ProofConfig out) {
+    public PredefinedConfig(String name, List<TwoWayDoorConfig> twoWayDoorConfig) {
         this.name = name;
-        this.doorIn = in;
-        this.doorOut = out;
+        this.doorConfig = twoWayDoorConfig;
     }
 
     protected PredefinedConfig() {
@@ -43,19 +41,11 @@ public class PredefinedConfig {
         this.name = name;
     }
 
-    public ProofConfig getDoorIn() {
-        return doorIn;
+    public List<TwoWayDoorConfig> getDoorConfig() {
+        return doorConfig;
     }
 
-    public void setDoorIn(ProofConfig doorIn) {
-        this.doorIn = doorIn;
-    }
-
-    public ProofConfig getDoorOut() {
-        return doorOut;
-    }
-
-    public void setDoorOut(ProofConfig doorOut) {
-        this.doorOut = doorOut;
+    public void setDoorConfig(List<TwoWayDoorConfig> doorConfig) {
+        this.doorConfig = doorConfig;
     }
 }

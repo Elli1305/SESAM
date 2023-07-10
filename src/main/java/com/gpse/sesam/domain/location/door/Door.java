@@ -1,15 +1,7 @@
 package com.gpse.sesam.domain.location.door;
 
 import com.gpse.sesam.domain.location.Coordinate;
-import com.gpse.sesam.domain.location.door.config.ProofConfig;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +21,9 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<ProofConfig> proofConfigIn = new ArrayList<>();
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<ProofConfig> proofConfigOut = new ArrayList<>();
 
 	public Door() {
 
@@ -56,22 +46,6 @@ public class Door {
 		return name;
 	}
 
-	public List<ProofConfig> getProofConfigIn() {
-		return proofConfigIn;
-	}
-
-	public void setProofConfigIn(final List<ProofConfig> proofConfigIn) {
-		this.proofConfigIn = proofConfigIn;
-	}
-
-	public List<ProofConfig> getProofConfigOut() {
-		return proofConfigOut;
-	}
-
-	public void setProofConfigOut(final List<ProofConfig> proofConfigOut) {
-		this.proofConfigOut = proofConfigOut;
-	}
-
 	public void setName(final String name) {
 		this.name = name;
 	}
@@ -82,16 +56,6 @@ public class Door {
 
 	public void setCoordinates(final List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
-	}
-
-
-	public void addProofConfigIn(final ProofConfig proofConfig) {
-		proofConfigIn.add(proofConfig);
-	}
-
-	public void addProofConfigOut(final ProofConfig proofConfig) {
-
-		proofConfigOut.add(proofConfig);
 	}
 
 	@Override
@@ -116,5 +80,14 @@ public class Door {
 		int result = name != null ? name.hashCode() : 0;
 		result = 31 * result + (coordinates != null ? coordinates.hashCode() : 0);
 		return result;
+	}
+
+
+	public List<TwoWayDoorConfig> getDoorConfigs() {
+		return doorConfigs;
+	}
+
+	public void setDoorConfigs(List<TwoWayDoorConfig> doorConfigs) {
+		this.doorConfigs = doorConfigs;
 	}
 }

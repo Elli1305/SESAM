@@ -34,7 +34,7 @@
         </q-icon>
       </q-toolbar>
       <q-card-section>
-        <q-input filled v-model="configDescription" :label="t('floorPlan.configDescription')" stack-label/>
+        <q-input filled v-model="qSelects.description" :label="t('floorPlan.configDescription')" stack-label/>
       </q-card-section>
       <q-card-section v-for="(select,i) in qSelects.configParts">
         <q-card bordered flat>
@@ -163,7 +163,7 @@ export default {
     }
   },
   emits: [
-    'ok', 'hide'
+    'ok', 'hide', 'changeDirection'
   ],
 
   methods: {
@@ -240,6 +240,7 @@ export default {
 
 
     const qSelects = ref({
+      description: '',
       configParts: [{
         credentials: [],
         attributeFilter: [{
@@ -255,6 +256,12 @@ export default {
       configDescription.value = props.doorConfig.description
       qSelects.value = props.doorConfig
     }
+
+    watch(() => props.doorConfig, () => {
+      console.log("hallo", props.doorConfig)
+      configDescription.value = props.doorConfig.description
+      qSelects.value = props.doorConfig
+    })
 
     const commonAttributeFilter = function (credentials) {
       let formEntries = credentials.map((credential) => {

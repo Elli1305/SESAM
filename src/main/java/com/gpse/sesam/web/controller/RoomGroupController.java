@@ -3,10 +3,7 @@ package com.gpse.sesam.web.controller;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
 import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
-import com.gpse.sesam.web.cmd.RoomGroupCmd;
-import com.gpse.sesam.web.cmd.RoomGroupDoorConfigCmd;
-import com.gpse.sesam.web.cmd.RoomGroupEditCmd;
-import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
+import com.gpse.sesam.web.cmd.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -80,7 +77,7 @@ public class RoomGroupController {
 
     @PostMapping("/saveconfigs")
     @Secured("EDITOR")
-    public void updateConfigOfGroup(List<TwoWayDoorConfigCmd> cmds) {
-        roomGroupService.setGroupConfig(cmds);
+    public void updateConfigOfGroup(@RequestBody DoorGroupConfigCmd configCmd) {
+        roomGroupService.setGroupConfig(configCmd);
     }
 }
