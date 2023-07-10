@@ -291,6 +291,15 @@ const messages = {
             imprintEditorMessageDeleteConfirmation:"Inhalt erfolgreich gelöscht"
 
         },
+        doorHistory:{
+            Title:"Historie von Türkonfigurationen",
+            Date:"Datum",
+            Name:"Name",
+            edite:"Bearbeiten",
+            dialogTitle:"Türkonfiguration",
+            credentials:"Credentials"
+
+        },
 
         issuermanagement: {
             title: "Herausgeber verwalten",
@@ -610,10 +619,18 @@ const messages = {
             cancel: "Cancel",
             saveConfirmationTitle: "Save?",
             saveConfirmationMessage: "Are you sure you want to save?",
+        },
 
-
+        doorHistory:{
+            title:"History of Door Configurations",
+            date:"Date",
+            name:"Name",
+            edit:"Edit",
+            dialogTitle:"Door Configurations",
+            credentials:"Credentials"
 
         },
+
     }
 }
 
