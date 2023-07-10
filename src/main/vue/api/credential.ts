@@ -1,10 +1,12 @@
 import axios, {AxiosResponse,} from "axios";
 import {
+    AllCredentialCmd,
     Category,
     CategoryResponse,
+    CreateCredential,
     Credential,
     CredentialCmd,
-    ExternalCredential,
+    ExternalCredential, ExternalCredentialCmd,
     IssueCredentialAttribute
 } from "@/main/vue/entity/credentialDefinition";
 
@@ -20,12 +22,28 @@ export default {
     all(): Promise<AxiosResponse<Credential[]>> {
         return axios.get("/api/credentials")
     },
+    externalCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
+        return axios.get("/api/external_credentials")
+    },
+    create(credential: CreateCredential): Promise<AxiosResponse<CreateCredential>> {
+        return axios.post(`/api/credentials`, credential);
+    },
+    delete(id: number): Promise<AxiosResponse<void>> {
+        return axios.delete(`/api/credentials/${id}`);
+    },
+    update(id: string, credential: CreateCredential): Promise<AxiosResponse<void>> {
+        return axios.put(`/api/credentials/${id}`, credential);
+    },
+
+    getAllCredentials(): Promise<AxiosResponse<ExternalCredential[]>> {
+        return axios.get("/api/credentials/getAll")
+    },
 
     getCategories(): Promise<AxiosResponse<Category[]>> {
         return axios.get("api/credentialmapping")
     },
 
-    getCredentialsByLocation(param: string): Promise<AxiosResponse<CredentialCmd[]>> {
+    getCredentialsByLocation(param: bigint): Promise<AxiosResponse<CredentialCmd[]>> {
         return axios.get("api/credentialview/" + param)
     },
 
@@ -46,5 +64,26 @@ export default {
 
     updateCategory(param: String, category: CategoryResponse): Promise<AxiosResponse<CategoryResponse>> {
         return axios.put('api/credentialmapping/edit/' + param, category)
-    }
+    },
+
+    getAllCredentialsForView():Promise<AxiosResponse<CredentialCmd[]>> {
+        return axios.get("api/allcredentials")
+    },
+
+    getAllExternalCredentialsForView(): Promise<AxiosResponse<ExternalCredentialCmd[]>> {
+        return axios.get("api/externalcredentialview")
+    },
+
+    getAllForView(): Promise<AxiosResponse<AllCredentialCmd[]>> {
+        return axios.get("api/allcredentialview")
+    },
+
+    getExternalCredentialByLocation(param: bigint): Promise<AxiosResponse<ExternalCredentialCmd[]>> {
+        return axios.get("api/externalcredentialsbylocation/" + param)
+    },
+
+    getAllByLocation(param: bigint): Promise<AxiosResponse<AllCredentialCmd[]>> {
+        return axios.get("api/allbylocation/" + param)
+    },
+
 }

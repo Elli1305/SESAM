@@ -1,15 +1,15 @@
 import {defineStore} from "pinia";
-import {Room} from "@/main/vue/entity/location";
+import {Floor, Room} from "@/main/vue/entity/location";
 import api from "@/main/vue/api";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {ref, Ref} from "vue";
-import {CredentialCmd} from "@/main/vue/entity/credentialDefinition";
 
 
 export const useRoomStore = defineStore('room', () => {
 
     const locationStore = useLocationStore()
-    const rooms: Ref<Room[]|null> = ref(null)
+    const rooms: Ref<Room[] | null> = ref(null)
+    const floor: Ref<Floor | null> = ref(null);
 
     function save(room: Room): Promise<Room> {
         return new Promise((resolve, reject) => {
@@ -44,10 +44,24 @@ export const useRoomStore = defineStore('room', () => {
         })
     }
 
+    function getFloor(id: BigInt) {
+        return new Promise((resolve, reject) => {
+            api.room.getFloor(id).then((response: { data: any; }) => {
+                floor.value = response.data
+
+                resolve(response.data)
+            }).catch((error: any) => {
+                reject(error)
+            })
+        })
+    }
+
     return {
         save,
         deleteById,
         getRooms,
-        rooms
+        getFloor,
+        rooms,
+        floor
     }
 })

@@ -5,7 +5,6 @@ export interface User {
     lastName: string;
     username: string;
     roles: any[];
-
 }
 
 export interface LoginResponse {

@@ -23,8 +23,9 @@ import CorporateDesign from "@/main/vue/views/CorporateDesign.vue";
 import IssueCredential from "@/main/vue/views/IssueCredential.vue";
 import IssuerManagement from "@/main/vue/views/IssuerManagement.vue";
 import DoorHistory from "@/main/vue/views/DoorHistory.vue";
-import DoorConfig from "@/main/vue/views/DoorConfig.vue";
-import CreateDoor from "@/main/vue/views/CreateDoor.vue";
+import CredentialAdministration from "@/main/vue/views/CredentialAdministration.vue";
+import CredentialEditing from "@/main/vue/views/CredentialEditing.vue";
+import PredefinedConfigEditor from "@/main/vue/views/PredefinedConfigEditor.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -66,6 +67,14 @@ const router = createRouter({
             name: 'currentuserlist',
             component: CurrentUserList,
             meta: {requiresAdmin: true}
+        },
+        {
+            path: '/predefinedConfigs',
+            name: 'PredefinedConfigs',
+            component: PredefinedConfigEditor,
+            meta: {
+                authorize: AttainableRole.EDITOR
+            }
         },
         {
             path: '/grouprooms',
@@ -168,16 +177,31 @@ const router = createRouter({
             component: DoorHistory,
             meta: {requiresAdmin: true},
         },
+
         {
-            path: "/doorconfig",
-            component: DoorConfig,
-            meta: {requiresAdmin: true},
+            path: "/credential_administration",
+            component: CredentialAdministration,
+            meta: {requiresAuth: true},
         },
         {
-            path: "/createdoor",
-            component: CreateDoor,
-            meta: {requiresAdmin: true},
+            path: "/credential_administration/:type(internal|external)/:id(\\d+)",
+            component: CredentialEditing,
+            props: true,
+            meta: {
+                requiresRoles: [
+                    'ADMINISTRATOR',
+                ]
+            }
         },
+        {
+            path: "/add_credential",
+            component: CredentialEditing,
+            meta: {
+                requiresRoles: [
+                    'ADMINISTRATOR',
+                ]
+            }
+        }
     ],
 });
 

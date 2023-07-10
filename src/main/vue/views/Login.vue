@@ -3,8 +3,8 @@
     <p class="row text-h3 justify-center">Login</p>
     <q-form @submit.prevent="login" class="column self-center items-center justify-evenly no-wrap" style="width: 22.5em; height: 25em">
       <div class="full-width">
-        <q-input class="q-my-sm" outlined v-model="eMail" label="E-Mail"/>
-        <q-input class="q-my-sm" outlined :type="isPwd ? 'password' : 'text'" v-model="password" :label="t('login.password')">
+        <q-input class="q-my-sm" outlined v-model="eMail" :label="t('profile.email')"/>
+        <q-input class="q-my-sm" outlined :type="isPwd ? 'password' : 'text'" v-model="password" :label="t('profile.password')">
           <template v-slot:append>
             <q-icon
                 :name="isPwd ? 'visibility_off' : 'visibility'"

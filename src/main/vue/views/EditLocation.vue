@@ -2,14 +2,15 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <q-card-section class="q-pa-md">
-        <div class="text-h6">{{t('floorplan.addLocation')}}</div>
+        <div v-if="location.id" class="text-h6">{{t('floorPlan.editLocation')}}</div>
+        <div v-if="!location.id" class="text-h6">{{t('floorPlan.addLocation')}}</div>
         <div class="q-mt-md">
           <q-input outlined v-model="locationName" label="Name"/>
         </div>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>
-        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.ok')" @click="onOKClick"/>
+        <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('common.save')" @click="onOKClick"/>
       </q-card-actions>
     </q-card>
   </q-dialog>

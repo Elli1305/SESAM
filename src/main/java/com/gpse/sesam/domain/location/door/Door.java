@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.location.door;
 
 import com.gpse.sesam.domain.credential.credentials.Credential;
+
 import com.gpse.sesam.domain.location.Coordinate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,10 +12,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import com.gpse.sesam.domain.location.door.config.ProofConfig;
+
+
 
 import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Door {
@@ -33,10 +39,15 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-	private List<Credential> credentials = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();
 
-	protected Door() {
+	//@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+
+	//private List<Credential> credentials = new ArrayList<>();
+
+
+	public Door() {
 
 	}
 
@@ -62,14 +73,6 @@ public class Door {
 		this.name = name;
 	}
 
-	public List<Credential> getCredentials() {
-		return credentials;
-	}
-
-	public void setCredentials(final List<Credential> credentials) {
-		this.credentials = credentials;
-	}
-
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
 	}
@@ -78,15 +81,47 @@ public class Door {
 		this.coordinates = coordinates;
 	}
 
-	public void addCredential(final Credential credential) {
-		credentials.add(credential);
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		Door door = (Door) o;
+
+		if (!Objects.equals(name, door.name)) {
+			return false;
+		}
+		return Objects.equals(coordinates, door.coordinates);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = name != null ? name.hashCode() : 0;
+		result = 31 * result + (coordinates != null ? coordinates.hashCode() : 0);
+		return result;
+	}
+
+
+	public List<TwoWayDoorConfig> getDoorConfigs() {
+		return doorConfigs;
+	}
+
+	public void setDoorConfigs(List<TwoWayDoorConfig> doorConfigs) {
+		this.doorConfigs = doorConfigs;
 	}
 
 	public Date getCreatedAt() {
+
 		return createdAt;
+
 	}
 
 	public void setCreatedAt(Date createdAt) {
+
 		this.createdAt = createdAt;
 	}
 }

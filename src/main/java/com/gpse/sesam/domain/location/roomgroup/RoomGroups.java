@@ -1,10 +1,11 @@
-package com.gpse.sesam.domain.location;
+package com.gpse.sesam.domain.location.roomgroup;
 
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.room.Room;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class RoomGroups {
 
     @Column
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Room> rooms;
+    private List<Room> rooms = new ArrayList<>();
 
 
     @ManyToOne(cascade = CascadeType.MERGE)

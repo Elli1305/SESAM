@@ -6,6 +6,7 @@ import {useQuasar} from 'quasar'
 import {useRouter} from "vue-router/dist/vue-router"
 import CountryFlag from 'vue-country-flag-next'
 import corpdesign from "@/main/vue/api/corpdesign";
+import {ref} from "vue";
 
 const {t} = useI18n()
 const userStore = useUserStore()
@@ -14,13 +15,34 @@ const router = useRouter()
 const i18nLocale = useI18n()
 const r = document.querySelector(':root')
 
-corpdesign.setColors()
-corpdesign.getColors().then( c => {
-  r.style.setProperty('--bg-color', c.data.bgC)
-  r.style.setProperty('--text-color', c.data.textC)
-})
+const themeIcon = ref('')
+const logoPath = ref('')
+if (!localStorage.getItem('colorTheme')) {
+  console.log('no theme selected')
+  localStorage.setItem('colorTheme', 'LIGHT')
+  themeIcon.value = 'light_mode'
+  logoPath.value = "/Logo.svg"
+  $q.dark.set(false)
+} else if (localStorage.getItem('colorTheme') === 'LIGHT') {
+    $q.dark.set(false)
+    themeIcon.value = 'light_mode'
+    updateColors('LIGHT')
+  } else {
+    $q.dark.set(true)
+    themeIcon.value = 'dark_mode'
+    updateColors('DARK')
+}
 
-function getLanguage(){
+function updateColors(colorTheme) {
+  corpdesign.setColors(colorTheme)
+  corpdesign.getColors(colorTheme).then(c => {
+    logoPath.value = c.data.logoPath
+    r.style.setProperty('--bg-color', c.data.bgC)
+    r.style.setProperty('--text-color', c.data.textC)
+  })
+}
+
+function getLanguage() {
   return i18nLocale.locale.value.toString() === 'de' ? 'de' : 'gb';
 }
 
@@ -30,13 +52,27 @@ function changeLanguage(language) {
   location.reload()
 }
 
+function changeTheme() {
+  if (localStorage.getItem('colorTheme') === 'LIGHT') {
+    localStorage.setItem('colorTheme', 'DARK')
+    updateColors('DARK')
+    $q.dark.set(true)
+    themeIcon.value = 'dark_mode'
+  } else {
+    localStorage.setItem('colorTheme', 'LIGHT')
+    updateColors('LIGHT')
+    $q.dark.set(false)
+    themeIcon.value = 'light_mode'
+  }
+}
+
 async function logout() {
   await userStore.logout()
   if (!userStore.authenticated) {
     $q.notify({
       type: 'positive',
-      message: 'Sie haben sich erfolgreich abgemeldet',
-      caption: 'Logout erfolgreich',
+      message: t('logout.title'),
+      caption: t('logout.success'),
       position: "top",
       timeout: 3000,
       classes: "loginNotify"
@@ -46,6 +82,7 @@ async function logout() {
 }
 
 
+
 </script>
 <template>
   <q-layout view="hHh lpR fff">
@@ -53,50 +90,56 @@ async function logout() {
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="row" style="margin: 0; padding: 24px">
         <div class="column">
-          <q-img src="/Logo.svg" @click="router.push('/')" class="foldMenu"
+          <q-img :src="logoPath" @click="router.push('/')" class="foldMenu"
                  style="height: 95px; width: 80px; margin-right: 24px"/>
         </div>
         <div class="column full-width justify-between no-wrap" style="height: 95px">
           <div id="upper" class="row justify-between" style="height: 42px">
             <div class="row text-accent">
               <q-toolbar-title style="font-weight: 800; font-size: 3.25em; line-height: 1">
-                {{ t("home.header") }}
+                {{ t("home.applicationName") }}
               </q-toolbar-title>
             </div>
-            <div class="column" style="width: 42px; height: 42px">
-              <q-btn class="row no-padding" round unelevated style="width: 3em">
-                <country-flag class="self-center no-margin shadow-16"
-                              style="height: 3em; width: 3em; border-radius: 100%"
-                              :country="getLanguage()" size="normal"/>
-                <q-menu fit transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
-                  <q-list>
-                    <q-item @click="changeLanguage('de')" clickable v-close-popup>
-                      <q-item-section text-color="black" style="width: 7.5em" unelevated>
-                        <div class="row justify-start items-center no-wrap">
-                          <country-flag rounded country='de' size="small"
-                                        style="margin: 0 -0.5em 0.1em -1.5em; border: 1px solid black"/>
-                          <p class="no-margin" style="line-height: 1">Deutsch</p>
-                        </div>
-                      </q-item-section>
-                    </q-item>
-                    <q-item @click="changeLanguage('en')" clickable v-close-popup>
-                      <q-item-section style="width: 7.5em" unelevated>
-                        <div class="row justify-start items-center no-wrap">
-                          <country-flag rounded country='gb' size="small"
-                                        style="margin: 0 -0.5em 0.1em -1.5em; border: 1px solid black"/>
-                          <p class="no-margin" style="line-height: 1">English</p>
-                        </div>
-                      </q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
-              </q-btn>
+            <div class="row no-wrap">
+              <q-btn :icon="themeIcon" text-color="accent" round flat style="width: 42px; height: 42px" ref="themeBtn" @click="changeTheme()"/>
+              <div class="column" style="width: 42px; height: 42px">
+                <q-btn class="row no-padding" round unelevated style="width: 3em">
+                  <country-flag class="self-center no-margin shadow-16"
+                                style="height: 3em; width: 3em; border-radius: 100%"
+                                :country="getLanguage()" size="normal"/>
+                  <q-menu fit transition-show="jump-down" transition-hide="jump-up"
+                          style="background-color: var(--bg-color)">
+                    <q-list>
+                      <q-item @click="changeLanguage('de')" clickable v-close-popup>
+                        <q-item-section text-color="black" style="width: 7.5em" unelevated>
+                          <div class="row justify-start items-center no-wrap">
+                            <country-flag rounded country='de' size="small"
+                                          style="margin: 0 -0.5em 0.1em -1.5em; border: 1px solid black"/>
+                            <p class="no-margin" style="line-height: 1">Deutsch</p>
+                          </div>
+                        </q-item-section>
+                      </q-item>
+                      <q-item @click="changeLanguage('en')" clickable v-close-popup>
+                        <q-item-section style="width: 7.5em" unelevated>
+                          <div class="row justify-start items-center no-wrap">
+                            <country-flag rounded country='gb' size="small"
+                                          style="margin: 0 -0.5em 0.1em -1.5em; border: 1px solid black"/>
+                            <p class="no-margin" style="line-height: 1">English</p>
+                          </div>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-btn>
+              </div>
             </div>
           </div>
           <div id="lower" class="row justify-end items-center no-wrap">
             <div class="row">
-              <router-link to="/" class="headerLink text-accent"><p class="headerText">{{ t("home.floorplan") }}</p></router-link>
-              <router-link to="/credentialview" class="headerLink text-accent"><p class="headerText">{{ t("home.credentials") }}</p></router-link>
+              <router-link to="/" class="headerLink text-accent"><p class="headerText">{{ t("home.floorPlan") }}</p>
+              </router-link>
+              <router-link to="/credentialview" class="headerLink text-accent"><p class="headerText">
+                {{ t("common.credentials") }}</p></router-link>
               <div>
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                    class="headerText foldMenu text-accent">
@@ -105,10 +148,15 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/currentUserlist" class="q-ma-sm headerLink text-black">{{ t("home.currentUsers") }}</router-link>
-                    <router-link to="/rolesRequest" class="q-ma-sm headerLink text-black">{{ t("home.currentRegistrations") }}
+                    <router-link to="/currentUserlist" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
+                        t("home.currentUsers")
+                      }}
                     </router-link>
-                    <router-link to="/issuermanagement" class="q-ma-sm headerLink text-black">{{ t("home.issuerManagement") }}
+                    <router-link to="/rolesRequest" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                      {{ t("home.currentRegistrations") }}
+                    </router-link>
+                    <router-link to="/issuermanagement" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                      {{ t("home.issuerManagement") }}
                     </router-link>
                   </div>
                 </q-menu>
@@ -121,8 +169,11 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/corporatedesign" class="q-ma-sm headerLink text-black">{{t("home.editCorporateDesign")}}</router-link>
-                    <router-link to="/imprinteditor" class="q-ma-sm headerLink text-black">{{t("home.editImprint")}}</router-link>
+                    <router-link to="/corporatedesign" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                      {{ t("home.editCorporateDesign") }}
+                    </router-link>
+                    <router-link to="/imprinteditor" class="q-ma-sm headerLink" style="color: var(--text-color)">{{ t("home.editImprint") }}
+                    </router-link>
                   </div>
                 </q-menu>
               </div>
@@ -134,7 +185,12 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/credentialmapping" class="q-ma-sm headerLink text-black">Credentialmapping</router-link>
+                    <router-link to="/credentialmapping" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                      {{ t("home.manageCredentialCategories") }}
+                    </router-link>
+                    <router-link to="/credential_administration" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                      {{ t("home.manageCredentials") }}
+                    </router-link>
                   </div>
                 </q-menu>
               </div>
@@ -144,8 +200,18 @@ async function logout() {
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color)">
                   <div class="column">
-                    <router-link to="/editFloorPlan" class="q-ma-sm headerLink text-black">{{ t("home.editFloorplan") }}</router-link>
-                    <router-link to="/grouprooms" class="q-ma-sm headerLink text-black">{{ t("home.groupRooms") }}</router-link>
+                    <router-link to="/editFloorPlan" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
+                        t("home.editFloorplan")
+                      }}
+                    </router-link>
+                    <router-link to="/grouprooms" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
+                        t("home.groupRooms")
+                      }}
+                    </router-link>
+                     <router-link to="/predefinedConfigs" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
+                        t("home.predefinedConfig")
+                      }}
+                     </router-link>
                   </div>
                 </q-menu>
               </div>
@@ -163,7 +229,7 @@ async function logout() {
                 <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
                   <q-list>
                     <q-item to="/profile" clickable v-close-popup>
-                      <q-item-section text-color="black" style="width: 7.5em" unelevated>
+                      <q-item-section style="width: 7.5em; color: var(--text-color)" unelevated>
                         <div>
                           <q-icon left name="person"/>
                           {{ t('profile.title') }}
@@ -171,7 +237,7 @@ async function logout() {
                       </q-item-section>
                     </q-item>
                     <q-item @click="logout" clickable v-close-popup>
-                      <q-item-section style="width: 7.5em" unelevated>
+                      <q-item-section style="width: 7.5em; color: var(--text-color)" unelevated>
                         <div>
                           <q-icon left name="logout"/>
                           {{ t('home.logout') }}
@@ -227,10 +293,11 @@ async function logout() {
   font-weight: 500;
   font-size: 1.5em;
   vertical-align: center;
-  }
+}
 
 .headerLink {
-  text-decoration: none;}
+  text-decoration: none;
+}
 
 .foldMenu {
   cursor: pointer;
