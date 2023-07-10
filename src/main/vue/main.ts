@@ -442,10 +442,10 @@ const messages = {
 
         },
         doorHistory:{
-            Title:"Historie von Türkonfigurationen",
-            Date:"Datum",
-            Name:"Name",
-            edite:"Bearbeiten",
+            title:"Historie von Türkonfigurationen",
+            date:"Datum",
+            name:"Name",
+            edit:"Bearbeiten",
             dialogTitle:"Türkonfiguration",
             credentials:"Credentials"
 
@@ -470,6 +470,9 @@ const messages = {
             saveConfirmationTitle: "Speichern?",
             saveConfirmationMessage: "Sind Sie sicher, dass sie speichern wollen?",
         },
+
+
+
     },
     en: {
         common: {
@@ -775,6 +778,15 @@ const messages = {
                 nameConfig: "Name"
             },
         },
+    },
+    doorHistory:{
+        title:"History of Doors Configuration",
+        date:"Date",
+        name:"Name",
+        edit:"Edit",
+        dialogTitle:"Door configuration",
+        credentials:"Credentials"
+
     },
     issuer: {
         issue: "Issue",
