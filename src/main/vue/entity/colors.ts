@@ -17,7 +17,7 @@ export interface Colors {
     secondary: string,
     accent: string,
     dark: string,
-    lightBlue: string,
+    light: string,
     positive: string,
     negative: string,
     info: string,

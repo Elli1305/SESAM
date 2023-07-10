@@ -1,13 +1,21 @@
 package com.gpse.sesam.util;
 
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.location.door.Door;
+import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
 import com.gpse.sesam.web.cmd.DoorCmd;
-import com.gpse.sesam.web.cmd.DoorConfigCmd;
+import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class DoorCmdMapper {
 
-	private DoorCmdMapper() {
+	private ConfigCmdMapper configCmdMapper;
 
+	public DoorCmdMapper(CredentialService credentialService) {
+		configCmdMapper = new ConfigCmdMapper(credentialService);
 	}
 
 	public static Door toEntity(final DoorCmd doorCmd) {
@@ -17,15 +25,46 @@ public final class DoorCmdMapper {
 		door.setName(doorCmd.getName());
 		door.setCoordinates(doorCmd.getCoordinates());
 
-		for (final DoorConfigCmd doorConfigCmd : doorCmd.getProofConfigIn()) {
-			door.addProofConfigIn(ConfigCmdMapper.fromCmd(doorConfigCmd));
+		List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();
+
+		for (TwoWayDoorConfigCmd twoWayDoorConfigCmd: doorCmd.getDoorConfigCmds()) {
+			TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
+			twoWayDoorConfig.setEndTime(twoWayDoorConfigCmd.getEndTime());
+			twoWayDoorConfig.setStartTime(twoWayDoorConfigCmd.getStartTime());
+			twoWayDoorConfig.setBaseConfig(twoWayDoorConfigCmd.isBaseConfig());
+			twoWayDoorConfig.setId(twoWayDoorConfigCmd.getId());
+			twoWayDoorConfig.setProofConfigIn(ConfigCmdMapper.fromCmd(twoWayDoorConfigCmd.getDoorConfigIn()));
+			twoWayDoorConfig.setProofConfigOut(ConfigCmdMapper.fromCmd(twoWayDoorConfigCmd.getDoorConfigOut()));
+			doorConfigs.add(twoWayDoorConfig);
 		}
 
 
-		for (final DoorConfigCmd doorConfigCmd : doorCmd.getProofConfigOut()) {
-			door.addProofConfigOut(ConfigCmdMapper.fromCmd(doorConfigCmd));
-		}
+		door.setDoorConfigs(doorConfigs);
 
 		return door;
+	}
+
+	public DoorCmd toCmd(final Door door) throws ParseException {
+		final DoorCmd doorCmd = new DoorCmd();
+		doorCmd.setId(door.getId());
+		doorCmd.setName(door.getName());
+		doorCmd.setCoordinates(door.getCoordinates());
+
+		List<TwoWayDoorConfigCmd> doorConfigCmds = new ArrayList<>();
+
+		for (TwoWayDoorConfig twoWayDoorConfig: door.getDoorConfigs()) {
+			TwoWayDoorConfigCmd twoWayDoorConfigCmd = new TwoWayDoorConfigCmd();
+			twoWayDoorConfigCmd.setEndTime(twoWayDoorConfig.getEndTime());
+			twoWayDoorConfigCmd.setStartTime(twoWayDoorConfig.getStartTime());
+			twoWayDoorConfigCmd.setBaseConfig(twoWayDoorConfig.isBaseConfig());
+			twoWayDoorConfigCmd.setId(twoWayDoorConfig.getId());
+			twoWayDoorConfigCmd.setDoorConfigIn(configCmdMapper.toCmd(twoWayDoorConfig.getProofConfigIn()));
+			twoWayDoorConfigCmd.setDoorConfigOut(configCmdMapper.toCmd(twoWayDoorConfig.getProofConfigOut()));
+			doorConfigCmds.add(twoWayDoorConfigCmd);
+		}
+
+		doorCmd.setDoorConfigCmds(doorConfigCmds);
+
+		return doorCmd;
 	}
 }

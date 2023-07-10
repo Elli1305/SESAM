@@ -6,6 +6,8 @@ public interface DoorService {
 
 	void deleteById(Long id);
 
+	java.util.List<Door> getDoors();
+
 	Door save(Door door);
 
 	Optional<Door> findDoorById(Long id);

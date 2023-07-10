@@ -4,64 +4,78 @@
 
       <q-icon @mouseover="menu = true" @mouseleave="menu = false" name="info_outlined" color="info" size="0.3em">
         <q-menu v-model="menu">
-          <q-card class="row q-pa-sm no-wrap" style="width: fit-content; height: fit-content">
-            <div class="column q-mx-xs">
-              <p class="row items-center no-wrap q-my-xs">
+          <q-card class="column q-pa-sm no-wrap" style="width: fit-content; height: fit-content; background-color: var(--bg-color); color: var(--text-color)">
+            <div class="row no-wrap q-my-xs">
+              <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
                          :style="{width: '1em', height: '1em', backgroundColor: primaryLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                 Primary:
               </p>
-              <p class="row items-center no-wrap q-my-xs">
+              <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.primary') }}</p>
+            </div>
+            <div class="row no-wrap q-my-xs">
+              <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
                          :style="{width: '1em', height: '1em', backgroundColor: secondaryLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                 Secondary:
               </p>
-              <p class="row items-center no-wrap q-my-xs">
+              <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.secondary') }}</p>
+            </div>
+            <div class="row no-wrap q-my-xs">
+              <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
                          :style="{width: '1em', height: '1em', backgroundColor: accentLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                 Accent:
               </p>
-              <p class="row items-center no-wrap q-my-xs">
+              <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.accent') }}</p>
+            </div>
+            <div class="row no-wrap q-my-xs">
+              <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
                          :style="{width: '1em', height: '1em', backgroundColor: darkLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                 Dark:
               </p>
-              <p class="row items-center no-wrap q-my-xs">
+              <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.dark') }}</p>
+            </div>
+            <div class="row no-wrap q-my-xs">
+              <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
                          :style="{width: '1em', height: '1em', backgroundColor: lightBlueLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
-                Light-Blue:
+                Light:
               </p>
-              <p class="row items-center no-wrap q-my-xs">
+              <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.light') }}</p>
+            </div>
+            <div class="row no-wrap q-my-xs">
+              <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
                          :style="{width: '1em', height: '1em', backgroundColor: positiveLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                 Positive:
               </p>
-              <p class="row items-center no-wrap q-my-xs">
+              <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.positive') }}</p>
+            </div>
+            <div class="row no-wrap q-my-xs">
+              <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
                          :style="{width: '1em', height: '1em', backgroundColor: negativeLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                 Negative:
               </p>
-              <p class="row items-center no-wrap q-my-xs">
+              <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.negative') }}</p>
+            </div>
+            <div class="row no-wrap q-my-xs">
+              <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
                          :style="{width: '1em', height: '1em', backgroundColor: infoLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                 Info:
               </p>
-              <p class="row items-center no-wrap q-my-xs">
+              <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.info') }}</p>
+            </div>
+            <div class="row no-wrap q-my-xs">
+              <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
                          :style="{width: '1em', height: '1em', backgroundColor: warningLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                 Warning:
               </p>
-            </div>
-            <div class="column q-mx-xs">
-              <p class="row no-wrap q-my-xs">{{ t('admin.corporateDesign.info.primary') }}</p>
-              <p class="row no-wrap q-my-xs">{{ t('admin.corporateDesign.info.secondary') }}</p>
-              <p class="row no-wrap q-my-xs">{{ t('admin.corporateDesign.info.accent') }}</p>
-              <p class="row no-wrap q-my-xs">{{ t('admin.corporateDesign.info.dark') }}</p>
-              <p class="row no-wrap q-my-xs">{{ t('admin.corporateDesign.info.lightBlue') }}</p>
-              <p class="row no-wrap q-my-xs">{{ t('admin.corporateDesign.info.positive') }}</p>
-              <p class="row no-wrap q-my-xs">{{ t('admin.corporateDesign.info.negative') }}</p>
-              <p class="row no-wrap q-my-xs">{{ t('admin.corporateDesign.info.info') }}</p>
-              <p class="row no-wrap q-my-xs">{{ t('admin.corporateDesign.info.warning') }}</p>
+              <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.warning') }}</p>
             </div>
           </q-card>
         </q-menu>
@@ -81,7 +95,7 @@
 
       <q-separator/>
 
-      <q-tab-panels v-model="tab" animated style="width: 80vw; height: 50vh; background-color: var(--bg-color)">
+      <q-tab-panels v-model="tab" animated style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)">
         <q-tab-panel name="light" class="q-py-md q-px-none">
           <div class="column justify-between no-wrap full-height">
             <div class="row justify-center no-wrap">
@@ -144,16 +158,16 @@
                     </q-icon>
                   </template>
                 </q-input>
-                <q-input label="Light-Blue" rounded outlined v-model="lightBlueLight"
+                <q-input label="Light-Blue" rounded outlined v-model="lightLight"
                          class="my-input q-my-xs" style="width: 14em">
                   <template v-slot:prepend>
                     <q-badge rounded
-                             :style="{width: '3em', height: '3em', backgroundColor: lightBlueLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                             :style="{width: '3em', height: '3em', backgroundColor: lightLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                   </template>
                   <template v-slot:append>
                     <q-icon name="colorize" class="cursor-pointer">
                       <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-color v-model="lightBlueLight"/>
+                        <q-color v-model="lightLight"/>
                       </q-popup-proxy>
                     </q-icon>
                   </template>
@@ -252,13 +266,13 @@
               <q-btn @click="confirmReset = true" round icon="restart_alt" color="negative" text-color="positive"
                      style="width: 4em; height: 4em"/>
               <q-file rounded outlined :label="t('admin.corporateDesign.logo')" v-model="logo" accept=".svg"
-                      :hint="t('admin.corporateDesign.logoHint')" style="width: 14em; background-color: var(--bg-color)">
+                      :hint="t('admin.corporateDesign.logoHint')" style="width: 14em; background-color: var(--bg-color); color: var(--text-color)">
                 <template v-slot:prepend>
                   <q-icon name="attach_file"/>
                 </template>
               </q-file>
               <q-file rounded outlined :label="t('admin.corporateDesign.favicon')" v-model="favicon" accept=".ico"
-                      :hint="t('admin.corporateDesign.faviconHint')" style="width: 14em; background-color: var(--bg-color)">
+                      :hint="t('admin.corporateDesign.faviconHint')" style="width: 14em; background-color: var(--bg-color); color: var(--text-color)">
                 <template v-slot:prepend>
                   <q-icon name="attach_file"/>
                 </template>
@@ -331,16 +345,16 @@
                     </q-icon>
                   </template>
                 </q-input>
-                <q-input label="Light-Blue" rounded outlined v-model="lightBlueDark"
+                <q-input label="Light-Blue" rounded outlined v-model="lightDark"
                          class="my-input q-my-xs" style="width: 14em">
                   <template v-slot:prepend>
                     <q-badge rounded
-                             :style="{width: '3em', height: '3em', backgroundColor: lightBlueDark, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                             :style="{width: '3em', height: '3em', backgroundColor: lightDark, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                   </template>
                   <template v-slot:append>
                     <q-icon name="colorize" class="cursor-pointer">
                       <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-color v-model="lightBlueDark"/>
+                        <q-color v-model="lightDark"/>
                       </q-popup-proxy>
                     </q-icon>
                   </template>
@@ -439,13 +453,13 @@
               <q-btn @click="confirmReset = true" round icon="restart_alt" color="negative" text-color="positive"
                      style="width: 4em; height: 4em"/>
               <q-file rounded outlined :label="t('admin.corporateDesign.logo')" v-model="logo" accept=".svg"
-                      :hint="t('admin.corporateDesign.logoHint')" style="width: 14em; background-color: var(--bg-color)">
+                      :hint="t('admin.corporateDesign.logoHint')" style="width: 14em; background-color: var(--bg-color); color: var(--text-color)">
                 <template v-slot:prepend>
                   <q-icon name="attach_file"/>
                 </template>
               </q-file>
               <q-file rounded outlined :label="t('admin.corporateDesign.favicon')" v-model="favicon" accept=".ico"
-                      :hint="t('admin.corporateDesign.faviconHint')" style="width: 14em; background-color: var(--bg-color)">
+                      :hint="t('admin.corporateDesign.faviconHint')" style="width: 14em; background-color: var(--bg-color); color: var(--text-color)">
                 <template v-slot:prepend>
                   <q-icon name="attach_file"/>
                 </template>
@@ -459,7 +473,7 @@
     </div>
 
     <q-dialog v-model="confirmReset" persistent>
-      <q-card>
+      <q-card style="background-color: var(--bg-color); color: var(--text-color)">
         <q-card-section>
           <div class="text-h6">{{ t('admin.corporateDesign.reset.title') }}</div>
         </q-card-section>
@@ -475,7 +489,7 @@
     </q-dialog>
 
     <q-dialog v-model="confirmSave" persistent>
-      <q-card>
+      <q-card style="background-color: var(--bg-color); color: var(--text-color)">
         <q-card-section>
           <div class="text-h6">{{ t('admin.corporateDesign.save.title') }}</div>
         </q-card-section>
@@ -519,7 +533,7 @@ export default {
     let secondaryLight = ref('')
     let accentLight = ref('')
     let darkLight = ref('')
-    let lightBlueLight = ref('')
+    let lightLight = ref('')
     let positiveLight = ref('')
     let negativeLight = ref('')
     let infoLight = ref('')
@@ -530,7 +544,7 @@ export default {
     let secondaryDark = ref('')
     let accentDark = ref('')
     let darkDark = ref('')
-    let lightBlueDark = ref('')
+    let lightDark = ref('')
     let positiveDark = ref('')
     let negativeDark = ref('')
     let infoDark = ref('')
@@ -545,7 +559,7 @@ export default {
       secondaryLight.value = colors.data.secondary
       accentLight.value = colors.data.accent
       darkLight.value = colors.data.dark
-      lightBlueLight.value = colors.data.lightBlue
+      lightLight.value = colors.data.light
       positiveLight.value = colors.data.positive
       negativeLight.value = colors.data.negative
       infoLight.value = colors.data.info
@@ -558,7 +572,7 @@ export default {
       secondaryDark.value = colors.data.secondary
       accentDark.value = colors.data.accent
       darkDark.value = colors.data.dark
-      lightBlueDark.value = colors.data.lightBlue
+      lightDark.value = colors.data.light
       positiveDark.value = colors.data.positive
       negativeDark.value = colors.data.negative
       infoDark.value = colors.data.info
@@ -566,10 +580,12 @@ export default {
     })
 
     function reset() {
-      corpdesign.reset().then(colors => {
-        corpdesign.setColors(localStorage.getItem('colorTheme'))
+      const colorTheme = tab.value.toUpperCase()
+      corpdesign.reset(colorTheme).then(colors => {
+        corpdesign.setColors(colorTheme)
         r.style.setProperty('--bg-color', colors.data.bgC)
         r.style.setProperty('--text-color', colors.data.textC)
+        r.style.setProperty('--light', colors.data.light)
         location.reload()
       }).catch(() => {
         $q.notify({
@@ -600,7 +616,7 @@ export default {
           secondary: secondaryLight.value,
           accent: accentLight.value,
           dark: darkLight.value,
-          lightBlue: lightBlueLight.value,
+          light: lightLight.value,
           positive: positiveLight.value,
           negative: negativeLight.value,
           info: infoLight.value,
@@ -609,6 +625,7 @@ export default {
           corpdesign.setColors(colorTheme)
           r.style.setProperty('--bg-color', colors.data.bgC)
           r.style.setProperty('--text-color', colors.data.textC)
+          r.style.setProperty('--light', colors.data.light)
           location.reload()
         }).catch(() => {
           $q.notify({
@@ -628,7 +645,7 @@ export default {
           secondary: secondaryDark.value,
           accent: accentDark.value,
           dark: darkDark.value,
-          lightBlue: lightBlueDark.value,
+          light: lightDark.value,
           positive: positiveDark.value,
           negative: negativeDark.value,
           info: infoDark.value,
@@ -637,6 +654,7 @@ export default {
           corpdesign.setColors(colorTheme)
           r.style.setProperty('--bg-color', colors.data.bgC)
           r.style.setProperty('--text-color', colors.data.textC)
+          r.style.setProperty('--light', colors.data.light)
           location.reload()
         }).catch(() => {
           $q.notify({
@@ -662,7 +680,7 @@ export default {
       secondaryLight,
       accentLight,
       darkLight,
-      lightBlueLight,
+      lightLight,
       positiveLight,
       negativeLight,
       infoLight,
@@ -673,7 +691,7 @@ export default {
       secondaryDark,
       accentDark,
       darkDark,
-      lightBlueDark,
+      lightDark,
       positiveDark,
       negativeDark,
       infoDark,

@@ -1,8 +1,11 @@
 package com.gpse.sesam.web.cmd;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DoorConfigCmd {
 	private String description;
 
@@ -32,4 +35,5 @@ public class DoorConfigCmd {
 	public void addConfigPart(final ConfigPartsCmd configPartsCmd) {
 		configParts.add(configPartsCmd);
 	}
+
 }

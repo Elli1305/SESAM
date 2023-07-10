@@ -11,11 +11,13 @@
               :name="isPwd ? 'visibility_off' : 'visibility'"
               class="cursor-pointer"
               @click="isPwd = !isPwd"
-              color="grey"
+              style="color: var(--light)"
               size="0.75em"/>
-          <q-icon style="position: absolute; margin-left: 1.25em; margin-top: 0.25em" class="self-start" color="info" size="0.5em" name="info_outlined">
-            <q-tooltip class="bg-grey-8" anchor="bottom right" self="top middle" :offset="[0, 0]">
-              {{t('passwordChange.passwordHint')}}
+          <q-icon style="position: absolute; margin-left: 1.15em; margin-top: 0.35em" class="self-start" color="info" size="0.5em" name="info_outlined">
+            <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" anchor="bottom right" self="top middle" :offset="[0, 0]">
+              <div style="max-width: 20em">
+                {{t('passwordChange.passwordHint')}}
+              </div>
             </q-tooltip>
           </q-icon>
         </template>
@@ -39,9 +41,9 @@
           size = "25px"
           inline/>
     </div>
-    <q-btn style="width: 22.5em" @click="signUp()" color="primary" :label="t('home.signUp')"/>
+    <q-btn style="width: 22.5em" @click="signUp()" color="primary" text-color="accent" :label="t('home.signUp')"/>
     <p style="width: 22.5em; font-size: 1em">{{ t('signUp.alreadySignedUp') }}
-      <router-link to="./login"> Login</router-link>
+      <router-link class="text-info" to="./login"> Login</router-link>
     </p>
   </q-page>
 

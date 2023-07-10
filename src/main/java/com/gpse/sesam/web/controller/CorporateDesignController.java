@@ -72,8 +72,8 @@ public class CorporateDesignController {
     @ResponseStatus(HttpStatus.CREATED)
     public Colors reset(@PathVariable String colorTheme) {
 
-        fileStorageService.reset();
         colorsService.resetColors(colorTheme.equals("LIGHT") ? ColorTheme.LIGHT : ColorTheme.DARK);
+        fileStorageService.reset(colorTheme.equals("LIGHT") ? ColorTheme.LIGHT : ColorTheme.DARK);
 
         return getColors(colorTheme);
     }

@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.credential.validation;
+package com.gpse.sesam.domain.credential.issue.validation;
 
 public enum ComparisonType {
 

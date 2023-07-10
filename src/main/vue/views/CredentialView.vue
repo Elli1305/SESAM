@@ -1,186 +1,184 @@
 <template>
-  <q-page class="column justify-evenly" style="padding: 2em 5em">
+  <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
     <p class="row text-h3 justify-center">{{ t("credentialView.title") }}</p>
-      <q-splitter
-          class="row self-center"
-          v-model="splitterModel"
-          style="width: 80vw; height: 50vh"
-          disable
-          :limits="[5, Infinity]"
-      >
-        <template v-slot:before style="width: fit-content">
-          <q-tabs
-              v-model="tab"
-              vertical
-              class="bg-white text-primary"
-              style="max-width: 10vw"
-          >
-            <q-tab name="all" :label="t('credentialView.all')"/>
-            <q-tab name="internal" :label="t('credentialView.intern')"/>
-            <q-tab name="external" :label="t('credentialView.extern')"/>
-          </q-tabs>
-        </template>
+    <div class="column">
+      <q-tabs
+          v-model="tab"
+          dense
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify">
+        <q-tab name="all" :label="t('credentialView.all')"/>
+        <q-tab name="internal" :label="t('credentialView.intern')"/>
+        <q-tab name="external" :label="t('credentialView.extern')"/>
+      </q-tabs>
 
-        <template v-slot:after>
-          <q-tab-panels
-              v-model="tab"
-              animated
-              swipeable
-              vertical
-              transition-prev="jump-up"
-              transition-next="jump-up"
-              color="primary"
-          >
-            <q-tab-panel name="internal">
-              <q-table
-                  style="height: 45vh"
-                  :rows-per-page-options="[0]"
-                  :rows="rows"
-                  :columns="columns"
-                  :title="t('admin.credentialMapping.internal')"
-                  :separator="'cell'"
-                  :no-data-label="t('common.noData')"
-                  :no-results-label="t('common.noResults')"
-                  :pagination-label="getPaginationLabel"
-                  :filter="filter"
-                  row-key="name"
-                  visible-columns="['category', 'availableCredential', 'qualification', 'issuer']">
-                <template v-slot:top-right>
-                  <q-toggle v-model="value" left-label :label="t('credentialView.showCredentials')" @update:model-value="internalCredential(value)"/>
-                  <div v-if="!value">
-                  <q-select
-                      :label="t('credentialView.location')"
-                      behavior="menu"
-                      v-model="model"
-                      borderless
-                      dense
-                      options-dense
-                      emit-value
-                      map-options
-                      :options="locationStore.allLocations"
-                      option-value="id"
-                      option-label="name"
-                      style="min-width: 12em; padding-right: 2em"
-                      @update:model-value="updateCredentials"/>
-                  </div>
-                  <q-input dense borderless debounce="250" v-model="filter" :placeholder="t('common.search')">
-                    <template v-slot:append>
-                      <q-icon name="search"/>
-                    </template>
-                  </q-input>
+      <q-separator/>
+
+      <q-tab-panels
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
+          v-model="tab"
+          animated
+          swipeable
+          color="primary">
+        <q-tab-panel name="all">
+          <q-table
+              class="full-width full-height"
+              style="background-color: var(--bg-color); color: var(--text-color)"
+              :rows-per-page-options="[0]"
+              :rows="rows3"
+              :columns="columns3"
+              :separator="'cell'"
+              :no-data-label="t('common.noData')"
+              :no-results-label="t('common.noResults')"
+              :pagination-label="getPaginationLabel"
+              :filter="filter3"
+              row-key="name"
+              visible-columns="['category', 'type', 'availableCredential', 'qualification', 'issuer']">
+            <template v-slot:top-left>
+              <q-toggle v-model="value3" left-label :label="t('credentialView.showCredentials')"
+                        @update:model-value="all(value3)" size="2.5em"/>
+              <q-select
+                  class="q-ml-md"
+                  v-if="!value3"
+                  :label="t('credentialView.location')"
+                  behavior="menu"
+                  v-model="model3"
+                  borderless
+                  dense
+                  options-dense
+                  emit-value
+                  map-options
+                  :options="locationStore.allLocations"
+                  option-value="id"
+                  option-label="name"
+                  style="min-width: 12em; padding-right: 2em"
+                  @update:model-value="updateAll"/>
+            </template>
+            <template v-slot:top-right>
+              <q-input dense outlined rounded debounce="250" v-model="filter3" :placeholder="t('common.search')">
+                <template v-slot:append>
+                  <q-icon name="search"/>
                 </template>
-                <template v-slot:body-cell-issuer="props">
-                  <q-td style="" class="column no-wrap" :props="props">
-                    <div class="row q-my-xs justify-between items-center no-wrap"
-                         v-for="(elem, index) in props.row.issuerName">
-                      <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
-                      <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
-                        <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
-                          {{ t("credentialView.room") }} {{ props.row.room[index] }}
-                        </q-tooltip>
-                      </q-icon>
-                    </div>
-                  </q-td>
-                  <br>
+              </q-input>
+            </template>
+            <template v-slot:body-cell-issuer="props">
+              <q-td class="row justify-evenly no-wrap" :props="props">
+                <div class="row q-my-xs justify-between items-center no-wrap"
+                     v-for="(elem, index) in props.row.issuerName">
+                  <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
+                  <q-icon class="q-ml-sm q-mr-md" color="info" size="1em" name="info_outlined">
+                    <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
+                      {{ t("credentialView.room") }} {{ props.row.room[index] }}
+                    </q-tooltip>
+                  </q-icon>
+                </div>
+              </q-td>
+            </template>
+          </q-table>
+        </q-tab-panel>
+        <q-tab-panel name="internal">
+          <q-table
+              class="full-width full-height"
+              style="background-color: var(--bg-color); color: var(--text-color)"
+              :rows-per-page-options="[0]"
+              :rows="rows"
+              :columns="columns"
+              :separator="'cell'"
+              :no-data-label="t('common.noData')"
+              :no-results-label="t('common.noResults')"
+              :pagination-label="getPaginationLabel"
+              :filter="filter"
+              row-key="name"
+              visible-columns="['category', 'availableCredential', 'qualification', 'issuer']">
+            <template v-slot:top-left>
+              <q-toggle v-model="value" left-label :label="t('credentialView.showCredentials')"
+                        @update:model-value="internalCredential(value)" size="2.5em"/>
+              <q-select
+                  class="q-ml-md"
+                  v-if="!value"
+                  :label="t('credentialView.location')"
+                  behavior="menu"
+                  v-model="model"
+                  borderless
+                  dense
+                  options-dense
+                  emit-value
+                  map-options
+                  :options="locationStore.allLocations"
+                  option-value="id"
+                  option-label="name"
+                  style="min-width: 12em; padding-right: 2em"
+                  @update:model-value="updateCredentials"/>
+            </template>
+            <template v-slot:top-right>
+              <q-input dense outlined rounded debounce="250" v-model="filter" :placeholder="t('common.search')">
+                <template v-slot:append>
+                  <q-icon name="search"/>
                 </template>
-              </q-table>
-            </q-tab-panel>
-            <q-tab-panel name="external">
-              <q-table
-                  style="height: 45vh"
-                  :rows-per-page-options="[0]"
-                  :rows="rows2"
-                  :columns="columns2"
-                  :title="t('admin.credentialMapping.external')"
-                  :separator="'cell'"
-                  :no-data-label="t('common.noData')"
-                  :no-results-label="t('common.noResults')"
-                  :pagination-label="getPaginationLabel"
-                  :filter="filter2"
-                  row-key="name">
-                <template v-slot:top-right>
-                  <q-toggle v-model="value2" left-label :label="t('credentialView.showCredentials')" @update:model-value="externalCredential(value2)" />
-                  <div v-if="!value2">
-                    <q-select
-                        :label="t('credentialView.location')"
-                        behavior="menu"
-                        v-model="model2"
-                        borderless
-                        dense
-                        options-dense
-                        emit-value
-                        map-options
-                        :options="locationStore.allLocations"
-                        option-value="id"
-                        option-label="name"
-                        style="min-width: 12em; padding-right: 2em"
-                        @update:model-value="updateExternalCredentials"/>
-                  </div>
-                  <q-input dense borderless debounce="250" v-model="filter2" :placeholder="t('common.search')">
-                    <template v-slot:append>
-                      <q-icon name="search"/>
-                    </template>
-                  </q-input>
+              </q-input>
+            </template>
+            <template v-slot:body-cell-issuer="props">
+              <q-td class="row justify-evenly no-wrap" :props="props">
+                <div class="row q-my-xs justify-between items-center no-wrap"
+                     v-for="(elem, index) in props.row.issuerName">
+                  <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
+                  <q-icon class="q-ml-sm q-mr-md" color="info" size="1em" name="info_outlined">
+                    <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
+                      {{ t("credentialView.room") }} {{ props.row.room[index] }}
+                    </q-tooltip>
+                  </q-icon>
+                </div>
+              </q-td>
+              <br>
+            </template>
+          </q-table>
+        </q-tab-panel>
+        <q-tab-panel name="external">
+          <q-table
+              class="full-width full-height"
+              style="background-color: var(--bg-color); color: var(--text-color)"
+              :rows-per-page-options="[0]"
+              :rows="rows2"
+              :columns="columns2"
+              :separator="'cell'"
+              :no-data-label="t('common.noData')"
+              :no-results-label="t('common.noResults')"
+              :pagination-label="getPaginationLabel"
+              :filter="filter2"
+              row-key="name">
+            <template v-slot:top-left>
+              <q-toggle v-model="value2" left-label :label="t('credentialView.showCredentials')"
+                        @update:model-value="externalCredential(value2)" size="2.5em"/>
+              <q-select
+                  class="q-ml-md"
+                  v-if="!value2"
+                  :label="t('credentialView.location')"
+                  behavior="menu"
+                  v-model="model2"
+                  borderless
+                  dense
+                  options-dense
+                  emit-value
+                  map-options
+                  :options="locationStore.allLocations"
+                  option-value="id"
+                  option-label="name"
+                  style="min-width: 12em; padding-right: 2em"
+                  @update:model-value="updateExternalCredentials"/>
+            </template>
+            <template v-slot:top-right>
+              <q-input dense outlined rounded debounce="250" v-model="filter2" :placeholder="t('common.search')">
+                <template v-slot:append>
+                  <q-icon name="search"/>
                 </template>
-              </q-table>
-            </q-tab-panel>
-            <q-tab-panel name="all">
-              <q-table
-                  style="height: 45vh"
-                  :rows-per-page-options="[0]"
-                  :rows="rows3"
-                  :columns="columns3"
-                  :title="t('credentialView.allCredentials')"
-                  :separator="'cell'"
-                  :no-data-label="t('common.noData')"
-                  :no-results-label="t('common.noResults')"
-                  :pagination-label="getPaginationLabel"
-                  :filter="filter3"
-                  row-key="name"
-                  visible-columns="['category', 'type', 'availableCredential', 'qualification', 'issuer']"
-              >
-                <template v-slot:top-right>
-                  <q-toggle v-model="value3" left-label :label="t('credentialView.showCredentials')" @update:model-value="all(value3)"/>
-                  <div v-if="!value3">
-                    <q-select
-                        :label="t('credentialView.location')"
-                        behavior="menu"
-                        v-model="model3"
-                        borderless
-                        dense
-                        options-dense
-                        emit-value
-                        map-options
-                        :options="locationStore.allLocations"
-                        option-value="id"
-                        option-label="name"
-                        style="min-width: 12em; padding-right: 2em"
-                        @update:model-value="updateAll"/>
-                  </div>
-                  <q-input dense borderless debounce="250" v-model="filter3" :placeholder="t('common.search')">
-                    <template v-slot:append>
-                      <q-icon name="search"/>
-                    </template>
-                  </q-input>
-                </template>
-                <template v-slot:body-cell-issuer="props">
-                  <q-td style="" class="column no-wrap" :props="props">
-                    <div class="row q-my-xs justify-between items-center no-wrap"
-                         v-for="(elem, index) in props.row.issuerName">
-                      <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
-                      <q-icon class="q-ml-md" color="info" size="1em" name="info_outlined">
-                        <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
-                          {{ t("credentialView.room") }} {{ props.row.room[index] }}
-                        </q-tooltip>
-                      </q-icon>
-                    </div>
-                  </q-td>
-                </template>
-              </q-table>
-            </q-tab-panel>
-          </q-tab-panels>
-        </template>
-      </q-splitter>
+              </q-input>
+            </template>
+          </q-table>
+        </q-tab-panel>
+      </q-tab-panels>
+    </div>
 
   </q-page>
 </template>
@@ -211,24 +209,101 @@ export default {
 
     const filter = ref('')
     const columns = [
-      { name: 'availableCredential', align: 'center', label: t('common.credential'), field: row => row.credentialName, sortable: true},
-      { name: 'category', required: true, label: t('common.category'), align: 'center', field: row => row.categoryName, format: val => `${val}`, sortable: true },
-      { name: 'qualification', align: 'center', label: t('admin.credentialMapping.external'), field: row => row.externalCredential, format: (val) => val.join(', '), sortable: true },
-      { name: 'issuer', align: 'center', label: t('profile.issuer'), field: row => row.issuerName, format: (val) => val.join(', '), sortable: true },
-      { name: 'room', align: 'center', label: t('common.room'), sortable: true}
+      {
+        name: 'availableCredential',
+        align: 'center',
+        label: t('common.credential'),
+        field: row => row.credentialName,
+        sortable: true
+      },
+      {
+        name: 'category',
+        required: true,
+        label: t('common.category'),
+        align: 'center',
+        field: row => row.categoryName,
+        format: val => `${val}`,
+        sortable: true
+      },
+      {
+        name: 'qualification',
+        align: 'center',
+        label: t('admin.credentialMapping.external'),
+        field: row => row.externalCredential,
+        format: (val) => val.join(', '),
+        sortable: true
+      },
+      {
+        name: 'issuer',
+        align: 'center',
+        label: t('profile.issuer'),
+        field: row => row.issuerName,
+        format: (val) => val.join(', '),
+        sortable: true,
+      },
+      {name: 'room', align: 'center', label: t('common.room'), sortable: true}
     ]
     const columns2 = [
-      { name: 'availableCredential', align: 'center', label: t('common.credential'), field: row => row.credentialName, sortable: true},
-      { name: 'category', required: true, label: t('common.category'), align: 'center', field: row => row.categoryName, format: val => `${val}`, sortable: true },
-      { name: 'qualification', align: 'center', label: t('admin.credentialMapping.internal'), field: row => row.internalCredential, format: (val) => val.join(', '), sortable: true },
+      {
+        name: 'availableCredential',
+        align: 'center',
+        label: t('common.credential'),
+        field: row => row.credentialName,
+        sortable: true
+      },
+      {
+        name: 'category',
+        required: true,
+        label: t('common.category'),
+        align: 'center',
+        field: row => row.categoryName,
+        format: val => `${val}`,
+        sortable: true
+      },
+      {
+        name: 'qualification',
+        align: 'center',
+        label: t('admin.credentialMapping.internal'),
+        field: row => row.internalCredential,
+        format: (val) => val.join(', '),
+        sortable: true
+      },
     ]
 
     const columns3 = [
-      { name: 'availableCredential', align: 'center', label: t('common.credentials'), field: row => row.credentialName, sortable: true},
-      { name: 'category', required: true, label: t('credentialView.type'), align: 'center', field: row => row.type, sortable: true },
-      { name: 'category', required: true, label: t('common.category'), align: 'center', field: row => row.categoryName, format: val => `${val}`, sortable: true },
-      { name: 'issuer', align: 'center', label: t('profile.issuer'), field: row => row.issuerName, format: (val) => val.join(', '), sortable: true },
-      { name: 'room', align: 'center', label: t('common.room'), sortable: true}
+      {
+        name: 'availableCredential',
+        align: 'center',
+        label: t('common.credentials'),
+        field: row => row.credentialName,
+        sortable: true
+      },
+      {
+        name: 'category',
+        required: true,
+        label: t('credentialView.type'),
+        align: 'center',
+        field: row => row.type,
+        sortable: true
+      },
+      {
+        name: 'category',
+        required: true,
+        label: t('common.category'),
+        align: 'center',
+        field: row => row.categoryName,
+        format: val => `${val}`,
+        sortable: true
+      },
+      {
+        name: 'issuer',
+        align: 'center',
+        label: t('profile.issuer'),
+        field: row => row.issuerName,
+        format: (val) => val.join(', '),
+        sortable: true
+      },
+      {name: 'room', align: 'center', label: t('common.room'), sortable: true}
     ]
 
     let rows = ref([])

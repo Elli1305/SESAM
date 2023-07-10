@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.credential.issuing;
+package com.gpse.sesam.domain.credential.issue.issuing;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

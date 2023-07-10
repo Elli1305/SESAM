@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-import StartView from "@/main/vue/views/Start.vue";
+import StartView from '../views/Start.vue'
 import FloorPlan from "@/main/vue/views/FloorPlan.vue";
 
 import {AttainableRole} from "@/main/vue/entity/createUser";
@@ -77,7 +77,7 @@ const router = createRouter({
         {
             path: "/profile",
             name: "profile",
-            component: () => import("@/main/vue/views/Profilansicht.vue"),
+            component: () => import("@/main/vue/views/ProfileView.vue"),
         },
         {
             path: "/passwordchange",
@@ -118,7 +118,7 @@ const router = createRouter({
             path: "/credentials",
             component: () => import("@/main/vue/views/IssueCredentials.vue"),
             meta: {
-                authorize: AttainableRole.ADMINISTRATOR,
+                authorize: AttainableRole.ISSUER,
             },
         },
         {

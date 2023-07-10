@@ -13,9 +13,8 @@ public class DoorCmd {
 
 	private List<Coordinate> coordinates = new ArrayList<>();
 
-	private List<DoorConfigCmd> proofConfigIn = new ArrayList<>();
 
-	private List<DoorConfigCmd> proofConfigOut = new ArrayList<>();
+	private List<TwoWayDoorConfigCmd> doorConfigCmds = new ArrayList<>();
 	private Long roomId;
 
 	public DoorCmd() {
@@ -50,27 +49,19 @@ public class DoorCmd {
 		this.coordinates = coordinates;
 	}
 
-	public List<DoorConfigCmd> getProofConfigIn() {
-		return proofConfigIn;
-	}
-
-	public void setProofConfigIn(final List<DoorConfigCmd> proofConfigIn) {
-		this.proofConfigIn = proofConfigIn;
-	}
-
-	public List<DoorConfigCmd> getProofConfigOut() {
-		return proofConfigOut;
-	}
-
-	public void setProofConfigOut(final List<DoorConfigCmd> proofConfigOut) {
-		this.proofConfigOut = proofConfigOut;
-	}
-
 	public Long getRoomId() {
 		return roomId;
 	}
 
 	public void setRoomId(final Long roomId) {
 		this.roomId = roomId;
+	}
+
+	public List<TwoWayDoorConfigCmd> getDoorConfigCmds() {
+		return doorConfigCmds;
+	}
+
+	public void setDoorConfigCmds(List<TwoWayDoorConfigCmd> doorConfigCmds) {
+		this.doorConfigCmds = doorConfigCmds;
 	}
 }

@@ -80,9 +80,10 @@ public class ExternalCredential implements Credential {
         return form;
     }
 
-    public void setForm(List<FormEntry> form) {
-        this.form = form;
-    }
+	@Override
+	public void setForm(List<FormEntry> form) {
+		this.form = form;
+	}
 
 	public Category getCategory() {
 		return category;

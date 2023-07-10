@@ -105,10 +105,23 @@ public class CredentialServiceImpl implements CredentialService {
         this.categoryService = categoryService;
     }
 
+    /**
+     * Ersetzt magische Credential-Definition-IDs durch ihre tatsächlichen Werte.
+     *
+     * @param credentialDefinitionId die Credential-Definition-ID, die ersetzt werden soll
+     * @return die ersetzte Credential-Definition-ID
+     */
     public static String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
         return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
     }
 
+    /**
+     * Zerstört den Pool und schließt die Verbindung.
+     *
+     * @throws IndyException          wenn ein Fehler in der Indy-Bibliothek auftritt
+     * @throws ExecutionException    wenn ein Fehler bei der Ausführung auftritt
+     * @throws InterruptedException  wenn der Thread während des Wartens unterbrochen wird
+     */
     @PreDestroy
     private void destroy() throws IndyException, ExecutionException, InterruptedException {
         if (pool == null) {
@@ -121,6 +134,15 @@ public class CredentialServiceImpl implements CredentialService {
         pool = null;
     }
 
+    /**
+     * Erstellt und öffnet einen Pool.
+     *
+     * @return der erstellte und geöffnete Pool
+     * @throws FileNotFoundException wenn die Datei nicht gefunden wird
+     * @throws IndyException          wenn ein Fehler in der Indy-Bibliothek auftritt
+     * @throws ExecutionException    wenn ein Fehler bei der Ausführung auftritt
+     * @throws InterruptedException  wenn der Thread während des Wartens unterbrochen wird
+     */
     private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException {
         if (!LibIndy.isInitialized()) {
             LibIndy.init();
@@ -216,6 +238,13 @@ public class CredentialServiceImpl implements CredentialService {
         return credentialRepository.findById(id);
     }
 
+    /**
+     * Sendet eine Anforderung zur Ausstellung eines Credentials.
+     *
+     * @param issueCredentialRequest die IssueCredentialRequest, die die Ausstellungsanforderung enthält
+     * @return die Antwort als String
+     * @throws JsonProcessingException wenn ein Fehler bei der Verarbeitung von JSON-Daten auftritt
+     */
     private String sendCredentialIssueRequest(@Valid final IssueCredentialRequest issueCredentialRequest)
             throws JsonProcessingException {
         return client.post().uri("credential/issue").contentType(MediaType.APPLICATION_JSON)
@@ -354,8 +383,9 @@ public class CredentialServiceImpl implements CredentialService {
                 .flatMap(building -> building.getFloors().stream())
                 .flatMap(floor -> floor.getRooms().stream())
                 .flatMap(room -> room.getDoors().stream())
-                .flatMap(door -> Stream.concat(door.getProofConfigIn().stream(), door.getProofConfigOut()
-                        .stream()))
+                .flatMap(door -> door.getDoorConfigs().stream())
+                .flatMap(twoWayDoorConfig -> Stream.of(twoWayDoorConfig.getProofConfigIn(),
+                        twoWayDoorConfig.getProofConfigOut()))
                 .flatMap(proofConfig -> {
                     final Stream<String> attributeFilterStream = proofConfig.getRequestedPredicates().values()
                             .stream()
@@ -643,6 +673,17 @@ public class CredentialServiceImpl implements CredentialService {
         return cmds;
     }
 
+    /**
+     * Ruft das Credential-Schema für die angegebene Credential-Definition-ID ab.
+     *
+     * @param credentialDefinitionId die ID der Credential-Definition
+     * @return das Credential-Schema als CredentialSchemaCmd-Objekt
+     * @throws IndyException               wenn ein Fehler in der Indy-Bibliothek auftritt
+     * @throws ExecutionException         wenn ein Fehler bei der Ausführung auftritt
+     * @throws InterruptedException       wenn der Thread während des Wartens unterbrochen wird
+     * @throws JsonProcessingException     wenn ein Fehler bei der Verarbeitung von JSON-Daten auftritt
+     * @throws FileNotFoundException     wenn die Datei nicht gefunden wird
+     */
     @Override
     public CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws IndyException,
             ExecutionException, InterruptedException, JsonProcessingException, FileNotFoundException {
