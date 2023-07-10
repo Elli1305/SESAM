@@ -60,7 +60,7 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 
 	@Override
 	public void sendProofConfig(String doorId, ProofConfig proofConfig) {
-		proofConfig.setCreatedAt(new Date());
+		//proofConfig.setCreatedAt(new Date());
 
 		final String url = appConfig.getUrl() + "/api/proof/config/" + doorId;
 
@@ -91,7 +91,7 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 	private ProofConfig createProofConfig() {
 		final ProofConfig proofConfig = new ProofConfig();
 		proofConfig.setDescription("Bitte präsentieren Sie ein T-Mitglieds-Credential mit dem Vornamen David.");
-		proofConfig.setCreatedAt(new Date());
+		//proofConfig.setCreatedAt(new Date());
 
 		final Map<String, ProofAttributeInfo> requestedAttributes = new HashMap<>();
 		final ProofAttributeInfo attributeInfo = new ProofAttributeInfo();
