@@ -117,13 +117,17 @@ const router = createRouter({
         {
             path: "/credentials",
             component: () => import("@/main/vue/views/IssueCredentials.vue"),
-            meta: {requiresAdmin: true},
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
         {
             path: "/credentials/:id/issue",
             component: () => import("@/main/vue/views/IssueCredential.vue"),
             props: true,
-            meta: {requiresAuth: true},
+            meta: {
+                authorize: AttainableRole.ISSUER,
+            },
         },
         {
             path: "/issuermanagement",
@@ -143,18 +147,24 @@ const router = createRouter({
         {
             path: "/credential_administration",
             component: () => import("@/main/vue/views/CredentialAdministration.vue"),
-            meta: {requiresAdmin: true},
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
         {
             path: "/credential_administration/:type(internal|external)/:id(\\d+)",
             component: () => import("@/main/vue/views/CredentialEditing.vue"),
             props: true,
-            meta: {requiresAdmin: true},
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
         {
             path: "/add_credential",
             component: () => import("@/main/vue/views/CredentialEditing.vue"),
-            meta: {requiresAdmin: true},
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
         {path: "/:pathMatch(.*)*", component: StartView},
     ],
