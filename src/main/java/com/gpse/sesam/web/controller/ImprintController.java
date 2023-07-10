@@ -4,6 +4,7 @@ import com.gpse.sesam.domain.imprint.ImprintServiceImpl;
 import com.gpse.sesam.web.cmd.UpdateImprintCmd;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,7 +40,7 @@ public class ImprintController {
 
         return new ResponseEntity<>(latestImprintContent, HttpStatus.OK);
     }
-
+    @Secured("ADMINISTRATOR")
     @PostMapping("/api/imprint")
     @ResponseStatus(HttpStatus.OK)
     public void saveImprintContent(@RequestBody final UpdateImprintCmd imprintContent) {
@@ -48,7 +49,7 @@ public class ImprintController {
         }
     }
 
-
+    @Secured("ADMINISTRATOR")
     @DeleteMapping("/api/imprint")
     @ResponseStatus(HttpStatus.OK)
     public void deleteImprintContent() {
