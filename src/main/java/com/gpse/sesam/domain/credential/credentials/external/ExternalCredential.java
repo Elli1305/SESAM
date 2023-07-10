@@ -3,7 +3,7 @@ package com.gpse.sesam.domain.credential.credentials.external;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.credentials.Credential;
-import com.gpse.sesam.domain.credential.issuing.FormEntry;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntry;
 import jakarta.persistence.*;
 
 import java.util.List;

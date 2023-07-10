@@ -15,7 +15,7 @@
         </template>
       <template v-slot:top-right>
         <q-btn rounded color="grey-6" flat icon="add" :label="t('admin.credentialAdministration.new')" to="/add_credential"/>
-        <q-input v-model="filter" outlined rounded class="q-ml-lg" debounce="300" dense :placeholder="t('common.search')">
+        <q-input v-model="search" outlined rounded class="q-ml-lg" debounce="300" dense :placeholder="t('common.search')">
           <template v-slot:append>
             <q-icon name="search"/>
           </template>
