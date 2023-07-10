@@ -82,9 +82,15 @@ const router = createRouter({
         {
             path: "/passwordchange",
             component: () => import("@/main/vue/views/PasswordChange.vue"),
-            props: (to) => ({
-                token: to.query.token,
-            }),
+            props: (to) => ({token: to.query.token}),
+            beforeEnter: (to, from, next) => {
+                if (!to.query.token) {
+                    next({path: "/"});
+                    return;
+                }
+
+                next();
+            }
         },
         {
             path: "/passwordreset",
@@ -111,13 +117,17 @@ const router = createRouter({
         {
             path: "/credentials",
             component: () => import("@/main/vue/views/IssueCredentials.vue"),
-            meta: {requiresAdmin: true},
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
         {
             path: "/credentials/:id/issue",
             component: () => import("@/main/vue/views/IssueCredential.vue"),
             props: true,
-            meta: {requiresAuth: true},
+            meta: {
+                authorize: AttainableRole.ISSUER,
+            },
         },
         {
             path: "/issuermanagement",
@@ -137,18 +147,24 @@ const router = createRouter({
         {
             path: "/credential_administration",
             component: () => import("@/main/vue/views/CredentialAdministration.vue"),
-            meta: {requiresAdmin: true},
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
         {
             path: "/credential_administration/:type(internal|external)/:id(\\d+)",
             component: () => import("@/main/vue/views/CredentialEditing.vue"),
             props: true,
-            meta: {requiresAdmin: true},
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
         {
             path: "/add_credential",
             component: () => import("@/main/vue/views/CredentialEditing.vue"),
-            meta: {requiresAdmin: true},
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
         {path: "/:pathMatch(.*)*", component: StartView},
     ],

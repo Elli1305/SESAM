@@ -156,6 +156,7 @@ const messages = {
             pickRoom: 'Raum auswählen',
             confirmDeletion: 'Löschen bestätigen',
             confirmDeletionText: 'Sind Sie sicher, dass Sie die Tür löschen möchten?',
+            doorCreateFailed: 'Tür konnte nicht erstellt werden',
             // Groups
             groupName: 'Gruppenname',
             editGroup: 'Gruppe bearbeiten',
@@ -591,6 +592,7 @@ const messages = {
             pickRoom: 'Choose room',
             confirmDeletion: 'Confirm deletion',
             confirmDeletionText: 'Are you sure you want to delete the door?',
+            doorCreateFailed: 'Door could not be created',
             // Groups
             groupName: 'Group name',
             editGroup: 'Edit group',
