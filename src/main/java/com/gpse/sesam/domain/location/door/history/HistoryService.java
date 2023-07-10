@@ -15,4 +15,6 @@ public interface HistoryService {
     void deleteById(Long id);
 
     void saveAll(Iterable<History> histories);
+
+    public List<History> historiesByDoor(Long id);
 }

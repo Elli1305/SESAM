@@ -1,6 +1,7 @@
 package com.gpse.sesam.domain.location.door.history;
 
-import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
+import com.gpse.sesam.domain.location.door.Door;
+import com.gpse.sesam.domain.location.door.DoorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,12 @@ public class HistoryServiceImpl implements HistoryService {
 
     private final HistoryRepository historyRepository;
 
+    private final DoorService doorService;
+
     @Autowired
-    public HistoryServiceImpl(HistoryRepository historyRepository) {
+    public HistoryServiceImpl(HistoryRepository historyRepository, DoorService doorService) {
         this.historyRepository = historyRepository;
+        this.doorService = doorService;
     }
 
 
@@ -45,4 +49,20 @@ public class HistoryServiceImpl implements HistoryService {
     public void saveAll(Iterable<History> histories) {
         historyRepository.saveAll(histories);
     }
+
+    @Override
+    public List<History> historiesByDoor(Long id) {
+        List<History> allHistories = getHistories();
+        List<History> histories = new ArrayList<>();
+        Optional<Door> door = doorService.findDoorById(id);
+
+        for (History history: allHistories) {
+            if (history.getDoor().equals(door)) {
+                histories.add(history);
+            }
+        }
+        return histories;
+    }
+
+
 }
