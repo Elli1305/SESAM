@@ -190,7 +190,7 @@ const messages = {
             room: "Raum: ",
             allCredentials: "Alle Credentials",
             type: "Typ",
-            showCredentials: "Alle Credential anzeigen",
+            showCredentials: "Alle anzeigen",
             all: "Alle",
             intern: "Intern",
             extern: "Extern"
@@ -610,7 +610,7 @@ const messages = {
             room: "Room: ",
             allCredentials: "All Credentials",
             type: "Type",
-            showCredentials: "Show all Credentials",
+            showCredentials: "Show all",
             all: "All",
             intern: "Internal",
             extern: "External"
