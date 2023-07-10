@@ -126,9 +126,12 @@
                 </div>
                 <DoorConfig
                     ref="configIn" :door-config="qSelectGeneral.qSelectsSet[k].doorConfigIn"
+                    :direction="JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigIn) !==
+                    JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigOut) ? Direction.IN : Direction.BOTH"
                     @changeDirection="changeDirectionOut($event, k)">
                 </DoorConfig>
-                <DoorConfig v-show="$refs.configIn?.value[k].direction !== Direction.BOTH" ref="configOut"
+                <DoorConfig v-show="configIn[k]?.direction !== Direction.BOTH" ref="configOut"
+                            :direction="Direction.OUT"
                             :is-config-out="true" :door-config="qSelectGeneral.qSelectsSet[k].doorConfigOut">
                 </DoorConfig>
 
@@ -339,9 +342,9 @@ async function addConfig() {
       await configStore.updateConfig(config)
       edit.value = false
   } else {
-    console.log(config)
       await configStore.createConfig(config)
   }
+  qSelectGeneral.value.qSelectsSet.splice(0)
 }
 
 async function deleteConfig(config: any) {
@@ -357,6 +360,7 @@ async function editConfig(config: any) {
     await configStore.getConfig(config)
     let editConfig = configStore.currentConfig
     configName.value = editConfig?.name
+    qSelectGeneral.value.qSelectsSet.splice(0)
     editConfig?.doorConfig.forEach((element, index) => {
       console.log(element)
       let object = {
@@ -376,9 +380,6 @@ async function editConfig(config: any) {
     })
 
 }
-
-
-
 
 </script>
 

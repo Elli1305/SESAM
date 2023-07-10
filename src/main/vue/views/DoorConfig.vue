@@ -139,7 +139,7 @@
 
 <script>
 import {Direction, PredicateType} from "@/main/vue/entity/doorConfiguration";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {useCredentialStore} from "@/main/vue/stores/credential";
 import {useI18n} from "vue-i18n";
 
@@ -163,7 +163,7 @@ export default {
     }
   },
   emits: [
-    'ok', 'hide'
+    'ok', 'hide', 'changeDirection'
   ],
 
   methods: {
@@ -256,6 +256,12 @@ export default {
       configDescription.value = props.doorConfig.description
       qSelects.value = props.doorConfig
     }
+
+    watch(() => props.doorConfig, () => {
+      console.log("hallo", props.doorConfig)
+      configDescription.value = props.doorConfig.description
+      qSelects.value = props.doorConfig
+    })
 
     const commonAttributeFilter = function (credentials) {
       let formEntries = credentials.map((credential) => {
