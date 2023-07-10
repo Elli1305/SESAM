@@ -1,6 +1,6 @@
-package com.gpse.sesam.domain.credential.issuing;
+package com.gpse.sesam.domain.credential.issue.issuing;
 
-import com.gpse.sesam.domain.credential.validation.AbstractValidationRule;
+import com.gpse.sesam.domain.credential.issue.validation.AbstractValidationRule;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

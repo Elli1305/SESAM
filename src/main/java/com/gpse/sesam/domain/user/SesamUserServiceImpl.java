@@ -73,18 +73,37 @@ public class SesamUserServiceImpl implements SesamUserService {
 		this.credentialService = credentialService;
 	}
 
+	/**
+	 * Validiert die Liste der Benutzerrollen.
+	 *
+	 * @param roles die Liste der Benutzerrollen
+	 * @throws UnprocessableEntityException wenn die Rollenliste null ist
+	 */
 	private static void validateRoles(final List<SesamUserRole.AttainableRole> roles) {
 		if (roles == null) {
 			throw new UnprocessableEntityException("roles may not be null");
 		}
 	}
 
+	/**
+	 * Validiert den Namen.
+	 *
+	 * @param name          der zu validierende Name
+	 * @param propertyName  der Name der Eigenschaft, die validiert wird
+	 * @throws UnprocessableEntityException wenn der Name nicht den Anforderungen entspricht
+	 */
 	private static void validateName(final String name, final String propertyName) {
 		if (!StringUtils.hasText(name) || name.matches(NUMBER_REGEX)) {
 			throw new UnprocessableEntityException(propertyName + " does not meet the requirements");
 		}
 	}
 
+	/**
+	 * Validiert die E-Mail-Adresse.
+	 *
+	 * @param email die zu validierende E-Mail-Adresse
+	 * @throws UnprocessableEntityException wenn die E-Mail-Adresse nicht gültig ist
+	 */
 	private static void validateEmail(final String email) {
 		if (email == null || !email.matches("[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+")) {
 			throw new UnprocessableEntityException("The provided e-mail is not valid");
@@ -118,6 +137,11 @@ public class SesamUserServiceImpl implements SesamUserService {
 		}
 	}
 
+	/**
+	 * Validiert die Benutzerdaten.
+	 *
+	 * @param userCmd das SesamUserCmd-Objekt mit den Benutzerdaten
+	 */
 	private void validateUser(final SesamUserCmd userCmd) {
 		validatePassword(userCmd.getPassword());
 		validateEmail(userCmd.getEmail());

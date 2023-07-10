@@ -253,7 +253,7 @@ paths:
   /corpdesign/save/logo-light:
     post:
       tags:
-        - color
+        - colors
       summary: Save a logo for the corporate design
       description: Save logo for the light mode
       operationId: saveLogoLight
@@ -280,7 +280,7 @@ paths:
   /corpdesign/save/logo-dark:
     post:
       tags:
-        - color
+        - colors
       summary: Save a logo for the corporate design
       description: Save logo for the dark mode
       operationId: saveLogoDark
@@ -307,7 +307,7 @@ paths:
   /corpdesign/save/favicon:
     post:
       tags:
-        - color
+        - colors
       summary: Save a favicon for the corporate design
       description: Save favicon
       operationId: saveFavicon
@@ -334,7 +334,7 @@ paths:
   /corpdesign/save/colors/{colortheme}:
     post:
       tags:
-        - color
+        - colors
       summary: Save a colors for the corporate design
       description: Save colors for a theme
       operationId: changeColors
@@ -368,7 +368,7 @@ paths:
   /corpdesign/get/colors/{colortheme}:
     get:
       tags:
-        - category
+        - colors
       summary: Get colors by their theme
       description: Get colors by their theme
       operationId: getColors
@@ -393,7 +393,7 @@ paths:
   /corpdesign/reset/colors/{colortheme}:
     post:
       tags:
-        - color
+        - colors
       summary: Reset colors for the corporate design
       description: Reset colors for a theme
       operationId: resetColors
@@ -1005,7 +1005,7 @@ paths:
   /issuers:
     get:
       tags:
-        - imprint
+        - issuer
       summary: Returns the issuers
       description: Returns the issuers
       operationId: getIssuers
