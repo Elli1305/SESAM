@@ -58,7 +58,7 @@
                   <q-tooltip max-width="15em" anchor="center right" self="center left">
                     {{t('floorPlan.directions.infoCredentialGroups')}}
                   </q-tooltip>
-                <q-menu anchor="bottom right" self="top right" transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
+                <q-menu anchor="bottom right" self="top right" transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color); color: var(--text-color)">
                     <q-list dense>
                         <q-item-label header class="text-bold text-primary" >
                           {{ t('common.categories') }}

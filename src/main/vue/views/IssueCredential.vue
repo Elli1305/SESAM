@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
-    <q-stepper v-model="step" ref="stepper" color="primary" animated flat style="width: 80vw">
+    <q-stepper v-model="step" ref="stepper" color="primary" animated flat style="width: 80vw; background-color: var(--bg-color); color: var(--text-color)">
 
       <q-step :name="1" class="row justify-center" :title="t('issuer.issueCredential.steps.form')" icon="description"
               :done="step > 1">
@@ -331,6 +331,7 @@ const next = async (refs: any) => {
       message: t('issuer.issueCredential.confirm.message', {'name': credential.value?.name}),
       ok: t('issuer.issueCredential.confirm.ok'),
       cancel: t('common.cancel'),
+      color: 'primary',
     }).onOk(async () => {
       $q.loading.show({delay: 400});
 
@@ -346,6 +347,8 @@ const next = async (refs: any) => {
                   ...opts,
                   message: t('issuer.issueCredential.errors.issue.failed'),
                   caption: t('issuer.issueCredential.errors.issue.unauthorized'),
+                  color: 'negative',
+                  textColor: 'positive',
                 })
 
                 break;
@@ -354,6 +357,8 @@ const next = async (refs: any) => {
                   ...opts,
                   message: t('issuer.issueCredential.errors.issue.failed'),
                   caption: t('issuer.issueCredential.errors.issue.failedDependency'),
+                  color: 'negative',
+                  textColor: 'positive',
                 })
 
                 break;
@@ -365,6 +370,8 @@ const next = async (refs: any) => {
                   ...opts,
                   message: t('issuer.issueCredential.errors.issue.failed'),
                   caption: t('issuer.issueCredential.errors.unknown'),
+                  color: 'negative',
+                  textColor: 'positive',
                 })
             }
           })

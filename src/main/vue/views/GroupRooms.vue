@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t("editor.groupRooms.title")}}</p>
     <div class="row self-center">
       <q-table
-          style="width: 80vw; height: 50vh"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
@@ -31,23 +31,18 @@
                   dense
                   round
                   flat
+                  color="grey"
+                  @click="prompt=true; openForm(props.row); getRoomsAndDoors(editedRow.id)"
+                  test="props.value"
+                  icon="meeting_room"/>
+              <q-btn
+                  dense
+                  round
+                  flat
                   icon="delete"
                   color="grey"
                   @click="deleteAlert = true; delGroup(Object.values(props));"/>
             </div>
-          </q-td>
-        </template>
-        <template v-slot:body-cell-doorconfig="props">
-          <q-td :props="props">
-            <q-btn
-                dense
-                round
-                flat
-                color="grey"
-                @click="prompt=true; openForm(props.row); getRoomsAndDoors(editedRow.id)"
-                test="props.value"
-                icon="edit">
-            </q-btn>
           </q-td>
         </template>
 
@@ -115,7 +110,7 @@
     </div>
 
     <q-dialog v-model="deleteAlert">
-        <q-card>
+        <q-card style="background-color: var(--bg-color); color: var(--text-color)">
             <q-card-section>
                 <div class="text-h6">{{ t('editor.groupRooms.deleteGroup') }}</div>
             </q-card-section>
@@ -130,7 +125,7 @@
     </q-dialog>
 
     <q-dialog v-model="editAlert">
-      <q-card>
+      <q-card style="background-color: var(--bg-color); color: var(--text-color)">
         <q-card-section>
           <div class="text-h6">{{t('editor.groupRooms.nameOfGroup')}}</div>
         </q-card-section>
@@ -160,7 +155,7 @@
     </q-dialog>
 
     <q-dialog v-model="newGroup">
-        <q-card>
+        <q-card style="background-color: var(--bg-color); color: var(--text-color)">
             <q-card-section>
                 <div class="text-h6">Name der Gruppe</div>
             </q-card-section>
@@ -186,13 +181,15 @@
     </q-dialog>
 
     <q-dialog v-model="prompt" persistent>
-      <q-card style="width: 90%">
-        <q-toolbar class="bg-primary text-accent">
-          <q-toolbar-title>{{t("editor.groupRooms.groupsConfig")}}</q-toolbar-title>
-        </q-toolbar>
+      <q-card style="min-width: 50em; background-color: var(--bg-color); color: var(--text-color)">
+        <q-card-section>
+          <div class="text-h6">{{t("editor.groupRooms.groupsConfig")}}</div>
+        </q-card-section>
         <q-card-section>
           <q-table
+              style="background-color: var(--bg-color); color: var(--text-color)"
               flat bordered
+              hide-bottom
               :rows-per-page-options="[0]"
               :title="t('editor.groupRooms.roomSelection')"
               :rows="rows2"
@@ -209,18 +206,18 @@
               <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
                 <q-toggle v-model="visibleColumns" val="doorNames" :label="t('editor.groupRooms.doors')" ></q-toggle>
               </div>
-              <q-input class="q-ml-xs" borderless dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
+              <q-input class="q-ml-xs" outlined rounded dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
                 <template v-slot:append>
                   <q-icon name="search" />
                 </template>
               </q-input>
             </template>
             <template v-slot:body-cell-doorNames="props">
-              <q-td :props="props" v-if="props.row.name">
-                <q-select
+              <q-td style="width: 60%" :props="props">
+                <q-select v-if="props.row.name"
                     @popup-show="getDoors(props.row.room)"
                     class="q-my-sm"
-                    filled
+                    filled dense options-dense
                     emit-value
                     v-model="model[props.row.room]"
                     multiple
@@ -234,7 +231,7 @@
               </q-td>
             </template>
             <template v-slot:body-cell-actions="props">
-              <q-td :props="props">
+              <q-td style="width: 10%" :props="props">
                 <q-checkbox v-model="props.row.name" @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.name, props.row.room)"/>
               </q-td>
             </template>
@@ -324,7 +321,6 @@ export default {
       { name: 'name', required: true, label: t('editor.groupRooms.group'), align: 'center', field: row => row.name, sortable: true },
       { name: 'rooms', align: 'center', label: t('floorPlan.rooms'), field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
       { name: 'actions', label: t('common.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
-      { name: 'doorconfig', label: t('editor.groupRooms.doorconfig'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
     ]
 
     const rows = ref([]);
