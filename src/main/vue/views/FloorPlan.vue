@@ -210,6 +210,7 @@ export default {
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
             this.redrawRooms()
+            this.$emit('doorCreated')
           })
           promise.catch(() => {
             $q.notify({
@@ -227,6 +228,9 @@ export default {
 
     mapContainerObserver.observe(this.$refs.mapContainer)
   },
+  emits: [
+      'doorCreated', 'roomClicked'
+  ],
   methods: {
     redrawRooms() {
       this.removeLayer()
@@ -333,6 +337,10 @@ export default {
           }
         })
       });
+      polygon.on('click', (e) => {
+        console.log(polygon.id)
+        this.$emit('roomClicked', polygon.id)
+      })
     }, async drawRooms(rooms) {
       let polygons = [];
       await this.credentialsStore.fetch()

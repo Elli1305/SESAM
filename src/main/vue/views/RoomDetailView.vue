@@ -182,14 +182,12 @@
 
 <script>
 
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import api from "@/main/vue/api";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 import {Direction} from "@/main/vue/entity/doorConfiguration";
 import {useQuasar} from "quasar";
-import EditBuilding from "@/main/vue/views/EditBuilding.vue";
 import EditRoom from "@/main/vue/views/EditRoom.vue";
-import {useI18n} from "vue-i18n";
 import {useUserStore} from "@/main/vue/stores/users";
 
 export default {
@@ -209,22 +207,26 @@ export default {
     'backClicked', 'doorChanged'
   ],
   methods: {
-    openDialog(room) {
+    load() {
+      api.room.getRoomDetails(this.$props.room.id)
+          .then(room => {
+            console.log("load")
+            this.config = room.data
+            this.loading = false
+            this.activeConfigs = room.data.doors.map(door => ({
+              ...this.getActiveConfig(door), doorName: door.name
+            }))
+            this.inactiveConfigs = room.data.doors.flatMap(d => this.getInactiveConfig(d))
+          })
+          .catch(() => this.loading = false)
+    }, openDialog(room) {
       this.$q.dialog({
         component: EditRoom,
         componentProps: {
           room: room
         }
       }).onOk(() => {
-        api.room.getRoomDetails(this.room.id)
-            .then(room => {
-              this.config = room.data
-              this.loading = false
-              this.activeConfigs = room.data.doors.map(door => ({
-                ...this.getActiveConfig(door), doorName: door.name
-              }))
-            })
-            .catch(() => this.loading = false)
+        this.load();
       })
     }
   },
@@ -238,6 +240,18 @@ export default {
     // TODO get inactive configs
     const inactiveConfigs = ref([]);
 
+    watch(() => props.room, () => {
+      api.room.getRoomDetails(props.room.id)
+          .then(room => {
+            config.value = room.data
+            loading.value = false
+            activeConfigs.value = room.data.doors.map(door => ({
+              ...getActiveConfig(door), doorName: door.name
+            }))
+            inactiveConfigs.value = room.data.doors.flatMap(d => getInactiveConfig(d))
+          })
+          .catch(() => loading.value = false)
+    })
     const getActiveConfig = (door) => {
       if (door.doorConfigCmds.length > 1) {
         const currentDate = new Date();
@@ -287,7 +301,7 @@ export default {
           inactiveConfigs.value = room.data.doors.flatMap(d => getInactiveConfig(d))
         })
         .catch(() => loading.value = false)
-    return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig}
+    return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig, getInactiveConfig}
   }
 }
 </script>

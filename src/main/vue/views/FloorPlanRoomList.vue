@@ -136,7 +136,7 @@
                 </div>
               </q-tab-panel>
               <q-tab-panel name="info">
-                <room-detail-view :room="room" @back-clicked="back()"/>
+                <room-detail-view ref="roomDetail" :room="room" @back-clicked="back()"/>
               </q-tab-panel>
             </q-tab-panels>
           </q-tab-panel>
@@ -427,6 +427,9 @@ export default {
     back() {
       this.roomTab = 'list';
     },
+    refreshDetail() {
+      this.$refs?.roomDetail?.load()
+    }
   },
   name: "FloorPlanRoomList",
 
