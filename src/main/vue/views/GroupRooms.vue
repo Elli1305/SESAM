@@ -1022,7 +1022,7 @@ export default {
           config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
           config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
           config.doorConfigIn.description = this.qSelectGeneral.qSelectsSet[index].doorConfigIn.description
-          config.doorConfigOut.description = this.qSelectGeneral.qSelectsSet[index].doorConfigOut.description
+          config.doorConfigOut.description = this.qSelectGeneral.qSelectsSet[index].doorConfigIn.description
         } else if (this.$refs.doorIn[index].direction === Direction.IN) {
           config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
           config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigOut))
