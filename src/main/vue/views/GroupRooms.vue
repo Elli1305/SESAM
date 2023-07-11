@@ -236,6 +236,7 @@
             </template>
           </q-table>
         </q-card-section>
+        <q-card-section>
         <q-select
             class="q-ml-md"
             style="min-width: 20em"
@@ -259,6 +260,7 @@
             </q-item>
           </template>
         </q-select>
+        </q-card-section>
         <q-card-section v-for="(selectConf,k) in qSelectGeneral.qSelectsSet">
           <q-card bordered flat>
             <q-toolbar class="bg-primary text-accent">
