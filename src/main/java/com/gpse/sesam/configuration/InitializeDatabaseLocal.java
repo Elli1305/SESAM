@@ -13,6 +13,7 @@ import com.gpse.sesam.domain.credential.issue.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issue.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
 import com.gpse.sesam.domain.credential.issue.validation.*;
+import com.gpse.sesam.domain.filestorage.FileStorageService;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
@@ -54,6 +55,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private final CredentialService credentialService;
 	private final ColorsService colorsService;
 
+	private final FileStorageService fileStorageService;
+
 	private final CategoryService categoryService;
 
 	private final PasswordEncoder passwordEncoder;
@@ -63,7 +66,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
 								   final CredentialService credentialService, final ColorsService colorsService,
 								   final CategoryService categoryService, final PasswordEncoder passwordEncoder,
-								   final RoomGroupService roomGroupService) {
+								   final RoomGroupService roomGroupService, FileStorageService fileStorageService) {
 		this.credentialService = credentialService;
 		this.colorsService = colorsService;
 		this.categoryService = categoryService;
@@ -71,6 +74,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		this.locationService = locationService;
 		this.userService = userService;
 		this.roomGroupService = roomGroupService;
+		this.fileStorageService = fileStorageService;
 	}
 
 	@Override
@@ -83,6 +87,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<RoomGroups> roomGroups = roomGroups(locations);
 
 		colorsService.saveAll(colors);
+		setLogo();
 		locationService.saveAll(locations);
 		credentialService.saveAll(credentials);
 		locationService.saveAll(locationsList);
@@ -151,6 +156,11 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		defaultColors.setNegative("#505050");
 		defaultColors.setInfo("#0074E2");
 		defaultColors.setWarning("#fec705");
+	}
+
+	private void setLogo() {
+		fileStorageService.reset(ColorTheme.LIGHT);
+		fileStorageService.reset(ColorTheme.DARK);
 	}
 
 	private List<SesamUser> createUsers(final List<InternalCredential> credentials) {

@@ -25,13 +25,13 @@ if (!localStorage.getItem('colorTheme')) {
   logoPath.value = "/Logo.svg"
   $q.dark.set(false)
 } else if (localStorage.getItem('colorTheme') === 'LIGHT') {
-    $q.dark.set(false)
-    themeIcon.value = 'light_mode'
-    updateColors('LIGHT')
-  } else {
-    $q.dark.set(true)
-    themeIcon.value = 'dark_mode'
-    updateColors('DARK')
+  $q.dark.set(false)
+  themeIcon.value = 'light_mode'
+  updateColors('LIGHT')
+} else {
+  $q.dark.set(true)
+  themeIcon.value = 'dark_mode'
+  updateColors('DARK')
 }
 
 function updateColors(colorTheme) {
@@ -85,7 +85,6 @@ async function logout() {
 }
 
 
-
 </script>
 <template>
   <q-layout v-if="appStore.reload" view="hHh lpR fff">
@@ -104,8 +103,10 @@ async function logout() {
               </q-toolbar-title>
             </div>
             <div class="row no-wrap">
-              <q-btn :icon="themeIcon" text-color="accent" round flat style="width: 42px; height: 42px" ref="themeBtn" @click="changeTheme()">
-                  <q-tooltip>DarkMode/LightMode</q-tooltip>
+              <q-btn :icon="themeIcon" text-color="accent" round flat style="width: 42px; height: 42px" ref="themeBtn"
+                     @click="changeTheme()">
+                <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="themeIcon === 'light_mode'" :offset="[0,0]">Lightmode</q-tooltip>
+                <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="themeIcon === 'dark_mode'" :offset="[0,0]">Darkmode</q-tooltip>
               </q-btn>
 
               <div class="column" style="width: 42px; height: 42px">
@@ -178,7 +179,8 @@ async function logout() {
                     <router-link to="/corporatedesign" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.editCorporateDesign") }}
                     </router-link>
-                    <router-link to="/imprinteditor" class="q-ma-sm headerLink" style="color: var(--text-color)">{{ t("home.editImprint") }}
+                    <router-link to="/imprinteditor" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                      {{ t("home.editImprint") }}
                     </router-link>
                   </div>
                 </q-menu>
@@ -194,7 +196,8 @@ async function logout() {
                     <router-link to="/credentialmapping" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.manageCredentialCategories") }}
                     </router-link>
-                    <router-link to="/credential_administration" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                    <router-link to="/credential_administration" class="q-ma-sm headerLink"
+                                 style="color: var(--text-color)">
                       {{ t("home.manageCredentials") }}
                     </router-link>
                   </div>
@@ -214,10 +217,10 @@ async function logout() {
                         t("home.groupRooms")
                       }}
                     </router-link>
-                     <router-link to="/predefinedConfigs" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
+                    <router-link to="/predefinedConfigs" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
                         t("home.predefinedConfig")
                       }}
-                     </router-link>
+                    </router-link>
                   </div>
                 </q-menu>
               </div>
@@ -232,7 +235,8 @@ async function logout() {
                      style="height: 3em; width: 3em; font-size: 1em; line-height: 1">
                 <p style="margin-top: 0.1em; margin-bottom: 0; font-size: 1.5em; font-weight: 400; line-height: 1">
                   {{ userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0) }}</p>
-                <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color); color: var(--text-color)">
+                <q-menu transition-show="jump-down" transition-hide="jump-up"
+                        style="background-color: var(--bg-color); color: var(--text-color)">
                   <q-list>
                     <q-item to="/profile" clickable v-close-popup>
                       <q-item-section style="width: 7.5em; color: var(--text-color)" unelevated>
