@@ -32,7 +32,7 @@
                   round
                   flat
                   style="color: var(--light)"
-                  @click="prompt=true; openForm(props.row); getRoomsAndDoors(editedRow.id)"
+                  @click="prompt=true; openForm(props.row); getRoomsAndDoors(editedRow.id); resetConfig()"
                   test="props.value"
                   icon="meeting_room"/>
               <q-btn
@@ -229,7 +229,7 @@
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td style="width: 10%" :props="props">
-                <q-checkbox v-model="props.row.selected" @update:model-value="getDoors(props.row.room)"/>
+                <q-checkbox v-model="props.row.selected" @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.selected, props.row.room)"/>
               </q-td>
             </template>
           </q-table>
@@ -609,6 +609,7 @@ export default {
     });
 
     function getRoomsAndDoors(id) {
+      model.value = [[]]
       roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => {
         rows2.value = rooms.map(r => ({...r, selected: true}))
         fetchDoors(rows2.value)
@@ -1023,7 +1024,7 @@ export default {
           res.push(model[val])
         }
       }
-      const finalArray = res.flat(1)
+      let finalArray = res.flat(1).map(d => d.id)
       const allConfig = []
       this.qSelectGeneral.qSelectsSet.forEach((element, index) => {
         let config = {}
@@ -1054,6 +1055,7 @@ export default {
         doorConfig: allConfig
       }
       roomGroupStore.setGroupConfig(configList)
+      finalArray = []
     }
   },
 
