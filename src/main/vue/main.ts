@@ -314,6 +314,9 @@ const messages = {
                 roomSelection: "Räume auswählen",
                 group: "Gruppe",
             },
+            config:{
+              noConfig: "Nicht konfiguriert"
+            },
             predefinedConfigs: {
                 title: "Vordefinierte Konfigurationen",
                 deleteAlert: "Konfiguration Löschen",
@@ -749,6 +752,9 @@ const messages = {
                 groupsConfig: "Adjustment of door configurations for groups of rooms",
                 roomSelection: "Choose Rooms",
                 group: "Group",
+            },
+            config:{
+                noConfig: "not configured"
             },
             predefinedConfigs: {
                 title: "Predefined configurations",

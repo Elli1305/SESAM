@@ -15,5 +15,10 @@ export default {
     },
     getFloor(id: BigInt): Promise<AxiosResponse<Floor>>{
         return axios.get(`api/room/floor/${id}`)
+    },
+
+
+    getRoomDetails(id: BigInt): Promise<AxiosResponse<Room>> {
+        return axios.get(`api/room/${id}`)
     }
 }

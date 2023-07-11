@@ -9,6 +9,7 @@ import {
     ExternalCredential,
     ExternalCredentialCmd
 } from "@/main/vue/entity/credentialDefinition";
+import credential from "@/main/vue/api/credential";
 
 export const useCredentialsStore = defineStore('credentials', {
     state: () => {
@@ -20,22 +21,25 @@ export const useCredentialsStore = defineStore('credentials', {
         async fetch(): Promise<void> {
             this.credentials = await api.credential.all().then(response => response.data);
             this.externalCredentials = await api.credential.externalCredentials().then(response => response.data);
+        },
+        getByDefinitionId(credentialDefinitionId: string): Credential|ExternalCredential | undefined {
+            return this.credentials.find(c => c.credentialDefinitionId === credentialDefinitionId)
+                || this.externalCredentials.find(ec => ec.credentialDefinitionId === credentialDefinitionId);
         }
     }
 },);
 
 export const useCredentialStore = defineStore('credential', () => {
-    const credentials: Ref<CredentialCmd[] | null> = ref(null)
-    const allCredentials: Ref<ExternalCredential[] | null> = ref(null)
-    const credsByIssuer: Ref<Credential[] | null> = ref(null)
-    const categories: Ref<Category[] | null> = ref(null)
-    const external: Ref<ExternalCredential[] | null> = ref(null)
-    const credentialsForView: Ref<CredentialCmd[] | null> = ref(null)
-    const externalForView: Ref<ExternalCredentialCmd[] | null> = ref(null)
-    const externalByLocation: Ref<ExternalCredentialCmd[] | null> = ref(null)
-    const all: Ref<AllCredentialCmd[] | null> = ref(null)
-    const allByLocation: Ref<AllCredentialCmd[] | null> = ref(null)
-
+        const credentials: Ref<CredentialCmd[] | null> = ref(null)
+        const allCredentials: Ref<ExternalCredential[] | null> = ref(null)
+        const credsByIssuer: Ref<Credential[] | null> = ref(null)
+        const categories: Ref<Category[] | null> = ref(null)
+        const external: Ref<ExternalCredential[] | null> = ref(null)
+        const credentialsForView: Ref<CredentialCmd[] | null> = ref(null)
+        const externalForView: Ref<ExternalCredentialCmd[] | null> = ref(null)
+        const externalByLocation: Ref<ExternalCredentialCmd[] | null> = ref(null)
+        const all: Ref<AllCredentialCmd[] | null> = ref(null)
+        const allByLocation: Ref<AllCredentialCmd[] | null> = ref(null)
 
 
         function getCredentialsByLocation(id: bigint) {
@@ -153,50 +157,53 @@ export const useCredentialStore = defineStore('credential', () => {
             })
         }
 
-    function getExternalsForView() {
-        return new Promise((resolve, reject) => {
-            api.credential.getAllExternalCredentialsForView().then((response) => {
-                externalForView.value = response.data
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
+        function getExternalsForView() {
+            return new Promise((resolve, reject) => {
+                api.credential.getAllExternalCredentialsForView().then((response) => {
+                    externalForView.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
             })
-        })
-    }
+        }
 
-    function getAllForView() {
-        return new Promise((resolve, reject) => {
-            api.credential.getAllForView().then((response) => {
-                all.value = response.data
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
+        function getAllForView() {
+            return new Promise((resolve, reject) => {
+                api.credential.getAllForView().then((response) => {
+                    all.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
             })
-        })
-    }
+        }
 
-    function getExternalByLocation(id: bigint) {
-        return new Promise((resolve, reject) => {
-            api.credential.getExternalCredentialByLocation(id).then((response) => {
-                externalByLocation.value = response.data
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
+        function getExternalByLocation(id: bigint) {
+            return new Promise((resolve, reject) => {
+                api.credential.getExternalCredentialByLocation(id).then((response) => {
+                    externalByLocation.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
             })
-        })
-    }
+        }
 
-    function getAllByLocation(id: bigint) {
-        return new Promise((resolve, reject) => {
-            api.credential.getAllByLocation(id).then((response) => {
-                allByLocation.value = response.data
-                resolve(response.data)
-            }).catch((error) => {
-                reject(error)
+        function getAllByLocation(id: bigint) {
+            return new Promise((resolve, reject) => {
+                api.credential.getAllByLocation(id).then((response) => {
+                    allByLocation.value = response.data
+                    resolve(response.data)
+                }).catch((error) => {
+                    reject(error)
+                })
             })
-        })
-    }
+        }
 
+        function getCredentialsByDefinitionId(credentialDefintionId: string) {
+
+        }
 
 
         return {

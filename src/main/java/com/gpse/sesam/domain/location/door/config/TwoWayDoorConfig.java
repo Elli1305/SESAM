@@ -1,4 +1,4 @@
-package com.gpse.sesam.domain.location.door;
+package com.gpse.sesam.domain.location.door.config;
 
 import com.gpse.sesam.domain.location.door.config.ProofConfig;
 import jakarta.persistence.*;

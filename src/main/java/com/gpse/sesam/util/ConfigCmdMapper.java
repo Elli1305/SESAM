@@ -13,11 +13,18 @@ import com.gpse.sesam.domain.location.door.config.ProofPredicateInfo;
 import com.gpse.sesam.web.cmd.AttributeFilterCmd;
 import com.gpse.sesam.web.cmd.ConfigPartsCmd;
 import com.gpse.sesam.web.cmd.DoorConfigCmd;
+import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
+@Component
 public final class ConfigCmdMapper {
 
 	private CredentialService credentialService;
@@ -101,7 +108,6 @@ public final class ConfigCmdMapper {
 		}
 		return proofConfig;
 	}
-
 	public DoorConfigCmd toCmd(ProofConfig proofConfig) throws ParseException {
 		final DoorConfigCmd doorConfigCmd = new DoorConfigCmd();
 		doorConfigCmd.setDescription(proofConfig.getDescription());
