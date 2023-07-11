@@ -255,12 +255,14 @@ export default {
     if (props.doorConfig) {
       configDescription.value = props.doorConfig.description
       qSelects.value = props.doorConfig
+        direction.value = props.doorConfig.direction
     }
 
     watch(() => props.doorConfig, () => {
       console.log("hallo", props.doorConfig)
       configDescription.value = props.doorConfig.description
       qSelects.value = props.doorConfig
+        direction.value = props.doorConfig.direction
     })
 
     const commonAttributeFilter = function (credentials) {
