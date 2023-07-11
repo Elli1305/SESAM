@@ -2,21 +2,24 @@
   <q-page-container class="no-padding no-margin">
     <q-page style="padding-right: 1em; padding-top: 2em">
 
-      <div v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)">
+      <div>
 
         <q-tabs
             v-model="tab"
             no-caps
             class="bg-primary text-white shadow-2"
         >
-          <q-icon size="1.25em" fixed-right color="white" name="info_outlined" class="q-pl-xs">
+          <q-icon size="1.25em" fixed-right color="white" name="info_outlined" class="q-pl-xs"
+                  v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)">
             <q-tooltip class="grey" anchor="bottom right" max-width="200px" self="top middle"
                        :offset="[0, 0]">
               {{ t('editor.groupRooms.info') }}
             </q-tooltip>
           </q-icon>
           <q-tab name="rooms" :label="t('floorPlan.rooms')"/>
-          <q-tab name="groups" :label="t('editor.groupRooms.groups')"/>
+          <q-tab name="groups"
+                 v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
+                 :label="t('editor.groupRooms.groups')"/>
 
         </q-tabs>
         <q-separator></q-separator>
@@ -786,7 +789,6 @@ export default {
       }
 
       if (filteredCredential.value?.length > 0) {
-        console.log('here')
         const definitionIds = filteredCredential.value.map(credential => credential.credentialDefinitionId)
         filteredRooms.value = filteredRooms.value.filter(r => {
           let doorContainsCredential = false
@@ -817,8 +819,21 @@ export default {
 
     function getActiveBaseConf(door) {
       if (door.doorConfigs.length > 1) {
+        const currentDate = new Date();
+
         for (const doorConfig of door.doorConfigs) {
+          if (!doorConfig?.baseConfig) {
+
+            const startTime = new Date();
+            startTime.setHours(doorConfig?.startTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
+            const endTime = new Date();
+            endTime.setHours(doorConfig?.endTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
+            if (startTime < currentDate && endTime > currentDate) {
+              return doorConfig
+            }
+          }
         }
+
         for (const doorConfig of door.doorConfigs) {
           if (doorConfig.baseConfig) {
             return doorConfig;
@@ -827,6 +842,7 @@ export default {
       } else {
         return door.doorConfigs[0]
       }
+
     }
 
     async function groupFilter() {

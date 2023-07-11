@@ -119,8 +119,7 @@
                         JSON.stringify(qSelectgeneral.qSelectsSet[k].doorConfigOut) ? Direction.IN : Direction.BOTH"
                        @changeDirection="changeDirectionOut($event, k)" ref="doorIn">
           </door-config>
-          <door-config v-show="JSON.stringify(qSelectgeneral.qSelectsSet[k].doorConfigIn) !==
-                        JSON.stringify(qSelectgeneral.qSelectsSet[k].doorConfigOut)"
+          <door-config  v-show="$refs.doorIn ? $refs.doorIn[k]?.direction !== Direction.BOTH : false"
                        :direction="Direction.OUT"
                        :door-config="qSelectgeneral.qSelectsSet[k].doorConfigOut" :is-config-out="true"
                        ref="doorOut">
@@ -183,7 +182,6 @@ export default {
   emits: [
     'ok', 'hide'
   ],
-
   methods: {
     changeDirectionOut(direction, k) {
 
@@ -369,7 +367,6 @@ export default {
 
 
     if (props.door) {
-      console.log(props.door)
       doorName.value = props.door.name
       if(props.door.doorConfigCmds.length > 0) {
         qSelectgeneral.qSelectsSet = props.door.doorConfigCmds
@@ -432,6 +429,11 @@ export default {
       configOut,
       configIn
     }
-  }
+  },
+  mounted() {
+    for (const test in this.$refs.doorIn) {
+      console.log(test)
+    }
+  },
 }
 </script>

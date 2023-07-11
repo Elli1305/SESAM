@@ -206,7 +206,7 @@ export default {
     },
   },
   emits: [
-    'backClicked'
+    'backClicked', 'doorChanged'
   ],
   methods: {
     openDialog(room) {
@@ -239,22 +239,42 @@ export default {
     const inactiveConfigs = ref([]);
 
     const getActiveConfig = (door) => {
-      let activeConfig;
       if (door.doorConfigCmds.length > 1) {
-        let baseConf;
+        const currentDate = new Date();
+
         for (const doorConfig of door.doorConfigCmds) {
-          if (doorConfig.baseConfig) {
-            baseConf = doorConfig;
-            break;
+          if (!doorConfig?.baseConfig) {
+
+            const startTime = new Date();
+            startTime.setHours(doorConfig?.startTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
+            const endTime = new Date();
+            endTime.setHours(doorConfig?.endTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
+            if (startTime < currentDate && endTime > currentDate) {
+              return doorConfig
+            }
           }
-          // TODO check time
         }
 
-        return activeConfig ? activeConfig : baseConf;
+        for (const doorConfig of door.doorConfigCmds) {
+          if (doorConfig.baseConfig) {
+            return doorConfig;
+          }
+        }
       } else {
-        activeConfig = door.doorConfigCmds[0]
+        return door.doorConfigCmds[0]
       }
-      return activeConfig;
+    }
+
+    function getInactiveConfig(door) {
+      const activeConfig = getActiveConfig(door)
+      if (activeConfig) {
+        return door.doorConfigCmds.filter((config) => config.id !== activeConfig.id).map(config => ({
+          ...config,
+          doorName: door.name
+        }))
+      } else {
+        return []
+      }
     }
 
     api.room.getRoomDetails(props.room.id)
@@ -264,6 +284,7 @@ export default {
           activeConfigs.value = room.data.doors.map(door => ({
             ...getActiveConfig(door), doorName: door.name
           }))
+          inactiveConfigs.value = room.data.doors.flatMap(d => getInactiveConfig(d))
         })
         .catch(() => loading.value = false)
     return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig}

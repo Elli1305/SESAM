@@ -113,6 +113,7 @@ export default {
       required: true
     }
   },
+  emits: ['doorChanged'],
   methods: {
     deleteDoor(room, door) {
       const doors = room.doors;
@@ -136,6 +137,24 @@ export default {
     },
     onDialogHide() {
       this.$emit('hide')
+    },
+    openDialog(door) {
+      api.door.getById(door.id).then((door) => {
+        this.$q.dialog({
+          component: CreateDoor,
+          componentProps: {
+            door: door.data
+          }
+        }).onOk(({doorName, configuration}) => {
+          console.log(doorName)
+          door.data.name = doorName
+          door.data.doorConfigCmds = configuration
+          api.door.update(door.data).then((door) => {
+            this.$emit('changedDoor', door.data.id)
+            this.room.doors[this.room.doors.findIndex((d) => d.id === door.data.id)] = door.data
+          })
+        })
+      })
     }
   },
   setup(props) {
@@ -146,25 +165,7 @@ export default {
     const roomStore = useRoomStore();
     const $q = useQuasar()
 
-    const openDialog = (door) => {
-      api.door.getById(door.id).then((door) => {
-        $q.dialog({
-          component: CreateDoor,
-          componentProps: {
-            door: door.data
-          }
-        }).onOk(({doorName, configuration}) => {
-          console.log(doorName)
-          door.data.name = doorName
-          door.data.doorConfigCmds = configuration
-          api.door.update(door.data).then(() => {
-            console.log("success")
-          })
-        })
-      })
-    }
-
-    return {t, currentRoomName, deleteDoorDialog, doorStore, roomStore, openDialog}
+    return {t, currentRoomName, deleteDoorDialog, doorStore, roomStore}
   }
 }
 </script>

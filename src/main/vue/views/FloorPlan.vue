@@ -204,12 +204,14 @@ export default {
                 }
             )),
           };
-
-          this.doorStore.create(door).then((savedDoor) => {
+          const promise =this.doorStore.create(door)
+          promise.then((savedDoor) => {
             room.doors.push(savedDoor)
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
-          }).catch(() => {
+            this.redrawRooms()
+          })
+          promise.catch(() => {
             $q.notify({
               type: 'negative',
               message: t('floorPlan.doorCreateFailed'),
@@ -226,6 +228,10 @@ export default {
     mapContainerObserver.observe(this.$refs.mapContainer)
   },
   methods: {
+    redrawRooms() {
+      this.removeLayer()
+      this.drawRooms(this.floorPlanStore.rooms)
+    },
     removeLayer() {
       floorPlanMap.eachLayer(layer => {
             if (layer.id) {
@@ -378,26 +384,12 @@ export default {
           line.roomId = room.id
 
 
-          let configurationString = "<b>Konfiguration für " + door.name + ":</b>";
 
 
-          let activeConfig;
-          if (door.doorConfigs.length > 1) {
-            let baseConf;
-            for (const doorConfig of door.doorConfigs) {
-              if (doorConfig.baseConfig) {
-                baseConf = doorConfig;
-                break;
-              }
-              // TODO check time
-            }
+          let activeConfig = this.getActiveBaseConf(door);
 
-            if (!activeConfig) {
-              activeConfig = baseConf;
-            }
-          } else {
-            activeConfig = door.doorConfigs[0]
-          }
+          let timeString = activeConfig ? (activeConfig.baseConfig ? ' (Basiskonf.) ' : " (" + activeConfig.startTime + " - " + activeConfig.endTime + ")") : ''
+          let configurationString = "<b>Konfiguration für " + door.name + timeString + ":</b>" ;
 
           if (activeConfig) {
             configurationString += "<br>"
@@ -453,6 +445,33 @@ export default {
             .join(" <b>ODER</b> "))
       }
       return activeCredentials
+    },
+    getActiveBaseConf(door) {
+      if (door.doorConfigs.length > 1) {
+        const currentDate = new Date();
+
+        for (const doorConfig of door.doorConfigs) {
+          if (!doorConfig?.baseConfig) {
+
+            const startTime = new Date();
+            startTime.setHours(doorConfig?.startTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
+            const endTime = new Date();
+            endTime.setHours(doorConfig?.endTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
+            if (startTime < currentDate && endTime > currentDate) {
+              return doorConfig
+            }
+          }
+        }
+
+        for (const doorConfig of door.doorConfigs) {
+          if (doorConfig.baseConfig) {
+            return doorConfig;
+          }
+        }
+      } else {
+        return door.doorConfigs[0]
+      }
+
     }
   },
 };

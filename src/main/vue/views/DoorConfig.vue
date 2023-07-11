@@ -254,12 +254,12 @@ export default {
 
     if (props.doorConfig) {
       configDescription.value = props.doorConfig.description
-      qSelects.value = JSON.parse(JSON.stringify(props.doorConfig))
+      qSelects.value = props.doorConfig
     }
 
     watch(() => props.doorConfig, () => {
       configDescription.value = props.doorConfig.description
-      qSelects.value = JSON.parse(JSON.stringify(props.doorConfig))
+      qSelects.value = props.doorConfig
     })
 
     const commonAttributeFilter = function (credentials) {
