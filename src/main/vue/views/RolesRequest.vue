@@ -189,16 +189,19 @@ export default {
             if (lowerSearch !== "") {
               s1 = false
               //Get the values
-              let s1_values = Object.values(row)
-              //Convert to lowercase
-              let s1_lower = s1_values.map(x => x.toString().toLowerCase())
+                let s1_values = [];
+                s1_values.push(Object.values(row.firstName).toString().toLowerCase().replaceAll(",",""));
+                s1_values.push(Object.values(row.lastName).toString().toLowerCase().replaceAll(",",""));
 
-              for (let val = 0; val < s1_lower.length; val++) {
-                if (s1_lower[val].includes(lowerSearch)) {
-                  s1 = true
-                  break
+                s1_values.push(Object.values(row.username).toString().toLowerCase().replaceAll(",",""));
+                //Convert to lowercase
+                for (let val = 0; val < s1_values.length; val++) {
+                    //s1_values.replace(',','');
+                    if (s1_values[val].includes(lowerSearch)) {
+                        s1 = true
+                        break
+                    }
                 }
-              }
             }
             //assume row doesn't match
             ans = false
