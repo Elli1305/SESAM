@@ -32,7 +32,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addViewControllers(final ViewControllerRegistry registry) {
-				registry.addViewController("{_:^(?!static|index\\.html|.*\\.(?:png|jpg|jpeg|gif|bmp|svg|ico|tiff)$)"
+				registry.addViewController("{_:^(?!static|api|index\\.html|.*\\.(?:png|jpg|jpeg|gif|bmp|svg|ico|tiff)$)"
 								+ ".*$}/**")
 						.setViewName("forward:/");
 			}
