@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card class="q-dialog-plugin">
+    <q-card class="q-dialog-plugin" style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section class="q-pa-md">
         <div v-if="floor.id" class="text-h6">{{t('floorPlan.editFloor')}}</div>
         <div v-if="!floor.id" class="text-h6">{{t('floorPlan.addFloor')}}</div>
@@ -8,8 +8,7 @@
           <q-input outlined v-model.number="floorLevel" type="number" :label="t('floorPlan.floorLevel')"/>
         </div>
         <div class="q-mt-md">
-          <q-file outlined :label="t('floorPlan.floorPlanUpload')" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff"
-                  bg-color="white">
+          <q-file outlined :label="t('floorPlan.floorPlanUpload')" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff">
             <template v-slot:prepend>
               <q-icon name="attach_file"/>
             </template>

@@ -1,9 +1,9 @@
 package com.gpse.sesam.domain.location.roomgroup;
 
 import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.web.cmd.DoorGroupConfigCmd;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
 import com.gpse.sesam.web.cmd.RoomGroupDoorConfigCmd;
-import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +29,7 @@ public interface RoomGroupService {
 
     void deleteById(Long id);
 
-    void setGroupConfig(List<TwoWayDoorConfigCmd> cmds);
+    void setGroupConfig(DoorGroupConfigCmd config);
 
     List<RoomGroupDoorConfigCmd> getRoomsAndDoorsByGroupId(Long id);
     List<Room> getRoomsByGroupId(Long id);

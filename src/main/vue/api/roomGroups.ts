@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from "axios";
-import {GroupConfigResponse, RoomGroup, RoomsAndDoors} from "@/main/vue/entity/roomGroup"
+import {GroupConfig, RoomGroup, RoomsAndDoors} from "@/main/vue/entity/roomGroup"
 import {Room} from "@/main/vue/entity/location";
 
 export default {
@@ -32,7 +32,7 @@ export default {
         return axios.get("/api/roomGroups/rooms/" + param)
     },
 
-    setGroupConfig(config: GroupConfigResponse[]): Promise<AxiosResponse<GroupConfigResponse[]>> {
+    setGroupConfig(config: GroupConfig): Promise<AxiosResponse<void>> {
         return axios.post("/api/roomGroups/saveconfigs", config)
     }
 }

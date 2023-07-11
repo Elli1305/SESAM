@@ -29,8 +29,14 @@ public class ColorsServiceImpl implements ColorsService {
      * @param colorTheme das Farbthema, für das die Farben abgerufen werden sollen
      * @return die Farbkonfiguration für das angegebene Farbthema
      */
+    @Override
     public Colors getColors(ColorTheme colorTheme) {
         return colorsRepository.findByDefaultColorsIsFalseAndTheme(colorTheme);
+    }
+
+    @Override
+    public Colors getDefaultColors(ColorTheme colorTheme) {
+        return colorsRepository.findByDefaultColorsIsTrueAndTheme(colorTheme);
     }
 
 
@@ -61,13 +67,15 @@ public class ColorsServiceImpl implements ColorsService {
         Colors colors = new Colors();
         colors.setId(currentColorsId);
         colors.setDefaultColors(false);
+        colors.setTheme(defaultColors.getTheme());
+        colors.setLogoPath(defaultColors.getLogoPath());
         colors.setBgC(defaultColors.getBgC());
         colors.setTextC(defaultColors.getTextC());
         colors.setPrimaryColor(defaultColors.getPrimaryColor());
         colors.setSecondary(defaultColors.getSecondary());
         colors.setAccent(defaultColors.getAccent());
         colors.setDark(defaultColors.getDark());
-        colors.setLightBlue(defaultColors.getLightBlue());
+        colors.setLight(defaultColors.getLight());
         colors.setPositive(defaultColors.getPositive());
         colors.setNegative(defaultColors.getNegative());
         colors.setInfo(defaultColors.getInfo());

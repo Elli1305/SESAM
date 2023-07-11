@@ -48,12 +48,10 @@ export default {
 
     setColors(colorTheme: string): void {
         this.getColors(colorTheme).then(colors => {
-            console.log(colors)
             setCssVar('primary', colors.data.primaryColor)
             setCssVar('secondary', colors.data.secondary)
             setCssVar('accent', colors.data.accent)
             setCssVar('dark', colors.data.dark)
-            setCssVar('dark-separator', colors.data.lightBlue)
             setCssVar('positive', colors.data.positive)
             setCssVar('negative', colors.data.negative)
             setCssVar('info', colors.data.info)

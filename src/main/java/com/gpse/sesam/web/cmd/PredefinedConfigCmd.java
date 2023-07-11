@@ -1,29 +1,27 @@
 package com.gpse.sesam.web.cmd;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PredefinedConfigCmd {
 
     private Long id;
     private String name;
-
-    private DoorConfigCmd doorConfigIn;
-
-    private DoorConfigCmd doorConfigOut;
+    private List<TwoWayDoorConfigCmd> doorConfig = new ArrayList<>();
 
     public PredefinedConfigCmd() {
 
     }
 
-    public PredefinedConfigCmd(String name, DoorConfigCmd in, DoorConfigCmd out) {
+    public PredefinedConfigCmd(String name, List<TwoWayDoorConfigCmd> doorConfig) {
         this.name = name;
-        this.doorConfigIn = in;
-        this.doorConfigOut = out;
+        this.doorConfig = doorConfig;
     }
 
-    public PredefinedConfigCmd(Long id, String name, DoorConfigCmd in, DoorConfigCmd out) {
+    public PredefinedConfigCmd(Long id, String name, List<TwoWayDoorConfigCmd> doorConfig) {
         this.id = id;
         this.name = name;
-        this.doorConfigIn = in;
-        this.doorConfigOut = out;
+        this.doorConfig = doorConfig;
     }
 
     public Long getId() {
@@ -38,19 +36,11 @@ public class PredefinedConfigCmd {
         this.name = name;
     }
 
-    public DoorConfigCmd getDoorConfigIn() {
-        return doorConfigIn;
+    public List<TwoWayDoorConfigCmd> getDoorConfig() {
+        return doorConfig;
     }
 
-    public void setDoorConfigIn(DoorConfigCmd doorConfigIn) {
-        this.doorConfigIn = doorConfigIn;
-    }
-
-    public DoorConfigCmd getDoorConfigOut() {
-        return doorConfigOut;
-    }
-
-    public void setDoorConfigOut(DoorConfigCmd doorConfigOut) {
-        this.doorConfigOut = doorConfigOut;
+    public void setDoorConfig(List<TwoWayDoorConfigCmd> doorConfig) {
+        this.doorConfig = doorConfig;
     }
 }

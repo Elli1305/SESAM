@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t('admin.credentialAdministration.title')}}</p>
     <div class="row self-center">
       <q-table
-          style="width: 80vw; height: 50vh"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
           :rows-per-page-options="[0]"
           :columns="columns"
           :rows="rows"
@@ -14,8 +14,8 @@
         <q-select style="width: 12em" dense v-model="selectedTypes" :options="options" borderless emit-value :label="t('admin.credentialAdministration.type')" map-options multiple/>
         </template>
       <template v-slot:top-right>
-        <q-btn rounded borderless color="grey-6" flat icon="add" :label="t('admin.credentialAdministration.new')" to="/add_credential"/>
-        <q-input v-model="filter" borderless class="q-ml-lg" debounce="300" dense :placeholder="t('common.search')">
+        <q-btn rounded color="grey-6" flat icon="add" :label="t('admin.credentialAdministration.new')" to="/add_credential"/>
+        <q-input v-model="filter" outlined rounded class="q-ml-lg" debounce="300" dense :placeholder="t('common.search')">
           <template v-slot:append>
             <q-icon name="search"/>
           </template>
@@ -28,13 +28,19 @@
       </template>
       <template v-slot:body-cell-type="props">
         <q-td :props="props">
-          <q-chip v-if="props.value" color="primary" label="Internal" text-color="white"/>
-          <q-chip v-else color="secondary" label="External" text-color="white"/>
+          <q-chip v-if="props.value" color="primary" text-color="secondary" style="font-size: 1em">
+            <q-icon name="business" left/>
+            Internal
+          </q-chip>
+          <q-chip v-else color="secondary" text-color="primary" style="font-size: 1em">
+            <q-icon name="public" left/>
+            External
+          </q-chip>
         </q-td>
       </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
-          <q-btn :to="`/credential_administration/${'issuer' in props.row ? 'internal' : 'external'}/${props.row.id}`" dense round flat color="grey" icon="edit"></q-btn>
+          <q-btn :to="`/credential_administration/${'issuer' in props.row ? 'internal' : 'external'}/${props.row.id}`" dense round flat style="color: var(--light)" icon="edit"></q-btn>
           </q-td>
       </template>
     </q-table>

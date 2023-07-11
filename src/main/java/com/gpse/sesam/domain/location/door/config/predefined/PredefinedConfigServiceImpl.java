@@ -1,10 +1,12 @@
 package com.gpse.sesam.domain.location.door.config.predefined;
 
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
 import com.gpse.sesam.domain.location.door.config.ProofConfig;
 import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.web.cmd.DoorConfigCmd;
 import com.gpse.sesam.web.cmd.PredefinedConfigCmd;
+import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
 import com.gpse.sesam.web.exception.InvalidDoorConfiguration;
 import com.gpse.sesam.web.exception.PredefinedConfigNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +48,20 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
         PredefinedConfig predefinedConfig = predefinedConfigRepository.findById(id).orElseThrow(()
                 -> new PredefinedConfigNotFoundException("PredefinedConfig with id: " + id + " not found"));
         try {
-            DoorConfigCmd in = configCmdMapper.toCmd(predefinedConfig.getDoorIn());
-            DoorConfigCmd out = configCmdMapper.toCmd(predefinedConfig.getDoorOut());
-            PredefinedConfigCmd predefinedConfigCmd = new PredefinedConfigCmd(predefinedConfig.getId(),
-                    predefinedConfig.getName(), in, out);
-            return predefinedConfigCmd;
+            List<TwoWayDoorConfigCmd> doorConfig = new ArrayList<>();
+            for (int i = 0; i < predefinedConfig.getDoorConfig().size(); i++) {
+                TwoWayDoorConfigCmd oneConfig = new TwoWayDoorConfigCmd();
+                oneConfig.setId(predefinedConfig.getDoorConfig().get(i).getId());
+                oneConfig.setBaseConfig(predefinedConfig.getDoorConfig().get(i).isBaseConfig());
+                oneConfig.setStartTime(predefinedConfig.getDoorConfig().get(i).getStartTime());
+                oneConfig.setEndTime(predefinedConfig.getDoorConfig().get(i).getEndTime());
+                DoorConfigCmd in = configCmdMapper.toCmd(predefinedConfig.getDoorConfig().get(i).getProofConfigIn());
+                DoorConfigCmd out = configCmdMapper.toCmd(predefinedConfig.getDoorConfig().get(i).getProofConfigOut());
+                oneConfig.setDoorConfigIn(in);
+                oneConfig.setDoorConfigOut(out);
+                doorConfig.add(oneConfig);
+            }
+            return new PredefinedConfigCmd(predefinedConfig.getId(), predefinedConfig.getName(), doorConfig);
         } catch (ParseException e) {
             throw new InvalidDoorConfiguration("door config could not be parsed", e);
         }
@@ -59,12 +70,12 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
     @Override
     public void update(PredefinedConfigCmd predefinedConfig) {
         final Optional<PredefinedConfig> tempPreConfig = predefinedConfigRepository.findById(predefinedConfig.getId());
-        final ProofConfig configIn = ConfigCmdMapper.fromCmd(predefinedConfig.getDoorConfigIn());
-        final ProofConfig configOut = ConfigCmdMapper.fromCmd(predefinedConfig.getDoorConfigOut());
+        final List<TwoWayDoorConfig> twoWayConfigs = new ArrayList<>();
+
+        setupTwoWayDoorConfigsForSave(predefinedConfig, twoWayConfigs);
         if (tempPreConfig.isPresent()) {
             tempPreConfig.get().setName(predefinedConfig.getName());
-            tempPreConfig.get().setDoorIn(configIn);
-            tempPreConfig.get().setDoorOut(configOut);
+            tempPreConfig.get().setDoorConfig(twoWayConfigs);
             predefinedConfigRepository.save(tempPreConfig.get());
         }
     }
@@ -72,10 +83,30 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
     @Override
     public void create(PredefinedConfigCmd predefinedConfig) {
         PredefinedConfig config = new PredefinedConfig();
+        List<TwoWayDoorConfig> twoWayConfigs = new ArrayList<>();
+
+        setupTwoWayDoorConfigsForSave(predefinedConfig, twoWayConfigs);
         config.setName(predefinedConfig.getName());
-        config.setDoorIn(ConfigCmdMapper.fromCmd(predefinedConfig.getDoorConfigIn()));
-        config.setDoorOut(ConfigCmdMapper.fromCmd(predefinedConfig.getDoorConfigOut()));
+        config.setDoorConfig(twoWayConfigs);
+
         predefinedConfigRepository.save(config);
+    }
+
+    private void setupTwoWayDoorConfigsForSave(PredefinedConfigCmd predefinedConfig,
+                                               List<TwoWayDoorConfig> twoWayConfigs) {
+        for (int i = 0; i < predefinedConfig.getDoorConfig().size(); i++) {
+            TwoWayDoorConfig tempConfig = new TwoWayDoorConfig();
+            tempConfig.setBaseConfig(predefinedConfig.getDoorConfig().get(i).isBaseConfig());
+            tempConfig.setStartTime(predefinedConfig.getDoorConfig().get(i).getStartTime());
+            tempConfig.setEndTime(predefinedConfig.getDoorConfig().get(i).getEndTime());
+            final ProofConfig configIn = ConfigCmdMapper.
+                    fromCmd(predefinedConfig.getDoorConfig().get(i).getDoorConfigIn());
+            final ProofConfig configOut = ConfigCmdMapper.
+                    fromCmd(predefinedConfig.getDoorConfig().get(i).getDoorConfigOut());
+            tempConfig.setProofConfigIn(configIn);
+            tempConfig.setProofConfigOut(configOut);
+            twoWayConfigs.add(tempConfig);
+        }
     }
 
     @Override

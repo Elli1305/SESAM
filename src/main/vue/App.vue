@@ -39,6 +39,7 @@ function updateColors(colorTheme) {
     logoPath.value = c.data.logoPath
     r.style.setProperty('--bg-color', c.data.bgC)
     r.style.setProperty('--text-color', c.data.textC)
+    r.style.setProperty('--light', c.data.light)
   })
 }
 
@@ -73,9 +74,10 @@ async function logout() {
       type: 'positive',
       message: t('logout.title'),
       caption: t('logout.success'),
-      position: "top",
       timeout: 3000,
-      classes: "loginNotify"
+      classes: "loginNotify",
+      color: 'positive',
+      textColor: 'negative'
     })
     await router.push('/')
   }
@@ -108,7 +110,7 @@ async function logout() {
                                 style="height: 3em; width: 3em; border-radius: 100%"
                                 :country="getLanguage()" size="normal"/>
                   <q-menu fit transition-show="jump-down" transition-hide="jump-up"
-                          style="background-color: var(--bg-color)">
+                          style="background-color: var(--bg-color); color: var(--text-color)">
                     <q-list>
                       <q-item @click="changeLanguage('de')" clickable v-close-popup>
                         <q-item-section text-color="black" style="width: 7.5em" unelevated>
@@ -146,7 +148,7 @@ async function logout() {
                   {{ t("home.profileManagement") }}
                 </p>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
-                        self="top right" style="background-color: var(--bg-color)">
+                        self="top right" style="background-color: var(--bg-color); color: var(--text-color)">
                   <div class="column">
                     <router-link to="/currentUserlist" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
                         t("home.currentUsers")
@@ -167,7 +169,7 @@ async function logout() {
                   {{ t("home.corporateDesign") }}
                 </p>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
-                        self="top right" style="background-color: var(--bg-color)">
+                        self="top right" style="background-color: var(--bg-color); color: var(--text-color)">
                   <div class="column">
                     <router-link to="/corporatedesign" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.editCorporateDesign") }}
@@ -183,7 +185,7 @@ async function logout() {
                   {{ t("home.credentialManagement") }}
                 </p>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
-                        self="top right" style="background-color: var(--bg-color)">
+                        self="top right" style="background-color: var(--bg-color); color: var(--text-color)">
                   <div class="column">
                     <router-link to="/credentialmapping" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.manageCredentialCategories") }}
@@ -198,7 +200,7 @@ async function logout() {
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
                    class="headerText foldMenu text-accent">{{ t("home.editorPages") }}</p>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
-                        self="top right" style="background-color: var(--bg-color)">
+                        self="top right" style="background-color: var(--bg-color); color: var(--text-color)">
                   <div class="column">
                     <router-link to="/editFloorPlan" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
                         t("home.editFloorplan")
@@ -226,7 +228,7 @@ async function logout() {
                      style="height: 3em; width: 3em; font-size: 1em; line-height: 1">
                 <p style="margin-top: 0.1em; margin-bottom: 0; font-size: 1.5em; font-weight: 400; line-height: 1">
                   {{ userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0) }}</p>
-                <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color)">
+                <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color); color: var(--text-color)">
                   <q-list>
                     <q-item to="/profile" clickable v-close-popup>
                       <q-item-section style="width: 7.5em; color: var(--text-color)" unelevated>
@@ -248,7 +250,7 @@ async function logout() {
                 </q-menu>
               </q-btn>
               <q-btn v-if="!userStore.authenticated" to="/login" style="height: 3em; width: 3em" unelevated>
-                <q-icon name="login" size="2em"/>
+                <q-icon name="login" size="2em" color="accent"/>
               </q-btn>
             </div>
           </div>
@@ -278,6 +280,7 @@ async function logout() {
 :root {
   --bg-color: #ffffff;
   --text-color: #000000;
+  --light: #939393;
 }
 
 @font-face {

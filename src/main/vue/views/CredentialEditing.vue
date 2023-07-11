@@ -10,7 +10,7 @@
                    outlined
                    style="width: 15vw; margin-bottom: -1em" type="text"/>
 
-          <q-btn flat label="Load Credential Schema" @click="getCredentialSchema"/>
+          <q-btn flat color="primary" :label="t('admin.credentialAdministration.loadCredentialSchema')" @click="getCredentialSchema"/>
           <q-input v-model="credential.name" :rules="[required]" error-message=" " label="Name"
                    lazy-rules no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
           <q-select v-if="props.type !== 'external'" v-model="credential.agent" :options="['university', 'tlabs']"
@@ -33,14 +33,18 @@
                               outlined
                               style="width: 10vw"/>
                     <div class="column justify-between items-center q-mx-sm">
-                      <div class="column justify-center no-wrap" style="height: 4em">
-                        <q-btn color="black" flat icon="lock" round size="0.75em" style="width: 2em"
-                               @click="editValidation(item, credential.attributes)"/>
-                        <q-btn v-if="index !== 0" color="primary" flat icon="remove" round size="0.75em"
+                      <div class="column justify-around no-wrap" style="height: 4em">
+                        <q-btn flat icon="lock" round size="0.70em" style="width: 2em"
+                               @click="editValidation(item, credential.attributes)">
+                          <q-tooltip  style="background-color: var(--bg-color); color: var(--text-color)" :offset="[0, 0]">
+                            {{t('issuer.issueCredential.validation.validationRules')}}
+                          </q-tooltip>
+                        </q-btn>
+                        <q-btn v-if="index !== 0" flat icon="remove" round size="0.70em"
                                style="width: 2em"
                                @click="() => credential.attributes.splice(index, 1)"/>
                       </div>
-                      <q-btn color="primary" flat icon="add" round size="0.75em" style="width: 2em"
+                      <q-btn color="primary" flat icon="add" round size="0.8em" style="width: 2em; margin-left: -4em"
                              @click="addAttribute(index)"/>
                     </div>
                   </div>
@@ -59,7 +63,7 @@
                       <q-btn v-if="index !== 0" flat icon="remove" size="0.75em" style="width: 2em"
                              @click="() => credential.conditions.splice(index, 1)"/>
                     </div>
-                    <q-btn color="primary" flat icon="add" size="0.75em" style="width: 2em"
+                    <q-btn color="primary" flat icon="add" round size="0.8em" style="width: 2em; margin-left: -2em"
                            @click="addCondition(index)"/>
                   </q-btn-group>
                 </q-item>

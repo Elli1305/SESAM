@@ -20,6 +20,8 @@ tags:
     description: Everything about the Floor
   - name: room
     description: Everything about the room
+  - name: roomgroup
+    description: Everything about the roomgroup
   - name: door
     description: Everything about the door
   - name: doorconfig
@@ -142,7 +144,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/InternalCredential'
+                $ref: '#/components/schemas/InternalCredential'
         '400':
           description: Invalid id supplied
         '404':
@@ -245,7 +247,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/Category'
+                $ref: '#/components/schemas/Category'
         '400':
           description: Invalid id supplied
         '404':
@@ -253,7 +255,7 @@ paths:
   /corpdesign/save/logo-light:
     post:
       tags:
-        - color
+        - colors
       summary: Save a logo for the corporate design
       description: Save logo for the light mode
       operationId: saveLogoLight
@@ -280,7 +282,7 @@ paths:
   /corpdesign/save/logo-dark:
     post:
       tags:
-        - color
+        - colors
       summary: Save a logo for the corporate design
       description: Save logo for the dark mode
       operationId: saveLogoDark
@@ -307,7 +309,7 @@ paths:
   /corpdesign/save/favicon:
     post:
       tags:
-        - color
+        - colors
       summary: Save a favicon for the corporate design
       description: Save favicon
       operationId: saveFavicon
@@ -334,7 +336,7 @@ paths:
   /corpdesign/save/colors/{colortheme}:
     post:
       tags:
-        - color
+        - colors
       summary: Save a colors for the corporate design
       description: Save colors for a theme
       operationId: changeColors
@@ -350,7 +352,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/colors'
+              $ref: '#/components/schemas/Colors'
         required: true
       responses:
         '200':
@@ -358,7 +360,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/colors'
+                $ref: '#/components/schemas/Colors'
         '405':
           description: Invalid input
       security:
@@ -368,7 +370,7 @@ paths:
   /corpdesign/get/colors/{colortheme}:
     get:
       tags:
-        - category
+        - colors
       summary: Get colors by their theme
       description: Get colors by their theme
       operationId: getColors
@@ -385,7 +387,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/Colors'
+                $ref: '#/components/schemas/Colors'
         '400':
           description: Invalid id supplied
         '404':
@@ -393,7 +395,7 @@ paths:
   /corpdesign/reset/colors/{colortheme}:
     post:
       tags:
-        - color
+        - colors
       summary: Reset colors for the corporate design
       description: Reset colors for a theme
       operationId: resetColors
@@ -409,7 +411,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/colors'
+              $ref: '#/components/schemas/Colors'
         required: true
       responses:
         '200':
@@ -417,7 +419,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/colors'
+                $ref: '#/components/schemas/Colors'
         '405':
           description: Invalid input
       security:
@@ -449,7 +451,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InternalCredentials'
+              $ref: '#/components/schemas/InternalCredential'
         required: true
       responses:
         '200':
@@ -457,7 +459,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InternalCredentials'
+                $ref: '#/components/schemas/InternalCredential'
         '405':
           description: Invalid input
       security:
@@ -513,7 +515,7 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schema/InternalCredential'
+                  $ref: '#/components/schemas/InternalCredential'
           '400':
             description: Invalid id supplied
           '404':
@@ -561,7 +563,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/InternalCredential'
+                $ref: '#/components/schemas/InternalCredential'
         '400':
           description: Invalid id supplied
         '404':
@@ -598,8 +600,8 @@ paths:
           description: Invalid input
       security:
         - issuer_auth:
-            - write:colors
-            - read:colors
+            - write:credential
+            - read:credential
   /allcredentials:
     get:
       tags:
@@ -663,7 +665,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/ExternalCredential'
+                $ref: '#/components/schemas/ExternalCredential'
         '400':
           description: Invalid id supplied
         '404':
@@ -689,7 +691,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/Credential'
+                $ref: '#/components/schemas/ExternalCredential'
         '400':
           description: Invalid id supplied
         '404':
@@ -742,7 +744,7 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schema/TwoWayDoorConfigCmd'
+                  $ref: '#/components/schemas/TwoWayDoorConfig'
           '400':
             description: Invalid id supplied
           '404':
@@ -845,7 +847,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/Door'
+                $ref: '#/components/schemas/Door'
         '400':
           description: Invalid id supplied
         '404':
@@ -1005,7 +1007,7 @@ paths:
   /issuers:
     get:
       tags:
-        - imprint
+        - issuer
       summary: Returns the issuers
       description: Returns the issuers
       operationId: getIssuers
@@ -1075,7 +1077,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/InternalCredential'
+                $ref: '#/components/schemas/InternalCredential'
         '400':
           description: Invalid id supplied
         '404':
@@ -1149,7 +1151,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/doorconfig'
+                $ref: '#/components/schemas/Doorconfig'
         '405':
           description: Invalid input
       security:
@@ -1196,7 +1198,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/Doorconfig'
+                $ref: '#/components/schemas/Doorconfig'
   /preconfig/{id}:
     get:
       tags:
@@ -1218,8 +1220,1321 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/Doorconfig'
+                $ref: '#/components/schemas/Doorconfig'
         '400':
           description: Invalid id supplied
         '404':
           description: config not found
+      security:
+        - editor_auth:
+            - write:doorconfig
+            - read:doorconfig
+  /credential_schema/{credentialDefinitionId}:
+    get:
+      tags:
+        - credential
+      summary: Find credential schema by credentialDefintionId
+      description: Find credential schema by the credentialDefintionId of an existing credential
+      operationId: getCredentialSchema
+      parameters:
+        - name: credentialDefintionId
+          in: path
+          description: credentialDefintionId of the location
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalCredential'
+        '400':
+          description: Invalid credentialDefintionId supplied
+        '404':
+          description: schema not found
+      security:
+        - admin_auth:
+            - write:credential
+            - read:credential
+  /room/save:
+    post:
+      tags:
+        - room
+      summary: Save room
+      description: Save room
+      operationId: save
+      requestBody:
+        description: Save a room
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:room
+            - read:room
+  /room/delete/{id}:
+    delete:
+      tags:
+        - room
+      summary: Deletes a room
+      description: Deletes a room by its id
+      operationId: deleteById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the room that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Room not found
+      security:
+        - editor_auth:
+            - write:room
+            - read:room
+  /room/rooms:
+    get:
+      tags:
+        - room
+      summary: Returns all rooms
+      description: List of all rooms
+      operationId: getRooms
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /room/floor/{id}:
+    get:
+      tags:
+        - room
+      summary: Find a floor by the roomid
+      description: Find a floor
+      operationId: getFloorToRoom
+      parameters:
+        - name: id
+          in: path
+          description: Id of the room
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalCredential'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: floor not found
+      security:
+        - editor_auth:
+            - write:room
+            - read:room
+  /roomGroups:
+    get:
+      tags:
+        - roomgroup
+      summary: Returns all roomsgroups
+      description: List of all roomsgroups
+      operationId: getAllRoomGroups
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /roomGroups/filter/{id}:
+    get:
+      tags:
+        - roomgroups
+      summary: Find all room groups by the building id
+      description: Find all room groups by the building id
+      operationId: getGroupsByBuilding
+      parameters:
+        - name: id
+          in: path
+          description: id of the building
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomGroup'
+        '400':
+          description: Invalid buildingid supplied
+        '404':
+          description: schema not found
+      security:
+        - editor_auth:
+            - write:roomgroup
+            - read:roomgroup
+  /roomGroup/save:
+    post:
+      tags:
+        - roomgroup
+      summary: Save room group
+      description: Save room group
+      operationId: save
+      requestBody:
+        description: Save a room group
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomGroup'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomGroup'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:roomgroup
+            - read:roomgroup
+  /roomGroup/newgroup:
+    post:
+      tags:
+        - roomgroup
+      summary: Create a room group
+      description: Create a room group
+      operationId: createRoomGroup
+      requestBody:
+        description: Create a room group
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomGroup'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomGroup'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:roomgroup
+            - read:roomgroup
+  /roomGroups/{id}:
+    delete:
+      tags:
+        - roomgroups
+      summary: Deletes a room group
+      description: Deletes a room group by its id
+      operationId: deleteById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the room group that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Room groups not found
+      security:
+        - editor_auth:
+            - write:roomgroups
+            - read:roomgroups
+  /roomGroup/edit_group:
+    post:
+      tags:
+        - roomgroups
+      summary: Update a room group
+      description: Update a room group
+      operationId: makeGroupEdit
+      requestBody:
+        description: Update a room groups
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomGroup'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomGroup'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:roomgroup
+            - read:roomgroup
+  /roomGroups/doorsandrooms/{id}:
+    get:
+      tags:
+        - roomgroups
+      summary: Find all room and doors by the group id
+      description: Find all room and doors by the group id
+      operationId: getRoomsAndDoorsByGroupId
+      parameters:
+        - name: id
+          in: path
+          description: id of the group
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomGroup'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: schema not found
+      security:
+        - editor_auth:
+            - write:roomgroup
+            - read:roomgroup
+  /roomGroups/rooms/{id}:
+    get:
+      tags:
+        - roomgroups
+      summary: Find all room by the group id
+      description: Find all room by the group id
+      operationId: getRoomsByGroupId
+      parameters:
+        - name: id
+          in: path
+          description: id of the group
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomGroup'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: schema not found
+      security:
+        - editor_auth:
+            - write:roomgroup
+            - read:roomgroup
+  /roomGroup/saveconfigs:
+    post:
+      tags:
+        - doorconfig
+      summary: Save a doorconfig of a group
+      description: Save doorconfig of a group
+      operationId: updateConfigOfGroup
+      requestBody:
+        description: Save a doorconfig group
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TwoWayDoorConfig'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoWayDoorConfig'
+        '405':
+          description: Invalid input
+      security:
+        - editor_auth:
+            - write:doorconfig
+            - read:doorconfig
+  /signup:
+    post:
+      tags:
+        - user
+      summary: Create a user
+      description: Create a user
+      operationId: createUser
+      requestBody:
+        description: Create a user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '405':
+          description: Invalid input
+      security:
+        - admin_auth:
+            - write:user
+            - read:user
+  /password_reset:
+    post:
+      tags:
+        - user
+      summary: Create a password reset
+      description: Create a password reset
+      operationId: passwordReset
+      requestBody:
+        description: Create a password reset
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetCmd'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetCmd'
+        '405':
+          description: Invalid input
+  /update_password:
+    post:
+      tags:
+        - user
+      summary: Create a new password
+      description: Create a new password
+      operationId: updatePasswordWithToken
+      requestBody:
+        description: Create a new password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordCmd'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePasswordCmd'
+        '405':
+          description: Invalid input
+  /user:
+    get:
+      tags:
+        - user
+      summary: Returns all users
+      description: List of all users
+      operationId: getCurrentUsers
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - admin_auth:
+            - write:user
+            - read:user
+  /user/edit/{id}:
+    get:
+      tags:
+        - user
+      summary: Find a user by id
+      description: Find a user by id
+      operationId: getUserToEdit
+      parameters:
+        - name: id
+          in: path
+          description: id of the user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: schema not found
+      security:
+        - admin_auth:
+            - write:user
+            - read:user
+  /edit_user:
+    post:
+      tags:
+        - user
+      summary: Update a user
+      description: Update a user
+      operationId: makeUserEdit
+      requestBody:
+        description: Update a user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '405':
+          description: Invalid input
+      security:
+        - admin_auth:
+            - write:user
+            - read:user
+  /delete_user/{id}:
+    delete:
+      tags:
+        - user
+      summary: Deletes a user
+      description: Deletes a user by its id (username)
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: The username of the user to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: User not found
+      security:
+        - admin_auth:
+            - write:user
+            - read:user
+components:
+  schemas:
+    Location:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Hamburg
+        building:
+          type: array
+          items:
+            $ref: '#/components/schemas/Building'
+      xml:
+        name: location
+    Building:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Citec
+        floor:
+          type: array
+          items:
+            $ref: '#/components/schemas/Floor'
+      xml:
+        name: building
+    Floor:
+      required:
+        - id
+        - floor-level
+        - floorPlanPath
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        floor-level:
+          type: integer
+          format: int64
+          example: 10
+        floorPlanPath:
+          type: string
+          example: Citec.png
+        room:
+          type: array
+          items:
+            $ref: '#/components/schemas/Room'
+      xml:
+        name: floor
+    Room:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        floor-level:
+          type: integer
+          format: int64
+          example: 10
+        floorPlanPath:
+          type: string
+          example: Citec.png
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coordinate'
+        door:
+          type: array
+          items:
+            $ref: '#/components/schemas/Door'
+      xml:
+        name: room
+    Door:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        floor-level:
+          type: integer
+          format: int64
+          example: 10
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coordinate'
+        proofconfigIn:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proofconfig'
+        proofconfigOut:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proofconfig'
+      xml:
+        name: room
+    Coordinate:
+      required:
+        - id
+        - lng
+        - lat
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        lng:
+          type: number
+          example: 10.00
+        lat:
+          type: number
+          example: 10.00
+      xml:
+        name: coordinate
+    RoomGroup:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        floor-level:
+          type: string
+          example: Office
+        room:
+          type: array
+          items:
+            $ref: '#/components/schemas/Room'
+        building:
+          $ref: '#/components/schemas/Building'
+      xml:
+        name: roomgroup
+    Proofconfig:
+      required:
+        - id
+        - description
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        description:
+          type: string
+          example: Office
+        requestedAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProofAttributeInfo'
+        requestedPredicates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProofPredicateInfo'
+      xml:
+        name: proofconfig
+    Doorconfig:
+      required:
+        - description
+        - doorId
+        - configParts
+      type: object
+      properties:
+        description:
+          type: string
+          example: Show a credential
+        doorId:
+          type: integer
+          format: int64
+          example: 13
+        configParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigParts'
+    ConfigParts:
+      required:
+        - credentials
+        - attributeFilter
+      type: object
+      properties:
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalCredential'
+        configParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeFilter'
+    TwoWayDoorConfig:
+      required:
+        - doorConfigIn
+        - doorConfigOut
+      type: object
+      properties:
+        doorConfigIn:
+          $ref: '#/components/schemas/Doorconfig'
+        doorConfigOut:
+          $ref: '#/components/schemas/Doorconfig'
+    Colors:
+      required:
+        - id
+        - defaultColors
+        - theme
+        - logoPath
+        - bgC
+        - textC
+        - primaryColor
+        - secondary
+        - accent
+        - dark
+        - lightBlue
+        - positive
+        - negative
+        - info
+        - warning
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        defaultColors:
+          type: boolean
+          example: true
+        theme:
+          type: string
+          example: light
+        logoPath:
+          type: string
+          example: Logo.svg
+        bgc:
+          type: string
+          example: blue
+        textC:
+          type: string
+          example: black
+        primaryColor:
+          type: string
+          example: pink
+        secondary:
+          type: string
+          example: light-pink
+        accent:
+          type: string
+          example: yellow
+        dark:
+          type: string
+          example: grey
+        lightblue:
+          type: string
+          example: green
+        positive:
+          type: string
+          example: red
+        negative:
+          type: string
+          example: red
+        info:
+          type: string
+          example: yellow
+        warning:
+          type: string
+          example: white
+      xml:
+        name: proofconfig
+    Category:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Safety
+        internalCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/InternalCredential'
+        externalCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalCredential'
+      xml:
+        name: category
+    ExternalCredential:
+      required:
+        - id
+        - name
+        - credentialDefinitionId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Safety Telekom
+        credentialDefintionId:
+          type: string
+          example: $U-Member
+        form:
+          type: array
+          items:
+            $ref: '#/components/schemas/Form'
+      xml:
+        name: externalcredential
+    InternalCredential:
+      required:
+        - id
+        - name
+        - credentialDefinitionId
+        - agent
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Safety Telekom
+        credentialDefintionId:
+          type: string
+          example: $U-Member
+        agent:
+          type: string
+          example: tlabs
+        category:
+          $ref: '#/components/schemas/Category'
+        form:
+          type: array
+          items:
+            $ref: '#/components/schemas/Form'
+        checklist:
+          type: array
+          items:
+            $ref: '#/components/schemas/Checklist'
+        issuer:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issuer'
+      xml:
+        name: internalcredential
+    Form:
+      required:
+        - id
+        - label
+        - type
+        - attributeName
+        - validationRules
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+        label:
+          type: string
+          example: "ID"
+        type:
+          type: string
+          example: date
+          enum:
+            - date
+            - number
+            - text
+        attributeName:
+          type: string
+          example: id_member
+        validationRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationRules'
+      xml:
+        name: form
+    Checklist:
+      required:
+        - id
+        - label
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+        attributeName:
+          type: string
+          example: Do you wanna give the permission
+      xml:
+        name: checklist
+    IssueCredentialAttributeCmd:
+      required:
+        - id
+        - value
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+        value:
+          type: string
+          example: id = 12
+    File:
+      type: object
+      properties:
+        path:
+          type: string
+          example: Logo.svg
+    Imprint:
+      required:
+        - id
+        - content
+        - timestamp
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+        content:
+          type: string
+          example: Citec Universitätsstr. 13 33615 Bielefeld
+        timestamp:
+          type: string
+          example: 05-03-2023 15:43
+      xml:
+        name: imprint
+    Mail:
+      required:
+        - form
+        - to
+        - subject
+        - text
+      type: object
+      properties:
+        form:
+          type: string
+          example: Gmail
+        to:
+          type: string
+          example: test@test.de
+        subject:
+          type: string
+          example: Password Reset
+        text:
+          type: string
+          example: Password Reset allowed
+      xml:
+        name: mail
+    User:
+      required:
+        - id
+        - email
+        - password
+        - firstName
+        - lastName
+        - roles
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+        email:
+          type: string
+          example: admin@test.de
+        password:
+          type: string
+          example: Hallo123!
+        firstName:
+          type: string
+          example: Gerd
+        lastName:
+          type: string
+          example: Meier
+        roles:
+          type: string
+          enum:
+            - Editor
+            - Admin
+            - Issuer
+          example: Admin
+      xml:
+        name: user
+    Issuer:
+      required:
+        - user
+        - room
+        - credentials
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        room:
+          $ref: '#/components/schemas/Room'
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/InternalCredential'
+      xml:
+        name: issuer
+    ValidationRules:
+      type: object
+      properties:
+        rule:
+          type: string
+          example: "ID"
+        type:
+          type: string
+          example: date
+          enum:
+            - date
+            - number
+            - text
+    ProofAttributeInfo:
+      required:
+        - id
+        - name
+        - restrictions
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+        restrictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeFilter'
+      xml:
+          name: proofattributeinfo
+    AttributeFilter:
+      required:
+         - id
+         - credentialDefintionId
+         - attributeValue
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+        credentialDefintionId:
+          type: string
+          example: $U-Member
+        attributeValue:
+          items:
+            $ref: '#/components/schemas/AttributeValue'
+      xml:
+        name: proofattributeinfo
+    AttributeValue:
+      required:
+        - id
+        - name
+        - attValue
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+        name:
+          type: string
+          example: id
+        attValue:
+          type: string
+          example: 12
+    PasswordResetCmd:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test@test.de
+    UpdatePasswordCmd:
+      type: object
+      properties:
+        token:
+          type: string
+          example: gfjkmlvfi832910owdef
+        password:
+          type: string
+          example: Hallo123!
+    ProofPredicateInfo:
+      required:
+        - id
+        - name
+        - predicateType
+        - predicateValue
+        - restrictions
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
+        name:
+          type: string
+          example: number
+        predicateType:
+          type: string
+          example: Date
+        predicateValue:
+          type: string
+          example: 12
+        restrictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeFilter'
+      xml:
+        name: proofattributeinfo
+  requestBodies:
+    User:
+      description: User of the application
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    Issuer:
+      description: Category
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Issuer'
+    IssueCredentialAttributeCmd:
+      description: IssueCredentialAttributeCmd
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueCredentialAttributeCmd'
+    InternalCredential:
+      description: Internal Credential
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalCredential'
+    ExternalCredential:
+      description: External Credential
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExternalCredential'
+    Category:
+      description: Category
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Category'
+    Location:
+      description: Location
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Location'
+    Building:
+      description: Building
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Building'
+    Floor:
+      description: Floor
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Floor'
+    Room:
+      description: Room
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Room'
+    Door:
+      description: Door
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Door'
+    DoorConfig:
+      description: DoorConfig
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Doorconfig'
+    Colors:
+      description: Colors
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Colors'
+    Imprint:
+      description: Imprint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Imprint'
+  securitySchemes:
+    issuer_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://localhost:8088/oauth/issuer
+          scopes:
+            write:credential: issue Credential
+            read:credential: issue Credential
+    editor_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://localhost:8088/oauth/editor
+          scopes:
+            write:location: modify locations
+            read:location: read your locations
+            write:building: modify buildings
+            read:building: read your buildings
+            write:floor: modify floors
+            read:floor: read your floors
+            write:room: modify rooms
+            read:room: read your rooms
+            write:roomgroups: modify roomgroups
+            read:roomgroups: read your roomgroups
+            write:door: modify doors
+            read:door: read your doors
+            write:doorconfig: modify doorconfig
+            read:doorconfig: read your doorconfig
+    admin_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://localhost:8088/oauth/admin
+          scopes:
+            write:colors: modify color
+            read:colors: read your colors
+            write:internalcredential: modify internal credentials
+            read:internalcredential: read your internal credentials
+            write:externalcredential: modify external credentials
+            read:externalcredential: read your external credentials
+            write:category: modify external categories
+            read:category: read your external categories
+            write:file: modify file
+            read:file: read your file
+            write:imprint: modify imprint
+            read:imprint: read your imprint
+            write:issuer: modify issuer
+            read:issuer: read your issuer
+            write:user: modify user
+            read:user: read your user
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+
+

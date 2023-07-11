@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card class="q-dialog-plugin">
+    <q-card class="q-dialog-plugin" style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section class="q-pa-md">
         <div v-if="location.id" class="text-h6">{{t('floorPlan.editLocation')}}</div>
         <div v-if="!location.id" class="text-h6">{{t('floorPlan.addLocation')}}</div>

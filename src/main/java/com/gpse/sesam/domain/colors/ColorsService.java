@@ -6,6 +6,8 @@ public interface ColorsService {
 
     Colors getColors(ColorTheme colorTheme);
 
+    Colors getDefaultColors(ColorTheme colorTheme);
+
     Colors changeColors(ColorTheme colorTheme, Colors colors);
 
     void resetColors(ColorTheme colorTheme);
