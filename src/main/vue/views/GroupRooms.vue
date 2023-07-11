@@ -613,8 +613,6 @@ export default {
       roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => {
         rows2.value = rooms.map(r => ({...r, selected: true}))
         fetchDoors(rows2.value)
-        console.log(rows2.value)
-        console.log(rows2)
       })
     }
 

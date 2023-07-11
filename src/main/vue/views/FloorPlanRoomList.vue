@@ -2,143 +2,202 @@
   <q-page-container class="no-padding no-margin">
     <q-page style="padding-right: 1em; padding-top: 2em">
 
-      <div>
+      <div v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)">
+
 
         <q-tabs
             v-model="tab"
-            no-caps
-            class="bg-primary text-white shadow-2"
-        >
-          <q-icon size="1.25em" fixed-right color="white" name="info_outlined" class="q-pl-xs"
-                  v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)">
-            <q-tooltip class="grey" anchor="bottom right" max-width="200px" self="top middle"
-                       :offset="[0, 0]">
-              {{ t('editor.groupRooms.info') }}
-            </q-tooltip>
-          </q-icon>
+            class="text-grey"
+            active-color="primary"
+            indicator-color="primary"
+            align="justify">
           <q-tab name="rooms" :label="t('floorPlan.rooms')"/>
-          <q-tab name="groups"
-                 v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
-                 :label="t('editor.groupRooms.groups')"/>
+          <q-tab name="groups" :label="t('editor.groupRooms.groups')"/>
+          <div class="row justify-center" style="width: 3em">
+            <q-icon size="1.25em" fixed-right color="white" name="info_outlined" class="q-pl-xs">
+              <q-tooltip class="grey" anchor="bottom right" max-width="200px" self="top middle"
+                         style="font-size: 1em"
+                         :offset="[0, 0]">
+                {{ t('editor.groupRooms.info') }}
+              </q-tooltip>
+            </q-icon>
+          </div>
 
         </q-tabs>
         <q-separator></q-separator>
 
-        <q-tab-panels v-model="tab" animated style="max-width: 24em; min-width: 24em">
+        <q-tab-panels v-model="tab" animated style="max-width: 24em; min-width: 24em; background-color: var(--bg-color); color: var(--text-color)">
           <q-tab-panel name="rooms">
-            <q-tab-panels v-model="roomTab" animated>
-              <q-tab-panel name="list" style="padding: 0; max-width: 100%">
 
-                <q-input
-                    :placeholder="t('common.search')"
-                    v-model="search"
-                    @update:model-value="roomFilter"
-                    clearable
-                    outlined
-                    rounded
-                    clear-icon="clear"
-                    style="margin-bottom: 1em; min-width: 20em">
-                  <template v-slot:append>
-                    <q-icon name="search"/>
-                  </template>
-                </q-input>
-                <q-select
-                    :label="t('common.search')"
-                    v-model="filteredCredential"
-                    @update:model-value="roomFilter"
-                    :display-value="filteredCredential?.name"
-                    :options="credentialsStore.credentials.concat(credentialsStore.externalCredentials)"
-                    option-value="credentialDefinitionId"
-                    clearable
-                    multiple
-                    option-label="name"
-                    outlined
-                    rounded
-                    clear-icon="clear"
-                    style="margin-bottom: 1em; min-width: 20em">
-                </q-select>
-                <q-scroll-area style="height: 30em; min-width: 21em; overflow: hidden; max-width: 22em; "
-                               :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
-                >
-                  <q-list>
-                    <q-item v-for="room in filteredRooms" style="padding-left: 0">
-                      <q-checkbox v-model="selectedRooms" :val="room.id"
-                                  color="blue"/>
-                      <q-btn
-                          split
-                          flat
-                          style="min-width: 16em"
-                          :label="room.name"
-                          dropdown-icon="expand_more"
-                          color="var(--text-color)"
-                          @click="toggleRoomCheckbox(room)">
-                      </q-btn>
-                      <q-btn flat icon="chevron_right"
-                             @click="roomClick(room)"/>
+            <q-input
+                :placeholder="t('common.search')"
+                v-model="search"
+                @update:model-value="roomFilter"
+                clearable
+                outlined
+                rounded
+                clear-icon="clear"
+                style="margin-bottom: 1em; min-width: 20em">
+              <template v-slot:append>
+                <q-icon name="search"/>
+              </template>
+            </q-input>
+            <q-scroll-area style="height: 24em; width: 22em; overflow: hidden"
+                           :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
+            >
+              <q-list>
+                <q-item v-for="room in filteredRooms" style="padding-left: 0">
+                  <q-checkbox v-model="selectedRooms" :val="room.id"
+                              color="blue"/>
+                  <q-btn-dropdown
+                      split
+                      flat
+                      style="min-width: 18em"
+                      :label="room.name"
+                      dropdown-icon="expand_more"
+                      color="var(--text-color)"
+                      @click="toggleRoomCheckbox(room);">
+                    <q-list>
+                      <q-item-label>{{ t("floorPlan.roomName") }}:</q-item-label>
+                      <q-item-label>{{ t("floorPlan.doors") }}:</q-item-label>
+                      <q-item-label>Credentials:</q-item-label>
+                    </q-list>
+                    <q-list>
+                      <q-item-label>{{ room.name }}</q-item-label>
+                      <q-item-label>{{
+                          room.doors.map(door => door.name).join(", ")
+                        }}
+                      </q-item-label>
+                      <q-item-label>
+                        {{ room?.id ? "U-MEMBER" : "" }}
+                      </q-item-label>
+                    </q-list>
+                    <div v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
+                      <q-separator></q-separator>
+                      <div class="row justify-center" style="padding: 0.5em">
+                        <p class="cursor-pointer q-mb-none"
+                           :style="{color: getCssVar('primary')}"
+                           @click="setOldValueR(room)">{{ t('common.edit') }}</p>
+                        <q-dialog v-model="inception">
+                          <q-card>
+                            <q-card-section>
+                              <div class="text-h6">{{ t("floorPlan.editRoom") }}</div>
+                              <div class="q-mt-md">
+                                <q-input filled v-model="currentRoomName"
+                                         :label="t( 'floorPlan.roomName')"
+                                         stack-label
+                                         style="width: 250px; padding-bottom: 1em"/>
+                              </div>
+                              <div class="q-my-xs">
+                                <q-list bordered class="rounded-borders"
+                                        style="max-width: 600px">
+                                  <q-item-label header>
+                                    <div class="row items-center">
+                                      <div class="q-mr-sm">{{
+                                          t("floorPlan.doors")
+                                        }}
+                                      </div>
 
-                      <q-btn-dropdown
-                          split
-                          flat
-                          style="min-width: 18em"
-                          :label="room.name"
-                          dropdown-icon="expand_more"
-                          color="var(--text-color)"
-                          @click="toggleRoomCheckbox(room);">
-                        <div class="column no-wrap" style="background-color: var(--bg-color)">
-                          <div class="row no-wrap">
-                            <div class="column no-wrap" style="padding: 0.5em">
-                              <q-list>
-                                <q-item-label>{{ t("floorPlan.roomName") }}:</q-item-label>
-                                <q-item-label>{{ t("floorPlan.doors") }}:</q-item-label>
-                                <q-item-label>Credentials:</q-item-label>
-                              </q-list>
-                            </div>
-                            <div class="column no-wrap" style="padding: 0.5em">
-                              <q-list>
-                                <q-item-label>{{ room.name }}</q-item-label>
-                                <q-item-label>{{
-                                    room.doors.map(door => door.name).join(", ")
-                                  }}
-                                </q-item-label>
-                                <q-item-label>
-                                  {{ room?.id ? "U-MEMBER" : "" }}
-                                </q-item-label>
-                              </q-list>
-                            </div>
-                          </div>
-                          <div
-                              v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
-                            <q-separator></q-separator>
-                            <div class="row justify-center" style="padding: 0.5em">
-                              <p class="cursor-pointer q-mb-none"
-                                 :style="{color: getCssVar('primary')}"
-                                 @click="setOldValueR(room)">{{ t('common.edit') }}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </q-btn-dropdown>
-                    </q-item>
-                  </q-list>
-                </q-scroll-area>
-                <div
-                    v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
-                  <q-separator></q-separator>
-                  <q-item>
-                    <q-btn style="min-width: 10em" color="primary" icon="add"
-                           :label="t('editor.groupRooms.addRoomsToNewGroup')"
-                           @click="checkAddRoomsToNewGroup();" flat/>
-                    <q-btn style="min-width: 10em" color="blue" icon="add"
-                           :label="t('editor.groupRooms.addRooms')"
-                           @click="addRoomsToExistingGroupDialog=checkIfGroupSelected();" flat/>
-                  </q-item>
+                                    </div>
+                                  </q-item-label>
+                                  <template v-for="door in room.doors">
+                                    <q-item class="q-mb-sm">
+                                      <q-item-section avatar top>
+                                        <q-icon name="meeting_room"
+                                                color="black" size="34px"/>
+                                      </q-item-section>
+
+                                      <q-item-section>
+                                        <q-item-label lines="1">
+                                                                                    <span class="text-weight-medium">{{
+                                                                                        door.name
+                                                                                      }}</span>
+                                        </q-item-label>
+
+                                      </q-item-section>
+
+                                      <q-item-section top side>
+                                        <div class="text-grey-8 q-gutter-xs">
+                                          <q-btn class="gt-xs" size="12px"
+                                                 flat dense round
+                                                 icon="delete"
+                                                 @click="deleteDoorDialog= true"/>
+                                          <q-btn size="12px" flat dense
+                                                 round
+                                                 icon="edit"
+                                                 @click="openDialog(door)"/>
+                                        </div>
+                                      </q-item-section>
+                                    </q-item>
+                                    <div class="row justify-end">
+
+                                      <q-dialog v-model="deleteDoorDialog"
+                                                persistent
+                                                transition-show="scale"
+                                                transition-hide="scale">
+                                        <q-card>
+                                          <q-card-section class="q-pa-md">
+                                            <div class="text-h6">{{
+                                                t("floorPlan.confirmDeletion")
+                                              }}
+                                            </div>
+                                            <div class="q-mt-md">{{
+                                                t("floorPlan.confirmDeletionText")
+                                              }}
+                                            </div>
+                                          </q-card-section>
+
+                                          <q-card-actions align="right"
+                                                          class="bg-white text-teal">
+                                            <q-btn flat color="primary"
+                                                   :label="t( 'common.cancel')"
+                                                   v-close-popup/>
+                                            <q-btn flat color="primary"
+                                                   :label="t('common.delete')"
+                                                   @click="deleteDoor(room, door)"
+                                                   v-close-popup/>
+                                          </q-card-actions>
+                                        </q-card>
+                                      </q-dialog>
+
+                                    </div>
+                                  </template>
+                                </q-list>
+                              </div>
+                              <q-card-actions align="right" class="text-primary">
+                                <q-btn flat :label="t( 'common.cancel')"
+                                       color="primary" v-close-popup/>
+                                <q-btn flat :label="t( 'common.save')"
+                                       color="primary" @click="save(room)"
+                                       v-close-popup/>
+                              </q-card-actions>
+                            </q-card-section>
+                          </q-card>
+                        </q-dialog>
+                      </div>
+                    </div>
+                  </q-btn-dropdown>
+                </q-item>
+              </q-list>
+            </q-scroll-area>
+            <div v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
+              <q-separator></q-separator>
+              <div class="column q-pa-xs">
+                <q-btn class="row no-wrap q-my-xs" style="min-width: 10em" color="primary"
+                       @click="checkAddRoomsToNewGroup();" rounded flat>
+                  <q-icon name="add" class="q-mr-xs"/>
+                  <span>{{t('editor.groupRooms.addRoomsToNewGroup')}}</span>
+                </q-btn>
+                <q-btn class="row no-wrap q-my-xs" style="min-width: 10em" color="primary"
+                       @click="addRoomsToExistingGroupDialog=checkIfGroupSelected();" rounded flat>
+                  <q-icon name="add" class="q-mr-xs"/>
+                  <span>{{t('editor.groupRooms.addRooms')}}</span>
+                </q-btn>
+              </div>
 
 
-                </div>
-              </q-tab-panel>
-              <q-tab-panel name="info">
-                <room-detail-view ref="roomDetail" :room="room" @back-clicked="back()"/>
-              </q-tab-panel>
-            </q-tab-panels>
+            </div>
+
           </q-tab-panel>
           <q-tab-panel name="groups">
             <q-input
@@ -154,8 +213,7 @@
                 <q-icon name="search"/>
               </template>
             </q-input>
-            <q-scroll-area style="height: 50vh; min-width: 21em; overflow: hidden; max-width: 22em;"
-                           @scroll="giveLog();dropdown = false"
+            <q-scroll-area style="height: 28em; width: 22em; overflow: hidden" @scroll="giveLog();dropdown = false"
                            :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
             >
               <q-list>
@@ -182,7 +240,7 @@
                       color="var(--text-color)"
                       @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
 
-                    <div class="column no-wrap" style="background-color: var(--bg-color)">
+                    <div class="column no-wrap" style="background-color: var(--bg-color); color: var(--text-color)">
                       <div class="row no-wrap" style="min-width: 18em">
                         <div class="column no-wrap q-pl-lg" style="padding: 0.5em">
                           <q-list>
@@ -242,8 +300,7 @@
                                               <div class="row">
                                                 <div class="col">
                                                   <q-item-label lines="1" class="row">
-                                                  <span style="padding-right: 10em"
-                                                        class="text-weight-medium">{{ room.name }}</span>
+                                                    <span style="padding-right: 10em" class="text-weight-medium">{{room.name }}</span>
                                                   </q-item-label>
                                                   <q-item-label caption class="row">
                                                     {{ t('editor.groupRooms.floor') }}
@@ -261,6 +318,8 @@
                                                     @click="addToDeleteList(room);"/>
                                               </div>
                                             </div>
+
+
 
 
                                           </q-item-section>
@@ -283,10 +342,11 @@
                                 <q-card-actions align="right" class="text-primary">
                                   <q-btn style="max-width: 10em;"
                                          class="q-mr-xl text-white bg-primary"
-                                         :label="t('editor.groupRooms.doorconfiguration')" @click="" flat/>
+                                         :label="t('editor.groupRooms.doorconfiguration')"
+                                         @click="prompt=true; getRoomsAndDoors()"
+                                  />
 
                                   <q-btn flat :label="t( 'common.cancel')"
-                                         color="primary"
                                          @click="unCheck();cancelEdit();"
                                          v-close-popup/>
                                   <q-btn flat :label="t( 'common.save')"
@@ -307,18 +367,20 @@
             <div
                 v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
               <q-separator></q-separator>
-              <q-item>
-                <q-btn color="primary" icon="add" :label="t('editor.groupRooms.newGroup')"
-                       @click="delName(); newGroup = true;" flat/>
+              <div class="q-pa-xs q-pt-sm">
                 <q-btn
-                    dense
-                    round
-                    flat
-                    icon="delete"
+                    color="primary"
+                    icon="add"
+                    :label="t('editor.groupRooms.newGroup')"
+                    @click="delName(); newGroup = true;"
+                    rounded flat/>
+                <q-btn
                     color="grey"
+                    icon="delete"
                     :label="t('common.delete')"
-                    @click="deleteAlert = checkGroupSelected();"/>
-              </q-item>
+                    @click="deleteAlert = checkGroupSelected();"
+                    rounded flat/>
+              </div>
 
 
             </div>
@@ -327,10 +389,180 @@
         </q-tab-panels>
       </div>
 
+
+      <div v-else class="full-height">
+
+
+        <q-input
+            :placeholder="t('common.search')"
+            v-model="search"
+            @update:model-value="roomFilter"
+            clearable
+            outlined
+            rounded
+            clear-icon="clear"
+            style="margin-bottom: 1em; min-width: 20em">
+          <template v-slot:append>
+            <q-icon name="search"/>
+          </template>
+        </q-input>
+        <div>
+          <q-scroll-area style="min-width: 21em; height: 35em; max-width: 22em;"
+                         :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
+          >
+            <q-list>
+              <q-item v-for="room in filteredRooms" style="padding-left: 0">
+                <q-checkbox v-model="selectedRooms" :val="room.id" color="blue"/>
+                <q-btn-dropdown
+                    split
+                    flat
+                    style="min-width: 16em"
+                    :label="room.name"
+                    dropdown-icon="expand_more"
+                    color="var(--text-color)"
+                    @click="toggleRoomCheckbox(room)">
+                  <div class="column no-wrap" style="background-color: var(--bg-color); color: var(--text-color)">
+                    <div class="row no-wrap">
+                      <div class="column no-wrap" style="padding: 0.5em">
+                        <q-list>
+                          <q-item-label>{{ t("floorPlan.roomName") }}:</q-item-label>
+                          <q-item-label>{{ t("floorPlan.doors") }}:</q-item-label>
+                          <q-item-label>Credentials:</q-item-label>
+                        </q-list>
+                      </div>
+                      <div class="column no-wrap" style="padding: 0.5em">
+                        <q-list>
+                          <q-item-label>{{ room.name }}</q-item-label>
+                          <q-item-label>{{
+                              room.doors.map(door => door.name).join(", ")
+                            }}
+                          </q-item-label>
+                          <q-item-label>
+                            {{ room?.id ? "U-MEMBER" : "" }}
+                          </q-item-label>
+                        </q-list>
+                      </div>
+                    </div>
+                    <div
+                        v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
+                      <q-separator></q-separator>
+                      <div class="row justify-center" style="padding: 0.5em">
+                        <p class="cursor-pointer q-mb-none"
+                           :style="{color: getCssVar('primary')}"
+                           @click="setOldValueR(room)">{{ t('common.edit') }}</p>
+                        <q-dialog v-model="inception">
+                          <q-card>
+                            <q-card-section>
+                              <div class="text-h6">{{ t("floorPlan.editRoom") }}</div>
+                              <div class="q-mt-md">
+                                <q-input filled v-model="currentRoomName"
+                                         :label="t( 'floorPlan.roomName')" stack-label
+                                         style="width: 250px; padding-bottom: 1em"/>
+                              </div>
+                              <div class="q-my-xs">
+                                <q-list bordered class="rounded-borders"
+                                        style="max-width: 600px">
+                                  <q-item-label header>
+                                    <div class="row items-center">
+                                      <div class="q-mr-sm">{{
+                                          t("floorPlan.doors")
+                                        }}
+                                      </div>
+
+                                    </div>
+                                  </q-item-label>
+                                  <template v-for="door in room.doors">
+                                    <q-item class="q-mb-sm">
+                                      <q-item-section avatar top>
+                                        <q-icon name="meeting_room"
+                                                color="black"
+                                                size="34px"/>
+                                      </q-item-section>
+
+                                      <q-item-section>
+                                        <q-item-label lines="1">
+                                                                            <span class="text-weight-medium">{{
+                                                                                door.name
+                                                                              }}</span>
+                                        </q-item-label>
+
+                                      </q-item-section>
+
+                                      <q-item-section top side>
+                                        <div class="text-grey-8 q-gutter-xs">
+                                          <q-btn class="gt-xs" size="12px"
+                                                 flat dense
+                                                 round icon="delete"
+                                                 @click="deleteDoorDialog= true"/>
+                                          <q-btn size="12px" flat dense round
+                                                 icon="edit"
+                                                 @click="openDialog(door)"/>
+                                        </div>
+                                      </q-item-section>
+                                    </q-item>
+                                    <div class="row justify-end">
+
+                                      <q-dialog v-model="deleteDoorDialog"
+                                                persistent
+                                                transition-show="scale"
+                                                transition-hide="scale">
+                                        <q-card>
+                                          <q-card-section class="q-pa-md">
+                                            <div class="text-h6">
+                                              {{
+                                                t("floorPlan.confirmDeletion")
+                                              }}
+                                            </div>
+                                            <div class="q-mt-md">{{
+                                                t("floorPlan.confirmDeletionText")
+                                              }}
+                                            </div>
+                                          </q-card-section>
+
+                                          <q-card-actions align="right"
+                                                          class="bg-white text-teal">
+                                            <q-btn flat color="primary"
+                                                   :label="t( 'common.cancel')"
+                                                   v-close-popup/>
+                                            <q-btn flat color="primary"
+                                                   :label="t('common.delete')"
+                                                   @click="deleteDoor(room, door)"
+                                                   v-close-popup/>
+                                          </q-card-actions>
+                                        </q-card>
+                                      </q-dialog>
+
+                                    </div>
+                                  </template>
+                                </q-list>
+                              </div>
+                              <q-card-actions align="right" class="text-primary">
+                                <q-btn flat :label="t( 'common.cancel')"
+                                       color="primary"
+                                       v-close-popup/>
+                                <q-btn flat :label="t( 'common.save')"
+                                       color="primary"
+                                       @click="save(room)" v-close-popup/>
+                              </q-card-actions>
+                            </q-card-section>
+                          </q-card>
+                        </q-dialog>
+                      </div>
+                    </div>
+                  </div>
+                </q-btn-dropdown>
+              </q-item>
+            </q-list>
+          </q-scroll-area>
+        </div>
+
+
+      </div>
+
       <q-dialog v-model="newGroup">
         <q-card>
           <q-card-section>
-            <div class="text-h6">{{ t('editor.groupRooms.nameOfGroup') }}</div>
+            <div class="text-h6">{{t('editor.groupRooms.nameOfGroup')}} </div>
           </q-card-section>
           <q-card-section class="q-pt-none">
             <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
@@ -345,7 +577,7 @@
       <q-dialog v-model="addRoomsToExistingGroupDialog">
         <q-card>
           <q-card-section>
-            <div class="text-h6">{{ t('editor.groupRooms.addRoomsToSelected') }} {{ selectedGroups.name }} ?</div>
+            <div class="text-h6">{{t('editor.groupRooms.addRoomsToSelected')}} {{ selectedGroups.name }} ?</div>
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
@@ -385,6 +617,173 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="prompt" persistent>
+      <q-card style="min-width: 50em; background-color: var(--bg-color); color: var(--text-color)">
+        <q-card-section>
+          <div class="text-h6">{{t("editor.groupRooms.groupsConfig")}}</div>
+        </q-card-section>
+        <q-card-section>
+          <q-table
+              style="background-color: var(--bg-color); color: var(--text-color)"
+              flat bordered
+              hide-bottom
+              :rows-per-page-options="[0]"
+              :title="t('editor.groupRooms.roomSelection')"
+              :rows="rows2"
+              :columns="columns2"
+              :filter="searchinput"
+              row-key="name"
+              separator="cell"
+              :no-data-label="t('common.noData')"
+              :no-results-label="t('common.noResults')"
+              :pagination-label="getPaginationLabel"
+              :visible-columns="visibleColumns"
+          >
+            <template v-slot:top-right>
+              <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
+                <q-toggle v-model="visibleColumns" @update:model-value="fetchDoors(rows2)" val="doorNames" :label="t('editor.groupRooms.doors')" size="2.5em"/>
+              </div>
+              <q-input class="q-ml-xs" outlined rounded dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
+                <template v-slot:append>
+                  <q-icon name="search"/>
+                </template>
+              </q-input>
+            </template>
+            <template v-slot:body-cell-doorNames="props">
+              <q-td style="width: 60%" :props="props">
+                <q-select v-if="props.row.selected"
+                          class="q-my-sm"
+                          filled dense options-dense
+                          emit-value
+                          v-model="model[props.row.room]"
+                          multiple
+                          :options="props.row.doors"
+                          option-label="name"
+                          options-cover
+                          map-options
+                          use-chips
+                />
+              </q-td>
+            </template>
+            <template v-slot:body-cell-actions="props">
+              <q-td style="width: 10%" :props="props">
+                <q-checkbox v-model="props.row.selected" @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.selected, props.row.room)"/>
+              </q-td>
+            </template>
+          </q-table>
+        </q-card-section>
+        <q-card-section>
+          <q-select
+              class="q-ml-md"
+              style="min-width: 20em"
+              filled
+              use-input
+              hide-selected
+              fill-input
+              input-debounce="0"
+              @filter="filterConfigOptions"
+              :label="t('floorPlan.chooseConfig')"
+              option-label="name"
+              v-model="selectedConfig"
+              :options="configOptions"
+              clearable
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  No results
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+        </q-card-section>
+        <q-card-section v-for="(selectConf,k) in qSelectGeneral.qSelectsSet">
+          <q-card bordered flat>
+            <q-toolbar class="bg-primary text-accent">
+
+              <q-toolbar-title>Konfiguration</q-toolbar-title>
+              <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
+                <q-tooltip max-width="15em" anchor="center right" self="center left">
+                  You can only choose one base configuration.
+                </q-tooltip>
+              </q-icon>
+              <q-td v-if=!(checkLength())>
+                <q-btn flat round icon="delete" size="0.75em" @click="removeConfig(k)"/>
+              </q-td>
+            </q-toolbar>
+
+
+            <div class="colomn q-mt-sm justify-around items-center no-wrap">
+
+              <div class="q-pa-md">
+                <div class="q-gutter-sm">
+
+                  <q-checkbox dense v-model="qSelectGeneral.qSelectsSet[k].baseConfig" label="Basis Konfiguration"
+                              color="primary" @click="check(k)"/>
+
+                </div>
+              </div>
+              <q-td class="q-pl-md v-if=" v-if="!qSelectGeneral.qSelectsSet[k].baseConfig">
+                <div class="q-gutter-sm row">
+                  <div class="q-gutter-sm row">
+                    <q-input filled v-model="qSelectGeneral.qSelectsSet[k].startTime" mask="time" :rules="['time']">
+                      <template v-slot:append>
+                        <q-icon name="access_time" class="cursor-pointer">
+                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-time v-model="qSelectGeneral.qSelectsSet[k].startTime">
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat/>
+                              </div>
+                            </q-time>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                  </div>
+                  <div class="q-gutter-sm row">
+                    <q-input filled v-model="qSelectGeneral.qSelectsSet[k].endTime" mask="time" :rules="['time']"
+                             :disabled="qSelectGeneral.qSelectsSet[k].baseConfig">
+                      <template v-slot:append>
+                        <q-icon name="access_time" class="cursor-pointer">
+                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-time v-model="qSelectGeneral.qSelectsSet[k].endTime">
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat/>
+                              </div>
+                            </q-time>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                  </div>
+                </div>
+              </q-td>
+            </div>
+            <door-config :door-config="qSelectGeneral.qSelectsSet[k].doorConfigIn"
+                         :direction="JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigIn) !==
+                        JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigOut) ? Direction.IN : Direction.BOTH"
+                         @changeDirection="changeDirectionOut($event, k)" ref="doorIn">
+            </door-config>
+            <door-config v-show="JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigIn.direction) !==
+                         JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigOut.direction)"
+                         :direction="Direction.BOTH"
+                         :door-config="qSelectGeneral.qSelectsSet[k].doorConfigOut" :is-config-out="true"
+                         ref="doorOut">
+            </door-config>
+
+            <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfiguration">
+              Konfiguration hinzufügen
+            </q-btn>
+          </q-card>
+        </q-card-section>
+        <q-card>
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat @click="resetConfig()" v-close-popup> {{ t("common.cancel") }}</q-btn>
+            <q-btn flat :disable="!checkBaseConf()" v-close-popup @click="saveConfig(model)"> {{ t("common.save") }}</q-btn>
+          </q-card-actions>
+        </q-card>
+      </q-card>
+    </q-dialog>
 
   </q-page-container>
 </template>
@@ -392,7 +791,7 @@
 <script>
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import {useUserStore} from "@/main/vue/stores/users";
-import {ref, watch} from "vue";
+import {reactive, ref, watch} from "vue";
 import {useI18n} from 'vue-i18n';
 import {storeToRefs} from "pinia";
 import {useRoomStore} from "@/main/vue/stores/room";
@@ -403,32 +802,143 @@ import CreateDoor from "@/main/vue/views/CreateDoor.vue";
 import {useDoorStore} from "@/main/vue/stores/door";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {useLocationStore} from "@/main/vue/stores/locations";
-import RoomDetailView from "@/main/vue/views/RoomDetailView.vue";
-import {useCredentialsStore} from "@/main/vue/stores/credential";
+import {useConfigStore} from "@/main/vue/stores/config";
+import {Direction} from "@/main/vue/entity/doorConfiguration";
 
 
 export default {
-  components: {RoomDetailView, DoorConfig},
+  computed: {
+    Direction() {
+      return Direction
+    }
+  },
+  components: {DoorConfig},
   props: {
     edit: {
       type: Boolean,
       required: false
+    },
+    doorConfigIn: {
+      required: false
+    },
+    doorConfigOut: {
+      required: false
     }
   },
+  emits: [
+    'ok'
+  ],
   methods: {
     getConfig() {
       return this.$refs.doorConfig.qSelects
     },
     getCssVar,
-    roomClick(room) {
-      this.roomTab = 'info';
-      this.room = room
+    useRoomGroupStore,
+    checkBaseConf() {
+      let x = 0;
+      let y = false;
+      this.qSelectGeneral.qSelectsSet.forEach((element, index) => {
+        if (this.qSelectGeneral.qSelectsSet[index].baseConfig === true) {
+          x = x + 1;
+        }
+      })
+      if (x === 1) {
+        y = true
+      }
+      return y
     },
-    back() {
-      this.roomTab = 'list';
+
+    addConfiguration() {
+      this.qSelectGeneral.qSelectsSet.push( {
+        doorConfigIn: {configParts: [{credentials: [], attributeFilter: [{ attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
+        doorConfigOut: {configParts: [{credentials: [], attributeFilter: [{attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
+        baseConfig: false,
+        startTime: null,
+        endTime: null
+      })
     },
-    refreshDetail() {
-      this.$refs?.roomDetail?.load()
+    removeConfig(i) {
+      this.qSelectGeneral.qSelectsSet.splice(i, 1)
+    },
+    checkLength() {
+      return (this.qSelectGeneral.qSelectsSet.length === 1);
+    },
+
+
+    changeDirectionOut(direction, k) {
+
+      if (direction === Direction.IN) {
+        this.$refs.doorOut[k].direction = Direction.OUT
+        this.qSelectGeneral.qSelectsSet[k].doorConfigOut.direction = Direction.IN
+        this.qSelectGeneral.qSelectsSet[k].doorConfigIn.direction = Direction.OUT
+
+      } else if (direction === Direction.OUT) {
+        this.$refs.doorOut[k].direction = Direction.IN
+        this.qSelectGeneral.qSelectsSet[k].doorConfigOut.direction = Direction.OUT
+        this.qSelectGeneral.qSelectsSet[k].doorConfigIn.direction = Direction.IN
+
+      } else if (direction === Direction.BOTH) {
+        this.$refs.doorOut[k].direction = Direction.BOTH
+        this.qSelectGeneral.qSelectsSet[k].doorConfigOut.direction = Direction.BOTH
+        this.qSelectGeneral.qSelectsSet[k].doorConfigIn.direction = Direction.BOTH
+
+      }
+    },
+    resetConfig() {
+      this.qSelectGeneral.qSelectsSet = [{
+        doorConfigIn: {configParts: [{credentials: [], attributeFilter: [{ attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
+        doorConfigOut: {configParts: [{credentials: [], attributeFilter: [{attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
+        baseConfig: false,
+        startTime: null,
+        endTime: null
+      }]
+      this.selectedConfig = null
+    },
+    saveConfig(model) {
+      console.log("model", model)
+      const roomGroupStore = useRoomGroupStore()
+      const res = []
+      for (const val in model) {
+        if (val && val !== 0) {
+          res.push(model[val])
+        }
+      }
+      let finalArray = res.flat(1).map(d => d.id)
+      const allConfig = []
+      this.qSelectGeneral.qSelectsSet.forEach((element, index) => {
+        let config = {}
+        config.baseConfig = this.qSelectGeneral.qSelectsSet[index].baseConfig
+        config.startTime = this.qSelectGeneral.qSelectsSet[index].startTime
+        config.endTime = this.qSelectGeneral.qSelectsSet[index].endTime
+        if (this.$refs.doorIn[index].direction === Direction.BOTH) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
+          config.doorConfigIn.description = this.qSelectGeneral.qSelectsSet[index].doorConfigIn.description
+          config.doorConfigOut.description = this.qSelectGeneral.qSelectsSet[index].doorConfigOut.description
+        } else if (this.$refs.doorIn[index].direction === Direction.IN) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigOut))
+          config.doorConfigIn.description = this.qSelectGeneral.qSelectsSet[index].doorConfigIn.description
+          config.doorConfigOut.description = this.qSelectGeneral.qSelectsSet[index].doorConfigOut.description
+        } else if (this.$refs.doorIn[index].direction === Direction.OUT) {
+          config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigOut))
+          config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
+          config.doorConfigIn.description = this.qSelectGeneral.qSelectsSet[index].doorConfigOut.description
+          config.doorConfigOut.description = this.qSelectGeneral.qSelectsSet[index].doorConfigIn.description
+        }
+        allConfig.push(config)
+      })
+      console.log("finalArray", finalArray)
+      let configList = {
+        doorIds: finalArray,
+        doorConfig: allConfig
+      }
+      roomGroupStore.setGroupConfig(configList)
+      finalArray = []
     }
   },
   name: "FloorPlanRoomList",
@@ -438,19 +948,17 @@ export default {
     const floorPlanStore = useFloorPlanStore()
     const {rooms, selectedRooms} = storeToRefs(floorPlanStore)
     const userStore = useUserStore()
-    const credentialsStore = useCredentialsStore()
+    const doorStore = useDoorStore()
     const roomStore = useRoomStore();
     const filteredRooms = ref([])
     const search = ref()
     const searchGroup = ref()
     const inception = ref();
+    const deleteDoorDialog = ref();
     const editDoorDialog = ref();
     const editedDoorName = ref();
     const currentRoomName = ref();
     const $q = useQuasar();
-    const roomTab = ref("list");
-    const room = ref();
-    const filteredCredential = ref();
 
     const roomGroupStore = useRoomGroupStore();
     const selectedGroups = ref([]);
@@ -463,7 +971,207 @@ export default {
     const isEditor = ref(false);
     const roomDeleteList = ref([]);
 
-    credentialsStore.fetch()
+    const model = ref([[]])
+    const res = []
+    let finalArray = []
+    const configStore = useConfigStore()
+    configStore.getAllConfigs()
+    const {allPreConfigs} = storeToRefs(configStore)
+    const configOptions = ref()
+    configOptions.value = configStore.allPreConfigs
+    const selectedConfig = ref()
+    const qSelectGeneral = reactive({
+      qSelectsSet: [{
+        doorConfigIn: {
+          configParts: [{
+            credentials: [],
+            attributeFilter: [{
+              attribute: null,
+              predicateType: null,
+              value: null,
+              currentDate: false
+            }]
+          }],
+          description: "",
+          direction: Direction.BOTH
+        },
+        doorConfigOut: {
+          configParts: [{
+            credentials: [],
+            attributeFilter: [{
+              attribute: null,
+              predicateType: null,
+              value: null,
+              currentDate: false
+            }]
+          }],
+          description: "",
+          direction: Direction.BOTH
+        },
+        baseConfig: false,
+        startTime: null,
+        endTime: null
+      }]
+    })
+
+    const filterConfigOptions = function (val, update) {
+      update(() => {
+        const needle = val.toLowerCase()
+        configOptions.value = allPreConfigs.value.filter(config => config.name.toLowerCase().indexOf(needle) > -1)
+      })
+    }
+
+    watch(allPreConfigs, () => {
+      configOptions.value = configStore.allPreConfigs
+    })
+
+    watch(selectedConfig, async () => {
+      if (selectedConfig.value == null) {
+        qSelectGeneral.qSelectsSet.splice(0)
+        qSelectGeneral.qSelectsSet.push({
+          doorConfigIn: {
+            configParts: [{
+              credentials: [], attributeFilter: [{
+                attribute: null,
+                predicateType: null, value: null, currentDate: false
+              }]
+            }], description: "", direction: Direction.BOTH
+          },
+          doorConfigOut: {
+            configParts: [{
+              credentials: [], attributeFilter: [{
+                attribute: null,
+                predicateType: null, value: null, currentDate: false
+              }]
+            }], description: "", direction: Direction.BOTH
+          },
+          baseConfig: false,
+          startTime: null,
+          endTime: null
+        })
+      } else {
+        await configStore.getConfig(selectedConfig.value.id)
+        let chosenConfig = configStore.currentConfig
+        let tempConfig = []
+        chosenConfig?.doorConfig.forEach((element) => {
+          console.log(element)
+          let object = {
+            doorConfigIn: {
+              direction: JSON.stringify(element.doorConfigIn)
+              !== JSON.stringify(element.doorConfigOut) ? Direction.IN : Direction.BOTH,
+              description: element.doorConfigIn.description,
+              configParts: element.doorConfigIn.configParts
+            },
+            doorConfigOut: {
+              direction: JSON.stringify(element.doorConfigIn)
+              !== JSON.stringify(element.doorConfigOut) ? Direction.OUT : Direction.BOTH,
+              description: element.doorConfigOut.description,
+              configParts: element.doorConfigOut.configParts
+            },
+            startTime: element.startTime || '',
+            endTime: element.endTime || '',
+            baseConfig: element.baseConfig || false
+          }
+          tempConfig.push(object)
+        })
+        qSelectGeneral.qSelectsSet = tempConfig
+        console.log("temp: ", tempConfig)
+        console.log("qselect: ", qSelectGeneral.qSelectsSet)
+      }
+    })
+
+    const check = (k) => {
+
+      const baseConfCount = qSelectGeneral.qSelectsSet.filter(
+          (config) => config.baseConfig
+      ).length;
+      if (baseConfCount > 1) {
+        // Display warning or prevent saving
+        console.log('Warning: You can only select one base configuration.');
+        $q.notify({
+          type: 'negative',
+          message: "You can only choose one base configuration.",
+          caption: "Error",
+          position: "top",
+          color: 'negative',
+          textColor: 'postitive',
+          timeout: 3000,
+          classes: "loginNotify"
+        })
+        qSelectGeneral.qSelectsSet.forEach((element, index) => {
+          if (!(index === k)) {
+            element.baseConfig = false;
+          }
+        })
+        return false; // Prevent saving
+      }
+      return true; // Allow saving
+    }
+
+    const columns2 = [
+      {
+        name: 'name',
+        required: true,
+        label: t('floorPlan.room'),
+        align: 'left',
+        field: row => row.roomName,
+        sortable: true
+      },
+      {name: 'room', label: t('floorPlan.room'), align: 'left', field: row => row.room, sortable: true},
+      {
+        name: 'actions',
+        label: t('editor.groupRooms.select'),
+        style: 'width: 8em',
+        headerStyle: 'width: 8em',
+        align: 'left'
+      },
+      {
+        name: 'doorNames',
+        label: t('editor.groupRooms.doors'),
+        field: row => row.doors,
+        format: (val) => val.map(e => e.id).join(', '),
+        style: 'width: 8em',
+        headerStyle: 'width: 8em',
+        align: 'left'
+      },
+      {
+        name: 'doors',
+        label: t('editor.groupRooms.doors'),
+        field: row => row.doors,
+        format: (val) => val.map(e => e.id).join(', '),
+        style: 'width: 8em',
+        headerStyle: 'width: 8em',
+        align: 'left'
+      }
+    ]
+
+    const rows2 = ref([]);
+    rows2.value = []
+
+    function getRoomsAndDoors() {
+      roomGroupStore.getRoomsAndDoorsByGroupId(selectedGroups.value.id).then((rooms) => {
+        rows2.value = rooms.map(r => ({...r, selected: true}))
+        fetchDoors(rows2.value)
+      })
+    }
+
+    function fetchDoors(rows) {
+      rows?.forEach(row => getDoors(row.room))
+    }
+
+    function getDoors(id) {
+      doorStore.getByRoomId(id).then((doors) => {
+        model.value[id] = doors
+        console.log(model.value)
+      })
+    }
+
+
+    function checkIfSelected(room, id) {
+      if (!room) {
+        model.value[id] = []
+      }
+    }
 
     function isEditorCheck() {
       if (userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)) {
@@ -477,7 +1185,6 @@ export default {
 
 
     isEditorCheck();
-
     async function start() {
       if (isEditor.value) {
         await roomGroupStore.getRoomGroups();
@@ -486,8 +1193,8 @@ export default {
         console.log("Ist nicht eingeloggt als Editor");
       }
     }
-
     start();
+
 
 
     async function loadRoomGroups(buildingID) {
@@ -498,7 +1205,10 @@ export default {
         filteredGroups.value = [];
         for (const roomG of roomGroupStore.filteredGroups) {
           filteredGroups.value.push(roomG);
+          console.log("loadRoomGroups() hier");
         }
+        console.log("Groups of rooms (loadRoomGroups)", filteredGroups.value);
+        //console.log("sel. Rooms", selectedRooms.value);
 
       })
     }
@@ -512,15 +1222,16 @@ export default {
         await roomGroupStore.makeNewGroup(newGroupName, currentBuilding.value, []);
         await loadRoomGroups(buildingID.value);
         newGroup.value = false;
+        console.log("done makeANewGroup");
 
       }
     }
 
     const selectedRoomsForGroup = ref([]);
-
     async function makeIdsToRooms() {
       selectedRoomsForGroup.value = [];
       await roomStore.getRooms();
+      //console.log(roomStore.rooms);
 
       selectedRoomsForGroup.value = roomStore.rooms?.filter((room) =>
           selectedRooms.value.includes(room.id)
@@ -572,7 +1283,14 @@ export default {
       }
     }
 
+    function getPaginationLabel(firstRowIndex, endRowIndex, totalRowsNumber) {
+      return firstRowIndex.toString() + "-" + endRowIndex.toString() + " / " + totalRowsNumber.toString()
+    }
+
     async function addRoomsToGroups() {
+      console.log("selected Rooms: ", selectedRooms.value);
+      console.log("selected Groups: ", selectedGroups.value);
+      //console.log("selected Groups length: ", selectedRooms.value.length);
 
       if (selectedRooms.value.length === 0) {
         $q.notify({
@@ -588,6 +1306,7 @@ export default {
           building: selectedGroups.value.building,
           rooms: selectedRoomsForGroup.value
         });
+        console.log("edited Group:", editedGroup.value);
         await roomGroupStore.editGroup(editedGroup.value);
         console.log("makeIsToRooms before loadRoomGroups: selectedGroups.value", selectedGroups.value)
         await loadRoomGroups(buildingID.value);
@@ -604,6 +1323,7 @@ export default {
     }
 
     async function deleteGroup() {
+      console.log("Delete Group", selectedGroups.value);
       if (selectedGroups.value === []) {
         unCheck();
       }
@@ -635,6 +1355,8 @@ export default {
     const checkNameAllowed = ref(false);
 
     async function checkName(newName) {
+      console.log(newName);
+      console.log("room Group List:", filteredGroups.value);
       checkNameAllowed.value = false;
       if (newName.trim() === "") {
         $q.notify({
@@ -646,6 +1368,8 @@ export default {
         checkNameAllowed.value = true;
       }
       for (const theGroup of filteredGroups.value) {
+        console.log("roomGroup:", theGroup)
+        console.log("newName: ", newName);
         if (theGroup.name === newName) {
           $q.notify({
             type: 'negative',
@@ -663,6 +1387,7 @@ export default {
     function getParentIDs(locations, selectFloorId) {
       for (const location of locations) {
         for (const building of location.buildings) {
+          console.log("locations: ", location)
           if (building.floors.some(floor => floor.id === selectFloorId)) {
             currentBuilding.value = building;
             return building.id
@@ -679,6 +1404,7 @@ export default {
       } else {
         buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
       }
+      console.log("buildingId: ", buildingID.value);
       if (isEditor.value) {
         await loadRoomGroups(buildingID.value);
       }
@@ -701,10 +1427,13 @@ export default {
               selectedRooms.value = [];
             }
           }
+          console.log("buildingId: ", buildingID.value);
           prevBuildingid = buildingID.value;
 
 
         });
+        //console.log("Orte: ", locations);
+        console.log("buildingIds: ", buildingID.value);
       })
     }
 
@@ -715,6 +1444,31 @@ export default {
       filteredRooms.value = rooms.value
     })
 
+    function deleteDoor(room, door) {
+      const doors = room.doors;
+      const index = doors.indexOf(door);
+      doors.splice(index, 1);
+      room.doors = doors;
+      deleteDoorDialog.value = false;
+    }
+
+    function openDialog(door) {
+      api.door.getById(door.id).then((door) => {
+        $q.dialog({
+          component: CreateDoor,
+          componentProps: {
+            door: door.data
+          }
+        }).onOk(({doorName, configuration}) => {
+          door.data.name = doorName
+          door.data.doorConfigCmds = configuration
+          doorStore.save(door.data).then(() => {
+            console.log("success")
+          })
+        })
+      })
+    }
+
     function setOldValueR(room) {
       inception.value = true;
       currentRoomName.value = room.name;
@@ -724,6 +1478,8 @@ export default {
       editGroupD.value = true;
       currentGroupName.value = group.name;
       selectedGroups.value = group;
+      console.log("group:", group);
+      console.log("selected Groups in setOldValue: ", selectedGroups.value);
     }
 
     async function save(room) {
@@ -734,10 +1490,12 @@ export default {
 
 
     async function editGroupName() {
+      console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDd")
       let prevName = selectedGroups.value.name;
-      if (prevName !== currentGroupName.value) {
+      if(prevName !== currentGroupName.value) {
         await checkName(currentGroupName.value);
-      } else {
+      }
+      else {
         checkNameAllowed.value = true;
       }
       //selectedGroups.value = [];
@@ -749,9 +1507,14 @@ export default {
           building: selectedGroups.value.building,
           rooms: selectedGroups.value.rooms
         });
+        console.log("edited Group", editedGroup.value);
         roomGroupStore.editGroup(editedGroup.value).then(async () => {
+          console.log("editGroupName(); selectedGroup.value vor loadRoomGroups", selectedGroups.value); //richtig
           await loadRoomGroups(buildingID.value);
+          console.log("editGroupName(); selectedGroup.value nach loadRoomGroups", selectedGroups.value);
           unCheck();
+          console.log("editGroupName(); selectedGroup.value nach unCheck", selectedGroups.value);
+          //await deleteRoomsOfGroup();
         });
       }
 
@@ -770,15 +1533,18 @@ export default {
     function updateNumRoomsInGroup() {
       if (selectedGroups.value !== null) {
         numRoomsInGroup.value = selectedGroups.value.rooms.length;
+        console.log("NumRoomsInGroup: ", numRoomsInGroup.value);
       }
     }
 
     function toggleRoomCheckbox(element) {
+      //console.log(element)
       if (selectedRooms.value.some(e => e === element.id)) {
         deleteRoom(element.id)
       } else {
         addRoom(element.id)
       }
+      //console.log("selected Rooms toggle:", selectedRooms.value);
     }
 
     async function roomFilter() {
@@ -790,62 +1556,6 @@ export default {
           return room.name.toLowerCase().includes(request)
         })
       }
-
-      if (filteredCredential.value?.length > 0) {
-        const definitionIds = filteredCredential.value.map(credential => credential.credentialDefinitionId)
-        filteredRooms.value = filteredRooms.value.filter(r => {
-          let doorContainsCredential = false
-          r.doors.forEach((door) => {
-            let activeConfig = getActiveBaseConf(door);
-
-            if (activeConfig) {
-              let configContains = true;
-              for (const attribute in activeConfig?.proofConfigIn.requestedAttributes) {
-                configContains = configContains && activeConfig.proofConfigIn
-                    .requestedAttributes[attribute]
-                    .restrictions
-                    .some(res => definitionIds.includes(res.credentialDefinitionId))
-              }
-              for (const attribute in activeConfig?.proofConfigIn.requestedPredicates) {
-                configContains = configContains && activeConfig.proofConfigIn
-                    .requestedPredicates[attribute]
-                    .restrictions
-                    .some(res => definitionIds.includes(res.credentialDefinitionId))
-              }
-              doorContainsCredential = doorContainsCredential || configContains
-            }
-          })
-          return doorContainsCredential;
-        })
-      }
-    }
-
-    function getActiveBaseConf(door) {
-      if (door.doorConfigs.length > 1) {
-        const currentDate = new Date();
-
-        for (const doorConfig of door.doorConfigs) {
-          if (!doorConfig?.baseConfig) {
-
-            const startTime = new Date();
-            startTime.setHours(doorConfig?.startTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
-            const endTime = new Date();
-            endTime.setHours(doorConfig?.endTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
-            if (startTime < currentDate && endTime > currentDate) {
-              return doorConfig
-            }
-          }
-        }
-
-        for (const doorConfig of door.doorConfigs) {
-          if (doorConfig.baseConfig) {
-            return doorConfig;
-          }
-        }
-      } else {
-        return door.doorConfigs[0]
-      }
-
     }
 
     async function groupFilter() {
@@ -869,17 +1579,24 @@ export default {
     function filterRoomToGroups() {
       if (prevSelectedGroup.value === null || prevSelectedGroup.value === undefined
           || (prevSelectedGroup.value !== selectedGroups.value)) {
+        console.log("prevSelectedGroup.value === null");
         selectedGroups.value.rooms.forEach((room) => {
+          //console.log("Raum: ", room);
           toggleRoomCheckbox(room);
         })
+        //console.log("selected Rooms after selecting Group:", selectedRooms.value);
       } else {
+        console.log("else", prevSelectedGroup.value);
         // to un-toggle the selected rooms
         selectedGroups.value.rooms.forEach((room) => {
+          //console.log("Raum (untoggle): ", room);
           toggleRoomCheckbox(room);
         })
+        //console.log("sel. rooms after un-toggle", selectedRooms.value);
         unCheck();
       }
 
+      console.log("Function: filterRoomsToGroups()");
       prevSelectedGroup.value = selectedGroups.value;
     }
 
@@ -908,7 +1625,7 @@ export default {
       let i = 0;
       for (const roomFromGroup of selectedGroups.value.rooms) {
         console.log("For");
-        if ((i === 0) && (room.id === roomFromGroup.id)) {
+        if ((i === 0) && (room.id === roomFromGroup.id) ) {
           selectedGroups.value.rooms.shift();
         } else if (room.id === roomFromGroup.id) {
           console.log("i: ", i);
@@ -921,10 +1638,27 @@ export default {
       console.log("entire delete-list:", roomDeleteList.value);
       console.log("selected Group rooms:", selectedGroups.value.rooms);
     }
-
     const dropdown = ref(false);
 
     return {
+      check,
+      model,
+      qSelectGeneral,
+      fetchDoors,
+      visibleColumns: ref(['name', 'actions']),
+      rows2,
+      searchinput: ref(''),
+      columns2,
+      val: ref(true),
+      prompt: ref(false),
+      getPaginationLabel,
+      filterConfigOptions,
+      configOptions,
+      selectedConfig,
+      getRoomsAndDoors,
+      finalArray,
+      getDoors,
+      checkIfSelected,
       floorPlanStore,
       selectedRooms,
       toggleRoomCheckbox,
@@ -936,17 +1670,18 @@ export default {
       groupFilter,
       t,
       inception,
+      deleteDoorDialog,
       editedDoorName,
       editDoorDialog,
+      openDialog,
       roomStore,
+      deleteDoor,
       save,
       editGroupName,
       currentRoomName,
       currentGroupName,
       setOldValueR,
       setOldValueG,
-      room,
-      roomTab,
       tab: ref('rooms'),
       allGroups: filteredGroups,
       selectedGroups,
@@ -974,19 +1709,17 @@ export default {
         selectedRooms.value = [];
         selectedGroups.value = group;
       },
-      giveLog() {
+      giveLog(){
         dropdown.value = false;
         //console.log("hiwerhoiehfowgiohowhoifwohfoweihfiosiohfi");
         //console.log(dropdown.value);
       },
       allFloorsForGroup,
-      credentialsStore,
-      filteredCredential,
       dropdown,
       arrayFloors,
       addToDeleteList,
       async reloadRoomsBE() {
-        if (selectedGroups.value !== null) {
+        if(selectedGroups.value !== null) {
           console.log("sel. Id", selectedGroups.value.id);
           await roomGroupStore.getRoomsByGroupId(selectedGroups.value.id);
           console.log("hier", roomGroupStore.rooms);
@@ -994,7 +1727,7 @@ export default {
           console.log("reloadRoomsBE(), selectedGroups", selectedGroups.value);
         }
       },
-      async cancelEdit() {
+      async cancelEdit(){
         await loadRoomGroups(buildingID.value);
       }
     }
