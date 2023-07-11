@@ -203,7 +203,7 @@
           >
             <template v-slot:top-right>
               <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
-                <q-toggle v-model="visibleColumns" val="doorNames" :label="t('editor.groupRooms.doors')" size="2.5em"/>
+                <q-toggle v-model="visibleColumns" @update:model-value="fetchDoors(rows2)" val="doorNames" :label="t('editor.groupRooms.doors')" size="2.5em"/>
               </div>
               <q-input class="q-ml-xs" outlined rounded dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
                 <template v-slot:append>
@@ -213,15 +213,13 @@
             </template>
             <template v-slot:body-cell-doorNames="props">
               <q-td style="width: 60%" :props="props">
-                <q-select v-if="props.row.name"
-                    @popup-show="getDoors(props.row.room)"
+                <q-select v-if="props.row.selected"
                     class="q-my-sm"
                     filled dense options-dense
                     emit-value
                     v-model="model[props.row.room]"
                     multiple
-                    :options=options
-                    option-value="id"
+                    :options="props.row.doors"
                     option-label="name"
                     options-cover
                     map-options
@@ -231,7 +229,7 @@
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td style="width: 10%" :props="props">
-                <q-checkbox v-model="props.row.name" @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.name, props.row.room)"/>
+                <q-checkbox v-model="props.row.selected" @update:model-value="getDoors(props.row.room)"/>
               </q-td>
             </template>
           </q-table>
@@ -414,6 +412,7 @@ export default {
     const list = [];
     const model = ref([[]])
     const res = []
+    const value = ref([])
     let finalArray = []
 
     const configStore = useConfigStore()
@@ -605,7 +604,11 @@ export default {
     });
 
     function getRoomsAndDoors(id) {
-      roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => rows2.value = rooms)
+      roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => {
+        rows2.value = rooms.map(r => ({...r, selected: true}))
+        console.log(rows2.value)
+        console.log(rows2)
+      })
     }
 
     const editedRow = ref({})
@@ -615,8 +618,8 @@ export default {
 
     function getDoors(id) {
       doorStore.getByRoomId(id).then((doors) => {
-        options.value = doors;
-        model.value[id] = options.value.map(obj => (obj['id']))
+        model.value[id] = doors
+        console.log(model.value)
       })
     }
 
@@ -775,7 +778,12 @@ export default {
       }
     }
 
+    function fetchDoors(rows) {
+      rows?.forEach(row => getDoors(row.room))
+    }
+
     return {
+      fetchDoors,
       check,
       qSelectGeneral,
       filterConfigOptions,
@@ -794,6 +802,7 @@ export default {
       newGroup,
       getDoors,
       res,
+      value,
       newGroupName: ref(''),
       editName: ref(''),
       modelRooms: ref(null),
@@ -810,7 +819,7 @@ export default {
       editGroupName,
       editGroupRooms,
       closeEditAlert,
-      visibleColumns: ref(['name', 'actions', 'doorNames']),
+      visibleColumns: ref(['name', 'actions']),
       locationList,
       buildingListNames,
       group: ref([]),
