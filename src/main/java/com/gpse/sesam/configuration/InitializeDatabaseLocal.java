@@ -384,6 +384,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 				"tlabs", form3, checklist3);
 		safety2.addIssuer(issuer1);
 		safety2.addIssuer(issuer2);
+		issuer1.setCredentials(List.of(safety2));
+		issuer2.setCredentials(List.of(safety2));
 
 
 		return List.of(safety2);
