@@ -104,7 +104,10 @@ async function logout() {
               </q-toolbar-title>
             </div>
             <div class="row no-wrap">
-              <q-btn :icon="themeIcon" text-color="accent" round flat style="width: 42px; height: 42px" ref="themeBtn" @click="changeTheme()"/>
+              <q-btn :icon="themeIcon" text-color="accent" round flat style="width: 42px; height: 42px" ref="themeBtn" @click="changeTheme()">
+                  <q-tooltip>DarkMode/LightMode</q-tooltip>
+              </q-btn>
+
               <div class="column" style="width: 42px; height: 42px">
                 <q-btn class="row no-padding" round unelevated style="width: 3em">
                   <country-flag class="self-center no-margin shadow-16"
