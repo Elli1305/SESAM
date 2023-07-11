@@ -9,6 +9,7 @@ import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
+import com.gpse.sesam.web.exception.LibIndyNotInstalledException;
 import jakarta.validation.Valid;
 import org.hyperledger.indy.sdk.IndyException;
 import org.hyperledger.indy.sdk.InvalidStructureException;
@@ -191,5 +192,11 @@ public class CredentialController {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(JsonProcessingException.class)
 	public void jsonException() {
+	}
+
+	@ResponseStatus(value = HttpStatus.FAILED_DEPENDENCY)
+	@ExceptionHandler({LibIndyNotInstalledException.class, UnsatisfiedLinkError.class})
+	public CredentialSchemaErrorCmd libIndyNotInstalled() {
+		return new CredentialSchemaErrorCmd("ERR_LIBINDY_NOT_INSTALLED");
 	}
 }

@@ -20,6 +20,7 @@ import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.*;
+import com.gpse.sesam.web.exception.LibIndyNotInstalledException;
 import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
 import org.hyperledger.indy.sdk.IndyException;
@@ -143,13 +144,13 @@ public class CredentialServiceImpl implements CredentialService {
      * @throws ExecutionException    wenn ein Fehler bei der Ausführung auftritt
      * @throws InterruptedException  wenn der Thread während des Wartens unterbrochen wird
      */
-    private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException {
+    private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException, UnsatisfiedLinkError {
         if (!LibIndy.isInitialized()) {
             LibIndy.init();
         }
 
         if (LibIndy.api == null) {
-            return null;
+            throw new LibIndyNotInstalledException();
         }
 
         File genesisTxnFile = ResourceUtils.getFile("classpath:test.bcovrin.vonx.io.jsonl");
