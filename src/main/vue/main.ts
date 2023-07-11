@@ -331,6 +331,16 @@ const messages = {
                 }
             }
         },
+        doorHistory:{
+            title:"Historie von Türkonfigurationen",
+            date:"Datum",
+            name:"Name",
+            edit:"Bearbeiten",
+            dialogTitle:"Türkonfiguration",
+            credentials:"Credentials"
+
+        },
+
         issuer: {
             issue: "Ausstellen",
             issueCredential: {
@@ -633,7 +643,7 @@ const messages = {
             room: "Room: ",
             allCredentials: "All Credentials",
             type: "Type",
-            showCredentials: "Show all",
+            showCredentials: "Show all Credentials",
             all: "All",
             intern: "Internal",
             extern: "External"
@@ -672,7 +682,7 @@ const messages = {
                     secondary: "role badges",
                     accent: "text-color in banner, footer, buttons",
                     dark: "footer",
-                    light: "icons",
+                    lightBlue: "...",
                     positive: "positive notifications, save buttons",
                     negative: "negative notifications, delete/reset buttons",
                     info: "profile button, informational content",
@@ -717,8 +727,7 @@ const messages = {
                 attribute: "Name of the attribute",
                 edit: "Edit Credential",
                 checklist: "Checklist",
-                credentialAttribute: "Credential attributes",
-                loadCredentialSchema: "Load credential schema"
+                credentialAttribute: "Credential attributes"
             }
         },
         editor: {
@@ -734,7 +743,7 @@ const messages = {
                 deleteGroup: "Delete group",
                 addRoomsToSelected: "Add selected rooms to the following group :",
                 nameOfGroup: "Name of the new group",
-                doorconfiguration: "Door configurations",
+                doorconfiguration: "Doorconfigurations",
                 groups: "Room Groups",
                 info: "Add rooms either to a new group or choose an existing group",
                 addRooms: "Add rooms to selected group",
@@ -769,6 +778,7 @@ const messages = {
         credentials:"Credentials"
 
     },
+
     issuer: {
         issue: "Issue",
         issueCredential: {
