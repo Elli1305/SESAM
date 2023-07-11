@@ -160,8 +160,8 @@
     </q-card>
   </q-dialog>
   <q-page class="row no-wrap">
-    <FloorPlan ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
-    <FloorPlanRoomList @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
+    <FloorPlan @roomClicked="openDetail" @door-created="refresh" ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
+    <FloorPlanRoomList ref="roomList" @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
   </q-page>
 
 </template>
@@ -187,11 +187,16 @@ export default {
   components: {FloorPlanRoomList, FloorPlan},
   methods: {
     redrawRooms() {
-      console.log(this.$refs.floorPlanRef)
       this.$refs.floorPlanRef.removeLayer()
       this.$refs.floorPlanRef.drawRooms(this.floorPlanStore.rooms)
+    },
+    refresh() {
+      this.$refs?.roomList?.refreshDetail();
+    },
+    openDetail(id) {
+      console.log(this.locationStore.getRoomById(id))
+      this.$refs?.roomList?.roomClick(this.locationStore.getRoomById(id))
     }
-
   },
   setup() {
     const locationStore = useLocationStore()

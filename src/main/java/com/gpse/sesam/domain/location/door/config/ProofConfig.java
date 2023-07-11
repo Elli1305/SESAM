@@ -19,14 +19,14 @@ public class ProofConfig {
 	@Column
 	private String description;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "config_attribute_mapping",
 			joinColumns = {@JoinColumn(name = "config_id", referencedColumnName = "id")},
 			inverseJoinColumns = {@JoinColumn(name = "attribute_id", referencedColumnName = "id")})
 	@Column
 	private Map<String, ProofAttributeInfo> requestedAttributes = new HashMap<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "config_predicate_mapping",
 			joinColumns = {@JoinColumn(name = "config_id", referencedColumnName = "id")},
 			inverseJoinColumns = {@JoinColumn(name = "predicate_id", referencedColumnName = "id")})
