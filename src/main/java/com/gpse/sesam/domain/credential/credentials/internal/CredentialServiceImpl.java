@@ -166,7 +166,6 @@ public class CredentialServiceImpl implements CredentialService {
             // Intentionally ignored.
         }
 
-
         return Pool.openPoolLedger(DEFAULT_POOL_NAME, "{}").get();
     }
 

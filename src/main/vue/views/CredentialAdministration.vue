@@ -3,44 +3,48 @@
     <p class="row text-h3 justify-center">{{ t('admin.credentialAdministration.title') }}</p>
     <div class="row self-center">
       <q-table
-          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
-          :rows-per-page-options="[0]"
           :columns="columns"
-          :rows="rows"
-          :separator="'cell'"
           :filter="search"
-          row-key="name">
-      <template v-slot:top-left>
-        <q-select style="width: 12em" dense v-model="selectedTypes" :options="options" borderless emit-value :label="t('admin.credentialAdministration.type')" map-options multiple/>
+          :rows="rows"
+          :rows-per-page-options="[0]"
+          :separator="'cell'"
+          row-key="name"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)">
+        <template v-slot:top-left>
+          <q-select v-model="selectedTypes" :label="t('admin.credentialAdministration.type')" :options="options" borderless dense emit-value
+                    map-options multiple style="width: 12em"/>
         </template>
-      <template v-slot:top-right>
-        <q-btn rounded color="grey-6" flat icon="add" :label="t('admin.credentialAdministration.new')" to="/add_credential"/>
-        <q-input v-model="search" outlined rounded class="q-ml-lg" debounce="300" dense :placeholder="t('common.search')">
-          <template v-slot:append>
-            <q-icon name="search"/>
-          </template>
-        </q-input>
-      </template>
-      <template v-slot:body-cell-name="props">
-        <q-td :props="props">
-          {{ props.value }}
-        </q-td>
-      </template>
-      <template v-slot:body-cell-type="props">
-        <q-td :props="props">
-          <q-chip v-if="props.value" color="primary" text-color="secondary" style="font-size: 1em">
-            <q-icon name="business" left/>
-            Internal
-          </q-chip>
-          <q-chip v-else color="secondary" text-color="primary" style="font-size: 1em">
-            <q-icon name="public" left/>
-            External
-          </q-chip>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-actions="props">
-        <q-td :props="props">
-          <q-btn :to="`/credential_administration/${'issuer' in props.row ? 'internal' : 'external'}/${props.row.id}`" dense round flat style="color: var(--light)" icon="edit"></q-btn>
+        <template v-slot:top-right>
+          <q-btn :label="t('admin.credentialAdministration.new')" color="grey-6" flat icon="add" rounded
+                 to="/add_credential"/>
+          <q-input v-model="search" :placeholder="t('common.search')" class="q-ml-lg" debounce="300" dense outlined
+                   rounded>
+            <template v-slot:append>
+              <q-icon name="search"/>
+            </template>
+          </q-input>
+        </template>
+        <template v-slot:body-cell-name="props">
+          <q-td :props="props">
+            {{ props.value }}
+          </q-td>
+        </template>
+        <template v-slot:body-cell-type="props">
+          <q-td :props="props">
+            <q-chip v-if="props.value" color="primary" style="font-size: 1em" text-color="secondary">
+              <q-icon left name="business"/>
+              Internal
+            </q-chip>
+            <q-chip v-else color="secondary" style="font-size: 1em" text-color="primary">
+              <q-icon left name="public"/>
+              External
+            </q-chip>
+          </q-td>
+        </template>
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props">
+            <q-btn :to="`/credential_administration/${'issuer' in props.row ? 'internal' : 'external'}/${props.row.id}`"
+                   dense flat icon="edit" round style="color: var(--light)"></q-btn>
           </q-td>
         </template>
       </q-table>
