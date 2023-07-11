@@ -122,7 +122,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
                 .flatMap(floor -> floor.getRooms().stream())
                 .flatMap(room -> room.getDoors().stream())
                 .flatMap(door -> door.getDoorConfigs().stream())
-                .flatMap(twoWayDoorConfig -> Stream.of(twoWayDoorConfig.getProofConfigIn(), twoWayDoorConfig.getProofConfigOut()))
+                .flatMap(twoWayDoorConfig -> Stream.of(twoWayDoorConfig.getProofConfigIn(),
                         twoWayDoorConfig.getProofConfigOut()))
                 .flatMap(proofConfig -> {
                     final Stream<String> attributeFilterStream = proofConfig.getRequestedPredicates().values()

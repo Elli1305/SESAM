@@ -4,9 +4,12 @@ import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorRepository;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
+import com.gpse.sesam.domain.location.door.config.ProofConfig;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.util.ActiveConfigUtil;
 import com.gpse.sesam.util.ConfigCmdMapper;
+import com.gpse.sesam.web.cmd.DoorGroupConfigCmd;
 import com.gpse.sesam.web.cmd.RoomGroupCmd;
 import com.gpse.sesam.web.cmd.RoomGroupDoorConfigCmd;
 import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
@@ -183,7 +186,7 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     /**
      * Setzt die Konfiguration für eine Gruppe von Türen.
      *
-     * @param cmds die Liste von TwoWayDoorConfigCmd-Objekten, die die Konfigurationen enthalten
+     * @param config die Tür Konfiguration welche die entsprechenden Türen und die Konfiguratione enthält
      */
 	@Override
     public void setGroupConfig(DoorGroupConfigCmd config) {

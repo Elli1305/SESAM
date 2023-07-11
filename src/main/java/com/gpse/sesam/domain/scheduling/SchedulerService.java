@@ -4,6 +4,7 @@ import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorService;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
 import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
+import com.gpse.sesam.util.ActiveConfigUtil;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 

@@ -2,29 +2,26 @@
   <q-page-container class="no-padding no-margin">
     <q-page style="padding-right: 1em; padding-top: 2em">
 
-      <div>
-
+      <div v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)">
 
         <q-tabs
             v-model="tab"
             no-caps
             class="bg-primary text-white shadow-2"
         >
-          <q-icon v-if="userStore.user?.roles.some(r => r.role === 'EDITOR' && r.granted)" size="1.25em" fixed-right
-                  color="white" name="info_outlined" class="q-pl-xs">
+          <q-icon size="1.25em" fixed-right color="white" name="info_outlined" class="q-pl-xs">
             <q-tooltip class="grey" anchor="bottom right" max-width="200px" self="top middle"
                        :offset="[0, 0]">
               {{ t('editor.groupRooms.info') }}
             </q-tooltip>
           </q-icon>
           <q-tab name="rooms" :label="t('floorPlan.rooms')"/>
-          <q-tab name="groups" v-if="userStore.user?.roles.some(r => r.role === 'EDITOR' && r.granted)"
-                 :label="t('editor.groupRooms.groups')"/>
+          <q-tab name="groups" :label="t('editor.groupRooms.groups')"/>
 
         </q-tabs>
         <q-separator></q-separator>
 
-        <q-tab-panels v-model="tab" animated style="width: 26em">
+        <q-tab-panels v-model="tab" animated style="max-width: 24em; min-width: 24em">
           <q-tab-panel name="rooms">
             <q-tab-panels v-model="roomTab" animated>
               <q-tab-panel name="list" style="padding: 0; max-width: 100%">
@@ -42,6 +39,21 @@
                     <q-icon name="search"/>
                   </template>
                 </q-input>
+                <q-select
+                    :label="t('common.search')"
+                    v-model="filteredCredential"
+                    @update:model-value="roomFilter"
+                    :display-value="filteredCredential?.name"
+                    :options="credentialsStore.credentials.concat(credentialsStore.externalCredentials)"
+                    option-value="credentialDefinitionId"
+                    clearable
+                    multiple
+                    option-label="name"
+                    outlined
+                    rounded
+                    clear-icon="clear"
+                    style="margin-bottom: 1em; min-width: 20em">
+                </q-select>
                 <q-scroll-area style="height: 30em; min-width: 21em; overflow: hidden; max-width: 22em; "
                                :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
                 >
@@ -121,7 +133,7 @@
                 </div>
               </q-tab-panel>
               <q-tab-panel name="info">
-                <room-detail-view  :room="room" @back-clicked="back()"/>
+                <room-detail-view :room="room" @back-clicked="back()"/>
               </q-tab-panel>
             </q-tab-panels>
           </q-tab-panel>
@@ -227,8 +239,8 @@
                                               <div class="row">
                                                 <div class="col">
                                                   <q-item-label lines="1" class="row">
-                                                    <span style="padding-right: 10em"
-                                                          class="text-weight-medium">{{ room.name }}</span>
+                                                  <span style="padding-right: 10em"
+                                                        class="text-weight-medium">{{ room.name }}</span>
                                                   </q-item-label>
                                                   <q-item-label caption class="row">
                                                     {{ t('editor.groupRooms.floor') }}
@@ -389,6 +401,7 @@ import {useDoorStore} from "@/main/vue/stores/door";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import RoomDetailView from "@/main/vue/views/RoomDetailView.vue";
+import {useCredentialsStore} from "@/main/vue/stores/credential";
 
 
 export default {
@@ -419,7 +432,7 @@ export default {
     const floorPlanStore = useFloorPlanStore()
     const {rooms, selectedRooms} = storeToRefs(floorPlanStore)
     const userStore = useUserStore()
-    const doorStore = useDoorStore()
+    const credentialsStore = useCredentialsStore()
     const roomStore = useRoomStore();
     const filteredRooms = ref([])
     const search = ref()
@@ -431,6 +444,7 @@ export default {
     const $q = useQuasar();
     const roomTab = ref("list");
     const room = ref();
+    const filteredCredential = ref();
 
     const roomGroupStore = useRoomGroupStore();
     const selectedGroups = ref([]);
@@ -442,6 +456,8 @@ export default {
     const numRoomsInGroup = ref();
     const isEditor = ref(false);
     const roomDeleteList = ref([]);
+
+    credentialsStore.fetch()
 
     function isEditorCheck() {
       if (userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)) {
@@ -712,7 +728,6 @@ export default {
 
 
     async function editGroupName() {
-      console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDd")
       let prevName = selectedGroups.value.name;
       if (prevName !== currentGroupName.value) {
         await checkName(currentGroupName.value);
@@ -729,12 +744,8 @@ export default {
           rooms: selectedGroups.value.rooms
         });
         roomGroupStore.editGroup(editedGroup.value).then(async () => {
-          console.log("editGroupName(); selectedGroup.value vor loadRoomGroups", selectedGroups.value); //richtig
           await loadRoomGroups(buildingID.value);
-          console.log("editGroupName(); selectedGroup.value nach loadRoomGroups", selectedGroups.value);
           unCheck();
-          console.log("editGroupName(); selectedGroup.value nach unCheck", selectedGroups.value);
-          //await deleteRoomsOfGroup();
         });
       }
 
@@ -773,6 +784,49 @@ export default {
           return room.name.toLowerCase().includes(request)
         })
       }
+
+      if (filteredCredential.value?.length > 0) {
+        console.log('here')
+        const definitionIds = filteredCredential.value.map(credential => credential.credentialDefinitionId)
+        filteredRooms.value = filteredRooms.value.filter(r => {
+          let doorContainsCredential = false
+          r.doors.forEach((door) => {
+            let activeConfig = getActiveBaseConf(door);
+
+            if (activeConfig) {
+              let configContains = true;
+              for (const attribute in activeConfig?.proofConfigIn.requestedAttributes) {
+                configContains = configContains && activeConfig.proofConfigIn
+                    .requestedAttributes[attribute]
+                    .restrictions
+                    .some(res => definitionIds.includes(res.credentialDefinitionId))
+              }
+              for (const attribute in activeConfig?.proofConfigIn.requestedPredicates) {
+                configContains = configContains && activeConfig.proofConfigIn
+                    .requestedPredicates[attribute]
+                    .restrictions
+                    .some(res => definitionIds.includes(res.credentialDefinitionId))
+              }
+              doorContainsCredential = doorContainsCredential || configContains
+            }
+          })
+          return doorContainsCredential;
+        })
+      }
+    }
+
+    function getActiveBaseConf(door) {
+      if (door.doorConfigs.length > 1) {
+        for (const doorConfig of door.doorConfigs) {
+        }
+        for (const doorConfig of door.doorConfigs) {
+          if (doorConfig.baseConfig) {
+            return doorConfig;
+          }
+        }
+      } else {
+        return door.doorConfigs[0]
+      }
     }
 
     async function groupFilter() {
@@ -797,10 +851,8 @@ export default {
       if (prevSelectedGroup.value === null || prevSelectedGroup.value === undefined
           || (prevSelectedGroup.value !== selectedGroups.value)) {
         selectedGroups.value.rooms.forEach((room) => {
-          //console.log("Raum: ", room);
           toggleRoomCheckbox(room);
         })
-        //console.log("selected Rooms after selecting Group:", selectedRooms.value);
       } else {
         // to un-toggle the selected rooms
         selectedGroups.value.rooms.forEach((room) => {
@@ -809,7 +861,6 @@ export default {
         unCheck();
       }
 
-      console.log("Function: filterRoomsToGroups()");
       prevSelectedGroup.value = selectedGroups.value;
     }
 
@@ -910,6 +961,8 @@ export default {
         //console.log(dropdown.value);
       },
       allFloorsForGroup,
+      credentialsStore,
+      filteredCredential,
       dropdown,
       arrayFloors,
       addToDeleteList,
