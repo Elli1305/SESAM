@@ -341,7 +341,7 @@
         <q-card>
           <q-card-actions align="right" class="text-primary">
             <q-btn flat @click="resetConfig()" v-close-popup> {{ t("common.cancel") }}</q-btn>
-            <q-btn flat v-close-popup @click="saveConfig(model)"> {{ t("common.save") }}</q-btn>
+            <q-btn flat :disable="!checkBaseConf()" v-close-popup @click="saveConfig(model)"> {{ t("common.save") }}</q-btn>
           </q-card-actions>
         </q-card>
       </q-card>
@@ -611,6 +611,7 @@ export default {
     function getRoomsAndDoors(id) {
       roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => {
         rows2.value = rooms.map(r => ({...r, selected: true}))
+        fetchDoors(rows2.value)
         console.log(rows2.value)
         console.log(rows2)
       })

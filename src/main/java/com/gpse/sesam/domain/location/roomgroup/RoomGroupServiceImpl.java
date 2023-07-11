@@ -179,7 +179,7 @@ public class RoomGroupServiceImpl implements RoomGroupService {
     /**
      * Setzt die Konfiguration für eine Gruppe von Türen.
      *
-     * @param config die Liste von TwoWayDoorConfigCmd-Objekten, die die Konfigurationen enthalten
+     * @param config die Liste von DoorGroupConfigCmd-Objekten, die die Konfigurationen enthalten
      */
     @Override
     public void setGroupConfig(DoorGroupConfigCmd config) {
