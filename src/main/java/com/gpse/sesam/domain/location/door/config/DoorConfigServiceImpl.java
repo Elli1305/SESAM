@@ -3,7 +3,6 @@ package com.gpse.sesam.domain.location.door.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.configuration.DoorApiConfig;
-import com.gpse.sesam.domain.credential.credentials.Credential;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.web.cmd.DoorConfigCmd;

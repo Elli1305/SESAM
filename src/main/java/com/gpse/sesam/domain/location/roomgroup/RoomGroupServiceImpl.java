@@ -1,6 +1,5 @@
 package com.gpse.sesam.domain.location.roomgroup;
 
-import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorRepository;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
