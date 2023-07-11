@@ -56,10 +56,9 @@ public class DoorServiceImpl implements DoorService {
 	}
 
 	/**
-	 * Speichert eine Tür.
+	 * Gibt alle Türen zurück
 	 *
-	 * @param door die zu speichernde Tür
-	 * @return die gespeicherte Tür
+	 * @return die Liste aller Türen
 	 */
 	@Override
 	public List<Door> getDoors() {
