@@ -7,9 +7,11 @@ import {useRouter} from "vue-router/dist/vue-router"
 import CountryFlag from 'vue-country-flag-next'
 import corpdesign from "@/main/vue/api/corpdesign";
 import {ref} from "vue";
+import {useAppStore} from "@/main/vue/stores/app";
 
 const {t} = useI18n()
 const userStore = useUserStore()
+const appStore = useAppStore()
 const $q = useQuasar()
 const router = useRouter()
 const i18nLocale = useI18n()
@@ -18,7 +20,6 @@ const r = document.querySelector(':root')
 const themeIcon = ref('')
 const logoPath = ref('')
 if (!localStorage.getItem('colorTheme')) {
-  console.log('no theme selected')
   localStorage.setItem('colorTheme', 'LIGHT')
   themeIcon.value = 'light_mode'
   logoPath.value = "/Logo.svg"
@@ -50,7 +51,7 @@ function getLanguage() {
 function changeLanguage(language) {
   sessionStorage.setItem("locale", language)
   i18nLocale.locale.value = language
-  location.reload()
+  appStore.forceRender()
 }
 
 function changeTheme() {
@@ -87,7 +88,7 @@ async function logout() {
 
 </script>
 <template>
-  <q-layout view="hHh lpR fff">
+  <q-layout v-if="appStore.reload" view="hHh lpR fff">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="row" style="margin: 0; padding: 24px">
