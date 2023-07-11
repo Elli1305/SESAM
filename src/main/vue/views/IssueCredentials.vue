@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t("home.issuerPages")}}</p>
     <div class="row self-center">
       <q-table
-          style="width: 80vw; height: 50vh"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"

@@ -2,6 +2,7 @@
   <q-drawer
       show-if-above bordered
       v-model="show"
+      style="background-color: var(--bg-color); color: var(--text-color)"
       content-class="bg-grey-1">
     <q-list>
       <q-item-label

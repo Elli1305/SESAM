@@ -2,11 +2,8 @@ package com.gpse.sesam.domain.location.door.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gpse.sesam.domain.location.room.Room;
 import jakarta.persistence.*;
 
-import java.sql.Time;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 

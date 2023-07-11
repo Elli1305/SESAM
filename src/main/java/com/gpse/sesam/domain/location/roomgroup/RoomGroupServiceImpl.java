@@ -2,8 +2,10 @@ package com.gpse.sesam.domain.location.roomgroup;
 
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorRepository;
+import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
 import com.gpse.sesam.domain.location.door.config.*;
 import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.util.ActiveConfigUtil;
 import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.ConflictException;
@@ -180,24 +182,38 @@ public class RoomGroupServiceImpl implements RoomGroupService {
      * @param cmds die Liste von TwoWayDoorConfigCmd-Objekten, die die Konfigurationen enthalten
      */
     @Override
-    public void setGroupConfig(List<TwoWayDoorConfigCmd> cmds) {
-        for (TwoWayDoorConfigCmd cmd : cmds) {
-            Optional<Door> door = doorRepository.findById(Long.valueOf(cmd.getDoorConfigIn().getDoorId()));
-            // TODO change when merged with master
-//            if (door.isPresent()) {
-//                doorConfigurationService.sendProofConfig(cmd.getDoorConfigIn()
-//                        .getDoorId(), ConfigCmdMapper.fromCmd(cmd.getDoorConfigIn()));
-//                doorConfigurationService.sendProofConfig(cmd.getDoorConfigOut()
-//                        .getDoorId(), ConfigCmdMapper.fromCmd(cmd.getDoorConfigOut()));
-//                door.get().setProofConfigIn(List.of(ConfigCmdMapper.fromCmd(cmd.getDoorConfigIn())));
-//                door.get().setProofConfigOut(List.of(ConfigCmdMapper.fromCmd(cmd.getDoorConfigOut())));
-//                doorRepository.save(door.get());
-//            }
+    public void setGroupConfig(DoorGroupConfigCmd config) {
+        List<TwoWayDoorConfig> doorConfig = new ArrayList<>();
+        for (TwoWayDoorConfigCmd oneConfigCmd: config.getDoorConfig()) {
+            TwoWayDoorConfig oneConfig = new TwoWayDoorConfig();
+            oneConfig.setBaseConfig(oneConfigCmd.isBaseConfig());
+            oneConfig.setStartTime(oneConfigCmd.getStartTime());
+            oneConfig.setEndTime(oneConfigCmd.getEndTime());
+            ProofConfig doorIn = ConfigCmdMapper.fromCmd(oneConfigCmd.getDoorConfigIn());
+            ProofConfig doorOut = ConfigCmdMapper.fromCmd(oneConfigCmd.getDoorConfigOut());
+            oneConfig.setProofConfigIn(doorIn);
+            oneConfig.setProofConfigOut(doorOut);
+            doorConfig.add(oneConfig);
+        }
+        for (Long id : config.getDoorIds()) {
+            Optional<Door> door = doorRepository.findById(id);
+            if (door.isPresent()) {
+                door.get().setDoorConfigs(doorConfig);
+                doorRepository.save(door.get());
+                TwoWayDoorConfig activeConfig = ActiveConfigUtil.getCurrentConfig(door.get().getDoorConfigs());
+                if (activeConfig != null) {
+                    doorConfigurationService.sendProofConfig(door.get().getName() + "_"
+                            + door.get().getId() + "_in", activeConfig.getProofConfigIn());
+                    doorConfigurationService.sendProofConfig(door.get().getName() + "_"
+                            + door.get().getId() + "_out", activeConfig.getProofConfigOut());
+                }
+            }
         }
     }
 
     /**
-     * Gibt eine Liste von RoomGroupDoorConfigCmd-Objekten zurück, die die Räume und Türen für die angegebene Raumgruppen-ID enthalten.
+     * Gibt eine Liste von RoomGroupDoorConfigCmd-Objekten zurück,
+     * die die Räume und Türen für die angegebene Raumgruppen-ID enthalten.
      *
      * @param id die ID der Raumgruppe
      * @return eine Liste von RoomGroupDoorConfigCmd-Objekten mit den Räumen und Türen der Raumgruppe

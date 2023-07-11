@@ -1,7 +1,5 @@
 package com.gpse.sesam.web.cmd;
 
-import java.time.LocalTime;
-
 public class TwoWayDoorConfigCmd {
 
 	private Long id;

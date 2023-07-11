@@ -33,7 +33,7 @@ public class Colors {
     @Column(nullable = false)
     private String dark;
     @Column(nullable = false)
-    private String lightBlue;
+    private String light;
     @Column(nullable = false)
     private String positive;
     @Column(nullable = false)
@@ -119,12 +119,12 @@ public class Colors {
         this.dark = dark;
     }
 
-    public String getLightBlue() {
-        return lightBlue;
+    public String getLight() {
+        return light;
     }
 
-    public void setLightBlue(String lightBlue) {
-        this.lightBlue = lightBlue;
+    public void setLight(String light) {
+        this.light = light;
     }
 
     public String getPositive() {

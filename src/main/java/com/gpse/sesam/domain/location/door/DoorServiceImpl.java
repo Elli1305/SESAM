@@ -5,15 +5,10 @@ import jakarta.validation.OverridesAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
-import com.gpse.sesam.domain.location.door.config.ProofConfig;
-import com.gpse.sesam.domain.scheduling.SchedulerService;
-import com.gpse.sesam.domain.location.door.config.DoorConfigService;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
 import com.gpse.sesam.domain.location.room.RoomService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
@@ -66,12 +61,7 @@ public class DoorServiceImpl implements DoorService {
 		doorRepository.deleteById(id);
 	}
 
-	/**
-	 * Speichert eine Tür.
-	 *
-	 * @param door die zu speichernde Tür
-	 * @return die gespeicherte Tür
-	 */
+
 	@Override
 	public List<Door> getDoors() {
 		final List<Door> doors = new ArrayList<>();

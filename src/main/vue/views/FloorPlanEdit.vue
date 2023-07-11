@@ -3,7 +3,7 @@
       show-if-above bordered
       v-model="show"
       content-class="bg-grey-1"
-      style="background-color: var(--bg-color)">
+      style="background-color: var(--bg-color); color: var(--text-color)">
     <q-list>
       <q-item-label
           header

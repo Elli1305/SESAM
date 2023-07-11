@@ -54,7 +54,7 @@ const messages = {
             manageCredentialCategories: "Kategorien von Credentials verwalten",
             manageCredentials: "Credentials verwalten",
             editorPages: "Bearbeiten",
-            editFloorplan: "Floorplan bearbeiten",
+            editFloorplan: "Gebäudeplan bearbeiten",
             groupRooms: "Räume gruppieren",
             issuerPages: "Credential Ausstellen",
             imprint: "Impressum",
@@ -196,7 +196,7 @@ const messages = {
             room: "Raum: ",
             allCredentials: "Alle Credentials",
             type: "Typ",
-            showCredentials: "Alle Credential anzeigen",
+            showCredentials: "Alle anzeigen",
             all: "Alle",
             intern: "Intern",
             extern: "Extern"
@@ -236,7 +236,7 @@ const messages = {
                     secondary: "Rollenschilder",
                     accent: "Schriftfarbe in Banner, Footer, Buttons",
                     dark: "Footer",
-                    lightBlue: "...",
+                    light: "Icons",
                     positive: "Positive Nachricht, Speichern Button",
                     negative: "Negative Nachricht, Löschen/Zurücksetzen Button",
                     info: "Profilbild, Informationen",
@@ -281,7 +281,8 @@ const messages = {
                 attribute: "Name des Attributes",
                 edit: "Credential bearbeiten",
                 checklist: "Checkliste",
-                credentialAttribute: "Credentialattribute"
+                credentialAttribute: "Credentialattribute",
+                loadCredentialSchema: "Credential-Schema laden"
             }
         },
         editor: {
@@ -299,9 +300,9 @@ const messages = {
                 doorconfiguration: "Türkonfigurationen",
                 nameOfGroup: "Name der neuen Gruppe",
                 groups: "Raumgruppen",
-                info: "Räume einer neuen Gruppe zufügen oder eine bereits bestehende Gruppe auswählen und 'Räume in ausgewählter Gruppe speichern' drücken",
-                addRooms: "Räume in ausgewählter Gruppe speichern",
-                addRoomsToNewGroup:"Räume zu neuer Gruppe zufügen",
+                info: "Räume einer neuen Gruppe zufügen oder eine bereits bestehende Gruppe auswählen und 'Räume zu ausgewählter Gruppe hinzufügen' drücken",
+                addRooms: "Zu gewählter Gruppe hinzufügen",
+                addRoomsToNewGroup:"Zu neuer Gruppe hinzufügen",
                 noGroupSelected: "Keine Gruppe ausgewählt",
                 noRoomSelected: "Keine Räume ausgewählt",
                 checkNameMessage: "Name darf nicht leer sein",
@@ -309,7 +310,7 @@ const messages = {
                 doorconfig: "Türkonfiguration anpassen",
                 select: "Auswählen",
                 doors: "Türen",
-                groupsConfig: "Anpassung der Türconfiguration für Raumgruppen",
+                groupsConfig: "Anpassung der Türkonfiguration für Raumgruppen",
                 roomSelection: "Räume auswählen",
                 group: "Gruppe",
             },
@@ -444,50 +445,6 @@ const messages = {
                 },
             },
         },
-        imprint:{
-            imprintTitle: "Impressum",
-            imprintEditorTitle: "Impressum bearbeiten",
-            imprintEditorMessageSave: "Sind Sie sicher, dass sie speichern wollen?",
-            imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
-            save:"Speichern",
-            cancel: "Abbrechen",
-            delete:"Löschen",
-            imprintEditorMessageSaveConfirmation:"Inhalt erfolgreich gespeichert",
-            imprintEditorMessageDeleteConfirmation:"Inhalt erfolgreich gelöscht"
-
-        },
-        doorHistory:{
-            title:"Historie von Türkonfigurationen",
-            date:"Datum",
-            name:"Name",
-            edit:"Bearbeiten",
-            dialogTitle:"Türkonfiguration",
-            credentials:"Credentials"
-
-        },
-
-        issuermanagement: {
-            title: "Herausgeber verwalten",
-            firstname: "Vorname",
-            lastname: "Name",
-            email: "E-Mail",
-            credential:"Credential",
-            search: "Suche",
-            issuerFilter:"Herausgebern filtern",
-            edit: "Bearbeiten",
-            credentialsList:"Liste aller Credentials",
-            roomsList:"Liste aller Räume",
-            roomId: "Raum ID",
-            credentials:"Credential",
-            dialogTitle:"Credentials verwalten",
-            save:"Speichern",
-            cancel: "Abbrechen",
-            saveConfirmationTitle: "Speichern?",
-            saveConfirmationMessage: "Sind Sie sicher, dass sie speichern wollen?",
-        },
-
-
-
     },
     en: {
         common: {
@@ -676,7 +633,7 @@ const messages = {
             room: "Room: ",
             allCredentials: "All Credentials",
             type: "Type",
-            showCredentials: "Show all Credentials",
+            showCredentials: "Show all",
             all: "All",
             intern: "Internal",
             extern: "External"
@@ -715,7 +672,7 @@ const messages = {
                     secondary: "role badges",
                     accent: "text-color in banner, footer, buttons",
                     dark: "footer",
-                    lightBlue: "...",
+                    light: "icons",
                     positive: "positive notifications, save buttons",
                     negative: "negative notifications, delete/reset buttons",
                     info: "profile button, informational content",
@@ -760,7 +717,8 @@ const messages = {
                 attribute: "Name of the attribute",
                 edit: "Edit Credential",
                 checklist: "Checklist",
-                credentialAttribute: "Credential attributes"
+                credentialAttribute: "Credential attributes",
+                loadCredentialSchema: "Load credential schema"
             }
         },
         editor: {
@@ -776,7 +734,7 @@ const messages = {
                 deleteGroup: "Delete group",
                 addRoomsToSelected: "Add selected rooms to the following group :",
                 nameOfGroup: "Name of the new group",
-                doorconfiguration: "Doorconfigurations",
+                doorconfiguration: "Door configurations",
                 groups: "Room Groups",
                 info: "Add rooms either to a new group or choose an existing group",
                 addRooms: "Add rooms to selected group",

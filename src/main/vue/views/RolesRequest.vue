@@ -3,7 +3,7 @@
     <p class="row text-h3 justify-center">{{t("admin.requestedRoles.title")}}</p>
     <div class="row justify-center">
       <q-table
-          style="width: 80vw; height: 50vh"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
@@ -29,15 +29,13 @@
           </q-td>
         </template>
         <template v-slot:top-left>
-          <div class="col-9">
             <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR"
-                      :label="t('profile.administrators')"/>
-            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t('profile.editors')"/>
-            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t('profile.issuers')"/>
-          </div>
+                      :label="t('profile.administrators')" size="2.5em"/>
+            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t('profile.editors')" size="2.5em"/>
+            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t('profile.issuers')" size="2.5em"/>
         </template>
         <template v-slot:top-right>
-          <q-input borderless dense debounce="300" v-model="filter.search"
+          <q-input outlined rounded dense debounce="300" v-model="filter.search"
                    :placeholder="t('common.search')">
             <template v-slot:append>
               <q-icon name="search"/>
@@ -49,7 +47,7 @@
             <div class="column items-center justify-evenly" v-for="role in props.value">
               <q-chip v-model:selected="role.selected" color="secondary" text-color="primary"
                       style="padding: 0.4em 0.75em 0.4em 0.75em; font-size: 1em"
-                      icon="close" icon-selected="done">
+                      icon="not_interested" icon-selected="account_circle">
                 {{ t('profile.' + role.role.toLowerCase()) }}
               </q-chip>
             </div>

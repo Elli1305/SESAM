@@ -177,29 +177,29 @@ export default {
         }
         floor.rooms.push(room)
 
-                this.floorStore.save(floor).then((savedFloor) => {
-                    const savedRoom = savedFloor.rooms.reduce((prev, current) => (prev.id > current.id) ? prev : current)
-                    this.floorPlanStore.rooms = savedFloor.rooms
-                    e.layer.id = savedRoom.id
-                    this.addCallbacksPolygon(e.layer)
-                })
-            } else if (e.shape === 'Line' || e.shape === 'Polyline') {
-                $q.dialog({
-                    component: CreateDoor,
-                    componentProps: {
-                        rooms: this.floorPlanStore.rooms
-                    }
-                }).onOk(({room, doorName, configuration}) => {
-                    let door = {
-                        name: doorName,
-                        doorConfigCmds: configuration,
-                        roomId: room.id,
-                        coordinates: e.layer._latlngs.map((latLng) => ({
-                                lat: latLng.lat,
-                                lng: latLng.lng
-                            }
-                        )),
-                    };
+        this.floorStore.save(floor).then((savedFloor) => {
+          const savedRoom = savedFloor.rooms.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+          this.floorPlanStore.rooms = savedFloor.rooms
+          e.layer.id = savedRoom.id
+          this.addCallbacksPolygon(e.layer)
+        })
+      } else if (e.shape === 'Line' || e.shape === 'Polyline') {
+        $q.dialog({
+          component: CreateDoor,
+          componentProps: {
+            rooms: this.floorPlanStore.rooms
+          }
+        }).onOk(({room, doorName, configuration}) => {
+          let door = {
+            name: doorName,
+            doorConfigCmds: configuration,
+            roomId: room.id,
+            coordinates: e.layer._latlngs.map((latLng) => ({
+                  lat: latLng.lat,
+                  lng: latLng.lng
+                }
+            )),
+          };
 
           this.doorStore.create(door).then((savedDoor) => {
             room.doors.push(savedDoor)
@@ -331,6 +331,14 @@ export default {
           width: 5,
           fillOpacity: 0.1
         })
+          if(this.floorPlanStore.selectedRooms.includes(room.id)) {
+              polygon.setStyle({
+                  color: 'red',
+                  fillColor: 'red',
+                  weight: 2,
+                  fillOpacity: 0.1
+              })
+          }
 
         polygons.push(polygon);
         let doorsname = room.doors.map(door => door.name).join(", ");
@@ -392,5 +400,6 @@ export default {
 #floor-plan-map {
   height: 70vh;
   position: relative;
+  background: var(--bg-color);
 }
 </style>

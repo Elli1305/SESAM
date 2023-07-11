@@ -8,8 +8,11 @@ export enum Direction {
 }
 
 export interface TwoWayDoorConfiguration {
-    doorConfigIn: DoorConfiguration,
+    doorConfigIn: DoorConfiguration
     doorConfigOut: DoorConfiguration
+    startTime?: string
+    endTime?: string
+    baseConfig?: boolean
 }
 
 export interface DoorConfiguration {

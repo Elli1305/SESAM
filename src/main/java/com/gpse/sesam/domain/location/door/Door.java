@@ -3,6 +3,7 @@ package com.gpse.sesam.domain.location.door;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 
 import com.gpse.sesam.domain.location.Coordinate;
+import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +40,7 @@ public class Door {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();
 
 	//@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -54,7 +55,6 @@ public class Door {
 	public Door(final String name, final List<Coordinate> coordinates) {
 		this.name = name;
 		this.coordinates = coordinates;
-		this.createdAt = new Date(System.currentTimeMillis());
 	}
 
 	public Long getId() {
