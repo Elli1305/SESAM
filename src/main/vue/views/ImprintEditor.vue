@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{ t('imprint.imprintEditorTitle') }}</p>
+    <p class="row text-h3 justify-center">{{ t("imprint.imprintEditorTitle") }}</p>
     <div class="row justify-evenly no-wrap" style="width: 80vw; height: 50vh">
       <q-btn class="self-end q-mr-lg" round icon="delete" color="negative" text-color="positive"
              @click="showDeleteDialog" style="width: 4em; height: 4em"/>
@@ -101,9 +101,7 @@
       </div>
       <q-dialog v-model="confirmDialog">
         <q-card>
-          <q-card-section>
-            <div class="text-h6">Bestätigen</div>
-          </q-card-section>
+
           <q-card-section class="row items-center">
             <div class="q-mx-sm">{{ t('admin.imprint.imprintEditorMessageSave') }}</div>
           </q-card-section>
@@ -116,9 +114,6 @@
 
       <q-dialog v-model="deleteDialog">
         <q-card>
-          <q-card-section>
-            <div class="text-h6">Löschen bestätigen</div>
-          </q-card-section>
           <q-card-section class="row items-center">
             <div class="q-mx-sm">{{ t('admin.imprint.imprintEditorMessageDelete') }}</div>
           </q-card-section>

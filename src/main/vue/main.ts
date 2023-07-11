@@ -254,14 +254,7 @@ const messages = {
                 resetFailure: "Zurücksetzen fehlgeschlagen",
                 saveFailure: "Speichern fehlgeschlagen"
             },
-            imprint: {
-                imprintTitle: "Impressum",
-                imprintEditorTitle: "Impressum Bearbeiten",
-                imprintEditorMessageSave: "Sind Sie sicher, dass Sie speichern wollen?",
-                imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
-                imprintEditorMessageSaveConfirmation: "Inhalt erfolgreich gespeichert",
-                imprintEditorMessageDeleteConfirmation: "Inhalt erfolgreich gelöscht"
-            },
+
             credentialMapping: {
                 title: 'Credentialmapping',
                 newCategory: 'Neue Kategorie',
@@ -454,6 +447,14 @@ const messages = {
                     unknown: "Bitte versuchen Sie es später erneut.",
                 },
             },
+        },
+        imprint: {
+            imprintTitle: "Impressum",
+            imprintEditorTitle: "Impressum Bearbeiten",
+            imprintEditorMessageSave: "Sind Sie sicher, dass Sie speichern wollen?",
+            imprintEditorMessageDelete: "Sind Sie sicher, dass Sie das Impressum löschen wollen?",
+            imprintEditorMessageSaveConfirmation: "Inhalt erfolgreich gespeichert",
+            imprintEditorMessageDeleteConfirmation: "Inhalt erfolgreich gelöscht"
         },
     },
     en: {
@@ -706,7 +707,7 @@ const messages = {
                 imprintEditorMessageSave: "Are you sure you want to save?",
                 imprintEditorMessageDelete: "Are you sure you want to delete?",
                 imprintEditorMessageSaveConfirmation: "Content saved successfully",
-                imprintEditorMessageDeleteConfirmation: "Content successfully deleted"
+                imprintEditorMessageDeleteConfirmation: "Content deleted"
             },
             credentialMapping: {
                 title: 'Credential mapping',
