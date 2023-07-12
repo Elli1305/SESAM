@@ -1,18 +1,18 @@
 package com.gpse.sesam.domain.location.door;
-import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
 import com.gpse.sesam.domain.location.room.RoomService;
 import com.gpse.sesam.util.ActiveConfigUtil;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -134,28 +134,5 @@ public class DoorServiceImpl implements DoorService {
 			return room.get().getDoors();
 		}
 		return Collections.emptyList();
-	}
-
-	@Override
-	public Room getRoomByDoorId(Long id) {
-		Optional<Door> door = doorRepository.findById(id);
-		List<Room> rooms = roomService.getRooms();
-		if (door.isPresent()) {
-			for (Room room : rooms) {
-				if (room.getDoors().contains(door)) {
-					return room;
-				}
-			}
-		}
-		return null;
-	}
-
-	@Override
-
-	public List<Door> getAllDoors() {
-		final List<Door> doors = new ArrayList<>();
-		doorRepository.findAll().forEach(doors::add);
-		return doors;
-
 	}
 }

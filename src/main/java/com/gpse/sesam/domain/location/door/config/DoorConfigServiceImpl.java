@@ -1,19 +1,13 @@
 package com.gpse.sesam.domain.location.door.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.gpse.sesam.configuration.DoorApiConfig;
-
-
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.web.cmd.DoorConfigCmd;
 import com.gpse.sesam.web.exception.InvalidDoorConfiguration;
-
 import org.slf4j.Logger;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -112,9 +106,7 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 				LOGGER.error("POST Request fehlgeschlagen. Statuscode: {} ", response.getStatusCode());
 				throw new InvalidDoorConfiguration("Could not configure door. Reason: " + response.getBody());
 			}
-
-		} catch (JsonProcessingException e) {
-
+		} catch (final JsonProcessingException e) {
 			LOGGER.error("Fehler beim Erstellen des Request-Bodies.", e);
 		}
 	}

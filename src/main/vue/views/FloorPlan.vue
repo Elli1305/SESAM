@@ -25,7 +25,6 @@ import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
 import {useCredentialsStore} from "@/main/vue/stores/credential";
 import {useI18n} from "vue-i18n";
-import api from "@/main/vue/api";
 
 const mapConfig = {
   crs: CRS.Simple,

@@ -160,20 +160,6 @@ const router = createRouter({
             },
         },
         {
-            path: "/doorhistory",
-            component: () => import("@/main/vue/views/DoorHistoryOverview.vue"),
-            meta: {
-                authorize: AttainableRole.ADMINISTRATOR && AttainableRole.EDITOR,
-            },
-        },
-        {
-            path: "/doorhistory/:id(\\d+)",
-            component: () => import("@/main/vue/views/DoorHistory.vue"),
-            meta: {
-                authorize: AttainableRole.ADMINISTRATOR && AttainableRole.EDITOR,
-            },
-        },
-        {
             path: "/add_credential",
             component: () => import("@/main/vue/views/CredentialEditing.vue"),
             meta: {
