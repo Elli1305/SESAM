@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Diese Klasse implementiert den DoorConfigService und stellt Funktionen zur Verwaltung von Türkonfigurationen bereit.
+ */
 @Component
 public class DoorConfigServiceImpl implements DoorConfigService {
 
@@ -32,6 +35,11 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 	private final DoorApiConfig appConfig;
 	private ConfigCmdMapper configCmdMapper;
 
+	/**
+	 * Konstruktor für DoorConfigServiceImpl.
+	 *
+	 * @param appConfig Application der Telekom
+	 */
 	@Autowired
 	public DoorConfigServiceImpl(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository,
 								 final CredentialService credentialService) {
@@ -40,6 +48,11 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 		this.configCmdMapper = new ConfigCmdMapper(credentialService);
 	}
 
+	/**
+	 * Gibt alle Türkonfigurationen zurück
+	 *
+	 * @return die Liste aller Türkonfigurationen
+	 */
 	@Override
 	public void getDoorConfigurations() {
 		final HttpHeaders headers = new HttpHeaders();
@@ -61,6 +74,11 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 		}
 	}
 
+	/**
+	 * Gibt alle Türkonfigurationen zurück
+	 * @param doorApiId String der doorApiId
+	 * @return die Liste aller Türkonfigurationen
+	 */
 	@Override
 	public DoorConfigCmd getDoorConfig(final String doorApiId) {
 		final HttpHeaders headers = new HttpHeaders();
@@ -83,6 +101,11 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 		}
 	}
 
+	/**
+	 * Versendet eine ProofConfig
+	 * @param doorId Tür zum Konfiguieren
+	 * @param proofConfig Config für die Konfiguration
+	 */
 
 	@Override
 	public void sendProofConfig(final String doorId, final ProofConfig proofConfig) {
@@ -110,6 +133,11 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 			LOGGER.error("Fehler beim Erstellen des Request-Bodies.", e);
 		}
 	}
+
+	/**
+	 * Erstellen einer neuen ProofConfig
+	 * @return proofConfig
+	 */
 
 	private ProofConfig createProofConfig() {
 		final ProofConfig proofConfig = new ProofConfig();

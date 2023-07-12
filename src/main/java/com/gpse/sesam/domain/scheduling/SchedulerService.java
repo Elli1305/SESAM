@@ -10,13 +10,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+/**
+ * Implementierung des SchedulerService, der Operationen zum Scheduling enthält
+ */
 
 @Service
 public class SchedulerService {
     DoorService doorService;
     DoorConfigService doorConfigService;
 
+    /**
+     * Konstruktoren des SchedulerService
+     * @param doorService DoorService
+     * @param doorConfigService Doorconfigservice
+     */
     SchedulerService(DoorService doorService, DoorConfigService doorConfigService) {
         this.doorService = doorService;
         this.doorConfigService = doorConfigService;
@@ -24,6 +31,9 @@ public class SchedulerService {
 
     }
 
+    /**
+     * Versenden der DoorConfig zur richtigen Zeit
+     */
     @Scheduled(fixedRate = 60000)
     public void sendDoorConfig() {
         final List<Door> doors = doorService.getDoors();
@@ -41,3 +51,4 @@ public class SchedulerService {
         }
     }
 }
+
