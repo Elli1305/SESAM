@@ -28,7 +28,7 @@ tags:
     description: Everything about the doorconfig
   - name: preconfig
     description: Everything about the predefined configs
-  - name: credentials
+  - name: credential
     description: Everything about the credentials
   - name: category
     description: Everything about the categories
@@ -444,7 +444,7 @@ paths:
                 type: object
     post:
       tags:
-        - credentials
+        - credential
       summary: Create a Credential
       description: Create a credential
       operationId: create
