@@ -4,9 +4,10 @@ type CredentialFormEntryType = "text" | "number" | "date";
 
 export type ComparisonType = "EQUAL" | "NOT_EQUAL" | "LESS_THAN" | "GREATER_THAN" | "LESS_EQUAL" | "GREATER_EQUAL";
 
-export interface Credential {
+export interface InternalCredential {
     id: bigint;
     name: string;
+    version: string;
     agent: string;
     credentialDefinitionId: string;
     form: FormEntry[];
@@ -75,13 +76,15 @@ export interface ChecklistEntry {
 export interface ExternalCredential {
     id: bigint;
     name: string;
+    version: string;
     credentialDefinitionId: string;
+    form: FormEntry[];
 }
 
 export interface Category {
     id: bigint;
     name: string;
-    credentials: Credential[];
+    credentials: InternalCredential[];
     externalCredentials: ExternalCredential[];
 }
 
@@ -113,11 +116,19 @@ interface CreateCondition {
 
 export interface CreateCredential {
     name: string;
+    version: string;
     agent: string;
     credentialDefinitionId: string;
 
     attributes: CreateAttribute[];
     conditions: CreateCondition[];
+}
+
+export interface CreateExternalCredential {
+    name: string;
+    version: string;
+    credentialDefinitionId: string;
+    attributes: CreateAttribute[];
 }
 
 export interface CategoryCmd {
