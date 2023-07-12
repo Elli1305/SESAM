@@ -300,7 +300,7 @@ public class SesamUserServiceImpl implements SesamUserService {
 							 final List<SesamUserRole.AttainableRole> roles) {
 		if (roles.contains(SesamUserRole.AttainableRole.ISSUER) && !(user instanceof Issuer)) {
 			deleteUser(user);
-			Issuer issuer = new Issuer(user.getUsername(), username, prename, lastname, roles.stream()
+			Issuer issuer = new Issuer(user.getUsername(), user.getPassword(), prename, lastname, roles.stream()
 					.distinct().map(role -> new SesamUserRole(role, true))
 					.collect(Collectors.toList()), null);
 			issuerService.save(issuer);
