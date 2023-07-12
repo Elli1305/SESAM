@@ -34,8 +34,6 @@ public class Door {
 	@Column
 	private String name;
 
-	@Column
-	private Date createdAt;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
@@ -114,14 +112,5 @@ public class Door {
 		this.doorConfigs = doorConfigs;
 	}
 
-	public Date getCreatedAt() {
 
-		return createdAt;
-
-	}
-
-	public void setCreatedAt(Date createdAt) {
-
-		this.createdAt = createdAt;
-	}
 }

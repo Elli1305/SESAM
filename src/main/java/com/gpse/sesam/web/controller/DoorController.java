@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/door")
 public class DoorController {
-
 	private final DoorService doorService;
 	private final DoorCmdMapper doorCmdMapper;
 

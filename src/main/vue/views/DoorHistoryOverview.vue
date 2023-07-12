@@ -6,7 +6,6 @@
           style="width: 80vw; height: 50vh"
           :rows-per-page-options="[0]"
           :separator="'cell'"
-          title="Türhistorie"
           :rows="doors"
           :no-data-label="t('common.noData')"
           :no-results-label="t('common.noResults')"
@@ -14,11 +13,6 @@
           row-key="id"
           :filter="filter"
       >
-        <template v-slot:body-cell-datum="props">
-          <q-td :props="props" class="center-cell">
-            <div>{{ formatDateTime(props.row.createdAt) }}</div>
-          </q-td>
-        </template>
         <template v-slot:body-cell-credentials="props">
           <q-td :props="props">
             <div v-for="credential in props.row.credentials" :key="credential.id">{{ credential.name }}</div>
@@ -42,8 +36,10 @@
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="width: 90%">
-        <q-input v-model="doorName" label="Door" disable />
-        <q-input v-model="roomName" label="Room" disable />
+        <div class="row justify-center" style="padding: 2em 2em" >
+          <q-input  filled v-model="doorName" label="Door" disable />
+          <q-input class="q-ml-md" filled v-model="roomName" label="Room" disable />
+        </div>
         <door-config disabled ref="configIn" :door-config="doorConfigIn"
                      :direction="JSON.stringify(this.doorConfigIn) !== JSON.stringify(this.doorConfigOut) ? Direction.IN : Direction.BOTH"
                      @changeDirection="changeDirectionOut"></door-config>
@@ -56,6 +52,7 @@
           <q-btn flat v-close-popup> {{ t("common.save")}}</q-btn>
           </p>
         </q-card-actions>
+
       </q-card>
     </q-dialog>
   </q-page>
@@ -99,9 +96,9 @@ export default {
     const doors = ref<Door[]>([]);
     const dialogVisible = ref(false);
     const userStore = useUserStore()
+    const doorName = ref('');
 
     const columns = [
-      { name: 'datum', required: true, label: t('doorHistory.date'), align: 'center', field: 'createdAt', headerAlign: 'center', sortable: true },
       { name: 'name', required: true, label: t('doorHistory.name'), align: 'center', field: 'name', headerAlign: 'center', sortable: true },
       { name: 'credentials', required: true, label: t('doorHistory.credentials'), align: 'center', field: 'credentials', headerAlign: 'center', sortable: true },
       { name: 'actions', align: 'center', label: t('doorHistory.edit') },
@@ -120,13 +117,8 @@ export default {
       selectedDoor.value = door;
     }
 
-    const formatDateTime = (dateTime: number): string => {
-      const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-      return new Date(dateTime).toLocaleDateString('en-US', options);
-    }
-
     const openDialog = (row: Door): void => {
-      selectedDoor.value = row;
+      doorName.value = row.name;
       dialogVisible.value = true;
     }
 
@@ -146,26 +138,16 @@ export default {
       dialogVisible,
       fetchDoors,
       showHistory,
-      formatDateTime,
       openDialog,
       closeDialog,
-      doorName: ref(''),
       roomName: ref(''),
       prompt: ref(false),
       filter: ref(''),
-      userStore
+      userStore,
+      doorName,
     };
   },
-  methods: {
 
-    changeDirectionOut(direction: Direction) {
-      if (direction === Direction.IN) {
-        this.$refs.configOut.direction = Direction.OUT
-      } else if (direction === Direction.OUT) {
-        this.$refs.configOut.direction = Direction.IN
-      }
-    },
-  }
 }
 </script>
 
