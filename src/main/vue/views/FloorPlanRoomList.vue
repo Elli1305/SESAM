@@ -342,8 +342,9 @@
                                                                 <q-card-actions align="right" class="text-primary">
                                                                     <q-btn style="max-width: 10em;"
                                                                            class="q-mr-xl text-white bg-primary"
-                                                                           :label="t('editor.groupRooms.doorconfiguration')" @click="" flat/>
-
+                                                                           :label="t('editor.groupRooms.doorconfiguration')" flat
+                                                                           @click="openGroupDoorDialog"
+                                                                    />
                                                                     <q-btn flat :label="t( 'common.cancel')"
                                                                            color="primary"
                                                                            @click="unCheck();cancelEdit();"
@@ -634,6 +635,7 @@ import CreateDoor from "@/main/vue/views/CreateDoor.vue";
 import {useDoorStore} from "@/main/vue/stores/door";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {useLocationStore} from "@/main/vue/stores/locations";
+import MultipleRoomsDoorConfigDialog from "@/main/vue/views/MultipleRoomsDoorConfigDialog.vue";
 
 
 export default {
@@ -972,6 +974,17 @@ export default {
             })
         }
 
+        function openGroupDoorDialog() {
+            $q.dialog({
+                component: MultipleRoomsDoorConfigDialog,
+                componentProps: {
+                    group: selectedGroups.value.id
+                }
+            }).onOk(() => {
+                console.log("success")
+            })
+        }
+
         function setOldValueR(room) {
             inception.value = true;
             currentRoomName.value = room.name;
@@ -1144,6 +1157,7 @@ export default {
         const dropdown = ref(false);
 
         return {
+            openGroupDoorDialog,
             floorPlanStore,
             selectedRooms,
             toggleRoomCheckbox,
