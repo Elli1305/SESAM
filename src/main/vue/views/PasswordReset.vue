@@ -40,7 +40,6 @@ export default {
       try {
         await userStore.resetPassword(email.value)
       } catch (error: any) {
-        console.log(error)
         if (error.response.status === 403 || error.response.status === 422) {
           $q.notify({
             type: 'negative',

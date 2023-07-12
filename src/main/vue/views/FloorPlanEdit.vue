@@ -115,7 +115,7 @@
       direction="right"
   ><q-icon name="chevron_right" right/></q-btn>
   <q-dialog v-model="deleteLocation" persistent>
-    <q-card>
+    <q-card style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section>
         <div class="text-h6"> {{t('floorPlan.deleteLocation')}}</div>
       </q-card-section>
@@ -125,12 +125,12 @@
 
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup>  {{ t("common.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteLocationFunction(param)">  {{ t("common.save")}} </q-btn>
+        <q-btn flat v-close-popup @click="deleteLocationFunction(param)">  {{ t("common.delete")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-dialog v-model="deleteBuilding" persistent>
-    <q-card>
+    <q-card style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section>
         <div class="text-h6"> {{t('floorPlan.deleteBuilding')}}</div>
       </q-card-section>
@@ -140,12 +140,12 @@
 
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup>  {{ t("common.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteBuildingFunction(param)">  {{ t("common.save")}} </q-btn>
+        <q-btn flat v-close-popup @click="deleteBuildingFunction(param)">  {{ t("common.delete")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-dialog v-model="deleteFloor" persistent>
-    <q-card>
+    <q-card style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section>
         <div class="text-h6"> {{t('floorPlan.deleteFloor')}}</div>
       </q-card-section>
@@ -155,13 +155,13 @@
 
       <q-card-actions align="right" class="text-primary">
         <q-btn flat v-close-popup>  {{ t("common.cancel")}}</q-btn>
-        <q-btn flat v-close-popup @click="deleteFloorFunction(param)">  {{ t("common.save")}} </q-btn>
+        <q-btn flat v-close-popup @click="deleteFloorFunction(param)">  {{ t("common.delete")}} </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-page class="row no-wrap">
-    <FloorPlan ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
-    <FloorPlanRoomList @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
+    <FloorPlan @roomClicked="openDetail" @door-created="refresh" ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
+    <FloorPlanRoomList ref="roomList" @doorChanged="redrawRooms" @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
   </q-page>
 
 </template>
@@ -187,11 +187,15 @@ export default {
   components: {FloorPlanRoomList, FloorPlan},
   methods: {
     redrawRooms() {
-      console.log(this.$refs.floorPlanRef)
       this.$refs.floorPlanRef.removeLayer()
       this.$refs.floorPlanRef.drawRooms(this.floorPlanStore.rooms)
+    },
+    refresh() {
+      this.$refs?.roomList?.refreshDetail();
+    },
+    openDetail(id) {
+      this.$refs?.roomList?.roomClick(this.locationStore.getRoomById(id))
     }
-
   },
   setup() {
     const locationStore = useLocationStore()

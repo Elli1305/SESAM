@@ -32,6 +32,9 @@ public class InternalCredential implements Credential {
 	private String name;
 
 	@Column(nullable = false)
+	private String version;
+
+	@Column(nullable = false, unique = true)
 	private String credentialDefinitionId;
 
 	@Column(nullable = false)
@@ -47,16 +50,17 @@ public class InternalCredential implements Credential {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ChecklistEntry> checklist;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "credentials")
 	private List<Issuer> issuers = new ArrayList<>();
 
 	protected InternalCredential() {
 	}
 
-	public InternalCredential(final String name, final String credentialDefinitionId, final String agent,
-							  final List<FormEntry> form,
+	public InternalCredential(final String name, final String version, final String credentialDefinitionId,
+							  final String agent, final List<FormEntry> form,
 							  final List<ChecklistEntry> checklist) {
 		this.name = name;
+		this.version = version;
 		this.credentialDefinitionId = credentialDefinitionId;
 		this.agent = agent;
 		this.form = form;
@@ -77,6 +81,16 @@ public class InternalCredential implements Credential {
 
 	public void setName(final String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String getVersion() {
+		return version;
+	}
+
+	@Override
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	public String getCredentialDefinitionId() {

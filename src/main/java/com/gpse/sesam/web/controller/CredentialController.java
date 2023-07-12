@@ -9,6 +9,7 @@ import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
+import com.gpse.sesam.web.exception.LibIndyNotInstalledException;
 import jakarta.validation.Valid;
 import org.hyperledger.indy.sdk.IndyException;
 import org.hyperledger.indy.sdk.InvalidStructureException;
@@ -84,8 +85,9 @@ public class CredentialController {
 	@PostMapping(value = "/credentials")
 	@ResponseStatus(HttpStatus.CREATED)
 	@Secured("ADMINISTRATOR")
-	public void create(@Valid @RequestBody final CreateCredentialCmd credential) {
-		service.create(credential);
+	public void create(@RequestParam(defaultValue = "false") boolean createOnLedger,
+					   @Valid @RequestBody CreateCredentialCmd credential) throws JsonProcessingException {
+		service.create(createOnLedger, credential);
 	}
 
 	@PutMapping(value = "/credentials/{id}")
@@ -125,6 +127,40 @@ public class CredentialController {
 	@GetMapping(value = "/allbylocation/{id}")
 	public List<AllCredentialCmd> allByLocation(@PathVariable final Long id) {
 		return service.getAllCredentialsByLocation(id);
+	}
+
+	@PostMapping(value = "/external_credentials")
+	@ResponseStatus(HttpStatus.CREATED)
+	@Secured("ADMINISTRATOR")
+	public void createExternalCredential(@Valid @RequestBody CreateExternalCredentialCmd credential) {
+		externalCredentialService.createExternalCredential(credential);
+	}
+
+	@GetMapping(value = "/external_credentials/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public ExternalCredential externalCredential(@PathVariable Long id) {
+		final Optional<ExternalCredential> credential = externalCredentialService.getExternalCredential(id);
+
+		if (credential.isPresent()) {
+			return credential.get();
+		}
+
+		throw new CredentialNotFoundException();
+	}
+
+	@PutMapping(value = "/external_credentials/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Secured("ADMINISTRATOR")
+	public void updateExternalCredential(@PathVariable Long id,
+										 @Valid @RequestBody CreateExternalCredentialCmd credential) {
+		externalCredentialService.updateExternalCredential(id, credential);
+	}
+
+	@DeleteMapping(value = "/external_credentials/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Secured("ADMINISTRATOR")
+	public void deleteExternalCredential(@PathVariable Long id) {
+		externalCredentialService.deleteExternalCredential(id);
 	}
 
 	@GetMapping(value = "/credential_schema/{credentialDefinitionId}")
@@ -170,5 +206,16 @@ public class CredentialController {
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({ConnectException.class, IllegalArgumentException.class})
 	public void importException() {
+	}
+
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(JsonProcessingException.class)
+	public void jsonException() {
+	}
+
+	@ResponseStatus(value = HttpStatus.FAILED_DEPENDENCY)
+	@ExceptionHandler({LibIndyNotInstalledException.class, UnsatisfiedLinkError.class})
+	public CredentialSchemaErrorCmd libIndyNotInstalled() {
+		return new CredentialSchemaErrorCmd("ERR_LIBINDY_NOT_INSTALLED");
 	}
 }

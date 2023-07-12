@@ -20,6 +20,7 @@ import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.*;
+import com.gpse.sesam.web.exception.LibIndyNotInstalledException;
 import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
 import org.hyperledger.indy.sdk.IndyException;
@@ -66,6 +67,7 @@ public class CredentialServiceImpl implements CredentialService {
     private final ObjectMapper mapper;
 
     private final IssuerRepository issuerRepository;
+
     private final CredentialRepository credentialRepository;
 
     private final LocationService locationService;
@@ -105,6 +107,16 @@ public class CredentialServiceImpl implements CredentialService {
     }
 
     /**
+     * Ersetzt magische Credential-Definition-IDs durch ihre tatsächlichen Werte.
+     *
+     * @param credentialDefinitionId die Credential-Definition-ID, die ersetzt werden soll
+     * @return die ersetzte Credential-Definition-ID
+     */
+    public static String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
+        return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
+    }
+
+    /**
      * Zerstört den Pool und schließt die Verbindung.
      *
      * @throws IndyException          wenn ein Fehler in der Indy-Bibliothek auftritt
@@ -132,13 +144,13 @@ public class CredentialServiceImpl implements CredentialService {
      * @throws ExecutionException    wenn ein Fehler bei der Ausführung auftritt
      * @throws InterruptedException  wenn der Thread während des Wartens unterbrochen wird
      */
-    private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException {
+    private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException, UnsatisfiedLinkError {
         if (!LibIndy.isInitialized()) {
             LibIndy.init();
         }
 
         if (LibIndy.api == null) {
-            return null;
+            throw new LibIndyNotInstalledException();
         }
 
         File genesisTxnFile = ResourceUtils.getFile("classpath:test.bcovrin.vonx.io.jsonl");
@@ -154,18 +166,7 @@ public class CredentialServiceImpl implements CredentialService {
             // Intentionally ignored.
         }
 
-
         return Pool.openPoolLedger(DEFAULT_POOL_NAME, "{}").get();
-    }
-
-    /**
-     * Ersetzt magische Credential-Definition-IDs durch ihre tatsächlichen Werte.
-     *
-     * @param credentialDefinitionId die Credential-Definition-ID, die ersetzt werden soll
-     * @return die ersetzte Credential-Definition-ID
-     */
-    private String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
-        return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
     }
 
 
@@ -246,7 +247,7 @@ public class CredentialServiceImpl implements CredentialService {
      */
     private String sendCredentialIssueRequest(@Valid final IssueCredentialRequest issueCredentialRequest)
             throws JsonProcessingException {
-        return client.post().uri("credential/issue").contentType(MediaType.TEXT_PLAIN)
+        return client.post().uri("credential/issue").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).bodyValue(mapper.writeValueAsString(issueCredentialRequest))
                 .retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(5000)).block();
     }
@@ -409,10 +410,34 @@ public class CredentialServiceImpl implements CredentialService {
      *                            Credential enthält.
      */
     @Override
-    public void create(final CreateCredentialCmd createCredentialCmd) {
+    public void create(boolean createOnLedger, CreateCredentialCmd createCredentialCmd) throws JsonProcessingException {
+        String credentialDefinitionId =
+                replaceMagicCredentialDefinitionIds(createCredentialCmd.getCredentialDefinitionId());
+
+        if (createOnLedger) {
+            final DeployCredentialCmd deployCredentialCmd = new DeployCredentialCmd(
+                    createCredentialCmd.getAgent(),
+                    createCredentialCmd.getName(),
+                    new DeployCredentialTemplateCmd(
+                            createCredentialCmd.getName(),
+                            createCredentialCmd.getVersion(),
+                            createCredentialCmd
+                                    .getAttributes()
+                                    .stream()
+                                    .map(CreateAttributeCmd::getAttributeName)
+                                    .collect(Collectors.toList())
+                    )
+            );
+
+            credentialDefinitionId = client.post().uri("credential/deploy").contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.TEXT_PLAIN).bodyValue(mapper.writeValueAsString(deployCredentialCmd))
+                    .retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(30000)).block();
+        }
+
         final InternalCredential credential = new InternalCredential(
                 createCredentialCmd.getName(),
-                replaceMagicCredentialDefinitionIds(createCredentialCmd.getCredentialDefinitionId()),
+                createCredentialCmd.getVersion(),
+                credentialDefinitionId,
                 createCredentialCmd.getAgent(),
                 createCredentialCmd.getAttributes().stream()
                         .map(createAttributeCmd ->
@@ -482,6 +507,7 @@ public class CredentialServiceImpl implements CredentialService {
 
         credential.setName(updateCredentialCmd.getName());
         credential.setAgent(updateCredentialCmd.getAgent());
+        credential.setVersion(updateCredentialCmd.getVersion());
         credential.setCredentialDefinitionId(
                 replaceMagicCredentialDefinitionIds(
                         updateCredentialCmd.getCredentialDefinitionId()

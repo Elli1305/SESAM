@@ -3,6 +3,7 @@ package com.gpse.sesam.web.cmd;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
@@ -11,9 +12,12 @@ public class CreateCredentialCmd {
     private String name;
 
     @NotBlank
+    private String version;
+
     private String credentialDefinitionId;
 
     @NotBlank
+    @Pattern(regexp = "^(tlabs|university)$")
     private String agent;
 
     @Valid
@@ -62,5 +66,13 @@ public class CreateCredentialCmd {
 
     public void setConditions(List<CreateConditionCmd> conditions) {
         this.conditions = conditions;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

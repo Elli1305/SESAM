@@ -1,20 +1,19 @@
 <template>
   <q-card-section>
-    <q-card bordered flat>
+    <q-card style="background-color: var(--bg-color); color: var(--text-color)" bordered flat>
       <q-toolbar class="bg-primary text-accent">
-        <q-toolbar-title>{{ t('floorPlan.config') }}</q-toolbar-title>
-        <q-field dark borderless>
-          <template v-slot:control>
-            <div class="no-outline text-subtitle2">{{t('floorPlan.direction')}}</div>
-          </template>
+        <q-toolbar-title>{{t('floorPlan.direction')}}</q-toolbar-title>
+        <q-field borderless>
           <template v-slot:append>
             <q-btn-toggle
                 toggle-indeterminate
                 v-model="direction"
-                style="margin: 1em 1em 1em 0"
+                class="q-mr-lg"
+                color="secondary"
+                text-color="accent"
+                toggle-color="primary"
+                toggle-text-color="accent"
                 :label="t('floorPlan.direction')"
-                color="white"
-                text-color="black"
                 :options="[
                   {label: t('floorPlan.directions.in'), value: Direction.IN},
                   {label: t('floorPlan.directions.both'), value: Direction.BOTH},
@@ -28,7 +27,7 @@
           </template>
         </q-field>
         <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
-          <q-tooltip max-width="15em" anchor="center right" self="center left">
+          <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" max-width="15em" anchor="center right" self="center left">
             {{t('floorPlan.infoConfigGroups')}}
           </q-tooltip>
         </q-icon>
@@ -37,8 +36,8 @@
         <q-input filled v-model="qSelects.description" :label="t('floorPlan.configDescription')" stack-label/>
       </q-card-section>
       <q-card-section v-for="(select,i) in qSelects.configParts">
-        <q-card bordered flat>
-          <q-toolbar class="bg-primary text-white shadow-2">
+        <q-card style="background-color: var(--bg-color); color: var(--text-color)" bordered flat>
+          <q-toolbar class="bg-primary text-accent shadow-2">
             <q-toolbar-title>{{ t('floorPlan.configGroup') }}</q-toolbar-title>
             <q-btn flat round icon="delete" size="0.75em" @click="removeConfigGroup(i)"/>
           </q-toolbar>
@@ -55,8 +54,8 @@
                 use-chips>
               <template v-slot:after>
                 <q-icon class="cursor-pointer" size="0.75em" name="filter_none">
-                  <q-tooltip max-width="15em" anchor="center right" self="center left">
-                    {{t('floorPlan.directions.infoCredentialGroups')}}
+                  <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" max-width="15em" anchor="center right" self="center left">
+                    {{t('floorPlan.infoCredentialGroups')}}
                   </q-tooltip>
                 <q-menu anchor="bottom right" self="top right" transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color); color: var(--text-color)">
                     <q-list dense>
@@ -255,12 +254,13 @@ export default {
     if (props.doorConfig) {
       configDescription.value = props.doorConfig.description
       qSelects.value = props.doorConfig
+        direction.value = props.doorConfig.direction
     }
 
     watch(() => props.doorConfig, () => {
-      console.log("hallo", props.doorConfig)
       configDescription.value = props.doorConfig.description
       qSelects.value = props.doorConfig
+        direction.value = props.doorConfig.direction
     })
 
     const commonAttributeFilter = function (credentials) {
