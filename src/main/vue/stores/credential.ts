@@ -29,6 +29,8 @@ export const useCredentialsStore = defineStore('credentials', {
     }
 },);
 
+
+
 export const useCredentialStore = defineStore('credential', () => {
         const credentials: Ref<CredentialCmd[] | null> = ref(null)
         const allCredentials: Ref<ExternalCredential[] | null> = ref(null)

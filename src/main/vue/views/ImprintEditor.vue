@@ -1,62 +1,141 @@
 <template>
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{t('admin.imprint.imprintEditorTitle')}}</p>
-      <div class="row justify-evenly no-wrap" style="width: 80vw; height: 50vh">
-        <q-btn class="self-end q-mr-lg" round icon="delete" color="negative" text-color="positive" @click="showDeleteDialog" style="width: 4em; height: 4em"/>
+    <p class="row text-h3 justify-center">{{ t("imprint.imprintEditorTitle") }}</p>
+    <div class="row justify-evenly no-wrap" style="width: 80vw; height: 50vh">
+      <q-btn class="self-end q-mr-lg" round icon="delete" color="negative" text-color="positive"
+             @click="showDeleteDialog" style="width: 4em; height: 4em"/>
+      <div style="display: flex; flex-direction: column; align-items: center;">
         <q-editor
-            class="column full-height"
-            toolbar-rounded
-            :definitions="{
-              left: {icon: 'format_align_left', tip: ''},
-              center: {icon: 'format_align_center', tip: ''},
-              right: {icon: 'format_align_right', tip: ''},
-              justify: {icon: 'format_align_justify', tip: ''},
-              bold: {icon: 'format_bold', tip: ''},
-              italic: {icon: 'format_italic', tip: ''},
-              underline: {icon: 'format_underline', tip: ''},
-              strike: {icon: 'format_strikethrough', tip: ''},
-              undo: {icon: 'undo', tip: ''},
-              redo: {icon: 'redo', tip: ''}}"
             v-model="editorContent"
-            style="width: 50vw; background-color: var(--bg-color); color: var(--text-color)"/>
-        <q-btn class="self-end q-ml-lg" round icon="save" color="positive" text-color="negative" @click="showConfirmDialog" style="width: 4em; height: 4em"/>
-      </div>
-    <q-dialog v-model="confirmDialog">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Bestätigen</div>
-          </q-card-section>
-        <q-card-section class="row items-center">
-          <div class="q-mx-sm">{{t('admin.imprint.imprintEditorMessageSave')}}</div>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat :label="t('common.cancel')" color="primary" @click="confirmDialog = false"/>
-          <q-btn flat :label="t('common.save')" color="primary" @click="postText"/>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+            style="margin-bottom: 20px;"
+            :toolbar="[
+        [
+          {
+            label: $q.lang.editor.align,
+            icon: $q.iconSet.editor.align,
+            fixedLabel: true,
+            list: 'only-icons',
+            options: ['left', 'center', 'right', 'justify']
+          },
+          {
+            label: $q.lang.editor.align,
+            icon: $q.iconSet.editor.align,
+            fixedLabel: true,
+            options: ['left', 'center', 'right', 'justify']
+          }
+        ],
+        ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+        ['token', 'hr', 'link', 'custom_btn'],
+        ['print', 'fullscreen'],
+        [
+          {
+            label: $q.lang.editor.formatting,
+            icon: $q.iconSet.editor.formatting,
+            list: 'no-icons',
+            options: [
+              'p',
+              'h1',
+              'h2',
+              'h3',
+              'h4',
+              'h5',
+              'h6',
+              'code'
+            ]
+          },
+          {
+            label: $q.lang.editor.fontSize,
+            icon: $q.iconSet.editor.fontSize,
+            fixedLabel: true,
+            fixedIcon: true,
+            list: 'no-icons',
+            options: [
+              'size-1',
+              'size-2',
+              'size-3',
+              'size-4',
+              'size-5',
+              'size-6',
+              'size-7'
+            ]
+          },
+          {
+            label: $q.lang.editor.defaultFont,
+            icon: $q.iconSet.editor.font,
+            fixedIcon: true,
+            list: 'no-icons',
+            options: [
+              'default_font',
+              'arial',
+              'arial_black',
+              'comic_sans',
+              'courier_new',
+              'impact',
+              'lucida_grande',
+              'times_new_roman',
+              'verdana'
+            ]
+          },
+          'removeFormat'
+        ],
+        ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
 
-    <q-dialog v-model="deleteDialog">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Löschen bestätigen</div>
-        </q-card-section>
-        <q-card-section class="row items-center">
-          <div class="q-mx-sm">{{t('admin.imprint.imprintEditorMessageDelete')}}</div>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat :label="t('common.cancel')" color="primary" @click="deleteDialog = false"/>
-          <q-btn flat :label="t('common.delete')" color="primary" @click="deletePostedContent"/>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+        ['undo', 'redo'],
+        ['viewsource']
+      ]"
+            :fonts="{
+        arial: 'Arial',
+        arial_black: 'Arial Black',
+        comic_sans: 'Comic Sans MS',
+        courier_new: 'Courier New',
+        impact: 'Impact',
+        lucida_grande: 'Lucida Grande',
+        times_new_roman: 'Times New Roman',
+        verdana: 'Verdana'
+      }"
+        />
+
+        <q-btn class="self-end q-ml-lg" round icon="save" color="positive" text-color="negative"
+               @click="showConfirmDialog" style="width: 4em; height: 4em"/>
+
+      </div>
+      <q-dialog v-model="confirmDialog">
+        <q-card>
+
+          <q-card-section class="row items-center">
+            <div class="q-mx-sm">{{ t('admin.imprint.imprintEditorMessageSave') }}</div>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn flat :label="t('common.cancel')" color="primary" @click="confirmDialog = false"/>
+            <q-btn flat :label="t('common.save')" color="primary" @click="postText"/>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
+      <q-dialog v-model="deleteDialog">
+        <q-card>
+          <q-card-section class="row items-center">
+            <div class="q-mx-sm">{{ t('admin.imprint.imprintEditorMessageDelete') }}</div>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn flat :label="t('common.cancel')" color="primary" @click="deleteDialog = false"/>
+            <q-btn flat :label="t('common.delete')" color="primary" @click="deletePostedContent"/>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+    </div>
   </q-page>
 </template>
 
 <script lang="ts">
 import {ref, onMounted} from 'vue';
 import {QDialog, useQuasar} from 'quasar';
-import {getImprintContent, postImprintContent, deleteImprintContent, getLatestImprint} from '../api/imprint';
+import {
+  getImprintContent,
+  postImprintContent,
+  deleteImprintContent,
+  getLatestImprint,
+} from '../api/imprint';
 import {useI18n} from "vue-i18n";
 
 export default {
@@ -66,13 +145,16 @@ export default {
   },
   setup() {
     const $q = useQuasar();
-    const { t } = useI18n()
+    const {t} = useI18n()
     const editorContent = ref('');
     const imprintContent = ref('');
     const showEditor = ref(false);
     const confirmDialog = ref(false);
     const deleteDialog = ref(false);
     const initialImprintContent = ref('');
+    const imprintPhotos = ref([] as File[]);
+    const uploaderRef = ref<any>(null);
+
 
     onMounted(async () => {
       try {
@@ -149,6 +231,26 @@ export default {
         console.error(error);
       }
     };
+    const uploadPhotos = () => {
+      const files = imprintPhotos.value;
+
+      if (files.length === 0) {
+        return;
+      }
+
+
+    };
+
+    const onFilesAdded = () => {
+      if (uploaderRef.value) {
+        const fileInput = uploaderRef.value.$el.querySelector('input[type=file]') as HTMLInputElement;
+        if (fileInput && fileInput.files) {
+          const files: File[] = Array.from(fileInput.files);
+          imprintPhotos.value.push(...files);
+        }
+      }
+    };
+
 
     return {
       editorContent,
@@ -162,6 +264,9 @@ export default {
       showDeleteDialog,
       deletePostedContent,
       initialImprintContent,
+      imprintPhotos,
+      uploadPhotos,
+      onFilesAdded,
       t,
     };
   },
