@@ -1,8 +1,14 @@
+export enum ColorTheme {'LIGHT', 'DARK'}
+
 export interface Colors {
 
     id: number,
 
     defaultColors: boolean,
+
+    theme: ColorTheme,
+
+    logoPath: string,
 
     bgC: string,
     textC: string,
@@ -11,7 +17,7 @@ export interface Colors {
     secondary: string,
     accent: string,
     dark: string,
-    lightBlue: string,
+    light: string,
     positive: string,
     negative: string,
     info: string,

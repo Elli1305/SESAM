@@ -1,3 +1,5 @@
+import {DoorConfiguration} from "@/main/vue/entity/doorConfiguration";
+
 export interface Coordinates {
     lat: number
     lng: number
@@ -8,6 +10,9 @@ export interface Door {
     name: string
     coordinates: Coordinates[]
     credentials: Credential[]
+    proofConfigIn: DoorConfiguration[]
+    proofConfigOut: DoorConfiguration[]
+    roomId: number
 }
 
 export interface Room {

@@ -1,7 +1,11 @@
 package com.gpse.sesam.domain.user;
 
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.mail.MailInformation;
 import com.gpse.sesam.domain.mail.MailService;
+import com.gpse.sesam.domain.user.issuer.Issuer;
+import com.gpse.sesam.domain.user.issuer.IssuerService;
 import com.gpse.sesam.web.cmd.SesamUserCmd;
 import com.gpse.sesam.web.exception.ConflictException;
 import com.gpse.sesam.web.exception.InvalidTokenException;
@@ -21,6 +25,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+/**
+ * Der SesamUserServiceImpl ist ein Service für die Verwaltung von Benutzern.
+ * Die Klasse implementiert das SesamUserService-Interface.
+ */
 @Service
 public class SesamUserServiceImpl implements SesamUserService {
 	private static final String NUMBER_REGEX = "[0-9]+";
@@ -33,37 +41,80 @@ public class SesamUserServiceImpl implements SesamUserService {
 	private final MailService mailService;
 
 	private final MessageSource messageSource;
+	private IssuerService issuerService;
+	private CredentialService credentialService;
 
+	/**
+	 * Erstellt eine neue Instanz des SesamUserServiceImpl und initialisiert die Repositories, den PasswordEncoder,
+	 * den MailService, die MessageSource und den IssuerService.
+	 *
+	 * @param userRepository               	das Repository für die Benutzer
+	 * @param passwordResetTokenRepository 	das Repository für die Passwort-Zurücksetzungstoken
+	 * @param passwordEncoder              	der PasswordEncoder zum Verschlüsseln der Passwörter
+	 * @param mailService                  	der MailService zum Versenden von E-Mails
+	 * @param messageSource               	die MessageSource für die internationalisierten Nachrichten
+	 * @param issuerService                	der IssuerService für die Verwaltung von Ausstellern
+	 * @param credentialService				der CredentialService zum Verwalten der Abhängigkeiten von Credentials
+	 */
 	@Autowired
 	public SesamUserServiceImpl(final SesamUserRepository userRepository,
 								final PasswordResetTokenRepository passwordResetTokenRepository,
 								final PasswordEncoder passwordEncoder, final MailService mailService,
-								final MessageSource messageSource) {
+								final MessageSource messageSource, final IssuerService issuerService,
+								final CredentialService credentialService) {
 		this.userRepository = userRepository;
 		this.passwordResetTokenRepository = passwordResetTokenRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.mailService = mailService;
 		this.messageSource = messageSource;
+		this.issuerService = issuerService;
+		this.credentialService = credentialService;
 	}
 
+	/**
+	 * Validiert die Liste der Benutzerrollen.
+	 *
+	 * @param roles die Liste der Benutzerrollen
+	 * @throws UnprocessableEntityException wenn die Rollenliste null ist
+	 */
 	private static void validateRoles(final List<SesamUserRole.AttainableRole> roles) {
 		if (roles == null) {
 			throw new UnprocessableEntityException("roles may not be null");
 		}
 	}
 
+	/**
+	 * Validiert den Namen.
+	 *
+	 * @param name          der zu validierende Name
+	 * @param propertyName  der Name der Eigenschaft, die validiert wird
+	 * @throws UnprocessableEntityException wenn der Name nicht den Anforderungen entspricht
+	 */
 	private static void validateName(final String name, final String propertyName) {
 		if (!StringUtils.hasText(name) || name.matches(NUMBER_REGEX)) {
 			throw new UnprocessableEntityException(propertyName + " does not meet the requirements");
 		}
 	}
 
+	/**
+	 * Validiert die E-Mail-Adresse.
+	 *
+	 * @param email die zu validierende E-Mail-Adresse
+	 * @throws UnprocessableEntityException wenn die E-Mail-Adresse nicht gültig ist
+	 */
 	private static void validateEmail(final String email) {
 		if (email == null || !email.matches("[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+")) {
 			throw new UnprocessableEntityException("The provided e-mail is not valid");
 		}
 	}
 
+	/**
+	 * Überprüft die Gültigkeit der übergebenen Benutzerdaten und erstellt einen neuen Benutzer.
+	 * Wirft eine ConflictException, wenn bereits ein Benutzer mit der angegebenen E-Mail-Adresse existiert.
+	 *
+	 * @param userCmd die Benutzerdaten
+	 * @return der erstellte Benutzer
+	 */
 	@Override
 	public SesamUser createUser(final SesamUserCmd userCmd) {
 		validateUser(userCmd);
@@ -84,6 +135,11 @@ public class SesamUserServiceImpl implements SesamUserService {
 		}
 	}
 
+	/**
+	 * Validiert die Benutzerdaten.
+	 *
+	 * @param userCmd das SesamUserCmd-Objekt mit den Benutzerdaten
+	 */
 	private void validateUser(final SesamUserCmd userCmd) {
 		validatePassword(userCmd.getPassword());
 		validateEmail(userCmd.getEmail());
@@ -92,12 +148,26 @@ public class SesamUserServiceImpl implements SesamUserService {
 		validateRoles(userCmd.getRequestedRoles());
 	}
 
+	/**
+	 * Überprüft, ob ein Benutzer mit dem angegebenen Benutzernamen existiert und gibt einen UserDetails-Objekt zurück.
+	 * Wirft eine UsernameNotFoundException, wenn kein Benutzer mit dem angegebenen Benutzernamen gefunden wurde.
+	 *
+	 * @param username der Benutzername
+	 * @return das UserDetails-Objekt des Benutzers
+	 * @throws UsernameNotFoundException wenn kein Benutzer mit dem angegebenen Benutzernamen gefunden wurde
+	 */
 	@Override
 	public UserDetails loadUserByUsername(final String username) {
 		return userRepository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException(username + " not found."));
 	}
 
+	/**
+	 * Erstellt ein PasswordResetToken für den angegebenen Benutzer und sendet eine E-Mail mit dem Token.
+	 *
+	 * @param user  der Benutzer
+	 * @param token das PasswordResetToken
+	 */
 	@Override
 	public void createPasswordResetToken(final SesamUser user, final String token) {
 		final PasswordResetToken resetToken = new PasswordResetToken(user, token);
@@ -112,6 +182,14 @@ public class SesamUserServiceImpl implements SesamUserService {
 						new String[]{user.getFirstName(), user.getLastName(), token}, locale)));
 	}
 
+	/**
+	 * Aktualisiert das Passwort des Benutzers mit dem angegebenen Token.
+	 * Wirft eine InvalidTokenException, wenn das Token ungültig oder abgelaufen ist.
+	 *
+	 * @param token    das Token
+	 * @param password das neue Passwort
+	 * @throws InvalidTokenException wenn das Token ungültig oder abgelaufen ist
+	 */
 	@Override
 	public void updatePasswordWithToken(final String token, final String password) {
 		final PasswordResetToken passwordResetToken = passwordResetTokenRepository
@@ -131,12 +209,24 @@ public class SesamUserServiceImpl implements SesamUserService {
 		passwordResetTokenRepository.delete(passwordResetToken);
 	}
 
+	/**
+	 * Ändert das Passwort des angegebenen Benutzers.
+	 *
+	 * @param user     der Benutzer
+	 * @param password das neue Passwort
+	 */
 	@Override
 	public void changePassword(final SesamUser user, final String password) {
 		user.setPassword(passwordEncoder.encode(password));
 		userRepository.save(user);
 	}
 
+	/**
+	 * Überprüft das Passwort auf Gültigkeit.
+	 *
+	 * @param password das zu überprüfende Passwort
+	 * @throws UnprocessableEntityException wenn das Passwort nicht den Anforderungen entspricht
+	 */
 	private void validatePassword(final String password) {
 		if (password == null || !password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])"
 				+ "[a-zA-Z0-9!@#$%^&*]{8,120}$")) {
@@ -144,16 +234,38 @@ public class SesamUserServiceImpl implements SesamUserService {
 		}
 	}
 
+	/**
+	 * Löscht einen Benutzer.
+	 *
+	 * @param sesamUser der zu löschende Benutzer
+	 */
 	@Override
 	public void deleteUser(final SesamUser sesamUser) {
+		if (sesamUser instanceof Issuer) {
+			List<InternalCredential> credentials = credentialService.getCredentialsByIssuerId(sesamUser.getId());
+			for (InternalCredential credential : credentials) {
+				credential.removeIssuer((Issuer) sesamUser);
+			}
+			credentialService.saveAll(credentials);
+		}
 		userRepository.delete(sesamUser);
 	}
 
+	/**
+	 * Speichert eine Liste von Benutzern.
+	 *
+	 * @param users die zu speichernden Benutzer
+	 */
 	@Override
 	public void saveAll(final Iterable<SesamUser> users) {
 		userRepository.saveAll(users);
 	}
 
+	/**
+	 * Gibt eine Liste aller Benutzer zurück.
+	 *
+	 * @return die Liste der Benutzer
+	 */
 	@Override
 	public List<SesamUser> getUsers() {
 		final List<SesamUser> articles = new ArrayList<>();
@@ -161,20 +273,44 @@ public class SesamUserServiceImpl implements SesamUserService {
 		return articles;
 	}
 
+	/**
+	 * Gibt einen Benutzer anhand seiner E-Mail-Adresse zurück.
+	 *
+	 * @param username die E-Mail-Adresse des Benutzers
+	 * @return der gefundene Benutzer
+	 * @throws UsernameNotFoundException wenn kein Benutzer mit der angegebenen E-Mail-Adresse gefunden wurde
+	 */
 	@Override
 	public SesamUser getUserByMail(final String username) {
 		return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username
 				+ " not found."));
 	}
 
+	/**
+	 * Aktualisiert die Informationen eines Benutzers.
+	 *
+	 * @param user     der zu aktualisierende Benutzer
+	 * @param prename  der neue Vorname
+	 * @param lastname der neue Nachname
+	 * @param username der neue Benutzername
+	 * @param roles    die neuen Rollen
+	 */
 	@Override
 	public void makeUserEdit(final SesamUser user, final String prename, final String lastname, final String username,
 							 final List<SesamUserRole.AttainableRole> roles) {
-		user.setFirstName(prename);
-		user.setLastName(lastname);
-		user.setRoles(roles.stream().distinct().map(role -> new SesamUserRole(role, true))
-				.collect(Collectors.toList()));
+		if (roles.contains(SesamUserRole.AttainableRole.ISSUER) && !(user instanceof Issuer)) {
+			deleteUser(user);
+			Issuer issuer = new Issuer(user.getUsername(), username, prename, lastname, roles.stream()
+					.distinct().map(role -> new SesamUserRole(role, true))
+					.collect(Collectors.toList()), null);
+			issuerService.save(issuer);
+		} else {
+			user.setLastName(lastname);
+			user.setFirstName(prename);
+			user.setRoles(roles.stream().distinct().map(role -> new SesamUserRole(role, true))
+					.collect(Collectors.toList()));
+			userRepository.save(user);
+		}
 
-		userRepository.save(user);
 	}
 }

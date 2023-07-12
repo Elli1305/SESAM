@@ -4,10 +4,20 @@ import {setCssVar} from "quasar"
 
 export default {
 
-    saveLogo(file: File): Promise<AxiosResponse<void>> {
+    saveLogoLight(file: File): Promise<AxiosResponse<void>> {
         let formData = new FormData()
         formData.append("file", file)
-        return axios.post('/api/corpdesign/save/logo', formData, {
+        return axios.post(`/api/corpdesign/save/logo-light`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        })
+    },
+
+    saveLogoDark(file: File): Promise<AxiosResponse<void>> {
+        let formData = new FormData()
+        formData.append("file", file)
+        return axios.post(`/api/corpdesign/save/logo-dark`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
@@ -24,25 +34,24 @@ export default {
         })
     },
 
-    saveColors(colors: Colors): Promise<AxiosResponse<Colors>> {
-        return axios.post('/api/corpdesign/save/colors', colors)
+    saveColors(colorTheme: string, colors: Colors): Promise<AxiosResponse<Colors>> {
+        return axios.post(`/api/corpdesign/save/colors/${colorTheme}`, colors)
     },
 
-    getColors(): Promise<AxiosResponse<Colors>> {
-        return axios.get('/api/corpdesign/get/colors')
+    getColors(colorTheme: string): Promise<AxiosResponse<Colors>> {
+        return axios.get(`/api/corpdesign/get/colors/${colorTheme}`, )
     },
 
-    reset(): Promise<AxiosResponse<Colors>> {
-        return axios.post('/api/corpdesign/reset')
+    reset(colorTheme: string): Promise<AxiosResponse<Colors>> {
+        return axios.post(`/api/corpdesign/reset/${colorTheme}`)
     },
 
-    setColors(): void {
-        this.getColors().then(colors => {
+    setColors(colorTheme: string): void {
+        this.getColors(colorTheme).then(colors => {
             setCssVar('primary', colors.data.primaryColor)
             setCssVar('secondary', colors.data.secondary)
             setCssVar('accent', colors.data.accent)
             setCssVar('dark', colors.data.dark)
-            setCssVar('dark-separator', colors.data.lightBlue)
             setCssVar('positive', colors.data.positive)
             setCssVar('negative', colors.data.negative)
             setCssVar('info', colors.data.info)

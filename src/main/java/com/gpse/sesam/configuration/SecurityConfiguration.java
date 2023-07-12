@@ -69,12 +69,13 @@ public class SecurityConfiguration {
 
 
 	@Bean
-	@Profile("test")
+	@Profile({"test", "presentation"})
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.ignoring().requestMatchers(
 				new AntPathRequestMatcher("/h2-console/**")
 		);
 	}
+
 
 	@Bean
 	public AuthenticationManager authenticationManager() {

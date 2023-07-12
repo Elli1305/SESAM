@@ -3,6 +3,9 @@ package com.gpse.sesam.domain.location.door.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpse.sesam.configuration.DoorApiConfig;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.util.ConfigCmdMapper;
+import com.gpse.sesam.web.cmd.DoorConfigCmd;
 import com.gpse.sesam.web.exception.InvalidDoorConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,13 +30,14 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DoorConfigServiceImpl.class);
 
 	private final DoorApiConfig appConfig;
-	private final ProofConfigRepository proofConfigRepository;
+	private ConfigCmdMapper configCmdMapper;
 
 	@Autowired
-	public DoorConfigServiceImpl(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository) {
+	public DoorConfigServiceImpl(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository,
+								 final CredentialService credentialService) {
 		this.appConfig = appConfig;
-		this.proofConfigRepository = proofConfigRepository;
 		proofConfigRepository.save(createProofConfig());
+		this.configCmdMapper = new ConfigCmdMapper(credentialService);
 	}
 
 	@Override
@@ -53,6 +58,28 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 			LOGGER.info("Antwort: " + responseBody);
 		} else {
 			LOGGER.error("Anmeldung fehlgeschlagen. Statuscode: " + response.getStatusCode());
+		}
+	}
+
+	@Override
+	public DoorConfigCmd getDoorConfig(final String doorApiId) {
+		final HttpHeaders headers = new HttpHeaders();
+		headers.setBasicAuth(appConfig.getUsername(), appConfig.getPassword());
+
+		final HttpEntity<String> entity = new HttpEntity<>(headers);
+
+		final RestTemplate restTemplate = new RestTemplate();
+
+		final ResponseEntity<String> response =
+				restTemplate.exchange(appConfig.getUrl() + "/api/proof/config/" + doorApiId,
+						HttpMethod.GET, entity, String.class);
+
+		final ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			final ProofConfig proofConfig = objectMapper.readValue(response.getBody(), ProofConfig.class);
+			return configCmdMapper.toCmd(proofConfig);
+		} catch (final JsonProcessingException | ParseException e) {
+			throw new InvalidDoorConfiguration("could not read door configuration", e);
 		}
 	}
 

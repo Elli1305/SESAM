@@ -15,5 +15,9 @@ export default {
                 "Content-Type": "multipart/form-data"
             }
         })
+    },
+
+    deleteFloor(param: String): Promise<AxiosResponse<void>> {
+        return axios.delete('api/floor/' + param);
     }
 }

@@ -1,9 +1,9 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em" >
-    <p class="row text-h3 justify-center">{{t("adminRolesRequest.headline")}}</p>
+    <p class="row text-h3 justify-center">{{t("admin.requestedRoles.title")}}</p>
     <div class="row justify-center">
       <q-table
-          style="width: 80vw; height: 50vh"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
@@ -29,16 +29,14 @@
           </q-td>
         </template>
         <template v-slot:top-left>
-          <div class="col-9">
             <q-toggle v-model="filter.filterToggle.admin" val="ADMINISTRATOR"
-                      :label="t( 'adminCurrentUser.showAdmin')"/>
-            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t( 'adminCurrentUser.showEditor')"/>
-            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t( 'adminCurrentUser.showIssuer')"/>
-          </div>
+                      :label="t('profile.administrators')" size="2.5em"/>
+            <q-toggle v-model="filter.filterToggle.editor" val="EDITOR" :label="t('profile.editors')" size="2.5em"/>
+            <q-toggle v-model="filter.filterToggle.issuer" val="ISSUER" :label="t('profile.issuers')" size="2.5em"/>
         </template>
         <template v-slot:top-right>
-          <q-input borderless dense debounce="300" v-model="filter.search"
-                   :placeholder="t( 'adminCurrentUser.search')">
+          <q-input outlined rounded dense debounce="300" v-model="filter.search"
+                   :placeholder="t('common.search')">
             <template v-slot:append>
               <q-icon name="search"/>
             </template>
@@ -49,8 +47,8 @@
             <div class="column items-center justify-evenly" v-for="role in props.value">
               <q-chip v-model:selected="role.selected" color="secondary" text-color="primary"
                       style="padding: 0.4em 0.75em 0.4em 0.75em; font-size: 1em"
-                      icon="close" icon-selected="done">
-                {{ t(`adminCurrentUser.roles.${role.role}`) }}
+                      icon="not_interested" icon-selected="account_circle">
+                {{ t('profile.' + role.role.toLowerCase()) }}
               </q-chip>
             </div>
           </q-td>
@@ -94,20 +92,19 @@ export default {
 
     const columns = [
       {
-                name: t('adminRolesRequest.lastname'),
         required: true,
-        label: 'Name',
+        label: t('profile.lastName'),
         align: 'center',
         field: row => row.lastName,
         format: val => `${val}`,
         sortable: true
       },
-      {name: 'firstName', align: 'center', label: t('adminRolesRequest.prename'), field: 'firstName', sortable: true},
-      {name: 'username', align: 'center', label: t('adminRolesRequest.email'), field: 'username', sortable: true},
-      {name: 'roles', align: 'center', label: t('adminRolesRequest.role'), field: 'roles'},
+      {name: 'firstName', align: 'center', label: t('profile.firstName'), field: 'firstName', sortable: true},
+      {name: 'username', align: 'center', label: t('profile.email'), field: 'username', sortable: true},
+      {name: 'roles', align: 'center', label: t('profile.roles'), field: 'roles'},
       {
         name: 'actions',
-        label: t('adminRolesRequest.save'),
+        label: t('common.save'),
         style: "width: 40px",
         align: 'center',
         field: row => row.roles
@@ -192,16 +189,19 @@ export default {
             if (lowerSearch !== "") {
               s1 = false
               //Get the values
-              let s1_values = Object.values(row)
-              //Convert to lowercase
-              let s1_lower = s1_values.map(x => x.toString().toLowerCase())
+                let s1_values = [];
+                s1_values.push(Object.values(row.firstName).toString().toLowerCase().replaceAll(",",""));
+                s1_values.push(Object.values(row.lastName).toString().toLowerCase().replaceAll(",",""));
 
-              for (let val = 0; val < s1_lower.length; val++) {
-                if (s1_lower[val].includes(lowerSearch)) {
-                  s1 = true
-                  break
+                s1_values.push(Object.values(row.username).toString().toLowerCase().replaceAll(",",""));
+                //Convert to lowercase
+                for (let val = 0; val < s1_values.length; val++) {
+                    //s1_values.replace(',','');
+                    if (s1_values[val].includes(lowerSearch)) {
+                        s1 = true
+                        break
+                    }
                 }
-              }
             }
             //assume row doesn't match
             ans = false

@@ -3,12 +3,12 @@
     <p class="row text-h3 justify-center">{{t("home.issuerPages")}}</p>
     <div class="row self-center">
       <q-table
-          style="width: 80vw; height: 50vh"
+          style="width: 80vw; height: 50vh; background-color: var(--bg-color); color: var(--text-color)"
           :rows-per-page-options="[0]"
           :rows="rows"
           :columns="columns"
-          title="Credentials"
-          :separator="'none'"
+          :title="t('common.credentials')"
+          :separator="'cell'"
           hide-header
           hide-bottom
           :no-data-label="t('common.noData')"
@@ -17,7 +17,7 @@
           row-key="name">
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn flat rounded color="primary" label="Ausstellen" :to="'/credentials/' + props.row.id + '/issue'"/>
+            <q-btn flat rounded color="primary" :label="t('issuer.issue')" :to="'/credentials/' + props.row.id + '/issue'"/>
           </q-td>
         </template>
       </q-table>

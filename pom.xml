@@ -15,6 +15,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Basis</name>
 	<description>Basis project gpse 23</description>
+	
+	<repositories>
+		<repository>
+			<id>sovrin</id>
+			<url>https://repo.sovrin.org/repository/maven-public</url>
+		</repository>
+	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -62,6 +69,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -144,6 +156,17 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.5</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>5.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hyperledger</groupId>
+			<artifactId>indy</artifactId>
+			<version>1.16.0</version>
 		</dependency>
 	</dependencies>
 

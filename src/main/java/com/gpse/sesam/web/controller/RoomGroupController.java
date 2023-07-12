@@ -1,9 +1,9 @@
 package com.gpse.sesam.web.controller;
 
-import com.gpse.sesam.domain.location.RoomGroupService;
-import com.gpse.sesam.domain.location.RoomGroups;
-import com.gpse.sesam.web.cmd.RoomGroupCmd;
-import com.gpse.sesam.web.cmd.RoomGroupEditCmd;
+import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
+import com.gpse.sesam.web.cmd.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/roomGroups")
-@Secured("EDITOR")
 public class RoomGroupController {
 
     private final RoomGroupService roomGroupService;
@@ -24,9 +23,13 @@ public class RoomGroupController {
     }
 
     @GetMapping
-    @Secured("EDITOR")
     public List<RoomGroups> getAllRoomGroups() {
         return roomGroupService.getRoomGroups();
+    }
+
+    @GetMapping("/filter/{id:\\d+}")
+    public List<RoomGroups> getGroupsByBuilding(@PathVariable("id") final Long id) {
+        return roomGroupService.getGroupByBuilding(id);
     }
 
     @PostMapping("/save")
@@ -57,5 +60,22 @@ public class RoomGroupController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteById(@PathVariable("id") final Long id) {
         roomGroupService.deleteById(id);
+    }
+
+    @GetMapping("/doorsandrooms/{id}")
+    @Secured("EDITOR")
+    public List<RoomGroupDoorConfigCmd> getRoomsAndDoorsByGroupId(@PathVariable("id") final Long id) {
+        return roomGroupService.getRoomsAndDoorsByGroupId(id);
+    }
+    @GetMapping("/rooms/{id}")
+    @Secured("EDITOR")
+    public List<Room> getRoomsByGroupId(@PathVariable("id") final Long id) {
+        return roomGroupService.getRoomsByGroupId(id);
+    }
+
+    @PostMapping("/saveconfigs")
+    @Secured("EDITOR")
+    public void updateConfigOfGroup(@RequestBody DoorGroupConfigCmd configCmd) {
+        roomGroupService.setGroupConfig(configCmd);
     }
 }

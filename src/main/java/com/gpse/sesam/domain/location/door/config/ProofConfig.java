@@ -1,16 +1,7 @@
 package com.gpse.sesam.domain.location.door.config;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.*;
+import jakarta.persistence.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,19 +18,20 @@ public class ProofConfig {
 	@Column
 	private String description;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "config_attribute_mapping",
 			joinColumns = {@JoinColumn(name = "config_id", referencedColumnName = "id")},
 			inverseJoinColumns = {@JoinColumn(name = "attribute_id", referencedColumnName = "id")})
 	@Column
 	private Map<String, ProofAttributeInfo> requestedAttributes = new HashMap<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "config_predicate_mapping",
 			joinColumns = {@JoinColumn(name = "config_id", referencedColumnName = "id")},
 			inverseJoinColumns = {@JoinColumn(name = "predicate_id", referencedColumnName = "id")})
 	@Column
 	private Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
+
 
 	public ProofConfig() {
 

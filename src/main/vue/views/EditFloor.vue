@@ -1,14 +1,14 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card class="q-dialog-plugin">
+    <q-card class="q-dialog-plugin" style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section class="q-pa-md">
-        <div class="text-h6">{{t('floorplan.editFloor')}}</div>
+        <div v-if="floor.id" class="text-h6">{{t('floorPlan.editFloor')}}</div>
+        <div v-if="!floor.id" class="text-h6">{{t('floorPlan.addFloor')}}</div>
         <div class="q-mt-md">
-          <q-input outlined v-model.number="floorLevel" type="number" :label="t('floorplan.floorlevel')"/>
+          <q-input outlined v-model.number="floorLevel" type="number" :label="t('floorPlan.floorLevel')"/>
         </div>
         <div class="q-mt-md">
-          <q-file outlined :label="t('floorplan.floorplanUpload')" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff"
-                  bg-color="white">
+          <q-file outlined :label="t('floorPlan.floorPlanUpload')" v-model="image" accept=".png,.jpg,.jpeg,.gif,.svg,.tiff">
             <template v-slot:prepend>
               <q-icon name="attach_file"/>
             </template>
@@ -16,8 +16,8 @@
         </div>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.cancel')" @click="onCancelClick"/>
-        <q-btn flat color="primary" :label="t('corporateDesign.confirm.save.ok')" @click="onOKClick" :disable="validate()"/>
+        <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick"/>
+        <q-btn flat color="primary" :label="t('common.save')" @click="onOKClick" :disable="validate()"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -65,7 +65,7 @@ export default {
       this.hide()
     },
     validate() {
-      return !this.floorLevel && (!this.$props.floor.id || !this.image)
+      return !((this.floorLevel || (this.floorLevel === 0)) && (this.$props.floor.id || this.image))
     }
   },
   setup(props) {

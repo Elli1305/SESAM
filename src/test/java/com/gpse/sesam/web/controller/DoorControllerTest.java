@@ -1,7 +1,10 @@
 package com.gpse.sesam.web.controller;
 
+import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorService;
+import com.gpse.sesam.util.DoorCmdMapper;
+import com.gpse.sesam.web.cmd.DoorCmd;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,14 +41,15 @@ class DoorControllerTest {
 
 	@Test
 	void saveShouldCallServiceWithCorrectArguments() {
-		Door door = new Door("Test", Collections.emptyList());
 
+		Door door = new Door("Test", Collections.emptyList());
 		when(doorService.save(door)).thenReturn(door);
 
-		Door doorSaved = doorController.save(door);
+		DoorCmd doorCmd = new DoorCmd("Test", Collections.emptyList());
+		Door doorSaved = doorController.save(new Door(doorCmd.getName(),doorCmd.getCoordinates()));
 
-		assertThat(doorSaved.getName(), is(door.getName()));
-		assertThat(doorSaved.getCoordinates(), is(door.getCoordinates()));
+		assertThat(doorSaved.getName(), is(doorCmd.getName()));
+		assertThat(doorSaved.getCoordinates(), is(doorCmd.getCoordinates()));
 	}
 
 	@Test

@@ -23,7 +23,8 @@ import {useRoomStore} from "@/main/vue/stores/room";
 import {useFloorStore} from "@/main/vue/stores/floor";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import {useDoorStore} from "@/main/vue/stores/door";
-import api from "@/main/vue/api";
+import {useCredentialsStore} from "@/main/vue/stores/credential";
+import {useI18n} from "vue-i18n";
 
 const mapConfig = {
   crs: CRS.Simple,
@@ -78,12 +79,16 @@ export default {
     const doorStore = useDoorStore();
     const locationStore = useLocationStore();
     const roomStore = useRoomStore();
-    return {floorStore, floorPlanStore, locationStore, roomStore, doorStore}
+    const credentialsStore = useCredentialsStore();
+    const i18nLocale = useI18n()
+
+    return {floorStore, floorPlanStore, locationStore, roomStore, doorStore, credentialsStore, i18nLocale}
   },
   mounted: function () {
     floorPlanMap = L.map("floor-plan-map", mapConfig);
-
+    const {t} = useI18n()
     const $q = useQuasar();
+
 
     const {rooms} = storeToRefs(this.floorPlanStore)
     watch(rooms, () => {
@@ -127,8 +132,8 @@ export default {
             weight: 2,
             fillOpacity: 0.1
           });
-          selectedRooms.value.forEach(room => {
-            if (room.id === layer.id) {
+          selectedRooms.value.forEach(roomID => {
+            if (roomID === layer.id) {
               layer.setStyle({
                 color: 'red',
                 fillColor: 'red',
@@ -178,6 +183,7 @@ export default {
 
         this.floorStore.save(floor).then((savedFloor) => {
           const savedRoom = savedFloor.rooms.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+          this.floorPlanStore.rooms = savedFloor.rooms
           e.layer.id = savedRoom.id
           this.addCallbacksPolygon(e.layer)
         })
@@ -187,32 +193,49 @@ export default {
           componentProps: {
             rooms: this.floorPlanStore.rooms
           }
-        }).onOk(({room, doorName, configuration, configDescription}) => {
-          room.doors.push({
+        }).onOk(({room, doorName, configuration}) => {
+          let door = {
             name: doorName,
+            doorConfigCmds: configuration,
+            roomId: room.id,
             coordinates: e.layer._latlngs.map((latLng) => ({
                   lat: latLng.lat,
                   lng: latLng.lng
                 }
             )),
-          })
-          this.roomStore.save(room).then((savedRoom) => {
-            const savedDoor = savedRoom.doors.reduce((prev, current) => (prev.id > current.id) ? prev : current)
+          };
+          const promise =this.doorStore.create(door)
+          promise.then((savedDoor) => {
+            room.doors.push(savedDoor)
             e.layer.id = savedDoor.id
             this.addCallbacksLine(e.layer)
-            configuration.description = configDescription
-            configuration.doorId = savedDoor.name + '_' + savedDoor.id
-            configuration.configParts.forEach(part => part.credentials = part.credentials.map(credential => credential.credentialDefinitionId))
-            api.doorConfig.save(configuration).then(() => console.log("success"))
+            this.redrawRooms()
+            this.$emit('doorCreated')
           })
-        })
+          promise.catch(() => {
+            $q.notify({
+              type: 'negative',
+              message: t('floorPlan.doorCreateFailed'),
+              position: 'bottom',
+              timeout: 3000,
+            });
+            floorPlanMap.removeLayer(e.layer)
+          })
+        }).onCancel(() => floorPlanMap.removeLayer(e.layer))
       }
     })
 
 
     mapContainerObserver.observe(this.$refs.mapContainer)
   },
+  emits: [
+      'doorCreated', 'roomClicked'
+  ],
   methods: {
+    redrawRooms() {
+      this.removeLayer()
+      this.drawRooms(this.floorPlanStore.rooms)
+    },
     removeLayer() {
       floorPlanMap.eachLayer(layer => {
             if (layer.id) {
@@ -305,34 +328,38 @@ export default {
         const floor = this.locationStore.getFloorById(this.floorPlanStore.selectedFloorId)
         const index = floor.rooms.findIndex(room => e.layer.id === room.id)
         floor.rooms.splice(index, 1)
-        this.floorStore.save(floor)
+        this.floorStore.save(floor).then((savedFloor) => {
+          this.floorPlanStore.rooms = savedFloor.rooms
+        })
         floorPlanMap.eachLayer(layer => {
           if (layer.roomId === e.layer.id) {
             floorPlanMap.removeLayer(layer)
           }
         })
       });
-    }, drawRooms(rooms) {
+      polygon.on('click', (e) => {
+        console.log(polygon.id)
+        this.$emit('roomClicked', polygon.id)
+      })
+    }, async drawRooms(rooms) {
       let polygons = [];
+      await this.credentialsStore.fetch()
       for (const room of rooms) {
         const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
           color: 'black',
           width: 5,
           fillOpacity: 0.1
         })
+        if (this.floorPlanStore.selectedRooms.includes(room.id)) {
+          polygon.setStyle({
+            color: 'red',
+            fillColor: 'red',
+            weight: 2,
+            fillOpacity: 0.1
+          })
+        }
 
         polygons.push(polygon);
-        let doorsname = room.doors.map(door => door.name).join(", ");
-        let doorscredentials = room.doors.flatMap(door => door.credentials).map(credential => credential.name).join(", ");
-        let issuer = room.doors.flatMap(door => door.credentials).flatMap(cred => cred.issuer).map(issuer => issuer.firstname + " " + issuer.lastname).join(", ");
-        const popup = L.popup();
-        let string = "Raumnummer: " + room.id.toString() + "<br>Türen: " + doorsname + "<br>Credentials: " + doorscredentials + "<br>Issuer: " + issuer;
-        let url = `<a href="/credentialview?q=${room.id}"> Mehr Informationen zu Credentials</a>`;
-
-        popup.setContent(url);
-        polygon.bindTooltip(string).openTooltip();
-        polygon.bindPopup(popup);
-        polygon.addTo(floorPlanMap);
 
         polygon.on('click', function () {
           for (const p of polygons) {
@@ -354,6 +381,8 @@ export default {
 
         polygon.id = room.id
         polygon.type = "Room"
+        let roomPopup = "<b>" + room.name + "</b><br>";
+
         for (const door of room.doors) {
           const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
             color: '#b0b0b0',
@@ -361,9 +390,94 @@ export default {
           }).addTo(floorPlanMap)
           line.id = door.id
           line.roomId = room.id
+
+
+
+
+          let activeConfig = this.getActiveBaseConf(door);
+
+          let timeString = activeConfig ? (activeConfig.baseConfig ? ' (Basiskonf.) ' : " (" + activeConfig.startTime + " - " + activeConfig.endTime + ")") : ''
+          let configurationString = "<b>Konfiguration für " + door.name + timeString + ":</b>" ;
+
+          if (activeConfig) {
+            configurationString += "<br>"
+            if (JSON.stringify(activeConfig.proofConfigIn) === JSON.stringify(activeConfig.proofConfigOut)) {
+              configurationString += "<div style='margin-left: 1em'>"
+              let activeCredentials = this.getConfigString(activeConfig.proofConfigIn);
+              activeCredentials = [...new Set(activeCredentials)]
+              configurationString += activeCredentials.join("<br> <b>UND</b> <br>")
+              configurationString += "</div>"
+            } else {
+              configurationString += "<b>Rein:</b><br><div style='margin-left: 1em'>"
+              let activeCredentialsIn = this.getConfigString(activeConfig.proofConfigIn);
+              activeCredentialsIn = [...new Set(activeCredentialsIn)]
+              configurationString += activeCredentialsIn.join("<br> <b>UND</b> <br>")
+              configurationString += "</div>"
+
+              configurationString += "<b>Raus:</b><br><div style='margin-left: 1em'>"
+              let activeCredentialsOut = this.getConfigString(activeConfig.proofConfigOut);
+              activeCredentialsOut = [...new Set(activeCredentialsOut)]
+              configurationString += activeCredentialsOut.join("<br> <b>UND</b> <br>")
+              configurationString += "</div>"
+            }
+          } else {
+            configurationString += ` <i>${this.i18nLocale.t('editor.config.noConfig')}</i><br>`
+          }
+          configurationString += "</div>"
+          line.bindTooltip(configurationString);
           this.addCallbacksLine(line);
+          roomPopup += configurationString
         }
+        polygon.bindTooltip(roomPopup);
+        polygon.addTo(floorPlanMap);
         this.addCallbacksPolygon(polygon);
+      }
+
+    },
+    getConfigString(config) {
+      const activeCredentials = []
+      for (const attribute in config.requestedAttributes) {
+        activeCredentials.push(config
+            .requestedAttributes[attribute]
+            .restrictions
+            .filter(rest => rest.credentialDefinitionId)
+            .map(rest => this.credentialsStore.getByDefinitionId(rest.credentialDefinitionId)?.name || "")
+            .join(" <b>ODER</b> "))
+      }
+      for (const attribute in config.requestedPredicates) {
+        activeCredentials.push(config
+            .requestedPredicates[attribute]
+            .restrictions
+            .filter(rest => rest.credentialDefinitionId)
+            .map(rest => this.credentialsStore.getByDefinitionId(rest.credentialDefinitionId)?.name || "")
+            .join(" <b>ODER</b> "))
+      }
+      return activeCredentials
+    },
+    getActiveBaseConf(door) {
+      if (door.doorConfigs.length > 1) {
+        const currentDate = new Date();
+
+        for (const doorConfig of door.doorConfigs) {
+          if (!doorConfig?.baseConfig) {
+
+            const startTime = new Date();
+            startTime.setHours(doorConfig?.startTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
+            const endTime = new Date();
+            endTime.setHours(doorConfig?.endTime?.split(":")[0], doorConfig?.startTime?.split(":")[1])
+            if (startTime < currentDate && endTime > currentDate) {
+              return doorConfig
+            }
+          }
+        }
+
+        for (const doorConfig of door.doorConfigs) {
+          if (doorConfig.baseConfig) {
+            return doorConfig;
+          }
+        }
+      } else {
+        return door.doorConfigs[0]
       }
 
     }
