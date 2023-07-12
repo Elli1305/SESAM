@@ -59,16 +59,20 @@
         </div>
 
         <q-dialog v-model="configDialog" persistent>
-            <q-card style="background-color: var(--bg-color); color: var(--text-color)">
+            <q-card style="width: 70em; max-width: 70em; background-color: var(--bg-color); color: var(--text-color)">
                 <q-card-section>
                     <q-input class="full-width" filled v-model="configName" :label="t('editor.predefinedConfigs.name')"
                              stack-label></q-input>
                 </q-card-section>
 
                 <q-card-section v-for="(config, k) in qSelectGeneral.qSelectsSet">
-                    <q-toolbar class="bg-primary text-accent">
 
+                  <q-card style="background-color: var(--bg-color); color: var(--text-color)" bordered flat>
+                  <q-toolbar class="bg-primary text-accent">
                         <q-toolbar-title>Konfiguration</q-toolbar-title>
+                      <q-checkbox class="q-mr-lg" size="2em" keep-color dense v-model="qSelectGeneral.qSelectsSet[k].baseConfig"
+                                  label="Basis Konfiguration"
+                                  color="accent" @click="check(k)"/>
                         <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
                             <q-tooltip max-width="15em" anchor="center right" self="center left">
                                 You can only choose one base configuration.
@@ -79,54 +83,50 @@
                         </q-td>
                     </q-toolbar>
 
-
-                    <div class="colomn q-mt-sm justify-around items-center no-wrap">
-
-                        <div class="q-pa-md">
-                            <div class="q-gutter-sm">
-
-                                <q-checkbox dense v-model="qSelectGeneral.qSelectsSet[k].baseConfig"
-                                            label="Basis Konfiguration" color="primary" @click="check(k)"/>
-
-                            </div>
-                        </div>
-                        <q-td class="q-pl-md v-if=" v-if="!qSelectGeneral.qSelectsSet[k].baseConfig">
-                            <div class="q-gutter-sm row">
-                                <div class="q-gutter-sm row">
-                                    <q-input filled v-model="qSelectGeneral.qSelectsSet[k].startTime" mask="time"
-                                             :rules="['time']">
-                                        <template v-slot:append>
-                                            <q-icon name="access_time" class="cursor-pointer">
-                                                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                                                    <q-time v-model="qSelectGeneral.qSelectsSet[k].startTime">
-                                                        <div class="row items-center justify-end">
-                                                            <q-btn v-close-popup label="Close" color="primary" flat/>
-                                                        </div>
-                                                    </q-time>
-                                                </q-popup-proxy>
-                                            </q-icon>
-                                        </template>
-                                    </q-input>
-                                </div>
-                                <div class="q-gutter-sm row">
-                                    <q-input filled v-model="qSelectGeneral.qSelectsSet[k].endTime" mask="time"
-                                             :rules="['time']" :disabled="qSelectGeneral.qSelectsSet[k].baseConfig">
-                                        <template v-slot:append>
-                                            <q-icon name="access_time" class="cursor-pointer">
-                                                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                                                    <q-time v-model="qSelectGeneral.qSelectsSet[k].endTime">
-                                                        <div class="row items-center justify-end">
-                                                            <q-btn v-close-popup label="Close" color="primary" flat/>
-                                                        </div>
-                                                    </q-time>
-                                                </q-popup-proxy>
-                                            </q-icon>
-                                        </template>
-                                    </q-input>
-                                </div>
-                            </div>
-                        </q-td>
+                  <div class="row justify-center q-mt-lg no-wrap"
+                       v-if="!qSelectGeneral.qSelectsSet[k].baseConfig">
+                    <q-input outlined rounded v-model="qSelectGeneral.qSelectsSet[k].startTime" mask="time" :rules="['time']">
+                      <template v-slot:append>
+                        <q-icon name="access_time" class="cursor-pointer">
+                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-time text-color="accent" style="background-color: var(--bg-color); color: var(--text-color)"
+                                    v-model="qSelectGeneral.qSelectsSet[k].startTime">
+                              <q-icon
+                                  class="cursor-pointer"
+                                  style="position: absolute; margin-top: -17.5em; margin-left: 11.7em"
+                                  v-close-popup
+                                  name="clear"
+                                  color="accent"
+                                  size="1.5em"/>
+                            </q-time>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                    <div class="column justify-center q-mx-lg" style="height: 4em">
+                      <span style="font-size: 2em; color: grey">&#8210</span>
                     </div>
+                    <q-input outlined rounded v-model="qSelectGeneral.qSelectsSet[k].endTime" mask="time" :rules="['time']"
+                             :disabled="qSelectGeneral.qSelectsSet[k].baseConfig">
+                      <template v-slot:append>
+                        <q-icon name="access_time" class="cursor-pointer">
+                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-time style="background-color: var(--bg-color); color: var(--text-color)"
+                                    v-model="qSelectGeneral.qSelectsSet[k].endTime">
+                              <q-icon
+                                  class="cursor-pointer"
+                                  style="position: absolute; margin-top: -17.5em; margin-left: 11.7em"
+                                  v-close-popup
+                                  name="clear"
+                                  color="accent"
+                                  size="1.5em"/>
+                            </q-time>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                  </div>
+
                     <DoorConfig
                             ref="configIn" :door-config="qSelectGeneral.qSelectsSet[k].doorConfigIn"
                             :direction="JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigIn) !==
@@ -142,6 +142,7 @@
                            @click="addConfiguration">
                         Konfiguration hinzufügen
                     </q-btn>
+                  </q-card>
                 </q-card-section>
                 <q-card-actions align="right">
                     <q-btn flat color="primary" :label="t('common.cancel')" @click="onCancelClick(); edit = false"

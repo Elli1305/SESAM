@@ -154,35 +154,49 @@
     </q-dialog>
 
     <q-dialog v-model="newGroup">
-        <q-card style="background-color: var(--bg-color); color: var(--text-color)">
-            <q-card-section>
-                <div class="text-h6">Name der Gruppe</div>
-            </q-card-section>
-            <q-card-section class="q-pt-none">
-                <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
-            </q-card-section>
-            <q-card-section>
-                <div class="text-h6">Räume auswählen</div>
-            </q-card-section>
-            <q-card-section class="q-pt-none">
-              <q-select
-                  filled
-                  v-model="modelRooms"
-                  multiple
-                  :options="listOfAllRoomsViaBuilding"
-                  option-label="name"/>
-            </q-card-section>
-            <q-card-actions align="right" class="text-primary">
-                <q-btn flat :label="t('common.cancel')" @click="toDefault()" v-close-popup/>
-                <q-btn flat :label="t('common.save')" @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
-            </q-card-actions>
-        </q-card>
+      <q-card style="background-color: var(--bg-color); color: var(--text-color)">
+        <q-card-section>
+          <div class="text-h6">Name der Gruppe</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-input dense v-model="newGroupName" autofocus @keyup.enter="prompt = false"/>
+        </q-card-section>
+        <q-card-section>
+          <div class="text-h6">Räume auswählen</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-select
+              filled
+              v-model="modelRooms"
+              multiple
+              :options="listOfAllRoomsViaBuilding"
+              option-label="name"/>
+        </q-card-section>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat :label="t('common.cancel')" @click="toDefault()" v-close-popup/>
+          <q-btn flat :label="t('common.save')"
+                 @click="checkName(newGroupName); makeNewGroup(newGroupName,modelRooms);"/>
+        </q-card-actions>
+      </q-card>
     </q-dialog>
 
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 50em; background-color: var(--bg-color); color: var(--text-color)">
-        <q-card-section>
-          <div class="text-h6">{{t("editor.groupRooms.groupsConfig")}}</div>
+        <q-card-section class="row justify-between">
+          <div class="text-h6">{{ t("editor.groupRooms.groupsConfig") }}</div>
+          <q-btn flat rounded size="0.9em">
+            <q-icon name="content_copy" size="1em" left/>
+            {{ t('floorPlan.chooseConfig') }}
+            <q-menu style="background-color: var(--bg-color); color: var(--text-color)">
+              <q-list>
+                <q-item clickable v-close-popup v-for="config in configOptions" @click="selectedConfig = config">
+                  <q-item-section>
+                    <q-item-label>{{ config.name }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-card-section>
         <q-card-section>
           <q-table
@@ -203,9 +217,11 @@
           >
             <template v-slot:top-right>
               <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
-                <q-toggle v-model="visibleColumns" @update:model-value="fetchDoors(rows2)" val="doorNames" :label="t('editor.groupRooms.doors')" size="2.5em"/>
+                <q-toggle v-model="visibleColumns" @update:model-value="fetchDoors(rows2)" val="doorNames"
+                          :label="t('editor.groupRooms.doors')" size="2.5em"/>
               </div>
-              <q-input class="q-ml-xs" outlined rounded dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
+              <q-input class="q-ml-xs" outlined rounded dense debounce="250" v-model="searchinput"
+                       :placeholder="t('common.search')">
                 <template v-slot:append>
                   <q-icon name="search"/>
                 </template>
@@ -214,56 +230,34 @@
             <template v-slot:body-cell-doorNames="props">
               <q-td style="width: 60%" :props="props">
                 <q-select v-if="props.row.selected"
-                    class="q-my-sm"
-                    filled dense options-dense
-                    emit-value
-                    v-model="model[props.row.room]"
-                    multiple
-                    :options="props.row.doors"
-                    option-label="name"
-                    options-cover
-                    map-options
-                    use-chips
+                          class="q-my-sm"
+                          filled dense options-dense
+                          emit-value
+                          v-model="model[props.row.room]"
+                          multiple
+                          :options="props.row.doors"
+                          option-label="name"
+                          options-cover
+                          map-options
+                          use-chips
                 />
               </q-td>
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td style="width: 10%" :props="props">
-                <q-checkbox v-model="props.row.selected" @update:model-value="getDoors(props.row.room, props.row.selected); checkIfSelected(props.row.selected, props.row.room)"/>
+                <q-checkbox v-model="props.row.selected"
+                            @update:model-value="getDoors(props.row.room, props.row.selected); checkIfSelected(props.row.selected, props.row.room)"/>
               </q-td>
             </template>
           </q-table>
         </q-card-section>
-        <q-card-section>
-        <q-select
-            class="q-ml-md"
-            style="min-width: 20em"
-            filled
-            use-input
-            hide-selected
-            fill-input
-            input-debounce="0"
-            @filter="filterConfigOptions"
-            :label="t('floorPlan.chooseConfig')"
-            option-label="name"
-            v-model="selectedConfig"
-            :options="configOptions"
-            clearable
-        >
-          <template v-slot:no-option>
-            <q-item>
-              <q-item-section class="text-grey">
-                No results
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
-        </q-card-section>
         <q-card-section v-for="(selectConf,k) in qSelectGeneral.qSelectsSet">
-          <q-card bordered flat>
+          <q-card style="background-color: var(--bg-color); color: var(--text-color)" bordered flat>
             <q-toolbar class="bg-primary text-accent">
-
               <q-toolbar-title>Konfiguration</q-toolbar-title>
+              <q-checkbox class="q-mr-lg" size="2em" keep-color dense v-model="qSelectGeneral.qSelectsSet[k].baseConfig"
+                          label="Basis Konfiguration"
+                          color="accent" @click="check(k)"/>
               <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
                 <q-tooltip max-width="15em" anchor="center right" self="center left">
                   You can only choose one base configuration.
@@ -275,51 +269,48 @@
             </q-toolbar>
 
 
-            <div class="colomn q-mt-sm justify-around items-center no-wrap">
-
-              <div class="q-pa-md">
-                <div class="q-gutter-sm">
-
-                  <q-checkbox dense v-model="qSelectGeneral.qSelectsSet[k].baseConfig" label="Basis Konfiguration"
-                              color="primary" @click="check(k)"/>
-
-                </div>
+            <div class="row justify-center q-mt-lg no-wrap"
+                 v-if="!qSelectGeneral.qSelectsSet[k].baseConfig">
+              <q-input outlined rounded v-model="qSelectGeneral.qSelectsSet[k].startTime" mask="time" :rules="['time']">
+                <template v-slot:append>
+                  <q-icon name="access_time" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <q-time text-color="accent" style="background-color: var(--bg-color); color: var(--text-color)"
+                              v-model="qSelectGeneral.qSelectsSet[k].startTime">
+                        <q-icon
+                            class="cursor-pointer"
+                            style="position: absolute; margin-top: -17.5em; margin-left: 11.7em"
+                            v-close-popup
+                            name="clear"
+                            color="accent"
+                            size="1.5em"/>
+                      </q-time>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+              <div class="column justify-center q-mx-lg" style="height: 4em">
+                <span style="font-size: 2em; color: grey">&#8210</span>
               </div>
-              <q-td class="q-pl-md v-if=" v-if="!qSelectGeneral.qSelectsSet[k].baseConfig">
-                <div class="q-gutter-sm row">
-                  <div class="q-gutter-sm row">
-                    <q-input filled v-model="qSelectGeneral.qSelectsSet[k].startTime" mask="time" :rules="['time']">
-                      <template v-slot:append>
-                        <q-icon name="access_time" class="cursor-pointer">
-                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-time v-model="qSelectGeneral.qSelectsSet[k].startTime">
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat/>
-                              </div>
-                            </q-time>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                    </q-input>
-                  </div>
-                  <div class="q-gutter-sm row">
-                    <q-input filled v-model="qSelectGeneral.qSelectsSet[k].endTime" mask="time" :rules="['time']"
-                             :disabled="qSelectGeneral.qSelectsSet[k].baseConfig">
-                      <template v-slot:append>
-                        <q-icon name="access_time" class="cursor-pointer">
-                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-time v-model="qSelectGeneral.qSelectsSet[k].endTime">
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat/>
-                              </div>
-                            </q-time>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                    </q-input>
-                  </div>
-                </div>
-              </q-td>
+              <q-input outlined rounded v-model="qSelectGeneral.qSelectsSet[k].endTime" mask="time" :rules="['time']"
+                       :disabled="qSelectGeneral.qSelectsSet[k].baseConfig">
+                <template v-slot:append>
+                  <q-icon name="access_time" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <q-time style="background-color: var(--bg-color); color: var(--text-color)"
+                              v-model="qSelectGeneral.qSelectsSet[k].endTime">
+                        <q-icon
+                            class="cursor-pointer"
+                            style="position: absolute; margin-top: -17.5em; margin-left: 11.7em"
+                            v-close-popup
+                            name="clear"
+                            color="accent"
+                            size="1.5em"/>
+                      </q-time>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
             </div>
             <door-config :door-config="qSelectGeneral.qSelectsSet[k].doorConfigIn"
                          :direction="JSON.stringify(qSelectGeneral.qSelectsSet[k].doorConfigIn) !==
@@ -338,12 +329,14 @@
             </q-btn>
           </q-card>
         </q-card-section>
-        <q-card>
-          <q-card-actions align="right" class="text-primary">
-            <q-btn flat @click="resetConfig()" v-close-popup> {{ t("common.cancel") }}</q-btn>
-            <q-btn flat :disable="!checkBaseConf()" v-close-popup @click="saveConfig(model)"> {{ t("common.save") }}</q-btn>
-          </q-card-actions>
-        </q-card>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat @click="resetConfig()" v-close-popup> {{ t("common.cancel") }}</q-btn>
+          <q-btn flat :disable="!checkBaseConf()" v-close-popup @click="saveConfig(model)">
+            {{
+              t("common.save")
+            }}
+          </q-btn>
+        </q-card-actions>
       </q-card>
     </q-dialog>
   </q-page>
@@ -435,7 +428,7 @@ export default {
             }]
           }],
           description: "",
-            direction: Direction.BOTH
+          direction: Direction.BOTH
         },
         doorConfigOut: {
           configParts: [{
@@ -448,7 +441,7 @@ export default {
             }]
           }],
           description: "",
-            direction: Direction.BOTH
+          direction: Direction.BOTH
         },
         baseConfig: false,
         startTime: null,
@@ -499,14 +492,14 @@ export default {
           console.log(element)
           let object = {
             doorConfigIn: {
-                direction: JSON.stringify(element.doorConfigIn)
-                !== JSON.stringify(element.doorConfigOut) ? Direction.IN : Direction.BOTH,
+              direction: JSON.stringify(element.doorConfigIn)
+              !== JSON.stringify(element.doorConfigOut) ? Direction.IN : Direction.BOTH,
               description: element.doorConfigIn.description,
               configParts: element.doorConfigIn.configParts
             },
             doorConfigOut: {
-                direction: JSON.stringify(element.doorConfigIn)
-                !== JSON.stringify(element.doorConfigOut) ? Direction.OUT : Direction.BOTH,
+              direction: JSON.stringify(element.doorConfigIn)
+              !== JSON.stringify(element.doorConfigOut) ? Direction.OUT : Direction.BOTH,
               description: element.doorConfigOut.description,
               configParts: element.doorConfigOut.configParts
             },
@@ -551,9 +544,22 @@ export default {
     }
 
     const columns = [
-      { name: 'name', required: true, label: t('editor.groupRooms.group'), align: 'center', field: row => row.name, sortable: true },
-      { name: 'rooms', align: 'center', label: t('floorPlan.rooms'), field: row => row.rooms.map(r => r.name).join(", "),  sortable: true},
-      { name: 'actions', label: t('common.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
+      {
+        name: 'name',
+        required: true,
+        label: t('editor.groupRooms.group'),
+        align: 'center',
+        field: row => row.name,
+        sortable: true
+      },
+      {
+        name: 'rooms',
+        align: 'center',
+        label: t('floorPlan.rooms'),
+        field: row => row.rooms.map(r => r.name).join(", "),
+        sortable: true
+      },
+      {name: 'actions', label: t('common.edit'), style: 'width: 8em', headerStyle: 'width: 8em', align: 'center'},
     ]
 
     const rows = ref([]);
@@ -916,11 +922,23 @@ export default {
     },
 
     addConfiguration() {
-      this.qSelectGeneral.qSelectsSet.push( {
-        doorConfigIn: {configParts: [{credentials: [], attributeFilter: [{ attribute: null,
-              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
-        doorConfigOut: {configParts: [{credentials: [], attributeFilter: [{attribute: null,
-              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
+      this.qSelectGeneral.qSelectsSet.push({
+        doorConfigIn: {
+          configParts: [{
+            credentials: [], attributeFilter: [{
+              attribute: null,
+              predicateType: null, value: null, currentDate: false
+            }]
+          }], description: "", direction: Direction.BOTH
+        },
+        doorConfigOut: {
+          configParts: [{
+            credentials: [], attributeFilter: [{
+              attribute: null,
+              predicateType: null, value: null, currentDate: false
+            }]
+          }], description: "", direction: Direction.BOTH
+        },
         baseConfig: false,
         startTime: null,
         endTime: null
@@ -1002,18 +1020,30 @@ export default {
           })
       return filteredRows
     },
-      resetConfig() {
-        this.qSelectGeneral.qSelectsSet = [{
-            doorConfigIn: {configParts: [{credentials: [], attributeFilter: [{ attribute: null,
-                        predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
-            doorConfigOut: {configParts: [{credentials: [], attributeFilter: [{attribute: null,
-                        predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
-            baseConfig: false,
-            startTime: null,
-            endTime: null
-        }]
-          this.selectedConfig = null
-      },
+    resetConfig() {
+      this.qSelectGeneral.qSelectsSet = [{
+        doorConfigIn: {
+          configParts: [{
+            credentials: [], attributeFilter: [{
+              attribute: null,
+              predicateType: null, value: null, currentDate: false
+            }]
+          }], description: "", direction: Direction.BOTH
+        },
+        doorConfigOut: {
+          configParts: [{
+            credentials: [], attributeFilter: [{
+              attribute: null,
+              predicateType: null, value: null, currentDate: false
+            }]
+          }], description: "", direction: Direction.BOTH
+        },
+        baseConfig: false,
+        startTime: null,
+        endTime: null
+      }]
+      this.selectedConfig = null
+    },
     saveConfig(model) {
       console.log("model", model)
       const roomGroupStore = useRoomGroupStore()

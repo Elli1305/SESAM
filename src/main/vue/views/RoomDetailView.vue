@@ -8,8 +8,9 @@
     <q-btn
         size="1em" flat round
         icon="edit"
+        style="color: var(--light)"
         v-show="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
-        @click="openDialog(room)" color="primary"/>
+        @click="openDialog(room)"/>
   </div>
   <q-scroll-area style="width: 100%; height: 33.25em">
     <p class="text-subtitle2 q-mt-md">Aktive Tür-Konfigurationen:</p>
