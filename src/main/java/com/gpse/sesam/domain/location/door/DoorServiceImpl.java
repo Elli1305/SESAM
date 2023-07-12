@@ -1,4 +1,5 @@
 package com.gpse.sesam.domain.location.door;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;

@@ -3,6 +3,7 @@ package com.gpse.sesam.domain.location.door;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 
 import com.gpse.sesam.domain.location.Coordinate;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
