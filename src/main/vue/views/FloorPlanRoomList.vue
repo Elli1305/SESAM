@@ -220,7 +220,7 @@
                                   color="primary"
                                   class="q-mt-md"
                                   style="width: 100%"
-                                  @click=""
+                                  @click="openGroupDoorDialog"
                                   rounded/>
                             </q-card-section>
 
@@ -348,6 +348,7 @@ import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 import {getCssVar, useQuasar} from "quasar";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {useLocationStore} from "@/main/vue/stores/locations";
+import MultipleRoomsDoorConfigDialog from "@/main/vue/views/MultipleRoomsDoorConfigDialog.vue";
 import RoomDetailView from "@/main/vue/views/RoomDetailView.vue";
 import {useCredentialsStore} from "@/main/vue/stores/credential";
 
@@ -682,6 +683,17 @@ export default {
       selectedGroups.value = group;
     }
 
+      function openGroupDoorDialog() {
+          $q.dialog({
+              component: MultipleRoomsDoorConfigDialog,
+              componentProps: {
+                  group: selectedGroups.value.id
+              }
+          }).onOk(() => {
+              console.log("success")
+          })
+      }
+
     async function save(room) {
       room.name = currentRoomName.value;
       await roomStore.save(room)
@@ -883,6 +895,7 @@ export default {
     const dropdown = ref(false);
 
     return {
+        openGroupDoorDialog,
       floorPlanStore,
       selectedRooms,
       toggleRoomCheckbox,

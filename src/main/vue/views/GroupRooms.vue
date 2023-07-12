@@ -229,7 +229,7 @@
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td style="width: 10%" :props="props">
-                <q-checkbox v-model="props.row.selected" @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.selected, props.row.room)"/>
+                <q-checkbox v-model="props.row.selected" @update:model-value="getDoors(props.row.room, props.row.selected); checkIfSelected(props.row.selected, props.row.room)"/>
               </q-td>
             </template>
           </q-table>
@@ -621,11 +621,12 @@ export default {
       editedRow.value = {...row};
     }
 
-    function getDoors(id) {
-      doorStore.getByRoomId(id).then((doors) => {
-        model.value[id] = doors
-        console.log(model.value)
-      })
+    function getDoors(id, checked) {
+      if (checked) {
+        doorStore.getByRoomId(id).then((doors) => {
+          model.value[id] = doors
+        })
+      }
     }
 
 
@@ -784,7 +785,7 @@ export default {
     }
 
     function fetchDoors(rows) {
-      rows?.forEach(row => getDoors(row.room))
+      rows?.forEach(row => getDoors(row.room, true))
     }
 
     return {
