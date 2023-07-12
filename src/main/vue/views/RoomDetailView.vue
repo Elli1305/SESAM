@@ -226,10 +226,14 @@ export default {
           room: room
         }
       });
-      dialog.onOk(() =>
-          this.load()
-      )
-      dialog.onCancel(() => this.load())
+      dialog.onOk(() => {
+        this.load()
+        this.$emit('doorChanged')
+      })
+      dialog.onCancel(() => {
+        this.load()
+        this.$emit('doorChanged')
+      })
     }
   },
   setup(props) {

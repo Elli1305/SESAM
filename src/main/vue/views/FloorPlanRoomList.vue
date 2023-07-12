@@ -136,7 +136,7 @@
                 </div>
               </q-tab-panel>
               <q-tab-panel name="info">
-                <room-detail-view ref="roomDetail" :room="room" @back-clicked="back()"/>
+                <room-detail-view ref="roomDetail" @doorChanged="$emit('doorChanged')" :room="room" @back-clicked="back()"/>
               </q-tab-panel>
             </q-tab-panels>
           </q-tab-panel>
@@ -398,9 +398,6 @@ import {storeToRefs} from "pinia";
 import {useRoomStore} from "@/main/vue/stores/room";
 import DoorConfig from "@/main/vue/views/DoorConfig.vue";
 import {getCssVar, useQuasar} from "quasar";
-import api from "@/main/vue/api";
-import CreateDoor from "@/main/vue/views/CreateDoor.vue";
-import {useDoorStore} from "@/main/vue/stores/door";
 import {useRoomGroupStore} from "@/main/vue/stores/roomGroupStore";
 import {useLocationStore} from "@/main/vue/stores/locations";
 import RoomDetailView from "@/main/vue/views/RoomDetailView.vue";
@@ -432,7 +429,7 @@ export default {
     }
   },
   name: "FloorPlanRoomList",
-
+  emits: ["doorChanged"],
   setup(props, context) {
     const {t} = useI18n();
     const floorPlanStore = useFloorPlanStore()

@@ -161,7 +161,7 @@
   </q-dialog>
   <q-page class="row no-wrap">
     <FloorPlan @roomClicked="openDetail" @door-created="refresh" ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
-    <FloorPlanRoomList ref="roomList" @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
+    <FloorPlanRoomList ref="roomList" @doorChanged="redrawRooms" @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
   </q-page>
 
 </template>
@@ -194,7 +194,6 @@ export default {
       this.$refs?.roomList?.refreshDetail();
     },
     openDetail(id) {
-      console.log(this.locationStore.getRoomById(id))
       this.$refs?.roomList?.roomClick(this.locationStore.getRoomById(id))
     }
   },
