@@ -220,14 +220,16 @@ export default {
           })
           .catch(() => this.loading = false)
     }, openDialog(room) {
-      this.$q.dialog({
+      let dialog = this.$q.dialog({
         component: EditRoom,
         componentProps: {
           room: room
         }
-      }).onOk(() => {
-        this.load();
-      })
+      });
+      dialog.onOk(() =>
+          this.load()
+      )
+      dialog.onCancel(() => this.load())
     }
   },
   setup(props) {
@@ -237,7 +239,6 @@ export default {
     const userStore = useUserStore()
     const activeConfigs = ref([]);
 
-    // TODO get inactive configs
     const inactiveConfigs = ref([]);
 
     watch(() => props.room, () => {
