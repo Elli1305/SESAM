@@ -26,7 +26,7 @@ public interface CredentialService {
 
 	List<CredentialCmd> getCredentialByLocation(Long id);
 
-	void create(CreateCredentialCmd createCredentialCmd);
+	void create(boolean createOnLedger, CreateCredentialCmd createCredentialCmd) throws JsonProcessingException;
 
 	void delete(Long id);
 

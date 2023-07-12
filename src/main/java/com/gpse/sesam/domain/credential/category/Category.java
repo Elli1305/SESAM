@@ -10,7 +10,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
@@ -31,8 +30,8 @@ public class Category {
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "category", fetch = FetchType.EAGER)
 	private List<InternalCredential> credentials = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "CATEGORY_ID")
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.EAGER)
 	private List<ExternalCredential> externalCredentials = new ArrayList<>();
 
 	protected Category() {
@@ -84,16 +83,22 @@ public class Category {
 		credential.setCategory(null);
 	}
 
+	public void addExternalCredential(ExternalCredential externalCredential) {
+		externalCredentials.add(externalCredential);
+		externalCredential.setCategory(this);
+	}
+
+	public void removeExternalCredential(ExternalCredential credential) {
+		externalCredentials.remove(credential);
+		credential.setCategory(null);
+	}
+
 	public void setExternalCredentials(final List<ExternalCredential> externalCredentials) {
 		this.externalCredentials = externalCredentials;
 	}
 
 	public List<ExternalCredential> getExternalCredentials() {
 		return externalCredentials;
-	}
-
-	public void addExternalCredential(final ExternalCredential externalCredential) {
-		externalCredentials.add(externalCredential);
 	}
 
 	public void setCredentials(final List<InternalCredential> credentials) {

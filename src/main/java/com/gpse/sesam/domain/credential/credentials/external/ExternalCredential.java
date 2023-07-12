@@ -1,8 +1,10 @@
 package com.gpse.sesam.domain.credential.credentials.external;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.credentials.Credential;
-import jakarta.persistence.*;
 import com.gpse.sesam.domain.credential.issue.issuing.FormEntry;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -16,20 +18,29 @@ public class ExternalCredential implements Credential {
 	@Column(nullable = false)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String credentialDefinitionId;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<FormEntry> form;
+	@Column(nullable = false)
+	private String version;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<FormEntry> form;
+
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Category category;
 
 	protected ExternalCredential() {
 	}
 
-    public ExternalCredential(final String name, final String credentialDefinitionId, final List<FormEntry> form) {
-        this.name = name;
-        this.credentialDefinitionId = credentialDefinitionId;
-        this.form = form;
-    }
+	public ExternalCredential(final String name, final String version, final String credentialDefinitionId,
+							  final List<FormEntry> form) {
+		this.name = name;
+		this.version = version;
+		this.credentialDefinitionId = credentialDefinitionId;
+		this.form = form;
+	}
 
 	public Long getId() {
 		return id;
@@ -51,15 +62,34 @@ public class ExternalCredential implements Credential {
 		return credentialDefinitionId;
 	}
 
-    public void setCredentialDefinitionId(final String credentialDefinitionId) {
-        this.credentialDefinitionId = credentialDefinitionId;
-    }
+	public void setCredentialDefinitionId(final String credentialDefinitionId) {
+		this.credentialDefinitionId = credentialDefinitionId;
+	}
 
-    public List<FormEntry> getForm() {
+	@Override
+	public String getVersion() {
+		return version;
+	}
+
+	@Override
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public List<FormEntry> getForm() {
         return form;
     }
 
-    public void setForm(List<FormEntry> form) {
-        this.form = form;
-    }
+	@Override
+	public void setForm(List<FormEntry> form) {
+		this.form = form;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 }
