@@ -226,13 +226,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		// breaks jar build from mater
 //		final String jsonContent = readJsonFile();
 //		final List<List<Coordinate>> roomCoordinates = createRoomCoordinates(jsonContent);
-
+//
 //		for (int i = 0; i < roomCoordinates.size(); i++) {
 //			rooms.get(i).setCoordinates(roomCoordinates.get(i));
 //		}
-
+//
 //		final List<List<Coordinate>> doorCoordinates = createDoorCoordinates(jsonContent);
-
+//
 //		for (int i = 0; i < doorCoordinates.size(); i++) {
 //			final Door door = new Door("door" + i, doorCoordinates.get(i));
 //			rooms.get(i).setDoors(List.of(door));
@@ -384,6 +384,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 				"tlabs", form3, checklist3);
 		safety2.addIssuer(issuer1);
 		safety2.addIssuer(issuer2);
+		issuer1.setCredentials(List.of(safety2));
+		issuer2.setCredentials(List.of(safety2));
 
 
 		return List.of(safety2);

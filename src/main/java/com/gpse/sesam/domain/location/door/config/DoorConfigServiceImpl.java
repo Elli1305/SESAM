@@ -36,17 +36,12 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DoorConfigServiceImpl.class);
 
 	private final DoorApiConfig appConfig;
-	private final ProofConfigRepository proofConfigRepository;
-	private final CredentialService credentialService;
-
-	private final ConfigCmdMapper configCmdMapper;
+	private ConfigCmdMapper configCmdMapper;
 
 	@Autowired
 	public DoorConfigServiceImpl(final DoorApiConfig appConfig, final ProofConfigRepository proofConfigRepository,
 								 final CredentialService credentialService) {
 		this.appConfig = appConfig;
-		this.proofConfigRepository = proofConfigRepository;
-		this.credentialService = credentialService;
 		proofConfigRepository.save(createProofConfig());
 		this.configCmdMapper = new ConfigCmdMapper(credentialService);
 	}

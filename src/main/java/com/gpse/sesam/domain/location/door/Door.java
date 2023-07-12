@@ -3,6 +3,15 @@ package com.gpse.sesam.domain.location.door;
 import com.gpse.sesam.domain.credential.credentials.Credential;
 
 import com.gpse.sesam.domain.location.Coordinate;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,16 +43,11 @@ public class Door {
 	@Column
 	private String name;
 
-
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Coordinate> coordinates = new ArrayList<>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();
-
-	//@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-
-	//private List<Credential> credentials = new ArrayList<>();
 
 
 	public Door() {
@@ -111,6 +115,4 @@ public class Door {
 	public void setDoorConfigs(List<TwoWayDoorConfig> doorConfigs) {
 		this.doorConfigs = doorConfigs;
 	}
-
-
 }

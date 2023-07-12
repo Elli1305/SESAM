@@ -1,9 +1,9 @@
 package com.gpse.sesam.web.controller;
 
-
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.DoorService;
+import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.util.DoorCmdMapper;
 import com.gpse.sesam.web.cmd.DoorCmd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +21,16 @@ public class DoorController {
 	private final DoorCmdMapper doorCmdMapper;
 
 	@Autowired
-	public DoorController(final DoorService doorService, CredentialService credentialService) {
+	public DoorController(final DoorService doorService, final CredentialService credentialService) {
 		this.doorService = doorService;
-		doorCmdMapper = new DoorCmdMapper(credentialService);
+		doorCmdMapper = new DoorCmdMapper(new ConfigCmdMapper(credentialService));
 	}
 
 	@PostMapping("/save")
-	public Door save(@RequestBody final DoorCmd door) {
-		return doorService.save(DoorCmdMapper.toEntity(door));
+	public Door save(@RequestBody final Door door) {
+		return doorService.save(door);
 	}
+
 
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -37,6 +38,12 @@ public class DoorController {
 		return doorService.create(doorCmd.getRoomId(), DoorCmdMapper.toEntity(doorCmd));
 	}
 
+
+	@PostMapping("/update")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Door update(@RequestBody final DoorCmd doorCmd) {
+		return doorService.save(DoorCmdMapper.toEntity(doorCmd));
+	}
 	@DeleteMapping("/{id:\\d+}")
 	public void deleteById(@PathVariable("id") final Long id) {
 		doorService.deleteById(id);
