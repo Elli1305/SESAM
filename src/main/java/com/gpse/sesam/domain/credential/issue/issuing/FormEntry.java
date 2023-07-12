@@ -2,6 +2,8 @@ package com.gpse.sesam.domain.credential.issue.issuing;
 
 import com.gpse.sesam.domain.credential.issue.validation.AbstractValidationRule;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +16,19 @@ public class FormEntry {
 	private Long id;
 
 	@Column(nullable = false)
+	@NotEmpty
 	private String label;
 
 	@Column(nullable = false)
+	@NotNull
 	private FormEntryType type;
 
 	@Column(nullable = false)
+	@NotEmpty
 	private String attributeName;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@NotNull
 	private List<AbstractValidationRule> validationRules;
 
 	protected FormEntry() {

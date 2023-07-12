@@ -704,4 +704,82 @@ public class CredentialServiceImpl implements CredentialService {
                 attrNames
         );
     }
+
+    @Override
+    public CredentialExportCmd exportCredentials() {
+        return new CredentialExportCmd(
+                getCredentials()
+                        .stream()
+                        .map(internalCredential ->
+                                new InternalCredentialExportCmd(
+                                        internalCredential.getName(),
+                                        "version",
+                                        internalCredential.getAgent(),
+                                        internalCredential.getCredentialDefinitionId(),
+                                        internalCredential.getForm(),
+                                        internalCredential.getChecklist()
+                                                .stream()
+                                                .map(ChecklistEntry::getLabel)
+                                                .collect(Collectors.toList())
+                                )
+                        )
+                        .collect(Collectors.toList()),
+                externalCredentialService.getExternalCredentials()
+                        .stream()
+                        .map(internalCredential ->
+                                new ExternalCredentialExportCmd(
+                                        internalCredential.getName(),
+                                        "version",
+                                        internalCredential.getCredentialDefinitionId(),
+                                        internalCredential.getForm()
+                                )
+                        )
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public void importCredentials(@Valid CredentialExportCmd credentialExportCmd) {
+        for (InternalCredentialExportCmd internalCredentialExportCmd: credentialExportCmd.getInternalCredentials()) {
+            final InternalCredential credential = new InternalCredential(
+                    internalCredentialExportCmd.getName(),
+                    replaceMagicCredentialDefinitionIds(internalCredentialExportCmd.getCredentialDefinitionId()),
+                    internalCredentialExportCmd.getAgent(),
+                    internalCredentialExportCmd.getAttributes().stream()
+                            .map(createAttributeCmd ->
+                                    new FormEntry(
+                                            createAttributeCmd.getLabel(),
+                                            createAttributeCmd.getType(),
+                                            createAttributeCmd.getAttributeName(),
+                                            new ArrayList<>()
+                                    )
+                            )
+                            .toList(),
+                    internalCredentialExportCmd.getConditions().stream()
+                            .map(ChecklistEntry::new)
+                            .toList()
+            );
+
+            credentialRepository.save(credential);
+        }
+
+        for (ExternalCredentialExportCmd externalCredentialExportCmd: credentialExportCmd.getExternalCredentials()) {
+            final ExternalCredential credential = new ExternalCredential(
+                    externalCredentialExportCmd.getName(),
+                    externalCredentialExportCmd.getCredentialDefinitionId(),
+                    externalCredentialExportCmd.getAttributes().stream()
+                            .map(createAttributeCmd ->
+                                    new FormEntry(
+                                            createAttributeCmd.getLabel(),
+                                            createAttributeCmd.getType(),
+                                            createAttributeCmd.getAttributeName(),
+                                            new ArrayList<>()
+                                    )
+                            )
+                            .toList()
+            );
+
+            externalCredentialService.save(credential);
+        }
+    }
 }

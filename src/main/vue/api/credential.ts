@@ -5,7 +5,7 @@ import {
     CategoryResponse,
     CreateCredential,
     Credential,
-    CredentialCmd, CredentialSchema,
+    CredentialCmd, CredentialExport, CredentialSchema,
     ExternalCredential, ExternalCredentialCmd,
     IssueCredentialAttribute
 } from "@/main/vue/entity/credentialDefinition";
@@ -88,5 +88,13 @@ export default {
 
     getCredentialSchema(credentialDefinitionId: string): Promise<AxiosResponse<CredentialSchema>> {
         return axios.get(`/api/credential_schema/${credentialDefinitionId}`);
-    }
+    },
+
+    exportCredentials(): Promise<AxiosResponse<Map<string, any>>> {
+        return axios.get(`/api/export_credentials`);
+    },
+
+    importCredentials(content: CredentialExport): Promise<AxiosResponse<void>> {
+        return axios.post(`/api/import_credentials`, content);
+    },
 }

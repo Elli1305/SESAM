@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -133,6 +134,19 @@ public class CredentialController {
 		return service.getCredentialSchema(credentialDefinitionId);
 	}
 
+	@GetMapping(value = "/export_credentials")
+	@ResponseStatus(HttpStatus.OK)
+	public CredentialExportCmd exportCredentials() {
+		return service.exportCredentials();
+	}
+
+	@PostMapping(value = "/import_credentials")
+	@ResponseStatus(HttpStatus.CREATED)
+	@Secured("ADMINISTRATOR")
+	public void importCredentials(@Valid @RequestBody final CredentialExportCmd credentialExportCmd) {
+		service.importCredentials(credentialExportCmd);
+	}
+
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(IndyException.class)
 	public CredentialSchemaErrorCmd indyException() {
@@ -151,5 +165,10 @@ public class CredentialController {
 		}
 
 		return new CredentialSchemaErrorCmd("ERR_LEDGER_COMMUNICATION_FAILED");
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler({ConnectException.class, IllegalArgumentException.class})
+	public void importException() {
 	}
 }

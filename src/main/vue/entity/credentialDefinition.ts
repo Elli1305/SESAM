@@ -154,3 +154,19 @@ export interface CredentialSchema {
     ver: string;
     attrs: string[];
 }
+
+interface InternalCredentialExport {
+    name: string;
+    version: string;
+    agent: string;
+    credentialDefinitionId: string;
+    attributes: Map<String, any>[];
+    conditions: string[];
+}
+
+export type ExternalCredentialExport = Omit<InternalCredentialExport, 'conditions' | 'agent'>;
+
+export interface CredentialExport {
+    internalCredentials: InternalCredentialExport[];
+    externalCredentials: ExternalCredentialExport[];
+}

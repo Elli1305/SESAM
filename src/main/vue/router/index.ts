@@ -166,6 +166,13 @@ const router = createRouter({
                 authorize: AttainableRole.ADMINISTRATOR,
             },
         },
+        {
+            path: "/import_credentials",
+            component: () => import("@/main/vue/views/ImportCredentials.vue"),
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
+        },
         {path: "/:pathMatch(.*)*", component: StartView},
     ],
 });

@@ -14,6 +14,21 @@
         <q-select style="width: 12em" dense v-model="selectedTypes" :options="options" borderless emit-value :label="t('admin.credentialAdministration.type')" map-options multiple/>
         </template>
       <template v-slot:top-right>
+        <q-btn-dropdown  color="grey-6" label="Import / Export Credentials" rounded flat icon="download">
+          <q-list>
+            <q-item v-close-popup clickable @click="importExport">
+              <q-item-section>
+                <q-item-label>Alle Credentials exportieren</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item v-close-popup clickable to="/import_credentials">
+              <q-item-section>
+                <q-item-label>Credentials importieren</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+
         <q-btn rounded color="grey-6" flat icon="add" :label="t('admin.credentialAdministration.new')" to="/add_credential"/>
         <q-input v-model="filter" outlined rounded class="q-ml-lg" debounce="300" dense :placeholder="t('common.search')">
           <template v-slot:append>
@@ -49,13 +64,16 @@
 </template>
 
 <script lang="ts" setup>
-import {QSelectOption, QTableColumn} from "quasar";
+import {exportFile, QSelectOption, QTableColumn, useQuasar} from "quasar";
 import {useCredentialsStore} from "@/main/vue/stores/credential";
 import {computed, Ref, ref} from "vue";
 import {Credential, ExternalCredential} from "@/main/vue/entity/credentialDefinition";
 import {useI18n} from "vue-i18n";
+import api from "@/main/vue/api";
 
 const {t} = useI18n();
+const $q = useQuasar();
+
 const columns: QTableColumn<Credential | ExternalCredential>[] = [
   {
     name: 'name',
@@ -121,6 +139,22 @@ const rows = computed(
     () => [...store.credentials, ...store.externalCredentials]
         .filter((value) => (selectedTypes.value.includes('internal') && 'issuer' in value) || (selectedTypes.value.includes('external') && !('issuer' in value)))
 );
+
+const importExport = async () => {
+  const credentials = await api.credential.exportCredentials();
+
+  const error = exportFile(
+      `export-${new Date().getTime()}.json`,
+      JSON.stringify(credentials.data),
+      {
+        mimeType: 'application/json'
+      }
+  )
+
+  if (error !== true) {
+    console.error(error);
+  }
+}
 
 </script>
 

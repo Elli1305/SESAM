@@ -14,6 +14,8 @@ public interface ExternalCredentialService {
 
     void saveAll(Iterable<ExternalCredential> externalCredentials);
 
+    void save(ExternalCredential externalCredential);
+
     List<ExternalCredential> getExternalCredentialByCredentialDefinitionId(String id);
 
     List<ExternalCredentialCmd> getAllExternal();

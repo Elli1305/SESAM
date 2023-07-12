@@ -196,4 +196,9 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
     public void saveAll(Iterable<ExternalCredential> externalCredentials) {
         externalCredentialRepository.saveAll(externalCredentials);
     }
+
+    @Override
+    public void save(ExternalCredential externalCredential) {
+        externalCredentialRepository.save(externalCredential);
+    }
 }
