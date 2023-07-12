@@ -32,6 +32,7 @@ import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.util.GeoJsonParser;
+import com.gpse.sesam.web.exception.FileStorageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -166,8 +167,12 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	}
 
 	private void setLogo() {
-		fileStorageService.reset(ColorTheme.LIGHT);
-		fileStorageService.reset(ColorTheme.DARK);
+		try {
+			fileStorageService.reset(ColorTheme.LIGHT);
+			fileStorageService.reset(ColorTheme.DARK);
+		} catch (FileStorageException ignored) {
+			LOG.warn("Unable to reset fileStorageService.");
+		}
 	}
 
 	private List<SesamUser> createUsers(final List<InternalCredential> credentials) {
