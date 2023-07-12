@@ -390,7 +390,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<ChecklistEntry> checklist3 = checklist();
 
 		final List<FormEntry> form3 = form();  //Form
-		final InternalCredential safety2 = new InternalCredential("T-Member", "$T-MEMBER",
+		final InternalCredential safety2 = new InternalCredential("T-Member", "1.0", "$T-MEMBER",
 				"tlabs", form3, checklist3);
 		safety2.addIssuer(issuer1);
 		safety2.addIssuer(issuer2);
@@ -431,6 +431,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<InternalCredential> credentials = new ArrayList<>();
 		final InternalCredential safety = new InternalCredential(
 				"Sicherheitsbelehrung-Baumschule",
+				"1.0",
 				"$T-MEMBER",
 				"tlabs",
 				form4,
@@ -441,7 +442,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		credentials.add(safety);
 		final List<FormEntry> form7 = form();
 		final List<ExternalCredential> externalCredentials = new ArrayList<>();
-		final ExternalCredential safety3 = new ExternalCredential("U-Member", "$U-MEMBER", form7);
+		final ExternalCredential safety3 = new ExternalCredential("U-Member", "1.0","$U-MEMBER", form7);
 
 		externalCredentials.add(safety3);
 
@@ -458,6 +459,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<InternalCredential> credentials2 = new ArrayList<>();
 		final InternalCredential firstAid = new InternalCredential(
 				"Erste-Hilfe-Kurs-DRK",
+				"1.0",
 				"$U-TRAINING",
 				"university",
 				form6,
@@ -469,8 +471,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<FormEntry> form8 = form();
 		final List<FormEntry> form9 = form();
 		final List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-TRAINING", form8);
-		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-MEMBER", form9);
+		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "1.0","$U-TRAINING", form8);
+		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "1.0","$U-MEMBER", form9);
 
 		externalCredentials2.add(firstAid2);
 		externalCredentials2.add(firstAid3);

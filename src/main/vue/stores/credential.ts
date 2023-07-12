@@ -14,7 +14,7 @@ import credential from "@/main/vue/api/credential";
 export const useCredentialsStore = defineStore('credentials', {
     state: () => {
         return {
-            credentials: new Array<Credential>(),
+            credentials: new Array<InternalCredential>(),
             externalCredentials: new Array<ExternalCredential>(),
         };
     }, actions: {
