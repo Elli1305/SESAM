@@ -1,308 +1,277 @@
 <template>
   <q-page-container class="no-padding no-margin">
     <q-page style="padding-right: 1em; padding-top: 2em">
+      <q-tabs
+          v-model="tab"
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify">
+        <q-tab name="rooms" :label="t('floorPlan.rooms')"/>
+        <q-tab name="groups"
+               v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
+               :label="t('editor.groupRooms.groups')"/>
+        <div v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
+             class="row justify-center" style="width: 3em">
+          <q-icon size="1.25em" fixed-right name="info_outlined" color="info" class="q-pl-xs">
+            <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em"
+                       anchor="bottom right" max-width="200px" self="top middle"
+                       :offset="[0, 0]">
+              {{ t('editor.groupRooms.info') }}
+            </q-tooltip>
+          </q-icon>
+        </div>
 
-      <div>
+      </q-tabs>
+      <q-separator/>
 
-        <q-tabs
-            v-model="tab"
-            class="text-grey"
-            active-color="primary"
-            indicator-color="primary"
-            align="justify">
-          <q-tab name="rooms" :label="t('floorPlan.rooms')"/>
-          <q-tab name="groups"
-                 v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
-                 :label="t('editor.groupRooms.groups')"/>
-          <div v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)" class="row justify-center" style="width: 3em">
-            <q-icon size="1.25em" fixed-right color="white" name="info_outlined" class="q-pl-xs">
-              <q-tooltip class="grey" anchor="bottom right" max-width="200px" self="top middle"
-                         style="font-size: 1em"
-                         :offset="[0, 0]">
-                {{ t('editor.groupRooms.info') }}
-              </q-tooltip>
-            </q-icon>
-          </div>
-
-        </q-tabs>
-        <q-separator/>
-
-        <q-tab-panels v-model="tab" animated
-                      style="max-width: 24em; min-width: 24em; background-color: var(--bg-color); color: var(--text-color)">
-          <q-tab-panel name="rooms">
-            <q-tab-panels v-model="roomTab" animated>
-              <q-tab-panel name="list" style="padding: 0; max-width: 100%">
-
+      <q-tab-panels v-model="tab" animated
+                    style="width: 22em; background-color: var(--bg-color); color: var(--text-color)">
+        <q-tab-panel name="rooms">
+          <q-tab-panels v-model="roomTab" animated
+                        style="background-color: var(--bg-color); color: var(--text-color)">
+            <q-tab-panel name="list" class="no-padding" style="width: 100%">
+              <div class="column justify-between no-wrap" style="height: 8.5em">
                 <q-input
+                    style="width: 100%"
                     :placeholder="t('common.search')"
                     v-model="search"
                     @update:model-value="roomFilter"
                     clearable
                     outlined
                     rounded
-                    clear-icon="clear"
-                    style="margin-bottom: 1em; min-width: 20em">
+                    clear-icon="clear">
                   <template v-slot:append>
                     <q-icon name="search"/>
                   </template>
                 </q-input>
                 <q-select
-                    :label="t('common.search')"
+                    style="width: 100%"
+                    :label="t('common.filter')"
                     v-model="filteredCredential"
                     @update:model-value="roomFilter"
                     :display-value="filteredCredential?.name"
                     :options="credentialsStore.credentials.concat(credentialsStore.externalCredentials)"
+                    :input-class="''"
                     option-value="credentialDefinitionId"
                     clearable
                     multiple
                     option-label="name"
                     outlined
                     rounded
-                    clear-icon="clear"
-                    style="margin-bottom: 1em; min-width: 20em">
+                    hide-dropdown-icon
+                    clear-icon="clear">
                 </q-select>
-                <q-scroll-area style="height: 24em; width: 22em; overflow: hidden"
-                               :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0 }"
-                >
-                  <q-list>
-                    <q-item v-for="room in filteredRooms" style="padding-left: 0">
-                      <q-checkbox v-model="selectedRooms" :val="room.id"
-                                  color="blue"/>
-                      <q-btn
-                          split
-                          flat
-                          style="min-width: 16em"
-                          :label="room.name"
-                          dropdown-icon="expand_more"
-                          color="var(--text-color)"
-                          @click="toggleRoomCheckbox(room)">
-                      </q-btn>
-                      <q-btn flat icon="chevron_right"
-                             @click="roomClick(room)"/>
-
-                      <q-btn-dropdown
-                          split
-                          flat
-                          style="min-width: 18em"
-                          :label="room.name"
-                          dropdown-icon="expand_more"
-                          color="var(--text-color)"
-                          @click="toggleRoomCheckbox(room);">
-                        <div class="column no-wrap" style="background-color: var(--bg-color)">
-                          <div class="row no-wrap">
-                            <div class="column no-wrap" style="padding: 0.5em">
-                              <q-list>
-                                <q-item-label>{{ t("floorPlan.roomName") }}:</q-item-label>
-                                <q-item-label>{{ t("floorPlan.doors") }}:</q-item-label>
-                                <q-item-label>Credentials:</q-item-label>
-                              </q-list>
-                            </div>
-                            <div class="column no-wrap" style="padding: 0.5em">
-                              <q-list>
-                                <q-item-label>{{ room.name }}</q-item-label>
-                                <q-item-label>{{
-                                    room.doors.map(door => door.name).join(", ")
-                                  }}
-                                </q-item-label>
-                                <q-item-label>
-                                  {{ room?.id ? "U-MEMBER" : "" }}
-                                </q-item-label>
-                              </q-list>
-                            </div>
-                          </div>
-                          <div
-                              v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
-                            <q-separator></q-separator>
-                            <div class="row justify-center" style="padding: 0.5em">
-                              <p class="cursor-pointer q-mb-none"
-                                 :style="{color: getCssVar('primary')}"
-                                 @click="setOldValueR(room)">{{ t('common.edit') }}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </q-btn-dropdown>
-                    </q-item>
-                  </q-list>
-                </q-scroll-area>
-                <div
-                    v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
-                  <q-separator></q-separator>
-                  <q-item>
-                    <q-btn style="min-width: 10em" color="primary" icon="add"
-                           :label="t('editor.groupRooms.addRoomsToNewGroup')"
-                           @click="checkAddRoomsToNewGroup();" flat/>
-                    <q-btn style="min-width: 10em" color="blue" icon="add"
-                           :label="t('editor.groupRooms.addRooms')"
-                           @click="addRoomsToExistingGroupDialog=checkIfGroupSelected();" flat/>
-                  </q-item>
-
-
-                </div>
-              </q-tab-panel>
-              <q-tab-panel name="info">
-                <room-detail-view ref="roomDetail" @doorChanged="$emit('doorChanged')" :room="room" @back-clicked="back()"/>
-              </q-tab-panel>
-            </q-tab-panels>
-          </q-tab-panel>
-          <q-tab-panel name="groups">
-            <q-input
-                :placeholder="t('common.search')"
-                v-model="searchGroup"
-                @update:model-value="groupFilter"
-                clearable
-                outlined
-                rounded
-                clear-icon="clear"
-                style="margin-bottom: 1em; min-width: 20em">
-              <template v-slot:append>
-                <q-icon name="search"/>
-              </template>
-            </q-input>
-            <q-scroll-area style="height: 50vh; min-width: 21em; overflow: hidden; max-width: 22em;"
-                           @scroll="giveLog();dropdown = false"
-                           :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
-            >
-              <q-list>
-
-                <q-item v-for="group in allGroups" style="padding-left: 0">
-                  <q-radio @click="filterRoomToGroups(); updateNumRoomsInGroup();"
-                           v-model="selectedGroups" :val="group"
-                           color="blue"/>
-                  <q-btn-dropdown
-                      flat
-                      style="min-width: 16em; max-width: 16em"
-                      :label="group.name"
-                      dropdown-icon="none"
-                      class="q-pl-xl"
-                      color="var(--text-color)"
-                      @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
-                  </q-btn-dropdown>
-                  <q-btn-dropdown
-
-                      flat
-                      menu-anchor="bottom right"
-                      style="max-width: 0"
-                      dropdown-icon="expand_more"
-                      color="var(--text-color)"
-                      @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
-
-                    <div class="column no-wrap" style="background-color: var(--bg-color); color: var(--text-color)">
-                      <div class="row no-wrap" style="min-width: 18em">
-                        <div class="column no-wrap q-pl-lg" style="padding: 0.5em">
-                          <q-list>
-                            <q-item-label>{{ t("floorPlan.roomAmount") }}:</q-item-label>
-                          </q-list>
-                        </div>
-                        <div class="column no-wrap" style="padding: 0.5em">
-                          <q-list>
-                            <q-item-label>{{ numRoomsInGroup }}</q-item-label>
-
-                          </q-list>
-                        </div>
-                      </div>
-                      <div
-                          v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
-                        <q-separator/>
-
-                        <div class="row justify-center" style="padding: 0.5em">
-                          <p class="cursor-pointer q-mb-none"
-                             :style="{color: getCssVar('primary')}"
-                             @click="reloadRoomsBE(); setOldValueG(group); allFloorsForGroup()">
-                            {{ t('common.edit') }}
-                          </p>
-                          <q-dialog v-model="editGroupD" persistent>
-                            <q-card style="width: 20em; background-color: var(--bg-color); color: var(--text-color)">
-                              <q-card-section>
-                                <div class="text-h6">
-                                  {{ t("floorPlan.editGroup") }}
-                                </div>
-                              </q-card-section>
-                              <q-card-section>
-                                <q-input filled v-model="currentGroupName"
-                                         :label="t( 'floorPlan.groupName')"
-                                         stack-label
-                                         style="width: 100%; padding-bottom: 1em"/>
-                                <q-list bordered class="rounded-borders">
-                                  <q-scroll-area
-                                      style="height: 20em; max-width: 100%;">
-                                    <q-item-label header>
-                                      {{ t("floorPlan.rooms") }}
-                                    </q-item-label>
-                                    <q-item
-                                        v-for="(room, i) in group.rooms"
-                                        class="row justify-around no-wrap">
-
-                                      <div class="column" style="width: 50%">
-                                        <q-item-label class="text-bold">
-                                          {{ room.name }}
-                                        </q-item-label>
-                                        <q-item-label caption>
-                                          {{ t('editor.groupRooms.floor') }}
-                                          {{ arrayFloors[i] }}
-                                        </q-item-label>
-                                      </div>
-                                      <q-btn
-                                          icon="delete"
-                                          dense flat round
-                                          style="width: 3em; height: 3em; color: var(--light)"
-                                          @click="addToDeleteList(room);"/>
-                                    </q-item>
-                                  </q-scroll-area>
-                                </q-list>
-                                <q-btn
-                                    :label="t('editor.groupRooms.doorconfiguration')"
-                                    color="primary"
-                                    class="q-mt-md"
-                                    style="width: 100%"
-                                    @click=""
-                                    rounded/>
-                              </q-card-section>
-
-                              <q-card-actions align="right" class="row no-wrap text-primary">
-                                <q-btn
-                                    flat rounded :label="t( 'common.cancel')"
-                                    color="primary"
-                                    @click="unCheck(); cancelEdit();"
-                                    v-close-popup/>
-                                <q-btn
-                                    flat rounded :label="t( 'common.save')"
-                                    color="primary"
-                                    @click="editGroupName(); updateNumRoomsInGroup();"/>
-                              </q-card-actions>
-                            </q-card>
-                          </q-dialog>
-                        </div>
-                      </div>
-
-                    </div>
-                  </q-btn-dropdown>
-                </q-item>
-              </q-list>
-            </q-scroll-area>
-            <div
-                v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
-              <q-separator/>
-              <div class="q-pa-xs q-pt-sm">
-                <q-btn
-                    color="primary"
-                    icon="add"
-                    :label="t('editor.groupRooms.newGroup')"
-                    @click="delName(); newGroup = true;"
-                    rounded flat/>
-                <q-btn
-                    color="grey"
-                    icon="delete"
-                    :label="t('common.delete')"
-                    @click="deleteAlert = checkGroupSelected();"
-                    rounded flat/>
               </div>
+              <q-scroll-area style="width: 100%; height: 21em" class="q-mt-sm">
+                <q-list>
+                  <q-item v-for="room in filteredRooms" style="padding-left: 0">
+                    <q-checkbox v-model="selectedRooms" :val="room.id"
+                                color="info"/>
+                    <q-btn
+                        flat
+                        class="full-width"
+                        :label="room.name"
+                        @click="toggleRoomCheckbox(room)">
+                    </q-btn>
+
+                    <q-btn
+                        flat
+                        icon="chevron_right"
+                        style="width: 3em; height: 3em"
+                        @click="roomClick(room)"/>
+                  </q-item>
+                </q-list>
+              </q-scroll-area>
+              <div
+                  v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
+                <q-separator/>
+                <div class="column justify-around no-wrap q-pa-sm" style="height: 6em">
+                  <q-btn
+                      flat dense rounded
+                      color="primary"
+                      @click="checkAddRoomsToNewGroup()">
+                    <div class="row no-wrap">
+                      <q-icon name="add" left/>
+                      {{ t('editor.groupRooms.addRoomsToNewGroup') }}
+                    </div>
+                  </q-btn>
+                  <q-btn
+                      flat dense rounded
+                      color="primary"
+                      @click="addRoomsToExistingGroupDialog=checkIfGroupSelected()">
+                    <div class="row no-wrap">
+                      <q-icon name="add" left/>
+                      {{ t('editor.groupRooms.addRooms') }}
+                    </div>
+                  </q-btn>
+                </div>
 
 
+              </div>
+            </q-tab-panel>
+            <q-tab-panel class="no-padding" name="info">
+              <room-detail-view ref="roomDetail" @doorChanged="$emit('doorChanged')" :room="room"
+                                @back-clicked="back()"/>
+            </q-tab-panel>
+          </q-tab-panels>
+        </q-tab-panel>
+        <q-tab-panel name="groups" style="width: 100%">
+          <q-input
+              class="q-mb-xs"
+              :placeholder="t('common.search')"
+              v-model="searchGroup"
+              @update:model-value="groupFilter"
+              clearable
+              outlined
+              rounded
+              clear-icon="clear"
+              style="width: 100%">
+            <template v-slot:append>
+              <q-icon name="search"/>
+            </template>
+          </q-input>
+          <q-scroll-area style="width: 100%; height: 28.5em"
+                         @scroll="giveLog();dropdown = false">
+            <q-list>
+
+              <q-item v-for="group in allGroups" style="padding-left: 0">
+                <q-radio @click="filterRoomToGroups(); updateNumRoomsInGroup();"
+                         v-model="selectedGroups" :val="group"
+                         color="info"/>
+                <q-btn
+                    flat
+                    class="full-width"
+                    :label="group.name"
+                    @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
+                </q-btn>
+                <q-btn-dropdown
+                    flat
+                    menu-anchor="bottom right"
+                    style="width: 3em; height: 3em"
+                    dropdown-icon="expand_more"
+                    @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup();">
+
+                  <div class="column no-wrap" style="background-color: var(--bg-color); color: var(--text-color)">
+                    <div class="row no-wrap" style="min-width: 18em">
+                      <div class="column no-wrap q-pl-lg" style="padding: 0.5em">
+                        <q-list>
+                          <q-item-label>{{ t("floorPlan.roomAmount") }}:</q-item-label>
+                        </q-list>
+                      </div>
+                      <div class="column no-wrap" style="padding: 0.5em">
+                        <q-list>
+                          <q-item-label>{{ numRoomsInGroup }}</q-item-label>
+
+                        </q-list>
+                      </div>
+                    </div>
+                    <div
+                        v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
+                      <q-separator/>
+
+                      <div class="row justify-center" style="padding: 0.5em">
+                        <p class="cursor-pointer q-mb-none"
+                           :style="{color: getCssVar('primary')}"
+                           @click="reloadRoomsBE(); setOldValueG(group); allFloorsForGroup()">
+                          {{ t('common.edit') }}
+                        </p>
+                        <q-dialog v-model="editGroupD" persistent>
+                          <q-card style="width: 20em; background-color: var(--bg-color); color: var(--text-color)">
+                            <q-card-section>
+                              <div class="text-h6">
+                                {{ t("floorPlan.editGroup") }}
+                              </div>
+                            </q-card-section>
+                            <q-card-section>
+                              <q-input filled v-model="currentGroupName"
+                                       :label="t( 'floorPlan.groupName')"
+                                       stack-label
+                                       style="width: 100%; padding-bottom: 1em"/>
+                              <q-list bordered class="rounded-borders">
+                                <q-scroll-area
+                                    style="height: 20em; max-width: 100%;">
+                                  <q-item-label header>
+                                    {{ t("floorPlan.rooms") }}
+                                  </q-item-label>
+                                  <q-item
+                                      v-for="(room, i) in group.rooms"
+                                      class="row justify-around no-wrap">
+
+                                    <div class="column" style="width: 50%">
+                                      <q-item-label class="text-bold">
+                                        {{ room.name }}
+                                      </q-item-label>
+                                      <q-item-label caption>
+                                        {{ t('editor.groupRooms.floor') }}
+                                        {{ arrayFloors[i] }}
+                                      </q-item-label>
+                                    </div>
+                                    <q-btn
+                                        icon="delete"
+                                        dense flat round
+                                        style="width: 3em; height: 3em; color: var(--light)"
+                                        @click="addToDeleteList(room);"/>
+                                  </q-item>
+                                </q-scroll-area>
+                              </q-list>
+                              <q-btn
+                                  :label="t('editor.groupRooms.doorconfiguration')"
+                                  color="primary"
+                                  class="q-mt-md"
+                                  style="width: 100%"
+                                  @click=""
+                                  rounded/>
+                            </q-card-section>
+
+                            <q-card-actions align="right" class="row no-wrap text-primary">
+                              <q-btn
+                                  flat rounded :label="t( 'common.cancel')"
+                                  color="primary"
+                                  @click="unCheck(); cancelEdit();"
+                                  v-close-popup/>
+                              <q-btn
+                                  flat rounded :label="t( 'common.save')"
+                                  color="primary"
+                                  @click="editGroupName(); updateNumRoomsInGroup();"/>
+                            </q-card-actions>
+                          </q-card>
+                        </q-dialog>
+                      </div>
+                    </div>
+
+                  </div>
+                </q-btn-dropdown>
+              </q-item>
+            </q-list>
+          </q-scroll-area>
+          <div
+              v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted) && edit">
+            <q-separator/>
+            <div class="row justify-evenly no-wrap q-pa-sm">
+              <q-btn
+                  style="width: 12em"
+                  color="primary"
+                  @click="delName(); newGroup = true;"
+                  rounded flat dense>
+                <div class="row no-wrap">
+                  <q-icon name="add" left/>
+                  {{ t('editor.groupRooms.newGroup') }}
+                </div>
+              </q-btn>
+              <q-btn
+                  color="grey"
+                  icon="delete"
+                  size="0.8em"
+                  @click="deleteAlert = checkGroupSelected();"
+                  round flat/>
             </div>
 
-          </q-tab-panel>
-        </q-tab-panels>
-      </div>
+
+          </div>
+
+        </q-tab-panel>
+      </q-tab-panels>
 
       <q-dialog v-model="newGroup">
         <q-card style="background-color: var(--bg-color); color: var(--text-color)">

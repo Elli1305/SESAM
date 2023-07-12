@@ -1,183 +1,176 @@
 <template>
-  <div>
-    <div class="row justify-between">
-      <q-btn flat icon="arrow_back" size="sm" @click="$emit('backClicked')"></q-btn>
-      <p class="text-h6" style="margin-left: 1em; text-align: center">{{ room?.name }}</p>
-      <q-btn flat icon="edit"
-             v-show="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
-             size="sm" @click="openDialog(room)" color="primary"></q-btn>
-    </div>
-    <q-scroll-area style="height: 30em; min-width: 21em; overflow: hidden; max-width: 22em; "
-                   :horizontal-thumb-style="{ right: '4px', borderRadius: '5px', background: 'red', width: '10px', opacity: 0,  }"
-    >
-      <p class="text-subtitle1">Aktive Tür-Konfigurationen:</p>
-      <q-list flat bordered v-for="door in activeConfigs">
-        <q-expansion-item expanded :label="door?.doorName"
-                          :caption="door.baseConfig? 'Basiskonfiguration' : (door.startTime && door.endTime) ? door.startTime + '-' + door.endTime : ''">
-          <q-card>
-            <q-separator/>
-            <q-card-section v-if="JSON.stringify(door.doorConfigIn) === JSON.stringify(door.doorConfigOut)">
-              <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
-                   style='padding: 0.2em; border-radius: 1em'>
-                <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <div v-for="(credential, i) in configpart?.credentials">
-                    <q-chip color="primary" text-color="white"> {{ credential.name }}</q-chip>
-                    <b v-if="i !== configpart.credentials.length - 1">ODER</b>
-                  </div>
-                  <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                    <b>mit</b>
-                    <p style="line-height: 1; margin: 0.1em"
-                       v-for="(attributeFilter, j) in configpart?.attributeFilter">
-                      {{
-                        attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
-                      }}
-                      <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
-                    </p>
-                  </div>
-                </div>
-                <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
-                  <b>UND</b>
-                </div>
-              </div>
-            </q-card-section>
-            <q-card-section v-if="JSON.stringify(door.doorConfigIn) !== JSON.stringify(door.doorConfigOut)">
-              <p class="text-subtitle2">Rein</p>
-              <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
-                   style='padding: 0.2em; border-radius: 1em'>
-                <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <div v-for="(credential, i) in configpart?.credentials">
-                    <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
-                    <b v-if="i !== configpart.credentials.length - 1">ODER</b>
-                  </div>
-                  <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                    <b>mit</b>
-                    <p style="line-height: 1; margin: 0.1em"
-                       v-for="(attributeFilter, j) in configpart?.attributeFilter">
-                      {{
-                        attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
-                      }}
-                      <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
-                    </p>
-                  </div>
-                </div>
-                <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
-                  <b>UND</b>
-                </div>
-              </div>
-              <p class="text-subtitle2">Raus</p>
-              <div v-for="(configpart, index) in door.doorConfigOut?.configParts"
-                   style='padding: 0.2em; border-radius: 1em'>
-                <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <div v-for="(credential, i) in configpart?.credentials">
-                    <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
-                    <b v-if="i !== configpart.credentials.length - 1">ODER</b>
-                  </div>
-                  <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                    <b>mit</b>
-                    <p style="line-height: 1; margin: 0.1em"
-                       v-for="(attributeFilter, j) in configpart?.attributeFilter">
-                      {{
-                        attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
-                      }}
-                      <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
-                    </p>
-                  </div>
-                </div>
-                <div v-if="index !== door.doorConfigOut?.configParts.length - 1">
-                  <b>UND</b>
-                </div>
-              </div>
-            </q-card-section>
-          </q-card>
-
-        </q-expansion-item>
-
-      </q-list>
-      <p class="text-subtitle1" v-if="inactiveConfigs.length > 0">Inaktive Tür-Konfigurationen:</p>
-      <q-list flat bordered v-for="door in inactiveConfigs">
-        <q-expansion-item expanded :label="door.doorName"
-                          :caption="door.baseConfig? 'Basiskonfiguration' : door.startTime + '-' + door.endTime">
-          <q-card>
-            <q-separator/>
-            <q-card-section v-if="JSON.stringify(door.doorConfigIn) === JSON.stringify(door.doorConfigOut)">
-              <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
-                   style='padding: 0.2em; border-radius: 1em'>
-                <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <div v-for="(credential, i) in configpart?.credentials">
-                    <q-chip color="primary" text-color="white"> {{ credential.name }}</q-chip>
-                    <b v-if="i !== configpart.credentials.length - 1">ODER</b>
-                  </div>
-                  <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                    <b>mit</b>
-                    <p style="line-height: 1; margin: 0.1em"
-                       v-for="(attributeFilter, j) in configpart?.attributeFilter">
-                      {{
-                        attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
-                      }}
-                      <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
-                    </p>
-                  </div>
-                </div>
-                <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
-                  <b>UND</b>
-                </div>
-              </div>
-            </q-card-section>
-            <q-card-section v-if="JSON.stringify(door.doorConfigIn) !== JSON.stringify(door.doorConfigOut)">
-              <p class="text-subtitle2">Rein</p>
-              <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
-                   style='padding: 0.2em; border-radius: 1em'>
-                <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <div v-for="(credential, i) in configpart?.credentials">
-                    <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
-                    <b v-if="i !== configpart.credentials.length - 1">ODER</b>
-                  </div>
-                  <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                    <b>mit</b>
-                    <p style="line-height: 1; margin: 0.1em"
-                       v-for="(attributeFilter, j) in configpart?.attributeFilter">
-                      {{
-                        attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
-                      }}
-                      <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
-                    </p>
-                  </div>
-                </div>
-                <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
-                  <b>UND</b>
-                </div>
-              </div>
-              <p class="text-subtitle2">Raus</p>
-              <div v-for="(configpart, index) in door.doorConfigOut?.configParts"
-                   style='padding: 0.2em; border-radius: 1em'>
-                <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <div v-for="(credential, i) in configpart?.credentials">
-                    <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
-                    <b v-if="i !== configpart.credentials.length - 1">ODER</b>
-                  </div>
-                  <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                    <b>mit</b>
-                    <p style="line-height: 1; margin: 0.1em"
-                       v-for="(attributeFilter, j) in configpart?.attributeFilter">
-                      {{
-                        attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
-                      }}
-                      <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
-                    </p>
-                  </div>
-                </div>
-                <div v-if="index !== door.doorConfigOut?.configParts.length - 1">
-                  <b>UND</b>
-                </div>
-              </div>
-            </q-card-section>
-          </q-card>
-
-        </q-expansion-item>
-
-      </q-list>
-    </q-scroll-area>
+  <div class="row justify-between">
+    <q-btn
+        size="1em" flat round
+        icon="arrow_back"
+        @click="$emit('backClicked')"/>
+    <p class="text-h6 self-center no-margin">{{ room?.name }}</p>
+    <q-btn
+        size="1em" flat round
+        icon="edit"
+        v-show="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
+        @click="openDialog(room)" color="primary"/>
   </div>
+  <q-scroll-area style="width: 100%; height: 33.25em">
+    <p class="text-subtitle2 q-mt-md">Aktive Tür-Konfigurationen:</p>
+    <q-list flat bordered v-for="door in activeConfigs">
+      <q-expansion-item expanded :label="door?.doorName"
+                        :caption="door.baseConfig? 'Basiskonfiguration' : (door.startTime && door.endTime) ? door.startTime + '-' + door.endTime : ''">
+        <q-card style="background-color: var(--bg-color); color: var(--text-color)">
+          <q-separator/>
+          <q-card-section v-if="JSON.stringify(door.doorConfigIn) === JSON.stringify(door.doorConfigOut)">
+            <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
+                 style='padding: 0.2em; border-radius: 1em'>
+              <div class="q-mb-sm" style='padding: 0.1em 0.5em; border-radius: 1em;'>
+                <div v-for="(credential, i) in configpart?.credentials">
+                  <q-chip color="primary" text-color="accent"> {{ credential.name }}</q-chip>
+                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                </div>
+                <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
+                  <b>mit</b>
+                  <p style="line-height: 1; margin: 0.1em"
+                     v-for="(attributeFilter, j) in configpart?.attributeFilter">
+                    {{ attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value }}
+                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                  </p>
+                </div>
+              </div>
+                <b v-if="index !== door.doorConfigIn?.configParts.length - 1">UND</b>
+            </div>
+          </q-card-section>
+          <q-card-section v-if="JSON.stringify(door.doorConfigIn) !== JSON.stringify(door.doorConfigOut)">
+            <p class="text-subtitle2">Rein</p>
+            <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
+                 style='padding: 0.2em; border-radius: 1em'>
+              <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
+                <div v-for="(credential, i) in configpart?.credentials">
+                  <q-chip dense color="primary" text-color="accent"> {{ credential.name }}</q-chip>
+                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                </div>
+                <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
+                  <b>mit</b>
+                  <p style="line-height: 1; margin: 0.1em"
+                     v-for="(attributeFilter, j) in configpart?.attributeFilter">
+                    {{ attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value }}
+                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                  </p>
+                </div>
+              </div>
+              <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
+                <b>UND</b>
+              </div>
+            </div>
+            <p class="text-subtitle2">Raus</p>
+            <div v-for="(configpart, index) in door.doorConfigOut?.configParts"
+                 style='padding: 0.2em; border-radius: 1em'>
+              <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
+                <div v-for="(credential, i) in configpart?.credentials">
+                  <q-chip dense color="primary" text-color="accent"> {{ credential.name }}</q-chip>
+                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                </div>
+                <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
+                  <b>mit</b>
+                  <p style="line-height: 1; margin: 0.1em"
+                     v-for="(attributeFilter, j) in configpart?.attributeFilter">
+                    {{ attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value }}
+                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                  </p>
+                </div>
+              </div>
+              <div v-if="index !== door.doorConfigOut?.configParts.length - 1">
+                <b>UND</b>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
+
+      </q-expansion-item>
+
+    </q-list>
+    <p class="text-subtitle2 q-mt-md" v-if="inactiveConfigs.length > 0">Inaktive Tür-Konfigurationen:</p>
+    <q-list flat bordered v-for="door in inactiveConfigs">
+      <q-expansion-item expanded :label="door.doorName"
+                        :caption="door.baseConfig? 'Basiskonfiguration' : door.startTime + '-' + door.endTime">
+        <q-card style="background-color: var(--bg-color); color: var(--text-color)">
+          <q-separator/>
+          <q-card-section v-if="JSON.stringify(door.doorConfigIn) === JSON.stringify(door.doorConfigOut)">
+            <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
+                 style='padding: 0.2em; border-radius: 1em'>
+              <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
+                <div v-for="(credential, i) in configpart?.credentials">
+                  <q-chip color="primary" text-color="white"> {{ credential.name }}</q-chip>
+                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                </div>
+                <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
+                  <b>mit</b>
+                  <p style="line-height: 1; margin: 0.1em"
+                     v-for="(attributeFilter, j) in configpart?.attributeFilter">
+                    {{
+                      attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
+                    }}
+                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                  </p>
+                </div>
+              </div>
+              <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
+                <b>UND</b>
+              </div>
+            </div>
+          </q-card-section>
+          <q-card-section v-if="JSON.stringify(door.doorConfigIn) !== JSON.stringify(door.doorConfigOut)">
+            <p class="text-subtitle2">Rein</p>
+            <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
+                 style='padding: 0.2em; border-radius: 1em'>
+              <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
+                <div v-for="(credential, i) in configpart?.credentials">
+                  <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
+                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                </div>
+                <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
+                  <b>mit</b>
+                  <p style="line-height: 1; margin: 0.1em"
+                     v-for="(attributeFilter, j) in configpart?.attributeFilter">
+                    {{
+                      attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
+                    }}
+                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                  </p>
+                </div>
+              </div>
+              <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
+                <b>UND</b>
+              </div>
+            </div>
+            <p class="text-subtitle2">Raus</p>
+            <div v-for="(configpart, index) in door.doorConfigOut?.configParts"
+                 style='padding: 0.2em; border-radius: 1em'>
+              <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
+                <div v-for="(credential, i) in configpart?.credentials">
+                  <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
+                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                </div>
+                <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
+                  <b>mit</b>
+                  <p style="line-height: 1; margin: 0.1em"
+                     v-for="(attributeFilter, j) in configpart?.attributeFilter">
+                    {{
+                      attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
+                    }}
+                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                  </p>
+                </div>
+              </div>
+              <div v-if="index !== door.doorConfigOut?.configParts.length - 1">
+                <b>UND</b>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
+
+      </q-expansion-item>
+
+    </q-list>
+  </q-scroll-area>
 </template>
 
 <script>

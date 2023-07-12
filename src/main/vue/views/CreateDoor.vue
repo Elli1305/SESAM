@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide" persistent>
-    <q-card style="max-width: 70em; background-color: var(--bg-color); color: var(--text-color)">
+    <q-card style="width: 70em; max-width: 70em; background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section class="row justify-between">
         <div class="text-h6">{{ t('floorPlan.addDoor') }}</div>
         <q-btn flat rounded size="0.9em">
@@ -42,7 +42,7 @@
           </template>
         </q-select>
       </q-card-section>
-      <q-scroll-area style="width: 47em; height: 40em">
+      <q-scroll-area style="width: 100%; height: 40em">
         <q-card-section v-for="(selectConf,k) in qSelectgeneral.qSelectsSet">
           <q-card style="background-color: var(--bg-color); color: var(--text-color)" bordered flat>
             <q-toolbar class="bg-primary text-accent">
