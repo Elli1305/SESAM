@@ -3,8 +3,8 @@ import {
     AllCredentialCmd,
     Category,
     CategoryResponse,
-    CreateCredential,
-    ExternalCredential, ExternalCredentialCmd,
+    CreateCredential, CreateExternalCredential, CredentialCmd, CredentialExport, CredentialSchema,
+    ExternalCredential, ExternalCredentialCmd, InternalCredential,
     IssueCredentialAttribute
 } from "@/main/vue/entity/credentialDefinition";
 
