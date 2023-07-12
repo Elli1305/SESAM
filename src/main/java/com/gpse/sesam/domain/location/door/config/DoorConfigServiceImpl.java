@@ -50,8 +50,6 @@ public class DoorConfigServiceImpl implements DoorConfigService {
 
 	/**
 	 * Gibt alle Türkonfigurationen zurück
-	 *
-	 * @return die Liste aller Türkonfigurationen
 	 */
 	@Override
 	public void getDoorConfigurations() {

@@ -91,7 +91,6 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
      * Updated eine Preconfig
      *
      * @param predefinedConfig für das Updaten
-     * @return updated Preconfig
      */
     @Override
     public void update(PredefinedConfigCmd predefinedConfig) {
@@ -110,7 +109,6 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
      * Erstellt eine neue Preconfig
      *
      * @param predefinedConfig cmd-Objekt zum Erstellen der config
-     * @return die erstellte Preconfig
      */
     @Override
     public void create(PredefinedConfigCmd predefinedConfig) {
