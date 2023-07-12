@@ -6,23 +6,27 @@ import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.credential.issue.issuing.ChecklistEntry;
 import com.gpse.sesam.domain.credential.issue.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
-import com.gpse.sesam.domain.credential.issue.validation.*;
+import com.gpse.sesam.domain.credential.issue.validation.AbstractValidationRule;
+import com.gpse.sesam.domain.credential.issue.validation.ComparisonRule;
+import com.gpse.sesam.domain.credential.issue.validation.ComparisonType;
+import com.gpse.sesam.domain.credential.issue.validation.LengthRule;
+import com.gpse.sesam.domain.credential.issue.validation.RegExRule;
 import com.gpse.sesam.domain.filestorage.FileStorageService;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
-import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
-import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
@@ -39,7 +43,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @Profile("test")
@@ -443,7 +449,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		credentials.add(safety);
 		final List<FormEntry> form7 = form();
 		final List<ExternalCredential> externalCredentials = new ArrayList<>();
-		final ExternalCredential safety3 = new ExternalCredential("U-Member", "1.0", "$U-MEMBER", form7);
+		final ExternalCredential safety3 = new ExternalCredential("U-Member", "1.0", "$U-MEMBER1", form7);
 
 		externalCredentials.add(safety3);
 
@@ -475,7 +481,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom",
 				"1.0", "$U-TRAINING", form8);
 		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter",
-				"1.0", "$U-MEMBER", form9);
+				"1.0", "$U-MEMBER2", form9);
 
 		externalCredentials2.add(firstAid2);
 		externalCredentials2.add(firstAid3);
