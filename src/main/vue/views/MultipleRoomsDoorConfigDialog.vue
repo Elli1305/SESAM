@@ -1,5 +1,5 @@
 <template>
-    <q-dialog>
+    <q-dialog persistent>
         <q-card style="min-width: 50em; background-color: var(--bg-color); color: var(--text-color)">
             <q-card-section>
                 <div class="text-h6">{{ t("editor.groupRooms.groupsConfig") }}</div>
@@ -53,7 +53,7 @@
                     <template v-slot:body-cell-actions="props">
                         <q-td style="width: 10%" :props="props">
                             <q-checkbox v-model="props.row.selected"
-                                        @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.selected, props.row.room)"/>
+                                        @update:model-value="checkIfSelected(props.row.selected, props.row.room)"/>
                         </q-td>
                     </template>
                 </q-table>
@@ -378,7 +378,7 @@ export default {
                     doorIds: finalArray,
                     doorConfig: allConfig
                 }
-                roomGroupStore.setGroupConfig(configList)
+                roomGroupStore.setGroupConfig(configList).then(() => this.$emit('ok'))
                 finalArray = []
             }
         },
@@ -444,7 +444,7 @@ export default {
         }
 
         function fetchDoors(rows) {
-            rows?.forEach(row => getDoors(row.room))
+            rows?.forEach(row => getDoors(row.room, true))
         }
 
         const filterConfigOptions = function (val, update) {
@@ -600,11 +600,12 @@ export default {
             editedRow.value = {...row};
         }
 
-        function getDoors(id) {
+        function getDoors(id, checked) {
+          if (checked) {
             doorStore.getByRoomId(id).then((doors) => {
-                model.value[id] = doors
-                console.log(model.value)
+              model.value[id] = doors
             })
+          }
         }
 
         function getPaginationLabel(firstRowIndex, endRowIndex, totalRowsNumber) {
