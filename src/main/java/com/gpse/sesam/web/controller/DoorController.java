@@ -8,16 +8,15 @@ import com.gpse.sesam.util.DoorCmdMapper;
 import com.gpse.sesam.web.cmd.DoorCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
-@Secured("EDITOR")
 @RequestMapping("/api/door")
 public class DoorController {
-
 	private final DoorService doorService;
 	private final DoorCmdMapper doorCmdMapper;
 
@@ -49,6 +48,13 @@ public class DoorController {
 	public void deleteById(@PathVariable("id") final Long id) {
 		doorService.deleteById(id);
 	}
+
+	@GetMapping("/doors")
+	public java.util.List<Door> getAllDoors() {
+		return doorService.getAllDoors();
+
+	}
+
 
 	@GetMapping("doorsbyroom/{id:\\d+}")
 	public java.util.List<Door> getDoorsByRoomId(@PathVariable("id") final Long id) {
