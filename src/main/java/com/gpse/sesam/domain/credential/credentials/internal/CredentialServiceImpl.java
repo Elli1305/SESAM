@@ -144,7 +144,8 @@ public class CredentialServiceImpl implements CredentialService {
      * @throws ExecutionException    wenn ein Fehler bei der Ausführung auftritt
      * @throws InterruptedException  wenn der Thread während des Wartens unterbrochen wird
      */
-    private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException, UnsatisfiedLinkError {
+    private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException,
+            UnsatisfiedLinkError {
         if (!LibIndy.isInitialized()) {
             LibIndy.init();
         }
@@ -769,6 +770,7 @@ public class CredentialServiceImpl implements CredentialService {
         for (InternalCredentialExportCmd internalCredentialExportCmd: credentialExportCmd.getInternalCredentials()) {
             final InternalCredential credential = new InternalCredential(
                     internalCredentialExportCmd.getName(),
+                    internalCredentialExportCmd.getVersion(),
                     replaceMagicCredentialDefinitionIds(internalCredentialExportCmd.getCredentialDefinitionId()),
                     internalCredentialExportCmd.getAgent(),
                     internalCredentialExportCmd.getAttributes().stream()
@@ -793,6 +795,7 @@ public class CredentialServiceImpl implements CredentialService {
             final ExternalCredential credential = new ExternalCredential(
                     externalCredentialExportCmd.getName(),
                     externalCredentialExportCmd.getCredentialDefinitionId(),
+                    externalCredentialExportCmd.getVersion(),
                     externalCredentialExportCmd.getAttributes().stream()
                             .map(createAttributeCmd ->
                                     new FormEntry(

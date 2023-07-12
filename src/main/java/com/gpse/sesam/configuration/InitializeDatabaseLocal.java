@@ -63,6 +63,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private final List<Location> locationsList = new ArrayList<>();
 
+	@SuppressWarnings("ParameterNumber")
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
 								   final CredentialService credentialService, final ColorsService colorsService,
 								   final CategoryService categoryService, final PasswordEncoder passwordEncoder,
@@ -442,7 +443,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		credentials.add(safety);
 		final List<FormEntry> form7 = form();
 		final List<ExternalCredential> externalCredentials = new ArrayList<>();
-		final ExternalCredential safety3 = new ExternalCredential("U-Member", "1.0","$U-MEMBER", form7);
+		final ExternalCredential safety3 = new ExternalCredential("U-Member", "1.0", "$U-MEMBER", form7);
 
 		externalCredentials.add(safety3);
 
@@ -471,8 +472,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<FormEntry> form8 = form();
 		final List<FormEntry> form9 = form();
 		final List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "1.0","$U-TRAINING", form8);
-		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "1.0","$U-MEMBER", form9);
+		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom",
+				"1.0", "$U-TRAINING", form8);
+		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter",
+				"1.0", "$U-MEMBER", form9);
 
 		externalCredentials2.add(firstAid2);
 		externalCredentials2.add(firstAid3);
