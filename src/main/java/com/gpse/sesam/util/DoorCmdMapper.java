@@ -1,8 +1,7 @@
 package com.gpse.sesam.util;
 
-import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.location.door.Door;
-import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import com.gpse.sesam.web.cmd.DoorCmd;
 import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
 
@@ -14,8 +13,8 @@ public final class DoorCmdMapper {
 
 	private ConfigCmdMapper configCmdMapper;
 
-	public DoorCmdMapper(CredentialService credentialService) {
-		configCmdMapper = new ConfigCmdMapper(credentialService);
+	public DoorCmdMapper(ConfigCmdMapper configCmdMapper) {
+		this.configCmdMapper = configCmdMapper;
 	}
 
 	public static Door toEntity(final DoorCmd doorCmd) {
@@ -27,7 +26,7 @@ public final class DoorCmdMapper {
 
 		List<TwoWayDoorConfig> doorConfigs = new ArrayList<>();
 
-		for (TwoWayDoorConfigCmd twoWayDoorConfigCmd: doorCmd.getDoorConfigCmds()) {
+		for (TwoWayDoorConfigCmd twoWayDoorConfigCmd : doorCmd.getDoorConfigCmds()) {
 			TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
 			twoWayDoorConfig.setEndTime(twoWayDoorConfigCmd.getEndTime());
 			twoWayDoorConfig.setStartTime(twoWayDoorConfigCmd.getStartTime());
@@ -52,7 +51,7 @@ public final class DoorCmdMapper {
 
 		List<TwoWayDoorConfigCmd> doorConfigCmds = new ArrayList<>();
 
-		for (TwoWayDoorConfig twoWayDoorConfig: door.getDoorConfigs()) {
+		for (TwoWayDoorConfig twoWayDoorConfig : door.getDoorConfigs()) {
 			TwoWayDoorConfigCmd twoWayDoorConfigCmd = new TwoWayDoorConfigCmd();
 			twoWayDoorConfigCmd.setEndTime(twoWayDoorConfig.getEndTime());
 			twoWayDoorConfigCmd.setStartTime(twoWayDoorConfig.getStartTime());

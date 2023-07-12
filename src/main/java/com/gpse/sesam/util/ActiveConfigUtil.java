@@ -1,6 +1,7 @@
 package com.gpse.sesam.util;
 
-import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
+
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 
 import java.time.LocalTime;
 import java.util.List;

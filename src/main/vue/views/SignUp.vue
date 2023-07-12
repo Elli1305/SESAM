@@ -133,7 +133,6 @@ export default {
 
       await userStore.requestToken({eMail: email.value, password: password.value})
           .catch((error) => {
-            console.log(error)
             if(error.response.status === 403 || error.response.status === 422) {
               $q.notify({
                 type: 'negative',
