@@ -46,7 +46,7 @@ class DoorControllerTest {
 		when(doorService.save(door)).thenReturn(door);
 
 		DoorCmd doorCmd = new DoorCmd("Test", Collections.emptyList());
-		Door doorSaved = doorController.save(doorCmd);
+		Door doorSaved = doorController.save(new Door(doorCmd.getName(),doorCmd.getCoordinates()));
 
 		assertThat(doorSaved.getName(), is(doorCmd.getName()));
 		assertThat(doorSaved.getCoordinates(), is(doorCmd.getCoordinates()));

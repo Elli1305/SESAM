@@ -217,7 +217,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
                     return Stream.concat(attributeFilterStream, attributeFilterStream1);
                 })
                 .filter(Objects::nonNull)
-                .flatMap(definitionId -> getExternalCredentialByCredentialDefinitionId(definitionId)
+                .flatMap(definitionId -> externalCredentialRepository.findAllByCredentialDefinitionId(definitionId)
                         .stream())
                 .collect(Collectors.toSet());
     }

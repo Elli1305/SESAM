@@ -19,6 +19,7 @@ const messages = {
             done: "Fertig",
             edit: "Bearbeiten",
             search: "Suche",
+            filter: "Filtern",
             der: "der",
             die: "die",
             das: "das",
@@ -305,12 +306,12 @@ const messages = {
                 chooseRooms: "Räume auswählen",
                 question: "Wollen Sie diese Gruppierung wirklich löschen?",
                 deleteGroup: "Gruppe löschen",
-                addRoomsToSelected: "Ausgewählte Räume wirklich der folgenden Gruppe zufügen :",
+                addRoomsToSelected: "Willst du die ausgewählten Räume wirklich zu {0} hinzufügen?",
                 doorconfiguration: "Türkonfigurationen",
                 nameOfGroup: "Name der neuen Gruppe",
                 groups: "Raumgruppen",
-                info: "Räume einer neuen Gruppe zufügen oder eine bereits bestehende Gruppe auswählen und 'Räume zu ausgewählter Gruppe hinzufügen' drücken",
-                addRooms: "Zu gewählter Gruppe hinzufügen",
+                info: "Räume einer neuen Gruppe hinzufügen oder eine bereits bestehende Gruppe auswählen und 'Räume zu ausgewählter Gruppe hinzufügen' drücken",
+                addRooms: "Zu Gruppe hinzufügen",
                 addRoomsToNewGroup:"Zu neuer Gruppe hinzufügen",
                 noGroupSelected: "Keine Gruppe ausgewählt",
                 noRoomSelected: "Keine Räume ausgewählt",
@@ -322,6 +323,9 @@ const messages = {
                 groupsConfig: "Anpassung der Türkonfiguration für Raumgruppen",
                 roomSelection: "Räume auswählen",
                 group: "Gruppe",
+            },
+            config:{
+              noConfig: "Nicht konfiguriert"
             },
             predefinedConfigs: {
                 title: "Vordefinierte Konfigurationen",
@@ -456,6 +460,7 @@ const messages = {
             done: "Done",
             edit: "Edit",
             search: "Search",
+            filter: "Filter",
             der: "the",
             die: "the",
             das: "the",
@@ -733,7 +738,7 @@ const messages = {
                 chooseRooms: "Choose the rooms",
                 question: "Do you really want to delete this group?",
                 deleteGroup: "Delete group",
-                addRoomsToSelected: "Add selected rooms to the following group :",
+                addRoomsToSelected: "Do you really want to add these rooms to {0}?",
                 nameOfGroup: "Name of the new group",
                 doorconfiguration: "Door configurations",
                 groups: "Room Groups",
@@ -750,6 +755,9 @@ const messages = {
                 groupsConfig: "Adjustment of door configurations for groups of rooms",
                 roomSelection: "Choose Rooms",
                 group: "Group",
+            },
+            config:{
+                noConfig: "not configured"
             },
             predefinedConfigs: {
                 title: "Predefined configurations",

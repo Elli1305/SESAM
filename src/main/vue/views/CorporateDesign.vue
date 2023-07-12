@@ -40,7 +40,7 @@
             <div class="row no-wrap q-my-xs">
               <p class="row items-center no-wrap q-ma-none">
                 <q-badge class="q-mr-xs" rounded
-                         :style="{width: '1em', height: '1em', backgroundColor: lightBlueLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
+                         :style="{width: '1em', height: '1em', backgroundColor: lightLight, borderRadius: '100%', border: '1px solid lightgrey'}"/>
                 Light:
               </p>
               <p class="row no-wrap q-ml-xs q-ma-none">{{ t('admin.corporateDesign.info.light') }}</p>
@@ -513,6 +513,7 @@ import {ref} from 'vue'
 import {useI18n} from "vue-i18n"
 import {useQuasar} from "quasar"
 import corpdesign from "@/main/vue/api/corpdesign";
+import {useAppStore} from "@/main/vue/stores/app";
 
 export default {
   name: "CorporateDesign",
@@ -527,6 +528,7 @@ export default {
     const logo = ref(null)
     const favicon = ref(null)
     const $q = useQuasar()
+    const appStore = useAppStore()
     const r = document.querySelector(':root')
     let menu = false
     let primaryLight = ref('')
@@ -581,12 +583,14 @@ export default {
 
     function reset() {
       const colorTheme = tab.value.toUpperCase()
-      corpdesign.reset(colorTheme).then(colors => {
-        corpdesign.setColors(colorTheme)
-        r.style.setProperty('--bg-color', colors.data.bgC)
-        r.style.setProperty('--text-color', colors.data.textC)
-        r.style.setProperty('--light', colors.data.light)
-        location.reload()
+      corpdesign.reset(colorTheme).then(c => {
+        corpdesign.setColors(localStorage.getItem('colorTheme'))
+        corpdesign.getColors(localStorage.getItem('colorTheme')).then(colors => {
+          r.style.setProperty('--bg-color', colors.data.bgC)
+          r.style.setProperty('--text-color', colors.data.textC)
+          r.style.setProperty('--light', colors.data.light)
+        })
+        appStore.forceRender()
       }).catch(() => {
         $q.notify({
           message: t('admin.corporateDesign.resetFailure'),
@@ -621,12 +625,14 @@ export default {
           negative: negativeLight.value,
           info: infoLight.value,
           warning: warningLight.value,
-        }).then(colors => {
-          corpdesign.setColors(colorTheme)
-          r.style.setProperty('--bg-color', colors.data.bgC)
-          r.style.setProperty('--text-color', colors.data.textC)
-          r.style.setProperty('--light', colors.data.light)
-          location.reload()
+        }).then(c => {
+          corpdesign.setColors(localStorage.getItem('colorTheme'))
+          corpdesign.getColors(localStorage.getItem('colorTheme')).then(colors => {
+            r.style.setProperty('--bg-color', colors.data.bgC)
+            r.style.setProperty('--text-color', colors.data.textC)
+            r.style.setProperty('--light', colors.data.light)
+          })
+          appStore.forceRender()
         }).catch(() => {
           $q.notify({
             message: t('admin.corporateDesign.saveFailure'),
@@ -650,12 +656,14 @@ export default {
           negative: negativeDark.value,
           info: infoDark.value,
           warning: warningDark.value,
-        }).then(colors => {
-          corpdesign.setColors(colorTheme)
-          r.style.setProperty('--bg-color', colors.data.bgC)
-          r.style.setProperty('--text-color', colors.data.textC)
-          r.style.setProperty('--light', colors.data.light)
-          location.reload()
+        }).then(c => {
+          corpdesign.setColors(localStorage.getItem('colorTheme'))
+          corpdesign.getColors(localStorage.getItem('colorTheme')).then(colors => {
+            r.style.setProperty('--bg-color', colors.data.bgC)
+            r.style.setProperty('--text-color', colors.data.textC)
+            r.style.setProperty('--light', colors.data.light)
+          })
+          appStore.forceRender()
         }).catch(() => {
           $q.notify({
             message: t('admin.corporateDesign.saveFailure'),

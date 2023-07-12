@@ -7,9 +7,11 @@ import {useRouter} from "vue-router/dist/vue-router"
 import CountryFlag from 'vue-country-flag-next'
 import corpdesign from "@/main/vue/api/corpdesign";
 import {ref} from "vue";
+import {useAppStore} from "@/main/vue/stores/app";
 
 const {t} = useI18n()
 const userStore = useUserStore()
+const appStore = useAppStore()
 const $q = useQuasar()
 const router = useRouter()
 const i18nLocale = useI18n()
@@ -18,19 +20,18 @@ const r = document.querySelector(':root')
 const themeIcon = ref('')
 const logoPath = ref('')
 if (!localStorage.getItem('colorTheme')) {
-  console.log('no theme selected')
   localStorage.setItem('colorTheme', 'LIGHT')
   themeIcon.value = 'light_mode'
   logoPath.value = "/Logo.svg"
   $q.dark.set(false)
 } else if (localStorage.getItem('colorTheme') === 'LIGHT') {
-    $q.dark.set(false)
-    themeIcon.value = 'light_mode'
-    updateColors('LIGHT')
-  } else {
-    $q.dark.set(true)
-    themeIcon.value = 'dark_mode'
-    updateColors('DARK')
+  $q.dark.set(false)
+  themeIcon.value = 'light_mode'
+  updateColors('LIGHT')
+} else {
+  $q.dark.set(true)
+  themeIcon.value = 'dark_mode'
+  updateColors('DARK')
 }
 
 function updateColors(colorTheme) {
@@ -50,7 +51,7 @@ function getLanguage() {
 function changeLanguage(language) {
   sessionStorage.setItem("locale", language)
   i18nLocale.locale.value = language
-  location.reload()
+  appStore.forceRender()
 }
 
 function changeTheme() {
@@ -84,10 +85,9 @@ async function logout() {
 }
 
 
-
 </script>
 <template>
-  <q-layout view="hHh lpR fff">
+  <q-layout v-if="appStore.reload" view="hHh lpR fff">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar class="row" style="margin: 0; padding: 24px">
@@ -103,7 +103,12 @@ async function logout() {
               </q-toolbar-title>
             </div>
             <div class="row no-wrap">
-              <q-btn :icon="themeIcon" text-color="accent" round flat style="width: 42px; height: 42px" ref="themeBtn" @click="changeTheme()"/>
+              <q-btn :icon="themeIcon" text-color="accent" round flat style="width: 42px; height: 42px" ref="themeBtn"
+                     @click="changeTheme()">
+                <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="themeIcon === 'light_mode'" :offset="[0,0]">Lightmode</q-tooltip>
+                <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="themeIcon === 'dark_mode'" :offset="[0,0]">Darkmode</q-tooltip>
+              </q-btn>
+
               <div class="column" style="width: 42px; height: 42px">
                 <q-btn class="row no-padding" round unelevated style="width: 3em">
                   <country-flag class="self-center no-margin shadow-16"
@@ -174,7 +179,8 @@ async function logout() {
                     <router-link to="/corporatedesign" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.editCorporateDesign") }}
                     </router-link>
-                    <router-link to="/imprinteditor" class="q-ma-sm headerLink" style="color: var(--text-color)">{{ t("home.editImprint") }}
+                    <router-link to="/imprinteditor" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                      {{ t("home.editImprint") }}
                     </router-link>
                   </div>
                 </q-menu>
@@ -190,7 +196,8 @@ async function logout() {
                     <router-link to="/credentialmapping" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.manageCredentialCategories") }}
                     </router-link>
-                    <router-link to="/credential_administration" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                    <router-link to="/credential_administration" class="q-ma-sm headerLink"
+                                 style="color: var(--text-color)">
                       {{ t("home.manageCredentials") }}
                     </router-link>
                   </div>
@@ -210,10 +217,10 @@ async function logout() {
                         t("home.groupRooms")
                       }}
                     </router-link>
-                     <router-link to="/predefinedConfigs" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
+                    <router-link to="/predefinedConfigs" class="q-ma-sm headerLink" style="color: var(--text-color)">{{
                         t("home.predefinedConfig")
                       }}
-                     </router-link>
+                    </router-link>
                   </div>
                 </q-menu>
               </div>
@@ -228,7 +235,8 @@ async function logout() {
                      style="height: 3em; width: 3em; font-size: 1em; line-height: 1">
                 <p style="margin-top: 0.1em; margin-bottom: 0; font-size: 1.5em; font-weight: 400; line-height: 1">
                   {{ userStore.user.firstName.charAt(0) + userStore.user.lastName.charAt(0) }}</p>
-                <q-menu transition-show="jump-down" transition-hide="jump-up" style="background-color: var(--bg-color); color: var(--text-color)">
+                <q-menu transition-show="jump-down" transition-hide="jump-up"
+                        style="background-color: var(--bg-color); color: var(--text-color)">
                   <q-list>
                     <q-item to="/profile" clickable v-close-popup>
                       <q-item-section style="width: 7.5em; color: var(--text-color)" unelevated>

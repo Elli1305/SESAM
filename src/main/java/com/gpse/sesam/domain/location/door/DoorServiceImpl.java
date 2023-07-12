@@ -1,12 +1,14 @@
 package com.gpse.sesam.domain.location.door;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.room.RoomRepository;
 import com.gpse.sesam.domain.location.room.RoomService;
+import com.gpse.sesam.util.ActiveConfigUtil;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,10 +33,10 @@ public class DoorServiceImpl implements DoorService {
 	/**
 	 * Konstruktor für DoorServiceImpl.
 	 *
-	 * @param doorRepository      das DoorRepository zur Datenbankabfrage von Türen
-	 * @param roomService         der RoomService zur Verwaltung von Räumen
-	 * @param roomRepository      das RoomRepository zur Datenbankabfrage von Räumen
-	 * @param doorConfigService   der DoorConfigService zur Verwaltung der Türkonfiguration
+	 * @param doorRepository    das DoorRepository zur Datenbankabfrage von Türen
+	 * @param roomService       der RoomService zur Verwaltung von Räumen
+	 * @param roomRepository    das RoomRepository zur Datenbankabfrage von Räumen
+	 * @param doorConfigService der DoorConfigService zur Verwaltung der Türkonfiguration
 	 */
 	@Autowired
 	public DoorServiceImpl(final DoorRepository doorRepository, final RoomService roomService,
@@ -56,10 +58,9 @@ public class DoorServiceImpl implements DoorService {
 	}
 
 	/**
-	 * Speichert eine Tür.
+	 * Gibt alle Türen zurück
 	 *
-	 * @param door die zu speichernde Tür
-	 * @return die gespeicherte Tür
+	 * @return die Liste aller Türen
 	 */
 	@Override
 	public List<Door> getDoors() {
@@ -72,7 +73,20 @@ public class DoorServiceImpl implements DoorService {
 
 	@Override
 	public Door save(final Door door) {
-		return doorRepository.save(door);
+		Door savedDoor = doorRepository.save(door);
+
+		scheduleActiveConfig(door, savedDoor);
+		return savedDoor;
+	}
+
+	private void scheduleActiveConfig(Door door, Door savedDoor) {
+		TwoWayDoorConfig activeConfig = ActiveConfigUtil.getCurrentConfig(door.getDoorConfigs());
+		if (activeConfig != null) {
+			doorConfigService.sendProofConfig(savedDoor.getName() + "_" + savedDoor.getId() + "_in",
+					activeConfig.getProofConfigIn());
+			doorConfigService.sendProofConfig(savedDoor.getName() + "_" + savedDoor.getId() + "_out",
+					activeConfig.getProofConfigOut());
+		}
 	}
 
 	/**
@@ -103,13 +117,7 @@ public class DoorServiceImpl implements DoorService {
 		room.addDoor(savedDoor);
 
 		roomService.save(room);
-// TODO get current door config
-//		doorConfigService.sendProofConfig(savedDoor.getName() + "_" + savedDoor.getId() + "_in",
-//				door.getProofConfigIn()
-//						.get(0));
-//		doorConfigService.sendProofConfig(savedDoor.getName() + "_" + savedDoor.getId() + "_out",
-//				door.getProofConfigOut()
-//						.get(0));
+		scheduleActiveConfig(door, savedDoor);
 		return savedDoor;
 	}
 

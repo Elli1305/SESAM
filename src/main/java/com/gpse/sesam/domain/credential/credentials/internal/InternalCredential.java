@@ -50,7 +50,7 @@ public class InternalCredential implements Credential {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ChecklistEntry> checklist;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "credentials")
 	private List<Issuer> issuers = new ArrayList<>();
 
 	protected InternalCredential() {

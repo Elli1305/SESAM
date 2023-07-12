@@ -112,12 +112,18 @@ public class IssuerServiceImpl implements IssuerService {
 	public void updateIssuer(final IssuerResponseCmd cmd) {
 		final Optional<Issuer> issuer = getIssuer(cmd.getIssuerId());
 		final List<InternalCredential> credentials = new ArrayList<>();
+		List<InternalCredential> internalCredentials = (List<InternalCredential>) credentialRepository.findAll();
+
 		if (issuer.isPresent()) {
 			final Optional<Room> room = roomRepository.findById(cmd.getRoom());
 			room.ifPresent(value -> issuer.get().setRoom(value));
+			for (InternalCredential internalCredential: internalCredentials) {
+				internalCredential.removeIssuer(issuer.get());
+			}
 			for (final Long cred : cmd.getCredentials()) {
 				final Optional<InternalCredential> credential = credentialRepository.findById(cred);
 				credential.ifPresent(credentials::add);
+				credential.get().addIssuer(issuer.get());
 			}
 			issuer.get().setCredentials(credentials);
 			issuerRepository.save(issuer.get());
