@@ -246,7 +246,7 @@ public class CredentialServiceImpl implements CredentialService {
      */
     private String sendCredentialIssueRequest(@Valid final IssueCredentialRequest issueCredentialRequest)
             throws JsonProcessingException {
-        return client.post().uri("credential/issue").contentType(MediaType.TEXT_PLAIN)
+        return client.post().uri("credential/issue").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).bodyValue(mapper.writeValueAsString(issueCredentialRequest))
                 .retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(5000)).block();
     }
