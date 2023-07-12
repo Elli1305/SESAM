@@ -9,11 +9,7 @@ import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
-import com.gpse.sesam.web.exception.LibIndyNotInstalledException;
 import jakarta.validation.Valid;
-import org.hyperledger.indy.sdk.IndyException;
-import org.hyperledger.indy.sdk.InvalidStructureException;
-import org.hyperledger.indy.sdk.pool.LedgerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.ConnectException;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @CrossOrigin
@@ -163,13 +158,6 @@ public class CredentialController {
 		externalCredentialService.deleteExternalCredential(id);
 	}
 
-	@GetMapping(value = "/credential_schema/{credentialDefinitionId}")
-	@ResponseStatus(HttpStatus.OK)
-	public CredentialSchemaCmd getCredentialSchema(@PathVariable final String credentialDefinitionId) throws
-			Exception {
-		return service.getCredentialSchema(credentialDefinitionId);
-	}
-
 	@GetMapping(value = "/export_credentials")
 	@ResponseStatus(HttpStatus.OK)
 	public CredentialExportCmd exportCredentials() {
@@ -184,26 +172,6 @@ public class CredentialController {
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(IndyException.class)
-	public CredentialSchemaErrorCmd indyException() {
-		return new CredentialSchemaErrorCmd("ERR_LEDGER_COMMUNICATION_FAILED");
-	}
-
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({ExecutionException.class, InterruptedException.class})
-	public CredentialSchemaErrorCmd ledgerException(Exception exception) {
-		final Throwable cause = exception.getCause();
-
-		if (cause instanceof InvalidStructureException) {
-			return new CredentialSchemaErrorCmd("ERR_INVALID_STRUCTURE");
-		} else if (cause instanceof LedgerNotFoundException) {
-			return new CredentialSchemaErrorCmd("ERR_CREDENTIAL_DEFINITION_NOT_FOUND");
-		}
-
-		return new CredentialSchemaErrorCmd("ERR_LEDGER_COMMUNICATION_FAILED");
-	}
-
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({ConnectException.class, IllegalArgumentException.class})
 	public void importException() {
 	}
@@ -211,11 +179,5 @@ public class CredentialController {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(JsonProcessingException.class)
 	public void jsonException() {
-	}
-
-	@ResponseStatus(value = HttpStatus.FAILED_DEPENDENCY)
-	@ExceptionHandler({LibIndyNotInstalledException.class, UnsatisfiedLinkError.class})
-	public CredentialSchemaErrorCmd libIndyNotInstalled() {
-		return new CredentialSchemaErrorCmd("ERR_LIBINDY_NOT_INSTALLED");
 	}
 }

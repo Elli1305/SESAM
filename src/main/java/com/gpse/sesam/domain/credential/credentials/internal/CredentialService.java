@@ -38,8 +38,6 @@ public interface CredentialService {
 
 	List<AllCredentialCmd> getAllCredentialsByLocation(Long id);
 
-	CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws Exception;
-
 	CredentialExportCmd exportCredentials();
 
 	void importCredentials(CredentialExportCmd credentialExportCmd);

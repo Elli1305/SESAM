@@ -12,9 +12,7 @@
                    :rules="[required]" class="q-mb-md" error-message=" " label="Credential Definition ID" lazy-rules
                    no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
 
-          <q-btn :disable="createType === 'internal' && createOnLedger" flat color="primary" :label="t('admin.credentialAdministration.loadCredentialSchema')"
-                 @click="getCredentialSchema"/>
-          <q-checkbox v-show="createType === 'internal'" v-model="createOnLedger" label="Create on ledger"/>
+          <q-checkbox v-show="createType === 'internal'" v-model="createOnLedger" label="Auf dem Ledger erstellen"/>
 
           <q-input v-model="credential.name" :rules="[required]" error-message=" " label="Name" lazy-rules no-error-icon
                    outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
@@ -234,42 +232,6 @@ const save = async () => {
         })
         .finally($q.loading.hide);
   }
-}
-
-const getCredentialSchema = async () => {
-  if (credential.value.credentialDefinitionId.length == 0) {
-    return;
-  }
-
-  $q.loading.show({delay: 400});
-
-  await api.credential.getCredentialSchema(credential.value.credentialDefinitionId)
-      .then(response => {
-        credential.value.name = response.data.name;
-        credential.value.credentialDefinitionId = response.data.credentialDefinitionId;
-        credential.value.version = response.data.ver;
-
-        if (response.data.agent) {
-          credential.value.agent = response.data.agent;
-        }
-
-        credential.value.attributes = response.data.attrs.map(v => ({
-          type: 'text',
-          name: '',
-          attributeName: v,
-          validationRules: [],
-        }));
-      })
-      .catch((e: AxiosError<{ code: string; }>) => {
-        $q.notify({
-          type: 'negative',
-          position: 'bottom',
-          timeout: 6000,
-          message: t('admin.credentialEditing.credentialSchemaLoadFailed'),
-          caption: t(`admin.credentialEditing.errors.${e.response?.data.code ?? 'ERR_LEDGER_COMMUNICATION_FAILED'}`),
-        });
-      })
-      .finally($q.loading.hide);
 }
 
 const editValidation = (item: CreateAttribute, items: CreateAttribute[]) => {

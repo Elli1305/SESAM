@@ -1,10 +1,7 @@
 package com.gpse.sesam.domain.credential.credentials.internal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.credentials.Credential;
@@ -20,26 +17,14 @@ import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.*;
-import com.gpse.sesam.web.exception.LibIndyNotInstalledException;
-import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
-import org.hyperledger.indy.sdk.IndyException;
-import org.hyperledger.indy.sdk.LibIndy;
-import org.hyperledger.indy.sdk.ledger.Ledger;
-import org.hyperledger.indy.sdk.ledger.LedgerResults;
-import org.hyperledger.indy.sdk.pool.Pool;
-import org.hyperledger.indy.sdk.pool.PoolJSONParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,11 +34,6 @@ import java.util.stream.Stream;
  */
 @Service
 public class CredentialServiceImpl implements CredentialService {
-    private static final Map<String, String> AGENT_FOR_DID = Map.of(
-            "XgpWt5zepWmbpuRUT82js9", "tlabs",
-            "9yGivzVEatBj7o9pNjoFbi", "university"
-    );
-
     private static final Map<String, String> MAGIC_CREDENTIAL_DEFINITION_IDS = Map.of(
             "$T-MEMBER", "XgpWt5zepWmbpuRUT82js9:3:CL:694410:T-MEMBER",
             "$T-TRAINING", "XgpWt5zepWmbpuRUT82js9:3:CL:694412:T-TRAINING",
@@ -75,9 +55,6 @@ public class CredentialServiceImpl implements CredentialService {
     private final ExternalCredentialService externalCredentialService;
 
     private final CategoryService categoryService;
-
-    private Pool pool = null;
-
 
     /**
      * Konstruktor für die CredentialServiceImpl-Klasse.
@@ -115,61 +92,6 @@ public class CredentialServiceImpl implements CredentialService {
     public static String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
         return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
     }
-
-    /**
-     * Zerstört den Pool und schließt die Verbindung.
-     *
-     * @throws IndyException          wenn ein Fehler in der Indy-Bibliothek auftritt
-     * @throws ExecutionException    wenn ein Fehler bei der Ausführung auftritt
-     * @throws InterruptedException  wenn der Thread während des Wartens unterbrochen wird
-     */
-    @PreDestroy
-    private void destroy() throws IndyException, ExecutionException, InterruptedException {
-        if (pool == null) {
-            return;
-        }
-
-        pool.closePoolLedger().get();
-        pool.close();
-
-        pool = null;
-    }
-
-    /**
-     * Erstellt und öffnet einen Pool.
-     *
-     * @return der erstellte und geöffnete Pool
-     * @throws FileNotFoundException wenn die Datei nicht gefunden wird
-     * @throws IndyException          wenn ein Fehler in der Indy-Bibliothek auftritt
-     * @throws ExecutionException    wenn ein Fehler bei der Ausführung auftritt
-     * @throws InterruptedException  wenn der Thread während des Wartens unterbrochen wird
-     */
-    private Pool createPool() throws FileNotFoundException, IndyException, ExecutionException, InterruptedException,
-            UnsatisfiedLinkError {
-        if (!LibIndy.isInitialized()) {
-            LibIndy.init();
-        }
-
-        if (LibIndy.api == null) {
-            throw new LibIndyNotInstalledException();
-        }
-
-        File genesisTxnFile = ResourceUtils.getFile("classpath:test.bcovrin.vonx.io.jsonl");
-
-        PoolJSONParameters.CreatePoolLedgerConfigJSONParameter createPoolLedgerConfigJSONParameter =
-                new PoolJSONParameters.CreatePoolLedgerConfigJSONParameter(genesisTxnFile.getAbsolutePath());
-
-        Pool.setProtocolVersion(2).get();
-
-        try {
-            Pool.createPoolLedgerConfig(DEFAULT_POOL_NAME, createPoolLedgerConfigJSONParameter.toJson()).get();
-        } catch (ExecutionException | IndyException | InterruptedException ignored) {
-            // Intentionally ignored.
-        }
-
-        return Pool.openPoolLedger(DEFAULT_POOL_NAME, "{}").get();
-    }
-
 
     /**
      * Ruft alle internen Credentials ab.
@@ -672,64 +594,6 @@ public class CredentialServiceImpl implements CredentialService {
         }
 
         return cmds;
-    }
-
-    /**
-     * Ruft das Credential-Schema für die angegebene Credential-Definition-ID ab.
-     *
-     * @param credentialDefinitionId die ID der Credential-Definition
-     * @return das Credential-Schema als CredentialSchemaCmd-Objekt
-     * @throws IndyException               wenn ein Fehler in der Indy-Bibliothek auftritt
-     * @throws ExecutionException         wenn ein Fehler bei der Ausführung auftritt
-     * @throws InterruptedException       wenn der Thread während des Wartens unterbrochen wird
-     * @throws JsonProcessingException     wenn ein Fehler bei der Verarbeitung von JSON-Daten auftritt
-     * @throws FileNotFoundException     wenn die Datei nicht gefunden wird
-     */
-    @Override
-    public CredentialSchemaCmd getCredentialSchema(String credentialDefinitionId) throws IndyException,
-            ExecutionException, InterruptedException, JsonProcessingException, FileNotFoundException {
-        if (pool == null) {
-            pool = createPool();
-        }
-
-        String normalizedCredentialDefinitionId = replaceMagicCredentialDefinitionIds(credentialDefinitionId);
-        String getCredDefRequest = Ledger.buildGetCredDefRequest(null, normalizedCredentialDefinitionId)
-                .get();
-        String getCredDefResponse = Ledger.submitRequest(pool, getCredDefRequest).get();
-
-        JsonNode getCredDefResponseNode = mapper.readTree(getCredDefResponse);
-
-        LedgerResults.ParseResponseResult getCredDefResponseResult = Ledger.parseGetCredDefResponse(getCredDefResponse)
-                .get();
-
-        JsonNode getCredDefResponseResultNode = mapper.readTree(getCredDefResponseResult.getObjectJson());
-
-        String getTxnRequest = Ledger.buildGetTxnRequest(
-                null,
-                "DOMAIN",
-                getCredDefResponseResultNode.get("schemaId").asInt()
-        ).get();
-        String getTxnResponse = Ledger.submitRequest(pool, getTxnRequest).get();
-
-        JsonNode getTxnResponseNode = mapper.readTree(getTxnResponse);
-
-        ArrayNode attrNamesNode = (ArrayNode) getTxnResponseNode.get("result")
-                .get("data")
-                .get("txn")
-                .get("data")
-                .get("data")
-                .get("attr_names");
-
-        List<String> attrNames = mapper.convertValue(attrNamesNode, new TypeReference<>() {
-        });
-
-        return new CredentialSchemaCmd(
-                getCredDefResponseResultNode.get("tag").asText(),
-                normalizedCredentialDefinitionId,
-                AGENT_FOR_DID.get(getCredDefResponseNode.get("result").get("origin").asText()),
-                getCredDefResponseResultNode.get("ver").asText(),
-                attrNames
-        );
     }
 
     @Override
