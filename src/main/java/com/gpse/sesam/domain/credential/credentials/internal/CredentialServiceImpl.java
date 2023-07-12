@@ -48,6 +48,9 @@ import java.util.stream.Stream;
  */
 @Service
 public class CredentialServiceImpl implements CredentialService {
+    /**
+     * Maps für die Kommunikation mit dem Ledger
+     */
     private static final Map<String, String> AGENT_FOR_DID = Map.of(
             "XgpWt5zepWmbpuRUT82js9", "tlabs",
             "9yGivzVEatBj7o9pNjoFbi", "university"

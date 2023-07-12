@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Diese Klasse implementiert den PredefinedConfigService und stellt Funktionen für die Verwaltung dieser zur Verfügung
+ */
 @Service
 public class PredefinedConfigServiceImpl implements PredefinedConfigService {
 
@@ -26,6 +29,12 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
 
     private final ConfigCmdMapper configCmdMapper;
 
+    /**
+     * Konstruktor für PredefinedConfigServiceImpl.
+     *
+     * @param predefinedConfigRepository    das PredefinedConfigRepository zur Datenbankabfrage von Türen
+     * @param credentialService       Der CredentialService.
+     */
     @Autowired
     public PredefinedConfigServiceImpl(final PredefinedConfigRepository predefinedConfigRepository,
                                        CredentialService credentialService) {
@@ -34,6 +43,11 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
         this.configCmdMapper = new ConfigCmdMapper(credentialService);
     }
 
+    /**
+     * Gibt aller predefined configs zurück
+     *
+     * @return die Liste aller configs
+     */
     @Override
     public List<PredefinedConfig> getAllPreConfigs() {
         final List<PredefinedConfig> preConfigs = new ArrayList<>();
@@ -43,6 +57,12 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
         return preConfigs;
     }
 
+    /**
+     * Sucht eine Predefined Config anhand der angegebenen ID.
+     *
+     * @param id die ID der gesuchten Preconfig
+     * @return Optional, das die gefundene Preconfig oder null enthält
+     */
     @Override
     public PredefinedConfigCmd getPreConfig(final Long id) {
         PredefinedConfig predefinedConfig = predefinedConfigRepository.findById(id).orElseThrow(()
@@ -67,6 +87,12 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
         }
     }
 
+    /**
+     * Updated eine Preconfig
+     *
+     * @param predefinedConfig für das Updaten
+     * @return updated Preconfig
+     */
     @Override
     public void update(PredefinedConfigCmd predefinedConfig) {
         final Optional<PredefinedConfig> tempPreConfig = predefinedConfigRepository.findById(predefinedConfig.getId());
@@ -80,6 +106,12 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
         }
     }
 
+    /**
+     * Erstellt eine neue Preconfig
+     *
+     * @param predefinedConfig cmd-Objekt zum Erstellen der config
+     * @return die erstellte Preconfig
+     */
     @Override
     public void create(PredefinedConfigCmd predefinedConfig) {
         PredefinedConfig config = new PredefinedConfig();
@@ -92,6 +124,11 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
         predefinedConfigRepository.save(config);
     }
 
+    /**
+     * Setzt eine TwoWayDoorConfig zum Speichern auf
+     * @param predefinedConfig Cmd-Objekt fürs Speichern
+     * @param twoWayConfigs Liste der Two-Way-Configs
+     */
     private void setupTwoWayDoorConfigsForSave(PredefinedConfigCmd predefinedConfig,
                                                List<TwoWayDoorConfig> twoWayConfigs) {
         for (int i = 0; i < predefinedConfig.getDoorConfig().size(); i++) {
@@ -109,6 +146,11 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
         }
     }
 
+    /**
+     * Löscht eine Preconfig anhand der angegebenen ID.
+     *
+     * @param id die ID der zu löschenden Preconfig
+     */
     @Override
     public void delete(Long id) {
         predefinedConfigRepository.deleteById(id);

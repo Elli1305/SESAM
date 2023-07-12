@@ -71,6 +71,11 @@ public class DoorServiceImpl implements DoorService {
 		return doors;
 	}
 
+	/**
+	 * Erstellt eine neue Tür.
+	 *
+	 * @param door Tür zum Erstellen
+	 */
 	@Override
 	public Door save(final Door door) {
 		Door savedDoor = doorRepository.save(door);
@@ -79,6 +84,11 @@ public class DoorServiceImpl implements DoorService {
 		return savedDoor;
 	}
 
+	/**
+	 * Prüft welche Config gerade gescheduled ist
+	 * @param door für das Scheduling
+	 * @param savedDoor Tür in der DB
+	 */
 	private void scheduleActiveConfig(Door door, Door savedDoor) {
 		TwoWayDoorConfig activeConfig = ActiveConfigUtil.getCurrentConfig(door.getDoorConfigs());
 		if (activeConfig != null) {
