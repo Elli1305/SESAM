@@ -6,6 +6,7 @@ import com.gpse.sesam.util.StringToIntSerializer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,7 +35,7 @@ public class ProofPredicateInfo {
 	private String predicateValue;
 
 	@Column
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<AttributeFilter> restrictions;
 
 	public ProofPredicateInfo() {

@@ -1,8 +1,8 @@
 package com.gpse.sesam.domain.location.door.config.predefined;
 
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
-import com.gpse.sesam.domain.location.door.TwoWayDoorConfig;
 import com.gpse.sesam.domain.location.door.config.ProofConfig;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.web.cmd.DoorConfigCmd;
 import com.gpse.sesam.web.cmd.PredefinedConfigCmd;

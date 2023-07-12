@@ -97,7 +97,6 @@ async function passwordChange() {
     await userStore.changePassword(password.value, props.token)
   }
   catch (error: any) {
-    console.log(error);
 
     if (error.response.status === 403 || error.response.status === 422) {
       $q.notify({

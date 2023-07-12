@@ -23,13 +23,11 @@ public class RoomGroupController {
     }
 
     @GetMapping
-    @Secured("EDITOR")
     public List<RoomGroups> getAllRoomGroups() {
         return roomGroupService.getRoomGroups();
     }
 
     @GetMapping("/filter/{id:\\d+}")
-    @Secured("EDITOR")
     public List<RoomGroups> getGroupsByBuilding(@PathVariable("id") final Long id) {
         return roomGroupService.getGroupByBuilding(id);
     }

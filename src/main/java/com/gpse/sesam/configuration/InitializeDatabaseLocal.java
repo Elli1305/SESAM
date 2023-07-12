@@ -236,13 +236,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		// breaks jar build from mater
 //		final String jsonContent = readJsonFile();
 //		final List<List<Coordinate>> roomCoordinates = createRoomCoordinates(jsonContent);
-
+//
 //		for (int i = 0; i < roomCoordinates.size(); i++) {
 //			rooms.get(i).setCoordinates(roomCoordinates.get(i));
 //		}
-
+//
 //		final List<List<Coordinate>> doorCoordinates = createDoorCoordinates(jsonContent);
-
+//
 //		for (int i = 0; i < doorCoordinates.size(); i++) {
 //			final Door door = new Door("door" + i, doorCoordinates.get(i));
 //			rooms.get(i).setDoors(List.of(door));

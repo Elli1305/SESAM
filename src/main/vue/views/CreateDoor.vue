@@ -175,7 +175,6 @@ export default {
   emits: [
     'ok', 'hide'
   ],
-
   methods: {
     changeDirectionOut(direction, k) {
 
@@ -255,11 +254,10 @@ export default {
       const allConfig = []
       this.qSelectgeneral.qSelectsSet.forEach((element, index) => {
         let config = {}
-        console.log(this.$refs.doorIn[index].configDescription)
+
         config.baseConfig = this.qSelectgeneral.qSelectsSet[index].baseConfig
         config.startTime = this.qSelectgeneral.qSelectsSet[index].startTime
         config.endTime = this.qSelectgeneral.qSelectsSet[index].endTime
-
         if (this.$refs.doorIn[index].direction === Direction.BOTH) {
           config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
           config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectgeneral.qSelectsSet[index].doorConfigIn))
@@ -396,7 +394,6 @@ export default {
 
 
     if (props.door) {
-      console.log(props.door)
       doorName.value = props.door.name
       if (props.door.doorConfigCmds.length > 0) {
         qSelectgeneral.qSelectsSet = props.door.doorConfigCmds
@@ -468,6 +465,11 @@ export default {
       configOut,
       configIn
     }
-  }
+  },
+  mounted() {
+    for (const test in this.$refs.doorIn) {
+      console.log(test)
+    }
+  },
 }
 </script>

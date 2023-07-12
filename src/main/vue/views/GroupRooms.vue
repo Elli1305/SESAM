@@ -32,7 +32,7 @@
                   round
                   flat
                   style="color: var(--light)"
-                  @click="prompt=true; openForm(props.row); getRoomsAndDoors(editedRow.id)"
+                  @click="prompt=true; openForm(props.row); getRoomsAndDoors(editedRow.id); resetConfig()"
                   test="props.value"
                   icon="meeting_room"/>
               <q-btn
@@ -203,7 +203,7 @@
           >
             <template v-slot:top-right>
               <div v-if="$q.screen.gt.xs" class="col" style="padding-right: 2em">
-                <q-toggle v-model="visibleColumns" val="doorNames" :label="t('editor.groupRooms.doors')" size="2.5em"/>
+                <q-toggle v-model="visibleColumns" @update:model-value="fetchDoors(rows2)" val="doorNames" :label="t('editor.groupRooms.doors')" size="2.5em"/>
               </div>
               <q-input class="q-ml-xs" outlined rounded dense debounce="250" v-model="searchinput" :placeholder="t('common.search')">
                 <template v-slot:append>
@@ -213,15 +213,13 @@
             </template>
             <template v-slot:body-cell-doorNames="props">
               <q-td style="width: 60%" :props="props">
-                <q-select v-if="props.row.name"
-                    @popup-show="getDoors(props.row.room)"
+                <q-select v-if="props.row.selected"
                     class="q-my-sm"
                     filled dense options-dense
                     emit-value
                     v-model="model[props.row.room]"
                     multiple
-                    :options=options
-                    option-value="id"
+                    :options="props.row.doors"
                     option-label="name"
                     options-cover
                     map-options
@@ -231,11 +229,12 @@
             </template>
             <template v-slot:body-cell-actions="props">
               <q-td style="width: 10%" :props="props">
-                <q-checkbox v-model="props.row.name" @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.name, props.row.room)"/>
+                <q-checkbox v-model="props.row.selected" @update:model-value="getDoors(props.row.room); checkIfSelected(props.row.selected, props.row.room)"/>
               </q-td>
             </template>
           </q-table>
         </q-card-section>
+        <q-card-section>
         <q-select
             class="q-ml-md"
             style="min-width: 20em"
@@ -259,6 +258,7 @@
             </q-item>
           </template>
         </q-select>
+        </q-card-section>
         <q-card-section v-for="(selectConf,k) in qSelectGeneral.qSelectsSet">
           <q-card bordered flat>
             <q-toolbar class="bg-primary text-accent">
@@ -341,7 +341,7 @@
         <q-card>
           <q-card-actions align="right" class="text-primary">
             <q-btn flat @click="resetConfig()" v-close-popup> {{ t("common.cancel") }}</q-btn>
-            <q-btn flat v-close-popup @click="saveConfig(model)"> {{ t("common.save") }}</q-btn>
+            <q-btn flat :disable="!checkBaseConf()" v-close-popup @click="saveConfig(model)"> {{ t("common.save") }}</q-btn>
           </q-card-actions>
         </q-card>
       </q-card>
@@ -412,6 +412,7 @@ export default {
     const list = [];
     const model = ref([[]])
     const res = []
+    const value = ref([])
     let finalArray = []
 
     const configStore = useConfigStore()
@@ -608,7 +609,11 @@ export default {
     });
 
     function getRoomsAndDoors(id) {
-      roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => rows2.value = rooms)
+      model.value = [[]]
+      roomGroupStore.getRoomsAndDoorsByGroupId(id).then((rooms) => {
+        rows2.value = rooms.map(r => ({...r, selected: true}))
+        fetchDoors(rows2.value)
+      })
     }
 
     const editedRow = ref({})
@@ -618,8 +623,8 @@ export default {
 
     function getDoors(id) {
       doorStore.getByRoomId(id).then((doors) => {
-        options.value = doors;
-        model.value[id] = options.value.map(obj => (obj['id']))
+        model.value[id] = doors
+        console.log(model.value)
       })
     }
 
@@ -778,7 +783,12 @@ export default {
       }
     }
 
+    function fetchDoors(rows) {
+      rows?.forEach(row => getDoors(row.room))
+    }
+
     return {
+      fetchDoors,
       check,
       qSelectGeneral,
       filterConfigOptions,
@@ -797,6 +807,7 @@ export default {
       newGroup,
       getDoors,
       res,
+      value,
       newGroupName: ref(''),
       editName: ref(''),
       modelRooms: ref(null),
@@ -813,7 +824,7 @@ export default {
       editGroupName,
       editGroupRooms,
       closeEditAlert,
-      visibleColumns: ref(['name', 'actions', 'doorNames']),
+      visibleColumns: ref(['name', 'actions']),
       locationList,
       buildingListNames,
       group: ref([]),
@@ -1011,7 +1022,7 @@ export default {
           res.push(model[val])
         }
       }
-      const finalArray = res.flat(1)
+      let finalArray = res.flat(1).map(d => d.id)
       const allConfig = []
       this.qSelectGeneral.qSelectsSet.forEach((element, index) => {
         let config = {}
@@ -1022,7 +1033,7 @@ export default {
           config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
           config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
           config.doorConfigIn.description = this.qSelectGeneral.qSelectsSet[index].doorConfigIn.description
-          config.doorConfigOut.description = this.qSelectGeneral.qSelectsSet[index].doorConfigOut.description
+          config.doorConfigOut.description = this.qSelectGeneral.qSelectsSet[index].doorConfigIn.description
         } else if (this.$refs.doorIn[index].direction === Direction.IN) {
           config.doorConfigIn = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigIn))
           config.doorConfigOut = JSON.parse(JSON.stringify(this.qSelectGeneral.qSelectsSet[index].doorConfigOut))
@@ -1042,6 +1053,7 @@ export default {
         doorConfig: allConfig
       }
       roomGroupStore.setGroupConfig(configList)
+      finalArray = []
     }
   },
 
