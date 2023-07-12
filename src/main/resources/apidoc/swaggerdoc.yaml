@@ -26,6 +26,8 @@ tags:
     description: Everything about the door
   - name: doorconfig
     description: Everything about the doorconfig
+  - name: preconfig
+    description: Everything about the predefined configs
   - name: credentials
     description: Everything about the credentials
   - name: category
@@ -66,7 +68,7 @@ paths:
         - editor_auth:
             - write:buildings
             - read:buildings
-  /building/delete/{id}:
+  /building/{id}:
     delete:
       tags:
         - building
@@ -223,9 +225,9 @@ paths:
         '405':
           description: Invalid input
       security:
-          - admin_auth:
-              - write:category
-              - read:category
+        - admin_auth:
+            - write:category
+            - read:category
   /category/{id}:
     get:
       tags:
@@ -495,53 +497,53 @@ paths:
               schema:
                 type: object
   /credentials/{id}:
-      get:
-        tags:
-          - credential
-        summary: Find credential by id
-        description: Find credential by the id
-        operationId: getCategoryById
-        parameters:
-          - name: id
-            in: path
-            description: Id of the credential
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/InternalCredential'
-          '400':
-            description: Invalid id supplied
-          '404':
-            description: Credential not found
-      delete:
-        tags:
-          - credential
-        summary: Deletes a credential
-        description: Deletes a credential by its id
-        operationId: delete
-        parameters:
-          - name: id
-            in: path
-            description: The id of the credential that needs to be deleted
-            required: true
-            schema:
-              type: integer
-        responses:
-          '400':
-            description: Invalid id supplied
-          '404':
-            description: Credential not found
-        security:
-          - admin_auth:
-              - write:credential
-              - read:credential
+    get:
+      tags:
+        - credential
+      summary: Find credential by id
+      description: Find credential by the id
+      operationId: getCategoryById
+      parameters:
+        - name: id
+          in: path
+          description: Id of the credential
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalCredential'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Credential not found
+    delete:
+      tags:
+        - credential
+      summary: Deletes a credential
+      description: Deletes a credential by its id
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: The id of the credential that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: Credential not found
+      security:
+        - admin_auth:
+            - write:credential
+            - read:credential
   /credentials/getByIssuer/{id}:
     get:
       tags:
@@ -724,31 +726,31 @@ paths:
             - write:doorconfig
             - read:doorconfig
   /doorconfig/{id}:
-      get:
-        tags:
-          - doorconfig
-        summary: Find doorconfig by id
-        description: Find doorconfig by id
-        operationId: getDoorConfigForBothDirections
-        parameters:
-          - name: id
-            in: path
-            description: Id of the doorconfig
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/TwoWayDoorConfig'
-          '400':
-            description: Invalid id supplied
-          '404':
-            description: location not found
+    get:
+      tags:
+        - doorconfig
+      summary: Find doorconfig by id
+      description: Find doorconfig by id
+      operationId: getDoorConfigForBothDirections
+      parameters:
+        - name: id
+          in: path
+          description: Id of the doorconfig
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoWayDoorConfig'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: location not found
   /door/save:
     post:
       tags:
@@ -852,6 +854,32 @@ paths:
           description: Invalid id supplied
         '404':
           description: room not found
+  /door/{id}:
+    get:
+      tags:
+        - door
+      summary: Find door by its id
+      description: Find a door by id
+      operationId: getDoorById
+      parameters:
+        - name: id
+          in: path
+          description: Id of the door
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Door'
+        '400':
+          description: Invalid id supplied
+        '404':
+          description: room not found
   /floor/uploadImage:
     post:
       tags:
@@ -906,7 +934,7 @@ paths:
         - editor_auth:
             - write:floor
             - read:floor
-  /floor/delete/{id}:
+  /floor/{id}:
     delete:
       tags:
         - floor
@@ -1134,7 +1162,7 @@ paths:
   /preConfig/create:
     post:
       tags:
-        - doorconfig
+        - preconfig
       summary: Create a doorconfig
       description: Create a doorconfig
       operationId: create
@@ -1143,7 +1171,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Doorconfig'
+              $ref: '#/components/schemas/Preconfig'
         required: true
       responses:
         '200':
@@ -1151,17 +1179,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doorconfig'
+                $ref: '#/components/schemas/Preconfig'
         '405':
           description: Invalid input
       security:
         - editor_auth:
-            - write:doorconfig
-            - read:doorconfig
+            - write:preconfig
+            - read:preconfig
   /preconfig/update:
     post:
       tags:
-        - doorconfig
+        - preconfig
       summary: Update a doorconfig
       description: Update a doorconfig
       operationId: update
@@ -1170,7 +1198,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Doorconfig'
+              $ref: '#/components/schemas/Preconfig'
         required: true
       responses:
         '200':
@@ -1178,17 +1206,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doorconfig'
+                $ref: '#/components/schemas/Preconfig'
         '405':
           description: Invalid input
       security:
         - editor_auth:
-            - write:doorconfig
-            - read:doorconfig
+            - write:preconfig
+            - read:preconfig
   /allconfigs:
     get:
       tags:
-        - doorconfig
+        - preconfig
       summary: Get all doorconfigs
       description: Get all doorconfigs
       operationId: getAllConfigs
@@ -1198,11 +1226,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doorconfig'
+                $ref: '#/components/schemas/Preconfig'
   /preconfig/{id}:
     get:
       tags:
-        - doorconfig
+        - preconfig
       summary: Find a doorconfig by its id
       description: Find a doorconfig
       operationId: getConfig
@@ -1220,15 +1248,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doorconfig'
+                $ref: '#/components/schemas/Preconfig'
         '400':
           description: Invalid id supplied
         '404':
           description: config not found
       security:
         - editor_auth:
-            - write:doorconfig
-            - read:doorconfig
+            - write:preconfig
+            - read:preconfig
   /credential_schema/{credentialDefinitionId}:
     get:
       tags:
@@ -1978,6 +2006,24 @@ components:
           $ref: '#/components/schemas/Doorconfig'
         doorConfigOut:
           $ref: '#/components/schemas/Doorconfig'
+    Preconfig:
+      required:
+        - id
+        - name
+        - twoWayDoorConfig
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 13
+        name:
+          type: string
+          example: U-Member-Config
+        twoWayDoorConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/TwoWayDoorConfig'
     Colors:
       required:
         - id
@@ -2316,12 +2362,12 @@ components:
           items:
             $ref: '#/components/schemas/AttributeFilter'
       xml:
-          name: proofattributeinfo
+        name: proofattributeinfo
     AttributeFilter:
       required:
-         - id
-         - credentialDefintionId
-         - attributeValue
+        - id
+        - credentialDefintionId
+        - attributeValue
       type: object
       properties:
         id:
@@ -2457,6 +2503,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Room'
+    Preconfig:
+      description: Preconfig
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Preconfig'
     Door:
       description: Door
       content:
