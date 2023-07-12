@@ -32,6 +32,9 @@ const router = createRouter({
             name: "edit",
             component: () => import("@/main/vue/views/EditUser.vue"),
             props: true,
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
 
         {
@@ -39,6 +42,9 @@ const router = createRouter({
             name: "rolesRequest",
             component: () => import("@/main/vue/views/RolesRequest.vue"),
             props: true,
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
 
         {
