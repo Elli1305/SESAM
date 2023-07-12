@@ -32,6 +32,9 @@ const router = createRouter({
             name: "edit",
             component: () => import("@/main/vue/views/EditUser.vue"),
             props: true,
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
 
         {
@@ -39,6 +42,9 @@ const router = createRouter({
             name: "rolesRequest",
             component: () => import("@/main/vue/views/RolesRequest.vue"),
             props: true,
+            meta: {
+                authorize: AttainableRole.ADMINISTRATOR,
+            },
         },
 
         {
@@ -157,20 +163,6 @@ const router = createRouter({
             props: true,
             meta: {
                 authorize: AttainableRole.ADMINISTRATOR,
-            },
-        },
-        {
-            path: "/doorhistory",
-            component: () => import("@/main/vue/views/DoorHistoryOverview.vue"),
-            meta: {
-                authorize: AttainableRole.ADMINISTRATOR && AttainableRole.EDITOR,
-            },
-        },
-        {
-            path: "/doorhistory/:id(\\d+)",
-            component: () => import("@/main/vue/views/DoorHistory.vue"),
-            meta: {
-                authorize: AttainableRole.ADMINISTRATOR && AttainableRole.EDITOR,
             },
         },
         {

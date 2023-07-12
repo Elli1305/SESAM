@@ -4,7 +4,6 @@ import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerService;
 import com.gpse.sesam.web.cmd.IssuerResponseCmd;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,7 +28,7 @@ public class IssuerController {
 	public List<Issuer> getIssuers() {
 		return service.getIssuers();
 	}
-	@Secured("ADMINISTRATOR")
+
 	@PutMapping("/issuer")
 	@ResponseStatus(HttpStatus.OK)
 	public void updateIssuer(@RequestBody final IssuerResponseCmd cmd) {

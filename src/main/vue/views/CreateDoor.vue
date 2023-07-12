@@ -220,23 +220,11 @@ export default {
     },
 
     addConfiguration() {
-      this.qSelectgeneral.qSelectsSet.push({
-        doorConfigIn: {
-          configParts: [{
-            credentials: [], attributeFilter: [{
-              attribute: null,
-              predicateType: null, value: null, currentDate: false
-            }]
-          }], description: "", direction: Direction.BOTH
-        },
-        doorConfigOut: {
-          configParts: [{
-            credentials: [], attributeFilter: [{
-              attribute: null,
-              predicateType: null, value: null, currentDate: false
-            }]
-          }], description: "", direction: Direction.BOTH
-        },
+      this.qSelectgeneral.qSelectsSet.push( {
+        doorConfigIn: {configParts: [{credentials: [], attributeFilter: [{ attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
+        doorConfigOut: {configParts: [{credentials: [], attributeFilter: [{attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
         baseConfig: false,
         startTime: null,
         endTime: null
@@ -313,22 +301,10 @@ export default {
       if (selectedConfig.value == null) {
         qSelectgeneral.qSelectsSet.splice(0)
         qSelectgeneral.qSelectsSet.push({
-          doorConfigIn: {
-            configParts: [{
-              credentials: [], attributeFilter: [{
-                attribute: null,
-                predicateType: null, value: null, currentDate: false
-              }]
-            }], description: "", direction: Direction.BOTH
-          },
-          doorConfigOut: {
-            configParts: [{
-              credentials: [], attributeFilter: [{
-                attribute: null,
-                predicateType: null, value: null, currentDate: false
-              }]
-            }], description: "", direction: Direction.BOTH
-          },
+          doorConfigIn: {configParts: [{credentials: [], attributeFilter: [{ attribute: null,
+                predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
+          doorConfigOut: {configParts: [{credentials: [], attributeFilter: [{attribute: null,
+                predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
           baseConfig: false,
           startTime: null,
           endTime: null
@@ -338,18 +314,18 @@ export default {
         let chosenConfig = configStore.currentConfig
         let tempConfig = []
         chosenConfig?.doorConfig.forEach((element) => {
-          console.log("Wert", JSON.stringify(element.doorConfigIn)
+          console.log("Wert",JSON.stringify(element.doorConfigIn)
               !== JSON.stringify(element.doorConfigOut))
           let object = {
             doorConfigIn: {
-              direction: JSON.stringify(element.doorConfigIn)
-              !== JSON.stringify(element.doorConfigOut) ? Direction.IN : Direction.BOTH,
+                direction: JSON.stringify(element.doorConfigIn)
+                !== JSON.stringify(element.doorConfigOut) ? Direction.IN : Direction.BOTH,
               description: element.doorConfigIn.description,
               configParts: element.doorConfigIn.configParts
             },
             doorConfigOut: {
-              direction: JSON.stringify(element.doorConfigIn)
-              !== JSON.stringify(element.doorConfigOut) ? Direction.OUT : Direction.BOTH,
+                direction: JSON.stringify(element.doorConfigIn)
+                !== JSON.stringify(element.doorConfigOut) ? Direction.OUT : Direction.BOTH,
               description: element.doorConfigOut.description,
               configParts: element.doorConfigOut.configParts
             },
@@ -370,22 +346,10 @@ export default {
 
     const qSelectgeneral = reactive({
       qSelectsSet: [{
-        doorConfigIn: {
-          configParts: [{
-            credentials: [], attributeFilter: [{
-              attribute: null,
-              predicateType: null, value: null, currentDate: false
-            }]
-          }], description: "", direction: Direction.BOTH
-        },
-        doorConfigOut: {
-          configParts: [{
-            credentials: [], attributeFilter: [{
-              attribute: null,
-              predicateType: null, value: null, currentDate: false
-            }]
-          }], description: "", direction: Direction.BOTH
-        },
+        doorConfigIn: {configParts: [{credentials: [], attributeFilter: [{ attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
+        doorConfigOut: {configParts: [{credentials: [], attributeFilter: [{attribute: null,
+              predicateType: null, value: null, currentDate: false}]}], description: "", direction: Direction.BOTH},
         baseConfig: false,
         startTime: null,
         endTime: null
@@ -395,17 +359,17 @@ export default {
 
     if (props.door) {
       doorName.value = props.door.name
-      if (props.door.doorConfigCmds.length > 0) {
+      if(props.door.doorConfigCmds.length > 0) {
         qSelectgeneral.qSelectsSet = props.door.doorConfigCmds
-        props.door.doorConfigCmds.forEach((element, index) => {
-          if (JSON.stringify(element.doorConfigIn) !== JSON.stringify(element.doorConfigOut)) {
-            qSelectgeneral.qSelectsSet[index].doorConfigIn.direction = Direction.IN
-            qSelectgeneral.qSelectsSet[index].doorConfigOut.direction = Direction.OUT
-          } else {
-            qSelectgeneral.qSelectsSet[index].doorConfigIn.direction = Direction.BOTH
-            qSelectgeneral.qSelectsSet[index].doorConfigOut.direction = Direction.BOTH
-          }
-        })
+          props.door.doorConfigCmds.forEach((element, index) => {
+              if(JSON.stringify(element.doorConfigIn) !== JSON.stringify(element.doorConfigOut)) {
+                  qSelectgeneral.qSelectsSet[index].doorConfigIn.direction = Direction.IN
+                  qSelectgeneral.qSelectsSet[index].doorConfigOut.direction = Direction.OUT
+              } else {
+                  qSelectgeneral.qSelectsSet[index].doorConfigIn.direction = Direction.BOTH
+                  qSelectgeneral.qSelectsSet[index].doorConfigOut.direction = Direction.BOTH
+              }
+          })
       }
     }
 

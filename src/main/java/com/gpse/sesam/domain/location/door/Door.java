@@ -1,7 +1,5 @@
 package com.gpse.sesam.domain.location.door;
 
-import com.gpse.sesam.domain.credential.credentials.Credential;
-
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import jakarta.persistence.CascadeType;
@@ -13,21 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import com.gpse.sesam.domain.location.door.config.ProofConfig;
-
-
-
-import java.sql.Date;
 
 import java.util.ArrayList;
 import java.util.List;
