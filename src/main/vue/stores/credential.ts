@@ -197,7 +197,7 @@ export const useCredentialStore = defineStore('credential', () => {
             })
         }
 
-        function getCredentialsByDefinitionId(credentialDefintionId: string) {
+        function getCredentialsByDefinitionId(credentialDefinitionId: string) {
 
         }
 

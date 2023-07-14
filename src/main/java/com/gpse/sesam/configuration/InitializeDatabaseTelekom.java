@@ -1,27 +1,32 @@
 package com.gpse.sesam.configuration;
 
+import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
-import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
-import com.gpse.sesam.domain.credential.issuing.FormEntry;
-import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.issue.issuing.ChecklistEntry;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntry;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
+import com.gpse.sesam.domain.filestorage.FileStorageService;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
-import com.gpse.sesam.domain.location.RoomGroupService;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
-import com.gpse.sesam.domain.location.door.config.*;
+import com.gpse.sesam.domain.location.door.config.AttributeFilter;
+import com.gpse.sesam.domain.location.door.config.DoorConfigService;
+import com.gpse.sesam.domain.location.door.config.ProofConfig;
+import com.gpse.sesam.domain.location.door.config.ProofPredicateInfo;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
 import com.gpse.sesam.domain.user.issuer.Issuer;
+import com.gpse.sesam.web.exception.FileStorageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -33,8 +38,9 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Service
-@Profile("presentation")
-public class InitializeDatabasePresentation implements InitializingBean {
+@Profile("telekom")
+public class InitializeDatabaseTelekom implements InitializingBean {
+
     private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
 
     private final LocationService locationService;
@@ -45,6 +51,8 @@ public class InitializeDatabasePresentation implements InitializingBean {
     private final CredentialService credentialService;
     private final ColorsService colorsService;
 
+    private final FileStorageService fileStorageService;
+
     private final DoorConfigService doorConfigService;
 
     private final CategoryService categoryService;
@@ -53,12 +61,13 @@ public class InitializeDatabasePresentation implements InitializingBean {
 
     private ProofConfig proofConfig;
 
-    public InitializeDatabasePresentation(final LocationService locationService, final SesamUserService userService,
-                                         final CredentialService credentialService, final ColorsService colorsService,
-                                         final CategoryService categoryService, final PasswordEncoder passwordEncoder,
-                                         final RoomGroupService roomGroupService, DoorConfigService doorConfigService) {
+    public InitializeDatabaseTelekom(final LocationService locationService, final SesamUserService userService,
+                                     final CredentialService credentialService, final ColorsService colorsService,
+                                     FileStorageService fileStorageService, final CategoryService categoryService, final PasswordEncoder passwordEncoder,
+                                     final RoomGroupService roomGroupService, DoorConfigService doorConfigService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
+        this.fileStorageService = fileStorageService;
         this.categoryService = categoryService;
         this.passwordEncoder = passwordEncoder;
         this.locationService = locationService;
@@ -77,70 +86,101 @@ public class InitializeDatabasePresentation implements InitializingBean {
         final List<Location> locations = createLocations();
 
         colorsService.saveAll(colors);
+        setLogo();
         credentialService.saveAll(credentials);
         userService.saveAll(users);
         locationService.saveAll(locations);
     }
 
     private List<Colors> createColors() {
-        final Colors defaultColors = new Colors();
-        defaultColors.setDefaultColors(true);
-        setColors(defaultColors);
+        final Colors defaultLight = new Colors();
+        defaultLight.setDefaultColors(true);
+        defaultLight.setTheme(ColorTheme.LIGHT);
+        setLightColors(defaultLight);
+        defaultLight.setLogoPath("T_logo_white.svg");
 
-        final Colors currentColors = new Colors();
-        currentColors.setDefaultColors(false);
-        setColors(currentColors);
+        final Colors defaultDark = new Colors();
+        defaultDark.setDefaultColors(true);
+        defaultDark.setTheme(ColorTheme.DARK);
+        setDarkColors(defaultDark);
+        defaultDark.setLogoPath("T_logo_black.svg");
+
+        final Colors currentLight = new Colors();
+        currentLight.setDefaultColors(false);
+        currentLight.setTheme(ColorTheme.LIGHT);
+        setLightColors(currentLight);
+
+        final Colors currentDark = new Colors();
+        currentDark.setDefaultColors(false);
+        currentDark.setTheme(ColorTheme.DARK);
+        setDarkColors(currentDark);
 
         final List<Colors> colors = new ArrayList<>();
-        colors.add(defaultColors);
-        colors.add(currentColors);
+        colors.add(defaultLight);
+        colors.add(defaultDark);
+        colors.add(currentLight);
+        colors.add(currentDark);
 
         return colors;
     }
 
-    private void setColors(final Colors defaultColors) {
+    private void setLightColors(final Colors defaultColors) {
+        defaultColors.setLogoPath("/Logo.svg");
         defaultColors.setBgC("#ffffff");
         defaultColors.setTextC("#000000");
         defaultColors.setPrimaryColor("#e20074");
         defaultColors.setSecondary("#f6b2d5");
         defaultColors.setAccent("#ffffff");
         defaultColors.setDark("#808080");
-        defaultColors.setLightBlue("#7d99a7");
+        defaultColors.setLight("#9e9e9e");
         defaultColors.setPositive("#dcdcdc");
         defaultColors.setNegative("#505050");
         defaultColors.setInfo("#0074E2");
         defaultColors.setWarning("#fec705");
     }
 
+    private void setDarkColors(final Colors defaultColors) {
+        defaultColors.setLogoPath("/Logo-Dark.svg");
+        defaultColors.setBgC("#303030");
+        defaultColors.setTextC("#ffffff");
+        defaultColors.setPrimaryColor("#e20074");
+        defaultColors.setSecondary("#f6b2d5");
+        defaultColors.setAccent("#000000");
+        defaultColors.setDark("#808080");
+        defaultColors.setLight("#9e9e9e");
+        defaultColors.setPositive("#dcdcdc");
+        defaultColors.setNegative("#505050");
+        defaultColors.setInfo("#0074E2");
+        defaultColors.setWarning("#fec705");
+    }
+
+    private void setLogo() {
+        try {
+            fileStorageService.reset(ColorTheme.LIGHT);
+            fileStorageService.reset(ColorTheme.DARK);
+        } catch (FileStorageException ignored) {
+            LOG.warn("Unable to reset fileStorageService.");
+        }
+    }
+
     private List<SesamUser> createUsers() {
         //User Roles
         final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
         adminRole.setGranted(true);
-
-
-        List<SesamUserRole> editorAndIssuer = new ArrayList<>();
-
         final SesamUserRole editorRole = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
         editorRole.setGranted(true);
         final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
         issuerRole.setGranted(true);
 
-        editorAndIssuer.add(editorRole);
-        editorAndIssuer.add(issuerRole);
-
-
-        final SesamUserRole issuerRole2 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-        issuerRole2.setGranted(true);
-
         //Users
         final String defaultPassword = passwordEncoder.encode("Hallo123!");
 
-        final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
+        final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "T-Labs", "Admin",
                 Collections.singletonList(adminRole));
-        final SesamUser editor = new Issuer("jörn@sesam.de", defaultPassword, "Jörn", "Editor",
-                editorAndIssuer, new Room("083"));
+        final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "T-Labs", "Editor",
+                Collections.singletonList(editorRole));
         final SesamUser issuer = new Issuer("wunderland@sesam.de", defaultPassword, "Herr", "Wunderland",
-                Collections.singletonList(issuerRole2), new Room("106"));
+                Collections.singletonList(issuerRole), new Room("106"));
 
         return List.of(admin, editor, issuer);
     }
@@ -150,10 +190,8 @@ public class InitializeDatabasePresentation implements InitializingBean {
 
         List<InternalCredential> internalCredentials = new ArrayList<>();
 
-        internalCredentials.add(new InternalCredential("U-Member", "$U-MEMBER", "university", formMember(), checklistMember()));
-        internalCredentials.add(new InternalCredential("T-Member", "$T-MEMBER", "tlabs", formMember(), checklistMember()));
-        internalCredentials.add(new InternalCredential("U-Training", "$U-TRAINING", "university", formTraining(), checklistTraining()));
-        internalCredentials.add(new InternalCredential("T-Training", "$T-TRAINING", "tlabs", formTraining(), checklistTraining()));
+        internalCredentials.add(new InternalCredential("T-Member", "1.0", "$T-MEMBER", "tlabs", formMember(), checklistMember()));
+        internalCredentials.add(new InternalCredential("T-Training", "1.0", "$T-TRAINING", "tlabs", formTraining(), checklistTraining()));
 
         return internalCredentials;
     }
@@ -243,18 +281,23 @@ public class InitializeDatabasePresentation implements InitializingBean {
 
     private ProofConfig createProofConfig() {
         final ProofConfig proofConfig = new ProofConfig();
-        proofConfig.setDescription("Bitte präsentieren Sie ein U-Member-Credential.");
+        proofConfig.setDescription("Bitte präsentieren Sie ein U-Member oder T-Member Credential.");
 
         final Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
         final ProofPredicateInfo predicateInfo = new ProofPredicateInfo();
         predicateInfo.setName("expiration_date");
         predicateInfo.setPredicateType(">");
         predicateInfo.setPredicateValue("$TODAY-YYYYMMDD");
+
         final List<AttributeFilter> predicateRestrictions = new ArrayList<>();
         predicateRestrictions.add(new AttributeFilter());
+        predicateRestrictions.add(new AttributeFilter());
         predicateRestrictions.get(0).setCredentialDefinitionId("$U-MEMBER");
+        predicateRestrictions.get(1).setCredentialDefinitionId("$T-MEMBER");
+
         predicateInfo.setRestrictions(predicateRestrictions);
         requestedPredicates.put("expiration_date", predicateInfo);
+
         proofConfig.setRequestedPredicates(requestedPredicates);
 
         return proofConfig;
