@@ -10,9 +10,8 @@ export interface Door {
     name: string
     coordinates: Coordinates[]
     credentials: Credential[]
-    proofConfigIn: DoorConfiguration
-    proofConfigOut: DoorConfiguration
-
+    proofConfigIn: DoorConfiguration[]
+    proofConfigOut: DoorConfiguration[]
     roomId: number
 }
 

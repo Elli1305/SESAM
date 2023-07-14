@@ -12,6 +12,9 @@ public class UpdateCredentialCmd {
     private String name;
 
     @NotBlank
+    private String version;
+
+    @NotBlank
     private String credentialDefinitionId;
 
     @NotBlank
@@ -63,5 +66,13 @@ public class UpdateCredentialCmd {
 
     public void setConditions(List<UpdateConditionCmd> conditions) {
         this.conditions = conditions;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

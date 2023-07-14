@@ -3,7 +3,6 @@ package com.gpse.sesam.web.controller;
 import com.gpse.sesam.domain.location.door.config.DoorConfigService;
 import com.gpse.sesam.util.ConfigCmdMapper;
 import com.gpse.sesam.web.cmd.TwoWayDoorConfigCmd;
-import com.gpse.sesam.web.cmd.TwoWayDoorConfigViewCmd;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class DoorConfigController {
 
 	private final DoorConfigService doorConfigurationService;
-
 	public DoorConfigController(final DoorConfigService doorConfigurationService) {
 		this.doorConfigurationService = doorConfigurationService;
 	}
@@ -32,8 +30,9 @@ public class DoorConfigController {
 	}
 
 	@GetMapping("/{id}")
-	public TwoWayDoorConfigViewCmd getDoorConfigForBothDirections(@PathVariable("id") final String id) {
-		return new TwoWayDoorConfigViewCmd(doorConfigurationService.getDoorConfig(id + "_in"),
+	public TwoWayDoorConfigCmd getDoorConfigForBothDirections(@PathVariable("id") final String id) {
+		return new TwoWayDoorConfigCmd(doorConfigurationService.getDoorConfig(id + "_in"),
 				doorConfigurationService.getDoorConfig(id + "_out"));
 	}
+
 }

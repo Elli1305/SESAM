@@ -1,6 +1,6 @@
 <template>
   <q-page class="column justify-evenly items-center" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{t('imprint.imprintEditorTitle')}}</p>
+    <p class="row text-h3 justify-center">{{t('admin.imprint.imprintEditorTitle')}}</p>
       <div class="row justify-evenly no-wrap" style="width: 80vw; height: 50vh">
         <q-btn class="self-end q-mr-lg" round icon="delete" color="negative" text-color="positive" @click="showDeleteDialog" style="width: 4em; height: 4em"/>
         <q-editor
@@ -18,7 +18,7 @@
               undo: {icon: 'undo', tip: ''},
               redo: {icon: 'redo', tip: ''}}"
             v-model="editorContent"
-            style="width: 50vw"/>
+            style="width: 50vw; background-color: var(--bg-color); color: var(--text-color)"/>
         <q-btn class="self-end q-ml-lg" round icon="save" color="positive" text-color="negative" @click="showConfirmDialog" style="width: 4em; height: 4em"/>
       </div>
     <q-dialog v-model="confirmDialog">
@@ -27,11 +27,11 @@
           <div class="text-h6">Bestätigen</div>
           </q-card-section>
         <q-card-section class="row items-center">
-          <div class="q-mx-sm">{{t('imprint.imprintEditorMessageSave')}}</div>
+          <div class="q-mx-sm">{{t('admin.imprint.imprintEditorMessageSave')}}</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat :label="t('imprint.cancel')" color="primary" @click="confirmDialog = false"/>
-          <q-btn flat :label="t('imprint.save')" color="primary" @click="postText"/>
+          <q-btn flat :label="t('common.cancel')" color="primary" @click="confirmDialog = false"/>
+          <q-btn flat :label="t('common.save')" color="primary" @click="postText"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -42,11 +42,11 @@
           <div class="text-h6">Löschen bestätigen</div>
         </q-card-section>
         <q-card-section class="row items-center">
-          <div class="q-mx-sm">{{t('imprint.imprintEditorMessageDelete')}}</div>
+          <div class="q-mx-sm">{{t('admin.imprint.imprintEditorMessageDelete')}}</div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat :label="t('imprint.cancel')" color="primary" @click="deleteDialog = false"/>
-          <q-btn flat :label="t('imprint.delete')" color="primary" @click="deletePostedContent"/>
+          <q-btn flat :label="t('common.cancel')" color="primary" @click="deleteDialog = false"/>
+          <q-btn flat :label="t('common.delete')" color="primary" @click="deletePostedContent"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -90,7 +90,6 @@ export default {
     };
 
     const postText = () => {
-      console.log('postText called');
       postImprintContent(editorContent.value)
           .then(() => {
             imprintContent.value = editorContent.value;
@@ -99,7 +98,7 @@ export default {
 
             $q.notify({
               type: 'positive',
-              message: t('imprint.imprintEditorMessageSaveConfirmation'),
+              message: t('admin.imprint.imprintEditorMessageSaveConfirmation'),
               position: 'bottom',
               color: "positive",
               textColor: "negative",
@@ -125,7 +124,7 @@ export default {
 
             $q.notify({
               type: 'negative',
-              message: t('imprint.imprintEditorMessageDeleteConfirmation'),
+              message: t('admin.imprint.imprintEditorMessageDeleteConfirmation'),
               position: 'bottom',
               timeout: 1500,
               color: "negative",
@@ -133,7 +132,7 @@ export default {
             });
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           });
     };
 
@@ -145,7 +144,6 @@ export default {
     const loadLatestContent = async () => {
       try {
         const response = await getLatestImprint();
-        console.log(response.data);
         editorContent.value = response.data;
       } catch (error) {
         console.error(error);

@@ -10,18 +10,33 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+/**
+ * Diese Klasse implementiert den ImprintService, der für das Erstellen, Abrufen und Löschen von Imprint-Einträgen
+ * verantwortlich ist.
+ */
 @Service
 public class ImprintServiceImpl implements ImprintService {
 
 	@Autowired
 	private ImprintRepository imprintRepository;
 
+
+	/**
+	 * Erstellt einen neuen Imprint-Eintrag mit dem angegebenen Inhalt und speichert ihn in der Datenbank.
+	 *
+	 * @param content der Inhalt des Imprint-Eintrags
+	 */
 	@Override
 	public void createImprintEntry(final String content) {
 		final Imprint newEntry = new Imprint(content, LocalDateTime.now());
 		imprintRepository.save(newEntry);
 	}
 
+	/**
+	 * Ruft den neuesten Imprint-Eintrag aus der Datenbank ab.
+	 *
+	 * @return der Inhalt des neuesten Imprint-Eintrags oder null, wenn kein Eintrag vorhanden ist
+	 */
 	@Override
 	public String getLatestImprintEntry() {
 		final List<Imprint> imprintEntries = StreamSupport
@@ -34,6 +49,9 @@ public class ImprintServiceImpl implements ImprintService {
 				.orElse(null);
 	}
 
+	/**
+	 * Löscht alle Imprint-Einträge aus der Datenbank.
+	 */
 	@Override
 	public void deleteImprintEntry() {
 		imprintRepository.deleteAll();

@@ -1,13 +1,16 @@
 package com.gpse.sesam.web.cmd;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DoorConfigCmd {
-
+	private String description;
 
 	private String doorId;
-	private String description;
-	private List<ConfigPartsCmd> configParts;
+	private List<ConfigPartsCmd> configParts = new ArrayList<>();
 
 	public List<ConfigPartsCmd> getConfigParts() {
 		return configParts;
@@ -29,7 +32,8 @@ public class DoorConfigCmd {
 		return doorId;
 	}
 
-	public void setDoorId(final String doorId) {
-		this.doorId = doorId;
+	public void addConfigPart(final ConfigPartsCmd configPartsCmd) {
+		configParts.add(configPartsCmd);
 	}
+
 }

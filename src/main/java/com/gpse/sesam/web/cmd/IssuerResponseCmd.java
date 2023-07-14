@@ -1,20 +1,18 @@
 package com.gpse.sesam.web.cmd;
 
-import com.gpse.sesam.domain.location.room.Room;
-
 import java.util.List;
 
 public class IssuerResponseCmd {
 
 	private Long issuerId;
 	private List<Long> credentials;
-	private Room room;
+	private Long room;
 
 	protected IssuerResponseCmd() {
 
 	}
 
-	public IssuerResponseCmd(final java.util.List<Long> credentials, final Room room) {
+	public IssuerResponseCmd(final java.util.List<Long> credentials, final Long room) {
 		this.credentials = credentials;
 		this.room = room;
 	}
@@ -23,7 +21,7 @@ public class IssuerResponseCmd {
 		this.credentials = credentials;
 	}
 
-	public void setRoom(final Room room) {
+	public void setRoom(final Long room) {
 		this.room = room;
 	}
 
@@ -31,7 +29,7 @@ public class IssuerResponseCmd {
 		return credentials;
 	}
 
-	public Room getRoom() {
+	public Long getRoom() {
 		return room;
 	}
 

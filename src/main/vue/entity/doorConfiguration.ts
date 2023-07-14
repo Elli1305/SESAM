@@ -1,4 +1,4 @@
-import {FormEntry} from "@/main/vue/entity/credentialDefinition";
+import {FormEntry, InternalCredential} from "@/main/vue/entity/credentialDefinition";
 
 
 export enum Direction {
@@ -8,22 +8,24 @@ export enum Direction {
 }
 
 export interface TwoWayDoorConfiguration {
-    doorConfigIn: DoorConfiguration,
+    doorConfigIn: DoorConfiguration
     doorConfigOut: DoorConfiguration
+    startTime?: string
+    endTime?: string
+    baseConfig?: boolean
 }
 
 export interface DoorConfiguration {
 
     description: string
     configParts: Config[],
-
-    attributeFilters: AttributeFilter[]
-
 }
 
 export interface Config {
 
-    credentials: Credential[]
+    credentials: InternalCredential[]
+
+    attributeFilters: AttributeFilter[]
 
 }
 
@@ -43,3 +45,4 @@ export interface AttributeFilter {
     currentDate?: boolean
 
 }
+

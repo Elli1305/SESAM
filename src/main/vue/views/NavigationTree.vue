@@ -2,12 +2,13 @@
   <q-drawer
       show-if-above bordered
       v-model="show"
+      style="background-color: var(--bg-color); color: var(--text-color)"
       content-class="bg-grey-1">
     <q-list>
       <q-item-label
           header
           class="text-grey-8">
-        {{ t('floorplan.locations') }}
+        {{ t('floorPlan.locations') }}
       </q-item-label>
       <Node
           v-for="node in locationTreeStructure"

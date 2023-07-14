@@ -2,28 +2,20 @@ package com.gpse.sesam.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gpse.sesam.domain.credential.credentials.Credential;
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
-import com.gpse.sesam.web.cmd.CreateCredentialCmd;
-import com.gpse.sesam.web.cmd.IssueCredentialAttributeCmd;
-import com.gpse.sesam.web.cmd.UpdateCredentialCmd;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.location.LocationService;
+import com.gpse.sesam.web.cmd.*;
 import com.gpse.sesam.web.exception.CredentialNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,10 +24,15 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class CredentialController {
 	private final CredentialService service;
+	private final ExternalCredentialService externalCredentialService;
+	private final LocationService locationService;
 
 	@Autowired
-	public CredentialController(final CredentialService service) {
+	public CredentialController(final CredentialService service, ExternalCredentialService externalCredentialService,
+								LocationService locationService) {
 		this.service = service;
+		this.externalCredentialService = externalCredentialService;
+		this.locationService = locationService;
 	}
 
 	@GetMapping("/credentials")
@@ -45,7 +42,7 @@ public class CredentialController {
 
 	@GetMapping("/external_credentials")
 	public List<ExternalCredential> getExternalCredential() {
-		return service.getExternalCredentials();
+		return externalCredentialService.getExternalCredentials();
 	}
 
 	@GetMapping("/credentials/getAll")
@@ -83,8 +80,9 @@ public class CredentialController {
 	@PostMapping(value = "/credentials")
 	@ResponseStatus(HttpStatus.CREATED)
 	@Secured("ADMINISTRATOR")
-	public void create(@Valid @RequestBody final CreateCredentialCmd credential) {
-		service.create(credential);
+	public void create(@RequestParam(defaultValue = "false") boolean createOnLedger,
+					   @Valid @RequestBody CreateCredentialCmd credential) throws JsonProcessingException {
+		service.create(createOnLedger, credential);
 	}
 
 	@PutMapping(value = "/credentials/{id}")
@@ -99,5 +97,87 @@ public class CredentialController {
 	@Secured("ADMINISTRATOR")
 	public void delete(@PathVariable final Long id) {
 		service.delete(id);
+	}
+
+	@GetMapping(value = "/allcredentials")
+	public List<CredentialCmd> credentials() {
+		return service.getAllCredentialsForView();
+	}
+
+	@GetMapping(value = "/externalcredentialview")
+	public List<ExternalCredentialCmd> externalCredentials() {
+		return externalCredentialService.getAllExternal();
+	}
+
+	@GetMapping(value = "/externalcredentialsbylocation/{id}")
+	public List<ExternalCredentialCmd> externalCredentialsByLocation(@PathVariable final Long id) {
+		return externalCredentialService.getAllExternalByLocation(id);
+	}
+
+	@GetMapping(value = "/allcredentialview")
+	public List<AllCredentialCmd> allCredentials() {
+		return service.getAllForView();
+	}
+
+	@GetMapping(value = "/allbylocation/{id}")
+	public List<AllCredentialCmd> allByLocation(@PathVariable final Long id) {
+		return service.getAllCredentialsByLocation(id);
+	}
+
+	@PostMapping(value = "/external_credentials")
+	@ResponseStatus(HttpStatus.CREATED)
+	@Secured("ADMINISTRATOR")
+	public void createExternalCredential(@Valid @RequestBody CreateExternalCredentialCmd credential) {
+		externalCredentialService.createExternalCredential(credential);
+	}
+
+	@GetMapping(value = "/external_credentials/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public ExternalCredential externalCredential(@PathVariable Long id) {
+		final Optional<ExternalCredential> credential = externalCredentialService.getExternalCredential(id);
+
+		if (credential.isPresent()) {
+			return credential.get();
+		}
+
+		throw new CredentialNotFoundException();
+	}
+
+	@PutMapping(value = "/external_credentials/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Secured("ADMINISTRATOR")
+	public void updateExternalCredential(@PathVariable Long id,
+										 @Valid @RequestBody CreateExternalCredentialCmd credential) {
+		externalCredentialService.updateExternalCredential(id, credential);
+	}
+
+	@DeleteMapping(value = "/external_credentials/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Secured("ADMINISTRATOR")
+	public void deleteExternalCredential(@PathVariable Long id) {
+		externalCredentialService.deleteExternalCredential(id);
+	}
+
+	@GetMapping(value = "/export_credentials")
+	@ResponseStatus(HttpStatus.OK)
+	public CredentialExportCmd exportCredentials() {
+		return service.exportCredentials();
+	}
+
+	@PostMapping(value = "/import_credentials")
+	@ResponseStatus(HttpStatus.CREATED)
+	@Secured("ADMINISTRATOR")
+	public void importCredentials(@Valid @RequestBody final CredentialExportCmd credentialExportCmd) {
+		service.importCredentials(credentialExportCmd);
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler({ConnectException.class, IllegalArgumentException.class})
+	public void importException() {
+	}
+
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(JsonProcessingException.class)
+	public void jsonException() {
 	}
 }

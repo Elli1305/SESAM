@@ -2,6 +2,7 @@ package com.gpse.sesam.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gpse.sesam.domain.location.DeleteLocationServiceImpl;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.floor.FloorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,12 @@ public class FloorController {
 
 	private final FloorService floorService;
 
+	private final DeleteLocationServiceImpl deleteLocationService;
+
 	@Autowired
-	public FloorController(final FloorService floorService) {
+	public FloorController(final FloorService floorService, DeleteLocationServiceImpl deleteLocationService) {
 		this.floorService = floorService;
+		this.deleteLocationService = deleteLocationService;
 	}
 
 	@PostMapping(path = "/uploadImage", consumes = {MediaType.APPLICATION_OCTET_STREAM_VALUE,
@@ -48,7 +52,7 @@ public class FloorController {
 	@DeleteMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteById(@PathVariable("id") final Long id) {
-		floorService.deleteById(id);
+		deleteLocationService.floorDeleteById(id);
 	}
 
 }

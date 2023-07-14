@@ -1,8 +1,11 @@
 package com.gpse.sesam.web.cmd;
 
-import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.issue.validation.AbstractValidationRule;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 public class UpdateAttributeCmd {
 	private Long id;
@@ -15,6 +18,8 @@ public class UpdateAttributeCmd {
 
 	@NotBlank
 	private String attributeName;
+
+	private List<AbstractValidationRule> validationRules;
 
 	public Long getId() {
 		return id;
@@ -47,5 +52,14 @@ public class UpdateAttributeCmd {
 	public void setAttributeName(final String attributeName) {
 		this.attributeName = attributeName;
 	}
+
+	public List<AbstractValidationRule> getValidationRules() {
+		return validationRules;
+	}
+
+	public void setValidationRules(List<AbstractValidationRule> validationRules) {
+		this.validationRules = validationRules;
+	}
+
 }
 

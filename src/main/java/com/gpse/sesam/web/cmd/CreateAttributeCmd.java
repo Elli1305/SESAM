@@ -1,9 +1,14 @@
 package com.gpse.sesam.web.cmd;
 
-import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.issue.validation.AbstractValidationRule;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateAttributeCmd {
 	@NotBlank
 	private String name;
@@ -13,6 +18,8 @@ public class CreateAttributeCmd {
 
 	@NotBlank
 	private String attributeName;
+
+	private List<AbstractValidationRule> validationRules;
 
 	public String getName() {
 		return name;
@@ -34,7 +41,15 @@ public class CreateAttributeCmd {
 		return attributeName;
 	}
 
-	public void setAttributeName(final String attributeName) {
+	public void setAttributeName(String attributeName) {
 		this.attributeName = attributeName;
+	}
+
+	public List<AbstractValidationRule> getValidationRules() {
+		return validationRules;
+	}
+
+	public void setValidationRules(List<AbstractValidationRule> validationRules) {
+		this.validationRules = validationRules;
 	}
 }

@@ -3,8 +3,8 @@
     <p class="row text-h3 justify-center">Login</p>
     <q-form @submit.prevent="login" class="column self-center items-center justify-evenly no-wrap" style="width: 22.5em; height: 25em">
       <div class="full-width">
-        <q-input class="q-my-sm" outlined v-model="eMail" label="E-Mail"/>
-        <q-input class="q-my-sm" outlined :type="isPwd ? 'password' : 'text'" v-model="password" :label="t('login.password')">
+        <q-input class="q-my-sm" outlined v-model="eMail" :label="t('profile.email')"/>
+        <q-input class="q-my-sm" outlined :type="isPwd ? 'password' : 'text'" v-model="password" :label="t('profile.password')">
           <template v-slot:append>
             <q-icon
                 :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -17,11 +17,11 @@
         </q-input>
       </div>
       <p class="full-width" style="font-size: 1em">{{ t("login.forgotPassword") }}
-        <router-link to="./passwordreset">{{t('login.resetPassword')}}</router-link>
+        <router-link class="text-info" to="./passwordreset">{{t('login.resetPassword')}}</router-link>
       </p>
       <q-btn class="full-width" color="primary" text-color="accent" label="Login" type="submit"/>
       <p class="full-width" style="font-size: 1em">{{ t("login.notRegistered") }}
-        <router-link to="./signup">{{ t("login.toRegister") }}</router-link>
+        <router-link class="text-info" to="./signup">{{ t("login.toRegister") }}</router-link>
       </p>
     </q-form>
   </q-page>
@@ -50,15 +50,13 @@ export default {
     async function login() {
       await userStore.requestToken({eMail: eMail.value, password: password.value})
           .catch((error) => {
-            console.log(error)
             if(error.response.status === 403) {
               $q.notify({
                 type: 'negative',
                 message: t('login.loginFailed'),
                 caption: t('login.wrongEmailPassword'),
-                position: "top",
                 color: 'negative',
-                textColor: 'postitive',
+                textColor: 'positive',
                 timeout: 3000,
                 classes: "loginNotify"
               })
@@ -67,9 +65,8 @@ export default {
                 type: 'negative',
                 message: t('login.loginFailed'),
                 caption: t('common.internalServerError'),
-                position: "top",
                 color: 'negative',
-                textColor: 'postitive',
+                textColor: 'positive',
                 timeout: 3000,
                 classes: "loginNotify"
               })
@@ -78,9 +75,8 @@ export default {
                 type: 'negative',
                 message: t('login.loginFailed'),
                 caption: t('common.unknownError'),
-                position: "top",
                 color: 'negative',
-                textColor: 'postitive',
+                textColor: 'positive',
                 timeout: 3000,
                 classes: "loginNotify"
               })

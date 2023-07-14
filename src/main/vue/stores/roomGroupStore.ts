@@ -1,8 +1,8 @@
 import {defineStore} from "pinia";
-import {RoomGroup} from "@/main/vue/entity/roomGroup";
+import {GroupConfig, RoomGroup, RoomsAndDoors} from "@/main/vue/entity/roomGroup";
 import {ref, Ref} from "vue";
 import api from "@/main/vue/api";
-import {Building} from "@/main/vue/entity/roomGroup";
+import {Building, Room} from "@/main/vue/entity/roomGroup";
 
 
 export const useRoomGroupStore = defineStore('roomGroups', () => {
@@ -10,6 +10,8 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
     const allRoomGroups: Ref<RoomGroup[]> = ref([])
     const filteredGroups: Ref<RoomGroup[]> = ref([])
     let roomGroupByName: Ref<RoomGroup | null> = ref(null)
+    const rooms: Ref<Room[]> = ref([])
+    const roomsAndDoors: Ref<RoomsAndDoors[] | null> = ref(null)
 
     function getRoomGroups(): Promise<RoomGroup[]> {
         return new Promise((resolve, reject) => {
@@ -83,6 +85,36 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
         })
     }
 
+    function getRoomsAndDoorsByGroupId(id: bigint): Promise<RoomsAndDoors[]> {
+        return new Promise((resolve, reject) => {
+            api.roomGroups.getDoorsAndRooms(id).then((response) => {
+                roomsAndDoors.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+    function getRoomsByGroupId(id: bigint): Promise<Room[]> {
+        return new Promise((resolve, reject) => {
+            api.roomGroups.getRooms(id).then((response ) => {
+                rooms.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+
+    function setGroupConfig(config: GroupConfig){
+        return new Promise<void>((resolve, reject) => {
+            api.roomGroups.setGroupConfig(config).then(_ => resolve())
+                .catch(reject);
+        });
+    }
+
     return {
         allRoomGroups,
         filteredGroups,
@@ -92,5 +124,10 @@ export const useRoomGroupStore = defineStore('roomGroups', () => {
         save,
         makeNewGroup,
         deleteGroup,
+        roomsAndDoors,
+        getRoomsAndDoorsByGroupId,
+        getRoomsByGroupId,
+        rooms,
+        setGroupConfig
     }
 })

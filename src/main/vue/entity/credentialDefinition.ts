@@ -2,9 +2,12 @@ import {Issuer} from "@/main/vue/entity/issuer";
 
 type CredentialFormEntryType = "text" | "number" | "date";
 
-export interface Credential {
+export type ComparisonType = "EQUAL" | "NOT_EQUAL" | "LESS_THAN" | "GREATER_THAN" | "LESS_EQUAL" | "GREATER_EQUAL";
+
+export interface InternalCredential {
     id: bigint;
     name: string;
+    version: string;
     agent: string;
     credentialDefinitionId: string;
     form: FormEntry[];
@@ -20,8 +23,41 @@ export interface IssueCredential {
         label: string;
         type: CredentialFormEntryType;
         value: string | null;
+        validationRules: (ComparisonRule | RangeRule | RegExRule | LengthRule)[]
     }[];
     checklist: ChecklistEntry[];
+}
+
+export interface ComparisonRule {
+    kind: "comparison"
+    comparisonType: ComparisonType
+    content: string
+    currentDay: boolean
+    compareWithAttribute: boolean
+    attributeName: string
+}
+
+export interface RangeRule {
+    kind: "range"
+    valueFrom: string
+    valueTo: string
+    compareWithAttribute: boolean
+    attributeNameFrom: string,
+    attributeNameTo: string
+}
+
+export interface RegExRule {
+    kind: "regEx"
+    regEx: string
+    description: string
+}
+
+export interface LengthRule {
+    kind: "length"
+    comparisonType: ComparisonType
+    length: number
+    compareWithAttribute: boolean
+    attributeName: string
 }
 
 export interface FormEntry {
@@ -29,6 +65,7 @@ export interface FormEntry {
     attributeName: string
     label: string;
     type: CredentialFormEntryType;
+    validationRules: (ComparisonRule | RangeRule | RegExRule | LengthRule)[]
 }
 
 export interface ChecklistEntry {
@@ -39,13 +76,15 @@ export interface ChecklistEntry {
 export interface ExternalCredential {
     id: bigint;
     name: string;
+    version: string;
     credentialDefinitionId: string;
+    form: FormEntry[];
 }
 
 export interface Category {
     id: bigint;
     name: string;
-    credentials: Credential[];
+    credentials: InternalCredential[];
     externalCredentials: ExternalCredential[];
 }
 
@@ -64,10 +103,11 @@ export interface CredentialCmd {
     issuerRoom: string[];
 }
 
-interface CreateAttribute {
+export interface CreateAttribute {
     type: string;
     name: string;
     attributeName: string;
+    validationRules: (ComparisonRule | RangeRule | RegExRule | LengthRule)[]
 }
 
 interface CreateCondition {
@@ -76,11 +116,19 @@ interface CreateCondition {
 
 export interface CreateCredential {
     name: string;
+    version: string;
     agent: string;
     credentialDefinitionId: string;
 
     attributes: CreateAttribute[];
     conditions: CreateCondition[];
+}
+
+export interface CreateExternalCredential {
+    name: string;
+    version: string;
+    credentialDefinitionId: string;
+    attributes: CreateAttribute[];
 }
 
 export interface CategoryCmd {
@@ -93,4 +141,43 @@ export interface CategoryResponse {
     name: string;
     credentials: bigint[];
     externalCredentials: bigint[];
+}
+
+export interface ExternalCredentialCmd {
+    categoryName: string;
+    credentialName: string;
+    internalCredential: string[];
+}
+
+export interface AllCredentialCmd {
+    categoryName: string;
+    credentialName: string;
+    type: string;
+    externalCredential: string[];
+    issuerName: string[];
+    issuerRoom: string[];
+}
+
+export interface CredentialSchema {
+    name: string;
+    credentialDefinitionId: string;
+    agent?: string;
+    ver: string;
+    attrs: string[];
+}
+
+interface InternalCredentialExport {
+    name: string;
+    version: string;
+    agent: string;
+    credentialDefinitionId: string;
+    attributes: Map<String, any>[];
+    conditions: string[];
+}
+
+export type ExternalCredentialExport = Omit<InternalCredentialExport, 'conditions' | 'agent'>;
+
+export interface CredentialExport {
+    internalCredentials: InternalCredentialExport[];
+    externalCredentials: ExternalCredentialExport[];
 }

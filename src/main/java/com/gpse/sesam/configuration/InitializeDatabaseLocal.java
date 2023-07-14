@@ -1,30 +1,38 @@
 package com.gpse.sesam.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.credentials.InternalCredential;
-import com.gpse.sesam.domain.credential.credentials.CredentialService;
-import com.gpse.sesam.domain.credential.credentials.ExternalCredential;
-import com.gpse.sesam.domain.credential.issuing.ChecklistEntry;
-import com.gpse.sesam.domain.credential.issuing.FormEntry;
-import com.gpse.sesam.domain.credential.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
+import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
+import com.gpse.sesam.domain.credential.issue.issuing.ChecklistEntry;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntry;
+import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
+import com.gpse.sesam.domain.credential.issue.validation.AbstractValidationRule;
+import com.gpse.sesam.domain.credential.issue.validation.ComparisonRule;
+import com.gpse.sesam.domain.credential.issue.validation.ComparisonType;
+import com.gpse.sesam.domain.credential.issue.validation.LengthRule;
+import com.gpse.sesam.domain.credential.issue.validation.RegExRule;
+import com.gpse.sesam.domain.filestorage.FileStorageService;
 import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
-import com.gpse.sesam.domain.location.RoomGroupService;
-import com.gpse.sesam.domain.location.RoomGroups;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.util.GeoJsonParser;
+import com.gpse.sesam.web.exception.FileStorageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -37,7 +45,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,16 +62,19 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private final CredentialService credentialService;
 	private final ColorsService colorsService;
 
+	private final FileStorageService fileStorageService;
+
 	private final CategoryService categoryService;
 
 	private final PasswordEncoder passwordEncoder;
 
 	private final List<Location> locationsList = new ArrayList<>();
 
+	@SuppressWarnings("ParameterNumber")
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
 								   final CredentialService credentialService, final ColorsService colorsService,
 								   final CategoryService categoryService, final PasswordEncoder passwordEncoder,
-								   final RoomGroupService roomGroupService) {
+								   final RoomGroupService roomGroupService, FileStorageService fileStorageService) {
 		this.credentialService = credentialService;
 		this.colorsService = colorsService;
 		this.categoryService = categoryService;
@@ -72,6 +82,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		this.locationService = locationService;
 		this.userService = userService;
 		this.roomGroupService = roomGroupService;
+		this.fileStorageService = fileStorageService;
 	}
 
 	@Override
@@ -84,6 +95,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<RoomGroups> roomGroups = roomGroups(locations);
 
 		colorsService.saveAll(colors);
+		setLogo();
 		locationService.saveAll(locations);
 		credentialService.saveAll(credentials);
 		locationService.saveAll(locationsList);
@@ -93,33 +105,74 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	}
 
 	private List<Colors> createColors() {
-		final Colors defaultColors = new Colors();
-		defaultColors.setDefaultColors(true);
-		setColors(defaultColors);
+		final Colors defaultLight = new Colors();
+		defaultLight.setDefaultColors(true);
+		defaultLight.setTheme(ColorTheme.LIGHT);
+		setLightColors(defaultLight);
+		defaultLight.setLogoPath("T_logo_white.svg");
 
-		final Colors currentColors = new Colors();
-		currentColors.setDefaultColors(false);
-		setColors(currentColors);
+		final Colors defaultDark = new Colors();
+		defaultDark.setDefaultColors(true);
+		defaultDark.setTheme(ColorTheme.DARK);
+		setDarkColors(defaultDark);
+		defaultDark.setLogoPath("T_logo_black.svg");
+
+		final Colors currentLight = new Colors();
+		currentLight.setDefaultColors(false);
+		currentLight.setTheme(ColorTheme.LIGHT);
+		setLightColors(currentLight);
+
+		final Colors currentDark = new Colors();
+		currentDark.setDefaultColors(false);
+		currentDark.setTheme(ColorTheme.DARK);
+		setDarkColors(currentDark);
 
 		final List<Colors> colors = new ArrayList<>();
-		colors.add(defaultColors);
-		colors.add(currentColors);
+		colors.add(defaultLight);
+		colors.add(defaultDark);
+		colors.add(currentLight);
+		colors.add(currentDark);
 
 		return colors;
 	}
 
-	private void setColors(final Colors defaultColors) {
+	private void setLightColors(final Colors defaultColors) {
+		defaultColors.setLogoPath("/Logo.svg");
 		defaultColors.setBgC("#ffffff");
 		defaultColors.setTextC("#000000");
 		defaultColors.setPrimaryColor("#e20074");
 		defaultColors.setSecondary("#f6b2d5");
 		defaultColors.setAccent("#ffffff");
 		defaultColors.setDark("#808080");
-		defaultColors.setLightBlue("#7d99a7");
+		defaultColors.setLight("#9e9e9e");
 		defaultColors.setPositive("#dcdcdc");
 		defaultColors.setNegative("#505050");
 		defaultColors.setInfo("#0074E2");
 		defaultColors.setWarning("#fec705");
+	}
+
+	private void setDarkColors(final Colors defaultColors) {
+		defaultColors.setLogoPath("/Logo-Dark.svg");
+		defaultColors.setBgC("#303030");
+		defaultColors.setTextC("#ffffff");
+		defaultColors.setPrimaryColor("#e20074");
+		defaultColors.setSecondary("#f6b2d5");
+		defaultColors.setAccent("#000000");
+		defaultColors.setDark("#808080");
+		defaultColors.setLight("#9e9e9e");
+		defaultColors.setPositive("#dcdcdc");
+		defaultColors.setNegative("#505050");
+		defaultColors.setInfo("#0074E2");
+		defaultColors.setWarning("#fec705");
+	}
+
+	private void setLogo() {
+		try {
+			fileStorageService.reset(ColorTheme.LIGHT);
+			fileStorageService.reset(ColorTheme.DARK);
+		} catch (FileStorageException ignored) {
+			LOG.warn("Unable to reset fileStorageService.");
+		}
 	}
 
 	private List<SesamUser> createUsers(final List<InternalCredential> credentials) {
@@ -149,8 +202,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final SesamUserRole editorRole21 = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
 		editorRole21.setGranted(true);
 
-		final SesamUser jana = new SesamUser("jana@test.de", defaultPassword, "Jana", "Editor-Issuer",
-				List.of(editorRole21, issuerRole20));
+		final SesamUser jana = new Issuer("jana@test.de", defaultPassword, "Jana", "Editor-Issuer",
+				List.of(editorRole21, issuerRole20), null);
 
 
 		return List.of(admin, issuer, editor, user, jana);
@@ -195,13 +248,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		// breaks jar build from mater
 //		final String jsonContent = readJsonFile();
 //		final List<List<Coordinate>> roomCoordinates = createRoomCoordinates(jsonContent);
-
+//
 //		for (int i = 0; i < roomCoordinates.size(); i++) {
 //			rooms.get(i).setCoordinates(roomCoordinates.get(i));
 //		}
-
+//
 //		final List<List<Coordinate>> doorCoordinates = createDoorCoordinates(jsonContent);
-
+//
 //		for (int i = 0; i < doorCoordinates.size(); i++) {
 //			final Door door = new Door("door" + i, doorCoordinates.get(i));
 //			rooms.get(i).setDoors(List.of(door));
@@ -245,17 +298,59 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private List<FormEntry> form() {
 		final List<FormEntry> form = new ArrayList<>();
-		final FormEntry id = new FormEntry("ID", FormEntryType.NUMBER, "id");
-		final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name");
-		final FormEntry lastName = new FormEntry("Nachname", FormEntryType.TEXT, "last_name");
-		final FormEntry birthDate = new FormEntry("Geburtstagsdatum", FormEntryType.DATE, "birth_date");
-		final FormEntry date = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
+		final FormEntry id = new FormEntry("ID", FormEntryType.NUMBER, "id", getIdValidationRules());
+		final FormEntry firstName = new FormEntry(
+				"Vorname", FormEntryType.TEXT, "first_name", getFirstNameValidationRules());
+		final FormEntry lastName = new FormEntry(
+				"Nachname", FormEntryType.TEXT, "last_name", getLastNameValidationRules());
+		final FormEntry birthDate = new FormEntry(
+				"Geburtstagsdatum", FormEntryType.DATE, "birth_date", getBirthDateValidationRules());
+		final FormEntry date = new FormEntry(
+				"Ablaufdatum", FormEntryType.DATE, "expiration_date", getDateValidationRules());
 		form.add(id);
 		form.add(firstName);
 		form.add(lastName);
 		form.add(birthDate);
 		form.add(date);
 		return form;
+	}
+
+	private List<AbstractValidationRule> getIdValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new ComparisonRule(ComparisonType.GREATER_EQUAL, "0"));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getFirstNameValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new RegExRule(
+				"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅ"
+						+ "ĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$",
+				"Wähle eine realen Name / Choose a real name"));
+		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getLastNameValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new RegExRule(
+				"^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅ"
+						+ "ĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$",
+				"Wähle eine realen Name / Choose a real name"));
+		validationRules.add(new LengthRule(ComparisonType.LESS_THAN, 50));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getBirthDateValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new ComparisonRule(ComparisonType.LESS_THAN, true, "Ablaufdatum"));
+		return validationRules;
+	}
+
+	private List<AbstractValidationRule> getDateValidationRules() {
+		final List<AbstractValidationRule> validationRules = new ArrayList<>();
+		validationRules.add(new ComparisonRule(ComparisonType.GREATER_THAN, true, "Geburtstagsdatum"));
+		return validationRules;
 	}
 
 	private List<ChecklistEntry> checklist() {
@@ -304,22 +399,18 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		issuers.add(issuer1);
 		issuers.add(issuer2);
 
-		// Safety-Credential
-		final InternalCredential safety = new InternalCredential("Sicherheitsbelehrung-Uni", "$U-MEMBER",
-				"university", form, checklist);
-		safety.addIssuer(issuer1);
-		safety.addIssuer(issuer2);
-
 		final List<ChecklistEntry> checklist3 = checklist();
 
 		final List<FormEntry> form3 = form();  //Form
-		final InternalCredential safety2 = new InternalCredential("Sicherheitsbelehrung-FH", "$T-TRAINING",
+		final InternalCredential safety2 = new InternalCredential("T-Member", "1.0", "$T-MEMBER",
 				"tlabs", form3, checklist3);
 		safety2.addIssuer(issuer1);
 		safety2.addIssuer(issuer2);
+		issuer1.setCredentials(List.of(safety2));
+		issuer2.setCredentials(List.of(safety2));
 
 
-		return Arrays.asList(safety, safety2);
+		return List.of(safety2);
 	}
 
 	private List<Category> createCredentialCategories() {
@@ -352,6 +443,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<InternalCredential> credentials = new ArrayList<>();
 		final InternalCredential safety = new InternalCredential(
 				"Sicherheitsbelehrung-Baumschule",
+				"1.0",
 				"$T-MEMBER",
 				"tlabs",
 				form4,
@@ -362,7 +454,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		credentials.add(safety);
 		final List<FormEntry> form7 = form();
 		final List<ExternalCredential> externalCredentials = new ArrayList<>();
-		final ExternalCredential safety3 = new ExternalCredential("Sicherheitsbelehrung-Telekom", "$T-TRAINING", form7);
+		final ExternalCredential safety3 = new ExternalCredential("U-Member", "1.0", "$U-MEMBER1", form7);
 
 		externalCredentials.add(safety3);
 
@@ -379,6 +471,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<InternalCredential> credentials2 = new ArrayList<>();
 		final InternalCredential firstAid = new InternalCredential(
 				"Erste-Hilfe-Kurs-DRK",
+				"1.0",
 				"$U-TRAINING",
 				"university",
 				form6,
@@ -390,8 +483,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<FormEntry> form8 = form();
 		final List<FormEntry> form9 = form();
 		final List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom", "$U-TRAINING", form8);
-		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter", "$U-MEMBER", form9);
+		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom",
+				"1.0", "$U-TRAINING", form8);
+		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter",
+				"1.0", "$U-MEMBER2", form9);
 
 		externalCredentials2.add(firstAid2);
 		externalCredentials2.add(firstAid3);
