@@ -9,7 +9,6 @@ import {
     ExternalCredentialCmd,
     InternalCredential
 } from "@/main/vue/entity/credentialDefinition";
-import credential from "@/main/vue/api/credential";
 
 export const useCredentialsStore = defineStore('credentials', {
     state: () => {
@@ -21,6 +20,10 @@ export const useCredentialsStore = defineStore('credentials', {
         async fetch(): Promise<void> {
             this.credentials = await api.credential.all().then(response => response.data);
             this.externalCredentials = await api.credential.externalCredentials().then(response => response.data);
+        },
+        getByDefinitionId(credentialDefinitionId: string): Credential|ExternalCredential | undefined {
+            return this.credentials.find(c => c.credentialDefinitionId === credentialDefinitionId)
+                || this.externalCredentials.find(ec => ec.credentialDefinitionId === credentialDefinitionId);
         }
     }
 },);
@@ -196,11 +199,6 @@ export const useCredentialStore = defineStore('credential', () => {
                 })
             })
         }
-
-        function getCredentialsByDefinitionId(credentialDefintionId: string) {
-
-        }
-
 
         return {
             getCredentialsByLocation,
