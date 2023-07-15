@@ -261,7 +261,7 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name");
         final FormEntry lastName = new FormEntry("Nachname", FormEntryType.TEXT, "last_name");
         final FormEntry date = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
-        final FormEntry trainingType = new FormEntry("Trainingstyp", FormEntryType.TEXT, "type_of_training");
+        final FormEntry trainingType = new FormEntry("Trainingstyp", FormEntryType.TEXT, "type");
         form.add(firstName);
         form.add(lastName);
         form.add(date);
