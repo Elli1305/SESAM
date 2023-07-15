@@ -18,6 +18,7 @@ import com.gpse.sesam.domain.location.door.DoorService;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.config.*;
+import com.gpse.sesam.domain.location.door.config.predefined.PredefinedConfig;
 import com.gpse.sesam.domain.location.door.config.predefined.PredefinedConfigService;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
@@ -86,7 +87,8 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         final List<SesamUser> users = createUsers();
         final List<Location> locations = createLocations();
         final List<ExternalCredential> externalCredentials = createExternals();
-        List<RoomGroups> roomGroups = createRoomGroup(locations);
+        final List<RoomGroups> roomGroups = createRoomGroup(locations);
+        final List<PredefinedConfig> predefinedConfigs = createPredefinedConfigList();
 
         colorsService.saveAll(colors);
         setLogo();
@@ -96,6 +98,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         doorService.save(locations.get(0).getBuildings().get(0).getFloors().get(0).getRooms().get(0).getDoors().get(0));
         externalCredentialService.saveAll(externalCredentials);
         roomGroupService.saveAll(roomGroups);
+        predefinedConfigService.saveAll(predefinedConfigs);
     }
 
     private List<Colors> createColors() {
@@ -326,7 +329,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
 
     private ProofConfig createProofConfig() {
         final ProofConfig proofConfig = new ProofConfig();
-        proofConfig.setDescription("Bitte präsentieren Sie ein U-Member oder T-Member Credential.");
+        proofConfig.setDescription("Präsentieren Sie ein U-Member oder T-Member Credential.");
 
         final Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
         final ProofPredicateInfo predicateInfo = new ProofPredicateInfo();
@@ -346,6 +349,54 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         proofConfig.setRequestedPredicates(requestedPredicates);
 
         return proofConfig;
+    }
+
+    private ProofConfig createPredefinedConfig() {
+        final ProofConfig proofConfig = new ProofConfig();
+        proofConfig.setDescription("Präsentieren Sie ein U-Member Credential mit dem Geburtsdatum vor 2005.");
+
+        final Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
+        final ProofPredicateInfo predicateInfo = new ProofPredicateInfo();
+        predicateInfo.setName("expiration_date");
+        predicateInfo.setPredicateType(">");
+        predicateInfo.setPredicateValue("$TODAY-YYYYMMDD");
+        final ProofPredicateInfo predicateInfo2 = new ProofPredicateInfo();
+        predicateInfo2.setName("birth_date");
+        predicateInfo2.setPredicateType("<");
+        predicateInfo2.setPredicateValue("20050101");
+
+        final List<AttributeFilter> predicateRestrictions = new ArrayList<>();
+        predicateRestrictions.add(new AttributeFilter());
+        predicateRestrictions.get(0).setCredentialDefinitionId("$U-MEMBER");
+
+
+        final List<AttributeFilter> predicateRestrictions2 = new ArrayList<>();
+        predicateRestrictions2.add(new AttributeFilter());
+        predicateRestrictions2.get(0).setCredentialDefinitionId("$U-MEMBER");
+
+        predicateInfo.setRestrictions(predicateRestrictions);
+        predicateInfo2.setRestrictions(predicateRestrictions2);
+        requestedPredicates.put("expiration_date", predicateInfo);
+        requestedPredicates.put("birth_date", predicateInfo2);
+
+        proofConfig.setRequestedPredicates(requestedPredicates);
+
+
+        return proofConfig;
+    }
+
+    private List<PredefinedConfig> createPredefinedConfigList() {
+        final ProofConfig config = createPredefinedConfig();
+        final ProofConfig config2 = createPredefinedConfig();
+
+        TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
+        twoWayDoorConfig.setBaseConfig(true);
+        twoWayDoorConfig.setProofConfigIn(config);
+        twoWayDoorConfig.setProofConfigOut(config2);
+
+        final PredefinedConfig predefinedConfig = new PredefinedConfig("U-Member vor 2005 geboren", List.of(twoWayDoorConfig));
+
+        return List.of(predefinedConfig);
     }
 
 }
