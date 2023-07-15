@@ -154,4 +154,9 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
         predefinedConfigRepository.deleteById(id);
     }
 
+    @Override
+    public void saveAll(Iterable<PredefinedConfig> predefinedConfigs) {
+        predefinedConfigRepository.saveAll(predefinedConfigs);
+    }
+
 }

@@ -3,6 +3,8 @@ package com.gpse.sesam.configuration;
 import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.credential.issue.issuing.ChecklistEntry;
@@ -16,8 +18,11 @@ import com.gpse.sesam.domain.location.door.DoorService;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.config.*;
+import com.gpse.sesam.domain.location.door.config.predefined.PredefinedConfigService;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
+import com.gpse.sesam.domain.location.roomgroup.RoomGroups;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
@@ -51,10 +56,16 @@ public class InitializeDatabaseUniversity implements InitializingBean {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final ExternalCredentialService externalCredentialService;
+
+    private final PredefinedConfigService predefinedConfigService;
+
+    private final RoomGroupService roomGroupService;
+
     public InitializeDatabaseUniversity(final LocationService locationService, final SesamUserService userService,
                                         final CredentialService credentialService, final ColorsService colorsService,
                                         FileStorageService fileStorageService, final PasswordEncoder passwordEncoder,
-                                        DoorService doorService) {
+                                        DoorService doorService, ExternalCredentialService externalCredentialService, PredefinedConfigService predefinedConfigService, RoomGroupService roomGroupService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
         this.fileStorageService = fileStorageService;
@@ -62,6 +73,9 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         this.locationService = locationService;
         this.userService = userService;
         this.doorService = doorService;
+        this.externalCredentialService = externalCredentialService;
+        this.predefinedConfigService = predefinedConfigService;
+        this.roomGroupService = roomGroupService;
     }
 
 
@@ -71,6 +85,8 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         final List<InternalCredential> credentials = createCredentials();
         final List<SesamUser> users = createUsers();
         final List<Location> locations = createLocations();
+        final List<ExternalCredential> externalCredentials = createExternals();
+        List<RoomGroups> roomGroups = createRoomGroup(locations);
 
         colorsService.saveAll(colors);
         setLogo();
@@ -78,6 +94,8 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         userService.saveAll(users);
         locationService.saveAll(locations);
         doorService.save(locations.get(0).getBuildings().get(0).getFloors().get(0).getRooms().get(0).getDoors().get(0));
+        externalCredentialService.saveAll(externalCredentials);
+        roomGroupService.saveAll(roomGroups);
     }
 
     private List<Colors> createColors() {
@@ -110,6 +128,14 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         colors.add(currentDark);
 
         return colors;
+    }
+
+    private final List<RoomGroups> createRoomGroup(List<Location> locations) {
+        List<RoomGroups> groups = new ArrayList<>();
+        groups.add(new RoomGroups("Labor", locations.get(0).getBuildings().get(0).getFloors().get(0).getRooms(),
+                locations.get(0).getBuildings().get(0)));
+
+        return groups;
     }
 
     private void setLightColors(final Colors defaultColors) {
@@ -191,6 +217,18 @@ public class InitializeDatabaseUniversity implements InitializingBean {
                 "university", formTraining(), checklistTraining()));
 
         return internalCredentials;
+    }
+
+    private List<ExternalCredential> createExternals() {
+        List<ExternalCredential> externalCredentials = new ArrayList<>();
+
+        ExternalCredential ttraining= new ExternalCredential("T-Training", "1.0", "$T-TRAINING", formTraining());
+        ExternalCredential tmember= new ExternalCredential("T-Member", "1.0", "$T-MEMBER", formMember());
+
+        externalCredentials.add(ttraining);
+        externalCredentials.add(tmember);
+
+        return externalCredentials;
     }
 
     private List<Location> createLocations() {

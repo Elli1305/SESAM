@@ -3,6 +3,10 @@ package com.gpse.sesam.configuration;
 import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
+import com.gpse.sesam.domain.credential.category.Category;
+import com.gpse.sesam.domain.credential.category.CategoryService;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
+import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.credential.issue.issuing.ChecklistEntry;
@@ -23,6 +27,7 @@ import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.web.exception.FileStorageException;
+import jakarta.validation.OverridesAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -52,10 +57,13 @@ public class InitializeDatabaseTelekom implements InitializingBean {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final ExternalCredentialService externalCredentialService;
+    private final CategoryService categoryService;
+
     public InitializeDatabaseTelekom(final LocationService locationService, final SesamUserService userService,
                                      final CredentialService credentialService, final ColorsService colorsService,
                                      FileStorageService fileStorageService, final PasswordEncoder passwordEncoder,
-                                     DoorService doorService) {
+                                     DoorService doorService, ExternalCredentialService externalCredentialService, CategoryService categoryService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
         this.fileStorageService = fileStorageService;
@@ -63,6 +71,8 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         this.locationService = locationService;
         this.userService = userService;
         this.doorService = doorService;
+        this.externalCredentialService = externalCredentialService;
+        this.categoryService = categoryService;
     }
 
 
@@ -70,8 +80,12 @@ public class InitializeDatabaseTelekom implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         final List<Colors> colors = createColors();
         final List<InternalCredential> credentials = createCredentials();
-        final List<SesamUser> users = createUsers();
+        final List<SesamUser> users = createUsers(credentials);
         final List<Location> locations = createLocations();
+        final List<ExternalCredential> externalCredentials = createExternalCredential();
+
+        final List<Category> categories = createCategories(credentials, externalCredentials);
+
 
         colorsService.saveAll(colors);
         setLogo();
@@ -79,7 +93,37 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         userService.saveAll(users);
         locationService.saveAll(locations);
         doorService.save(locations.get(0).getBuildings().get(0).getFloors().get(0).getRooms().get(0).getDoors().get(0));
+        externalCredentialService.saveAll(externalCredentials);
+        categoryService.saveAll(categories);
     }
+
+    private List<ExternalCredential> createExternalCredential() {
+        List<ExternalCredential> externalCredentials = new ArrayList<>();
+
+        ExternalCredential utraining= new ExternalCredential("U-Training", "1.0", "$U-TRAINING", formTraining());
+
+        externalCredentials.add(utraining);
+
+        return externalCredentials;
+    }
+
+    private List<Category> createCategories(List<InternalCredential> internal, List<ExternalCredential> external) {
+        List<Category> categories = new ArrayList<>();
+
+        Category category = new Category("hazard-handling");
+        category.addCredential(internal.get(1));
+        internal.get(1).setCategory(category);
+
+        for (ExternalCredential externalCredential: external) {
+            externalCredential.setCategory(category);
+            category.addExternalCredential(externalCredential);
+        }
+
+        categories.add(category);
+
+        return categories;
+    }
+
 
     private List<Colors> createColors() {
         final Colors defaultLight = new Colors();
@@ -152,7 +196,7 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         }
     }
 
-    private List<SesamUser> createUsers() {
+    private List<SesamUser> createUsers(List<InternalCredential> internals) {
         //User Roles
         final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
         adminRole.setGranted(true);
@@ -168,8 +212,10 @@ public class InitializeDatabaseTelekom implements InitializingBean {
                 Collections.singletonList(adminRole));
         final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "T-Labs", "Editor",
                 Collections.singletonList(editorRole));
-        final SesamUser issuer = new Issuer("wunderland@sesam.de", defaultPassword, "Herr", "Wunderland",
+        final Issuer issuer = new Issuer("wunderland@sesam.de", defaultPassword, "Gerhard", "Wunderland",
                 Collections.singletonList(issuerRole), new Room("106"));
+        issuer.setCredentials(List.of(internals.get(1)));
+        internals.get(1).setIssuer(List.of(issuer));
 
         return List.of(admin, editor, issuer);
     }
