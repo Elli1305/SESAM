@@ -3,7 +3,6 @@ package com.gpse.sesam.configuration;
 import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
-import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.credential.issue.issuing.ChecklistEntry;
@@ -15,13 +14,10 @@ import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
-import com.gpse.sesam.domain.location.door.config.AttributeFilter;
-import com.gpse.sesam.domain.location.door.config.DoorConfigService;
-import com.gpse.sesam.domain.location.door.config.ProofConfig;
-import com.gpse.sesam.domain.location.door.config.ProofPredicateInfo;
+import com.gpse.sesam.domain.location.door.DoorService;
+import com.gpse.sesam.domain.location.door.config.*;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
-import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
 import com.gpse.sesam.domain.user.SesamUser;
 import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
@@ -44,7 +40,6 @@ public class InitializeDatabaseTelekom implements InitializingBean {
     private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
 
     private final LocationService locationService;
-    private final RoomGroupService roomGroupService;
 
     private final SesamUserService userService;
 
@@ -53,33 +48,26 @@ public class InitializeDatabaseTelekom implements InitializingBean {
 
     private final FileStorageService fileStorageService;
 
-    private final DoorConfigService doorConfigService;
-
-    private final CategoryService categoryService;
+    private final DoorService doorService;
 
     private final PasswordEncoder passwordEncoder;
 
-    private ProofConfig proofConfig;
-
     public InitializeDatabaseTelekom(final LocationService locationService, final SesamUserService userService,
                                      final CredentialService credentialService, final ColorsService colorsService,
-                                     FileStorageService fileStorageService, final CategoryService categoryService, final PasswordEncoder passwordEncoder,
-                                     final RoomGroupService roomGroupService, DoorConfigService doorConfigService) {
+                                     FileStorageService fileStorageService, final PasswordEncoder passwordEncoder,
+                                     DoorService doorService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
         this.fileStorageService = fileStorageService;
-        this.categoryService = categoryService;
         this.passwordEncoder = passwordEncoder;
         this.locationService = locationService;
         this.userService = userService;
-        this.roomGroupService = roomGroupService;
-        this.doorConfigService = doorConfigService;
+        this.doorService = doorService;
     }
 
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        proofConfig = createProofConfig();
         final List<Colors> colors = createColors();
         final List<InternalCredential> credentials = createCredentials();
         final List<SesamUser> users = createUsers();
@@ -90,6 +78,7 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         credentialService.saveAll(credentials);
         userService.saveAll(users);
         locationService.saveAll(locations);
+        doorService.save(locations.get(0).getBuildings().get(0).getFloors().get(0).getRooms().get(0).getDoors().get(0));
     }
 
     private List<Colors> createColors() {
@@ -190,8 +179,12 @@ public class InitializeDatabaseTelekom implements InitializingBean {
 
         List<InternalCredential> internalCredentials = new ArrayList<>();
 
-        internalCredentials.add(new InternalCredential("T-Member", "1.0", "$T-MEMBER", "tlabs", formMember(), checklistMember()));
-        internalCredentials.add(new InternalCredential("T-Training", "1.0", "$T-TRAINING", "tlabs", formTraining(), checklistTraining()));
+        internalCredentials.add(new InternalCredential(
+                "T-Member", "1.0", "$T-MEMBER",
+                "tlabs", formMember(), checklistMember()));
+        internalCredentials.add(new InternalCredential(
+                "T-Training", "1.0", "$T-TRAINING",
+                "tlabs", formTraining(), checklistTraining()));
 
         return internalCredentials;
     }
@@ -213,14 +206,24 @@ public class InitializeDatabaseTelekom implements InitializingBean {
 
         //Door to Room 0.114
         List<Coordinate> doorCoordinates = new ArrayList<>();
+        ProofConfig proofConfig = createProofConfig();
+        ProofConfig proofConfig2 = createProofConfig();
+
+        TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
+        twoWayDoorConfig.setBaseConfig(true);
+        twoWayDoorConfig.setProofConfigIn(proofConfig);
+        twoWayDoorConfig.setProofConfigOut(proofConfig2);
 
         doorCoordinates.add(new Coordinate(new BigDecimal("23.81"), new BigDecimal("68.85")));
         doorCoordinates.add(new Coordinate(new BigDecimal("26.81"), new BigDecimal("68.85")));
 
-        room.addDoor(new Door("Eingang-1", doorCoordinates));
+        Door door = new Door("Eingang-1", doorCoordinates);
+        door.setDoorConfigs(List.of(twoWayDoorConfig));
+
+        room.addDoor(door);
 
         //Floor
-        final Floor floor = new Floor(0, "/citec-gebaeudeplan.png");
+        final Floor floor = new Floor(0, "/citec-gebaeudeplan.svg");
         floor.addRoom(room);
 
         //Building

@@ -245,26 +245,25 @@ public class InitializeDatabaseLocal implements InitializingBean {
 			rooms2.add(room2);
 		}
 
-		// breaks jar build from mater
-//		final String jsonContent = readJsonFile();
-//		final List<List<Coordinate>> roomCoordinates = createRoomCoordinates(jsonContent);
-//
-//		for (int i = 0; i < roomCoordinates.size(); i++) {
-//			rooms.get(i).setCoordinates(roomCoordinates.get(i));
-//		}
-//
-//		final List<List<Coordinate>> doorCoordinates = createDoorCoordinates(jsonContent);
-//
-//		for (int i = 0; i < doorCoordinates.size(); i++) {
-//			final Door door = new Door("door" + i, doorCoordinates.get(i));
-//			rooms.get(i).setDoors(List.of(door));
-//		}
+		final String jsonContent = readJsonFile();
+		final List<List<Coordinate>> roomCoordinates = createRoomCoordinates(jsonContent);
+
+		for (int i = 0; i < roomCoordinates.size(); i++) {
+			rooms.get(i).setCoordinates(roomCoordinates.get(i));
+		}
+
+		final List<List<Coordinate>> doorCoordinates = createDoorCoordinates(jsonContent);
+
+		for (int i = 0; i < doorCoordinates.size(); i++) {
+			final Door door = new Door("door" + i, doorCoordinates.get(i));
+			rooms.get(i).setDoors(List.of(door));
+		}
 
 		final List<Floor> floors = new ArrayList<>();
 		final List<Floor> floors2 = new ArrayList<>();
 		for (int i = 0; i < 6; i++) {
-			final Floor floor = new Floor(i % 2, "/citec-gebaeudeplan.png");
-			final Floor floor2 = new Floor(i % 2, "/citec-gebaeudeplan.png");
+			final Floor floor = new Floor(i % 2, "/citec-gebaeudeplan.svg");
+			final Floor floor2 = new Floor(i % 2, "/citec-gebaeudeplan.svg");
 			for (int j = 0; j < 5; j++) {
 				floor.addRoom(rooms.get(i * 5 + j));
 				floor2.addRoom(rooms2.get(i * 5 + j));

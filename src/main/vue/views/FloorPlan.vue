@@ -1,8 +1,8 @@
 <template>
-  <q-page-container style="height: 75vh; padding: 2em">
+  <q-page-container class="no-padding" style="height: 75vh">
     <q-page>
       <div ref="mapContainer" class="floor-plan-editor-map">
-        <div id="floor-plan-map"></div>
+        <div class="full-height" id="floor-plan-map"></div>
       </div>
     </q-page>
   </q-page-container>
@@ -17,7 +17,7 @@ import L from "leaflet";
 import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 import {storeToRefs} from "pinia";
 import {watch} from "vue";
-import {useQuasar} from "quasar";
+import {getCssVar, useQuasar} from "quasar";
 import CreateDoor from "@/main/vue/views/CreateDoor.vue";
 import {useRoomStore} from "@/main/vue/stores/room";
 import {useFloorStore} from "@/main/vue/stores/floor";
@@ -99,12 +99,12 @@ export default {
 
     floorPlanMap.pm.Draw.Polygon.setPathOptions({
       color: 'black',
-      width: 5,
+      width: 1,
       fillOpacity: 0.1
     });
     floorPlanMap.pm.Draw.Line.setPathOptions({
-      color: '#b0b0b0',
-      weight: 3
+      color: getCssVar('warning'),
+      weight: 2
     });
 
     floorPlanMap.on('pm:drawstart', ({workingLayer}) => {
@@ -129,7 +129,7 @@ export default {
           layer.setStyle({
             color: 'black',
             fillColor: 'black',
-            weight: 2,
+            weight: 1,
             fillOpacity: 0.1
           });
           selectedRooms.value.forEach(roomID => {
@@ -158,13 +158,13 @@ export default {
       if (e.layer instanceof L.Polygon || e.layer instanceof L.Rectangle) {
         e.layer.setStyle({
           color: 'black',
-          width: 5,
+          width: 1,
           fillOpacity: 0.1
         });
       } else if (e.layer instanceof L.Polyline) {
         e.layer.setStyle({
-          color: '#b0b0b0',
-          weight: 3
+          color: getCssVar('warning'),
+          weight: 2
         });
       }
 
@@ -342,12 +342,13 @@ export default {
         this.$emit('roomClicked', polygon.id)
       })
     }, async drawRooms(rooms) {
-      let polygons = [];
+      let polygons = []
+      let polylines = []
       await this.credentialsStore.fetch()
       for (const room of rooms) {
         const polygon = L.polygon(room.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
           color: 'black',
-          width: 5,
+          weight: 1,
           fillOpacity: 0.1
         })
         if (this.floorPlanStore.selectedRooms.includes(room.id)) {
@@ -366,7 +367,7 @@ export default {
             p.setStyle({
               color: 'black',
               fillColor: 'black',
-              weight: 5,
+              weight: 1,
               fillOpacity: 0.1
             });
           }
@@ -385,9 +386,9 @@ export default {
 
         for (const door of room.doors) {
           const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
-            color: '#b0b0b0',
-            weight: 3
-          }).addTo(floorPlanMap)
+            color: getCssVar('warning'),
+            weight: 2
+          })
           line.id = door.id
           line.roomId = room.id
 
@@ -427,10 +428,14 @@ export default {
           line.bindTooltip(configurationString);
           this.addCallbacksLine(line);
           roomPopup += configurationString
+          polylines.push(line)
         }
         polygon.bindTooltip(roomPopup);
         polygon.addTo(floorPlanMap);
         this.addCallbacksPolygon(polygon);
+      }
+      for (const door of polylines) {
+        door.addTo(floorPlanMap)
       }
 
     },
@@ -493,7 +498,6 @@ export default {
 }
 
 #floor-plan-map {
-  height: 70vh;
   position: relative;
   background-color: var(--bg-color);
 }

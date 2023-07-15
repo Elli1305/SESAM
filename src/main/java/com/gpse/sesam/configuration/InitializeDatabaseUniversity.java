@@ -3,7 +3,6 @@ package com.gpse.sesam.configuration;
 import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
-import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.credential.issue.issuing.ChecklistEntry;
@@ -14,7 +13,6 @@ import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.door.DoorService;
-import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
 import com.gpse.sesam.domain.location.door.config.*;
@@ -41,7 +39,6 @@ public class InitializeDatabaseUniversity implements InitializingBean {
     private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
 
     private final LocationService locationService;
-    private final RoomGroupService roomGroupService;
 
     private final SesamUserService userService;
 
@@ -52,26 +49,19 @@ public class InitializeDatabaseUniversity implements InitializingBean {
 
     private final DoorService doorService;
 
-    private final DoorConfigService doorConfigService;
-
-    private final CategoryService categoryService;
-
     private final PasswordEncoder passwordEncoder;
 
     public InitializeDatabaseUniversity(final LocationService locationService, final SesamUserService userService,
                                         final CredentialService credentialService, final ColorsService colorsService,
-                                        FileStorageService fileStorageService, final CategoryService categoryService, final PasswordEncoder passwordEncoder,
-                                        final RoomGroupService roomGroupService, DoorService doorService, DoorConfigService doorConfigService) {
+                                        FileStorageService fileStorageService, final PasswordEncoder passwordEncoder,
+                                        DoorService doorService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
         this.fileStorageService = fileStorageService;
-        this.categoryService = categoryService;
         this.passwordEncoder = passwordEncoder;
         this.locationService = locationService;
         this.userService = userService;
-        this.roomGroupService = roomGroupService;
         this.doorService = doorService;
-        this.doorConfigService = doorConfigService;
     }
 
 
@@ -193,8 +183,12 @@ public class InitializeDatabaseUniversity implements InitializingBean {
 
         List<InternalCredential> internalCredentials = new ArrayList<>();
 
-        internalCredentials.add(new InternalCredential("U-Member", "1.0", "$U-MEMBER", "university", formMember(), checklistMember()));
-        internalCredentials.add(new InternalCredential("U-Training", "1.0", "$U-TRAINING", "university", formTraining(), checklistTraining()));
+        internalCredentials.add(new InternalCredential(
+                "U-Member", "1.0", "$U-MEMBER",
+                "university", formMember(), checklistMember()));
+        internalCredentials.add(new InternalCredential(
+                "U-Training", "1.0", "$U-TRAINING",
+                "university", formTraining(), checklistTraining()));
 
         return internalCredentials;
     }
@@ -204,12 +198,12 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         //Room 0.114
         List<Coordinate> coordinates = new ArrayList<>();
 
-        coordinates.add(new Coordinate(new BigDecimal("21.18"), new BigDecimal("68.85")));
-        coordinates.add(new Coordinate(new BigDecimal("54.99"), new BigDecimal("68.85")));
-        coordinates.add(new Coordinate(new BigDecimal("54.99"), new BigDecimal("45.56")));
-        coordinates.add(new Coordinate(new BigDecimal("12.18"), new BigDecimal("45.56")));
-        coordinates.add(new Coordinate(new BigDecimal("12.18"), new BigDecimal("57.95")));
-        coordinates.add(new Coordinate(new BigDecimal("21.18"), new BigDecimal("57.95")));
+        coordinates.add(new Coordinate(new BigDecimal("55.45"), new BigDecimal("69.95")));
+        coordinates.add(new Coordinate(new BigDecimal("21.62"), new BigDecimal("69.95")));
+        coordinates.add(new Coordinate(new BigDecimal("21.62"), new BigDecimal("59.06")));
+        coordinates.add(new Coordinate(new BigDecimal("12.64"), new BigDecimal("59.06")));
+        coordinates.add(new Coordinate(new BigDecimal("12.64"), new BigDecimal("46.62")));
+        coordinates.add(new Coordinate(new BigDecimal("55.45"), new BigDecimal("46.62")));
 
         final Room room = new Room("Forschungslabor 0.114");
         room.setCoordinates(coordinates);
@@ -224,8 +218,8 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         twoWayDoorConfig.setProofConfigIn(proofConfig);
         twoWayDoorConfig.setProofConfigOut(proofConfig2);
 
-        doorCoordinates.add(new Coordinate(new BigDecimal("23.81"), new BigDecimal("68.85")));
-        doorCoordinates.add(new Coordinate(new BigDecimal("26.81"), new BigDecimal("68.85")));
+        doorCoordinates.add(new Coordinate(new BigDecimal("23.91"), new BigDecimal("69.96")));
+        doorCoordinates.add(new Coordinate(new BigDecimal("27.11"), new BigDecimal("69.96")));
 
         Door door = new Door("Eingang-1", doorCoordinates);
         door.setDoorConfigs(List.of(twoWayDoorConfig));
@@ -233,7 +227,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         room.addDoor(door);
 
         //Floor
-        final Floor floor = new Floor(0, "/citec-gebaeudeplan.png");
+        final Floor floor = new Floor(0, "/citec-gebaeudeplan.svg");
         floor.addRoom(room);
 
         //Building

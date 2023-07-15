@@ -21,6 +21,10 @@ export const useCredentialsStore = defineStore('credentials', {
         async fetch(): Promise<void> {
             this.credentials = await api.credential.all().then(response => response.data);
             this.externalCredentials = await api.credential.externalCredentials().then(response => response.data);
+        },
+        getByDefinitionId(credentialDefinitionId: string): Credential|ExternalCredential | undefined {
+            return this.credentials.find(c => c.credentialDefinitionId === credentialDefinitionId)
+                || this.externalCredentials.find(ec => ec.credentialDefinitionId === credentialDefinitionId);
         }
     }
 },);
@@ -195,10 +199,6 @@ export const useCredentialStore = defineStore('credential', () => {
                     reject(error)
                 })
             })
-        }
-
-        function getCredentialsByDefinitionId(credentialDefinitionId: string) {
-
         }
 
 
