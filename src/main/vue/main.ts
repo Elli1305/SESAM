@@ -169,6 +169,7 @@ const messages = {
             infoConfigGroups: 'Konfigurationsgruppen sind untereinander mit UND verknüpft',
             chooseConfig: "Konfiguration auswählen",
             addConfigGroup: 'Konfigurationsgruppe hinzufügen',
+            addConfig: "Konfiguration hinzufügen",
             direction: 'Richtung',
             directions: {
                 in: 'rein',
@@ -188,6 +189,15 @@ const messages = {
             currentTime: 'Aktueller Zeitpunkt',
             //
             floorPlanUpload: 'Etagenplan hochladen',
+            baseConfig: "Man darf nur eine Basiskonfiguration wählen",
+            base: "Basiskonfiguration",
+            roomDetails: {
+                active: "Aktive Tür-Konfigurationen:",
+                inactive: "Inaktive Tür-Konfigurationen:",
+                and: "UND",
+                or: "ODER",
+                with: "mit"
+            }
         },
         credentialView: {
             title: "Credentialansicht",
@@ -323,6 +333,8 @@ const messages = {
                 groupsConfig: "Anpassung der Türkonfiguration für Raumgruppen",
                 roomSelection: "Räume auswählen",
                 group: "Gruppe",
+                newName: "Bitte wählen Sie einen neuen Namen",
+                assigned: "Name für dieses Gebäude bereits vergeben"
             },
             config:{
               noConfig: "Nicht konfiguriert"
@@ -630,6 +642,16 @@ const messages = {
             currentTime: 'Current time',
             //
             floorPlanUpload: 'Upload floor plan',
+            baseConfig: "You can only choose one base configuration",
+            base: "Base configuration",
+            roomDetails: {
+                active: "Active Door Configurations:",
+                inactive: "Inactive Door Configurations:",
+                and: "AND",
+                or: "OR",
+                with: "with"
+            },
+            addConfig: "Add Configuration",
         },
         credentialView: {
             title: "Credentials",
@@ -755,6 +777,8 @@ const messages = {
                 groupsConfig: "Adjustment of door configurations for groups of rooms",
                 roomSelection: "Choose Rooms",
                 group: "Group",
+                newName: "Please choose a new name",
+                assigned: "The name of the building is already assigned"
             },
             config:{
                 noConfig: "not configured"

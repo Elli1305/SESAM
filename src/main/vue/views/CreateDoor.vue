@@ -47,14 +47,14 @@
           <q-card style="background-color: var(--bg-color); color: var(--text-color)" bordered flat>
             <q-toolbar class="bg-primary text-accent">
 
-              <q-toolbar-title>Konfiguration</q-toolbar-title>
+              <q-toolbar-title>{{t('floorPlan.config')}}</q-toolbar-title>
               <q-checkbox class="q-mr-lg" size="2em" keep-color dense v-model="qSelectgeneral.qSelectsSet[k].baseConfig"
-                          label="Basis-Konfiguration"
+                          :label="t('floorPlan.base')"
                           color="accent" @click="check(k)"/>
               <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
                 <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em"
                            max-width="15em" anchor="center right" self="center left">
-                  You can only choose one base configuration.
+                  {{t('floorPlan.baseConfig')}}
                 </q-tooltip>
               </q-icon>
               <q-td v-if=!(checkLength())>
@@ -119,7 +119,7 @@
             </door-config>
 
             <q-btn class="q-ml-sm q-mb-sm" flat dense rounded color="primary" icon="add" @click="addConfiguration">
-              Konfiguration hinzufügen
+              {{t('floorPlan.addConfig')}}
             </q-btn>
 
 
@@ -380,10 +380,9 @@ export default {
       ).length;
       if (baseConfCount > 1) {
         // Display warning or prevent saving
-        console.log('Warning: You can only select one base configuration.');
         $q.notify({
           type: 'negative',
-          message: "You can only choose one base configuration.",
+          message: t('floorPlan.baseConfig'),
           caption: "Error",
           position: "top",
           color: 'negative',

@@ -1,6 +1,4 @@
 package com.gpse.sesam.domain.location.door.config.predefined;
-
-import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.web.cmd.PredefinedConfigCmd;
 
 import java.util.List;

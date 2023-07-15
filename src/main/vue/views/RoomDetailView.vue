@@ -13,10 +13,10 @@
         @click="openDialog(room)"/>
   </div>
   <q-scroll-area style="width: 100%; height: 33.25em">
-    <p class="text-subtitle2 q-mt-md">Aktive Tür-Konfigurationen:</p>
+    <p class="text-subtitle2 q-mt-md">{{ t('floorPlan.roomDetails.active') }}</p>
     <q-list flat bordered v-for="door in activeConfigs">
       <q-expansion-item expanded :label="door?.doorName"
-                        :caption="door.baseConfig? 'Basiskonfiguration' : (door.startTime && door.endTime) ? door.startTime + '-' + door.endTime : ''">
+                        :caption="door.baseConfig? t('floorPlan.base') : (door.startTime && door.endTime) ? door.startTime + '-' + door.endTime : ''">
         <q-card style="background-color: var(--bg-color); color: var(--text-color)">
           <q-separator/>
           <q-card-section v-if="JSON.stringify(door.doorConfigIn) === JSON.stringify(door.doorConfigOut)">
@@ -25,18 +25,18 @@
               <div class="q-mb-sm" style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
                   <q-chip color="primary" text-color="accent"> {{ credential.name }}</q-chip>
-                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                  <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <b>mit</b>
+                  <b>{{ t('floorPlan.roomDetails.with')}}</b>
                   <p style="line-height: 1; margin: 0.1em"
                      v-for="(attributeFilter, j) in configpart?.attributeFilter">
                     {{ attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value }}
-                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                    <b v-if="j !== configpart.attributeFilter.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                   </p>
                 </div>
               </div>
-                <b v-if="index !== door.doorConfigIn?.configParts.length - 1">UND</b>
+                <b v-if="index !== door.doorConfigIn?.configParts.length - 1">{{ t('floorPlan.roomDetails.and')}}</b>
             </div>
           </q-card-section>
           <q-card-section v-if="JSON.stringify(door.doorConfigIn) !== JSON.stringify(door.doorConfigOut)">
@@ -46,19 +46,19 @@
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
                   <q-chip dense color="primary" text-color="accent"> {{ credential.name }}</q-chip>
-                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                  <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <b>mit</b>
+                  <b>{{ t('floorPlan.roomDetails.with')}}</b>
                   <p style="line-height: 1; margin: 0.1em"
                      v-for="(attributeFilter, j) in configpart?.attributeFilter">
                     {{ attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value }}
-                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                    <b v-if="j !== configpart.attributeFilter.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                   </p>
                 </div>
               </div>
               <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
-                <b>UND</b>
+                <b>{{ t('floorPlan.roomDetails.and')}}</b>
               </div>
             </div>
             <p class="text-subtitle2">Raus</p>
@@ -67,19 +67,19 @@
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
                   <q-chip dense color="primary" text-color="accent"> {{ credential.name }}</q-chip>
-                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                  <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <b>mit</b>
+                  <b>{{ t('floorPlan.roomDetails.with')}}</b>
                   <p style="line-height: 1; margin: 0.1em"
                      v-for="(attributeFilter, j) in configpart?.attributeFilter">
                     {{ attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value }}
-                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                    <b v-if="j !== configpart.attributeFilter.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                   </p>
                 </div>
               </div>
               <div v-if="index !== door.doorConfigOut?.configParts.length - 1">
-                <b>UND</b>
+                <b>{{ t('floorPlan.roomDetails.and')}}</b>
               </div>
             </div>
           </q-card-section>
@@ -88,10 +88,10 @@
       </q-expansion-item>
 
     </q-list>
-    <p class="text-subtitle2 q-mt-md" v-if="inactiveConfigs.length > 0">Inaktive Tür-Konfigurationen:</p>
+    <p class="text-subtitle2 q-mt-md" v-if="inactiveConfigs.length > 0">{{ t('floorPlan.roomDetails.inactive') }}</p>
     <q-list flat bordered v-for="door in inactiveConfigs">
       <q-expansion-item expanded :label="door.doorName"
-                        :caption="door.baseConfig? 'Basiskonfiguration' : door.startTime + '-' + door.endTime">
+                        :caption="door.baseConfig? t('floorPlan.base') : door.startTime + '-' + door.endTime">
         <q-card style="background-color: var(--bg-color); color: var(--text-color)">
           <q-separator/>
           <q-card-section v-if="JSON.stringify(door.doorConfigIn) === JSON.stringify(door.doorConfigOut)">
@@ -100,21 +100,21 @@
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
                   <q-chip color="primary" text-color="white"> {{ credential.name }}</q-chip>
-                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                  <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <b>mit</b>
+                  <b>{{ t('floorPlan.roomDetails.with')}}</b>
                   <p style="line-height: 1; margin: 0.1em"
                      v-for="(attributeFilter, j) in configpart?.attributeFilter">
                     {{
                       attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
                     }}
-                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                    <b v-if="j !== configpart.attributeFilter.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                   </p>
                 </div>
               </div>
               <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
-                <b>UND</b>
+                <b>{{ t('floorPlan.roomDetails.and')}}</b>
               </div>
             </div>
           </q-card-section>
@@ -125,21 +125,21 @@
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
                   <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
-                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                  <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <b>mit</b>
+                  <b>{{ t('floorPlan.roomDetails.with')}}</b>
                   <p style="line-height: 1; margin: 0.1em"
                      v-for="(attributeFilter, j) in configpart?.attributeFilter">
                     {{
                       attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
                     }}
-                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                    <b v-if="j !== configpart.attributeFilter.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                   </p>
                 </div>
               </div>
               <div v-if="index !== door.doorConfigIn?.configParts.length - 1">
-                <b>UND</b>
+                <b>{{ t('floorPlan.roomDetails.and')}}</b>
               </div>
             </div>
             <p class="text-subtitle2">Raus</p>
@@ -148,21 +148,21 @@
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
                   <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
-                  <b v-if="i !== configpart.credentials.length - 1">ODER</b>
+                  <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
-                  <b>mit</b>
+                  <b>{{ t('floorPlan.roomDetails.with')}}</b>
                   <p style="line-height: 1; margin: 0.1em"
                      v-for="(attributeFilter, j) in configpart?.attributeFilter">
                     {{
                       attributeFilter.attribute.label + " " + attributeFilter.predicateType + " " + attributeFilter.value
                     }}
-                    <b v-if="j !== configpart.attributeFilter.length - 1">ODER</b>
+                    <b v-if="j !== configpart.attributeFilter.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                   </p>
                 </div>
               </div>
               <div v-if="index !== door.doorConfigOut?.configParts.length - 1">
-                <b>UND</b>
+                <b>{{ t('floorPlan.roomDetails.and')}}</b>
               </div>
             </div>
           </q-card-section>
@@ -183,6 +183,7 @@ import {Direction} from "@/main/vue/entity/doorConfiguration";
 import {useQuasar} from "quasar";
 import EditRoom from "@/main/vue/views/EditRoom.vue";
 import {useUserStore} from "@/main/vue/stores/users";
+import {useI18n} from "vue-i18n";
 
 export default {
   name: "RoomDetailView",
@@ -236,6 +237,7 @@ export default {
     const config = ref();
     const userStore = useUserStore()
     const activeConfigs = ref([]);
+    const {t} = useI18n()
 
     const inactiveConfigs = ref([]);
 
@@ -300,7 +302,7 @@ export default {
           inactiveConfigs.value = room.data.doors.flatMap(d => getInactiveConfig(d))
         })
         .catch(() => loading.value = false)
-    return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig, getInactiveConfig}
+    return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig, getInactiveConfig, t}
   }
 }
 </script>
