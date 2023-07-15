@@ -102,7 +102,8 @@ public class InitializeDatabaseTelekom implements InitializingBean {
     private List<ExternalCredential> createExternalCredential() {
         List<ExternalCredential> externalCredentials = new ArrayList<>();
 
-        ExternalCredential utraining = new ExternalCredential("U-Training", "1.0", "$U-TRAINING", formTraining());
+        ExternalCredential utraining = new ExternalCredential("U-Training", "1.0",
+                "$U-TRAINING", formTraining());
 
         externalCredentials.add(utraining);
 
@@ -210,8 +211,8 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         //Users
         final String defaultPassword = passwordEncoder.encode("Hallo123!");
 
-        final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "T-Labs", "Admin",
-                Collections.singletonList(adminRole));
+        final SesamUser admin = new SesamUser("admin@test.de", defaultPassword,
+                "T-Labs", "Admin", Collections.singletonList(adminRole));
         final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "T-Labs", "Editor",
                 Collections.singletonList(editorRole));
         final Issuer issuer = new Issuer("wunderland@sesam.de", defaultPassword, "Gerhard", "Wunderland",

@@ -229,8 +229,10 @@ public class InitializeDatabaseUniversity implements InitializingBean {
     private List<ExternalCredential> createExternals() {
         List<ExternalCredential> externalCredentials = new ArrayList<>();
 
-        ExternalCredential ttraining = new ExternalCredential("T-Training", "1.0", "$T-TRAINING", formTraining());
-        ExternalCredential tmember = new ExternalCredential("T-Member", "1.0", "$T-MEMBER", formMember());
+        ExternalCredential ttraining = new ExternalCredential("T-Training", "1.0",
+                "$T-TRAINING", formTraining());
+        ExternalCredential tmember = new ExternalCredential("T-Member",
+                "1.0", "$T-MEMBER", formMember());
 
         externalCredentials.add(ttraining);
         externalCredentials.add(tmember);

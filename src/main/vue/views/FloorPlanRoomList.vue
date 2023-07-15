@@ -414,10 +414,7 @@ export default {
     function isEditorCheck() {
       if (userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)) {
         isEditor.value = true;
-        console.log("Is Editor Check");
       }
-
-      console.log("Is Editor Check");
       return true;
     }
 
@@ -427,9 +424,6 @@ export default {
     async function start() {
       if (isEditor.value) {
         await roomGroupStore.getRoomGroups();
-        console.log("Ist eingeloggt als Editor");
-      } else {
-        console.log("Ist nicht eingeloggt als Editor");
       }
     }
 
@@ -437,15 +431,12 @@ export default {
 
 
     async function loadRoomGroups(buildingID) {
-      //filteredGroups.value = [];
       unCheck();
-      console.log("loadRoomGroups(): roomGroupStore.filteredGroups", roomGroupStore.filteredGroups);
       roomGroupStore.getGroupByBuilding(buildingID).then(() => {
         filteredGroups.value = [];
         for (const roomG of roomGroupStore.filteredGroups) {
           filteredGroups.value.push(roomG);
         }
-
       })
     }
 
@@ -471,12 +462,10 @@ export default {
       selectedRoomsForGroup.value = roomStore.rooms?.filter((room) =>
           selectedRooms.value.includes(room.id)
       )
-      console.log("selectedRoomsForGroup: ", selectedRoomsForGroup.value);
 
     }
 
     async function addRoomsToNewGroup() {
-      //console.log(selectedRooms.value);
       await checkName(newGroupName.value);
       if (checkNameAllowed.value) {
 
@@ -489,7 +478,6 @@ export default {
         addRoomsToNewGroupDialog.value = false;
         newGroupName.value = "";
         selectedRooms.value = [];
-        console.log("done makeANewGroup for selected rooms");
 
       }
     }
@@ -506,7 +494,6 @@ export default {
     }
 
     function checkIfGroupSelected() {
-      console.log("Selected Group for new Group: ", selectedGroups.value);
       if (selectedGroups.value !== null) {
         return true;
       } else {
@@ -535,12 +522,8 @@ export default {
           rooms: selectedRoomsForGroup.value
         });
         await roomGroupStore.editGroup(editedGroup.value);
-        console.log("makeIsToRooms before loadRoomGroups: selectedGroups.value", selectedGroups.value)
         await loadRoomGroups(buildingID.value);
-        console.log("makeIsToRooms after loadRoomGroups: selectedGroups.value", selectedGroups.value)
         unCheck();
-        console.log("makeIsToRooms after unCheck: selectedGroups.value", selectedGroups.value)
-
       } else {
         $q.notify({
           type: 'negative',
@@ -603,8 +586,8 @@ export default {
           if (theGroup.name === newName) {
             $q.notify({
               type: 'negative',
-              message: 'Name für dieses Gebäude bereits vergeben',
-              caption: 'Bitte wählen Sie einen neuen Namen.',
+              message: t('editor.groupRooms.assigned'),
+              caption: t('editor.groupRooms.newName'),
               color: 'negative',
               textColor: 'positive'
             })
@@ -653,7 +636,6 @@ export default {
           } else {
             buildingID.value = getParentIDs(locations, floorPlanStore.selectedFloorId);
             if (prevBuildingid !== buildingID.value) {
-              console.log("prev B und current b: ", prevBuildingid, buildingID.value);
               await loadRoomGroups(buildingID.value);
               selectedRooms.value = [];
             }
@@ -690,7 +672,6 @@ export default {
                   group: selectedGroups.value.id
               }
           }).onOk(() => {
-              console.log("success")
           })
       }
 
@@ -866,30 +847,20 @@ export default {
         await roomStore.getFloor(rooms[roomLength].id);
         let level = roomStore.floor.floorLevel
         arrayFloors.value.push(level);
-        //console.log("Room:", rooms[roomLength], "Floor", level);
       }
-      console.log("arrayFloors:", arrayFloors.value);
-      console.log("function: allFloorsForGroup()");
     }
 
     function addToDeleteList(room) {
       roomDeleteList.value.push(room);
-      console.log("add to delete list: room:", room);
       let i = 0;
       for (const roomFromGroup of selectedGroups.value.rooms) {
-        console.log("For");
         if ((i === 0) && (room.id === roomFromGroup.id)) {
           selectedGroups.value.rooms.shift();
         } else if (room.id === roomFromGroup.id) {
-          console.log("i: ", i);
-          //selectedGroups.value.rooms.pop(roomFromGroup);
           selectedGroups.value.rooms.splice(i, 1);
-          console.log("ohne ", selectedGroups.value.rooms);
         }
         i++;
       }
-      console.log("entire delete-list:", roomDeleteList.value);
-      console.log("selected Group rooms:", selectedGroups.value.rooms);
     }
 
     const dropdown = ref(false);
@@ -947,8 +918,6 @@ export default {
       },
       giveLog() {
         dropdown.value = false;
-        //console.log("hiwerhoiehfowgiohowhoifwohfoweihfiosiohfi");
-        //console.log(dropdown.value);
       },
       allFloorsForGroup,
       credentialsStore,
@@ -958,11 +927,8 @@ export default {
       addToDeleteList,
       async reloadRoomsBE() {
         if (selectedGroups.value !== null) {
-          console.log("sel. Id", selectedGroups.value.id);
           await roomGroupStore.getRoomsByGroupId(selectedGroups.value.id);
-          console.log("hier", roomGroupStore.rooms);
           selectedGroups.value.rooms = roomGroupStore.rooms;
-          console.log("reloadRoomsBE(), selectedGroups", selectedGroups.value);
         }
       },
       async cancelEdit() {
