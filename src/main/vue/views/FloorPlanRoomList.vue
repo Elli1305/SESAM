@@ -136,7 +136,7 @@
             <q-list>
 
               <q-item v-for="group in allGroups" style="padding-left: 0">
-                <q-radio @click="filterRoomToGroups(); updateNumRoomsInGroup();"
+                <q-radio @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup()"
                          v-model="selectedGroups" :val="group"
                          color="info"/>
                 <q-btn
@@ -947,8 +947,6 @@ export default {
       },
       giveLog() {
         dropdown.value = false;
-        //console.log("hiwerhoiehfowgiohowhoifwohfoweihfiosiohfi");
-        //console.log(dropdown.value);
       },
       allFloorsForGroup,
       credentialsStore,
