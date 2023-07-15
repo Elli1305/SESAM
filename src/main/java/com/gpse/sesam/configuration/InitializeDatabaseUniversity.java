@@ -322,8 +322,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
 
     private List<ChecklistEntry> checklistTraining() {
         final List<ChecklistEntry> checklist = new ArrayList<>();
-        checklist.add(new ChecklistEntry("Wurde ein Gefahrentraining absolviert?"));
-        checklist.add(new ChecklistEntry("Wurde der notwendige Nachweis erbracht?"));
+        checklist.add(new ChecklistEntry("Wurde ein Gefahrentraining absolviert und liegt ein Nachweis vor?"));
         return checklist;
     }
 
