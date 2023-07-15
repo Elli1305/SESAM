@@ -64,10 +64,13 @@ public class InitializeDatabaseUniversity implements InitializingBean {
 
     private final RoomGroupService roomGroupService;
 
+    @SuppressWarnings("ParameterNumber")
     public InitializeDatabaseUniversity(final LocationService locationService, final SesamUserService userService,
                                         final CredentialService credentialService, final ColorsService colorsService,
                                         FileStorageService fileStorageService, final PasswordEncoder passwordEncoder,
-                                        DoorService doorService, ExternalCredentialService externalCredentialService, PredefinedConfigService predefinedConfigService, RoomGroupService roomGroupService) {
+                                        DoorService doorService, ExternalCredentialService externalCredentialService,
+                                        PredefinedConfigService predefinedConfigService,
+                                        RoomGroupService roomGroupService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
         this.fileStorageService = fileStorageService;
@@ -226,8 +229,8 @@ public class InitializeDatabaseUniversity implements InitializingBean {
     private List<ExternalCredential> createExternals() {
         List<ExternalCredential> externalCredentials = new ArrayList<>();
 
-        ExternalCredential ttraining= new ExternalCredential("T-Training", "1.0", "$T-TRAINING", formTraining());
-        ExternalCredential tmember= new ExternalCredential("T-Member", "1.0", "$T-MEMBER", formMember());
+        ExternalCredential ttraining = new ExternalCredential("T-Training", "1.0", "$T-TRAINING", formTraining());
+        ExternalCredential tmember = new ExternalCredential("T-Member", "1.0", "$T-MEMBER", formMember());
 
         externalCredentials.add(ttraining);
         externalCredentials.add(tmember);
@@ -309,8 +312,10 @@ public class InitializeDatabaseUniversity implements InitializingBean {
 
     public List<FormEntry> formTraining() {
         final List<FormEntry> form = new ArrayList<>();
-        final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name", getFirstNameValidationRules());
-        final FormEntry lastName = new FormEntry("Nachname", FormEntryType.TEXT, "last_name", getLastNameValidationRules());
+        final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name",
+                getFirstNameValidationRules());
+        final FormEntry lastName = new FormEntry("Nachname", FormEntryType.TEXT, "last_name",
+                getLastNameValidationRules());
         final FormEntry date = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
         final FormEntry trainingType = new FormEntry("Trainingstyp", FormEntryType.TEXT, "type");
         form.add(firstName);
@@ -399,7 +404,8 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         twoWayDoorConfig.setProofConfigIn(config);
         twoWayDoorConfig.setProofConfigOut(config2);
 
-        final PredefinedConfig predefinedConfig = new PredefinedConfig("U-Member vor 2005 geboren", List.of(twoWayDoorConfig));
+        final PredefinedConfig predefinedConfig = new PredefinedConfig("U-Member vor 2005 geboren",
+                List.of(twoWayDoorConfig));
 
         return List.of(predefinedConfig);
     }

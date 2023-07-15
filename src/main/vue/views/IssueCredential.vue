@@ -41,8 +41,8 @@
             <span class="q-mb-lg sub-title text-grey">{{ credential?.name }}</span>
             <p class="q-mb-xs">{{ t('issuer.issueCredential.addCredential.howTo') }}</p>
             <ol class="q-gutter-xs">
-              <i18n-t keypath="issueCredential.addCredential.steps.step1" tag="li">
-                <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet" target="_blank">
+              <i18n-t keypath="issuer.issueCredential.addCredential.steps.step1" tag="li">
+                <a :style="{color: getCssVar('info')}" href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet" target="_blank">
                   BC Wallet App
                 </a>
               </i18n-t>
@@ -56,7 +56,11 @@
             </ol>
           </div>
           <div class="column justify-center no-wrap" style="padding-left: 2em">
-            <QRCode class="q-pa-sm qr-border" style="width: 20vw; height: 20vw" :value="oobUrl" :size="300"/>
+            <div class="q-pa-md" style="border: 4px dashed var(--text-color); border-radius: 1em">
+              <div class="column justify-center" style="padding: 35px; background-color: white; border: 1px solid var(--text-color); border-radius: 1em">
+                <QRCode style="width: 20vw; height: 20vw" :value="oobUrl" :size="300"/>
+              </div>
+            </div>
           </div>
         </div>
       </q-step>
@@ -78,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import {QForm, QNotifyCreateOptions, QOptionGroupProps, QStepper, useQuasar, ValidationRule} from 'quasar';
+import {getCssVar, QForm, QNotifyCreateOptions, QOptionGroupProps, QStepper, useQuasar, ValidationRule} from 'quasar';
 import {computed, ComputedRef, Ref, ref} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {AxiosError, AxiosResponse} from "axios";
@@ -329,10 +333,10 @@ const next = async (refs: any) => {
     $q.dialog({
       title: t('issuer.issueCredential.confirm.title'),
       message: t('issuer.issueCredential.confirm.message', {'name': credential.value?.name}),
-      ok: t('issuer.issueCredential.confirm.ok'),
+      ok:  t('issuer.issueCredential.confirm.ok'),
       cancel: t('common.cancel'),
       color: 'primary',
-      style: 'background-color: var(--bg-color); color: var(--text-color)'
+      style: 'background-color: var(--bg-color); color: var(--text-color)',
     }).onOk(async () => {
       $q.loading.show({delay: 400});
 

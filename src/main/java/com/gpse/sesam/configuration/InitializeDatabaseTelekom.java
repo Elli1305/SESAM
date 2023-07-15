@@ -28,7 +28,6 @@ import com.gpse.sesam.domain.user.SesamUserRole;
 import com.gpse.sesam.domain.user.SesamUserService;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.web.exception.FileStorageException;
-import jakarta.validation.OverridesAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -61,10 +60,12 @@ public class InitializeDatabaseTelekom implements InitializingBean {
     private final ExternalCredentialService externalCredentialService;
     private final CategoryService categoryService;
 
+    @SuppressWarnings("ParameterNumber")
     public InitializeDatabaseTelekom(final LocationService locationService, final SesamUserService userService,
                                      final CredentialService credentialService, final ColorsService colorsService,
                                      FileStorageService fileStorageService, final PasswordEncoder passwordEncoder,
-                                     DoorService doorService, ExternalCredentialService externalCredentialService, CategoryService categoryService) {
+                                     DoorService doorService, ExternalCredentialService externalCredentialService,
+                                     CategoryService categoryService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
         this.fileStorageService = fileStorageService;
@@ -101,7 +102,7 @@ public class InitializeDatabaseTelekom implements InitializingBean {
     private List<ExternalCredential> createExternalCredential() {
         List<ExternalCredential> externalCredentials = new ArrayList<>();
 
-        ExternalCredential utraining= new ExternalCredential("U-Training", "1.0", "$U-TRAINING", formTraining());
+        ExternalCredential utraining = new ExternalCredential("U-Training", "1.0", "$U-TRAINING", formTraining());
 
         externalCredentials.add(utraining);
 
@@ -310,8 +311,10 @@ public class InitializeDatabaseTelekom implements InitializingBean {
 
     public List<FormEntry> formTraining() {
         final List<FormEntry> form = new ArrayList<>();
-        final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name", getFirstNameValidationRules());
-        final FormEntry lastName = new FormEntry("Nachname", FormEntryType.TEXT, "last_name", getLastNameValidationRules());
+        final FormEntry firstName = new FormEntry("Vorname", FormEntryType.TEXT, "first_name",
+                getFirstNameValidationRules());
+        final FormEntry lastName = new FormEntry("Nachname", FormEntryType.TEXT, "last_name",
+                getLastNameValidationRules());
         final FormEntry date = new FormEntry("Ablaufdatum", FormEntryType.DATE, "expiration_date");
         final FormEntry trainingType = new FormEntry("Trainingstyp", FormEntryType.TEXT, "type");
         form.add(firstName);
