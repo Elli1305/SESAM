@@ -221,7 +221,12 @@ const messages = {
         },
         admin: {
             credentialEditing: {
+                createOnLedger: 'Auf dem Ledger erstellen',
                 credentialSchemaLoadFailed: 'Das Credential Schema konnte nicht vom Ledger geladen werden.',
+                deleteCredential: 'Sind Sie sicher, dass Sie das Credential löschen wollen?',
+                confirmDelete: 'Löschen',
+                abortDelete: 'Abbrechen',
+                deleteFailed: 'Das Credential konnte nicht gelöscht werden.',
                 errors: {
                     'ERR_LEDGER_COMMUNICATION_FAILED': 'Die Kommunikation mit dem Ledger ist fehlgeschlagen.',
                     'ERR_INVALID_STRUCTURE': 'Die Credential Definition ID ist fehlerhaft.',
@@ -680,6 +685,20 @@ const messages = {
             extern: "External"
         },
         admin: {
+            credentialEditing: {
+                createOnLedger: 'Create on Ledger',
+                credentialSchemaLoadFailed: 'Failed to load the Credential Schema from the Ledger.',
+                deleteCredential: 'Are you sure you want to delete the Credential?',
+                confirmDelete: 'Delete',
+                abortDelete: 'Cancel',
+                deleteFailed: 'The Credential could not be deleted.',
+                errors: {
+                    'ERR_LEDGER_COMMUNICATION_FAILED': 'Communication with the Ledger has failed.',
+                    'ERR_INVALID_STRUCTURE': 'The Credential Definition ID is invalid.',
+                    'ERR_CREDENTIAL_DEFINITION_NOT_FOUND': 'The specified Credential Definition ID could not be found on the Ledger.',
+                    'ERR_LIBINDY_NOT_INSTALLED': 'The libindy Shared Library is not installed. Please contact your administrator.'
+                }
+            },
             currentUsers: {
                 title: "User Management",
                 editUser: {

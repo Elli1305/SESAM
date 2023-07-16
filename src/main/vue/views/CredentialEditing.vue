@@ -12,7 +12,7 @@
                  :rules="[required]" error-message=" " label="Credential Definition ID" lazy-rules
                  no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
 
-        <q-checkbox v-show="createType === 'internal'" v-model="createOnLedger" label="Auf dem Ledger erstellen"/>
+        <q-checkbox v-show="createType === 'internal'" v-model="createOnLedger" :label="t('admin.credentialEditing.createOnLedger')"/>
 
         <q-input v-model="credential.name" :rules="[required]" error-message=" " label="Name" lazy-rules no-error-icon
                  outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
@@ -110,7 +110,7 @@ import api from "@/main/vue/api";
 import {useI18n} from "vue-i18n";
 import router from "@/main/vue/router";
 import ValidateCredentials from "@/main/vue/views/ValidateCredentials.vue";
-import {AxiosError, AxiosResponse} from "axios";
+import {AxiosResponse} from "axios";
 
 const props = defineProps<{ id?: string, type?: 'internal' | 'external' }>();
 
@@ -260,23 +260,31 @@ const deleteCredential = async () => {
     return;
   }
 
-  $q.loading.show({delay: 400});
+  $q.dialog({
+    message: t('admin.credentialEditing.deleteCredential'),
+    ok: t('admin.credentialEditing.confirmDelete'),
+    cancel: t('admin.credentialEditing.abortDelete'),
+    color: 'primary',
+    style: 'background-color: var(--bg-color); color: var(--text-color)',
+  }).onOk(async () => {
+    $q.loading.show({delay: 400});
 
-  api.credential[(props.type === 'internal' ? 'delete' : 'deleteExternalCredential')](props.id)
-      .then(() => {
-        router.push("/credential_administration");
-      })
-      .catch(reason => {
-        console.log(reason);
+    api.credential[(props.type === 'internal' ? 'delete' : 'deleteExternalCredential')](props.id)
+        .then(() => {
+          router.push("/credential_administration");
+        })
+        .catch(reason => {
+          console.log(reason);
 
-        $q.notify({
-          type: 'negative',
-          position: 'bottom',
-          timeout: 6000,
-          message: 'Beim löschen des Credential ist ein Fehler aufgetreten.',
-        });
-      })
-      .finally($q.loading.hide);
+          $q.notify({
+            type: 'negative',
+            position: 'bottom',
+            timeout: 6000,
+            message: t('admin.credentialEditing.deleteFailed'),
+          });
+        })
+        .finally($q.loading.hide);
+  });
 }
 </script>
 
