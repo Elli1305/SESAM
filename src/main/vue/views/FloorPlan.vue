@@ -397,8 +397,8 @@ export default {
 
           let activeConfig = this.getActiveBaseConf(door);
 
-          let timeString = activeConfig ? (activeConfig.baseConfig ? ' (Basiskonf.) ' : " (" + activeConfig.startTime + " - " + activeConfig.endTime + ")") : ''
-          let configurationString = "<b>Konfiguration für " + door.name + timeString + ":</b>" ;
+          let timeString = activeConfig ? (activeConfig.baseConfig ? ' ('+ this.i18nLocale.t('floorPlan.roomDetails.baseConf') + ')'  : " (" + activeConfig.startTime + " - " + activeConfig.endTime + ")") : ''
+          let configurationString = "<b>"+ this.i18nLocale.t('floorPlan.roomDetails.doorConfigFor')+ "" + door.name + timeString + ":</b>" ;
 
           if (activeConfig) {
             configurationString += "<br>"
@@ -406,19 +406,19 @@ export default {
               configurationString += "<div style='margin-left: 1em'>"
               let activeCredentials = this.getConfigString(activeConfig.proofConfigIn);
               activeCredentials = [...new Set(activeCredentials)]
-              configurationString += activeCredentials.join("<br> <b>UND</b> <br>")
+              configurationString += activeCredentials.join("<br> <b>"+ this.i18nLocale.t('floorPlan.roomDetails.and')+ "</b> <br>")
               configurationString += "</div>"
             } else {
-              configurationString += "<b>Rein:</b><br><div style='margin-left: 1em'>"
+              configurationString += "<b>" + this.i18nLocale.t('floorPlan.roomDetails.in') + ':'+ "</b><br><div style='margin-left: 1em'>"
               let activeCredentialsIn = this.getConfigString(activeConfig.proofConfigIn);
               activeCredentialsIn = [...new Set(activeCredentialsIn)]
-              configurationString += activeCredentialsIn.join("<br> <b>UND</b> <br>")
+              configurationString += activeCredentialsIn.join("<br> <b>"+ this.i18nLocale.t('floorPlan.roomDetails.and')+ "</b> <br>")
               configurationString += "</div>"
 
-              configurationString += "<b>Raus:</b><br><div style='margin-left: 1em'>"
+              configurationString += "<b>" + this.i18nLocale.t('floorPlan.roomDetails.out') + ':'+ "</b><br><div style='margin-left: 1em'>"
               let activeCredentialsOut = this.getConfigString(activeConfig.proofConfigOut);
               activeCredentialsOut = [...new Set(activeCredentialsOut)]
-              configurationString += activeCredentialsOut.join("<br> <b>UND</b> <br>")
+              configurationString += activeCredentialsOut.join("<br> <b>"+ this.i18nLocale.t('floorPlan.roomDetails.and')+ "</b> <br>")
               configurationString += "</div>"
             }
           } else {
@@ -447,7 +447,7 @@ export default {
             .restrictions
             .filter(rest => rest.credentialDefinitionId)
             .map(rest => this.credentialsStore.getByDefinitionId(rest.credentialDefinitionId)?.name || "")
-            .join(" <b>ODER</b> "))
+            .join(" <b>"+ this.i18nLocale.t('floorPlan.roomDetails.or')+ "</b> "))
       }
       for (const attribute in config.requestedPredicates) {
         activeCredentials.push(config
@@ -455,7 +455,7 @@ export default {
             .restrictions
             .filter(rest => rest.credentialDefinitionId)
             .map(rest => this.credentialsStore.getByDefinitionId(rest.credentialDefinitionId)?.name || "")
-            .join(" <b>ODER</b> "))
+            .join(" <b>"+ this.i18nLocale.t('floorPlan.roomDetails.or')+ "</b> "))
       }
       return activeCredentials
     },

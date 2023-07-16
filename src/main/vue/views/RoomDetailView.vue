@@ -40,7 +40,7 @@
             </div>
           </q-card-section>
           <q-card-section v-if="JSON.stringify(door.doorConfigIn) !== JSON.stringify(door.doorConfigOut)">
-            <p class="text-subtitle2">Rein</p>
+            <p class="text-subtitle2">{{ t('floorPlan.roomDetails.in')}}</p>
             <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
                  style='padding: 0.2em; border-radius: 1em'>
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
@@ -61,7 +61,7 @@
                 <b>{{ t('floorPlan.roomDetails.and')}}</b>
               </div>
             </div>
-            <p class="text-subtitle2">Raus</p>
+            <p class="text-subtitle2">{{ t('floorPlan.roomDetails.out')}}</p>
             <div v-for="(configpart, index) in door.doorConfigOut?.configParts"
                  style='padding: 0.2em; border-radius: 1em'>
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
@@ -119,7 +119,7 @@
             </div>
           </q-card-section>
           <q-card-section v-if="JSON.stringify(door.doorConfigIn) !== JSON.stringify(door.doorConfigOut)">
-            <p class="text-subtitle2">Rein</p>
+            <p class="text-subtitle2">{{ t('floorPlan.roomDetails.in')}}</p>
             <div v-for="(configpart, index) in door.doorConfigIn?.configParts"
                  style='padding: 0.2em; border-radius: 1em'>
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
@@ -142,7 +142,7 @@
                 <b>{{ t('floorPlan.roomDetails.and')}}</b>
               </div>
             </div>
-            <p class="text-subtitle2">Raus</p>
+            <p class="text-subtitle2">{{ t('floorPlan.roomDetails.out')}}</p>
             <div v-for="(configpart, index) in door.doorConfigOut?.configParts"
                  style='padding: 0.2em; border-radius: 1em'>
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>

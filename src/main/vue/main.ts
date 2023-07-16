@@ -196,8 +196,14 @@ const messages = {
                 inactive: "Inaktive Tür-Konfigurationen:",
                 and: "UND",
                 or: "ODER",
-                with: "mit"
-            }
+                with: "mit",
+                doorConfigFor: "Konfiguration für ",
+                baseConf: "Basiskonf.",
+                in: "Rein",
+                out: "Raus"
+            },
+            floor0: "Erdgeschoss",
+            floors: "Etage "
         },
         credentialView: {
             title: "Credentialansicht",
@@ -650,9 +656,15 @@ const messages = {
                 inactive: "Inactive Door Configurations:",
                 and: "AND",
                 or: "OR",
-                with: "with"
+                with: "with",
+                doorConfigFor: "Configuration for ",
+                baseConf: "Base conf.",
+                in: "In",
+                out: "Out"
             },
             addConfig: "Add Configuration",
+            floor0: "Floor 0",
+            floors: "Floor "
         },
         credentialView: {
             title: "Credentials",

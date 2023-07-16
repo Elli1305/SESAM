@@ -14,12 +14,9 @@ import com.gpse.sesam.domain.credential.issue.issuing.FormEntry;
 import com.gpse.sesam.domain.credential.issue.issuing.FormEntryType;
 import com.gpse.sesam.domain.credential.issue.validation.*;
 import com.gpse.sesam.domain.filestorage.FileStorageService;
-import com.gpse.sesam.domain.location.Coordinate;
 import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.building.Building;
-import com.gpse.sesam.domain.location.door.Door;
-import com.gpse.sesam.domain.location.door.DoorService;
 import com.gpse.sesam.domain.location.door.config.*;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
@@ -35,7 +32,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -53,7 +49,6 @@ public class InitializeDatabaseTelekom implements InitializingBean {
 
     private final FileStorageService fileStorageService;
 
-    private final DoorService doorService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -64,7 +59,7 @@ public class InitializeDatabaseTelekom implements InitializingBean {
     public InitializeDatabaseTelekom(final LocationService locationService, final SesamUserService userService,
                                      final CredentialService credentialService, final ColorsService colorsService,
                                      FileStorageService fileStorageService, final PasswordEncoder passwordEncoder,
-                                     DoorService doorService, ExternalCredentialService externalCredentialService,
+                                     ExternalCredentialService externalCredentialService,
                                      CategoryService categoryService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
@@ -72,7 +67,6 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         this.passwordEncoder = passwordEncoder;
         this.locationService = locationService;
         this.userService = userService;
-        this.doorService = doorService;
         this.externalCredentialService = externalCredentialService;
         this.categoryService = categoryService;
     }
@@ -94,7 +88,6 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         credentialService.saveAll(credentials);
         userService.saveAll(users);
         locationService.saveAll(locations);
-        doorService.save(locations.get(0).getBuildings().get(0).getFloors().get(0).getRooms().get(0).getDoors().get(0));
         externalCredentialService.saveAll(externalCredentials);
         categoryService.saveAll(categories);
     }
@@ -239,44 +232,11 @@ public class InitializeDatabaseTelekom implements InitializingBean {
     }
 
     private List<Location> createLocations() {
-
-        //Room 0.114
-        List<Coordinate> coordinates = new ArrayList<>();
-
-        coordinates.add(new Coordinate(new BigDecimal("21.18"), new BigDecimal("68.85")));
-        coordinates.add(new Coordinate(new BigDecimal("54.99"), new BigDecimal("68.85")));
-        coordinates.add(new Coordinate(new BigDecimal("54.99"), new BigDecimal("45.56")));
-        coordinates.add(new Coordinate(new BigDecimal("12.18"), new BigDecimal("45.56")));
-        coordinates.add(new Coordinate(new BigDecimal("12.18"), new BigDecimal("57.95")));
-        coordinates.add(new Coordinate(new BigDecimal("21.18"), new BigDecimal("57.95")));
-
-        final Room room = new Room("Forschungslabor 0.114");
-        room.setCoordinates(coordinates);
-
-        //Door to Room 0.114
-        List<Coordinate> doorCoordinates = new ArrayList<>();
-        ProofConfig proofConfig = createProofConfig();
-        ProofConfig proofConfig2 = createProofConfig();
-
-        TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
-        twoWayDoorConfig.setBaseConfig(true);
-        twoWayDoorConfig.setProofConfigIn(proofConfig);
-        twoWayDoorConfig.setProofConfigOut(proofConfig2);
-
-        doorCoordinates.add(new Coordinate(new BigDecimal("23.81"), new BigDecimal("68.85")));
-        doorCoordinates.add(new Coordinate(new BigDecimal("26.81"), new BigDecimal("68.85")));
-
-        Door door = new Door("Eingang-1", doorCoordinates);
-        door.setDoorConfigs(List.of(twoWayDoorConfig));
-
-        room.addDoor(door);
-
         //Floor
         final Floor floor = new Floor(0, "/citec-gebaeudeplan.svg");
-        floor.addRoom(room);
 
         //Building
-        final Building building = new Building("CITEC");
+        final Building building = new Building("Hauptgebäude");
         building.addFloor(floor);
 
         //Location
