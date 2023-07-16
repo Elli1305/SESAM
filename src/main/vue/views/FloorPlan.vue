@@ -103,7 +103,7 @@ export default {
       fillOpacity: 0.1
     });
     floorPlanMap.pm.Draw.Line.setPathOptions({
-      color: getCssVar('warning'),
+      color: 'deeppink',
       weight: 2
     });
 
@@ -163,7 +163,7 @@ export default {
         });
       } else if (e.layer instanceof L.Polyline) {
         e.layer.setStyle({
-          color: getCssVar('warning'),
+          color: 'deeppink',
           weight: 2
         });
       }
@@ -386,7 +386,7 @@ export default {
 
         for (const door of room.doors) {
           const line = L.polyline(door.coordinates?.map(coord => L.latLng(coord.lat, coord.lng)), {
-            color: getCssVar('warning'),
+            color: 'deeppink',
             weight: 2
           })
           line.id = door.id

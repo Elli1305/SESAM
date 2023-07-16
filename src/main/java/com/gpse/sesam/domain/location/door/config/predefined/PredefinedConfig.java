@@ -17,7 +17,7 @@ public class PredefinedConfig {
     @Column
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<TwoWayDoorConfig> doorConfig;
 
     public PredefinedConfig(String name, List<TwoWayDoorConfig> twoWayDoorConfig) {

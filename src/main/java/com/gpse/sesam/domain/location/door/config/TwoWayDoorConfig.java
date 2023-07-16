@@ -2,6 +2,8 @@ package com.gpse.sesam.domain.location.door.config;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 public class TwoWayDoorConfig {
 
@@ -71,5 +73,22 @@ public class TwoWayDoorConfig {
 
     public void setBaseConfig(boolean baseConfig) {
         this.baseConfig = baseConfig;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        TwoWayDoorConfig that = (TwoWayDoorConfig) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

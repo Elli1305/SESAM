@@ -69,14 +69,14 @@ public class PredefinedConfigServiceImpl implements PredefinedConfigService {
                 -> new PredefinedConfigNotFoundException("PredefinedConfig with id: " + id + " not found"));
         try {
             List<TwoWayDoorConfigCmd> doorConfig = new ArrayList<>();
-            for (int i = 0; i < predefinedConfig.getDoorConfig().size(); i++) {
+            for (TwoWayDoorConfig config : predefinedConfig.getDoorConfig().stream().distinct().toList()) {
                 TwoWayDoorConfigCmd oneConfig = new TwoWayDoorConfigCmd();
-                oneConfig.setId(predefinedConfig.getDoorConfig().get(i).getId());
-                oneConfig.setBaseConfig(predefinedConfig.getDoorConfig().get(i).isBaseConfig());
-                oneConfig.setStartTime(predefinedConfig.getDoorConfig().get(i).getStartTime());
-                oneConfig.setEndTime(predefinedConfig.getDoorConfig().get(i).getEndTime());
-                DoorConfigCmd in = configCmdMapper.toCmd(predefinedConfig.getDoorConfig().get(i).getProofConfigIn());
-                DoorConfigCmd out = configCmdMapper.toCmd(predefinedConfig.getDoorConfig().get(i).getProofConfigOut());
+                oneConfig.setId(config.getId());
+                oneConfig.setBaseConfig(config.isBaseConfig());
+                oneConfig.setStartTime(config.getStartTime());
+                oneConfig.setEndTime(config.getEndTime());
+                DoorConfigCmd in = configCmdMapper.toCmd(config.getProofConfigIn());
+                DoorConfigCmd out = configCmdMapper.toCmd(config.getProofConfigOut());
                 oneConfig.setDoorConfigIn(in);
                 oneConfig.setDoorConfigOut(out);
                 doorConfig.add(oneConfig);
