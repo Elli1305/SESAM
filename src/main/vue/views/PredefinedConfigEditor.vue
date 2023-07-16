@@ -217,8 +217,6 @@ const qSelectGeneral = ref({
     qSelectsSet: <any[]>[]
 })
 
-
-checkLength()
 function removeConfig(i: any) {
     qSelectGeneral.value.qSelectsSet.splice(i, 1)
 }
@@ -397,7 +395,6 @@ async function editConfig(config: any) {
             endTime: element.endTime || '',
             baseConfig: element.baseConfig || false
         }
-        console.log(object)
         qSelectGeneral.value.qSelectsSet.push(object)
     })
 
