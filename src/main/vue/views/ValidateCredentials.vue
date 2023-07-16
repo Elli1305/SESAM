@@ -133,9 +133,9 @@
                     class="q-ml-sm"
                     style="height: 4em"
                     unchecked-icon="text_fields"
-                    checked-icon="format_list_bulleted"
+                    checked-icon="grid_view"
                     v-model="vr.compareWithAttribute"
-                    keep-color size="2.5em"/>
+                    keep-color size="3em"/>
                 <q-btn
                     class="q-ml-lg"
                     style="min-width: 4em; height: 4em"
@@ -203,9 +203,9 @@
                     class="q-ml-sm"
                     style="height: 4em"
                     unchecked-icon="text_fields"
-                    checked-icon="format_list_bulleted"
+                    checked-icon="grid_view"
                     v-model="vr.compareWithAttribute"
-                    keep-color size="2.5em"/>
+                    keep-color size="3em"/>
                 <q-btn
                     class="q-ml-lg"
                     style="min-width: 4em; height: 4em"
@@ -316,11 +316,11 @@ export default {
           presets.set(t('issuer.issueCredential.validation.presets.negativeWithoutZero'), [{kind: "comparison", comparisonType: "LESS_THAN", content: "0", currentDay: false, compareWithAttribute: false, attributeName: ""}])
           break
         case 'date':
-          presets.set(t('issuer.issueCredential.validation.presets.futureWithToday'), [{kind: "comparison", comparisonType: "GREATER_EQUAL", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
-          presets.set(t('issuer.issueCredential.validation.presets.futureWithoutToday'), [{kind: "comparison", comparisonType: "GREATER_THAN", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
-          presets.set(t('issuer.issueCredential.validation.presets.pastWithToday'), [{kind: "comparison", comparisonType: "LESS_EQUAL", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
-          presets.set(t('issuer.issueCredential.validation.presets.pastWithoutToday'), [{kind: "comparison", comparisonType: "LESS_THAN", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
-          presets.set(t('issuer.issueCredential.validation.presets.today'), [{kind: "comparison", comparisonType: "EQUAL", content: "", currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.futureWithToday'), [{kind: "comparison", comparisonType: "GREATER_EQUAL", content: new Date().toISOString().split('T')[0], currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.futureWithoutToday'), [{kind: "comparison", comparisonType: "GREATER_THAN", content: new Date().toISOString().split('T')[0], currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.pastWithToday'), [{kind: "comparison", comparisonType: "LESS_EQUAL", content: new Date().toISOString().split('T')[0], currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.pastWithoutToday'), [{kind: "comparison", comparisonType: "LESS_THAN", content: new Date().toISOString().split('T')[0], currentDay: true, compareWithAttribute: false, attributeName: ""}])
+          presets.set(t('issuer.issueCredential.validation.presets.today'), [{kind: "comparison", comparisonType: "EQUAL", content: new Date().toISOString().split('T')[0], currentDay: true, compareWithAttribute: false, attributeName: ""}])
           break
         case 'text':
           presets.set(t('issuer.issueCredential.validation.presets.names'), [{kind: "regEx", regEx: "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$", description: "Wähle eine realen Name / Choose a real name"}, {kind: "length", comparisonType: "LESS_THAN", length: 50, compareWithAttribute: false, attributeName: ""}])
