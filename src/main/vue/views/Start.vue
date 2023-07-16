@@ -2,6 +2,7 @@
   <NavigationTree></NavigationTree>
   <q-page class="row no-wrap">
     <FloorPlan class="full-width"></FloorPlan>
+    <q-separator vertical/>
     <FloorPlanRoomList></FloorPlanRoomList>
   </q-page>
 </template>

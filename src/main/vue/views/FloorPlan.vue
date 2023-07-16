@@ -1,5 +1,5 @@
 <template>
-  <q-page-container class="no-padding" style="height: 75vh">
+  <q-page-container class="no-padding">
     <q-page>
       <div ref="mapContainer" class="floor-plan-editor-map">
         <div class="full-height" id="floor-plan-map"></div>

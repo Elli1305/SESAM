@@ -112,8 +112,9 @@
       @click="show = true"
       class="absolute"
       color="primary"
-      direction="right"
-  ><q-icon name="chevron_right" right/></q-btn>
+      direction="right">
+    <q-icon name="chevron_right" right/>
+  </q-btn>
   <q-dialog v-model="deleteLocation" persistent>
     <q-card style="background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section>
@@ -159,8 +160,9 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <q-page class="row no-wrap">
+  <q-page class="row no-wrap" style="z-index: 5">
     <FloorPlan @roomClicked="openDetail" @door-created="refresh" ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
+    <q-separator vertical/>
     <FloorPlanRoomList ref="roomList" @doorChanged="redrawRooms" @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
   </q-page>
 
