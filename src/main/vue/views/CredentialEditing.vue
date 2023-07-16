@@ -12,7 +12,7 @@
                  :rules="[required]" error-message=" " label="Credential Definition ID" lazy-rules
                  no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
 
-        <q-checkbox v-show="createType === 'internal'" v-model="createOnLedger" :label="t('admin.credentialEditing.createOnLedger')"/>
+        <q-checkbox v-show="createType === 'internal' && !props.id" v-model="createOnLedger" :label="t('admin.credentialEditing.createOnLedger')"/>
 
         <q-input v-model="credential.name" :rules="[required]" error-message=" " label="Name" lazy-rules no-error-icon
                  outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
@@ -269,7 +269,7 @@ const deleteCredential = async () => {
   }).onOk(async () => {
     $q.loading.show({delay: 400});
 
-    api.credential[(props.type === 'internal' ? 'delete' : 'deleteExternalCredential')](props.id)
+    api.credential[(props.type === 'internal' ? 'delete' : 'deleteExternalCredential')](props.id!)
         .then(() => {
           router.push("/credential_administration");
         })

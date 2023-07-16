@@ -5,8 +5,10 @@ import axios from "axios";
 import {CredentialExport, ExternalCredentialExport} from "@/main/vue/entity/credentialDefinition";
 import api from "@/main/vue/api";
 import router from "@/main/vue/router";
+import {useI18n} from "vue-i18n";
 
 const $q = useQuasar();
+const {t} = useI18n();
 
 type Row = ExternalCredentialExport & { 'type': string };
 
@@ -64,7 +66,7 @@ const next = async (refs: any) => {
             type: 'negative',
             position: 'bottom',
             timeout: 6000,
-            message: 'Die eingegebene URL ist nicht valide.',
+            message: t('admin.importCredentials.invalidURL'),
             color: 'negative',
             textColor: 'positive',
           })
@@ -76,7 +78,7 @@ const next = async (refs: any) => {
           type: 'negative',
           position: 'bottom',
           timeout: 6000,
-          message: 'Ein unbekannter Fehler ist aufgetreten.',
+          message: t('admin.importCredentials.unknownError'),
           color: 'negative',
           textColor: 'positive',
         })
@@ -96,7 +98,7 @@ const next = async (refs: any) => {
           type: 'negative',
           position: 'bottom',
           timeout: 6000,
-          message: 'Beim öffnen der Datei ist ein unbekannter Fehler aufgetreten.',
+          message: t('admin.importCredentials.unableToOpenFile'),
           color: 'negative',
           textColor: 'positive',
         })
@@ -108,10 +110,12 @@ const next = async (refs: any) => {
         type: 'negative',
         position: 'bottom',
         timeout: 6000,
-        message: 'Es wurden keine Credentials ausgewählt.',
+        message: t('admin.importCredentials.noCredentialsSelected'),
         color: 'negative',
         textColor: 'positive',
-      })
+      });
+
+      return;
     }
 
     await api.credential.importCredentials(
@@ -139,25 +143,20 @@ const next = async (refs: any) => {
           :done="step > 1"
           :name="1"
           icon="file_import"
-          title="Quelle auswählen">
+          :title="t('admin.importCredentials.selectSource')">
         <div class="row justify-evenly" style="height: 45vh">
           <div class="column q-pa-lg" style="width: 40%; font-size: 1.5em">
-            <p>Um Credentials zu importieren, stehen Ihnen auf unserer Seite verschiedene Optionen zur Verfügung. Sie
-              können entweder die URL einer anderen Instanz angeben oder eine zuvor exportierte Datei importieren.</p>
+            <p>{{ t('admin.importCredentials.steps.step1') }}</p>
 
-            <p>Wenn Sie sich für die erste Option entscheiden, geben Sie einfach die URL der entsprechenden Seite ein.
-              Dadurch werden die Credentials von dieser Instanz abgerufen und auf unserer Seite angezeigt.</p>
+            <p>{{ t('admin.importCredentials.steps.step2') }}</p>
 
-            <p>Alternativ dazu können Sie eine zuvor exportierte Datei importieren. Klicken Sie dazu auf die
-              Schaltfläche
-              "Datei auswählen" und suchen Sie die entsprechende Datei auf Ihrem Computer. Nach dem Hochladen werden die
-              Credentials aus der Datei extrahiert und auf unserer Seite angezeigt.</p>
+            <p>{{ t('admin.importCredentials.steps.step3') }}</p>
           </div>
           <q-form ref="form" class="column justify-evenly" @submit.prevent style="width: 40%">
             <q-input v-model="host" :disable="file != null" class="q-mb-md" type="url"
-                     label="URL einer anderen Instanz"/>
+                     :label="t('admin.importCredentials.instanceURL')"/>
             <q-file v-model="file" :disable="host != null && host.length > 0" accept="application/json"
-                    label="Exportierte Datei hochladen"/>
+                    :label="t('admin.importCredentials.uploadFile')"/>
           </q-form>
         </div>
       </q-step>
@@ -166,17 +165,13 @@ const next = async (refs: any) => {
           :done="step > 2"
           :name="2"
           icon="checklist"
-          title="Credentials auswählen"
+          :title="t('admin.importCredentials.pickCredentials')"
       >
         <div class="column no-wrap" style="height: 45vh">
           <div class="q-pa-lg" style="font-size: 1.25em">
-            <p>Nun haben Sie die Möglichkeit, aus den angezeigten Credentials auszuwählen, welche Sie importieren
-              möchten. Dafür gibt es in jeder Zeile ein Kontrollkästchen. Wählen Sie die gewünschten Credentials aus,
-              indem Sie die entsprechenden Kontrollkästchen aktivieren. Möchten Sie alle Credentials auf einmal
-              auswählen, können Sie auch das Kontrollkästchen in der Tabellenüberschrift verwenden.</p>
+            <p>{{ t('admin.importCredentials.steps.step4') }}</p>
 
-            <p>Nachdem Sie Ihre Auswahl getroffen haben, klicken Sie einfach auf die Schaltfläche "Importieren". Dadurch
-              werden die ausgewählten Credentials in Ihre Instanz integriert.</p>
+            <p>{{ t('admin.importCredentials.steps.step5') }}</p>
           </div>
           <q-table
               class="fit"
@@ -192,9 +187,10 @@ const next = async (refs: any) => {
 
       <template v-slot:navigation>
         <q-stepper-navigation class="row q-mt-md justify-end">
-          <q-btn v-if="step > 1" class="q-ml-sm" color="primary" flat label="Zurück" rounded
+          <q-btn v-if="step > 1" :label="t('admin.importCredentials.back')" class="q-ml-sm" color="primary" flat rounded
                  @click="$refs.stepper.previous()"/>
-          <q-btn :disable="host == null && file == null" :label="step === 2 ? 'Importieren' : 'Weiter'"
+          <q-btn :disable="host == null && file == null"
+                 :label="step === 2 ? t('admin.importCredentials.import') : t('admin.importCredentials.next')"
                  color="primary" flat
                  rounded @click="() => next($refs)"/>
         </q-stepper-navigation>

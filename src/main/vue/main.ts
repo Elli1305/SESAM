@@ -9,6 +9,7 @@ import 'quasar/src/css/index.sass'
 import '@quasar/extras/material-icons/material-icons.css'
 import '@/main/vue/styles/notify.scss'
 import axios from "axios";
+
 const messages = {
     de: {
         common: {
@@ -220,6 +221,26 @@ const messages = {
 
         },
         admin: {
+            importCredentials: {
+                invalidURL: 'Die eingegebene URL ist nicht valide.',
+                unknownError: 'Ein unbekannter Fehler ist aufgetreten.',
+                unableToOpenFile: 'Beim Öffnen der Datei ist ein unbekannter Fehler aufgetreten.',
+                noCredentialsSelected: 'Es wurden keine Credentials ausgewählt.',
+                selectSource: 'Quelle auswählen',
+                instanceURL: 'URL einer anderen Instanz',
+                uploadFile: 'Exportierte Datei hochladen',
+                pickCredentials: 'Credentials auswählen',
+                import: 'Importieren',
+                next: 'Weiter',
+                back: 'Zurück',
+                steps: {
+                    step1: 'Um Credentials zu importieren, stehen Ihnen auf unserer Seite verschiedene Optionen zur Verfügung. Sie können entweder die URL einer anderen Instanz angeben oder eine zuvor exportierte Datei importieren.',
+                    step2: 'Wenn Sie sich für die erste Option entscheiden, geben Sie einfach die URL der entsprechenden Seite ein. Dadurch werden die Credentials von dieser Instanz abgerufen und auf unserer Seite angezeigt.',
+                    step3: 'Alternativ dazu können Sie eine zuvor exportierte Datei importieren. Klicken Sie dazu auf die Schaltfläche "Datei auswählen" und suchen Sie die entsprechende Datei auf Ihrem Computer. Nach dem Hochladen werden die Credentials aus der Datei extrahiert und auf unserer Seite angezeigt.',
+                    step4: 'Nun haben Sie die Möglichkeit, aus den angezeigten Credentials auszuwählen, welche Sie importieren               möchten. Dafür gibt es in jeder Zeile ein Kontrollkästchen. Wählen Sie die gewünschten Credentials aus,               indem Sie die entsprechenden Kontrollkästchen aktivieren. Möchten Sie alle Credentials auf einmal               auswählen, können Sie auch das Kontrollkästchen in der Tabellenüberschrift verwenden.',
+                    step5: 'Nachdem Sie Ihre Auswahl getroffen haben, klicken Sie einfach auf die Schaltfläche "Importieren". Dadurch               werden die ausgewählten Credentials in Ihre Instanz integriert.'
+                }
+            },
             credentialEditing: {
                 createOnLedger: 'Auf dem Ledger erstellen',
                 credentialSchemaLoadFailed: 'Das Credential Schema konnte nicht vom Ledger geladen werden.',
@@ -314,7 +335,10 @@ const messages = {
                 add: "Credential erstellen",
                 checklist: "Checkliste",
                 credentialAttribute: "Credentialattribute",
-                loadCredentialSchema: "Credential-Schema laden"
+                loadCredentialSchema: "Credential-Schema laden",
+                importExport: "Credential importieren / exportieren",
+                exportAll: "Alle Credentials exportieren",
+                import: "Credentials importieren",
             }
         },
         editor: {
@@ -685,6 +709,26 @@ const messages = {
             extern: "External"
         },
         admin: {
+            importCredentials: {
+                invalidURL: 'The entered URL is not valid.',
+                unknownError: 'An unknown error has occurred.',
+                unableToOpenFile: 'An unknown error occurred while opening the file.',
+                noCredentialsSelected: 'No credentials have been selected.',
+                selectSource: 'Select Source',
+                instanceURL: 'URL of another instance',
+                uploadFile: 'Upload Exported File',
+                pickCredentials: 'Select Credentials',
+                import: 'Import',
+                next: 'Next',
+                back: 'Back',
+                steps: {
+                    step1: 'To import credentials, you have various options available on our page. You can either provide the URL of another instance or import a previously exported file.',
+                    step2: 'If you choose the first option, simply enter the URL of the corresponding page. This will retrieve the credentials from that instance and display them on our page.',
+                    step3: 'Alternatively, you can import a previously exported file. To do this, click on the "Choose File" button and locate the corresponding file on your computer. After uploading, the credentials will be extracted from the file and displayed on our page.',
+                    step4: 'Now, you have the option to select which credentials you want to import from the ones displayed. Each row has a checkbox. Choose the desired credentials by activating the corresponding checkboxes. If you want to select all credentials at once, you can also use the checkbox in the table header.',
+                    step5: 'After making your selection, simply click the "Import" button. This will integrate the selected credentials into your instance.'
+                }
+            },
             credentialEditing: {
                 createOnLedger: 'Create on Ledger',
                 credentialSchemaLoadFailed: 'Failed to load the Credential Schema from the Ledger.',
@@ -779,7 +823,10 @@ const messages = {
                 add: "Add Credential",
                 checklist: "Checklist",
                 credentialAttribute: "Credential attributes",
-                loadCredentialSchema: "Load credential schema"
+                loadCredentialSchema: "Load credential schema",
+                importExport: "Import / Export Credentials",
+                exportAll: "Export all credentials",
+                import: "Import credentials",
             }
         },
         editor: {

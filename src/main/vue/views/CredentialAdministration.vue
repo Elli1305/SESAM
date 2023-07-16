@@ -15,16 +15,16 @@
                     map-options multiple style="width: 12em"/>
         </template>
         <template v-slot:top-right>
-          <q-btn-dropdown  color="grey-6" label="Import / Export Credentials" rounded flat icon="download">
+          <q-btn-dropdown  color="grey-6" :label="t('admin.credentialAdministration.importExport')" rounded flat icon="download">
             <q-list>
               <q-item v-close-popup clickable @click="importExport">
                 <q-item-section>
-                  <q-item-label>Alle Credentials exportieren</q-item-label>
+                  <q-item-label>{{ t('admin.credentialAdministration.exportAll') }}</q-item-label>
                 </q-item-section>
               </q-item>
               <q-item v-close-popup clickable to="/import_credentials">
                 <q-item-section>
-                  <q-item-label>Credentials importieren</q-item-label>
+                  <q-item-label>{{ t('admin.credentialAdministration.import') }}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -106,7 +106,7 @@ const columns: QTableColumn<InternalCredential | ExternalCredential>[] = [
   {
     name: 'type',
     required: true,
-    label: 'Typ',
+    label: t('admin.credentialAdministration.type'),
     align: 'center',
     field: (row) => "issuer" in row,
     sortable: true,
