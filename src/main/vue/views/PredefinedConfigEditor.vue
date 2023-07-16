@@ -74,7 +74,7 @@
                                   :label="t('floorPlan.base')"
                                   color="accent" @click="check(k)"/>
                         <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
-                            <q-tooltip max-width="15em" anchor="center right" self="center left">
+                            <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" max-width="15em" anchor="center right" self="center left">
                               {{t('floorPlan.baseConfig')}}
                             </q-tooltip>
                         </q-icon>
@@ -217,6 +217,8 @@ const qSelectGeneral = ref({
     qSelectsSet: <any[]>[]
 })
 
+
+checkLength()
 function removeConfig(i: any) {
     qSelectGeneral.value.qSelectsSet.splice(i, 1)
 }
@@ -395,6 +397,7 @@ async function editConfig(config: any) {
             endTime: element.endTime || '',
             baseConfig: element.baseConfig || false
         }
+        console.log(object)
         qSelectGeneral.value.qSelectsSet.push(object)
     })
 

@@ -237,7 +237,6 @@
                           multiple
                           :options="props.row.doors"
                           option-label="name"
-                          options-cover
                           map-options
                           use-chips
                 />
@@ -256,10 +255,10 @@
             <q-toolbar class="bg-primary text-accent">
               <q-toolbar-title>{{t('floorPlan.config')}}</q-toolbar-title>
               <q-checkbox class="q-mr-lg" size="2em" keep-color dense v-model="qSelectGeneral.qSelectsSet[k].baseConfig"
-                          label="t('floorPlan.base')"
+                          :label="t('floorPlan.base')"
                           color="accent" @click="check(k)"/>
               <q-icon class="q-mr-xs" color="accent" size="1.25em" name="info_outlined">
-                <q-tooltip max-width="15em" anchor="center right" self="center left">
+                <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" max-width="15em" anchor="center right" self="center left">
                   {{t('floorPlan.baseConfig')}}
                 </q-tooltip>
               </q-icon>

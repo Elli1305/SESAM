@@ -121,7 +121,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	public void reset(ColorTheme colorTheme) {
 		try (final InputStream logoFile = Files.newInputStream(fileStorageLocation
 				.resolve(colorsService.getDefaultColors(colorTheme).getLogoPath()));
-			 final InputStream faviconFile = Files.newInputStream(fileStorageLocation.resolve("T_favicon.ico"))) {
+			 final InputStream faviconFile = Files.newInputStream(fileStorageLocation.resolve("Default_Favicon.ico"))) {
 			final Path logoLocation;
 			if (colorTheme.equals(ColorTheme.LIGHT)) {
 				logoLocation = fileStorageLocation.resolve("Logo.svg");
