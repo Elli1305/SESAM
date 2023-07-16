@@ -636,7 +636,7 @@ public class CredentialServiceImpl implements CredentialService {
             final InternalCredential credential = new InternalCredential(
                     internalCredentialExportCmd.getName(),
                     internalCredentialExportCmd.getVersion(),
-                    replaceMagicCredentialDefinitionIds(internalCredentialExportCmd.getCredentialDefinitionId()),
+                    internalCredentialExportCmd.getCredentialDefinitionId(),
                     internalCredentialExportCmd.getAgent(),
                     internalCredentialExportCmd.getAttributes().stream()
                             .map(createAttributeCmd ->
@@ -660,7 +660,7 @@ public class CredentialServiceImpl implements CredentialService {
             final ExternalCredential credential = new ExternalCredential(
                     externalCredentialExportCmd.getName(),
                     externalCredentialExportCmd.getVersion(),
-                    replaceMagicCredentialDefinitionIds(externalCredentialExportCmd.getCredentialDefinitionId()),
+                    externalCredentialExportCmd.getCredentialDefinitionId(),
                     externalCredentialExportCmd.getAttributes().stream()
                             .map(createAttributeCmd ->
                                     new FormEntry(
