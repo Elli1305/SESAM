@@ -20,6 +20,8 @@ import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 
+import static java.util.function.Predicate.not;
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class SesamUser implements UserDetails {

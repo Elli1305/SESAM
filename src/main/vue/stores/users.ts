@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
-import {Ref, ref} from 'vue'
+import {Ref, ref, UnwrapRef} from 'vue'
 import api from '../api'
-import {AttainableRole} from "@/main/vue/entity/createUser"
+import {AttainableRole, UserCount} from "@/main/vue/entity/createUser"
 import axios from 'axios';
 import {User} from "@/main/vue/entity/loginResponse";
 import {LoginData} from "@/main/vue/entity/loginData"
@@ -16,6 +16,7 @@ export const useUserStore = defineStore('users', () => {
     const comparePassword: Ref<boolean> = ref(false)
     const editUser: Ref<User | null> = ref(null)
     const issuers: Ref<Issuer [] | null> = ref(null)
+    const notGrantedCount: Ref<UserCount | null> = ref(null)
 
 
     if (sessionStorage.getItem("users")) {
@@ -167,7 +168,20 @@ export const useUserStore = defineStore('users', () => {
         })
     }
 
+    function getNotGrantedCount() {
+        return new Promise((resolve, reject) => {
+            api.auth.getNotGrantedCount().then((response) => {
+                notGrantedCount.value = response.data
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
 
+
+    // @ts-ignore
+    // @ts-ignore
     return {
         user,
         authenticated,
@@ -190,6 +204,8 @@ export const useUserStore = defineStore('users', () => {
         deleteUser,
         updateIssuer,
         getIssuers,
-        issuers
-    };
+        issuers,
+        getNotGrantedCount,
+        notGrantedCount
+    }
 });

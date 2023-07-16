@@ -139,7 +139,7 @@ export default {
                   ...v,
                   roles: v.roles.filter(r => !r.granted).map(r => ({...r, selected: false}))
                 }))
-
+                userStore.getNotGrantedCount()
               }))
     }
 

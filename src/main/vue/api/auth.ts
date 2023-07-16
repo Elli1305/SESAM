@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from "axios";
-import {CreateUser} from "@/main/vue/entity/createUser";
+import {CreateUser, UserCount} from "@/main/vue/entity/createUser";
 import {SignUpResponse} from "@/main/vue/entity/signUpResponse";
 import {LoginData} from "@/main/vue/entity/loginData";
 import {LoginResponse, User} from "@/main/vue/entity/loginResponse";
@@ -47,5 +47,8 @@ export default {
     },
     getIssuer(): Promise<AxiosResponse<Issuer []>> {
         return axios.get('/api/issuers');
-    }
+    },
+    getNotGrantedCount(): Promise<AxiosResponse<UserCount>> {
+        return axios.get('/api/countNotAuthorized');
+    },
 }

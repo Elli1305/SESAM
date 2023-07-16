@@ -6,7 +6,7 @@ import {useQuasar} from 'quasar'
 import {useRouter} from "vue-router/dist/vue-router"
 import CountryFlag from 'vue-country-flag-next'
 import corpdesign from "@/main/vue/api/corpdesign";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useAppStore} from "@/main/vue/stores/app";
 
 const {t} = useI18n()
@@ -84,6 +84,20 @@ async function logout() {
   }
 }
 
+function getCounter() {
+  userStore.getNotGrantedCount().then(count => {
+    if (!count == 0) {
+    }
+  })
+}
+
+onMounted(() => {
+  if (userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)) {
+    getCounter()
+  }
+}
+)
+
 
 </script>
 <template>
@@ -150,7 +164,10 @@ async function logout() {
               <div>
                 <p v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)"
                    class="headerText foldMenu text-accent">
+                  <div>
                   {{ t("home.profileManagement") }}
+                    <q-badge rounded color="secondary" v-if="userStore.notGrantedCount>0"/>
+                  </div>
                 </p>
                 <q-menu fit transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
                         self="top right" style="background-color: var(--bg-color); color: var(--text-color)">
@@ -159,9 +176,12 @@ async function logout() {
                         t("home.currentUsers")
                       }}
                     </router-link>
+                    <div>
                     <router-link to="/rolesRequest" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.currentRegistrations") }}
                     </router-link>
+                      <q-badge rounded :label="userStore.notGrantedCount" v-if="userStore.notGrantedCount>0"/>
+                    </div>
                     <router-link to="/issuermanagement" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.issuerManagement") }}
                     </router-link>

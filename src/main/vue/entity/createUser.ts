@@ -7,3 +7,7 @@ export interface CreateUser {
 }
 
 export enum AttainableRole { ADMINISTRATOR = 'ADMINISTRATOR', EDITOR = 'EDITOR', ISSUER = 'ISSUER'}
+
+export interface UserCount {
+    count: bigint
+}
