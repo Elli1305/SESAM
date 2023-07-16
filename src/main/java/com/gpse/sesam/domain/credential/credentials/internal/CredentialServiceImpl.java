@@ -17,6 +17,7 @@ import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.user.issuer.Issuer;
 import com.gpse.sesam.domain.user.issuer.IssuerRepository;
 import com.gpse.sesam.web.cmd.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -604,7 +605,7 @@ public class CredentialServiceImpl implements CredentialService {
                         .map(internalCredential ->
                                 new InternalCredentialExportCmd(
                                         internalCredential.getName(),
-                                        "version",
+                                        internalCredential.getVersion(),
                                         internalCredential.getAgent(),
                                         internalCredential.getCredentialDefinitionId(),
                                         internalCredential.getForm(),
@@ -617,18 +618,19 @@ public class CredentialServiceImpl implements CredentialService {
                         .collect(Collectors.toList()),
                 externalCredentialService.getExternalCredentials()
                         .stream()
-                        .map(internalCredential ->
+                        .map(externalCredential ->
                                 new ExternalCredentialExportCmd(
-                                        internalCredential.getName(),
-                                        "version",
-                                        internalCredential.getCredentialDefinitionId(),
-                                        internalCredential.getForm()
+                                        externalCredential.getName(),
+                                        externalCredential.getVersion(),
+                                        externalCredential.getCredentialDefinitionId(),
+                                        externalCredential.getForm()
                                 )
                         )
                         .collect(Collectors.toList())
         );
     }
 
+    @Transactional
     @Override
     public void importCredentials(@Valid CredentialExportCmd credentialExportCmd) {
         for (InternalCredentialExportCmd internalCredentialExportCmd: credentialExportCmd.getInternalCredentials()) {
