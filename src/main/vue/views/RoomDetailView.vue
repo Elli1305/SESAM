@@ -24,7 +24,14 @@
                  style='padding: 0.2em; border-radius: 1em'>
               <div class="q-mb-sm" style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
-                  <q-chip color="primary" text-color="accent"> {{ credential.name }}</q-chip>
+                  <q-chip color="primary" text-color="accent"> {{ credential.name }}
+                    <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="credential?.issuer?.length > 0">
+                      Herausgegeben durch: <br>
+                      <p style="margin-bottom: 0px" v-for="(issuer) in credential.issuer"> {{
+                          issuer.firstName + " " + issuer.lastName + " in " + issuer.room.name
+                        }}</p>
+                    </q-tooltip>
+                  </q-chip>
                   <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
@@ -45,7 +52,14 @@
                  style='padding: 0.2em; border-radius: 1em'>
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
-                  <q-chip dense color="primary" text-color="accent"> {{ credential.name }}</q-chip>
+                  <q-chip dense color="primary" text-color="accent"> {{ credential.name }}
+                    <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="credential?.issuer?.length > 0">
+                      Herausgegeben durch: <br>
+                      <p style="margin-bottom: 0px" v-for="(issuer) in credential.issuer"> {{
+                          issuer.firstName + " " + issuer.lastName + " in " + issuer.room.name
+                        }}</p>
+                    </q-tooltip>
+                  </q-chip>
                   <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
@@ -66,7 +80,15 @@
                  style='padding: 0.2em; border-radius: 1em'>
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
-                  <q-chip dense color="primary" text-color="accent"> {{ credential.name }}</q-chip>
+                  <q-chip dense color="primary" text-color="accent">
+                    {{ credential.name }}
+                    <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="credential?.issuer?.length > 0">
+                      Herausgegeben durch: <br>
+                      <p style="margin-bottom: 0px" v-for="(issuer) in credential.issuer"> {{
+                          issuer.firstName + " " + issuer.lastName + " in " + issuer.room.name
+                        }}</p>
+                    </q-tooltip>
+                  </q-chip>
                   <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
@@ -99,7 +121,12 @@
                  style='padding: 0.2em; border-radius: 1em'>
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
-                  <q-chip color="primary" text-color="white"> {{ credential.name }}</q-chip>
+                  <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="credential?.issuer?.length > 0">
+                    Herausgegeben durch: <br>
+                    <p style="margin-bottom: 0px" v-for="(issuer) in credential.issuer"> {{
+                        issuer.firstName + " " + issuer.lastName + " in " + issuer.room.name
+                      }}</p>
+                  </q-tooltip>
                   <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
@@ -124,7 +151,12 @@
                  style='padding: 0.2em; border-radius: 1em'>
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
-                  <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
+                  <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="credential?.issuer?.length > 0">
+                    Herausgegeben durch: <br>
+                    <p style="margin-bottom: 0px" v-for="(issuer) in credential.issuer"> {{
+                        issuer.firstName + " " + issuer.lastName + " in " + issuer.room.name
+                      }}</p>
+                  </q-tooltip>
                   <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
@@ -147,7 +179,12 @@
                  style='padding: 0.2em; border-radius: 1em'>
               <div style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
-                  <q-chip dense color="primary" text-color="white"> {{ credential.name }}</q-chip>
+                  <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="credential?.issuer?.length > 0">
+                    Herausgegeben durch: <br>
+                    <p style="margin-bottom: 0px" v-for="(issuer) in credential.issuer"> {{
+                        issuer.firstName + " " + issuer.lastName + " in " + issuer.room.name
+                      }}</p>
+                  </q-tooltip>
                   <b v-if="i !== configpart.credentials.length - 1">{{ t('floorPlan.roomDetails.or')}}</b>
                 </div>
                 <div style='margin-top: 0.5em; padding: 0.1em 0.5em; border-radius: 1em;'>
