@@ -313,4 +313,22 @@ public class SesamUserServiceImpl implements SesamUserService {
 		}
 
 	}
+
+	public Integer countNotGrantedUser() {
+		List<SesamUser> users = getUsers();
+		Integer count = 0;
+		List<SesamUser> notGranted = new ArrayList<>();
+
+		for (SesamUser user : users) {
+			for (SesamUserRole role : user.getRoles()) {
+				if (!role.isGranted() && !notGranted.contains(user)) {
+					notGranted.add(user);
+				}
+			}
+		}
+
+		count = notGranted.size();
+
+		return count;
+	}
 }

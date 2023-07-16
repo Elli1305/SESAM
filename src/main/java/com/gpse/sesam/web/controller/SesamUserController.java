@@ -92,4 +92,10 @@ public class SesamUserController {
 		service.deleteUser(user);
 	}
 
+	@Secured(ADMINISTRATOR)
+	@GetMapping("/countNotAuthorized")
+	public Integer countNotGranted() {
+		return service.countNotGrantedUser();
+	}
+
 }

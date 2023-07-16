@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-between">
+  <div class="row justify-between" v-show="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)">
     <q-btn
         size="1em" flat round
         icon="arrow_back"
@@ -11,6 +11,13 @@
         style="color: var(--light)"
         v-show="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
         @click="openDialog(room)"/>
+  </div>
+  <div class="row" v-show="!(userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted))">
+    <q-btn
+        size="1em" flat round
+        icon="arrow_back"
+        @click="$emit('backClicked')"/>
+    <p class="text-h6 self-center no-margin">{{ room?.name }}</p>
   </div>
   <q-scroll-area style="width: 100%; height: 33.25em">
     <p class="text-subtitle2 q-mt-md">{{ t('floorPlan.roomDetails.active') }}</p>
@@ -153,7 +160,7 @@
                 <div v-for="(credential, i) in configpart?.credentials">
                   <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="credential?.issuer?.length > 0">
                     Herausgegeben durch: <br>
-                    <p style="margin-bottom: 0px" v-for="(issuer) in credential.issuer"> {{
+                    <p style="margin-bottom: 0" v-for="(issuer) in credential.issuer"> {{
                         issuer.firstName + " " + issuer.lastName + " in " + issuer.room.name
                       }}</p>
                   </q-tooltip>
@@ -204,7 +211,6 @@
             </div>
           </q-card-section>
         </q-card>
-
       </q-expansion-item>
 
     </q-list>
