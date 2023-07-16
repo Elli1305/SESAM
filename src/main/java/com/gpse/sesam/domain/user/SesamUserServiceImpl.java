@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -312,5 +314,23 @@ public class SesamUserServiceImpl implements SesamUserService {
 			userRepository.save(user);
 		}
 
+	}
+
+	public Integer countNotGrantedUser() {
+		List<SesamUser> users = getUsers();
+		Integer count = 0;
+		List<SesamUser> notGranted = new ArrayList<>();
+
+		for (SesamUser user : users) {
+			for (SesamUserRole role : user.getRoles()) {
+				if (!role.isGranted() && !notGranted.contains(user)) {
+					notGranted.add(user);
+				}
+			}
+		}
+
+		count = notGranted.size();
+
+		return count;
 	}
 }
