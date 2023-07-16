@@ -42,26 +42,32 @@ public class ExternalCredential implements Credential {
 		this.form = form;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(final Long id) {
 		this.id = id;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(final String name) {
 		this.name = name;
 	}
 
+	@Override
 	public String getCredentialDefinitionId() {
 		return credentialDefinitionId;
 	}
 
+	@Override
 	public void setCredentialDefinitionId(final String credentialDefinitionId) {
 		this.credentialDefinitionId = credentialDefinitionId;
 	}
@@ -76,6 +82,7 @@ public class ExternalCredential implements Credential {
 		this.version = version;
 	}
 
+	@Override
 	public List<FormEntry> getForm() {
         return form;
     }

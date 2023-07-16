@@ -67,18 +67,22 @@ public class InternalCredential implements Credential {
 		this.checklist = checklist;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(final Long id) {
 		this.id = id;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(final String name) {
 		this.name = name;
 	}
@@ -93,18 +97,22 @@ public class InternalCredential implements Credential {
 		this.version = version;
 	}
 
+	@Override
 	public String getCredentialDefinitionId() {
 		return credentialDefinitionId;
 	}
 
+	@Override
 	public void setCredentialDefinitionId(final String credentialDefinitionId) {
 		this.credentialDefinitionId = credentialDefinitionId;
 	}
 
+	@Override
 	public List<FormEntry> getForm() {
 		return form;
 	}
 
+	@Override
 	public void setForm(final List<FormEntry> form) {
 		this.form = form;
 	}

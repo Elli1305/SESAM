@@ -41,7 +41,6 @@ public class CredentialServiceImpl implements CredentialService {
             "$U-MEMBER", "9yGivzVEatBj7o9pNjoFbi:3:CL:694437:U-MEMBER",
             "$U-TRAINING", "9yGivzVEatBj7o9pNjoFbi:3:CL:694444:U-TRAINING"
     );
-    private static final String DEFAULT_POOL_NAME = "default_pool";
 
     private final WebClient client;
 
@@ -660,8 +659,8 @@ public class CredentialServiceImpl implements CredentialService {
         for (ExternalCredentialExportCmd externalCredentialExportCmd: credentialExportCmd.getExternalCredentials()) {
             final ExternalCredential credential = new ExternalCredential(
                     externalCredentialExportCmd.getName(),
-                    externalCredentialExportCmd.getCredentialDefinitionId(),
                     externalCredentialExportCmd.getVersion(),
+                    replaceMagicCredentialDefinitionIds(externalCredentialExportCmd.getCredentialDefinitionId()),
                     externalCredentialExportCmd.getAttributes().stream()
                             .map(createAttributeCmd ->
                                     new FormEntry(
