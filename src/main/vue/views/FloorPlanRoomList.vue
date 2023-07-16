@@ -363,7 +363,7 @@ export default {
     }
   },
   name: "FloorPlanRoomList",
-  emits: ["doorChanged"],
+  emits: ["doorChanged", "editRoom"],
   setup(props, context) {
     const {t} = useI18n();
     const floorPlanStore = useFloorPlanStore()

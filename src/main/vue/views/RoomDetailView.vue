@@ -184,6 +184,7 @@ import {useQuasar} from "quasar";
 import EditRoom from "@/main/vue/views/EditRoom.vue";
 import {useUserStore} from "@/main/vue/stores/users";
 import {useI18n} from "vue-i18n";
+import {useLocationStore} from "@/main/vue/stores/locations";
 
 export default {
   name: "RoomDetailView",
@@ -224,20 +225,23 @@ export default {
       dialog.onOk(() => {
         this.load()
         this.$emit('doorChanged')
+        this.locationStore.getLocations()
       })
       dialog.onCancel(() => {
         this.load()
+        this.locationStore.getLocations()
         this.$emit('doorChanged')
       })
     }
   },
-  setup(props) {
+  setup: function (props) {
     const $q = useQuasar();
     const loading = ref(true)
     const config = ref();
     const userStore = useUserStore()
     const activeConfigs = ref([]);
     const {t} = useI18n()
+    const locationStore = useLocationStore()
 
     const inactiveConfigs = ref([]);
 
@@ -302,7 +306,7 @@ export default {
           inactiveConfigs.value = room.data.doors.flatMap(d => getInactiveConfig(d))
         })
         .catch(() => loading.value = false)
-    return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig, getInactiveConfig, t}
+    return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig, getInactiveConfig, t, locationStore}
   }
 }
 </script>

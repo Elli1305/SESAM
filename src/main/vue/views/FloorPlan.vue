@@ -229,7 +229,7 @@ export default {
     mapContainerObserver.observe(this.$refs.mapContainer)
   },
   emits: [
-      'doorCreated', 'roomClicked'
+      'doorCreated', 'roomClicked', 'doorRemoved'
   ],
   methods: {
     redrawRooms() {
@@ -336,10 +336,12 @@ export default {
             floorPlanMap.removeLayer(layer)
           }
         })
+        this.$emit('doorRemoved', e.layer.id)
       });
       polygon.on('click', (e) => {
-        console.log(polygon.id)
-        this.$emit('roomClicked', polygon.id)
+        if (!floorPlanMap.pm.globalRemovalModeEnabled()) {
+          this.$emit('roomClicked', polygon.id)
+        }
       })
     }, async drawRooms(rooms) {
       let polygons = []

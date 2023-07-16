@@ -72,7 +72,7 @@
           </template>
           <q-item clickable v-ripple v-for="(floor) in building.floors" :inset-level="2"
                   @click="changeFloorPlan(floor)" :active="floorPlanStore.selectedFloorId === floor.id" class="show">
-            <q-item-section>{{ floor.floorLevel === 0 ? "Erdgeschoss" : "Etage " + floor.floorLevel }}</q-item-section>
+            <q-item-section>{{ floor.floorLevel === 0 ? t('floorPlan.floor0') : t('floorPlan.floors') + floor.floorLevel }}</q-item-section>
 
             <q-item-section side>
               <q-btn round icon="more_vert" @click.stop flat class="edit-menu">
@@ -161,7 +161,7 @@
     </q-card>
   </q-dialog>
   <q-page class="row no-wrap" style="z-index: 5">
-    <FloorPlan @roomClicked="openDetail" @door-created="refresh" ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
+    <FloorPlan @roomClicked="openDetail" @door-created="refresh" @door-removed="closeDetail" ref="floorPlanRef" :edit-view="true" class="full-width"></FloorPlan>
     <q-separator vertical/>
     <FloorPlanRoomList ref="roomList" @doorChanged="redrawRooms" @editRoom="redrawRooms" :edit="true"></FloorPlanRoomList>
   </q-page>
@@ -197,6 +197,11 @@ export default {
     },
     openDetail(id) {
       this.$refs?.roomList?.roomClick(this.locationStore.getRoomById(id))
+    },
+    closeDetail(id) {
+      if (this.$refs?.roomList?.room.id === id) {
+        this.$refs?.roomList?.back()
+      }
     }
   },
   setup() {
