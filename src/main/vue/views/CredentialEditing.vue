@@ -19,7 +19,7 @@
         <q-select v-if="props.type !== 'external'" v-model="credential.agent" :options="agents" emit-value
                   label="Agent"
                   map-options outlined style="width: 15vw; margin-bottom: -1em"/>
-        <q-input v-model="credential.version" :rules="[required]" error-message=" " label="Version" lazy-rules
+        <q-input v-model="credential.version" :rules="[required, val => new RegExp('^[0123456789.]+$').test(val)]" error-message=" " label="Version" lazy-rules
                  no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
       </div>
       <div class="column no-wrap fit">
