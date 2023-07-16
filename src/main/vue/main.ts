@@ -300,6 +300,7 @@ const messages = {
                 new: "Neues Credential",
                 attribute: "Name des Attributes",
                 edit: "Credential bearbeiten",
+                add: "Credential erstellen",
                 checklist: "Checkliste",
                 credentialAttribute: "Credentialattribute",
                 loadCredentialSchema: "Credential-Schema laden"
@@ -744,6 +745,7 @@ const messages = {
                 new: "New Credential",
                 attribute: "Name of the attribute",
                 edit: "Edit Credential",
+                add: "Add Credential",
                 checklist: "Checklist",
                 credentialAttribute: "Credential attributes",
                 loadCredentialSchema: "Load credential schema"

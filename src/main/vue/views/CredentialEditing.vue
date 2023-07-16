@@ -1,28 +1,29 @@
 <template>
   <q-page class="column justify-evenly" style="padding: 2em 5em">
-    <p class="row text-h3 justify-center">{{ t('admin.credentialAdministration.edit') }}</p>
-    <q-form ref="form" class="column justify-between self-center no-wrap full-width" style="height: 50vh"
+    <p v-if="props.id && props.type" class="row text-h3 justify-center">{{ t('admin.credentialAdministration.edit') }}</p>
+    <p v-else class="row text-h3 justify-center">{{ t('admin.credentialAdministration.add') }}</p>
+    <q-form ref="form" class="row justify-between self-center no-wrap full-width" style="height: 50vh"
             @submit.prevent>
-      <div class="row no-wrap full-width">
-        <div class="column justify-evenly" style="width: 15vw; height: 40vh; margin-right: 3vw">
-          <q-select v-if="!props.type && !props.id" v-model="createType" :options="createOptions" emit-value
-                    label="Credential Type" map-options outlined></q-select>
+      <div class="column justify-evenly full-height" style="width: 15vw; height: 40vh; margin-right: 3vw">
+        <q-select v-if="!props.type && !props.id" v-model="createType" :options="createOptions" emit-value
+                  label="Credential Type" map-options outlined></q-select>
 
-          <q-input v-model="credential.credentialDefinitionId" :disable="createType === 'internal' && createOnLedger"
-                   :rules="[required]" class="q-mb-md" error-message=" " label="Credential Definition ID" lazy-rules
-                   no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
+        <q-input v-model="credential.credentialDefinitionId" :disable="createType === 'internal' && createOnLedger"
+                 :rules="[required]" error-message=" " label="Credential Definition ID" lazy-rules
+                 no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
 
-          <q-checkbox v-show="createType === 'internal'" v-model="createOnLedger" label="Auf dem Ledger erstellen"/>
+        <q-checkbox v-show="createType === 'internal'" v-model="createOnLedger" label="Auf dem Ledger erstellen"/>
 
-          <q-input v-model="credential.name" :rules="[required]" error-message=" " label="Name" lazy-rules no-error-icon
-                   outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
-          <q-select v-if="props.type !== 'external'" v-model="credential.agent" :options="agents" emit-value
-                    label="Agent"
-                    map-options outlined style="width: 15vw; margin-bottom: -1em"/>
-          <q-input v-model="credential.version" :rules="[required]" error-message=" " label="Version" lazy-rules
-                   no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
-        </div>
-        <q-virtual-scroll :items="[0]" class="column full-width" style="height: 40vh">
+        <q-input v-model="credential.name" :rules="[required]" error-message=" " label="Name" lazy-rules no-error-icon
+                 outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
+        <q-select v-if="props.type !== 'external'" v-model="credential.agent" :options="agents" emit-value
+                  label="Agent"
+                  map-options outlined style="width: 15vw; margin-bottom: -1em"/>
+        <q-input v-model="credential.version" :rules="[required]" error-message=" " label="Version" lazy-rules
+                 no-error-icon outlined style="width: 15vw; margin-bottom: -1em" type="text"/>
+      </div>
+      <div class="column no-wrap fit">
+        <q-virtual-scroll :items="[0]" class="column fit" style="height: 40vh">
           <div class="row no-wrap full-width">
             <div class="column full-width">
               <h6 v-if="props.type !== 'external'" class="no-margin q-pb-sm">
@@ -76,12 +77,21 @@
             </div>
           </div>
         </q-virtual-scroll>
-      </div>
-      <div class="row justify-around q-mt-md">
-        <q-btn color="negative" fab icon="delete" style="width: 4em; height: 4em" text-color="positive" unelevated
-               v-if="props.id && props.type" @click="deleteCredential"/>
-        <q-btn color="positive" fab icon="save" style="width: 4em; height: 4em" text-color="negative" unelevated
-               @click="save"/>
+        <div class="row justify-end q-mt-md">
+          <q-btn
+              flat rounded
+              size="1.25em"
+              color="primary"
+              :label="t('common.delete')"
+              v-if="props.id && props.type"
+              @click="deleteCredential"/>
+          <q-btn
+              flat rounded
+              size="1.25em"
+              color="primary"
+              :label="t('common.save')"
+              @click="save"/>
+        </div>
       </div>
     </q-form>
   </q-page>
