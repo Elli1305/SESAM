@@ -30,6 +30,13 @@ const columns: QTableColumn<Row>[] = [
     field: 'credentialDefinitionId',
     sortable: true
   },
+  {
+    name: 'type',
+    label: t('admin.credentialAdministration.type'),
+    align: 'center',
+    field: (row) => row.type,
+    sortable: true,
+  },
 ]
 
 const rows: Ref<Row[]> = ref([]);
@@ -118,12 +125,25 @@ const next = async (refs: any) => {
       return;
     }
 
-    await api.credential.importCredentials(
-        {
-          internalCredentials: selected.value.filter(value => value.type === 'internal') as any,
-          externalCredentials: selected.value.filter(value => value.type === 'external')
-        }
-    );
+    try {
+      await api.credential.importCredentials(
+          {
+            internalCredentials: selected.value.filter(value => value.type === 'internal') as any,
+            externalCredentials: selected.value.filter(value => value.type === 'external')
+          }
+      );
+    } catch (e) {
+      $q.notify({
+        type: 'negative',
+        position: 'bottom',
+        timeout: 6000,
+        message: t('admin.importCredentials.conflict'),
+        color: 'negative',
+        textColor: 'positive',
+      });
+
+      return;
+    }
 
     await router.push('/credential_administration');
   }
@@ -181,7 +201,20 @@ const next = async (refs: any) => {
               :rows="rows"
               flat
               row-key="name"
-              selection="multiple"/>
+              selection="multiple">
+            <template v-slot:body-cell-type="props">
+              <q-td :props="props">
+                <q-chip v-if="props.value === 'internal'" color="primary" style="font-size: 1em" text-color="secondary">
+                  <q-icon left name="business"/>
+                  Internal
+                </q-chip>
+                <q-chip v-else color="secondary" style="font-size: 1em" text-color="primary">
+                  <q-icon left name="public"/>
+                  External
+                </q-chip>
+              </q-td>
+            </template>
+          </q-table>
         </div>
       </q-step>
 

@@ -239,7 +239,8 @@ const messages = {
                     step3: 'Alternativ dazu können Sie eine zuvor exportierte Datei importieren. Klicken Sie dazu auf die Schaltfläche "Datei auswählen" und suchen Sie die entsprechende Datei auf Ihrem Computer. Nach dem Hochladen werden die Credentials aus der Datei extrahiert und auf unserer Seite angezeigt.',
                     step4: 'Nun haben Sie die Möglichkeit, aus den angezeigten Credentials auszuwählen, welche Sie importieren               möchten. Dafür gibt es in jeder Zeile ein Kontrollkästchen. Wählen Sie die gewünschten Credentials aus,               indem Sie die entsprechenden Kontrollkästchen aktivieren. Möchten Sie alle Credentials auf einmal               auswählen, können Sie auch das Kontrollkästchen in der Tabellenüberschrift verwenden.',
                     step5: 'Nachdem Sie Ihre Auswahl getroffen haben, klicken Sie einfach auf die Schaltfläche "Importieren". Dadurch               werden die ausgewählten Credentials in Ihre Instanz integriert.'
-                }
+                },
+                conflict: 'Mindestens eine der Credential Definition IDs existiert bereits in dieser Instanz.'
             },
             credentialEditing: {
                 createOnLedger: 'Auf dem Ledger erstellen',
@@ -727,7 +728,8 @@ const messages = {
                     step3: 'Alternatively, you can import a previously exported file. To do this, click on the "Choose File" button and locate the corresponding file on your computer. After uploading, the credentials will be extracted from the file and displayed on our page.',
                     step4: 'Now, you have the option to select which credentials you want to import from the ones displayed. Each row has a checkbox. Choose the desired credentials by activating the corresponding checkboxes. If you want to select all credentials at once, you can also use the checkbox in the table header.',
                     step5: 'After making your selection, simply click the "Import" button. This will integrate the selected credentials into your instance.'
-                }
+                },
+                conflict: 'At least one of the Credential Definition IDs already exists in this instance.'
             },
             credentialEditing: {
                 createOnLedger: 'Create on Ledger',
