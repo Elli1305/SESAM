@@ -41,7 +41,7 @@ public class ImprintServiceImpl implements ImprintService {
 	public String getLatestImprintEntry() {
 		final List<Imprint> imprintEntries = StreamSupport
 				.stream(imprintRepository.findAll().spliterator(), false)
-				.collect(Collectors.toList());
+				.toList();
 
 		return imprintEntries.stream()
 				.max(Comparator.comparing(Imprint::getTimestamp))

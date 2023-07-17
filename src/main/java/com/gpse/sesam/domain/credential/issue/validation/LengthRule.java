@@ -16,7 +16,7 @@ public class LengthRule extends AbstractValidationRule {
 
     private String attributeName;
 
-    public LengthRule(ComparisonType comparisonType, int length) {
+    public LengthRule(final ComparisonType comparisonType, final int length) {
         this.comparisonType = comparisonType;
         this.length = length;
     }
@@ -34,7 +34,7 @@ public class LengthRule extends AbstractValidationRule {
      * @throws IllegalArgumentException wenn der angegebene Typ nicht für die Bereichsvalidierung unterstützt wird
      */
     @Override
-    public boolean validate(String input, FormEntryType type) {
+    public boolean validate(final String input, final FormEntryType type) {
         if (type == FormEntryType.TEXT) {
             return comparisonType.validate(input.length(), length);
         }
@@ -45,7 +45,7 @@ public class LengthRule extends AbstractValidationRule {
         return comparisonType;
     }
 
-    public void setComparisonType(ComparisonType comparisonType) {
+    public void setComparisonType(final ComparisonType comparisonType) {
         this.comparisonType = comparisonType;
     }
 
@@ -53,7 +53,7 @@ public class LengthRule extends AbstractValidationRule {
         return length;
     }
 
-    public void setLength(int length) {
+    public void setLength(final int length) {
         this.length = length;
     }
 
@@ -61,7 +61,7 @@ public class LengthRule extends AbstractValidationRule {
         return compareWithAttribute;
     }
 
-    public void setCompareWithAttribute(boolean compareWithAttribute) {
+    public void setCompareWithAttribute(final boolean compareWithAttribute) {
         this.compareWithAttribute = compareWithAttribute;
     }
 
@@ -69,7 +69,7 @@ public class LengthRule extends AbstractValidationRule {
         return attributeName;
     }
 
-    public void setAttributeName(String attributeName) {
+    public void setAttributeName(final String attributeName) {
         this.attributeName = attributeName;
     }
 }

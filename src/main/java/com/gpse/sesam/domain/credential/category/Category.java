@@ -83,12 +83,12 @@ public class Category {
 		credential.setCategory(null);
 	}
 
-	public void addExternalCredential(ExternalCredential externalCredential) {
+	public void addExternalCredential(final ExternalCredential externalCredential) {
 		externalCredentials.add(externalCredential);
 		externalCredential.setCategory(this);
 	}
 
-	public void removeExternalCredential(ExternalCredential credential) {
+	public void removeExternalCredential(final ExternalCredential credential) {
 		externalCredentials.remove(credential);
 		credential.setCategory(null);
 	}

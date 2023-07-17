@@ -51,6 +51,7 @@ import java.util.List;
 @Service
 @Profile("test")
 public class InitializeDatabaseLocal implements InitializingBean {
+	private static final String DEFAULT_PASSWORD = "Hallo123!";
 
 	private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
 
@@ -74,7 +75,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
 								   final CredentialService credentialService, final ColorsService colorsService,
 								   final CategoryService categoryService, final PasswordEncoder passwordEncoder,
-								   final RoomGroupService roomGroupService, FileStorageService fileStorageService) {
+								   final RoomGroupService roomGroupService, final FileStorageService fileStorageService) {
 		this.credentialService = credentialService;
 		this.colorsService = colorsService;
 		this.categoryService = categoryService;
@@ -182,7 +183,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		issuerRole.setGranted(true);
 		final SesamUserRole editorRole = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
 		editorRole.setGranted(true);
-		final String defaultPassword = passwordEncoder.encode("Hallo123!");
+		final String defaultPassword = passwordEncoder.encode(DEFAULT_PASSWORD);
 		final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
 				List.of(adminRole));
 		final Issuer issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
@@ -387,7 +388,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		building.addFloor(floor);
 		final Location location = new Location("Köln");
 		location.addBuilding(building);
-		final String defaultPassword = passwordEncoder.encode("Hallo123!");
+		final String defaultPassword = passwordEncoder.encode(DEFAULT_PASSWORD);
 		final List<Issuer> issuers = new ArrayList<>();
 		final Issuer issuer1 = new Issuer("peters@test.com", defaultPassword, "Gerda", "Peters",
 				List.of(issuerRole10), room);
@@ -429,10 +430,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 
 		final List<Issuer> issuers = new ArrayList<>();
-		final Issuer issuer1 = new Issuer("mann@test.com", "Hallo123!", "Elfriede", "Mann",
+		final Issuer issuer1 = new Issuer("mann@test.com", DEFAULT_PASSWORD, "Elfriede", "Mann",
 				List.of(issuerRole10), room);
 
-		final Issuer issuer2 = new Issuer("hombach@test.com", "Hallo123!", "Johann",
+		final Issuer issuer2 = new Issuer("hombach@test.com", DEFAULT_PASSWORD, "Johann",
 				"Hombach", List.of(issuerRole11), room2);
 		issuers.add(issuer1);
 		issuers.add(issuer2);

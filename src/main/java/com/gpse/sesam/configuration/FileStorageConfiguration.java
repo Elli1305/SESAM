@@ -10,7 +10,7 @@ public final class FileStorageConfiguration {
 		return baseDir;
 	}
 
-	public void setBaseDir(String baseDir) {
+	public void setBaseDir(final String baseDir) {
 		this.baseDir = baseDir;
 	}
 }

@@ -21,7 +21,7 @@ public class RangeRule extends AbstractValidationRule {
 
     private String attributeNameTo;
 
-    public RangeRule(String valueFrom, String valueTo) {
+    public RangeRule(final String valueFrom, final String valueTo) {
         this.valueFrom = valueFrom;
         this.valueTo = valueTo;
     }
@@ -39,23 +39,23 @@ public class RangeRule extends AbstractValidationRule {
      * @throws IllegalArgumentException wenn der angegebene Typ nicht für die Bereichsvalidierung unterstützt wird
      */
     @Override
-    public boolean validate(String input, FormEntryType type) {
+    public boolean validate(final String input, final FormEntryType type) {
         switch (type) {
             case NUMBER -> {
-                int integerInput = Integer.parseInt(input);
-                int integerFrom = Integer.parseInt(valueFrom);
-                int integerTo = Integer.parseInt(valueTo);
+                final int integerInput = Integer.parseInt(input);
+                final int integerFrom = Integer.parseInt(valueFrom);
+                final int integerTo = Integer.parseInt(valueTo);
                 return integerFrom <= integerInput && integerInput <= integerTo;
             }
             case DATE -> {
-                String[] inputString = input.split("-");
-                LocalDate dateInput = LocalDate.of(Integer.parseInt(inputString[0]),
+                final String[] inputString = input.split("-");
+                final LocalDate dateInput = LocalDate.of(Integer.parseInt(inputString[0]),
                         Integer.parseInt(inputString[1]), Integer.parseInt(inputString[2]));
-                String[] fromString = valueFrom.split("-");
-                LocalDate dateFrom = LocalDate.of(Integer.parseInt(fromString[0]),
+                final String[] fromString = valueFrom.split("-");
+                final LocalDate dateFrom = LocalDate.of(Integer.parseInt(fromString[0]),
                         Integer.parseInt(fromString[1]), Integer.parseInt(fromString[2]));
-                String[] toString = valueTo.split("-");
-                LocalDate dateTo = LocalDate.of(Integer.parseInt(toString[0]),
+                final String[] toString = valueTo.split("-");
+                final LocalDate dateTo = LocalDate.of(Integer.parseInt(toString[0]),
                         Integer.parseInt(toString[1]), Integer.parseInt(toString[2]));
                 return (dateInput.isAfter(dateFrom) || dateInput.isEqual(dateFrom))
                         && (dateInput.isBefore(dateTo) || dateInput.isEqual(dateTo));
@@ -70,7 +70,7 @@ public class RangeRule extends AbstractValidationRule {
         return valueFrom;
     }
 
-    public void setValueFrom(String valueFrom) {
+    public void setValueFrom(final String valueFrom) {
         this.valueFrom = valueFrom;
     }
 
@@ -78,7 +78,7 @@ public class RangeRule extends AbstractValidationRule {
         return valueTo;
     }
 
-    public void setValueTo(String valueTo) {
+    public void setValueTo(final String valueTo) {
         this.valueTo = valueTo;
     }
 
@@ -86,7 +86,7 @@ public class RangeRule extends AbstractValidationRule {
         return compareWithAttribute;
     }
 
-    public void setCompareWithAttribute(boolean compareWithAttribute) {
+    public void setCompareWithAttribute(final boolean compareWithAttribute) {
         this.compareWithAttribute = compareWithAttribute;
     }
 
@@ -94,7 +94,7 @@ public class RangeRule extends AbstractValidationRule {
         return attributeNameFrom;
     }
 
-    public void setAttributeNameFrom(String attributeName) {
+    public void setAttributeNameFrom(final String attributeName) {
         this.attributeNameFrom = attributeName;
     }
 
@@ -102,7 +102,7 @@ public class RangeRule extends AbstractValidationRule {
         return attributeNameTo;
     }
 
-    public void setAttributeNameTo(String attributeNameTo) {
+    public void setAttributeNameTo(final String attributeNameTo) {
         this.attributeNameTo = attributeNameTo;
     }
 }

@@ -22,21 +22,22 @@ public class ComparisonRule extends AbstractValidationRule {
     private String attributeName;
 
 
-    public ComparisonRule(ComparisonType comparisonType, String content) {
+    public ComparisonRule(final ComparisonType comparisonType, final String content) {
         this.comparisonType = comparisonType;
         this.content = content;
         this.currentDay = false;
         this.compareWithAttribute = false;
     }
 
-    public ComparisonRule(ComparisonType comparisonType, boolean currentDay) {
+    public ComparisonRule(final ComparisonType comparisonType, final boolean currentDay) {
         this.comparisonType = comparisonType;
         this.currentDay = currentDay;
         this.content = "";
         this.compareWithAttribute = false;
     }
 
-    public ComparisonRule(ComparisonType comparisonType, boolean compareWithAttribute, String attributeName) {
+    public ComparisonRule(final ComparisonType comparisonType, final boolean compareWithAttribute,
+                          final String attributeName) {
         this.comparisonType = comparisonType;
         this.content = "";
         this.attributeName = attributeName;
@@ -52,7 +53,7 @@ public class ComparisonRule extends AbstractValidationRule {
         return comparisonType;
     }
 
-    public void setComparisonType(ComparisonType comparisonType) {
+    public void setComparisonType(final ComparisonType comparisonType) {
         this.comparisonType = comparisonType;
     }
 
@@ -60,7 +61,7 @@ public class ComparisonRule extends AbstractValidationRule {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(final String content) {
         this.content = content;
     }
 
@@ -68,7 +69,7 @@ public class ComparisonRule extends AbstractValidationRule {
         return currentDay;
     }
 
-    public void setCurrentDay(boolean currentDay) {
+    public void setCurrentDay(final boolean currentDay) {
         this.currentDay = currentDay;
     }
 
@@ -76,7 +77,7 @@ public class ComparisonRule extends AbstractValidationRule {
         return compareWithAttribute;
     }
 
-    public void setCompareWithAttribute(boolean compareWithAttribute) {
+    public void setCompareWithAttribute(final boolean compareWithAttribute) {
         this.compareWithAttribute = compareWithAttribute;
     }
 
@@ -84,7 +85,7 @@ public class ComparisonRule extends AbstractValidationRule {
         return attributeName;
     }
 
-    public void setAttributeName(String attributeName) {
+    public void setAttributeName(final String attributeName) {
         this.attributeName = attributeName;
     }
 
@@ -97,22 +98,22 @@ public class ComparisonRule extends AbstractValidationRule {
      * @throws IllegalArgumentException wenn der angegebene Typ nicht für die Bereichsvalidierung unterstützt wird
      */
     @Override
-    public boolean validate(String input, FormEntryType type) {
+    public boolean validate(final String input, final FormEntryType type) {
         switch (type) {
             case NUMBER -> {
-                int integerInput = Integer.parseInt(input);
-                int integerContent = Integer.parseInt(content);
+                final int integerInput = Integer.parseInt(input);
+                final int integerContent = Integer.parseInt(content);
                 return comparisonType.validate(integerInput, integerContent);
             }
             case DATE -> {
-                String[] inputString = input.split("-");
-                LocalDate dateInput = LocalDate.of(Integer.parseInt(inputString[0]), Integer.parseInt(inputString[1]),
+                final String[] inputString = input.split("-");
+                final LocalDate dateInput = LocalDate.of(Integer.parseInt(inputString[0]), Integer.parseInt(inputString[1]),
                         Integer.parseInt(inputString[2]));
-                LocalDate dateContent;
+                final LocalDate dateContent;
                 if (currentDay) {
                     dateContent = LocalDate.now();
                 } else {
-                    String[] contentString = content.split("-");
+                    final String[] contentString = content.split("-");
                     dateContent = LocalDate.of(Integer.parseInt(contentString[0]), Integer.parseInt(contentString[1]),
                             Integer.parseInt(contentString[2]));
                 }

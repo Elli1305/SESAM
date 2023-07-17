@@ -78,7 +78,7 @@ public class ExternalCredential implements Credential {
 	}
 
 	@Override
-	public void setVersion(String version) {
+	public void setVersion(final String version) {
 		this.version = version;
 	}
 
@@ -88,7 +88,7 @@ public class ExternalCredential implements Credential {
     }
 
 	@Override
-	public void setForm(List<FormEntry> form) {
+	public void setForm(final List<FormEntry> form) {
 		this.form = form;
 	}
 
@@ -96,7 +96,7 @@ public class ExternalCredential implements Credential {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public void setCategory(final Category category) {
 		this.category = category;
 	}
 }

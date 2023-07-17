@@ -1,7 +1,7 @@
 package com.gpse.sesam.domain.imprint;
 
 public interface ImprintService {
-	void createImprintEntry(String content);
+	void createImprintEntry(final String content);
 
 	String getLatestImprintEntry();
 

@@ -1,9 +1,7 @@
 package com.gpse.sesam.domain.location.building;
 
 public interface BuildingService {
+	void deleteById(final  Long id);
 
-
-	void deleteById(Long id);
-
-	Building save(Building building);
+	Building save(final  Building building);
 }

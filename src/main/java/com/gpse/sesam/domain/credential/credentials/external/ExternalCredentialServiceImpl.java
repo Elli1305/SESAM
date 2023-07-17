@@ -42,8 +42,9 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
      */
 
     @Autowired
-    public ExternalCredentialServiceImpl(ExternalCredentialRepository externalCredentialRepository,
-                                         LocationService locationService, CategoryService categoryService) {
+    public ExternalCredentialServiceImpl(final ExternalCredentialRepository externalCredentialRepository,
+                                         final LocationService locationService,
+                                         final CategoryService categoryService) {
         this.externalCredentialRepository = externalCredentialRepository;
         this.locationService = locationService;
         this.categoryService = categoryService;
@@ -70,12 +71,12 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
      * vorhanden sind.
      */
     @Override
-    public Optional<ExternalCredential> getExternalCredential(Long id) {
+    public Optional<ExternalCredential> getExternalCredential(final Long id) {
         return externalCredentialRepository.findById(id);
     }
 
     @Override
-    public void createExternalCredential(CreateExternalCredentialCmd createExternalCredentialCmd) {
+    public void createExternalCredential(final CreateExternalCredentialCmd createExternalCredentialCmd) {
         final ExternalCredential credential = new ExternalCredential(
                 createExternalCredentialCmd.getName(),
                 createExternalCredentialCmd.getVersion(),
@@ -96,7 +97,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
     }
 
     @Override
-    public void deleteExternalCredential(Long id) {
+    public void deleteExternalCredential(final Long id) {
         final Optional<ExternalCredential> optionalCredential = externalCredentialRepository.findById(id);
 
         if (optionalCredential.isEmpty()) {
@@ -115,7 +116,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
     }
 
     @Override
-    public void updateExternalCredential(Long id, CreateExternalCredentialCmd createExternalCredentialCmd) {
+    public void updateExternalCredential(final Long id, final CreateExternalCredentialCmd createExternalCredentialCmd) {
         final Optional<ExternalCredential> optionalCredential = externalCredentialRepository.findById(id);
 
         if (optionalCredential.isEmpty()) {
@@ -157,7 +158,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
      * @return Eine Liste der gefundenen externen Credentials.
      */
     @Override
-    public List<ExternalCredential> getExternalCredentialByCredentialDefinitionId(String id) {
+    public List<ExternalCredential> getExternalCredentialByCredentialDefinitionId(final String id) {
         return externalCredentialRepository.findAllByCredentialDefinitionId(id);
     }
 
@@ -168,17 +169,17 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
      */
     @Override
     public List<ExternalCredentialCmd> getAllExternal() {
-        List<ExternalCredential> externalCredentials = getExternalCredentials();
-        List<ExternalCredentialCmd> cmds = new ArrayList<>();
-        List<Category> categories = categoryService.getCategory();
-        for (ExternalCredential extern : externalCredentials) {
-            List<String> intern = new ArrayList<>();
+        final List<ExternalCredential> externalCredentials = getExternalCredentials();
+        final List<ExternalCredentialCmd> cmds = new ArrayList<>();
+        final List<Category> categories = categoryService.getCategory();
+        for (final ExternalCredential extern : externalCredentials) {
+            final List<String> intern = new ArrayList<>();
             String categoryName = "-";
-            String name = extern.getName();
-            for (Category category : categories) {
+            final String name = extern.getName();
+            for (final Category category : categories) {
                 if (category.getExternalCredentials().contains(extern)) {
                     categoryName = category.getName();
-                    for (InternalCredential internal : category.getCredentials()) {
+                    for (final InternalCredential internal : category.getCredentials()) {
                         intern.add(internal.getName());
                     }
                 }
@@ -196,7 +197,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
      * @param location Standort zum Abrufen der ProofConfigs zum Erhalten der externen Credentials
      */
 
-    private Iterable<ExternalCredential> getCredentialFromAttachedProofConfig(Location location) {
+    private Iterable<ExternalCredential> getCredentialFromAttachedProofConfig(final Location location) {
         return location
                 .getBuildings().stream()
                 .flatMap(building -> building.getFloors().stream())
@@ -230,8 +231,8 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
      * repräsentieren.
      */
     @Override
-    public List<ExternalCredentialCmd> getAllExternalByLocation(Long id) {
-        List<Category> categories = categoryService.getCategory();
+    public List<ExternalCredentialCmd> getAllExternalByLocation(final Long id) {
+        final List<Category> categories = categoryService.getCategory();
         final Location location = locationService.getLocation(id)
                 .orElseThrow(() -> new IllegalArgumentException("Location with id " + id + " does not exist"));
 
@@ -244,10 +245,10 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
             final String credentialName = credential.getName();
             final List<String> internalCredentials = new ArrayList<>();
             String categoryName = "";
-            for (Category category : categories) {
+            for (final Category category : categories) {
                 if (category.getExternalCredentials().contains(credential)) {
                     categoryName = category.getName();
-                    for (InternalCredential internal : category.getCredentials()) {
+                    for (final InternalCredential internal : category.getCredentials()) {
                         internalCredentials.add(internal.getName());
                     }
                 }
@@ -274,12 +275,12 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
      * @param externalCredentials Eine Iterable-Liste von externen Credentials.
      */
     @Override
-    public void saveAll(Iterable<ExternalCredential> externalCredentials) {
+    public void saveAll(final Iterable<ExternalCredential> externalCredentials) {
         externalCredentialRepository.saveAll(externalCredentials);
     }
 
     @Override
-    public void save(ExternalCredential externalCredential) {
+    public void save(final ExternalCredential externalCredential) {
         externalCredentialRepository.save(externalCredential);
     }
 }

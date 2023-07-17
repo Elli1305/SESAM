@@ -31,8 +31,9 @@ public class CategoryServiceImpl implements CategoryService {
      * @param externalCredentialRepository Das ExternalCredentialRepository.
      */
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CredentialRepository credentialRepository,
-                               ExternalCredentialRepository externalCredentialRepository) {
+    public CategoryServiceImpl(final CategoryRepository categoryRepository,
+                               final CredentialRepository credentialRepository,
+                               final ExternalCredentialRepository externalCredentialRepository) {
         this.categoryRepository = categoryRepository;
         this.credentialRepository = credentialRepository;
         this.externalCredentialRepository = externalCredentialRepository;
@@ -57,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return Die gefundene Kategorie oder Optional.empty(), wenn keine Kategorie mit der ID vorhanden ist.
      */
     @Override
-    public Optional<Category> getCategory(Long id) {
+    public Optional<Category> getCategory(final Long id) {
         return categoryRepository.findById(id);
     }
 
@@ -68,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param id Die ID der zu löschenden Kategorie.
      */
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         Optional<Category> category = getCategory(id);
         if (category.isPresent()) {
             for (InternalCredential credential: category.get().getCredentials()) {
@@ -93,7 +94,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param category Eine Iterable-Liste von Kategorien.
      */
     @Override
-    public void saveAll(Iterable<Category> category) {
+    public void saveAll(final Iterable<Category> category) {
         categoryRepository.saveAll(category);
     }
 
@@ -105,7 +106,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
 
     @Override
-    public void updateCategory(Long id, CategoryResponseCmd cmd) {
+    public void updateCategory(final Long id, final CategoryResponseCmd cmd) {
         Optional<Category> category = getCategory(id);
         if (category.isPresent()) {
             category.get().setName(cmd.getName());
@@ -145,7 +146,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
 
     @Override
-    public void deleteCategory(Category category) {
+    public void deleteCategory(final Category category) {
         categoryRepository.delete(category);
     }
 
@@ -156,7 +157,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param categoryCmd Das CategoryResponseCmd-Objekt mit den Daten für die neue Kategorie.
      */
     @Override
-    public void createCategory(CategoryResponseCmd categoryCmd) {
+    public void createCategory(final CategoryResponseCmd categoryCmd) {
         final Category category = new Category(categoryCmd.getName());
         List<InternalCredential> internal = new ArrayList<>();
         for (Long cred: categoryCmd.getCredentials()) {
@@ -170,9 +171,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCredentials(internal);
         for (Long cred: categoryCmd.getExternalCredentials()) {
             Optional<ExternalCredential> credential = externalCredentialRepository.findById(cred);
-            if (credential.isPresent()) {
-                external.add(credential.get());
-            }
+            credential.ifPresent(external::add);
         }
         category.setExternalCredentialList(external);
         categoryRepository.save(category);

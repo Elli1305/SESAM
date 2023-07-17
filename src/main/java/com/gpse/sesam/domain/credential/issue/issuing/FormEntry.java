@@ -79,7 +79,7 @@ public class FormEntry {
 		return validationRules;
 	}
 
-	public void setValidationRules(List<AbstractValidationRule> validationRules) {
+	public void setValidationRules(final List<AbstractValidationRule> validationRules) {
 		this.validationRules = validationRules;
 	}
 }

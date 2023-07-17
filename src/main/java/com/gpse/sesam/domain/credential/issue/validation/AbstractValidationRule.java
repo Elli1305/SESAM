@@ -27,10 +27,9 @@ public abstract class AbstractValidationRule {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
-    public abstract boolean validate(String input, FormEntryType type);
-
+    public abstract boolean validate(final String input, final FormEntryType type);
 }

@@ -43,15 +43,11 @@ public class Colors {
     @Column(nullable = false)
     private String warning;
 
-    public Colors() {
-
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -59,7 +55,7 @@ public class Colors {
         return defaultColors;
     }
 
-    public void setDefaultColors(boolean defaultColors) {
+    public void setDefaultColors(final boolean defaultColors) {
         this.defaultColors = defaultColors;
     }
 
@@ -67,7 +63,7 @@ public class Colors {
         return theme;
     }
 
-    public void setTheme(ColorTheme theme) {
+    public void setTheme(final ColorTheme theme) {
         this.theme = theme;
     }
 
@@ -75,7 +71,7 @@ public class Colors {
         return bgC;
     }
 
-    public void setBgC(String bgC) {
+    public void setBgC(final String bgC) {
         this.bgC = bgC;
     }
 
@@ -83,7 +79,7 @@ public class Colors {
         return textC;
     }
 
-    public void setTextC(String textC) {
+    public void setTextC(final String textC) {
         this.textC = textC;
     }
 
@@ -91,7 +87,7 @@ public class Colors {
         return primaryColor;
     }
 
-    public void setPrimaryColor(String primaryColor) {
+    public void setPrimaryColor(final String primaryColor) {
         this.primaryColor = primaryColor;
     }
 
@@ -99,7 +95,7 @@ public class Colors {
         return secondary;
     }
 
-    public void setSecondary(String secondary) {
+    public void setSecondary(final String secondary) {
         this.secondary = secondary;
     }
 
@@ -107,7 +103,7 @@ public class Colors {
         return accent;
     }
 
-    public void setAccent(String accent) {
+    public void setAccent(final String accent) {
         this.accent = accent;
     }
 
@@ -115,7 +111,7 @@ public class Colors {
         return dark;
     }
 
-    public void setDark(String dark) {
+    public void setDark(final String dark) {
         this.dark = dark;
     }
 
@@ -123,7 +119,7 @@ public class Colors {
         return light;
     }
 
-    public void setLight(String light) {
+    public void setLight(final String light) {
         this.light = light;
     }
 
@@ -131,7 +127,7 @@ public class Colors {
         return positive;
     }
 
-    public void setPositive(String positive) {
+    public void setPositive(final String positive) {
         this.positive = positive;
     }
 
@@ -139,7 +135,7 @@ public class Colors {
         return negative;
     }
 
-    public void setNegative(String negative) {
+    public void setNegative(final String negative) {
         this.negative = negative;
     }
 
@@ -147,7 +143,7 @@ public class Colors {
         return info;
     }
 
-    public void setInfo(String info) {
+    public void setInfo(final String info) {
         this.info = info;
     }
 
@@ -155,7 +151,7 @@ public class Colors {
         return warning;
     }
 
-    public void setWarning(String warning) {
+    public void setWarning(final String warning) {
         this.warning = warning;
     }
 
@@ -163,7 +159,7 @@ public class Colors {
         return logoPath;
     }
 
-    public void setLogoPath(String logoPath) {
+    public void setLogoPath(final String logoPath) {
         this.logoPath = logoPath;
     }
 }

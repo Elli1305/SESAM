@@ -16,7 +16,7 @@ public class ChecklistEntry {
 
     }
 
-    public ChecklistEntry(String label) {
+    public ChecklistEntry(final String label) {
         this.label = label;
     }
 
@@ -24,7 +24,7 @@ public class ChecklistEntry {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -32,7 +32,7 @@ public class ChecklistEntry {
         return label;
     }
 
-    public void setLabel(String label) {
+    public void setLabel(final String label) {
         this.label = label;
     }
 }

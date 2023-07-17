@@ -89,7 +89,7 @@ public class CredentialServiceImpl implements CredentialService {
      * @param credentialDefinitionId die Credential-Definition-ID, die ersetzt werden soll
      * @return die ersetzte Credential-Definition-ID
      */
-    public static String replaceMagicCredentialDefinitionIds(String credentialDefinitionId) {
+    public static String replaceMagicCredentialDefinitionIds(final String credentialDefinitionId) {
         return MAGIC_CREDENTIAL_DEFINITION_IDS.getOrDefault(credentialDefinitionId, credentialDefinitionId);
     }
 
@@ -260,7 +260,7 @@ public class CredentialServiceImpl implements CredentialService {
      * @return Eine Liste der gefundenen Credentials für den Standort.
      */
     @Override
-    public List<CredentialCmd> getCredentialByLocation(Long id) {
+    public List<CredentialCmd> getCredentialByLocation(final Long id) {
 
         final Location location = locationService.getLocation(id)
                 .orElseThrow(() -> new IllegalArgumentException("Location with id " + id + " does not exist"));
@@ -300,7 +300,7 @@ public class CredentialServiceImpl implements CredentialService {
      *
      * @param location Standort zum Abrufen der ProofConfigs zum Erhalten der internen Credentials
      */
-    private Iterable<InternalCredential> getCredentialFromAttachedProofConfig(Location location) {
+    private Iterable<InternalCredential> getCredentialFromAttachedProofConfig(final Location location) {
         return location
                 .getBuildings().stream()
                 .flatMap(building -> building.getFloors().stream())
@@ -333,7 +333,7 @@ public class CredentialServiceImpl implements CredentialService {
      *                            Credential enthält.
      */
     @Override
-    public void create(boolean createOnLedger, CreateCredentialCmd createCredentialCmd) throws JsonProcessingException {
+    public void create(final boolean createOnLedger, final CreateCredentialCmd createCredentialCmd) throws JsonProcessingException {
         String credentialDefinitionId =
                 replaceMagicCredentialDefinitionIds(createCredentialCmd.getCredentialDefinitionId());
 
@@ -474,27 +474,27 @@ public class CredentialServiceImpl implements CredentialService {
      */
     @Override
     public List<CredentialCmd> getAllCredentialsForView() {
-        List<InternalCredential> credentials = getCredentials();
-        List<Category> categories = categoryService.getCategory();
-        List<CredentialCmd> cmd = new ArrayList<>();
+        final List<InternalCredential> credentials = getCredentials();
+        final List<Category> categories = categoryService.getCategory();
+        final List<CredentialCmd> cmd = new ArrayList<>();
 
-        for (InternalCredential credential : credentials) {
+        for (final InternalCredential credential : credentials) {
             String categoryName = "-";
-            List<String> externalCredentials = new ArrayList<>();
-            List<String> issuers = new ArrayList<>();
-            List<String> room = new ArrayList<>();
-            for (Category category : categories) {
+            final List<String> externalCredentials = new ArrayList<>();
+            final List<String> issuers = new ArrayList<>();
+            final List<String> room = new ArrayList<>();
+            for (final Category category : categories) {
                 if (category.getCredentials().contains(credential)) {
                     categoryName = category.getName();
-                    for (ExternalCredential external : credential.getCategory().getExternalCredentials()) {
+                    for (final ExternalCredential external : credential.getCategory().getExternalCredentials()) {
                         externalCredentials.add(external.getName());
                     }
                 }
             }
 
-            String credentialName = credential.getName();
+            final String credentialName = credential.getName();
             if (!credential.getIssuer().isEmpty()) {
-                for (Issuer issuer : credential.getIssuer()) {
+                for (final Issuer issuer : credential.getIssuer()) {
                     issuers.add(issuer.getFirstName() + " " + issuer.getLastName());
                     String roomName = "-";
                     if (!(issuer.getRoom() == null)) {
@@ -503,8 +503,8 @@ public class CredentialServiceImpl implements CredentialService {
                     room.add(roomName);
                 }
             }
-            cmd.add(new CredentialCmd(categoryName, credentialName, externalCredentials, issuers, room));
 
+            cmd.add(new CredentialCmd(categoryName, credentialName, externalCredentials, issuers, room));
         }
 
         return cmd;
@@ -517,27 +517,27 @@ public class CredentialServiceImpl implements CredentialService {
      */
     @Override
     public List<AllCredentialCmd> getAllForView() {
-        List<InternalCredential> credentials = getCredentials();
-        List<Category> categories = categoryService.getCategory();
-        List<AllCredentialCmd> cmd = new ArrayList<>();
+        final List<InternalCredential> credentials = getCredentials();
+        final List<Category> categories = categoryService.getCategory();
+        final List<AllCredentialCmd> cmd = new ArrayList<>();
 
-        for (InternalCredential credential : credentials) {
+        for (final InternalCredential credential : credentials) {
             String categoryName = "-";
-            List<String> externalCredentials = new ArrayList<>();
-            List<String> issuers = new ArrayList<>();
-            List<String> room = new ArrayList<>();
-            for (Category category : categories) {
+            final List<String> externalCredentials = new ArrayList<>();
+            final List<String> issuers = new ArrayList<>();
+            final List<String> room = new ArrayList<>();
+            for (final Category category : categories) {
                 if (category.getCredentials().contains(credential)) {
                     categoryName = category.getName();
-                    for (ExternalCredential external : credential.getCategory().getExternalCredentials()) {
+                    for (final ExternalCredential external : credential.getCategory().getExternalCredentials()) {
                         externalCredentials.add(external.getName());
                     }
                 }
             }
 
-            String credentialName = credential.getName();
+            final String credentialName = credential.getName();
             if (!credential.getIssuer().isEmpty()) {
-                for (Issuer issuer : credential.getIssuer()) {
+                for (final Issuer issuer : credential.getIssuer()) {
                     issuers.add(issuer.getFirstName() + " " + issuer.getLastName());
                     String roomName = "-";
                     if (!(issuer.getRoom() == null)) {
@@ -549,22 +549,22 @@ public class CredentialServiceImpl implements CredentialService {
             cmd.add(new AllCredentialCmd(categoryName, credentialName, "Intern", externalCredentials, issuers,
                     room));
         }
-        List<ExternalCredential> externalCredentials = externalCredentialService.getExternalCredentials();
-        for (ExternalCredential extern : externalCredentials) {
-            List<String> intern = new ArrayList<>();
+        final List<ExternalCredential> externalCredentials = externalCredentialService.getExternalCredentials();
+        for (final ExternalCredential extern : externalCredentials) {
+            final List<String> intern = new ArrayList<>();
             String categoryName = "-";
-            String name = extern.getName();
-            for (Category category : categories) {
+            final String name = extern.getName();
+            for (final Category category : categories) {
                 if (category.getExternalCredentials().contains(extern)) {
                     categoryName = category.getName();
-                    for (InternalCredential internal : category.getCredentials()) {
+                    for (final InternalCredential internal : category.getCredentials()) {
                         intern.add(internal.getName());
                     }
                 }
 
             }
-            List<String> room = new ArrayList<>();
-            List<String> issuer = new ArrayList<>();
+            final List<String> room = new ArrayList<>();
+            final List<String> issuer = new ArrayList<>();
             cmd.add(new AllCredentialCmd(categoryName, name, "Extern", intern, issuer, room));
 
         }
@@ -578,17 +578,17 @@ public class CredentialServiceImpl implements CredentialService {
      * @return Eine Liste von AllCredentialCmd-Objekten, die alle Credentials für den Standort repräsentieren.
      */
     @Override
-    public List<AllCredentialCmd> getAllCredentialsByLocation(Long id) {
-        List<AllCredentialCmd> cmds = new ArrayList<>();
-        List<CredentialCmd> intern = getCredentialByLocation(id);
-        List<ExternalCredentialCmd> extern = externalCredentialService.getAllExternalByLocation(id);
+    public List<AllCredentialCmd> getAllCredentialsByLocation(final Long id) {
+        final List<AllCredentialCmd> cmds = new ArrayList<>();
+        final List<CredentialCmd> intern = getCredentialByLocation(id);
+        final List<ExternalCredentialCmd> extern = externalCredentialService.getAllExternalByLocation(id);
 
-        for (CredentialCmd in : intern) {
+        for (final CredentialCmd in : intern) {
             cmds.add(new AllCredentialCmd(in.getCategoryName(), in.getCredentialName(), "Intern",
                     in.getExternalCredential(), in.getIssuerName(), in.getRoom()));
         }
 
-        for (ExternalCredentialCmd ex : extern) {
+        for (final ExternalCredentialCmd ex : extern) {
             cmds.add(new AllCredentialCmd(ex.getCategoryName(), ex.getCredentialName(), "Extern",
                     ex.getInternalCredential(), new ArrayList<>(), new ArrayList<>()));
         }
@@ -631,8 +631,8 @@ public class CredentialServiceImpl implements CredentialService {
 
     @Transactional
     @Override
-    public void importCredentials(@Valid CredentialExportCmd credentialExportCmd) {
-        for (InternalCredentialExportCmd internalCredentialExportCmd: credentialExportCmd.getInternalCredentials()) {
+    public void importCredentials(final @Valid CredentialExportCmd credentialExportCmd) {
+        for (final InternalCredentialExportCmd internalCredentialExportCmd: credentialExportCmd.getInternalCredentials()) {
             final InternalCredential credential = new InternalCredential(
                     internalCredentialExportCmd.getName(),
                     internalCredentialExportCmd.getVersion(),
@@ -656,7 +656,7 @@ public class CredentialServiceImpl implements CredentialService {
             credentialRepository.save(credential);
         }
 
-        for (ExternalCredentialExportCmd externalCredentialExportCmd: credentialExportCmd.getExternalCredentials()) {
+        for (final ExternalCredentialExportCmd externalCredentialExportCmd: credentialExportCmd.getExternalCredentials()) {
             final ExternalCredential credential = new ExternalCredential(
                     externalCredentialExportCmd.getName(),
                     externalCredentialExportCmd.getVersion(),

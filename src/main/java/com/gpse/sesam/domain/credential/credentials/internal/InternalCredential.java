@@ -93,7 +93,7 @@ public class InternalCredential implements Credential {
 	}
 
 	@Override
-	public void setVersion(String version) {
+	public void setVersion(final String version) {
 		this.version = version;
 	}
 

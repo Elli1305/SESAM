@@ -14,7 +14,7 @@ public class RegExRule extends AbstractValidationRule {
     @Column
     private String description;
 
-    public RegExRule(String regEx, String description) {
+    public RegExRule(final String regEx, final String description) {
         this.regEx = regEx;
         this.description = description;
     }
@@ -32,7 +32,7 @@ public class RegExRule extends AbstractValidationRule {
      * @throws IllegalArgumentException wenn der angegebene Typ nicht für die Bereichsvalidierung unterstützt wird
      */
     @Override
-    public boolean validate(String input, FormEntryType type) {
+    public boolean validate(final String input, final FormEntryType type) {
         if (type == FormEntryType.TEXT) {
             return Pattern.compile(regEx).matcher(input).matches();
         }
@@ -43,7 +43,7 @@ public class RegExRule extends AbstractValidationRule {
         return regEx;
     }
 
-    public void setRegEx(String regEx) {
+    public void setRegEx(final String regEx) {
         this.regEx = regEx;
     }
 
@@ -51,7 +51,7 @@ public class RegExRule extends AbstractValidationRule {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 }

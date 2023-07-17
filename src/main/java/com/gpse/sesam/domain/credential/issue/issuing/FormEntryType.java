@@ -8,9 +8,9 @@ public enum FormEntryType {
     NUMBER("number");
 
     @JsonValue
-    private String value;
+    private final String value;
 
-    FormEntryType(String value) {
+    FormEntryType(final String value) {
         this.value = value;
     }
 

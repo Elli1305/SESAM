@@ -34,7 +34,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
 	public FileStorageServiceImpl(final FileStorageConfiguration fileStorageConfiguration,
 								  final ColorsService colorsService) {
-		fileStorageLocation = Paths.get(fileStorageConfiguration.getBaseDir()).normalize();
+		this.fileStorageLocation = Paths.get(fileStorageConfiguration.getBaseDir()).normalize();
 		this.colorsService = colorsService;
 		try {
 			Files.createDirectories(fileStorageLocation);
@@ -56,7 +56,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	public String storeFile(final MultipartFile file) {
 		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
-			String[] fileNameArray = fileName.split("\\.");
+			final String[] fileNameArray = fileName.split("\\.");
 			final String randomFileName = String.format("%s.%s",
 					UUID.randomUUID().toString().replace("-", ""),
 					fileNameArray[fileNameArray.length - 1]);
@@ -77,7 +77,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	 * @throws FileStorageException wenn ein Fehler beim Speichern des Logos auftritt
 	 */
 	@Override
-	public String storeLogo(final MultipartFile file, String colorTheme) {
+	public String storeLogo(final MultipartFile file, final String colorTheme) {
 		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
 			final Path targetLocation;
@@ -118,7 +118,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	 * @throws FileStorageException wenn ein Fehler beim Zurücksetzen der Ressourcen auftritt
 	 */
 	@Override
-	public void reset(ColorTheme colorTheme) {
+	public void reset(final ColorTheme colorTheme) {
 		try (final InputStream logoFile = Files.newInputStream(fileStorageLocation
 				.resolve(colorsService.getDefaultColors(colorTheme).getLogoPath()));
 			 final InputStream faviconFile = Files.newInputStream(fileStorageLocation.resolve("Default_Favicon.ico"))) {

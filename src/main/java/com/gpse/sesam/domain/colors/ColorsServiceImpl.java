@@ -19,7 +19,7 @@ public class ColorsServiceImpl implements ColorsService {
      * @param colorsRepository das Repository für Farbdaten
      */
 
-    public ColorsServiceImpl(ColorsRepository colorsRepository) {
+    public ColorsServiceImpl(final ColorsRepository colorsRepository) {
         this.colorsRepository = colorsRepository;
     }
 
@@ -30,12 +30,12 @@ public class ColorsServiceImpl implements ColorsService {
      * @return die Farbkonfiguration für das angegebene Farbthema
      */
     @Override
-    public Colors getColors(ColorTheme colorTheme) {
+    public Colors getColors(final ColorTheme colorTheme) {
         return colorsRepository.findByDefaultColorsIsFalseAndTheme(colorTheme);
     }
 
     @Override
-    public Colors getDefaultColors(ColorTheme colorTheme) {
+    public Colors getDefaultColors(final ColorTheme colorTheme) {
         return colorsRepository.findByDefaultColorsIsTrueAndTheme(colorTheme);
     }
 
@@ -48,7 +48,7 @@ public class ColorsServiceImpl implements ColorsService {
      * @return die aktualisierte Farbkonfiguration
      */
     @Override
-    public Colors changeColors(ColorTheme colorTheme, Colors colors) {
+    public Colors changeColors(final ColorTheme colorTheme, final Colors colors) {
         Long currentColorsId = colorsRepository.findByDefaultColorsIsFalseAndTheme(colorTheme).getId();
         colors.setId(currentColorsId);
         colorsRepository.save(colors);
@@ -61,10 +61,10 @@ public class ColorsServiceImpl implements ColorsService {
      * @param colorTheme das Farbthema, für das die Farben zurückgesetzt werden sollen
      */
     @Override
-    public void resetColors(ColorTheme colorTheme) {
+    public void resetColors(final ColorTheme colorTheme) {
         Long currentColorsId = colorsRepository.findByDefaultColorsIsFalseAndTheme(colorTheme).getId();
         Colors defaultColors = colorsRepository.findByDefaultColorsIsTrueAndTheme(colorTheme);
-        Colors colors = new Colors();
+        final Colors colors = new Colors();
         colors.setId(currentColorsId);
         colors.setDefaultColors(false);
         colors.setTheme(defaultColors.getTheme());
@@ -89,7 +89,7 @@ public class ColorsServiceImpl implements ColorsService {
      * @param defaultColors die Liste von Farbkonfigurationen, die gespeichert werden sollen
      */
     @Override
-    public void saveAll(List<Colors> defaultColors) {
+    public void saveAll(final List<Colors> defaultColors) {
         colorsRepository.saveAll(defaultColors);
     }
 

@@ -29,7 +29,7 @@ public class BuildingServiceImpl implements BuildingService {
 	 * @param id die ID des zu löschenden Gebäudes
 	 */
 	@Override
-	public void deleteById(Long id) {
+	public void deleteById(final Long id) {
 		buildingRepository.deleteById(id);
 	}
 
@@ -40,7 +40,7 @@ public class BuildingServiceImpl implements BuildingService {
 	 * @return das gespeicherte Gebäude
 	 */
 	@Override
-	public Building save(Building building) {
+	public Building save(final Building building) {
 		return buildingRepository.save(building);
 	}
 }
