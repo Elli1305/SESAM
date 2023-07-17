@@ -136,7 +136,7 @@
           <q-list>
 
             <q-item v-for="group in allGroups" class="q-px-none">
-              <q-radio @click="filterRoomToGroups(); updateNumRoomsInGroup();"
+                <q-radio @click="selectGroup(group); filterRoomToGroups(); updateNumRoomsInGroup()"
                        v-model="selectedGroups" :val="group"
                        color="info"/>
               <q-btn

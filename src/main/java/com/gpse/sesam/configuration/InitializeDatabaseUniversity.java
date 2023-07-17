@@ -203,7 +203,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         //Users
         final String defaultPassword = passwordEncoder.encode("Hallo123!");
 
-        final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "UBI", "Admin",
+        final SesamUser admin = new SesamUser("admin@sesam.de", defaultPassword, "UBI", "Admin",
                 Collections.singletonList(adminRole));
         final SesamUser editorIssuer = new Issuer("jörn@sesam.de", defaultPassword, "Jörn", "Mühlenkamp",
                 editorAndIssuer, new Room("0.409"));
