@@ -5,12 +5,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileStorageService {
 
-    String storeFile(final MultipartFile file);
+    String storeFile(MultipartFile file);
 
-    String storeLogo(final MultipartFile file, String colorTheme);
+    String storeLogo(MultipartFile file, String colorTheme);
 
-    String storeFavicon(final MultipartFile file);
+    String storeFavicon(MultipartFile file);
 
-    void reset(final ColorTheme colorTheme);
-
+    void reset(ColorTheme colorTheme);
 }

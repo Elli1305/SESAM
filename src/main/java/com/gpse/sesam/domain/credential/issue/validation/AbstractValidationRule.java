@@ -31,5 +31,5 @@ public abstract class AbstractValidationRule {
         this.id = id;
     }
 
-    public abstract boolean validate(final String input, final FormEntryType type);
+    public abstract boolean validate(String input, FormEntryType type);
 }

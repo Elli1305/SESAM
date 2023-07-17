@@ -333,7 +333,8 @@ public class CredentialServiceImpl implements CredentialService {
      *                            Credential enthält.
      */
     @Override
-    public void create(final boolean createOnLedger, final CreateCredentialCmd createCredentialCmd) throws JsonProcessingException {
+    public void create(final boolean createOnLedger, final CreateCredentialCmd createCredentialCmd)
+            throws JsonProcessingException {
         String credentialDefinitionId =
                 replaceMagicCredentialDefinitionIds(createCredentialCmd.getCredentialDefinitionId());
 
@@ -632,7 +633,8 @@ public class CredentialServiceImpl implements CredentialService {
     @Transactional
     @Override
     public void importCredentials(final @Valid CredentialExportCmd credentialExportCmd) {
-        for (final InternalCredentialExportCmd internalCredentialExportCmd: credentialExportCmd.getInternalCredentials()) {
+        for (final InternalCredentialExportCmd internalCredentialExportCmd
+                : credentialExportCmd.getInternalCredentials()) {
             final InternalCredential credential = new InternalCredential(
                     internalCredentialExportCmd.getName(),
                     internalCredentialExportCmd.getVersion(),
@@ -656,7 +658,8 @@ public class CredentialServiceImpl implements CredentialService {
             credentialRepository.save(credential);
         }
 
-        for (final ExternalCredentialExportCmd externalCredentialExportCmd: credentialExportCmd.getExternalCredentials()) {
+        for (final ExternalCredentialExportCmd externalCredentialExportCmd
+                : credentialExportCmd.getExternalCredentials()) {
             final ExternalCredential credential = new ExternalCredential(
                     externalCredentialExportCmd.getName(),
                     externalCredentialExportCmd.getVersion(),

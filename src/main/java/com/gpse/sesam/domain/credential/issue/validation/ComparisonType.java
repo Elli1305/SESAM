@@ -39,6 +39,5 @@ public enum ComparisonType {
         }
     };
 
-    public abstract <T> boolean validate(final Comparable<T> value1, final T value2);
-
+    public abstract <T> boolean validate(Comparable<T> value1, T value2);
 }

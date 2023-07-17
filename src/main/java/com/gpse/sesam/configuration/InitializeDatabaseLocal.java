@@ -75,7 +75,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
 								   final CredentialService credentialService, final ColorsService colorsService,
 								   final CategoryService categoryService, final PasswordEncoder passwordEncoder,
-								   final RoomGroupService roomGroupService, final FileStorageService fileStorageService) {
+								   final RoomGroupService roomGroupService,
+								   final FileStorageService fileStorageService) {
 		this.credentialService = credentialService;
 		this.colorsService = colorsService;
 		this.categoryService = categoryService;

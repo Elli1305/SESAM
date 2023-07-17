@@ -107,8 +107,11 @@ public class ComparisonRule extends AbstractValidationRule {
             }
             case DATE -> {
                 final String[] inputString = input.split("-");
-                final LocalDate dateInput = LocalDate.of(Integer.parseInt(inputString[0]), Integer.parseInt(inputString[1]),
-                        Integer.parseInt(inputString[2]));
+                final LocalDate dateInput = LocalDate.of(
+                        Integer.parseInt(inputString[0]),
+                        Integer.parseInt(inputString[1]),
+                        Integer.parseInt(inputString[2])
+                );
                 final LocalDate dateContent;
                 if (currentDay) {
                     dateContent = LocalDate.now();
