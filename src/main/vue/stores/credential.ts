@@ -9,7 +9,6 @@ import {
     ExternalCredentialCmd,
     InternalCredential
 } from "@/main/vue/entity/credentialDefinition";
-import credential from "@/main/vue/api/credential";
 
 export const useCredentialsStore = defineStore('credentials', {
     state: () => {
@@ -200,7 +199,6 @@ export const useCredentialStore = defineStore('credential', () => {
                 })
             })
         }
-
 
         return {
             getCredentialsByLocation,
