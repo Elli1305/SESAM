@@ -35,7 +35,7 @@
               :pagination-label="getPaginationLabel"
               :filter="filter3"
               row-key="name"
-              visible-columns="['category', 'type', 'availableCredential', 'qualification', 'issuer']">
+              :visible-columns="['availableCredential', 'type', 'category', 'issuer']">
             <template v-slot:top-left>
               <q-toggle v-model="value3" left-label :label="t('credentialView.showCredentials')"
                         @update:model-value="all(value3)" size="2.5em"/>
@@ -69,7 +69,7 @@
                      v-for="(elem, index) in props.row.issuerName">
                   <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
                   <q-icon class="q-ml-sm q-mr-md" color="info" size="1em" name="info_outlined">
-                    <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
+                    <q-tooltip class="shadow-1" style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" anchor="center right" self="center left" :offset="[8, 0]">
                       {{ t("credentialView.room") }} {{ props.row.room[index] }}
                     </q-tooltip>
                   </q-icon>
@@ -91,7 +91,7 @@
               :pagination-label="getPaginationLabel"
               :filter="filter"
               row-key="name"
-              visible-columns="['category', 'availableCredential', 'qualification', 'issuer']">
+              :visible-columns="['availableCredential', 'category', 'qualification', 'issuer']">
             <template v-slot:top-left>
               <q-toggle v-model="value" left-label :label="t('credentialView.showCredentials')"
                         @update:model-value="internalCredential(value)" size="2.5em"/>
@@ -125,13 +125,12 @@
                      v-for="(elem, index) in props.row.issuerName">
                   <p class="no-margin" style="line-height: 1">{{ props.row.issuerName[index] }}</p>
                   <q-icon class="q-ml-sm q-mr-md" color="info" size="1em" name="info_outlined">
-                    <q-tooltip class="bg-grey-8" anchor="top left" self="bottom left" :offset="[0, 8]">
+                    <q-tooltip class="shadow-1" style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" anchor="center right" self="center left" :offset="[8, 0]">
                       {{ t("credentialView.room") }} {{ props.row.room[index] }}
                     </q-tooltip>
                   </q-icon>
                 </div>
               </q-td>
-              <br>
             </template>
           </q-table>
         </q-tab-panel>
@@ -279,7 +278,7 @@ export default {
         sortable: true
       },
       {
-        name: 'category',
+        name: 'type',
         required: true,
         label: t('credentialView.type'),
         align: 'center',
