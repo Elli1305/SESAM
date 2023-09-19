@@ -98,7 +98,13 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         ExternalCredential utraining = new ExternalCredential("U-Training", "1.0",
                 "$U-TRAINING", formTraining());
 
+        ExternalCredential umember = new ExternalCredential("U-Member", "1.0", "$U-Member", formMember());
+
+        ExternalCredential ulab = new ExternalCredential("U-Lab", "1.0", "$U-Lab", formMember());
+
         externalCredentials.add(utraining);
+        externalCredentials.add(umember);
+        externalCredentials.add(ulab);
 
         return externalCredentials;
     }
@@ -110,12 +116,23 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         category.addCredential(internal.get(1));
         internal.get(1).setCategory(category);
 
+        external.get(0).setCategory(category);
+        category.addExternalCredential(external.get(0));
+
+        Category lab = new Category("lab-trained");
+        lab.addCredential(internal.get(2));
+        internal.get(2).setCategory(lab);
+
         for (ExternalCredential externalCredential: external) {
-            externalCredential.setCategory(category);
-            category.addExternalCredential(externalCredential);
+            if (externalCredential.getName().equals("U-Lab")) {
+                lab.addExternalCredential(externalCredential);
+                externalCredential.setCategory(lab);
+            }
         }
 
+
         categories.add(category);
+        categories.add(lab);
 
         return categories;
     }
@@ -205,19 +222,40 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
         issuerRole.setGranted(true);
 
+        final SesamUserRole issuerRole2 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+        issuerRole2.setGranted(true);
+
+        final SesamUserRole issuerRole3 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+        issuerRole3.setGranted(true);
+
+        final SesamUserRole adminRole2 = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
+        adminRole2.setGranted(false);
+
         //Users
         final String defaultPassword = passwordEncoder.encode("Hallo123!");
 
         final SesamUser admin = new SesamUser("admin@test.de", defaultPassword,
                 "T-Labs", "Admin", Collections.singletonList(adminRole));
-        final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "T-Labs", "Editor",
-                Collections.singletonList(editorRole));
-        final Issuer issuer = new Issuer("wunderland@sesam.de", defaultPassword, "Gerhard", "Wunderland",
-                Collections.singletonList(issuerRole), new Room("106"));
-        issuer.setCredentials(List.of(internals.get(1)));
-        internals.get(1).setIssuer(List.of(issuer));
 
-        return List.of(admin, editor, issuer);
+        final SesamUser admin2 = new SesamUser("meier@telekom.de", defaultPassword,
+                "Meier", "Sandra", Collections.singletonList(adminRole2));
+        final SesamUser editor = new SesamUser("editor@telekom.de", defaultPassword, "T-Labs", "Editor",
+                Collections.singletonList(editorRole));
+        final Issuer issuer = new Issuer("wunderland@telekom.de", defaultPassword, "Gerhard", "Wunderland",
+                Collections.singletonList(issuerRole), new Room("106"));
+
+        final Issuer issuer2 = new Issuer("issuer@telekom.de", defaultPassword, "Max", "Mustermann",
+                Collections.singletonList(issuerRole2), new Room("104"));
+        final Issuer issuer3 = new Issuer("dumon@telekom.de", defaultPassword, "Dumon", "Ditthoff",
+                Collections.singletonList(issuerRole3), new Room("105"));
+        issuer.setCredentials(List.of(internals.get(1)));
+        issuer2.setCredentials(List.of(internals.get(1)));
+        internals.get(1).setIssuer(List.of(issuer, issuer2));
+
+        issuer3.setCredentials(List.of(internals.get(0)));
+        internals.get(0).setIssuer(List.of(issuer3));
+
+        return List.of(admin, admin2, editor, issuer);
     }
 
 
@@ -231,6 +269,10 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         internalCredentials.add(new InternalCredential(
                 "T-Training", "1.0", "$T-TRAINING",
                 "tlabs", formTraining(), checklistTraining()));
+
+        internalCredentials.add(new InternalCredential(
+                "T-Lab", "1.0", "$T-LAB",
+                "tlabs", formMember(), checklistTraining()));
 
         return internalCredentials;
     }
