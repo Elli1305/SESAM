@@ -149,7 +149,10 @@ public class InitializeDatabaseUniversity implements InitializingBean {
 
     private final List<RoomGroups> createRoomGroup(List<Location> locations) {
         List<RoomGroups> groups = new ArrayList<>();
-        groups.add(new RoomGroups("Labor", locations.get(0).getBuildings().get(0).getFloors().get(0).getRooms(),
+
+        groups.add(new RoomGroups("Labore", locations.get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.114") || room.getName().equals("0.117") || room.getName().equals("0.414") || room.getName().equals("0.112")).toList(),
+                locations.get(0).getBuildings().get(0)));
+        groups.add(new RoomGroups("Büros", locations.get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.115") || room.getName().equals("0.116") || room.getName().equals("0.214")).toList(),
                 locations.get(0).getBuildings().get(0)));
 
         return groups;
@@ -340,6 +343,10 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         location.addBuilding(building);
 
         locations.add(location);
+        locations.add(new Location("Hamburg"));
+        locations.add(new Location("Köln"));
+        locations.add(new Location("Berlin"));
+        locations.add(new Location("Bremen"));
 
         return locations;
     }
