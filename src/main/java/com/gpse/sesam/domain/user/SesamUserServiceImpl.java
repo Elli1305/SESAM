@@ -314,6 +314,7 @@ public class SesamUserServiceImpl implements SesamUserService {
 
 	}
 
+	@Override
 	public Integer countNotGrantedUser() {
 		List<SesamUser> users = getUsers();
 		Integer count = 0;
