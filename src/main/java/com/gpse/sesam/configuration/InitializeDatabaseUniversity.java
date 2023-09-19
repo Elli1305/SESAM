@@ -3,6 +3,8 @@ package com.gpse.sesam.configuration;
 import com.gpse.sesam.domain.colors.ColorTheme;
 import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
+import com.gpse.sesam.domain.credential.category.Category;
+import com.gpse.sesam.domain.credential.category.CategoryService;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.domain.credential.credentials.external.ExternalCredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
@@ -63,6 +65,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
     private final PredefinedConfigService predefinedConfigService;
 
     private final RoomGroupService roomGroupService;
+    private final CategoryService categoryService;
 
     @SuppressWarnings("ParameterNumber")
     public InitializeDatabaseUniversity(final LocationService locationService, final SesamUserService userService,
@@ -70,7 +73,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
                                         FileStorageService fileStorageService, final PasswordEncoder passwordEncoder,
                                         DoorService doorService, ExternalCredentialService externalCredentialService,
                                         PredefinedConfigService predefinedConfigService,
-                                        RoomGroupService roomGroupService) {
+                                        RoomGroupService roomGroupService, CategoryService categoryService) {
         this.credentialService = credentialService;
         this.colorsService = colorsService;
         this.fileStorageService = fileStorageService;
@@ -81,6 +84,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         this.externalCredentialService = externalCredentialService;
         this.predefinedConfigService = predefinedConfigService;
         this.roomGroupService = roomGroupService;
+        this.categoryService = categoryService;
     }
 
 
@@ -88,11 +92,12 @@ public class InitializeDatabaseUniversity implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         final List<Colors> colors = createColors();
         final List<InternalCredential> credentials = createCredentials();
-        final List<SesamUser> users = createUsers();
+        final List<SesamUser> users = createUsers(credentials);
         final List<Location> locations = createLocations();
         final List<ExternalCredential> externalCredentials = createExternals();
         final List<RoomGroups> roomGroups = createRoomGroup(locations);
         final List<PredefinedConfig> predefinedConfigs = createPredefinedConfigList();
+        final List<Category> categories = createCategories(credentials, externalCredentials);
 
         colorsService.saveAll(colors);
         setLogo();
@@ -103,6 +108,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         externalCredentialService.saveAll(externalCredentials);
         roomGroupService.saveAll(roomGroups);
         predefinedConfigService.saveAll(predefinedConfigs);
+        categoryService.saveAll(categories);
     }
 
     private List<Colors> createColors() {
@@ -188,7 +194,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         }
     }
 
-    private List<SesamUser> createUsers() {
+    private List<SesamUser> createUsers(List<InternalCredential> credentials) {
         //User Roles
         final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
         adminRole.setGranted(true);
@@ -201,6 +207,12 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
         issuerRole.setGranted(true);
 
+        final SesamUserRole issuerRole2 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+        issuerRole.setGranted(true);
+
+        final SesamUserRole issuerRole3 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
+        issuerRole.setGranted(true);
+
         editorAndIssuer.add(editorRole);
         editorAndIssuer.add(issuerRole);
 
@@ -210,9 +222,20 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         final SesamUser admin = new SesamUser("admin@sesam.de", defaultPassword, "UBI", "Admin",
                 Collections.singletonList(adminRole));
         final SesamUser editorIssuer = new Issuer("jörn@sesam.de", defaultPassword, "Jörn", "Mühlenkamp",
-                editorAndIssuer, new Room("0.409"));
+                editorAndIssuer, new Room("0.408"));
 
-        return List.of(admin, editorIssuer);
+        final Issuer issuer2 = new Issuer("jutta@sesam.de", defaultPassword, "Jutta", "Bergmann",
+                Collections.singletonList(issuerRole2), new Room("0.409"));
+        issuer2.setCredentials(credentials);
+        for (InternalCredential credential : credentials) {
+            credential.setIssuer(List.of(issuer2));
+        }
+        final Issuer issuer3 = new Issuer("kelvin@sesam.de", defaultPassword, "Kelvin", "Matthews",
+                Collections.singletonList(issuerRole3), new Room("0.410"));
+        issuer3.addCredential(credentials.get(2));
+        credentials.get(2).setIssuer(List.of(issuer3));
+
+        return List.of(admin, editorIssuer, issuer2, issuer3);
     }
 
 
@@ -227,7 +250,28 @@ public class InitializeDatabaseUniversity implements InitializingBean {
                 "U-Training", "1.0", "$U-TRAINING",
                 "university", formTraining(), checklistTraining()));
 
+        internalCredentials.add(new InternalCredential(
+                "U-Lab", "1.0", "$U-Lab",
+                "university", formTraining(), checklistTraining()));
+
         return internalCredentials;
+    }
+
+    private List<Category> createCategories(List<InternalCredential> internal, List<ExternalCredential> external) {
+        List<Category> categories = new ArrayList<>();
+        Category lab = new Category("lab-trained");
+        lab.addCredential(internal.get(2));
+        internal.get(2).setCategory(lab);
+
+        for (ExternalCredential externalCredential: external) {
+            if (externalCredential.getName().equals("T-Lab")) {
+                lab.addExternalCredential(externalCredential);
+                externalCredential.setCategory(lab);
+            }
+        }
+        categories.add(lab);
+
+        return categories;
     }
 
     private List<ExternalCredential> createExternals() {
@@ -238,8 +282,12 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         ExternalCredential tmember = new ExternalCredential("T-Member",
                 "1.0", "$T-MEMBER", formMember());
 
+        ExternalCredential tlab = new ExternalCredential("T-Lab",
+                "1.0", "$T-Lab", formMember());
+
         externalCredentials.add(ttraining);
         externalCredentials.add(tmember);
+        externalCredentials.add(tlab);
 
         return externalCredentials;
     }
