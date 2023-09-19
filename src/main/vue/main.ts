@@ -308,6 +308,19 @@ const messages = {
                 resetFailure: "Zurücksetzen fehlgeschlagen",
                 saveFailure: "Speichern fehlgeschlagen"
             },
+            corporateName: {
+                title: 'Corporate Name Bearbeiten',
+                name: 'Corporate Name',
+                reset: {
+                    title: "Sind Sie sicher, dass Sie zurücksetzen wollen?",
+                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
+                    reset: "Zurücksetzen",
+                },
+                save: {
+                    title: "Sind Sie sicher, dass Sie speichern wollen?",
+                    message: "Danach können Sie Ihre aktuellen Einstellungen nicht wiederherstellen.",
+                },
+            },
             imprint: {
                 imprintTitle: "Impressum",
                 imprintEditorTitle: "Impressum Bearbeiten",
@@ -797,6 +810,19 @@ const messages = {
                 },
                 resetFailure: "Reset failed",
                 saveFailure: "Saving failed"
+            },
+            corporateName: {
+                title: 'Edit Corporate Name',
+                name: 'Corporate Name',
+                reset: {
+                    title: "Are you sure you want to reset?",
+                    message: "You will not be able to retrieve your current settings.",
+                    reset: "Reset",
+                },
+                save: {
+                    title: "Are you sure you want to save?",
+                    message: "You will not be able to retrieve your current settings.",
+                },
             },
             imprint: {
                 imprintTitle: "Imprint",

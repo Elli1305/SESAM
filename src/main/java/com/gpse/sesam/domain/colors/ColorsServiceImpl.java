@@ -67,6 +67,7 @@ public class ColorsServiceImpl implements ColorsService {
         final Colors colors = new Colors();
         colors.setId(currentColorsId);
         colors.setDefaultColors(false);
+        colors.setCorporateName(defaultColors.getCorporateName());
         colors.setTheme(defaultColors.getTheme());
         colors.setLogoPath(defaultColors.getLogoPath());
         colors.setBgC(defaultColors.getBgC());
@@ -81,6 +82,91 @@ public class ColorsServiceImpl implements ColorsService {
         colors.setInfo(defaultColors.getInfo());
         colors.setWarning(defaultColors.getWarning());
         colorsRepository.save(colors);
+    }
+
+    @Override
+    public void resetName() {
+        Colors currentColorsLight = colorsRepository.findByDefaultColorsIsFalseAndTheme(ColorTheme.LIGHT);
+        Colors currentColorsDark = colorsRepository.findByDefaultColorsIsFalseAndTheme(ColorTheme.DARK);
+        String defaultName = colorsRepository.findByDefaultColorsIsTrueAndTheme(ColorTheme.LIGHT).getCorporateName();
+        final Colors colorsLight = new Colors();
+        colorsLight.setId(currentColorsLight.getId());
+        colorsLight.setDefaultColors(false);
+        colorsLight.setCorporateName(defaultName);
+        colorsLight.setTheme(currentColorsLight.getTheme());
+        colorsLight.setLogoPath(currentColorsLight.getLogoPath());
+        colorsLight.setBgC(currentColorsLight.getBgC());
+        colorsLight.setTextC(currentColorsLight.getTextC());
+        colorsLight.setPrimaryColor(currentColorsLight.getPrimaryColor());
+        colorsLight.setSecondary(currentColorsLight.getSecondary());
+        colorsLight.setAccent(currentColorsLight.getAccent());
+        colorsLight.setDark(currentColorsLight.getDark());
+        colorsLight.setLight(currentColorsLight.getLight());
+        colorsLight.setPositive(currentColorsLight.getPositive());
+        colorsLight.setNegative(currentColorsLight.getNegative());
+        colorsLight.setInfo(currentColorsLight.getInfo());
+        colorsLight.setWarning(currentColorsLight.getWarning());
+        final Colors colorsDark = new Colors();
+        colorsDark.setId(currentColorsDark.getId());
+        colorsDark.setDefaultColors(false);
+        colorsDark.setCorporateName(defaultName);
+        colorsDark.setTheme(currentColorsDark.getTheme());
+        colorsDark.setLogoPath(currentColorsDark.getLogoPath());
+        colorsDark.setBgC(currentColorsDark.getBgC());
+        colorsDark.setTextC(currentColorsDark.getTextC());
+        colorsDark.setPrimaryColor(currentColorsDark.getPrimaryColor());
+        colorsDark.setSecondary(currentColorsDark.getSecondary());
+        colorsDark.setAccent(currentColorsDark.getAccent());
+        colorsDark.setDark(currentColorsDark.getDark());
+        colorsDark.setLight(currentColorsDark.getLight());
+        colorsDark.setPositive(currentColorsDark.getPositive());
+        colorsDark.setNegative(currentColorsDark.getNegative());
+        colorsDark.setInfo(currentColorsDark.getInfo());
+        colorsDark.setWarning(currentColorsDark.getWarning());
+        colorsRepository.save(colorsLight);
+        colorsRepository.save(colorsDark);
+    }
+
+    @Override
+    public void saveName(String name) {
+        Colors currentColorsLight = colorsRepository.findByDefaultColorsIsFalseAndTheme(ColorTheme.LIGHT);
+        Colors currentColorsDark = colorsRepository.findByDefaultColorsIsFalseAndTheme(ColorTheme.DARK);
+        final Colors colorsLight = new Colors();
+        colorsLight.setId(currentColorsLight.getId());
+        colorsLight.setDefaultColors(false);
+        colorsLight.setCorporateName(name);
+        colorsLight.setTheme(currentColorsLight.getTheme());
+        colorsLight.setLogoPath(currentColorsLight.getLogoPath());
+        colorsLight.setBgC(currentColorsLight.getBgC());
+        colorsLight.setTextC(currentColorsLight.getTextC());
+        colorsLight.setPrimaryColor(currentColorsLight.getPrimaryColor());
+        colorsLight.setSecondary(currentColorsLight.getSecondary());
+        colorsLight.setAccent(currentColorsLight.getAccent());
+        colorsLight.setDark(currentColorsLight.getDark());
+        colorsLight.setLight(currentColorsLight.getLight());
+        colorsLight.setPositive(currentColorsLight.getPositive());
+        colorsLight.setNegative(currentColorsLight.getNegative());
+        colorsLight.setInfo(currentColorsLight.getInfo());
+        colorsLight.setWarning(currentColorsLight.getWarning());
+        final Colors colorsDark = new Colors();
+        colorsDark.setId(currentColorsDark.getId());
+        colorsDark.setDefaultColors(false);
+        colorsDark.setCorporateName(name);
+        colorsDark.setTheme(currentColorsDark.getTheme());
+        colorsDark.setLogoPath(currentColorsDark.getLogoPath());
+        colorsDark.setBgC(currentColorsDark.getBgC());
+        colorsDark.setTextC(currentColorsDark.getTextC());
+        colorsDark.setPrimaryColor(currentColorsDark.getPrimaryColor());
+        colorsDark.setSecondary(currentColorsDark.getSecondary());
+        colorsDark.setAccent(currentColorsDark.getAccent());
+        colorsDark.setDark(currentColorsDark.getDark());
+        colorsDark.setLight(currentColorsDark.getLight());
+        colorsDark.setPositive(currentColorsDark.getPositive());
+        colorsDark.setNegative(currentColorsDark.getNegative());
+        colorsDark.setInfo(currentColorsDark.getInfo());
+        colorsDark.setWarning(currentColorsDark.getWarning());
+        colorsRepository.save(colorsLight);
+        colorsRepository.save(colorsDark);
     }
 
     /**

@@ -108,23 +108,27 @@ public class InitializeDatabaseUniversity implements InitializingBean {
     private List<Colors> createColors() {
         final Colors defaultLight = new Colors();
         defaultLight.setDefaultColors(true);
+        defaultLight.setCorporateName("Universität Bielefeld");
         defaultLight.setTheme(ColorTheme.LIGHT);
         setLightColors(defaultLight);
         defaultLight.setLogoPath("Universität_Bielefeld_Logo_white.svg");
 
         final Colors defaultDark = new Colors();
         defaultDark.setDefaultColors(true);
+        defaultDark.setCorporateName("Universität Bielefeld");
         defaultDark.setTheme(ColorTheme.DARK);
         setDarkColors(defaultDark);
         defaultDark.setLogoPath("Universität_Bielefeld_Logo_black.svg");
 
         final Colors currentLight = new Colors();
         currentLight.setDefaultColors(false);
+        currentLight.setCorporateName("Universität Bielefeld");
         currentLight.setTheme(ColorTheme.LIGHT);
         setLightColors(currentLight);
 
         final Colors currentDark = new Colors();
         currentDark.setDefaultColors(false);
+        currentDark.setCorporateName("Universität Bielefeld");
         currentDark.setTheme(ColorTheme.DARK);
         setDarkColors(currentDark);
 
@@ -156,7 +160,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         defaultColors.setLight("#9e9e9e");
         defaultColors.setPositive("#dcdcdc");
         defaultColors.setNegative("#505050");
-        defaultColors.setInfo("#224f7d");
+        defaultColors.setInfo("#1061b3");
         defaultColors.setWarning("#c08329");
     }
 
@@ -171,7 +175,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         defaultColors.setLight("#9e9e9e");
         defaultColors.setPositive("#dcdcdc");
         defaultColors.setNegative("#505050");
-        defaultColors.setInfo("#224f7d");
+        defaultColors.setInfo("#1061b3");
         defaultColors.setWarning("#c08329");
     }
 

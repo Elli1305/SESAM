@@ -124,23 +124,27 @@ public class InitializeDatabaseTelekom implements InitializingBean {
     private List<Colors> createColors() {
         final Colors defaultLight = new Colors();
         defaultLight.setDefaultColors(true);
+        defaultLight.setCorporateName("Telekom");
         defaultLight.setTheme(ColorTheme.LIGHT);
         setLightColors(defaultLight);
         defaultLight.setLogoPath("T_logo_white.svg");
 
         final Colors defaultDark = new Colors();
         defaultDark.setDefaultColors(true);
+        defaultDark.setCorporateName("Telekom");
         defaultDark.setTheme(ColorTheme.DARK);
         setDarkColors(defaultDark);
         defaultDark.setLogoPath("T_logo_black.svg");
 
         final Colors currentLight = new Colors();
         currentLight.setDefaultColors(false);
+        currentLight.setCorporateName("Telekom");
         currentLight.setTheme(ColorTheme.LIGHT);
         setLightColors(currentLight);
 
         final Colors currentDark = new Colors();
         currentDark.setDefaultColors(false);
+        currentDark.setCorporateName("Telekom");
         currentDark.setTheme(ColorTheme.DARK);
         setDarkColors(currentDark);
 

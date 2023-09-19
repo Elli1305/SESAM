@@ -46,6 +46,14 @@ export default {
         return axios.post(`/api/corpdesign/reset/${colorTheme}`)
     },
 
+    resetName(): Promise<AxiosResponse<void>> {
+        return axios.post(`/api/corpdesign/resetName`)
+    },
+
+    saveName(name: string): Promise<AxiosResponse<void>> {
+        return axios.post(`/api/corpdesign/saveName/${name}`)
+    },
+
     setColors(colorTheme: string): void {
         this.getColors(colorTheme).then(colors => {
             setCssVar('primary', colors.data.primaryColor)

@@ -151,6 +151,11 @@ const router = createRouter({
             meta: {requiresAdmin: true},
         },
         {
+            path: "/corporatename",
+            component: () => import("@/main/vue/views/CorporateName.vue"),
+            meta: {requiresAdmin: true},
+        },
+        {
             path: "/credential_administration",
             component: () => import("@/main/vue/views/CredentialAdministration.vue"),
             meta: {

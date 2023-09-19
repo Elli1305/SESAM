@@ -14,6 +14,9 @@ public class Colors {
     private boolean defaultColors;
 
     @Column
+    private String corporateName;
+
+    @Column
     private ColorTheme theme;
 
     @Column
@@ -57,6 +60,14 @@ public class Colors {
 
     public void setDefaultColors(final boolean defaultColors) {
         this.defaultColors = defaultColors;
+    }
+
+    public String getCorporateName() {
+        return corporateName;
+    }
+
+    public void setCorporateName(String corporateName) {
+        this.corporateName = corporateName;
     }
 
     public ColorTheme getTheme() {

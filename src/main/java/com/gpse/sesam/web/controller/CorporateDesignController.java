@@ -78,4 +78,22 @@ public class CorporateDesignController {
         return getColors(colorTheme);
     }
 
+    @PostMapping(path = "/resetName")
+    @Secured("ADMINISTRATOR")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void resetName() {
+
+        colorsService.resetName();
+
+    }
+
+    @PostMapping(path = "/saveName/{name}")
+    @Secured("ADMINISTRATOR")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void saveName(@PathVariable String name) {
+
+        colorsService.saveName(name);
+
+    }
+
 }

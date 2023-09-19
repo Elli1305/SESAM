@@ -12,6 +12,10 @@ public interface ColorsService {
 
     void resetColors(ColorTheme colorTheme);
 
+    void resetName();
+
+    void saveName(String name);
+
     void saveAll(List<Colors> defaultColors);
 
     void deleteAll();

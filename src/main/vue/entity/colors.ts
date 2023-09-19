@@ -6,6 +6,8 @@ export interface Colors {
 
     defaultColors: boolean,
 
+    corporateName: string,
+
     theme: ColorTheme,
 
     logoPath: string,

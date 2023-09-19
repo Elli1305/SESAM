@@ -16,6 +16,8 @@ const $q = useQuasar()
 const router = useRouter()
 const i18nLocale = useI18n()
 const r = document.querySelector(':root')
+const corporateName = ref('')
+corpdesign.getColors('LIGHT').then(c => { corporateName.value = c.data.corporateName })
 
 const themeIcon = ref('')
 const logoPath = ref('')
@@ -37,6 +39,7 @@ if (!localStorage.getItem('colorTheme')) {
 function updateColors(colorTheme) {
   corpdesign.setColors(colorTheme)
   corpdesign.getColors(colorTheme).then(c => {
+    corporateName.value = c.data.corporateName
     logoPath.value = c.data.logoPath
     r.style.setProperty('--bg-color', c.data.bgC)
     r.style.setProperty('--text-color', c.data.textC)
@@ -113,7 +116,7 @@ onMounted(() => {
           <div id="upper" class="row justify-between" style="height: 42px">
             <div class="row text-accent">
               <q-toolbar-title style="font-weight: 800; font-size: 3.25em; line-height: 1">
-                {{ t("home.applicationName") }}
+                {{ corporateName }}
               </q-toolbar-title>
             </div>
             <div class="row no-wrap">
@@ -198,6 +201,9 @@ onMounted(() => {
                   <div class="column">
                     <router-link to="/corporatedesign" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.editCorporateDesign") }}
+                    </router-link>
+                    <router-link to="/corporatename" class="q-ma-sm headerLink" style="color: var(--text-color)">
+                      {{ t("admin.corporateName.title") }}
                     </router-link>
                     <router-link to="/imprinteditor" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.editImprint") }}
