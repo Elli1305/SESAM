@@ -32,8 +32,8 @@
               <div class="q-mb-sm" style='padding: 0.1em 0.5em; border-radius: 1em;'>
                 <div v-for="(credential, i) in configpart?.credentials">
                   <q-chip color="primary" text-color="accent"> {{ credential.name }}
-                    <q-tooltip style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" v-if="credential?.issuer?.length > 0">
-                      Herausgegeben durch: <br>
+                    <q-tooltip class="shadow-1" style="background-color: var(--bg-color); color: var(--text-color); font-size: 1em" anchor="bottom left" self="top left" :offset="[0, 8]" v-if="credential?.issuer?.length > 0">
+                      {{ t('floorPlan.roomDetails.issuedBy') }}<br>
                       <p style="margin-bottom: 0px" v-for="(issuer) in credential.issuer"> {{
                           issuer.firstName + " " + issuer.lastName + " in " + issuer.room.name
                         }}</p>

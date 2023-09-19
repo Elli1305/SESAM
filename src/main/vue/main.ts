@@ -201,7 +201,8 @@ const messages = {
                 doorConfigFor: "Konfiguration für ",
                 baseConf: "Basiskonf.",
                 in: "Rein",
-                out: "Raus"
+                out: "Raus",
+                issuedBy: "Ausgestellt von: "
             },
             floor0: "Erdgeschoss",
             floors: "Etage "
@@ -690,7 +691,8 @@ const messages = {
                 doorConfigFor: "Configuration for ",
                 baseConf: "Base conf.",
                 in: "In",
-                out: "Out"
+                out: "Out",
+                issuedBy: "Issued by: "
             },
             addConfig: "Add Configuration",
             floor0: "Floor 0",
