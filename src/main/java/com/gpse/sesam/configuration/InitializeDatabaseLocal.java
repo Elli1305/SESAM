@@ -213,7 +213,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 
 	private List<RoomGroups> roomGroups(final List<Location> locations) {
 		final List<RoomGroups> groups = new ArrayList<>();
-		String roomName = locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0).getBuildings().get(0).getFloors().get(0).getRooms().get(0).getName();
+
 		groups.add(new RoomGroups("Labore", locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.114") || room.getName().equals("0.117") || room.getName().equals("0.414") || room.getName().equals("0.112")).toList(),
 				locations.get(0).getBuildings().get(0)));
 		groups.add(new RoomGroups("Büros", locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.115") || room.getName().equals("0.116") || room.getName().equals("0.214")).toList(),
