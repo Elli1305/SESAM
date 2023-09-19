@@ -23,6 +23,10 @@ import com.gpse.sesam.domain.location.Location;
 import com.gpse.sesam.domain.location.LocationService;
 import com.gpse.sesam.domain.location.building.Building;
 import com.gpse.sesam.domain.location.door.Door;
+import com.gpse.sesam.domain.location.door.config.AttributeFilter;
+import com.gpse.sesam.domain.location.door.config.ProofConfig;
+import com.gpse.sesam.domain.location.door.config.ProofPredicateInfo;
+import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
@@ -41,12 +45,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Profile("test")
@@ -109,23 +112,27 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private List<Colors> createColors() {
 		final Colors defaultLight = new Colors();
 		defaultLight.setDefaultColors(true);
+		defaultLight.setCorporateName("SESAM");
 		defaultLight.setTheme(ColorTheme.LIGHT);
 		setLightColors(defaultLight);
 		defaultLight.setLogoPath("T_logo_white.svg");
 
 		final Colors defaultDark = new Colors();
 		defaultDark.setDefaultColors(true);
+		defaultDark.setCorporateName("SESAM");
 		defaultDark.setTheme(ColorTheme.DARK);
 		setDarkColors(defaultDark);
 		defaultDark.setLogoPath("T_logo_black.svg");
 
 		final Colors currentLight = new Colors();
 		currentLight.setDefaultColors(false);
+		currentLight.setCorporateName("SESAM");
 		currentLight.setTheme(ColorTheme.LIGHT);
 		setLightColors(currentLight);
 
 		final Colors currentDark = new Colors();
 		currentDark.setDefaultColors(false);
+		currentDark.setCorporateName("SESAM");
 		currentDark.setTheme(ColorTheme.DARK);
 		setDarkColors(currentDark);
 
@@ -187,17 +194,10 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final String defaultPassword = passwordEncoder.encode(DEFAULT_PASSWORD);
 		final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
 				List.of(adminRole));
-		final Issuer issuer = new Issuer("issuer@test.de", defaultPassword, "Issuer", "User",
-				List.of(issuerRole), new Room("0.007"));
-		issuer.setCredentials(credentials);
 		final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
 				List.of(editorRole));
 		final SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User",
 				Collections.emptyList());
-
-		for (final InternalCredential cred : credentials) {
-			cred.getIssuer().add(issuer);
-		}
 
 		final SesamUserRole issuerRole20 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
 		issuerRole20.setGranted(true);
@@ -208,93 +208,262 @@ public class InitializeDatabaseLocal implements InitializingBean {
 				List.of(editorRole21, issuerRole20), null);
 
 
-		return List.of(admin, issuer, editor, user, jana);
+		return List.of(admin, editor, user, jana);
 	}
 
 	private List<RoomGroups> roomGroups(final List<Location> locations) {
 		final List<RoomGroups> roomGroups = new ArrayList<>();
 		final Building build = locations.get(0).getBuildings().get(0);
-		final Building build2 = locations.get(0).getBuildings().get(1);
 		final List<Room> rooms = build.getFloors().get(0).getRooms();
 
-		final List<Room> rooms2 = build2.getFloors().get(1).getRooms();
 		roomGroups.add(new RoomGroups("Frozen Jaghurt", rooms, build));
-		roomGroups.add(new RoomGroups("Group 2", rooms2, build2));
 		return roomGroups;
 	}
 
 	private List<Location> createLocations() {
-		final List<Door> doors = new ArrayList<>();
-		final List<Door> doors2 = new ArrayList<>();
 
-		for (int i = 0, k = 0; i < 60; i++, k += 2) {
-			final Door door = new Door("Door" + i, null);
-			doors.add(door);
-			final Door door2 = new Door("Door" + k, null);
-			doors2.add(door2);
+		//Room 0.114
+		final Room r114 = new Room("0.114");
+		{
+			List<Coordinate> coordinates = new ArrayList<>();
+
+			coordinates.add(new Coordinate(new BigDecimal("55.45"), new BigDecimal("69.95")));
+			coordinates.add(new Coordinate(new BigDecimal("21.62"), new BigDecimal("69.95")));
+			coordinates.add(new Coordinate(new BigDecimal("21.62"), new BigDecimal("59.06")));
+			coordinates.add(new Coordinate(new BigDecimal("12.64"), new BigDecimal("59.06")));
+			coordinates.add(new Coordinate(new BigDecimal("12.64"), new BigDecimal("46.62")));
+			coordinates.add(new Coordinate(new BigDecimal("55.45"), new BigDecimal("46.62")));
+
+			r114.setCoordinates(coordinates);
+
+			//Door 1
+			List<Coordinate> doorCoordinates = new ArrayList<>();
+			ProofConfig proofConfig = createProofConfig();
+			ProofConfig proofConfig2 = createProofConfig();
+
+			TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
+			twoWayDoorConfig.setBaseConfig(true);
+			twoWayDoorConfig.setProofConfigIn(proofConfig);
+			twoWayDoorConfig.setProofConfigOut(proofConfig2);
+
+			doorCoordinates.add(new Coordinate(new BigDecimal("23.91"), new BigDecimal("69.95")));
+			doorCoordinates.add(new Coordinate(new BigDecimal("27.11"), new BigDecimal("69.95")));
+
+			Door door = new Door("0.114.1", doorCoordinates);
+			door.setDoorConfigs(List.of(twoWayDoorConfig));
+
+			r114.addDoor(door);
+
+			//Door 2
+			List<Coordinate> doorCoordinates2 = new ArrayList<>();
+			ProofConfig proofConfig21 = createProofConfig();
+			ProofConfig proofConfig22 = createProofConfig();
+
+			TwoWayDoorConfig twoWayDoorConfig2 = new TwoWayDoorConfig();
+			twoWayDoorConfig2.setBaseConfig(true);
+			twoWayDoorConfig2.setProofConfigIn(proofConfig21);
+			twoWayDoorConfig2.setProofConfigOut(proofConfig22);
+
+			doorCoordinates2.add(new Coordinate(new BigDecimal("55.45"), new BigDecimal("56.01")));
+			doorCoordinates2.add(new Coordinate(new BigDecimal("55.45"), new BigDecimal("50.52")));
+
+			Door door2 = new Door("0.114.2", doorCoordinates2);
+			door2.setDoorConfigs(List.of(twoWayDoorConfig2));
+
+			r114.addDoor(door2);
+
+			//Door 3
+			List<Coordinate> doorCoordinates3 = new ArrayList<>();
+			ProofConfig proofConfig31 = createProofConfig();
+			ProofConfig proofConfig32 = createProofConfig();
+
+			TwoWayDoorConfig twoWayDoorConfig3 = new TwoWayDoorConfig();
+			twoWayDoorConfig3.setBaseConfig(true);
+			twoWayDoorConfig3.setProofConfigIn(proofConfig31);
+			twoWayDoorConfig3.setProofConfigOut(proofConfig32);
+
+			doorCoordinates3.add(new Coordinate(new BigDecimal("43.26"), new BigDecimal("46.62")));
+			doorCoordinates3.add(new Coordinate(new BigDecimal("49.41"), new BigDecimal("46.62")));
+
+			Door door3 = new Door("0.114.3", doorCoordinates3);
+			door3.setDoorConfigs(List.of(twoWayDoorConfig3));
+
+			r114.addDoor(door3);
+
+			//Door 4
+			List<Coordinate> doorCoordinates4 = new ArrayList<>();
+			ProofConfig proofConfig41 = createProofConfig();
+			ProofConfig proofConfig42 = createProofConfig();
+
+			TwoWayDoorConfig twoWayDoorConfig4 = new TwoWayDoorConfig();
+			twoWayDoorConfig4.setBaseConfig(true);
+			twoWayDoorConfig4.setProofConfigIn(proofConfig41);
+			twoWayDoorConfig4.setProofConfigOut(proofConfig42);
+
+			doorCoordinates4.add(new Coordinate(new BigDecimal("15.38"), new BigDecimal("46.62")));
+			doorCoordinates4.add(new Coordinate(new BigDecimal("18.58"), new BigDecimal("46.62")));
+
+			Door door4 = new Door("0.114.3", doorCoordinates4);
+			door4.setDoorConfigs(List.of(twoWayDoorConfig4));
+
+			r114.addDoor(door4);
 		}
 
-		final List<Room> rooms = new ArrayList<>();
-		final List<Room> rooms2 = new ArrayList<>();
-		for (int i = 0; i < 30; i++) {
-			final Room room = new Room("Room " + i);
-			room.addDoor(doors.get(i * 2));
-			room.addDoor(doors.get(i * 2 + 1));
-			rooms.add(room);
-			final Room room2 = new Room("Room " + i);
-			room2.addDoor(doors2.get(i * 2));
-			room2.addDoor(doors2.get(i * 2 + 1));
-			rooms2.add(room2);
+		//Room 0.115
+		final Room r115 = new Room("0.115");
+		{
+			List<Coordinate> coordinates = new ArrayList<>();
+
+			coordinates.add(new Coordinate(new BigDecimal("12.64"), new BigDecimal("59.06")));
+			coordinates.add(new Coordinate(new BigDecimal("12.64"), new BigDecimal("69.95")));
+			coordinates.add(new Coordinate(new BigDecimal("21.62"), new BigDecimal("69.95")));
+			coordinates.add(new Coordinate(new BigDecimal("21.62"), new BigDecimal("59.06")));
+
+			r115.setCoordinates(coordinates);
+
+			//Doors
+			List<Coordinate> doorCoordinates = new ArrayList<>();
+			ProofConfig proofConfig = createProofConfig();
+			ProofConfig proofConfig2 = createProofConfig();
+
+			TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
+			twoWayDoorConfig.setBaseConfig(true);
+			twoWayDoorConfig.setProofConfigIn(proofConfig);
+			twoWayDoorConfig.setProofConfigOut(proofConfig2);
+
+			doorCoordinates.add(new Coordinate(new BigDecimal("15.39"), new BigDecimal("69.96")));
+			doorCoordinates.add(new Coordinate(new BigDecimal("18.59"), new BigDecimal("69.96")));
+
+			Door door = new Door("0.115.1", doorCoordinates);
+			door.setDoorConfigs(List.of(twoWayDoorConfig));
+
+			r115.addDoor(door);
 		}
 
-		final String jsonContent = readJsonFile();
-		final List<List<Coordinate>> roomCoordinates = createRoomCoordinates(jsonContent);
+		//Room 0.116
+		final Room r116 = new Room("0.116");
+		{
+			List<Coordinate> coordinates = new ArrayList<>();
 
-		for (int i = 0; i < roomCoordinates.size(); i++) {
-			rooms.get(i).setCoordinates(roomCoordinates.get(i));
+			coordinates.add(new Coordinate(new BigDecimal("30.04"), new BigDecimal("75.83")));
+			coordinates.add(new Coordinate(new BigDecimal("30.04"), new BigDecimal("89.72")));
+			coordinates.add(new Coordinate(new BigDecimal("38.04"), new BigDecimal("89.72")));
+			coordinates.add(new Coordinate(new BigDecimal("38.04"), new BigDecimal("75.83")));
+
+			r116.setCoordinates(coordinates);
+
+			//Doors
+			List<Coordinate> doorCoordinates = new ArrayList<>();
+			ProofConfig proofConfig = createProofConfig();
+			ProofConfig proofConfig2 = createProofConfig();
+
+			TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
+			twoWayDoorConfig.setBaseConfig(true);
+			twoWayDoorConfig.setProofConfigIn(proofConfig);
+			twoWayDoorConfig.setProofConfigOut(proofConfig2);
+
+			doorCoordinates.add(new Coordinate(new BigDecimal("33.06"), new BigDecimal("75.83")));
+			doorCoordinates.add(new Coordinate(new BigDecimal("36.19"), new BigDecimal("75.83")));
+
+			Door door = new Door("0.116.1", doorCoordinates);
+			door.setDoorConfigs(List.of(twoWayDoorConfig));
+
+			r116.addDoor(door);
 		}
 
-		final List<List<Coordinate>> doorCoordinates = createDoorCoordinates(jsonContent);
+		//Room 0.117
+		final Room r117 = new Room("0.117");
+		{
+			List<Coordinate> coordinates = new ArrayList<>();
 
-		for (int i = 0; i < doorCoordinates.size(); i++) {
-			final Door door = new Door("door" + i, doorCoordinates.get(i));
-			rooms.get(i).setDoors(List.of(door));
+			coordinates.add(new Coordinate(new BigDecimal("-12.00"), new BigDecimal("75.83")));
+			coordinates.add(new Coordinate(new BigDecimal("-12.00"), new BigDecimal("89.72")));
+			coordinates.add(new Coordinate(new BigDecimal("30.04"), new BigDecimal("89.72")));
+			coordinates.add(new Coordinate(new BigDecimal("30.04"), new BigDecimal("75.83")));
+
+			r117.setCoordinates(coordinates);
+
+			//Door 1
+			List<Coordinate> doorCoordinates = new ArrayList<>();
+			ProofConfig proofConfig = createProofConfig();
+			ProofConfig proofConfig2 = createProofConfig();
+
+			TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
+			twoWayDoorConfig.setBaseConfig(true);
+			twoWayDoorConfig.setProofConfigIn(proofConfig);
+			twoWayDoorConfig.setProofConfigOut(proofConfig2);
+
+			doorCoordinates.add(new Coordinate(new BigDecimal("-4.65"), new BigDecimal("75.83")));
+			doorCoordinates.add(new Coordinate(new BigDecimal("-1.88"), new BigDecimal("75.83")));
+
+			Door door = new Door("0.117.1", doorCoordinates);
+			door.setDoorConfigs(List.of(twoWayDoorConfig));
+
+			r117.addDoor(door);
+
+			//Door 2
+			List<Coordinate> doorCoordinates2 = new ArrayList<>();
+			ProofConfig proofConfig21 = createProofConfig();
+			ProofConfig proofConfig22 = createProofConfig();
+
+			TwoWayDoorConfig twoWayDoorConfig2 = new TwoWayDoorConfig();
+			twoWayDoorConfig2.setBaseConfig(true);
+			twoWayDoorConfig2.setProofConfigIn(proofConfig21);
+			twoWayDoorConfig2.setProofConfigOut(proofConfig22);
+
+			doorCoordinates2.add(new Coordinate(new BigDecimal("24.64"), new BigDecimal("75.83")));
+			doorCoordinates2.add(new Coordinate(new BigDecimal("27.85"), new BigDecimal("75.83")));
+
+			Door door2 = new Door("0.117.1", doorCoordinates2);
+			door2.setDoorConfigs(List.of(twoWayDoorConfig2));
+
+			r117.addDoor(door2);
 		}
 
-		final List<Floor> floors = new ArrayList<>();
-		final List<Floor> floors2 = new ArrayList<>();
-		for (int i = 0; i < 6; i++) {
-			final Floor floor = new Floor(i % 2, "/citec-gebaeudeplan.svg");
-			final Floor floor2 = new Floor(i % 2, "/citec-gebaeudeplan.svg");
-			for (int j = 0; j < 5; j++) {
-				floor.addRoom(rooms.get(i * 5 + j));
-				floor2.addRoom(rooms2.get(i * 5 + j));
-			}
-			floors.add(floor);
-			floors2.add(floor2);
-		}
+		//Floor
+		final Floor floor = new Floor(0, "/citec-gebaeudeplan.svg");
+		floor.addRoom(r114);
+		floor.addRoom(r115);
+		floor.addRoom(r116);
+		floor.addRoom(r117);
 
-		final List<Building> buildings = new ArrayList<>();
-		final List<Building> buildings2 = new ArrayList<>();
-		for (int i = 0; i < 3; i++) {
-			final Building building = new Building("Building " + i);
-			building.addFloor(floors.get(i * 2));
-			building.addFloor(floors.get(i * 2 + 1));
-			buildings.add(building);
-			final Building building2 = new Building("Building " + i);
-			building2.addFloor(floors2.get(i * 2));
-			building2.addFloor(floors2.get(i * 2 + 1));
-			buildings2.add(building2);
-		}
-		final Location location1 = new Location("Berlin");
-		final Location location2 = new Location("Bielefeld");
+		//Building
+		final Building building = new Building("CITEC");
+		building.addFloor(floor);
 
-		for (int i = 0; i < buildings.size(); i++) {
-			location1.addBuilding(buildings.get(i));
-			location2.addBuilding(buildings2.get(i));
-		}
+		//Location
+		List<Location> locations = new ArrayList<>();
 
-		return List.of(location1, location2);
+		final Location location = new Location("Bielefeld");
+		location.addBuilding(building);
+
+		locations.add(location);
+
+		return locations;
+	}
+
+	private ProofConfig createProofConfig() {
+		final ProofConfig proofConfig = new ProofConfig();
+		proofConfig.setDescription("Präsentieren Sie ein U-Member oder T-Member Credential.");
+
+		final Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
+		final ProofPredicateInfo predicateInfo = new ProofPredicateInfo();
+		predicateInfo.setName("expiration_date");
+		predicateInfo.setPredicateType(">");
+		predicateInfo.setPredicateValue("$TODAY-YYYYMMDD");
+
+		final List<AttributeFilter> predicateRestrictions = new ArrayList<>();
+		predicateRestrictions.add(new AttributeFilter());
+		predicateRestrictions.add(new AttributeFilter());
+		predicateRestrictions.get(0).setCredentialDefinitionId("$U-MEMBER");
+		predicateRestrictions.get(1).setCredentialDefinitionId("$T-MEMBER");
+
+		predicateInfo.setRestrictions(predicateRestrictions);
+		requestedPredicates.put("expiration_date", predicateInfo);
+
+		proofConfig.setRequestedPredicates(requestedPredicates);
+
+		return proofConfig;
 	}
 
 	private List<FormEntry> form() {
@@ -362,213 +531,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	}
 
 	private List<InternalCredential> createCredentials() {
-		// Checklist
-		final List<ChecklistEntry> checklist = checklist();
+		List<InternalCredential> credentials = new ArrayList<>();
 
-		//Form
-		final List<FormEntry> form = form();
-
-		// Issuer
-		final SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-		issuerRole10.setGranted(true);
-		final SesamUserRole issuerRole11 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-		issuerRole11.setGranted(true);
-
-
-		final Door door = new Door("Door999", null);
-		final Door door2 = new Door("Door666", null);
-
-		final Room room = new Room("0.007");
-		room.addDoor(door);
-		final Room room2 = new Room("0.112");
-		room2.addDoor(door2);
-		final Floor floor = new Floor(40, null);
-		floor.addRoom(room);
-		floor.addRoom(room2);
-		final Building building = new Building("UHG");
-		building.addFloor(floor);
-		final Location location = new Location("Köln");
-		location.addBuilding(building);
-		final String defaultPassword = passwordEncoder.encode(DEFAULT_PASSWORD);
-		final List<Issuer> issuers = new ArrayList<>();
-		final Issuer issuer1 = new Issuer("peters@test.com", defaultPassword, "Gerda", "Peters",
-				List.of(issuerRole10), room);
-
-		final Issuer issuer2 = new Issuer("muster@test.com", defaultPassword, "Erik", "Muster",
-				List.of(issuerRole11), room2);
-
-		issuers.add(issuer1);
-		issuers.add(issuer2);
-
-		final List<ChecklistEntry> checklist3 = checklist();
-
-		final List<FormEntry> form3 = form();  //Form
-		final InternalCredential safety2 = new InternalCredential("T-Member", "1.0", "$T-MEMBER",
-				"tlabs", form3, checklist3);
-		safety2.addIssuer(issuer1);
-		safety2.addIssuer(issuer2);
-		issuer1.setCredentials(List.of(safety2));
-		issuer2.setCredentials(List.of(safety2));
-
-
-		return List.of(safety2);
+		return credentials;
 	}
 
 	private List<Category> createCredentialCategories() {
-		// Checklist
-		final List<ChecklistEntry> checklist4 = checklist();
-
-		//Form
-		final List<FormEntry> form4 = form();
-
-		// Issuer
-		final SesamUserRole issuerRole10 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-		issuerRole10.setGranted(true);
-		final SesamUserRole issuerRole11 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-		issuerRole10.setGranted(true);
-		final Room room = new Room("0.007");
-		final Room room2 = new Room("0.112");
-
-
-		final List<Issuer> issuers = new ArrayList<>();
-		final Issuer issuer1 = new Issuer("mann@test.com", DEFAULT_PASSWORD, "Elfriede", "Mann",
-				List.of(issuerRole10), room);
-
-		final Issuer issuer2 = new Issuer("hombach@test.com", DEFAULT_PASSWORD, "Johann",
-				"Hombach", List.of(issuerRole11), room2);
-		issuers.add(issuer1);
-		issuers.add(issuer2);
-
-
-		// Safety-Credential
-		final List<InternalCredential> credentials = new ArrayList<>();
-		final InternalCredential safety = new InternalCredential(
-				"Sicherheitsbelehrung-Baumschule",
-				"1.0",
-				"$T-MEMBER",
-				"tlabs",
-				form4,
-				checklist4
-		);
-		safety.addIssuer(issuer1);
-		safety.addIssuer(issuer2);
-		credentials.add(safety);
-		final List<FormEntry> form7 = form();
-		final List<ExternalCredential> externalCredentials = new ArrayList<>();
-		final ExternalCredential safety3 = new ExternalCredential("U-Member", "1.0", "$U-MEMBER1", form7);
-
-		externalCredentials.add(safety3);
-
-
-		//First-Aid-Credential
-		final List<Issuer> issuers2 = new ArrayList<>();
-		issuers2.add(issuer1);
-		// Checklist
-		final List<ChecklistEntry> checklist6 = checklist();
-
-		//Form
-		final List<FormEntry> form6 = form();
-
-		final List<InternalCredential> credentials2 = new ArrayList<>();
-		final InternalCredential firstAid = new InternalCredential(
-				"Erste-Hilfe-Kurs-DRK",
-				"1.0",
-				"$U-TRAINING",
-				"university",
-				form6,
-				checklist6
-		);
-		firstAid.addIssuer(issuer2);
-		credentials2.add(firstAid);
-
-		final List<FormEntry> form8 = form();
-		final List<FormEntry> form9 = form();
-		final List<ExternalCredential> externalCredentials2 = new ArrayList<>();
-		final ExternalCredential firstAid2 = new ExternalCredential("Erste-Hilfe-Kurs-Telekom",
-				"1.0", "$U-TRAINING", form8);
-		final ExternalCredential firstAid3 = new ExternalCredential("Erste-Hilfe-Kurs-Johanniter",
-				"1.0", "$U-MEMBER2", form9);
-
-		externalCredentials2.add(firstAid2);
-		externalCredentials2.add(firstAid3);
-
-		//Rooms with Credentials
-
-		final Door door3 = new Door("Tor120", null);
-
-		final List<Door> doors3 = new ArrayList<>();
-
-		doors3.add(door3);
-
-		final Room room3 = new Room("120");
-		room3.addDoor(door3);
-
-		final List<Room> roomList = new ArrayList<>();
-		roomList.add(room3);
-
-		final Floor floor3 = new Floor(1, "/citec-gebaeudeplan.png");
-		floor3.addRoom(room3);
-		floor3.addRoom(room);
-		floor3.addRoom(room2);
-
-		final List<Floor> floorList = new ArrayList<>();
-
-		floorList.add(floor3);
-
-		final Building building3 = new Building("Citec");
-		building3.addFloor(floor3);
-
-		final List<Building> buildingList = new ArrayList<>();
-
-		buildingList.add(building3);
-
-		final Location location = new Location("Hamburg");
-		location.addBuilding(building3);
-
-		final Door door4 = new Door("Tor1506", null);
-
-		final List<Door> doors4 = new ArrayList<>();
-
-		doors4.add(door4);
-
-		final Room room4 = new Room("0.150");
-		room4.addDoor(door4);
-
-		final List<Room> roomList2 = new ArrayList<>();
-
-		roomList2.add(room4);
-
-		final Floor floor4 = new Floor(1, "/citec-gebaeudeplan.png");
-		floor4.addRoom(room4);
-
-		final List<Floor> floorList2 = new ArrayList<>();
-
-		floorList2.add(floor4);
-
-		final Building building4 = new Building("Citec2");
-
-		final List<Building> buildingList2 = new ArrayList<>();
-		building4.addFloor(floor4);
-
-		buildingList2.add(building4);
-
-		final Location location2 = new Location("Bremen");
-		location2.addBuilding(building4);
-		locationsList.add(location);
-		locationsList.add(location2);
-
-		// Category
-
-		final List<Category> categories = new ArrayList<>();
-		final Category category = new Category("Sicherheitsbelehrung");
-		category.addExternalCredential(safety3);
-		category.addCredential(safety);
-		final Category category2 = new Category("Erste-Hilfe-Kurs");
-		category2.addCredential(firstAid);
-		category2.addExternalCredential(firstAid2);
-		category2.addExternalCredential(firstAid3);
-		categories.add(category);
-		categories.add(category2);
+		List<Category> categories = new ArrayList<>();
 
 		return categories;
 	}
