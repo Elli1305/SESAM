@@ -153,6 +153,7 @@ const messages = {
             // Doors
             doors: 'Türen',
             doorName: 'Türname',
+            doorId: 'Tür ID',
             addDoor: 'Tür zuweisen',
             editDoor: 'Tür bearbeiten',
             pickRoom: 'Raum auswählen',
@@ -657,6 +658,7 @@ const messages = {
             // Doors
             doors: 'Doors',
             doorName: 'Door name',
+            doorId: 'Door ID',
             addDoor: 'Assign door',
             editDoor: 'Edit Door',
             pickRoom: 'Choose room',

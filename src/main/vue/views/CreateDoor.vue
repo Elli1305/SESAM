@@ -18,7 +18,10 @@
         </q-btn>
       </q-card-section>
       <q-card-section class="row q-px-lg justify-between no-wrap">
-        <q-input class="full-width" filled v-model="doorName" :label="t('floorPlan.doorName')" stack-label/>
+        <div class="full-width">
+          <q-input filled v-model="doorName" :label="t('floorPlan.doorName')" style="margin-bottom: 1em" stack-label/>
+          <q-input filled v-model="doorId" :label="t('floorPlan.doorId')" v-if="doorId" readonly stack-label/>
+        </div>
         <q-select
             class="q-ml-md"
             style="width: 40em"
@@ -278,6 +281,7 @@ export default {
   setup(props) {
     const room = ref(null)
     const doorName = ref('')
+    const doorId = ref('')
     const roomOptions = ref(props.rooms)
     const {t} = useI18n()
     const $q = useQuasar()
@@ -358,6 +362,7 @@ export default {
 
     if (props.door) {
       doorName.value = props.door.name
+      doorId.value = props.door.id
       if(props.door.doorConfigCmds.length > 0) {
         qSelectgeneral.qSelectsSet = props.door.doorConfigCmds
           props.door.doorConfigCmds.forEach((element, index) => {
@@ -419,6 +424,7 @@ export default {
       room,
       filterFn,
       doorName,
+      doorId,
       disableSave,
       t,
       check,
