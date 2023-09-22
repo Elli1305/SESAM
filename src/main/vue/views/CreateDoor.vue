@@ -2,7 +2,10 @@
   <q-dialog ref="dialog" @hide="onDialogHide" persistent>
     <q-card style="width: 70em; max-width: 70em; background-color: var(--bg-color); color: var(--text-color)">
       <q-card-section class="row justify-between">
-        <div class="text-h6">{{ t('floorPlan.addDoor') }}</div>
+          <div class="text-h6">{{ t('floorPlan.addDoor') }}</div>
+        <div>
+          <q-btn v-if="door?.id" size="0.9em" flat icon="open_in_new" label="Tür anzeigen (rein)" :href="`https://sesam.gp-se.de:3060/${door.name}_${door.id}_in`" target="_blank"/>
+          <q-btn v-if="door?.id" size="0.9em" flat icon="open_in_new" label="Tür anzeigen (raus)" :href="`https://sesam.gp-se.de:3060/${door.name}_${door.id}_out`" target="_blank"/>
         <q-btn flat rounded size="0.9em">
           <q-icon name="content_copy" size="1em" left/>
           {{ t('floorPlan.chooseConfig') }}
@@ -16,6 +19,7 @@
             </q-list>
           </q-menu>
         </q-btn>
+        </div>
       </q-card-section>
       <q-card-section class="row q-px-lg justify-between no-wrap">
         <div class="full-width">
