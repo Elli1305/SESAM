@@ -587,13 +587,13 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		floor.addRoom(r112);
 		floor.addRoom(r214);
 		final Floor floor2 = new Floor(0, "/citec-gebaeudeplan.svg");
-		floor.addRoom(new Room("Room"));
+		floor2.addRoom(new Room("Room"));
 		final Floor floor3 = new Floor(0, "/citec-gebaeudeplan.svg");
-		floor.addRoom(new Room("Room"));
+		floor3.addRoom(new Room("Room"));
 		final Floor floor4 = new Floor(0, "/citec-gebaeudeplan.svg");
-		floor.addRoom(new Room("Room"));
+		floor4.addRoom(new Room("Room"));
 		final Floor floor5 = new Floor(0, "/citec-gebaeudeplan.svg");
-		floor.addRoom(new Room("Room"));
+		floor5.addRoom(new Room("Room"));
 
 		//Building
 		final Building building = new Building("CITEC");
@@ -616,15 +616,12 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		hamburg.addBuilding(building2);
 		final Location koeln = new Location("Köln");
 		koeln.addBuilding(building3);
-		final Location berlin = new Location("Berlin");
-		berlin.addBuilding(building4);
 		final Location bremen = new Location("Bremen");
 		bremen.addBuilding(building5);
 
 		locations.add(bielefeld);
 		locations.add(hamburg);
 		locations.add(koeln);
-		locations.add(berlin);
 		locations.add(bremen);
 
 		return locations;
@@ -725,8 +722,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 				"U-Member", "1.0", "$U-MEMBER",
 				"university", form(), checklist()));
 		internalCredentials.add(new InternalCredential(
-				"U-Training", "1.0", "$U-TRAINING",
-				"university", form(), checklist()));
+				"T-Member", "1.0", "$T-MEMBER",
+				"tlabs", form(), checklist()));
 
 		return internalCredentials;
 	}
