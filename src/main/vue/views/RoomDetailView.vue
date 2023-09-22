@@ -228,6 +228,7 @@ import EditRoom from "@/main/vue/views/EditRoom.vue";
 import {useUserStore} from "@/main/vue/stores/users";
 import {useI18n} from "vue-i18n";
 import {useLocationStore} from "@/main/vue/stores/locations";
+import {useFloorPlanStore} from "@/main/vue/stores/floorPlan";
 
 export default {
   name: "RoomDetailView",
@@ -265,10 +266,13 @@ export default {
           room: room
         }
       });
-      dialog.onOk(() => {
+      dialog.onOk((savedRoom) => {
         this.load()
-        this.$emit('doorChanged')
-        this.locationStore.getLocations()
+        this.locationStore.getLocations().then(() => {
+          const index = this.floorPlanStore.rooms.findIndex(room => savedRoom.id === room.id)
+          this.floorPlanStore.rooms[index] = savedRoom
+          this.$emit('doorChanged')
+        })
       })
       dialog.onCancel(() => {
         this.load()
@@ -284,6 +288,7 @@ export default {
     const userStore = useUserStore()
     const activeConfigs = ref([]);
     const {t} = useI18n()
+    const floorPlanStore = useFloorPlanStore()
     const locationStore = useLocationStore()
 
     const inactiveConfigs = ref([]);
@@ -349,7 +354,7 @@ export default {
           inactiveConfigs.value = room.data.doors.flatMap(d => getInactiveConfig(d))
         })
         .catch(() => loading.value = false)
-    return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig, getInactiveConfig, t, locationStore}
+    return {config, activeConfigs, inactiveConfigs, userStore, getActiveConfig, getInactiveConfig, t, locationStore, floorPlanStore}
   }
 }
 </script>
