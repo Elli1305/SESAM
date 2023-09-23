@@ -267,10 +267,6 @@ public class InitializeDatabaseUniversity implements InitializingBean {
                 "U-Training", "1.0", "$U-TRAINING",
                 "university", formTraining(), checklistTraining()));
 
-        internalCredentials.add(new InternalCredential(
-                "U-Lab", "1.0", "$U-Lab",
-                "university", formTraining(), checklistTraining()));
-
         return internalCredentials;
     }
 

@@ -709,7 +709,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<AttributeFilter> predicateRestrictions = new ArrayList<>();
 		predicateRestrictions.add(new AttributeFilter());
 		predicateRestrictions.add(new AttributeFilter());
-		predicateRestrictions.get(0).setCredentialDefinitionId("$U-MEMBER");
 		predicateRestrictions.get(1).setCredentialDefinitionId("$T-MEMBER");
 
 		predicateInfo.setRestrictions(predicateRestrictions);
@@ -787,9 +786,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private List<InternalCredential> createCredentials() {
 		List<InternalCredential> internalCredentials = new ArrayList<>();
 
-		internalCredentials.add(new InternalCredential(
-				"U-Member", "1.0", "$U-MEMBER",
-				"university", form(), checklist()));
 		internalCredentials.add(new InternalCredential(
 				"T-Member", "1.0", "$T-MEMBER",
 				"tlabs", form(), checklist()));
