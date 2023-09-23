@@ -12,14 +12,14 @@
         v-show="userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted)"
         @click="openDialog(room)"/>
   </div>
-  <div class="row" v-show="!(userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted))">
+  <div class="row items-center" v-show="!(userStore.authenticated && userStore.user.roles.some(r => r.role === 'EDITOR' && r.granted))">
     <q-btn
         size="1em" flat round
         icon="arrow_back"
         @click="$emit('backClicked')"/>
-    <p class="text-h6 self-center no-margin">{{ room?.name }}</p>
+    <p class="text-h6 text-center no-margin" style="width: 75%">{{ room?.name }}</p>
   </div>
-  <q-scroll-area style="width: 100%; height: 33.25em">
+  <q-scroll-area class="fit">
     <p class="text-subtitle2 q-mt-md">{{ t('floorPlan.roomDetails.active') }}</p>
     <q-list flat bordered v-for="door in activeConfigs">
       <q-expansion-item expanded :label="door?.doorName"

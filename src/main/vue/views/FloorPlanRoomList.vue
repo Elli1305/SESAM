@@ -111,7 +111,7 @@
 
             </div>
           </q-tab-panel>
-          <q-tab-panel name="info">
+          <q-tab-panel name="info" class="column justify-between q-pb-none no-wrap">
             <room-detail-view ref="roomDetail" @doorChanged="$emit('doorChanged')" :room="room"
                               @back-clicked="back()"/>
           </q-tab-panel>
