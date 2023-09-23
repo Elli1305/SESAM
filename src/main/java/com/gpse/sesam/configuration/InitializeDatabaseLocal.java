@@ -6,7 +6,6 @@ import com.gpse.sesam.domain.colors.Colors;
 import com.gpse.sesam.domain.colors.ColorsService;
 import com.gpse.sesam.domain.credential.category.Category;
 import com.gpse.sesam.domain.credential.category.CategoryService;
-import com.gpse.sesam.domain.credential.credentials.external.ExternalCredential;
 import com.gpse.sesam.domain.credential.credentials.internal.CredentialService;
 import com.gpse.sesam.domain.credential.credentials.internal.InternalCredential;
 import com.gpse.sesam.domain.credential.issue.issuing.ChecklistEntry;
@@ -55,6 +54,7 @@ import java.util.*;
 
 @Service
 @Profile("test")
+@SuppressWarnings("avoidnestedblocks")
 public class InitializeDatabaseLocal implements InitializingBean {
 	private static final String DEFAULT_PASSWORD = "Hallo123!";
 
@@ -212,7 +212,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		editorRole21.setGranted(true);
 
 		final SesamUser jana = new Issuer("jana@test.de", defaultPassword, "Jana", "Editor-Issuer",
-				List.of(editorRole21, issuerRole20), null);
+				List.of(editorRole21, issuerRole20));
 
 
 		return List.of(admin, editor, user, jana);
@@ -221,9 +221,22 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private List<RoomGroups> roomGroups(final List<Location> locations) {
 		final List<RoomGroups> groups = new ArrayList<>();
 
-		groups.add(new RoomGroups("Labore", locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.114") || room.getName().equals("0.117") || room.getName().equals("0.414") || room.getName().equals("0.112")).toList(),
+		groups.add(new RoomGroups("Labore",
+				locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0)
+						.getBuildings().get(0).getFloors().get(0)
+						.getRooms().stream().filter(room ->
+								room.getName().equals("0.114")
+										|| room.getName().equals("0.117")
+										|| room.getName().equals("0.414")
+										|| room.getName().equals("0.112")).toList(),
 				locations.get(0).getBuildings().get(0)));
-		groups.add(new RoomGroups("Büros", locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.115") || room.getName().equals("0.116") || room.getName().equals("0.214")).toList(),
+		groups.add(new RoomGroups("Büros",
+				locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0)
+						.getBuildings().get(0).getFloors().get(0)
+						.getRooms().stream().filter(room ->
+								room.getName().equals("0.115")
+										|| room.getName().equals("0.116")
+										|| room.getName().equals("0.214")).toList(),
 				locations.get(0).getBuildings().get(0)));
 
 		return groups;

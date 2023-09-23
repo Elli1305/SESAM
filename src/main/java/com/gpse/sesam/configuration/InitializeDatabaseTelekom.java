@@ -41,6 +41,7 @@ import java.util.*;
 
 @Service
 @Profile("telekom")
+@SuppressWarnings("avoidnestedblocks")
 public class InitializeDatabaseTelekom implements InitializingBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
@@ -222,49 +223,52 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         }
     }
 
-    private List<SesamUser> createUsers(List<InternalCredential> internals) {
-        //User Roles
-        final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
-        adminRole.setGranted(true);
-        final SesamUserRole editorRole = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
-        editorRole.setGranted(true);
-        final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-        issuerRole.setGranted(true);
+    private List<SesamUser> createUsers(List<InternalCredential> credentials) {
 
-        final SesamUserRole issuerRole2 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-        issuerRole2.setGranted(true);
+        final List<SesamUser> users = new ArrayList<>();
 
-        final SesamUserRole issuerRole3 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-        issuerRole3.setGranted(true);
-
-        final SesamUserRole adminRole2 = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
-        adminRole2.setGranted(false);
-
-        //Users
+        //Password
         final String defaultPassword = passwordEncoder.encode("Hallo123!");
 
-        final SesamUser admin = new SesamUser("admin@test.de", defaultPassword,
-                "T-Labs", "Admin", Collections.singletonList(adminRole));
+        //Users
+        users.add(new SesamUser("gisela@telekom.de", defaultPassword, "Gisela", "Wunderlich",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR, true))));
 
-        final SesamUser admin2 = new SesamUser("meier@telekom.de", defaultPassword,
-                "Meier", "Sandra", Collections.singletonList(adminRole2));
-        final SesamUser editor = new SesamUser("editor@telekom.de", defaultPassword, "T-Labs", "Editor",
-                Collections.singletonList(editorRole));
-        final Issuer issuer = new Issuer("wunderland@telekom.de", defaultPassword, "Gerhard", "Wunderland",
-                Collections.singletonList(issuerRole), new Room("106"));
+        users.add(new SesamUser("meier@telekom.de", defaultPassword, "Meier", "Sandra",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR, false))));
 
-        final Issuer issuer2 = new Issuer("issuer@telekom.de", defaultPassword, "Max", "Mustermann",
-                Collections.singletonList(issuerRole2), new Room("104"));
-        final Issuer issuer3 = new Issuer("dumon@telekom.de", defaultPassword, "Dumon", "Ditthoff",
-                Collections.singletonList(issuerRole3), new Room("105"));
-        issuer.setCredentials(List.of(internals.get(1)));
-        issuer2.setCredentials(List.of(internals.get(1)));
-        internals.get(1).setIssuer(List.of(issuer, issuer2));
+        users.add(new SesamUser("harald@telekom.de", defaultPassword, "Harald", "Warmke",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.EDITOR, true))));
 
-        issuer3.setCredentials(List.of(internals.get(0)));
-        internals.get(0).setIssuer(List.of(issuer3));
+        users.add(new Issuer("gerhard@telekom.de", defaultPassword, "Gerhard", "Wunderland",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
+                new Room("0.109"),
+                List.of(credentials.get(0))));
+        credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
 
-        return List.of(admin, admin2, editor, issuer);
+        users.add(new Issuer("max@telekom.de", defaultPassword, "Max", "Weißberg",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
+                new Room("0.106"),
+                List.of(credentials.get(0),
+                        credentials.get(1))));
+        credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+        credentials.get(1).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+
+        users.add(new Issuer("dumon@telekom.de", defaultPassword, "Dumon", "Ditthoff",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
+                new Room("0.107"),
+                List.of(credentials.get(0),
+                        credentials.get(2))));
+        credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+        credentials.get(2).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+
+        users.add(new Issuer("celina@telekom.de", defaultPassword, "Celina", "Werk",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, false))));
+
+        users.add(new SesamUser("anton@telekom.de", defaultPassword, "Anton", "Henz",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.EDITOR, false))));
+
+        return users;
     }
 
 
@@ -286,12 +290,25 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         return internalCredentials;
     }
 
-    private final List<RoomGroups> createRoomGroup(List<Location> locations) {
+    private List<RoomGroups> createRoomGroup(List<Location> locations) {
         final List<RoomGroups> groups = new ArrayList<>();
 
-        groups.add(new RoomGroups("Labore", locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.114") || room.getName().equals("0.117") || room.getName().equals("0.414") || room.getName().equals("0.112")).toList(),
+        groups.add(new RoomGroups("Labore",
+                locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0)
+                        .getBuildings().get(0).getFloors().get(0)
+                        .getRooms().stream().filter(room ->
+                                room.getName().equals("0.114")
+                                        || room.getName().equals("0.117")
+                                        || room.getName().equals("0.414")
+                                        || room.getName().equals("0.112")).toList(),
                 locations.get(0).getBuildings().get(0)));
-        groups.add(new RoomGroups("Büros", locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.115") || room.getName().equals("0.116") || room.getName().equals("0.214")).toList(),
+        groups.add(new RoomGroups("Büros",
+                locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0)
+                        .getBuildings().get(0).getFloors().get(0)
+                        .getRooms().stream().filter(room ->
+                                room.getName().equals("0.115")
+                                        || room.getName().equals("0.116")
+                                        || room.getName().equals("0.214")).toList(),
                 locations.get(0).getBuildings().get(0)));
 
         return groups;
@@ -691,15 +708,15 @@ public class InitializeDatabaseTelekom implements InitializingBean {
         hamburg.addBuilding(building2);
         final Location koeln = new Location("Köln");
         koeln.addBuilding(building3);
-        final Location berlin = new Location("Berlin");
-        berlin.addBuilding(building4);
+        final Location hannover = new Location("Hannover");
+        hannover.addBuilding(building4);
         final Location bremen = new Location("Bremen");
         bremen.addBuilding(building5);
 
         locations.add(bielefeld);
         locations.add(hamburg);
         locations.add(koeln);
-        locations.add(berlin);
+        locations.add(hannover);
         locations.add(bremen);
 
         return locations;

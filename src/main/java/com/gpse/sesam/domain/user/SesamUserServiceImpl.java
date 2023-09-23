@@ -302,7 +302,7 @@ public class SesamUserServiceImpl implements SesamUserService {
 			deleteUser(user);
 			Issuer issuer = new Issuer(user.getUsername(), user.getPassword(), prename, lastname, roles.stream()
 					.distinct().map(role -> new SesamUserRole(role, true))
-					.collect(Collectors.toList()), null);
+					.collect(Collectors.toList()));
 			issuerService.save(issuer);
 		} else {
 			user.setLastName(lastname);
