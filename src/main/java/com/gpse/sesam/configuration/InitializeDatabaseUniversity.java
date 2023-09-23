@@ -44,6 +44,7 @@ import java.util.*;
 
 @Service
 @Profile("university")
+@SuppressWarnings("avoidnestedblocks")
 public class InitializeDatabaseUniversity implements InitializingBean {
     private static final Logger LOG = LoggerFactory.getLogger(InitializeDatabaseLocal.class);
 
@@ -150,9 +151,22 @@ public class InitializeDatabaseUniversity implements InitializingBean {
     private final List<RoomGroups> createRoomGroup(List<Location> locations) {
         final List<RoomGroups> groups = new ArrayList<>();
 
-        groups.add(new RoomGroups("Labore", locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.114") || room.getName().equals("0.117") || room.getName().equals("0.414") || room.getName().equals("0.112")).toList(),
+        groups.add(new RoomGroups("Labore",
+                locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0)
+                        .getBuildings().get(0).getFloors().get(0)
+                        .getRooms().stream().filter(room ->
+                                room.getName().equals("0.114")
+                                        || room.getName().equals("0.117")
+                                        || room.getName().equals("0.414")
+                                        || room.getName().equals("0.112")).toList(),
                 locations.get(0).getBuildings().get(0)));
-        groups.add(new RoomGroups("Büros", locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0).getBuildings().get(0).getFloors().get(0).getRooms().stream().filter(room -> room.getName().equals("0.115") || room.getName().equals("0.116") || room.getName().equals("0.214")).toList(),
+        groups.add(new RoomGroups("Büros",
+                locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0)
+                        .getBuildings().get(0).getFloors().get(0)
+                        .getRooms().stream().filter(room ->
+                                room.getName().equals("0.115")
+                                        || room.getName().equals("0.116")
+                                        || room.getName().equals("0.214")).toList(),
                 locations.get(0).getBuildings().get(0)));
 
         return groups;
