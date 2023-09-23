@@ -17,6 +17,10 @@ const router = useRouter()
 const i18nLocale = useI18n()
 const r = document.querySelector(':root')
 const corporateName = ref('')
+const editName = ref(false)
+const dark = ref(false)
+const confirmReset = ref(false)
+const confirmSave = ref(false)
 corpdesign.getColors('LIGHT').then(c => { corporateName.value = c.data.corporateName })
 
 const themeIcon = ref('')
@@ -27,10 +31,12 @@ if (!localStorage.getItem('colorTheme')) {
   logoPath.value = "/Logo.svg"
   $q.dark.set(false)
 } else if (localStorage.getItem('colorTheme') === 'LIGHT') {
+  dark.value = false
   $q.dark.set(false)
   themeIcon.value = 'light_mode'
   updateColors('LIGHT')
 } else {
+  dark.value = true
   $q.dark.set(true)
   themeIcon.value = 'dark_mode'
   updateColors('DARK')
@@ -60,11 +66,13 @@ function changeLanguage(language) {
 function changeTheme() {
   if (localStorage.getItem('colorTheme') === 'LIGHT') {
     localStorage.setItem('colorTheme', 'DARK')
+    dark.value = true
     updateColors('DARK')
     $q.dark.set(true)
     themeIcon.value = 'dark_mode'
   } else {
     localStorage.setItem('colorTheme', 'LIGHT')
+    dark.value = false
     updateColors('LIGHT')
     $q.dark.set(false)
     themeIcon.value = 'light_mode'
@@ -101,6 +109,15 @@ onMounted(() => {
 }
 )
 
+function reset() {
+  corpdesign.resetName()
+  location.reload()
+}
+
+function save() {
+  corpdesign.saveName(corporateName.value)
+  location.reload()
+}
 
 </script>
 <template>
@@ -114,10 +131,16 @@ onMounted(() => {
         </div>
         <div class="column full-width justify-between no-wrap" style="height: 95px">
           <div id="upper" class="row justify-between" style="height: 42px">
-            <div class="row text-accent">
+            <div v-if="!editName" class="row text-accent">
               <q-toolbar-title style="font-weight: 800; font-size: 3.25em; line-height: 1">
                 {{ corporateName }}
               </q-toolbar-title>
+              <q-btn v-if="userStore.authenticated && userStore.user.roles.some(r => r.role === 'ADMINISTRATOR' && r.granted)" @click="editName = true" class="self-start" icon="edit" style="width: 0.5em; margin-left: -1.5em; margin-top: -1em" color="accent" size="0.6em" flat round/>
+            </div>
+            <div class="row" v-if="editName">
+              <q-input class="self-center" style="width: 15vw" color="accent" :dark="!dark" dense outlined v-model="corporateName"/>
+              <q-btn @click="confirmReset = true" class="self-center q-ml-sm" icon="restart_alt" style="height: 0.75em" color="accent" size="0.75em" flat round/>
+              <q-btn @click="confirmSave = true" class="self-center q-ml-xs" icon="save" style="height: 0.75em" color="accent" size="0.75em" flat round/>
             </div>
             <div class="row no-wrap">
               <q-btn :icon="themeIcon" text-color="accent" round flat style="width: 42px; height: 42px" ref="themeBtn"
@@ -201,9 +224,6 @@ onMounted(() => {
                   <div class="column">
                     <router-link to="/corporatedesign" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.editCorporateDesign") }}
-                    </router-link>
-                    <router-link to="/corporatename" class="q-ma-sm headerLink" style="color: var(--text-color)">
-                      {{ t("admin.corporateName.title") }}
                     </router-link>
                     <router-link to="/imprinteditor" class="q-ma-sm headerLink" style="color: var(--text-color)">
                       {{ t("home.editImprint") }}
@@ -307,6 +327,38 @@ onMounted(() => {
     </q-footer>
 
   </q-layout>
+
+  <q-dialog v-model="confirmReset" persistent>
+    <q-card style="background-color: var(--bg-color); color: var(--text-color)">
+      <q-card-section>
+        <div class="text-h6">{{ t('admin.corporateName.reset.title') }}</div>
+      </q-card-section>
+      <q-card-section class="row items-center">
+        <span class="q-ml-sm">{{ t('admin.corporateName.reset.message') }}</span>
+      </q-card-section>
+
+      <q-card-actions align="right">
+        <q-btn flat :label="t('common.cancel')" color="primary" v-close-popup/>
+        <q-btn @click="reset" flat :label="t('admin.corporateName.reset.reset')" color="primary" v-close-popup/>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+
+  <q-dialog v-model="confirmSave" persistent>
+    <q-card style="background-color: var(--bg-color); color: var(--text-color)">
+      <q-card-section>
+        <div class="text-h6">{{ t('admin.corporateName.save.title') }}</div>
+      </q-card-section>
+      <q-card-section class="row items-center">
+        <span class="q-ml-sm">{{ t('admin.corporateName.save.message') }}</span>
+      </q-card-section>
+
+      <q-card-actions align="right">
+        <q-btn flat :label="t('common.cancel')" color="primary" v-close-popup/>
+        <q-btn @click="save" flat :label="t('common.save')" color="primary" v-close-popup/>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 
 </template>
 
