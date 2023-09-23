@@ -26,6 +26,8 @@ import com.gpse.sesam.domain.location.door.config.AttributeFilter;
 import com.gpse.sesam.domain.location.door.config.ProofConfig;
 import com.gpse.sesam.domain.location.door.config.ProofPredicateInfo;
 import com.gpse.sesam.domain.location.door.config.TwoWayDoorConfig;
+import com.gpse.sesam.domain.location.door.config.predefined.PredefinedConfig;
+import com.gpse.sesam.domain.location.door.config.predefined.PredefinedConfigService;
 import com.gpse.sesam.domain.location.floor.Floor;
 import com.gpse.sesam.domain.location.room.Room;
 import com.gpse.sesam.domain.location.roomgroup.RoomGroupService;
@@ -61,6 +63,8 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private final LocationService locationService;
 	private final RoomGroupService roomGroupService;
 
+	private final PredefinedConfigService predefinedConfigService;
+
 	private final SesamUserService userService;
 
 	private final CredentialService credentialService;
@@ -78,7 +82,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	public InitializeDatabaseLocal(final LocationService locationService, final SesamUserService userService,
 								   final CredentialService credentialService, final ColorsService colorsService,
 								   final CategoryService categoryService, final PasswordEncoder passwordEncoder,
-								   final RoomGroupService roomGroupService,
+								   final RoomGroupService roomGroupService, PredefinedConfigService predefinedConfigService,
 								   final FileStorageService fileStorageService) {
 		this.credentialService = credentialService;
 		this.colorsService = colorsService;
@@ -88,6 +92,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		this.userService = userService;
 		this.roomGroupService = roomGroupService;
 		this.fileStorageService = fileStorageService;
+		this.predefinedConfigService = predefinedConfigService;
 	}
 
 	@Override
@@ -98,6 +103,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<Category> categories = createCredentialCategories();
 		final List<Colors> colors = createColors();
 		final List<RoomGroups> roomGroups = roomGroups(locations);
+		final List<PredefinedConfig> predefinedConfigs = createPredefinedConfigList();
 
 		colorsService.saveAll(colors);
 		setLogo();
@@ -107,6 +113,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		categoryService.saveAll(categories);
 		userService.saveAll(users);
 		roomGroupService.saveAll(roomGroups);
+		predefinedConfigService.saveAll(predefinedConfigs);
 	}
 
 	private List<Colors> createColors() {
@@ -233,6 +240,55 @@ public class InitializeDatabaseLocal implements InitializingBean {
 				locations.get(0).getBuildings().get(0)));
 
 		return groups;
+	}
+
+	private List<PredefinedConfig> createPredefinedConfigList() {
+		final ProofConfig config = createPredefinedConfig();
+		final ProofConfig config2 = createPredefinedConfig();
+
+		TwoWayDoorConfig twoWayDoorConfig = new TwoWayDoorConfig();
+		twoWayDoorConfig.setBaseConfig(true);
+		twoWayDoorConfig.setProofConfigIn(config);
+		twoWayDoorConfig.setProofConfigOut(config2);
+
+		final PredefinedConfig predefinedConfig = new PredefinedConfig("T-Member vor 2005 geboren",
+				List.of(twoWayDoorConfig));
+
+		return List.of(predefinedConfig);
+	}
+
+	private ProofConfig createPredefinedConfig() {
+		final ProofConfig proofConfig = new ProofConfig();
+		proofConfig.setDescription("Präsentieren Sie ein T-Member Credential mit dem Geburtsdatum vor 2005.");
+
+		final Map<String, ProofPredicateInfo> requestedPredicates = new HashMap<>();
+		final ProofPredicateInfo predicateInfo = new ProofPredicateInfo();
+		predicateInfo.setName("expiration_date");
+		predicateInfo.setPredicateType(">");
+		predicateInfo.setPredicateValue("$TODAY-YYYYMMDD");
+		final ProofPredicateInfo predicateInfo2 = new ProofPredicateInfo();
+		predicateInfo2.setName("birth_date");
+		predicateInfo2.setPredicateType("<");
+		predicateInfo2.setPredicateValue("20050101");
+
+		final List<AttributeFilter> predicateRestrictions = new ArrayList<>();
+		predicateRestrictions.add(new AttributeFilter());
+		predicateRestrictions.get(0).setCredentialDefinitionId("$T-MEMBER");
+
+
+		final List<AttributeFilter> predicateRestrictions2 = new ArrayList<>();
+		predicateRestrictions2.add(new AttributeFilter());
+		predicateRestrictions2.get(0).setCredentialDefinitionId("$T-MEMBER");
+
+		predicateInfo.setRestrictions(predicateRestrictions);
+		predicateInfo2.setRestrictions(predicateRestrictions2);
+		requestedPredicates.put("expiration_date", predicateInfo);
+		requestedPredicates.put("birth_date", predicateInfo2);
+
+		proofConfig.setRequestedPredicates(requestedPredicates);
+
+
+		return proofConfig;
 	}
 
 	private List<Location> createLocations() {
@@ -653,7 +709,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		final List<AttributeFilter> predicateRestrictions = new ArrayList<>();
 		predicateRestrictions.add(new AttributeFilter());
 		predicateRestrictions.add(new AttributeFilter());
-		predicateRestrictions.get(0).setCredentialDefinitionId("$U-MEMBER");
 		predicateRestrictions.get(1).setCredentialDefinitionId("$T-MEMBER");
 
 		predicateInfo.setRestrictions(predicateRestrictions);
@@ -731,9 +786,6 @@ public class InitializeDatabaseLocal implements InitializingBean {
 	private List<InternalCredential> createCredentials() {
 		List<InternalCredential> internalCredentials = new ArrayList<>();
 
-		internalCredentials.add(new InternalCredential(
-				"U-Member", "1.0", "$U-MEMBER",
-				"university", form(), checklist()));
 		internalCredentials.add(new InternalCredential(
 				"T-Member", "1.0", "$T-MEMBER",
 				"tlabs", form(), checklist()));
