@@ -43,9 +43,15 @@ public class Issuer extends SesamUser {
 	 */
 	public Issuer(final String email, final String password, final String firstName, final String lastName,
 				  final List<SesamUserRole> roles,
-				  final Room room) {
+				  final Room room, final List<InternalCredential> credentials) {
 		super(email, password, firstName, lastName, roles);
 		this.room = room;
+		this.credentials = credentials;
+
+	}
+	public Issuer(final String email, final String password, final String firstName, final String lastName,
+				   final List<SesamUserRole> roles) {
+		super(email, password, firstName, lastName, roles);
 	}
 
 	public List<InternalCredential> getCredentials() {

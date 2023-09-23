@@ -148,7 +148,7 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         return colors;
     }
 
-    private final List<RoomGroups> createRoomGroup(List<Location> locations) {
+    private List<RoomGroups> createRoomGroup(List<Location> locations) {
         final List<RoomGroups> groups = new ArrayList<>();
 
         groups.add(new RoomGroups("Labore",
@@ -212,47 +212,47 @@ public class InitializeDatabaseUniversity implements InitializingBean {
     }
 
     private List<SesamUser> createUsers(List<InternalCredential> credentials) {
-        //User Roles
-        final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
-        adminRole.setGranted(true);
 
+        final List<SesamUser> users = new ArrayList<>();
 
-        List<SesamUserRole> editorAndIssuer = new ArrayList<>();
-
-        final SesamUserRole editorRole = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
-        editorRole.setGranted(true);
-        final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-        issuerRole.setGranted(true);
-
-        final SesamUserRole issuerRole2 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-        issuerRole.setGranted(true);
-
-        final SesamUserRole issuerRole3 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-        issuerRole.setGranted(true);
-
-        editorAndIssuer.add(editorRole);
-        editorAndIssuer.add(issuerRole);
-
-        //Users
+        //Password
         final String defaultPassword = passwordEncoder.encode("Hallo123!");
 
-        final SesamUser admin = new SesamUser("admin@sesam.de", defaultPassword, "UBI", "Admin",
-                Collections.singletonList(adminRole));
-        final SesamUser editorIssuer = new Issuer("jörn@sesam.de", defaultPassword, "Jörn", "Mühlenkamp",
-                editorAndIssuer, new Room("0.408"));
+        //Users
+        users.add(new SesamUser("hubert@sesam.de", defaultPassword, "Hubert", "Müller",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR, true))));
 
-        final Issuer issuer2 = new Issuer("jutta@sesam.de", defaultPassword, "Jutta", "Bergmann",
-                Collections.singletonList(issuerRole2), new Room("0.409"));
-        issuer2.setCredentials(credentials);
-        for (InternalCredential credential : credentials) {
-            credential.setIssuer(List.of(issuer2));
-        }
-        final Issuer issuer3 = new Issuer("kelvin@sesam.de", defaultPassword, "Kelvin", "Matthews",
-                Collections.singletonList(issuerRole3), new Room("0.410"));
-        issuer3.addCredential(credentials.get(2));
-        credentials.get(2).setIssuer(List.of(issuer3));
+        users.add(new Issuer("jörn@sesam.de", defaultPassword, "Jörn", "Mühlenkamp",
+                List.of(
+                        new SesamUserRole(SesamUserRole.AttainableRole.EDITOR, true),
+                        new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
+                new Room("0.109"),
+                List.of(credentials.get(0))));
+        credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
 
-        return List.of(admin, editorIssuer, issuer2, issuer3);
+        users.add(new Issuer("jutta@sesam.de", defaultPassword, "Jutta", "Bergmann",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
+                new Room("0.106"),
+                List.of(credentials.get(0),
+                        credentials.get(1))));
+        credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+        credentials.get(1).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+
+        users.add(new Issuer("kelvin@sesam.de", defaultPassword, "Kelvin", "Matthews",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
+                new Room("0.107"),
+                List.of(credentials.get(0),
+                        credentials.get(2))));
+        credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+        credentials.get(2).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+
+        users.add(new Issuer("hannah@sesam.de", defaultPassword, "Hannah", "Bauer",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, false))));
+
+        users.add(new SesamUser("moritz@sesam.de", defaultPassword, "Moritz", "Brockner",
+                List.of(new SesamUserRole(SesamUserRole.AttainableRole.EDITOR, false))));
+
+        return users;
     }
 
 
@@ -703,15 +703,15 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         hamburg.addBuilding(building2);
         final Location koeln = new Location("Köln");
         koeln.addBuilding(building3);
-        final Location berlin = new Location("Berlin");
-        berlin.addBuilding(building4);
+        final Location hannover = new Location("Hannover");
+        hannover.addBuilding(building4);
         final Location bremen = new Location("Bremen");
         bremen.addBuilding(building5);
 
         locations.add(bielefeld);
         locations.add(hamburg);
         locations.add(koeln);
-        locations.add(berlin);
+        locations.add(hannover);
         locations.add(bremen);
 
         return locations;
