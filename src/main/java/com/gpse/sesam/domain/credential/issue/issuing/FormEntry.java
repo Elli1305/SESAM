@@ -28,7 +28,6 @@ public class FormEntry {
 	private String attributeName;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@NotNull
 	private List<AbstractValidationRule> validationRules;
 
 	protected FormEntry() {

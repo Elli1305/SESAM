@@ -20,8 +20,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.gpse.sesam.domain.credential.credentials.internal.CredentialServiceImpl.replaceMagicCredentialDefinitionIds;
-
 /**
  * Implementierung des ExternalCredentialService, der Operationen zur Verwaltung von externen Credentials durchführt.
  */
@@ -80,7 +78,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
         final ExternalCredential credential = new ExternalCredential(
                 createExternalCredentialCmd.getName(),
                 createExternalCredentialCmd.getVersion(),
-                replaceMagicCredentialDefinitionIds(createExternalCredentialCmd.getCredentialDefinitionId()),
+                createExternalCredentialCmd.getCredentialDefinitionId(),
                 createExternalCredentialCmd.getAttributes().stream()
                         .map(createAttributeCmd ->
                                 new FormEntry(
@@ -128,9 +126,7 @@ public class ExternalCredentialServiceImpl implements ExternalCredentialService 
         credential.setName(createExternalCredentialCmd.getName());
         credential.setVersion(createExternalCredentialCmd.getVersion());
         credential.setCredentialDefinitionId(
-                replaceMagicCredentialDefinitionIds(
                         createExternalCredentialCmd.getCredentialDefinitionId()
-                )
         );
 
         final List<FormEntry> formEntries = new ArrayList<>();

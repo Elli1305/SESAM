@@ -191,31 +191,51 @@ public class InitializeDatabaseLocal implements InitializingBean {
 		}
 	}
 
-	private List<SesamUser> createUsers(final List<InternalCredential> credentials) {
-		final SesamUserRole adminRole = new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR);
-		adminRole.setGranted(true);
-		final SesamUserRole issuerRole = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-		issuerRole.setGranted(true);
-		final SesamUserRole editorRole = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
-		editorRole.setGranted(true);
-		final String defaultPassword = passwordEncoder.encode(DEFAULT_PASSWORD);
-		final SesamUser admin = new SesamUser("admin@test.de", defaultPassword, "Admin", "User",
-				List.of(adminRole));
-		final SesamUser editor = new SesamUser("editor@test.de", defaultPassword, "Editor", "User",
-				List.of(editorRole));
-		final SesamUser user = new SesamUser("user@test.de", defaultPassword, "Test", "User",
-				Collections.emptyList());
+	private List<SesamUser> createUsers(List<InternalCredential> credentials) {
 
-		final SesamUserRole issuerRole20 = new SesamUserRole(SesamUserRole.AttainableRole.ISSUER);
-		issuerRole20.setGranted(true);
-		final SesamUserRole editorRole21 = new SesamUserRole(SesamUserRole.AttainableRole.EDITOR);
-		editorRole21.setGranted(true);
+		final List<SesamUser> users = new ArrayList<>();
 
-		final SesamUser jana = new Issuer("jana@test.de", defaultPassword, "Jana", "Editor-Issuer",
-				List.of(editorRole21, issuerRole20));
+		//Password
+		final String defaultPassword = passwordEncoder.encode("Hallo123!");
 
+		//Users
+		users.add(new SesamUser("gisela@telekom.de", defaultPassword, "Gisela", "Wunderlich",
+				List.of(new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR, true))));
 
-		return List.of(admin, editor, user, jana);
+		users.add(new SesamUser("meier@telekom.de", defaultPassword, "Meier", "Sandra",
+				List.of(new SesamUserRole(SesamUserRole.AttainableRole.ADMINISTRATOR, false))));
+
+		users.add(new SesamUser("harald@telekom.de", defaultPassword, "Harald", "Warmke",
+				List.of(new SesamUserRole(SesamUserRole.AttainableRole.EDITOR, true))));
+
+		users.add(new Issuer("jana@telekom.de", defaultPassword, "Jana", "Musterfrau",
+				List.of(new SesamUserRole(SesamUserRole.AttainableRole.EDITOR, true), new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true))));
+
+		users.add(new Issuer("gerhard@telekom.de", defaultPassword, "Gerhard", "Wunderland",
+				List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
+				new Room("0.109"),
+				List.of(credentials.get(0))));
+		credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+
+		users.add(new Issuer("max@telekom.de", defaultPassword, "Max", "Weißberg",
+				List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
+				new Room("0.106"),
+				List.of(credentials.get(0))));
+		credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+
+		users.add(new Issuer("dumon@telekom.de", defaultPassword, "Dumon", "Ditthoff",
+				List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
+				new Room("0.107"),
+				List.of(credentials.get(0))));
+		credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
+
+		users.add(new Issuer("celina@telekom.de", defaultPassword, "Celina", "Werk",
+				List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, false))));
+
+		users.add(new SesamUser("anton@telekom.de", defaultPassword, "Anton", "Henz",
+				List.of(new SesamUserRole(SesamUserRole.AttainableRole.EDITOR, false))));
+
+		return users;
 	}
 
 	private List<RoomGroups> roomGroups(final List<Location> locations) {
@@ -230,7 +250,7 @@ public class InitializeDatabaseLocal implements InitializingBean {
 										|| room.getName().equals("0.414")
 										|| room.getName().equals("0.112")).toList(),
 				locations.get(0).getBuildings().get(0)));
-		groups.add(new RoomGroups("Büros",
+		groups.add(new RoomGroups("Lager",
 				locations.stream().filter(location -> location.getName().equals("Bielefeld")).toList().get(0)
 						.getBuildings().get(0).getFloors().get(0)
 						.getRooms().stream().filter(room ->
