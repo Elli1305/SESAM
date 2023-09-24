@@ -241,10 +241,8 @@ public class InitializeDatabaseUniversity implements InitializingBean {
         users.add(new Issuer("kelvin@sesam.de", defaultPassword, "Kelvin", "Matthews",
                 List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, true)),
                 new Room("0.107"),
-                List.of(credentials.get(0),
-                        credentials.get(2))));
+                List.of(credentials.get(0))));
         credentials.get(0).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
-        credentials.get(2).setIssuer(List.of((Issuer) users.get(users.size() - 1)));
 
         users.add(new Issuer("hannah@sesam.de", defaultPassword, "Hannah", "Bauer",
                 List.of(new SesamUserRole(SesamUserRole.AttainableRole.ISSUER, false))));
@@ -273,15 +271,12 @@ public class InitializeDatabaseUniversity implements InitializingBean {
     private List<Category> createCategories(List<InternalCredential> internal, List<ExternalCredential> external) {
         List<Category> categories = new ArrayList<>();
         Category lab = new Category("lab-trained");
-        lab.addCredential(internal.get(2));
-        internal.get(2).setCategory(lab);
+        lab.addCredential(internal.get(1));
+        internal.get(1).setCategory(lab);
 
-        for (ExternalCredential externalCredential: external) {
-            if (externalCredential.getName().equals("T-Lab")) {
-                lab.addExternalCredential(externalCredential);
-                externalCredential.setCategory(lab);
-            }
-        }
+        lab.addExternalCredential(external.get(0));
+        external.get(0).setCategory(lab);
+
         categories.add(lab);
 
         return categories;
